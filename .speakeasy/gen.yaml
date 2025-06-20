@@ -1,0 +1,35 @@
+configVersion: 2.0.0
+generation:
+  sdkClassName: Seqera
+  maintainOpenAPIOrder: true
+  usageSnippets:
+    optionalPropertyRendering: withExample
+    sdkInitStyle: constructor
+  useClassNamesForArrayFields: true
+  fixes:
+    nameResolutionDec2023: true
+    nameResolutionFeb2025: true
+    parameterOrderingFeb2024: true
+    requestResponseComponentNamesFeb2024: true
+    securityFeb2025: true
+    sharedErrorComponentsApr2025: true
+  auth:
+    oAuth2ClientCredentialsEnabled: true
+    oAuth2PasswordEnabled: true
+  sdkHooksConfigAccess: true
+terraform:
+  version: 0.0.3
+  additionalDataSources: []
+  additionalDependencies: {}
+  additionalEphemeralResources: []
+  additionalProviderAttributes:
+    httpHeaders: ""
+    tlsSkipVerify: ""
+  additionalResources: []
+  allowUnknownFieldsInWeakUnions: false
+  author: speakeasy
+  baseErrorName: SeqeraError
+  defaultErrorName: APIError
+  enableTypeDeduplication: false
+  environmentVariables: []
+  packageName: seqera

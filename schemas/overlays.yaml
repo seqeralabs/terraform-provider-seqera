@@ -1,0 +1,300 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Overlay ../schemas/seqera.yml => ../schemas/seqera_final.yml
+  version: 0.0.0
+actions:
+  - target: $
+    description: |
+      This overlay encapsulates provider-level changes:
+
+      - Add servers configuration to the OAS with a default server URL. This
+        value can be overridden by customers via the provider `server_url`
+        attribute in Terraform configurations or via the SEQERA_SERVER_URL
+        environment variable.
+    update:
+      servers:
+        - url: https://api.cloud.seqera.io
+  - target: $["info"]["version"]
+    update: 1.45.0
+  - target: $["paths"]["/actions"]["get"]
+    update:
+      x-speakeasy-entity-operation: Actions#read
+  - target: $["paths"]["/actions"]["post"]
+    update:
+      x-speakeasy-entity-operation: Action#create
+  - target: $["paths"]["/actions/{actionId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Action#read
+  - target: $["paths"]["/actions/{actionId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Action#update
+  - target: $["paths"]["/actions/{actionId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Action#delete
+  - target: $["paths"]["/compute-envs"]["get"]
+    update:
+      x-speakeasy-entity-operation: ComputeEnvs#read
+  - target: $["paths"]["/compute-envs"]["post"]
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#create
+  - target: $["paths"]["/compute-envs/{computeEnvId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#read
+  - target: $["paths"]["/compute-envs/{computeEnvId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#update
+  - target: $["paths"]["/compute-envs/{computeEnvId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#delete
+  - target: $["paths"]["/credentials"]["get"]
+    update:
+      x-speakeasy-entity-operation: Credentials#read
+  - target: $["paths"]["/credentials"]["post"]
+    update:
+      x-speakeasy-entity-operation: Credential#create
+  - target: $["paths"]["/credentials/{credentialsId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Credential#read
+  - target: $["paths"]["/credentials/{credentialsId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Credential#update
+  - target: $["paths"]["/credentials/{credentialsId}"]["delete"]["x-speakeasy-entity-operation"]
+    remove: true
+  - target: $["paths"]["/credentials/{credentialsId}"]["delete"]["x-speakeasy-entity-operation"]
+    remove: true
+  - target: $["paths"]["/credentials/{credentialsId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Credential#delete
+  - target: $["paths"]["/datasets"]["get"]
+    update:
+      x-speakeasy-entity-operation: Datasets#read
+  - target: $["paths"]["/pipelines"]["get"]
+    update:
+      x-speakeasy-entity-operation: Pipelines#read
+  - target: $["paths"]["/pipelines"]["post"]
+    update:
+      x-speakeasy-entity-operation: Pipeline#create
+  - target: $["paths"]["/pipelines/{pipelineId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Pipeline#read
+  - target: $["paths"]["/pipelines/{pipelineId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Pipeline#update
+  - target: $["paths"]["/pipelines/{pipelineId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Pipeline#delete
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["status"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ContainerRegistryKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["CreateComputeEnvRequest"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["CreateComputeEnvResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["Credentials"]
+    update:
+      x-speakeasy-entity: Credential
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: credentialsId
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["id"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["description"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
+    update:
+      x-speakeasy-name-override: providerType
+  - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.EventType"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.TowerActionConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.TowerActionEvent"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AgentSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AltairPbsComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzBatchConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzureEntraKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzureReposSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzureSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["BitBucketSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["CodeCommitSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["ComputeConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
+    remove: true
+  # - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
+  #   update:
+  #     - aws
+  #     - azure
+  #     - google
+  #     - github
+  #     - gitlab
+  #     - bitbucket
+  #     - ssh
+  #     - k8s
+  #     - container-reg
+  #     - tw-agent
+  #     - codecommit
+  #     - gitea
+  #     - azurerepos
+  #     - seqeracompute
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["baseUrl"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["category"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["deleted"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]["properties"]["computeEnv"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["EksComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["password"]
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["password"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["GitLabSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GiteaSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GithubActionConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GithubActionEvent"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GkeComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleBatchConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleLifeSciencesConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["K8sComputeConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["K8sSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
+    update:
+      x-speakeasy-entity: Action
+  - target: $["components"]["schemas"]["ListComputeEnvsResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnvs
+  - target: $["components"]["schemas"]["ListCredentialsResponse"]
+    update:
+      x-speakeasy-entity: Credentials
+  - target: $["components"]["schemas"]["LsfComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["MoabComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["PipelineDbDto"]
+    update:
+      x-speakeasy-entity: Pipeline
+  - target: $["components"]["schemas"]["SSHSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SecurityKeys"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SlurmComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["TraceProgressRequest"]["properties"]["containers"]
+    remove: true
+  - target: $["components"]["schemas"]["UnivaComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  
+  - target: $.paths["/user-info"].get
+    update:
+      x-speakeasy-entity-operation: CurrentUser#read
+  - target: $.paths["/users/{userId}"].get
+    update:
+      x-speakeasy-entity-operation: User#read
+  - target: $.paths["/user/{userId}/workspaces"].get
+    update:
+      x-speakeasy-entity-operation: UserWorkspaces#read
+  - target: $.components.schemas.ListWorkspacesAndOrgResponse
+    update:
+      x-speakeasy-entity: UserWorkspaces
+  - target: $.components.schemas.UserDbDto
+    update:
+      x-speakeasy-entity:
+        - CurrentUser
+        - User
+  - target: $.components.schemas.WorkflowLaunchRequest
+    update:
+      properties:
+        id:
+          x-speakeasy-param-force-new: true
+        pipeline:
+          x-speakeasy-param-force-new: true
+

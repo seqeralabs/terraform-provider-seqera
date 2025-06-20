@@ -1,0 +1,13 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    Seqera API:
+        inputs:
+            - location: schemas/seqera-final.yaml
+        output: .speakeasy/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/seqera/seqera/seqera-api
+targets:
+    seqera:
+        target: terraform
+        source: Seqera API

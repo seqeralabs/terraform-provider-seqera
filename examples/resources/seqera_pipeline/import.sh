@@ -1,0 +1,1 @@
+terraform import seqera_pipeline.my_seqera_pipeline "0"

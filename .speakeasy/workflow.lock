@@ -1,0 +1,29 @@
+speakeasyVersion: 1.567.3
+sources:
+    Seqera API:
+        sourceNamespace: seqera-api
+        sourceRevisionDigest: sha256:45b55057a67e7f3dd36e6014f8520e01f0d7b2acf22c02631b203ad949cd2522
+        sourceBlobDigest: sha256:7050196624a70aeb7f8a3c77ecd2301fad9b90a35ae42b7018e5e580d10fe993
+        tags:
+            - latest
+            - 1.45.0
+targets:
+    seqera:
+        source: Seqera API
+        sourceNamespace: seqera-api
+        sourceRevisionDigest: sha256:45b55057a67e7f3dd36e6014f8520e01f0d7b2acf22c02631b203ad949cd2522
+        sourceBlobDigest: sha256:7050196624a70aeb7f8a3c77ecd2301fad9b90a35ae42b7018e5e580d10fe993
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        Seqera API:
+            inputs:
+                - location: schemas/seqera-final.yaml
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/seqera/seqera/seqera-api
+    targets:
+        seqera:
+            target: terraform
+            source: Seqera API

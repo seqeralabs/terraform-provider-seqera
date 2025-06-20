@@ -1,0 +1,2367 @@
+lockVersion: 2.0.0
+id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
+management:
+  docChecksum: c3c967c4d404d9c3dd74c995d1217bfd
+  docVersion: 1.45.0
+  speakeasyVersion: 1.567.3
+  generationVersion: 2.632.2
+  releaseVersion: 0.0.3
+  configChecksum: 536fc11394b8f75f1f66f52d9bd64a2b
+features:
+  terraform:
+    additionalDependencies: 0.1.0
+    core: 3.41.12
+    deepObjectParams: 0.1.0
+    deprecations: 2.82.0
+    getRequestBodies: 2.81.1
+    globalSecurity: 2.81.12
+    globalServerURLs: 2.82.2
+    inputOutputModels: 2.83.0
+    nameOverrides: 2.81.3
+    nullables: 0.0.0
+    unions: 2.81.17
+generatedFiles:
+  - .gitattributes
+  - USAGE.md
+  - examples/README.md
+  - examples/data-sources/seqera_action/data-source.tf
+  - examples/data-sources/seqera_actions/data-source.tf
+  - examples/data-sources/seqera_compute_env/data-source.tf
+  - examples/data-sources/seqera_compute_envs/data-source.tf
+  - examples/data-sources/seqera_credential/data-source.tf
+  - examples/data-sources/seqera_credentials/data-source.tf
+  - examples/data-sources/seqera_current_user/data-source.tf
+  - examples/data-sources/seqera_datasets/data-source.tf
+  - examples/data-sources/seqera_pipeline/data-source.tf
+  - examples/data-sources/seqera_pipelines/data-source.tf
+  - examples/data-sources/seqera_user/data-source.tf
+  - examples/data-sources/seqera_user_workspaces/data-source.tf
+  - examples/provider/provider.tf
+  - examples/resources/seqera_action/import.sh
+  - examples/resources/seqera_action/resource.tf
+  - examples/resources/seqera_compute_env/import.sh
+  - examples/resources/seqera_compute_env/resource.tf
+  - examples/resources/seqera_credential/import.sh
+  - examples/resources/seqera_credential/resource.tf
+  - examples/resources/seqera_pipeline/import.sh
+  - examples/resources/seqera_pipeline/resource.tf
+  - go.mod
+  - go.sum
+  - internal/planmodifiers/boolplanmodifier/suppress_diff.go
+  - internal/planmodifiers/float32planmodifier/suppress_diff.go
+  - internal/planmodifiers/float64planmodifier/suppress_diff.go
+  - internal/planmodifiers/int32planmodifier/suppress_diff.go
+  - internal/planmodifiers/int64planmodifier/suppress_diff.go
+  - internal/planmodifiers/listplanmodifier/suppress_diff.go
+  - internal/planmodifiers/mapplanmodifier/suppress_diff.go
+  - internal/planmodifiers/numberplanmodifier/suppress_diff.go
+  - internal/planmodifiers/objectplanmodifier/suppress_diff.go
+  - internal/planmodifiers/setplanmodifier/suppress_diff.go
+  - internal/planmodifiers/stringplanmodifier/suppress_diff.go
+  - internal/planmodifiers/utils/state_check.go
+  - internal/provider/action_data_source.go
+  - internal/provider/action_data_source_sdk.go
+  - internal/provider/action_resource.go
+  - internal/provider/action_resource_sdk.go
+  - internal/provider/actions_data_source.go
+  - internal/provider/actions_data_source_sdk.go
+  - internal/provider/computeenv_data_source.go
+  - internal/provider/computeenv_data_source_sdk.go
+  - internal/provider/computeenv_resource.go
+  - internal/provider/computeenv_resource_sdk.go
+  - internal/provider/computeenvs_data_source.go
+  - internal/provider/computeenvs_data_source_sdk.go
+  - internal/provider/credential_data_source.go
+  - internal/provider/credential_data_source_sdk.go
+  - internal/provider/credential_resource.go
+  - internal/provider/credential_resource_sdk.go
+  - internal/provider/credentials_data_source.go
+  - internal/provider/credentials_data_source_sdk.go
+  - internal/provider/currentuser_data_source.go
+  - internal/provider/currentuser_data_source_sdk.go
+  - internal/provider/datasets_data_source.go
+  - internal/provider/datasets_data_source_sdk.go
+  - internal/provider/pipeline_data_source.go
+  - internal/provider/pipeline_data_source_sdk.go
+  - internal/provider/pipeline_resource.go
+  - internal/provider/pipeline_resource_sdk.go
+  - internal/provider/pipelines_data_source.go
+  - internal/provider/pipelines_data_source_sdk.go
+  - internal/provider/provider.go
+  - internal/provider/reflect/diags.go
+  - internal/provider/reflect/doc.go
+  - internal/provider/reflect/generic_attr_value.go
+  - internal/provider/reflect/helpers.go
+  - internal/provider/reflect/interfaces.go
+  - internal/provider/reflect/into.go
+  - internal/provider/reflect/map.go
+  - internal/provider/reflect/number.go
+  - internal/provider/reflect/options.go
+  - internal/provider/reflect/outof.go
+  - internal/provider/reflect/pointer.go
+  - internal/provider/reflect/primitive.go
+  - internal/provider/reflect/slice.go
+  - internal/provider/reflect/struct.go
+  - internal/provider/typeconvert/date.go
+  - internal/provider/typeconvert/datetime.go
+  - internal/provider/typeconvert/int.go
+  - internal/provider/types/action_config_type.go
+  - internal/provider/types/action_event_type.go
+  - internal/provider/types/action_response_dto.go
+  - internal/provider/types/action_tower_action_config.go
+  - internal/provider/types/action_tower_action_event.go
+  - internal/provider/types/agent_security_keys.go
+  - internal/provider/types/altair_pbs_configuration.go
+  - internal/provider/types/amazon_eks_cluster_configuration.go
+  - internal/provider/types/aws_batch_configuration.go
+  - internal/provider/types/aws_cloud_configuration.go
+  - internal/provider/types/aws_security_keys.go
+  - internal/provider/types/aws_security_keys1.go
+  - internal/provider/types/az_batch_forge_config.go
+  - internal/provider/types/azure_batch_configuration.go
+  - internal/provider/types/azure_entra_keys.go
+  - internal/provider/types/azure_entra_keys1.go
+  - internal/provider/types/azure_repos_security_keys.go
+  - internal/provider/types/azure_repos_security_keys1.go
+  - internal/provider/types/azure_security_keys.go
+  - internal/provider/types/azure_security_keys1.go
+  - internal/provider/types/bit_bucket_security_keys.go
+  - internal/provider/types/bit_bucket_security_keys1.go
+  - internal/provider/types/code_commit_security_keys.go
+  - internal/provider/types/code_commit_security_keys1.go
+  - internal/provider/types/compute_config.go
+  - internal/provider/types/compute_env.go
+  - internal/provider/types/compute_env_compute_config.go
+  - internal/provider/types/compute_env_db_dto.go
+  - internal/provider/types/compute_env_response_dto.go
+  - internal/provider/types/config_env_variable.go
+  - internal/provider/types/container_registry_keys.go
+  - internal/provider/types/container_registry_keys1.go
+  - internal/provider/types/credentials.go
+  - internal/provider/types/dataset.go
+  - internal/provider/types/forge_config.go
+  - internal/provider/types/git_hub_security_keys.go
+  - internal/provider/types/git_hub_security_keys1.go
+  - internal/provider/types/git_lab_security_keys.go
+  - internal/provider/types/git_lab_security_keys1.go
+  - internal/provider/types/gitea_security_keys.go
+  - internal/provider/types/gitea_security_keys1.go
+  - internal/provider/types/github_action_config.go
+  - internal/provider/types/github_action_event.go
+  - internal/provider/types/google_batch_service_configuration.go
+  - internal/provider/types/google_gke_cluster_configuration.go
+  - internal/provider/types/google_life_sciences_configuration.go
+  - internal/provider/types/google_security_keys.go
+  - internal/provider/types/google_security_keys1.go
+  - internal/provider/types/ibmlsf_configuration.go
+  - internal/provider/types/k8s_security_keys.go
+  - internal/provider/types/k8s_security_keys1.go
+  - internal/provider/types/kubernetes_compute_configuration.go
+  - internal/provider/types/label_db_dto.go
+  - internal/provider/types/launch.go
+  - internal/provider/types/list_actions_response_action_info.go
+  - internal/provider/types/list_compute_envs_response_entry.go
+  - internal/provider/types/moab_configuration.go
+  - internal/provider/types/org_and_workspace_dto.go
+  - internal/provider/types/pipeline_db_dto.go
+  - internal/provider/types/security_keys.go
+  - internal/provider/types/security_keys_output.go
+  - internal/provider/types/seqera_compute_configuration.go
+  - internal/provider/types/seqera_compute_security_keys.go
+  - internal/provider/types/seqera_compute_security_keys1.go
+  - internal/provider/types/slurm_configuration.go
+  - internal/provider/types/ssh_security_keys.go
+  - internal/provider/types/ssh_security_keys1.go
+  - internal/provider/types/univa_grid_engine_configuration.go
+  - internal/provider/types/workflow_launch_request.go
+  - internal/provider/user_data_source.go
+  - internal/provider/user_data_source_sdk.go
+  - internal/provider/userworkspaces_data_source.go
+  - internal/provider/userworkspaces_data_source_sdk.go
+  - internal/provider/utils.go
+  - internal/sdk/.gitattributes
+  - internal/sdk/actions.go
+  - internal/sdk/avatars.go
+  - internal/sdk/computeenvs.go
+  - internal/sdk/credentials.go
+  - internal/sdk/datalinks.go
+  - internal/sdk/datasets.go
+  - internal/sdk/ga4gh.go
+  - internal/sdk/internal/config/sdkconfiguration.go
+  - internal/sdk/internal/hooks/hooks.go
+  - internal/sdk/internal/utils/contenttype.go
+  - internal/sdk/internal/utils/env.go
+  - internal/sdk/internal/utils/form.go
+  - internal/sdk/internal/utils/headers.go
+  - internal/sdk/internal/utils/json.go
+  - internal/sdk/internal/utils/pathparams.go
+  - internal/sdk/internal/utils/queryparams.go
+  - internal/sdk/internal/utils/requestbody.go
+  - internal/sdk/internal/utils/retries.go
+  - internal/sdk/internal/utils/security.go
+  - internal/sdk/internal/utils/utils.go
+  - internal/sdk/labels.go
+  - internal/sdk/launch.go
+  - internal/sdk/models/errors/apierror.go
+  - internal/sdk/models/operations/addlabelstoactions.go
+  - internal/sdk/models/operations/addlabelstopipelines.go
+  - internal/sdk/models/operations/addlabelstoworkflows.go
+  - internal/sdk/models/operations/applylabelstoactions.go
+  - internal/sdk/models/operations/applylabelstopipelines.go
+  - internal/sdk/models/operations/applylabelstoworkflows.go
+  - internal/sdk/models/operations/cancelworkflow.go
+  - internal/sdk/models/operations/createaction.go
+  - internal/sdk/models/operations/createcomputeenv.go
+  - internal/sdk/models/operations/createcredentials.go
+  - internal/sdk/models/operations/createcustomdatalink.go
+  - internal/sdk/models/operations/createdataset.go
+  - internal/sdk/models/operations/createdatasetv2.go
+  - internal/sdk/models/operations/createdatastudio.go
+  - internal/sdk/models/operations/createlabel.go
+  - internal/sdk/models/operations/createorganization.go
+  - internal/sdk/models/operations/createorganizationmember.go
+  - internal/sdk/models/operations/createorganizationteam.go
+  - internal/sdk/models/operations/createorganizationteammember.go
+  - internal/sdk/models/operations/createpipeline.go
+  - internal/sdk/models/operations/createpipelinesecret.go
+  - internal/sdk/models/operations/createtoken.go
+  - internal/sdk/models/operations/createtrace.go
+  - internal/sdk/models/operations/createworkflowlaunch.go
+  - internal/sdk/models/operations/createworkflowstar.go
+  - internal/sdk/models/operations/createworkspace.go
+  - internal/sdk/models/operations/createworkspaceparticipant.go
+  - internal/sdk/models/operations/deleteaction.go
+  - internal/sdk/models/operations/deletealltokens.go
+  - internal/sdk/models/operations/deletecomputeenv.go
+  - internal/sdk/models/operations/deletecredentials.go
+  - internal/sdk/models/operations/deletecustomdatalink.go
+  - internal/sdk/models/operations/deletedatalinkitem.go
+  - internal/sdk/models/operations/deletedataset.go
+  - internal/sdk/models/operations/deletedatasetv2.go
+  - internal/sdk/models/operations/deletedatastudio.go
+  - internal/sdk/models/operations/deletelabel.go
+  - internal/sdk/models/operations/deleteorganization.go
+  - internal/sdk/models/operations/deleteorganizationmember.go
+  - internal/sdk/models/operations/deleteorganizationteam.go
+  - internal/sdk/models/operations/deleteorganizationteammember.go
+  - internal/sdk/models/operations/deletepipeline.go
+  - internal/sdk/models/operations/deletepipelinesecret.go
+  - internal/sdk/models/operations/deletetoken.go
+  - internal/sdk/models/operations/deleteuser.go
+  - internal/sdk/models/operations/deleteworkflow.go
+  - internal/sdk/models/operations/deleteworkflowmany.go
+  - internal/sdk/models/operations/deleteworkflowstar.go
+  - internal/sdk/models/operations/deleteworkspace.go
+  - internal/sdk/models/operations/deleteworkspaceparticipant.go
+  - internal/sdk/models/operations/describeaction.go
+  - internal/sdk/models/operations/describecomputeenv.go
+  - internal/sdk/models/operations/describecredentials.go
+  - internal/sdk/models/operations/describedatalink.go
+  - internal/sdk/models/operations/describedataset.go
+  - internal/sdk/models/operations/describedatasetv2.go
+  - internal/sdk/models/operations/describedatastudio.go
+  - internal/sdk/models/operations/describelaunch.go
+  - internal/sdk/models/operations/describeorganization.go
+  - internal/sdk/models/operations/describeorganizationquotas.go
+  - internal/sdk/models/operations/describeorganizationteam.go
+  - internal/sdk/models/operations/describepipeline.go
+  - internal/sdk/models/operations/describepipelinelaunch.go
+  - internal/sdk/models/operations/describepipelinerepository.go
+  - internal/sdk/models/operations/describepipelineschema.go
+  - internal/sdk/models/operations/describepipelinesecret.go
+  - internal/sdk/models/operations/describeplatform.go
+  - internal/sdk/models/operations/describeuser.go
+  - internal/sdk/models/operations/describeworkflow.go
+  - internal/sdk/models/operations/describeworkflowlaunch.go
+  - internal/sdk/models/operations/describeworkflowmetrics.go
+  - internal/sdk/models/operations/describeworkflowprogress.go
+  - internal/sdk/models/operations/describeworkflowstar.go
+  - internal/sdk/models/operations/describeworkflowtask.go
+  - internal/sdk/models/operations/describeworkspace.go
+  - internal/sdk/models/operations/downloadavatar.go
+  - internal/sdk/models/operations/downloaddatalink.go
+  - internal/sdk/models/operations/downloaddataset.go
+  - internal/sdk/models/operations/downloaddatasetv2.go
+  - internal/sdk/models/operations/downloadworkflowlog.go
+  - internal/sdk/models/operations/downloadworkflowtasklog.go
+  - internal/sdk/models/operations/exploredatalink.go
+  - internal/sdk/models/operations/exploredatalink1.go
+  - internal/sdk/models/operations/exploredatalinktree.go
+  - internal/sdk/models/operations/extenddatastudiolifespan.go
+  - internal/sdk/models/operations/finddatastudiosworkspacesettings.go
+  - internal/sdk/models/operations/finishdatalinkupload.go
+  - internal/sdk/models/operations/finishdatalinkupload1.go
+  - internal/sdk/models/operations/ga4ghruncancel.go
+  - internal/sdk/models/operations/ga4ghruncreate.go
+  - internal/sdk/models/operations/ga4ghrundescribe.go
+  - internal/sdk/models/operations/ga4ghrunlist.go
+  - internal/sdk/models/operations/ga4ghrunstatus.go
+  - internal/sdk/models/operations/ga4ghserviceinfo.go
+  - internal/sdk/models/operations/generatedatalinkuploadurl.go
+  - internal/sdk/models/operations/generatedatalinkuploadurl1.go
+  - internal/sdk/models/operations/generatedownloadscript.go
+  - internal/sdk/models/operations/generatedownloadurldatalink.go
+  - internal/sdk/models/operations/generaterandomworkflowname.go
+  - internal/sdk/models/operations/getdatastudiocheckpoint.go
+  - internal/sdk/models/operations/getworkflowtasklog.go
+  - internal/sdk/models/operations/info.go
+  - internal/sdk/models/operations/launchaction.go
+  - internal/sdk/models/operations/leaveorganization.go
+  - internal/sdk/models/operations/leaveworkspaceparticipant.go
+  - internal/sdk/models/operations/listactions.go
+  - internal/sdk/models/operations/listactiontypes.go
+  - internal/sdk/models/operations/listcomputeenvs.go
+  - internal/sdk/models/operations/listcredentials.go
+  - internal/sdk/models/operations/listdatalinks.go
+  - internal/sdk/models/operations/listdatasets.go
+  - internal/sdk/models/operations/listdatasetsv2.go
+  - internal/sdk/models/operations/listdatasetversions.go
+  - internal/sdk/models/operations/listdatasetversionsv2.go
+  - internal/sdk/models/operations/listdatastudiocheckpoints.go
+  - internal/sdk/models/operations/listdatastudios.go
+  - internal/sdk/models/operations/listdatastudiotemplates.go
+  - internal/sdk/models/operations/listlabels.go
+  - internal/sdk/models/operations/listlatestdatasetversionsv2.go
+  - internal/sdk/models/operations/listlaunchdatasetversions.go
+  - internal/sdk/models/operations/listmounteddatalinkids.go
+  - internal/sdk/models/operations/listorganizationcollaborators.go
+  - internal/sdk/models/operations/listorganizationmembers.go
+  - internal/sdk/models/operations/listorganizations.go
+  - internal/sdk/models/operations/listorganizationteammembers.go
+  - internal/sdk/models/operations/listorganizationteams.go
+  - internal/sdk/models/operations/listpipelinerepositories.go
+  - internal/sdk/models/operations/listpipelines.go
+  - internal/sdk/models/operations/listpipelinesecrets.go
+  - internal/sdk/models/operations/listplatformregions.go
+  - internal/sdk/models/operations/listplatforms.go
+  - internal/sdk/models/operations/listworkflows.go
+  - internal/sdk/models/operations/listworkflowtasks.go
+  - internal/sdk/models/operations/listworkspacedatasetversions.go
+  - internal/sdk/models/operations/listworkspaceparticipants.go
+  - internal/sdk/models/operations/listworkspaces.go
+  - internal/sdk/models/operations/listworkspacesbyteam.go
+  - internal/sdk/models/operations/listworkspacesuser.go
+  - internal/sdk/models/operations/options.go
+  - internal/sdk/models/operations/pauseaction.go
+  - internal/sdk/models/operations/refreshdatalinkcache.go
+  - internal/sdk/models/operations/removelabelsfromactions.go
+  - internal/sdk/models/operations/removelabelsfrompipelines.go
+  - internal/sdk/models/operations/removelabelsfromworkflows.go
+  - internal/sdk/models/operations/startdatastudio.go
+  - internal/sdk/models/operations/stopdatastudio.go
+  - internal/sdk/models/operations/tokenlist.go
+  - internal/sdk/models/operations/updateaction.go
+  - internal/sdk/models/operations/updatecomputeenv.go
+  - internal/sdk/models/operations/updatecomputeenvprimary.go
+  - internal/sdk/models/operations/updatecredentials.go
+  - internal/sdk/models/operations/updatecustomdatalink.go
+  - internal/sdk/models/operations/updatedataset.go
+  - internal/sdk/models/operations/updatedatasetv2.go
+  - internal/sdk/models/operations/updatedatastudiocheckpoint.go
+  - internal/sdk/models/operations/updatedatastudiosworkspacesettings.go
+  - internal/sdk/models/operations/updatelabel.go
+  - internal/sdk/models/operations/updateorganization.go
+  - internal/sdk/models/operations/updateorganizationmemberrole.go
+  - internal/sdk/models/operations/updateorganizationteam.go
+  - internal/sdk/models/operations/updatepipeline.go
+  - internal/sdk/models/operations/updatepipelinesecret.go
+  - internal/sdk/models/operations/updatetracebegin.go
+  - internal/sdk/models/operations/updatetracecomplete.go
+  - internal/sdk/models/operations/updatetraceheartbeat.go
+  - internal/sdk/models/operations/updatetraceprogress.go
+  - internal/sdk/models/operations/updateuser.go
+  - internal/sdk/models/operations/updateworkspace.go
+  - internal/sdk/models/operations/updateworkspaceparticipantrole.go
+  - internal/sdk/models/operations/uploaddataset.go
+  - internal/sdk/models/operations/uploaddatasetv2.go
+  - internal/sdk/models/operations/userinfo.go
+  - internal/sdk/models/operations/validateactionname.go
+  - internal/sdk/models/operations/validatecomputeenvname.go
+  - internal/sdk/models/operations/validatecredentialsname.go
+  - internal/sdk/models/operations/validatedatastudioname.go
+  - internal/sdk/models/operations/validateorganizationname.go
+  - internal/sdk/models/operations/validatepipelinename.go
+  - internal/sdk/models/operations/validatepipelinesecretname.go
+  - internal/sdk/models/operations/validateteamname.go
+  - internal/sdk/models/operations/validateusername.go
+  - internal/sdk/models/operations/validateworkflowconstraints.go
+  - internal/sdk/models/operations/workflowlogs.go
+  - internal/sdk/models/operations/workspacevalidate.go
+  - internal/sdk/models/shared/accesstoken.go
+  - internal/sdk/models/shared/actionconfigtype.go
+  - internal/sdk/models/shared/actioneventtype.go
+  - internal/sdk/models/shared/actionqueryattribute.go
+  - internal/sdk/models/shared/actionresponsedto.go
+  - internal/sdk/models/shared/actionsource.go
+  - internal/sdk/models/shared/actionstatus.go
+  - internal/sdk/models/shared/activeconnection.go
+  - internal/sdk/models/shared/addmemberrequest.go
+  - internal/sdk/models/shared/addmemberresponse.go
+  - internal/sdk/models/shared/addparticipantrequest.go
+  - internal/sdk/models/shared/addparticipantresponse.go
+  - internal/sdk/models/shared/addteammemberresponse.go
+  - internal/sdk/models/shared/analytics.go
+  - internal/sdk/models/shared/associateactionlabelsrequest.go
+  - internal/sdk/models/shared/associatepipelinelabelsrequest.go
+  - internal/sdk/models/shared/associateworkflowlabelsrequest.go
+  - internal/sdk/models/shared/awsbatchplatformmetainfo.go
+  - internal/sdk/models/shared/awscloudplatformmetainfo.go
+  - internal/sdk/models/shared/azbatchforgeconfig.go
+  - internal/sdk/models/shared/azbatchplatformmetainfo.go
+  - internal/sdk/models/shared/bucket.go
+  - internal/sdk/models/shared/cloudpricemodel.go
+  - internal/sdk/models/shared/computeconfig.go
+  - internal/sdk/models/shared/computeenvcomputeconfiginput.go
+  - internal/sdk/models/shared/computeenvdbdto.go
+  - internal/sdk/models/shared/computeenvqueryattribute.go
+  - internal/sdk/models/shared/computeenvresponsedto.go
+  - internal/sdk/models/shared/computeenvstatus.go
+  - internal/sdk/models/shared/computeplatform.go
+  - internal/sdk/models/shared/computeplatformdto.go
+  - internal/sdk/models/shared/computeregion.go
+  - internal/sdk/models/shared/configenvvariable.go
+  - internal/sdk/models/shared/createaccesstokenrequest.go
+  - internal/sdk/models/shared/createaccesstokenresponse.go
+  - internal/sdk/models/shared/createactionrequest.go
+  - internal/sdk/models/shared/createactionresponse.go
+  - internal/sdk/models/shared/createcomputeenvrequest.go
+  - internal/sdk/models/shared/createcomputeenvresponse.go
+  - internal/sdk/models/shared/createcredentialsrequest.go
+  - internal/sdk/models/shared/createcredentialsresponse.go
+  - internal/sdk/models/shared/createdatasetrequest.go
+  - internal/sdk/models/shared/createdatasetresponse.go
+  - internal/sdk/models/shared/createlabelrequest.go
+  - internal/sdk/models/shared/createlabelresponse.go
+  - internal/sdk/models/shared/createorganizationrequest.go
+  - internal/sdk/models/shared/createorganizationresponse.go
+  - internal/sdk/models/shared/createpipelinerequest.go
+  - internal/sdk/models/shared/createpipelineresponse.go
+  - internal/sdk/models/shared/createpipelinesecretrequest.go
+  - internal/sdk/models/shared/createpipelinesecretresponse.go
+  - internal/sdk/models/shared/createteammemberrequest.go
+  - internal/sdk/models/shared/createteamrequest.go
+  - internal/sdk/models/shared/createteamresponse.go
+  - internal/sdk/models/shared/createworkflowstarresponse.go
+  - internal/sdk/models/shared/createworkspacerequest.go
+  - internal/sdk/models/shared/createworkspaceresponse.go
+  - internal/sdk/models/shared/credentialsinput.go
+  - internal/sdk/models/shared/credentialsoutput.go
+  - internal/sdk/models/shared/datalinkcontentresponse.go
+  - internal/sdk/models/shared/datalinkcontenttreelistresponse.go
+  - internal/sdk/models/shared/datalinkcreaterequest.go
+  - internal/sdk/models/shared/datalinkcredentials.go
+  - internal/sdk/models/shared/datalinkdeleteitemrequest.go
+  - internal/sdk/models/shared/datalinkdeleteitemresponse.go
+  - internal/sdk/models/shared/datalinkdownloadscriptresponse.go
+  - internal/sdk/models/shared/datalinkdownloadurlresponse.go
+  - internal/sdk/models/shared/datalinkdto.go
+  - internal/sdk/models/shared/datalinkfinishmultipartuploadrequest.go
+  - internal/sdk/models/shared/datalinkitem.go
+  - internal/sdk/models/shared/datalinkitemdeletionfailure.go
+  - internal/sdk/models/shared/datalinkitemtype.go
+  - internal/sdk/models/shared/datalinkmultipartuploadrequest.go
+  - internal/sdk/models/shared/datalinkmultipartuploadresponse.go
+  - internal/sdk/models/shared/datalinkprovider.go
+  - internal/sdk/models/shared/datalinkresponse.go
+  - internal/sdk/models/shared/datalinksimpleitem.go
+  - internal/sdk/models/shared/datalinkslistresponse.go
+  - internal/sdk/models/shared/datalinktype.go
+  - internal/sdk/models/shared/datalinkupdaterequest.go
+  - internal/sdk/models/shared/dataset.go
+  - internal/sdk/models/shared/datasetversiondbdto.go
+  - internal/sdk/models/shared/datastudiocheckpointdto.go
+  - internal/sdk/models/shared/datastudiocheckpointupdaterequest.go
+  - internal/sdk/models/shared/datastudiocomputeenvdto.go
+  - internal/sdk/models/shared/datastudioconfiguration.go
+  - internal/sdk/models/shared/datastudiocreaterequest.go
+  - internal/sdk/models/shared/datastudiocreateresponse.go
+  - internal/sdk/models/shared/datastudiodto.go
+  - internal/sdk/models/shared/datastudiodtoparentcheckpoint.go
+  - internal/sdk/models/shared/datastudiolistcheckpointsresponse.go
+  - internal/sdk/models/shared/datastudiolistresponse.go
+  - internal/sdk/models/shared/datastudiomountedlinksresponse.go
+  - internal/sdk/models/shared/datastudioprogressstep.go
+  - internal/sdk/models/shared/datastudioprogressstepstatus.go
+  - internal/sdk/models/shared/datastudioqueryattribute.go
+  - internal/sdk/models/shared/datastudiostartrequest.go
+  - internal/sdk/models/shared/datastudiostartresponse.go
+  - internal/sdk/models/shared/datastudiostatus.go
+  - internal/sdk/models/shared/datastudiostatusinfo.go
+  - internal/sdk/models/shared/datastudiostopresponse.go
+  - internal/sdk/models/shared/datastudiotemplate.go
+  - internal/sdk/models/shared/datastudiotemplateslistresponse.go
+  - internal/sdk/models/shared/datastudioversionstatus.go
+  - internal/sdk/models/shared/datastudioworkspacesettingsresponse.go
+  - internal/sdk/models/shared/deletecredentialsconflictresponse.go
+  - internal/sdk/models/shared/deletecredentialsconflictresponseconflict.go
+  - internal/sdk/models/shared/deleteworkflowsrequest.go
+  - internal/sdk/models/shared/deleteworkflowsresponse.go
+  - internal/sdk/models/shared/describeactionresponse.go
+  - internal/sdk/models/shared/describecomputeenvresponse.go
+  - internal/sdk/models/shared/describecredentialsresponse.go
+  - internal/sdk/models/shared/describedatasetresponse.go
+  - internal/sdk/models/shared/describelaunchresponse.go
+  - internal/sdk/models/shared/describeorganizationquotasresponse.go
+  - internal/sdk/models/shared/describeorganizationresponse.go
+  - internal/sdk/models/shared/describepipelineinforesponse.go
+  - internal/sdk/models/shared/describepipelineresponse.go
+  - internal/sdk/models/shared/describepipelinesecretresponse.go
+  - internal/sdk/models/shared/describeplatformresponse.go
+  - internal/sdk/models/shared/describetaskresponse.go
+  - internal/sdk/models/shared/describeteamresponse.go
+  - internal/sdk/models/shared/describeuserresponse.go
+  - internal/sdk/models/shared/describeworkflowlaunchresponse.go
+  - internal/sdk/models/shared/describeworkflowresponse.go
+  - internal/sdk/models/shared/describeworkspaceresponse.go
+  - internal/sdk/models/shared/efsfilesystem.go
+  - internal/sdk/models/shared/eksplatformmetainfo.go
+  - internal/sdk/models/shared/emptybodyrequest.go
+  - internal/sdk/models/shared/errorresponse.go
+  - internal/sdk/models/shared/eventtype.go
+  - internal/sdk/models/shared/forgeconfig.go
+  - internal/sdk/models/shared/fsxfilesystem.go
+  - internal/sdk/models/shared/getprogressresponse.go
+  - internal/sdk/models/shared/getworkflowmetricsresponse.go
+  - internal/sdk/models/shared/gkeplatformmetainfo.go
+  - internal/sdk/models/shared/googleplatformmetainfo.go
+  - internal/sdk/models/shared/googleplatformmetainfobucket.go
+  - internal/sdk/models/shared/googleplatformmetainfofilestore.go
+  - internal/sdk/models/shared/gridplatformmetainfo.go
+  - internal/sdk/models/shared/image.go
+  - internal/sdk/models/shared/instancetype.go
+  - internal/sdk/models/shared/iteratorstring.go
+  - internal/sdk/models/shared/jobcleanuppolicy.go
+  - internal/sdk/models/shared/jobinfodto.go
+  - internal/sdk/models/shared/jobqueue.go
+  - internal/sdk/models/shared/k8splatformmetainfo.go
+  - internal/sdk/models/shared/labeldbdto.go
+  - internal/sdk/models/shared/labeltype.go
+  - internal/sdk/models/shared/launch.go
+  - internal/sdk/models/shared/launchactionrequest.go
+  - internal/sdk/models/shared/launchactionresponse.go
+  - internal/sdk/models/shared/listaccesstokensresponse.go
+  - internal/sdk/models/shared/listactionsresponse.go
+  - internal/sdk/models/shared/listactionsresponseactioninfo.go
+  - internal/sdk/models/shared/listcomputeenvsresponse.go
+  - internal/sdk/models/shared/listcomputeenvsresponseentry.go
+  - internal/sdk/models/shared/listcredentialsresponse.go
+  - internal/sdk/models/shared/listdatasetsresponse.go
+  - internal/sdk/models/shared/listdatasetversionsresponse.go
+  - internal/sdk/models/shared/listeventtypesresponse.go
+  - internal/sdk/models/shared/listlabelsresponse.go
+  - internal/sdk/models/shared/listmembersresponse.go
+  - internal/sdk/models/shared/listorganizationsresponse.go
+  - internal/sdk/models/shared/listparticipantsresponse.go
+  - internal/sdk/models/shared/listpipelineinforesponse.go
+  - internal/sdk/models/shared/listpipelinesecretsresponse.go
+  - internal/sdk/models/shared/listpipelinesresponse.go
+  - internal/sdk/models/shared/listplatformsresponse.go
+  - internal/sdk/models/shared/listregionsresponse.go
+  - internal/sdk/models/shared/listtasksresponse.go
+  - internal/sdk/models/shared/listteamresponse.go
+  - internal/sdk/models/shared/listworkflowsresponse.go
+  - internal/sdk/models/shared/listworkflowsresponselistworkflowselement.go
+  - internal/sdk/models/shared/listworkspacesandorgresponse.go
+  - internal/sdk/models/shared/listworkspacesresponse.go
+  - internal/sdk/models/shared/localplatformmetainfo.go
+  - internal/sdk/models/shared/log.go
+  - internal/sdk/models/shared/logpage.go
+  - internal/sdk/models/shared/logpagedownload.go
+  - internal/sdk/models/shared/memberdbdto.go
+  - internal/sdk/models/shared/multirequestfileschema.go
+  - internal/sdk/models/shared/navbarconfig.go
+  - internal/sdk/models/shared/navbarconfignavbarmenu.go
+  - internal/sdk/models/shared/organdworkspacedto.go
+  - internal/sdk/models/shared/organization.go
+  - internal/sdk/models/shared/organizationdbdto.go
+  - internal/sdk/models/shared/organizationquotas.go
+  - internal/sdk/models/shared/orgrole.go
+  - internal/sdk/models/shared/orgtype.go
+  - internal/sdk/models/shared/participantdbdto.go
+  - internal/sdk/models/shared/participanttype.go
+  - internal/sdk/models/shared/pipelinedbdto.go
+  - internal/sdk/models/shared/pipelineinfo.go
+  - internal/sdk/models/shared/pipelineoptimizationstatus.go
+  - internal/sdk/models/shared/pipelinequeryattribute.go
+  - internal/sdk/models/shared/pipelineschemaattributes.go
+  - internal/sdk/models/shared/pipelineschemaresponse.go
+  - internal/sdk/models/shared/pipelinesecret.go
+  - internal/sdk/models/shared/platformmetainfo.go
+  - internal/sdk/models/shared/podcleanuppolicy.go
+  - internal/sdk/models/shared/processload.go
+  - internal/sdk/models/shared/progressdata.go
+  - internal/sdk/models/shared/randomworkflownameresponse.go
+  - internal/sdk/models/shared/resourcedata.go
+  - internal/sdk/models/shared/runid.go
+  - internal/sdk/models/shared/runlistresponse.go
+  - internal/sdk/models/shared/runlog.go
+  - internal/sdk/models/shared/runrequest.go
+  - internal/sdk/models/shared/runstatus.go
+  - internal/sdk/models/shared/security.go
+  - internal/sdk/models/shared/securitygroup.go
+  - internal/sdk/models/shared/securitykeysoutput.go
+  - internal/sdk/models/shared/serviceinfo.go
+  - internal/sdk/models/shared/serviceinforesponse.go
+  - internal/sdk/models/shared/state.go
+  - internal/sdk/models/shared/studiouser.go
+  - internal/sdk/models/shared/submitworkflowlaunchrequest.go
+  - internal/sdk/models/shared/submitworkflowlaunchresponse.go
+  - internal/sdk/models/shared/subnet.go
+  - internal/sdk/models/shared/task.go
+  - internal/sdk/models/shared/taskstatus.go
+  - internal/sdk/models/shared/team.go
+  - internal/sdk/models/shared/teamdbdto.go
+  - internal/sdk/models/shared/tracebeginrequest.go
+  - internal/sdk/models/shared/tracebeginresponse.go
+  - internal/sdk/models/shared/tracecompleterequest.go
+  - internal/sdk/models/shared/tracecompleteresponse.go
+  - internal/sdk/models/shared/tracecreaterequest.go
+  - internal/sdk/models/shared/tracecreateresponse.go
+  - internal/sdk/models/shared/traceheartbeatrequest.go
+  - internal/sdk/models/shared/traceheartbeatresponse.go
+  - internal/sdk/models/shared/traceprocessingstatus.go
+  - internal/sdk/models/shared/traceprogressdata.go
+  - internal/sdk/models/shared/traceprogressdetail.go
+  - internal/sdk/models/shared/traceprogressrequest.go
+  - internal/sdk/models/shared/traceprogressresponse.go
+  - internal/sdk/models/shared/updateactionrequest.go
+  - internal/sdk/models/shared/updatecomputeenvrequest.go
+  - internal/sdk/models/shared/updatecredentialsrequest.go
+  - internal/sdk/models/shared/updatedatasetrequest.go
+  - internal/sdk/models/shared/updatelabelrequest.go
+  - internal/sdk/models/shared/updatelabelresponse.go
+  - internal/sdk/models/shared/updatememberrolerequest.go
+  - internal/sdk/models/shared/updateorganizationrequest.go
+  - internal/sdk/models/shared/updateparticipantrolerequest.go
+  - internal/sdk/models/shared/updatepipelinerequest.go
+  - internal/sdk/models/shared/updatepipelineresponse.go
+  - internal/sdk/models/shared/updatepipelinesecretrequest.go
+  - internal/sdk/models/shared/updateteamrequest.go
+  - internal/sdk/models/shared/updateworkspacerequest.go
+  - internal/sdk/models/shared/uploaddatasetversionresponse.go
+  - internal/sdk/models/shared/uploadetag.go
+  - internal/sdk/models/shared/userdbdto.go
+  - internal/sdk/models/shared/visibility.go
+  - internal/sdk/models/shared/vpc.go
+  - internal/sdk/models/shared/weserrorresponse.go
+  - internal/sdk/models/shared/wfmanifest.go
+  - internal/sdk/models/shared/wfnextflow.go
+  - internal/sdk/models/shared/wfstats.go
+  - internal/sdk/models/shared/workflow.go
+  - internal/sdk/models/shared/workflowdbdto.go
+  - internal/sdk/models/shared/workflowinput.go
+  - internal/sdk/models/shared/workflowlaunchrequest.go
+  - internal/sdk/models/shared/workflowlaunchresponse.go
+  - internal/sdk/models/shared/workflowload.go
+  - internal/sdk/models/shared/workflowlogresponse.go
+  - internal/sdk/models/shared/workflowmetrics.go
+  - internal/sdk/models/shared/workflowqueryattribute.go
+  - internal/sdk/models/shared/workflowstatus.go
+  - internal/sdk/models/shared/workspace.go
+  - internal/sdk/models/shared/workspacedbdto.go
+  - internal/sdk/models/shared/wsprole.go
+  - internal/sdk/orgs.go
+  - internal/sdk/pipelines.go
+  - internal/sdk/pipelinesecrets.go
+  - internal/sdk/platforms.go
+  - internal/sdk/retry/config.go
+  - internal/sdk/seqera.go
+  - internal/sdk/serviceinfo.go
+  - internal/sdk/studios.go
+  - internal/sdk/teams.go
+  - internal/sdk/tokens.go
+  - internal/sdk/trace.go
+  - internal/sdk/types/bigint.go
+  - internal/sdk/types/date.go
+  - internal/sdk/types/datetime.go
+  - internal/sdk/types/decimal.go
+  - internal/sdk/types/pointers.go
+  - internal/sdk/users.go
+  - internal/sdk/workflows.go
+  - internal/sdk/workspaces.go
+  - internal/validators/DateValidator.go
+  - internal/validators/ExactlyOneChild.go
+  - internal/validators/JSONParseValidator.go
+  - internal/validators/RFC3339Validator.go
+  - internal/validators/boolvalidators/not_null.go
+  - internal/validators/float32validators/not_null.go
+  - internal/validators/float64validators/not_null.go
+  - internal/validators/int32validators/not_null.go
+  - internal/validators/int64validators/not_null.go
+  - internal/validators/listvalidators/not_null.go
+  - internal/validators/mapvalidators/not_null.go
+  - internal/validators/numbervalidators/not_null.go
+  - internal/validators/objectvalidators/not_null.go
+  - internal/validators/setvalidators/not_null.go
+  - internal/validators/stringvalidators/not_null.go
+  - main.go
+  - terraform-registry-manifest.json
+  - tools/tools.go
+examples:
+  ListActions:
+    speakeasy-default-list-actions:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateAction:
+    speakeasy-default-create-action:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListActionTypes:
+    speakeasy-default-list-action-types:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateActionName:
+    speakeasy-default-validate-action-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAction:
+    speakeasy-default-describe-action:
+      parameters:
+        path:
+          actionId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAction:
+    speakeasy-default-update-action:
+      parameters:
+        path:
+          actionId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAction:
+    speakeasy-default-delete-action:
+      parameters:
+        path:
+          actionId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  LaunchAction:
+    speakeasy-default-launch-action:
+      parameters:
+        path:
+          actionId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  PauseAction:
+    speakeasy-default-pause-action:
+      parameters:
+        path:
+          actionId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  AddLabelsToActions:
+    speakeasy-default-add-labels-to-actions:
+      requestBody:
+        application/json: {}
+  ApplyLabelsToActions:
+    speakeasy-default-apply-labels-to-actions:
+      requestBody:
+        application/json: {}
+  RemoveLabelsFromActions:
+    speakeasy-default-remove-labels-from-actions:
+      requestBody:
+        application/json: {}
+  ListLabels:
+    speakeasy-default-list-labels:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateLabel:
+    speakeasy-default-create-label:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateLabel:
+    speakeasy-default-update-label:
+      parameters:
+        path:
+          labelId: 478484
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteLabel:
+    speakeasy-default-delete-label:
+      parameters:
+        path:
+          labelId: 991830
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  AddLabelsToPipelines:
+    speakeasy-default-add-labels-to-pipelines:
+      requestBody:
+        application/json: {}
+  ApplyLabelsToPipelines:
+    speakeasy-default-apply-labels-to-pipelines:
+      requestBody:
+        application/json: {}
+  RemoveLabelsFromPipelines:
+    speakeasy-default-remove-labels-from-pipelines:
+      requestBody:
+        application/json: {}
+  AddLabelsToWorkflows:
+    speakeasy-default-add-labels-to-workflows:
+      requestBody:
+        application/json: {}
+  ApplyLabelsToWorkflows:
+    speakeasy-default-apply-labels-to-workflows:
+      requestBody:
+        application/json: {}
+  RemoveLabelsFromWorkflows:
+    speakeasy-default-remove-labels-from-workflows:
+      requestBody:
+        application/json: {}
+  DownloadAvatar:
+    speakeasy-default-download-avatar:
+      parameters:
+        path:
+          avatarId: "<id>"
+      responses:
+        "200":
+          application/json: "0x1AcCAFd27D"
+        "400":
+          application/json: {"message": "<value>"}
+  ListComputeEnvs:
+    speakeasy-default-list-compute-envs:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateComputeEnv:
+    speakeasy-default-create-compute-env:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateComputeEnvName:
+    speakeasy-default-validate-compute-env-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeComputeEnv:
+    speakeasy-default-describe-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateComputeEnv:
+    speakeasy-default-update-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteComputeEnv:
+    speakeasy-default-delete-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateComputeEnvPrimary:
+    speakeasy-default-update-compute-env-primary:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListCredentials:
+    speakeasy-default-list-credentials:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateCredentials:
+    speakeasy-default-create-credentials:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateCredentialsName:
+    speakeasy-default-validate-credentials-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeCredentials:
+    speakeasy-default-describe-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateCredentials:
+    speakeasy-default-update-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteCredentials:
+    speakeasy-default-delete-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  ListDataLinks:
+    speakeasy-default-list-data-links:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateCustomDataLink:
+    speakeasy-default-create-custom-data-link:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  RefreshDataLinkCache: {}
+  DescribeDataLink:
+    speakeasy-default-describe-data-link:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateCustomDataLink:
+    speakeasy-default-update-custom-data-link:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteCustomDataLink:
+    speakeasy-default-delete-custom-data-link:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ExploreDataLink:
+    speakeasy-default-explore-data-link:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ExploreDataLinkTree:
+    speakeasy-default-explore-data-link-tree:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      responses:
+        "200":
+          application/json: {"items": []}
+        "400":
+          application/json: {"message": "<value>"}
+  ExploreDataLink_1:
+    speakeasy-default-explore-data-link-1:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+          path: "/srv"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteDataLinkItem:
+    speakeasy-default-delete-data-link-item:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DownloadDataLink:
+    speakeasy-default-download-data-link:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+          filePath: "/etc/yowza_into.mid"
+      responses:
+        "200":
+          application/json: "0xaaA09d62eD"
+        "400":
+          application/json: {"message": "<value>"}
+  GenerateDownloadUrlDataLink:
+    speakeasy-default-generate-download-url-data-link:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  GenerateDownloadScript:
+    speakeasy-default-generate-download-script:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  GenerateDataLinkUploadUrl:
+    speakeasy-default-generate-data-link-upload-url:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  FinishDataLinkUpload:
+    speakeasy-default-finish-data-link-upload:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  FinishDataLinkUpload_1:
+    speakeasy-default-finish-data-link-upload-1:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+          dirPath: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  GenerateDataLinkUploadUrl_1:
+    speakeasy-default-generate-data-link-upload-url-1:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+          dirPath: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListDatasetsV2:
+    speakeasy-default-list-datasets-v2:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateDatasetV2:
+    speakeasy-default-create-dataset-v2:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListLatestDatasetVersionsV2:
+    speakeasy-default-list-latest-dataset-versions-v2:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateDatasetV2:
+    speakeasy-default-update-dataset-v2:
+      parameters:
+        path:
+          datasetId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteDatasetV2:
+    speakeasy-default-delete-dataset-v2:
+      parameters:
+        path:
+          datasetId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeDatasetV2:
+    speakeasy-default-describe-dataset-v2:
+      parameters:
+        path:
+          datasetId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UploadDatasetV2:
+    speakeasy-default-upload-dataset-v2:
+      parameters:
+        path:
+          datasetId: "<id>"
+      requestBody:
+        multipart/form-data: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DownloadDatasetV2:
+    speakeasy-default-download-dataset-v2:
+      parameters:
+        path:
+          datasetId: "<id>"
+          version: "<value>"
+          fileName: "example.file"
+      responses:
+        "200":
+          application/json: "0xC91EdD673c"
+        "400":
+          application/json: {"message": "<value>"}
+  ListDatasetVersionsV2:
+    speakeasy-default-list-dataset-versions-v2:
+      parameters:
+        path:
+          datasetId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListLaunchDatasetVersions:
+    speakeasy-default-list-launch-dataset-versions:
+      parameters:
+        path:
+          launchId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+  ListDatasets:
+    speakeasy-default-list-datasets:
+      parameters:
+        path:
+          workspaceId: 136484
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateDataset:
+    speakeasy-default-create-dataset:
+      parameters:
+        path:
+          workspaceId: 751126
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkspaceDatasetVersions:
+    speakeasy-default-list-workspace-dataset-versions:
+      parameters:
+        path:
+          workspaceId: 686143
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateDataset:
+    speakeasy-default-update-dataset:
+      parameters:
+        path:
+          workspaceId: 737761
+          datasetId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteDataset:
+    speakeasy-default-delete-dataset:
+      parameters:
+        path:
+          workspaceId: 606881
+          datasetId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeDataset:
+    speakeasy-default-describe-dataset:
+      parameters:
+        path:
+          workspaceId: 418490
+          datasetId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UploadDataset:
+    speakeasy-default-upload-dataset:
+      parameters:
+        path:
+          workspaceId: 795043
+          datasetId: "<id>"
+      requestBody:
+        multipart/form-data: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DownloadDataset:
+    speakeasy-default-download-dataset:
+      parameters:
+        path:
+          workspaceId: 359737
+          datasetId: "<id>"
+          version: "<value>"
+          fileName: "example.file"
+      responses:
+        "200":
+          application/json: "0x509fBD6Aaf"
+        "400":
+          application/json: {"message": "<value>"}
+  ListDatasetVersions:
+    speakeasy-default-list-dataset-versions:
+      parameters:
+        path:
+          workspaceId: 354563
+          datasetId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  Ga4ghRunList:
+    speakeasy-default-ga4gh-run-list:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+  Ga4ghRunCreate:
+    speakeasy-default-ga4gh-run-create:
+      requestBody:
+        application/json: {}
+        multipart/form-data: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+  Ga4ghRunDescribe:
+    speakeasy-default-ga4gh-run-describe:
+      parameters:
+        path:
+          run_id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+  Ga4ghRunCancel:
+    speakeasy-default-ga4gh-run-cancel:
+      parameters:
+        path:
+          run_id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+  Ga4ghRunStatus:
+    speakeasy-default-ga4gh-run-status:
+      parameters:
+        path:
+          run_id: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+  Ga4ghServiceInfo:
+    speakeasy-default-ga4gh-service-info:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {}
+  DescribeLaunch:
+    speakeasy-default-describe-launch:
+      parameters:
+        path:
+          launchId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListOrganizations:
+    speakeasy-default-list-organizations:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateOrganization:
+    speakeasy-default-create-organization:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateOrganizationName:
+    speakeasy-default-validate-organization-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeOrganization:
+    speakeasy-default-describe-organization:
+      parameters:
+        path:
+          orgId: 809285
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateOrganization:
+    speakeasy-default-update-organization:
+      parameters:
+        path:
+          orgId: 914329
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteOrganization:
+    speakeasy-default-delete-organization:
+      parameters:
+        path:
+          orgId: 708330
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListOrganizationCollaborators:
+    speakeasy-default-list-organization-collaborators:
+      parameters:
+        path:
+          orgId: 937675
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListOrganizationMembers:
+    speakeasy-default-list-organization-members:
+      parameters:
+        path:
+          orgId: 395253
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateOrganizationMember:
+    speakeasy-default-create-organization-member:
+      parameters:
+        path:
+          orgId: 761726
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  LeaveOrganization:
+    speakeasy-default-leave-organization:
+      parameters:
+        path:
+          orgId: 563685
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteOrganizationMember:
+    speakeasy-default-delete-organization-member:
+      parameters:
+        path:
+          orgId: 550327
+          memberId: 831898
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateOrganizationMemberRole:
+    speakeasy-default-update-organization-member-role:
+      parameters:
+        path:
+          orgId: 977615
+          memberId: 493581
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeOrganizationQuotas:
+    speakeasy-default-describe-organization-quotas:
+      parameters:
+        path:
+          orgId: 973410
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListOrganizationTeams:
+    speakeasy-default-list-organization-teams:
+      parameters:
+        path:
+          orgId: 544458
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateOrganizationTeam:
+    speakeasy-default-create-organization-team:
+      parameters:
+        path:
+          orgId: 543550
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateTeamName:
+    speakeasy-default-validate-team-name:
+      parameters:
+        path:
+          orgId: 355539
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeOrganizationTeam:
+    speakeasy-default-describe-organization-team:
+      parameters:
+        path:
+          orgId: 246068
+          teamId: 454414
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateOrganizationTeam:
+    speakeasy-default-update-organization-team:
+      parameters:
+        path:
+          orgId: 196382
+          teamId: 335426
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteOrganizationTeam:
+    speakeasy-default-delete-organization-team:
+      parameters:
+        path:
+          orgId: 294305
+          teamId: 741515
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListOrganizationTeamMembers:
+    speakeasy-default-list-organization-team-members:
+      parameters:
+        path:
+          orgId: 851991
+          teamId: 300189
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateOrganizationTeamMember:
+    speakeasy-default-create-organization-team-member:
+      parameters:
+        path:
+          orgId: 579489
+          teamId: 61327
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteOrganizationTeamMember:
+    speakeasy-default-delete-organization-team-member:
+      parameters:
+        path:
+          orgId: 567526
+          teamId: 551165
+          memberId: 145827
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkspacesByTeam:
+    speakeasy-default-list-workspaces-by-team:
+      parameters:
+        path:
+          orgId: 12877
+          teamId: 696032
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkspaces:
+    speakeasy-default-list-workspaces:
+      parameters:
+        path:
+          orgId: 129198
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateWorkspace:
+    speakeasy-default-create-workspace:
+      parameters:
+        path:
+          orgId: 726719
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  WorkspaceValidate:
+    speakeasy-default-workspace-validate:
+      parameters:
+        path:
+          orgId: 102493
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeWorkspace:
+    speakeasy-default-describe-workspace:
+      parameters:
+        path:
+          orgId: 357619
+          workspaceId: 29089
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateWorkspace:
+    speakeasy-default-update-workspace:
+      parameters:
+        path:
+          orgId: 580420
+          workspaceId: 861183
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteWorkspace:
+    speakeasy-default-delete-workspace:
+      parameters:
+        path:
+          orgId: 849166
+          workspaceId: 300063
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkspaceParticipants:
+    speakeasy-default-list-workspace-participants:
+      parameters:
+        path:
+          orgId: 493072
+          workspaceId: 773845
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  LeaveWorkspaceParticipant:
+    speakeasy-default-leave-workspace-participant:
+      parameters:
+        path:
+          orgId: 887387
+          workspaceId: 607203
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateWorkspaceParticipant:
+    speakeasy-default-create-workspace-participant:
+      parameters:
+        path:
+          orgId: 685908
+          workspaceId: 100022
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteWorkspaceParticipant:
+    speakeasy-default-delete-workspace-participant:
+      parameters:
+        path:
+          orgId: 494691
+          workspaceId: 22633
+          participantId: 219884
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateWorkspaceParticipantRole:
+    speakeasy-default-update-workspace-participant-role:
+      parameters:
+        path:
+          orgId: 150685
+          workspaceId: 913254
+          participantId: 428418
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  FindDataStudiosWorkspaceSettings:
+    speakeasy-default-find-data-studios-workspace-settings:
+      parameters:
+        path:
+          orgId: 986994
+          workspaceId: 952424
+      responses:
+        "200":
+          application/json: {"orgId": 959967, "wspId": 518999, "lifespanHours": 75905}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateDataStudiosWorkspaceSettings:
+    speakeasy-default-update-data-studios-workspace-settings:
+      parameters:
+        path:
+          orgId: 259152
+          workspaceId: 513742
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkspacesUser:
+    speakeasy-default-list-workspaces-user:
+      parameters:
+        path:
+          userId: 557896
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListPipelineSecrets:
+    speakeasy-default-list-pipeline-secrets:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreatePipelineSecret:
+    speakeasy-default-create-pipeline-secret:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidatePipelineSecretName:
+    speakeasy-default-validate-pipeline-secret-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribePipelineSecret:
+    speakeasy-default-describe-pipeline-secret:
+      parameters:
+        path:
+          secretId: 316902
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdatePipelineSecret:
+    speakeasy-default-update-pipeline-secret:
+      parameters:
+        path:
+          secretId: 782498
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeletePipelineSecret:
+    speakeasy-default-delete-pipeline-secret:
+      parameters:
+        path:
+          secretId: 609384
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListPipelines:
+    speakeasy-default-list-pipelines:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreatePipeline:
+    speakeasy-default-create-pipeline:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribePipelineRepository:
+    speakeasy-default-describe-pipeline-repository:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListPipelineRepositories:
+    speakeasy-default-list-pipeline-repositories:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidatePipelineName:
+    speakeasy-default-validate-pipeline-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribePipeline:
+    speakeasy-default-describe-pipeline:
+      parameters:
+        path:
+          pipelineId: 589518
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdatePipeline:
+    speakeasy-default-update-pipeline:
+      parameters:
+        path:
+          pipelineId: 936263
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeletePipeline:
+    speakeasy-default-delete-pipeline:
+      parameters:
+        path:
+          pipelineId: 15957
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribePipelineLaunch:
+    speakeasy-default-describe-pipeline-launch:
+      parameters:
+        path:
+          pipelineId: 833165
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribePipelineSchema:
+    speakeasy-default-describe-pipeline-schema:
+      parameters:
+        path:
+          pipelineId: 814573
+      responses:
+        "200":
+          application/json: {"schema": "<value>"}
+        "400":
+          application/json: {"message": "<value>"}
+  ListPlatforms:
+    speakeasy-default-list-platforms:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribePlatform:
+    speakeasy-default-describe-platform:
+      parameters:
+        path:
+          platformId: "<id>"
+        query:
+          regionId: "<id>"
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListPlatformRegions:
+    speakeasy-default-list-platform-regions:
+      parameters:
+        path:
+          platformId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  Info:
+    speakeasy-default-info:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListDataStudios:
+    speakeasy-default-list-data-studios:
+      responses:
+        "200":
+          application/json: {"studios": [{}], "totalSize": 186382}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateDataStudio:
+    speakeasy-default-create-data-studio:
+      requestBody:
+        application/json: {"name": "<value>", "dataStudioToolUrl": "https://uneven-wallaby.com/", "computeEnvId": "<id>"}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListMountedDataLinkIds:
+    speakeasy-default-list-mounted-data-link-ids:
+      responses:
+        "200":
+          application/json: {}
+  ListDataStudioTemplates:
+    speakeasy-default-list-data-studio-templates:
+      responses:
+        "200":
+          application/json: {"templates": [], "totalSize": 453727}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateDataStudioName: {}
+  DescribeDataStudio:
+    speakeasy-default-describe-data-studio:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "404":
+          application/json: {"message": "<value>"}
+  DeleteDataStudio:
+    speakeasy-default-delete-data-studio:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "404":
+          application/json: {"message": "<value>"}
+  ListDataStudioCheckpoints:
+    speakeasy-default-list-data-studio-checkpoints:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "200":
+          application/json: {"checkpoints": [], "totalSize": 321212}
+        "400":
+          application/json: {"message": "<value>"}
+  GetDataStudioCheckpoint:
+    speakeasy-default-get-data-studio-checkpoint:
+      parameters:
+        path:
+          sessionId: "<id>"
+          checkpointId: 674924
+      responses:
+        "200":
+          application/json: {"id": 650158, "name": "<value>", "dateCreated": "2023-09-09T23:15:18.409Z", "dateSaved": "2025-08-27T11:46:26.393Z", "author": {"id": 209321, "userName": "Marcel.Fadel", "email": "Dawn65@gmail.com", "avatar": "https://picsum.photos/seed/7YoAI/592/3800"}, "path": "/usr/src"}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateDataStudioCheckpoint:
+    speakeasy-default-update-data-studio-checkpoint:
+      parameters:
+        path:
+          sessionId: "<id>"
+          checkpointId: 554221
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"id": 30064, "name": "<value>", "dateCreated": "2024-08-15T11:49:05.950Z", "dateSaved": "2024-07-04T01:04:00.041Z", "author": {"id": 361514, "userName": "Reese.Murphy", "email": "Roosevelt_Kuhic@hotmail.com", "avatar": "https://loremflickr.com/3378/1110?lock=4186109938868485"}, "path": "/opt/lib"}
+        "400":
+          application/json: {"message": "<value>"}
+  ExtendDataStudioLifespan:
+    speakeasy-default-extend-data-studio-lifespan:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  StartDataStudio:
+    speakeasy-default-start-data-studio:
+      parameters:
+        path:
+          sessionId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"jobSubmitted": true, "sessionId": "<id>", "statusInfo": {}}
+        "404":
+          application/json: {"message": "<value>"}
+  StopDataStudio:
+    speakeasy-default-stop-data-studio:
+      parameters:
+        path:
+          sessionId: "<id>"
+      responses:
+        "200":
+          application/json: {"jobSubmitted": false, "sessionId": "<id>", "statusInfo": {}}
+        "404":
+          application/json: {"message": "<value>"}
+  TokenList:
+    speakeasy-default-token-list:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateToken:
+    speakeasy-default-create-token:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAllTokens:
+    speakeasy-default-delete-all-tokens:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteToken:
+    speakeasy-default-delete-token:
+      parameters:
+        path:
+          tokenId: 20845
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateTrace:
+    speakeasy-default-create-trace:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateTraceBegin:
+    speakeasy-default-update-trace-begin:
+      parameters:
+        path:
+          workflowId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateTraceComplete:
+    speakeasy-default-update-trace-complete:
+      parameters:
+        path:
+          workflowId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateTraceHeartbeat:
+    speakeasy-default-update-trace-heartbeat:
+      parameters:
+        path:
+          workflowId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateTraceProgress:
+    speakeasy-default-update-trace-progress:
+      parameters:
+        path:
+          workflowId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UserInfo:
+    speakeasy-default-user-info:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateUserName:
+    speakeasy-default-validate-user-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeUser:
+    speakeasy-default-describe-user:
+      parameters:
+        path:
+          userId: 630418
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateUser:
+    speakeasy-default-update-user:
+      parameters:
+        path:
+          userId: 477393
+      requestBody:
+        application/json: {"userName": "Gail_Pacocha", "email": "Reece70@yahoo.com"}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteUser:
+    speakeasy-default-delete-user:
+      parameters:
+        path:
+          userId: 89431
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkflows:
+    speakeasy-default-list-workflows:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteWorkflowMany:
+    speakeasy-default-delete-workflow-many:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateWorkflowLaunch:
+    speakeasy-default-create-workflow-launch:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  GenerateRandomWorkflowName:
+    speakeasy-default-generate-random-workflow-name:
+      responses:
+        "200":
+          application/json: {}
+  ValidateWorkflowConstraints:
+    speakeasy-default-validate-workflow-constraints:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeWorkflow:
+    speakeasy-default-describe-workflow:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteWorkflow:
+    speakeasy-default-delete-workflow:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CancelWorkflow:
+    speakeasy-default-cancel-workflow:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DownloadWorkflowLog:
+    speakeasy-default-download-workflow-log:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: "0x21dDAb1CED"
+        "400":
+          application/json: {"message": "<value>"}
+  DownloadWorkflowTaskLog:
+    speakeasy-default-download-workflow-task-log:
+      parameters:
+        path:
+          workflowId: "<id>"
+          taskId: 679525
+      responses:
+        "200":
+          application/json: "0x8d3d3E235F"
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeWorkflowLaunch:
+    speakeasy-default-describe-workflow-launch:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  WorkflowLogs:
+    speakeasy-default-workflow-logs:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  GetWorkflowTaskLog:
+    speakeasy-default-get-workflow-task-log:
+      parameters:
+        path:
+          workflowId: "<id>"
+          taskId: 820618
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeWorkflowMetrics:
+    speakeasy-default-describe-workflow-metrics:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeWorkflowProgress:
+    speakeasy-default-describe-workflow-progress:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeWorkflowStar:
+    speakeasy-default-describe-workflow-star:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "404":
+          application/json: {"message": "<value>"}
+  CreateWorkflowStar:
+    speakeasy-default-create-workflow-star:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "404":
+          application/json: {"message": "<value>"}
+  DeleteWorkflowStar:
+    speakeasy-default-delete-workflow-star:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "404":
+          application/json: {"message": "<value>"}
+  DescribeWorkflowTask:
+    speakeasy-default-describe-workflow-task:
+      parameters:
+        path:
+          workflowId: "<id>"
+          taskId: 295094
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkflowTasks:
+    speakeasy-default-list-workflow-tasks:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+examplesVersion: 1.0.2
+generatedTests: {}
