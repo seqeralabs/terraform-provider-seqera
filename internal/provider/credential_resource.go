@@ -682,9 +682,25 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"provider_type": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(16),
+					stringvalidator.OneOf(
+						"aws",
+						"azure",
+						"google",
+						"github",
+						"gitlab",
+						"bitbucket",
+						"ssh",
+						"k8s",
+						"container-reg",
+						"tw-agent",
+						"codecommit",
+						"gitea",
+						"azurerepos",
+						"seqeracompute",
+					),
 				},
 			},
 			"workspace_id": schema.Int64Attribute{

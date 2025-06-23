@@ -11,6 +11,6 @@ resource "seqera_credential" "my_credential" {
     }
   }
   name          = "...my_name..."
-  provider_type = "...my_provider_t"
+  provider_type = "ssh"
   workspace_id  = 6
 }

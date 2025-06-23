@@ -9,7 +9,7 @@ terraform {
 
 provider "seqera" {
   server_url = "https://api.cloud.seqera.io"
-  bearer_auth = "BEARER_TOKEN"
+  bearer_auth = "xxx=="
 }
 
 

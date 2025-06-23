@@ -8739,7 +8739,21 @@ components:
         provider:
           maxLength: 16
           type: string
-          enum: []
+          enum:
+            - aws
+            - azure
+            - google
+            - github
+            - gitlab
+            - bitbucket
+            - ssh
+            - k8s
+            - container-reg
+            - tw-agent
+            - codecommit
+            - gitea
+            - azurerepos
+            - seqeracompute
           x-speakeasy-name-override: providerType
         baseUrl:
           maxLength: 200
@@ -10309,6 +10323,7 @@ components:
           items:
             $ref: "#/components/schemas/ListComputeEnvsResponse.Entry"
       x-speakeasy-entity: ComputeEnvs
+      ## Compute Config Schemas
     ListComputeEnvsResponse.Entry:
       type: object
       properties:
@@ -10345,6 +10360,7 @@ components:
           items:
             $ref: "#/components/schemas/Credentials"
       x-speakeasy-entity: Credentials
+      ## Security Keys Schemas
     ListDatasetVersionsResponse:
       type: object
       properties:
@@ -10881,6 +10897,7 @@ components:
         computeEnv:
           $ref: "#/components/schemas/ComputeEnvDbDto"
       x-speakeasy-entity: Pipeline
+      ## Users
     PipelineInfo:
       type: object
       properties:
@@ -12025,6 +12042,7 @@ components:
       x-speakeasy-entity:
         - CurrentUser
         - User
+        ## Workflows
     Visibility:
       type: string
       enum:
@@ -12381,6 +12399,7 @@ components:
         pipeline:
           type: string
           x-speakeasy-param-force-new: true
+          ## Misc Schemas
         workDir:
           type: string
         revision:

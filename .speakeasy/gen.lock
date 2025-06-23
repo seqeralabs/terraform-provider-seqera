@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: c3c967c4d404d9c3dd74c995d1217bfd
+  docChecksum: 6e5b47b6c4b4be5bfc34c87cff991ec8
   docVersion: 1.45.0
-  speakeasyVersion: 1.567.3
+  speakeasyVersion: 1.568.0
   generationVersion: 2.632.2
   releaseVersion: 0.0.3
   configChecksum: 536fc11394b8f75f1f66f52d9bd64a2b
@@ -444,7 +444,6 @@ generatedFiles:
   - internal/sdk/models/shared/createworkflowstarresponse.go
   - internal/sdk/models/shared/createworkspacerequest.go
   - internal/sdk/models/shared/createworkspaceresponse.go
-  - internal/sdk/models/shared/credentialsinput.go
   - internal/sdk/models/shared/credentialsoutput.go
   - internal/sdk/models/shared/datalinkcontentresponse.go
   - internal/sdk/models/shared/datalinkcontenttreelistresponse.go

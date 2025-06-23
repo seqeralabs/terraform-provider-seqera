@@ -30,9 +30,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	} else {
 		description = nil
 	}
-	var providerType string
-	providerType = r.ProviderType.ValueString()
-
+	providerType := shared.ProviderType(r.ProviderType.ValueString())
 	baseURL := new(string)
 	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
 		*baseURL = r.BaseURL.ValueString()
@@ -885,7 +883,7 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(resp.ProviderType)
+		r.ProviderType = types.StringValue(string(resp.ProviderType))
 	}
 
 	return diags
