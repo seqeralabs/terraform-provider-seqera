@@ -8,6 +8,18 @@ terraform {
 }
 
 provider "seqera" {
-  server_url = "https://api.cloud.seqera.io"
-  bearer_auth = "eyJ0aWQiOiAxMTkwNH0uOGI1ZGJmNDViMDg5MDYxMjYwNGU2OTZiZTRkYjUzMGYzMGNjNWU5Yg=="
+  server_url  = var.seqera_server_url
+  bearer_auth = var.seqera_bearer_auth
+}
+
+variable "seqera_server_url" {
+  description = "Seqera API server URL"
+  type        = string
+  default     = "https://api.cloud.seqera.io"
+}
+
+variable "seqera_bearer_auth" {
+  description = "Seqera API bearer token"
+  type        = string
+  sensitive   = true
 }

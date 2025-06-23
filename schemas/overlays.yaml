@@ -36,6 +36,8 @@ actions:
     update:
       x-speakeasy-entity-operation: Action#delete
 
+
+
 ## Actions Schemas
   - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
     remove: true
@@ -209,22 +211,23 @@ actions:
       x-speakeasy-name-override: providerType
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
     remove: true
-  # - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
-  #   update:
-  #   - aws
-  #   - azure
-  #   - google
-  #   - github
-  #   - gitlab
-  #   - bitbucket
-  #   - ssh
-  #   - k8s
-  #   - container-reg
-  #   - tw-agent
-  #   - codecommit
-  #   - gitea
-  #   - azurerepos
-  #   - seqeracompute
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
+    update:
+    - aws
+    - azure
+    - google
+    - github
+    - gitlab
+    - bitbucket
+    - ssh
+    - k8s
+    - container-reg
+    - tw-agent
+    - codecommit
+    - gitea
+    - azurerepos
+    - seqeracompute
+
     # discriminator:
     #   propertyName: discriminator
     #   mapping:
@@ -269,7 +272,7 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
-    const: aws
+    x-speakeasy-xor-with: 
   - target: $["components"]["schemas"]["AzureEntraKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
     const: azure_entra
@@ -349,9 +352,9 @@ actions:
   - target: $.paths["/users/{userId}"].get
     update:
       x-speakeasy-entity-operation: User#read
-  - target: $.paths["/user/{userId}/workspaces"].get
-    update:
-      x-speakeasy-entity-operation: UserWorkspaces#read
+  # - target: $.paths["/user/{userId}/workspaces"].get
+  #   update:
+  #     x-speakeasy-entity-operation: UserWorkspaces#read
 
 ## Users Schemas
   - target: $.components.schemas.ListWorkspacesAndOrgResponse

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 6fefc56b897b7b10673bb35bf7d00436
+  docChecksum: 0d78e59527103dd5b78bbe2872e33e47
   docVersion: 1.45.0
   speakeasyVersion: 1.568.0
   generationVersion: 2.632.2
@@ -31,11 +31,15 @@ generatedFiles:
   - examples/data-sources/seqera_credential/data-source.tf
   - examples/data-sources/seqera_credentials/data-source.tf
   - examples/data-sources/seqera_current_user/data-source.tf
+  - examples/data-sources/seqera_data_studios/data-source.tf
   - examples/data-sources/seqera_datasets/data-source.tf
+  - examples/data-sources/seqera_orgs/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipelines/data-source.tf
+  - examples/data-sources/seqera_tokens/data-source.tf
   - examples/data-sources/seqera_user/data-source.tf
   - examples/data-sources/seqera_user_workspaces/data-source.tf
+  - examples/data-sources/seqera_workspace_datasets/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/seqera_action/import.sh
   - examples/resources/seqera_action/resource.tf
@@ -43,8 +47,14 @@ generatedFiles:
   - examples/resources/seqera_compute_env/resource.tf
   - examples/resources/seqera_credential/import.sh
   - examples/resources/seqera_credential/resource.tf
+  - examples/resources/seqera_data_studios/resource.tf
+  - examples/resources/seqera_orgs/resource.tf
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
+  - examples/resources/seqera_tokens/resource.tf
+  - examples/resources/seqera_trace/resource.tf
+  - examples/resources/seqera_workspace_datasets/import.sh
+  - examples/resources/seqera_workspace_datasets/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -81,6 +91,14 @@ generatedFiles:
   - internal/provider/currentuser_data_source_sdk.go
   - internal/provider/datasets_data_source.go
   - internal/provider/datasets_data_source_sdk.go
+  - internal/provider/datastudios_data_source.go
+  - internal/provider/datastudios_data_source_sdk.go
+  - internal/provider/datastudios_resource.go
+  - internal/provider/datastudios_resource_sdk.go
+  - internal/provider/orgs_data_source.go
+  - internal/provider/orgs_data_source_sdk.go
+  - internal/provider/orgs_resource.go
+  - internal/provider/orgs_resource_sdk.go
   - internal/provider/pipeline_data_source.go
   - internal/provider/pipeline_data_source_sdk.go
   - internal/provider/pipeline_resource.go
@@ -102,14 +120,22 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/tokens_data_source.go
+  - internal/provider/tokens_data_source_sdk.go
+  - internal/provider/tokens_resource.go
+  - internal/provider/tokens_resource_sdk.go
+  - internal/provider/trace_resource.go
+  - internal/provider/trace_resource_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
+  - internal/provider/types/access_token.go
   - internal/provider/types/action_config_type.go
   - internal/provider/types/action_event_type.go
   - internal/provider/types/action_response_dto.go
   - internal/provider/types/action_tower_action_config.go
   - internal/provider/types/action_tower_action_event.go
+  - internal/provider/types/active_connection.go
   - internal/provider/types/agent_security_keys.go
   - internal/provider/types/altair_pbs_configuration.go
   - internal/provider/types/amazon_eks_cluster_configuration.go
@@ -138,6 +164,15 @@ generatedFiles:
   - internal/provider/types/container_registry_keys.go
   - internal/provider/types/container_registry_keys1.go
   - internal/provider/types/credentials.go
+  - internal/provider/types/data_link_credentials.go
+  - internal/provider/types/data_link_dto.go
+  - internal/provider/types/data_studio_compute_env_dto.go
+  - internal/provider/types/data_studio_configuration.go
+  - internal/provider/types/data_studio_dto.go
+  - internal/provider/types/data_studio_dto_parent_checkpoint.go
+  - internal/provider/types/data_studio_progress_step.go
+  - internal/provider/types/data_studio_status_info.go
+  - internal/provider/types/data_studio_template.go
   - internal/provider/types/dataset.go
   - internal/provider/types/forge_config.go
   - internal/provider/types/git_hub_security_keys.go
@@ -163,6 +198,8 @@ generatedFiles:
   - internal/provider/types/list_compute_envs_response_entry.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
+  - internal/provider/types/organization.go
+  - internal/provider/types/organization_db_dto.go
   - internal/provider/types/pipeline_db_dto.go
   - internal/provider/types/security_keys.go
   - internal/provider/types/security_keys_output.go
@@ -172,6 +209,7 @@ generatedFiles:
   - internal/provider/types/slurm_configuration.go
   - internal/provider/types/ssh_security_keys.go
   - internal/provider/types/ssh_security_keys1.go
+  - internal/provider/types/studio_user.go
   - internal/provider/types/univa_grid_engine_configuration.go
   - internal/provider/types/workflow_launch_request.go
   - internal/provider/user_data_source.go
@@ -179,6 +217,10 @@ generatedFiles:
   - internal/provider/userworkspaces_data_source.go
   - internal/provider/userworkspaces_data_source_sdk.go
   - internal/provider/utils.go
+  - internal/provider/workspacedatasets_data_source.go
+  - internal/provider/workspacedatasets_data_source_sdk.go
+  - internal/provider/workspacedatasets_resource.go
+  - internal/provider/workspacedatasets_resource_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/actions.go
   - internal/sdk/avatars.go
@@ -444,7 +486,6 @@ generatedFiles:
   - internal/sdk/models/shared/createworkflowstarresponse.go
   - internal/sdk/models/shared/createworkspacerequest.go
   - internal/sdk/models/shared/createworkspaceresponse.go
-  - internal/sdk/models/shared/credentialsinput.go
   - internal/sdk/models/shared/credentialsoutput.go
   - internal/sdk/models/shared/datalinkcontentresponse.go
   - internal/sdk/models/shared/datalinkcontenttreelistresponse.go

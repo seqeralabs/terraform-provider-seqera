@@ -24,3 +24,12 @@ output "current_user_id" {
 locals {
   workspace_id = 49242724423913
 }
+
+
+# resource "seqera_orgs" "my_orgs" {
+#   organization = {
+#     description = "testing org"
+#     full_name   = "seqera_test_shahbaz_tf_provider"
+#     name        = "seqera_test_shahbaz_tf_provider"
+#   }
+# }

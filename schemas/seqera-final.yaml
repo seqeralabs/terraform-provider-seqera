@@ -1022,6 +1022,8 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#delete
+      x-speakeasy-entity-operation: Credential#delete
+      x-speakeasy-entity-operation: Credential#delete
   /data-links:
     get:
       summary: List data-links
@@ -2785,6 +2787,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Orgs#read
     post:
       summary: Create organization
       description: Creates a new organization.
@@ -2821,6 +2824,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Orgs#create
   /orgs/validate:
     get:
       summary: Validate organization name
@@ -2929,6 +2933,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Orgs#update
     delete:
       summary: Delete organization
       description: Deletes the organization identified by the given `orgId`.
@@ -2956,6 +2961,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Orgs#delete
   /orgs/{orgId}/collaborators:
     get:
       summary: List organization collaborators
@@ -5240,6 +5246,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataStudios#read
     post:
       summary: Create Studio
       description: "Creates a new Studio environment, starting it by default. Default behavior can be changed using the query parameter `autoStart=false`."
@@ -5300,6 +5307,7 @@ paths:
                 $ref: "#/components/schemas/DataStudioCreateResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataStudios#create
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -5495,6 +5503,7 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataStudios#delete
   /studios/{sessionId}/checkpoints:
     get:
       summary: List Studio checkpoints
@@ -5813,6 +5822,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Tokens#read
     post:
       summary: Create token
       description: "Creates an API access token with the details in the given request body."
@@ -5849,6 +5859,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Tokens#create
   /tokens/delete-all:
     delete:
       summary: Delete all user tokens
@@ -5897,6 +5908,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Tokens#delete
   /trace/create:
     post:
       summary: Create workflow execution trace
@@ -5935,6 +5947,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Trace#create
   /trace/{workflowId}/begin:
     put:
       summary: Signal workflow execution start
@@ -7239,6 +7252,7 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceDatasets#read
     post:
       summary: Create dataset
       description: Creates a new dataset in the given workspace context. Include the dataset file and details in your request body.
@@ -7284,6 +7298,7 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceDatasets#create
   /workspaces/{workspaceId}/datasets/versions:
     get:
       summary: List latest dataset versions
@@ -7370,6 +7385,7 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceDatasets#update
     delete:
       summary: Delete dataset
       description: Deletes the dataset identified by the given `datasetId`.
@@ -7404,6 +7420,7 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceDatasets#delete
   /workspaces/{workspaceId}/datasets/{datasetId}/metadata:
     get:
       summary: Describe dataset
@@ -7653,6 +7670,7 @@ components:
         dateCreated:
           type: string
           format: date-time
+      x-speakeasy-entity: Tokens
     Action.ConfigType:
       type: object
       properties:
@@ -8556,6 +8574,7 @@ components:
           type: string
         token:
           $ref: "#/components/schemas/AccessToken"
+      x-speakeasy-entity: Tokens
     CreateActionRequest:
       type: object
       properties:
@@ -8611,11 +8630,13 @@ components:
           type: string
         description:
           type: string
+      x-speakeasy-entity: Datasets
     CreateDatasetResponse:
       type: object
       properties:
         dataset:
           $ref: "#/components/schemas/Dataset"
+      x-speakeasy-entity: Datasets
     CreateLabelRequest:
       type: object
       properties:
@@ -8627,6 +8648,7 @@ components:
           type: boolean
         isDefault:
           type: boolean
+      x-speakeasy-entity: Label
     CreateLabelResponse:
       type: object
       properties:
@@ -8641,6 +8663,7 @@ components:
           type: boolean
         isDefault:
           type: boolean
+      x-speakeasy-entity: Label
     CreateOrganizationRequest:
       type: object
       properties:
@@ -8648,11 +8671,13 @@ components:
           $ref: "#/components/schemas/Organization"
         logoId:
           type: string
+      x-speakeasy-entity: Orgs
     CreateOrganizationResponse:
       type: object
       properties:
         organization:
           $ref: "#/components/schemas/OrganizationDbDto"
+      x-speakeasy-entity: Orgs
     CreatePipelineRequest:
       type: object
       properties:
@@ -8669,11 +8694,13 @@ components:
           items:
             type: integer
             format: int64
+      x-speakeasy-entity: Pipelines
     CreatePipelineResponse:
       type: object
       properties:
         pipeline:
           $ref: "#/components/schemas/PipelineDbDto"
+      x-speakeasy-entity: Pipelines
     CreatePipelineSecretRequest:
       type: object
       properties:
@@ -8739,7 +8766,39 @@ components:
         provider:
           maxLength: 16
           type: string
-          enum: []
+          enum:
+            - aws
+            - azure
+            - google
+            - github
+            - gitlab
+            - bitbucket
+            - ssh
+            - k8s
+            - container-reg
+            - tw-agent
+            - codecommit
+            - gitea
+            - azurerepos
+            - seqeracompute
+            # discriminator:
+            #   propertyName: discriminator
+            #   mapping:
+            #     aws: "#/components/schemas/AwsSecurityKeys"
+            #     azure: "#/components/schemas/AzureSecurityKeys"
+            #     google: "#/components/schemas/GoogleSecurityKeys"
+            #     github: "#/components/schemas/GitHubSecurityKeys"
+            #     gitlab: "#/components/schemas/GitLabSecurityKeys"
+            #     bitbucket: "#/components/schemas/BitBucketSecurityKeys"
+            #     ssh: "#/components/schemas/SSHSecurityKeys"
+            #     k8s: "#/components/schemas/K8sSecurityKeys"
+            #     container-reg: "#/components/schemas/ContainerRegistryKeys"
+            #     tw-agent: "#/components/schemas/AgentSecurityKeys"
+            #     codecommit: "#/components/schemas/CodeCommitSecurityKeys"
+            #     gitea: "#/components/schemas/GiteaSecurityKeys"
+            #     azurerepos: "#/components/schemas/AzureReposSecurityKeys"
+            #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
+            #     azure_entra: "#/components/schemas/AzureEntraKeys"
           x-speakeasy-name-override: providerType
         baseUrl:
           maxLength: 200
@@ -9031,6 +9090,7 @@ components:
               type: string
             workDir:
               type: string
+      x-speakeasy-entity: DataStudio
     DataStudioConfiguration:
       type: object
       properties:
@@ -9057,6 +9117,7 @@ components:
           minimum: 0
           type: integer
           format: int32
+      x-speakeasy-entity: DataStudio
     DataStudioCreateRequest:
       required:
         - computeEnvId
@@ -9093,6 +9154,7 @@ components:
         spot:
           type: boolean
           nullable: true
+      x-speakeasy-entity: DataStudio
     DataStudioCreateResponse:
       type: object
       properties:
@@ -9161,6 +9223,7 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/LabelDbDto"
+      x-speakeasy-entity: DataStudio
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -12709,6 +12772,7 @@ components:
         lastUpdated:
           type: string
           format: date-time
+      x-speakeasy-entity: Workspace
     WorkspaceDbDto:
       type: object
       properties:

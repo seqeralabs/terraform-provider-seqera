@@ -38,3 +38,10 @@ terraform {
 ```sh 
 shahbaz.mahmood@Shahbazs-MacBook-Pro terraform-provider-seqera % go build .
 ```
+
+
+4. Declare an environment variables with your bearer token and optionally the server URL for enterprise of dev instances:
+```sh
+export TF_VAR_seqera_server_url="https://api.cloud.seqera.io"
+export TF_VAR_seqera_bearer_auth="your-token-here"
+```

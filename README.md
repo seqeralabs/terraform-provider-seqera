@@ -66,7 +66,12 @@ provider "seqera" {
 * [seqera_action](docs/resources/action.md)
 * [seqera_compute_env](docs/resources/compute_env.md)
 * [seqera_credential](docs/resources/credential.md)
+* [seqera_data_studios](docs/resources/data_studios.md)
+* [seqera_orgs](docs/resources/orgs.md)
 * [seqera_pipeline](docs/resources/pipeline.md)
+* [seqera_tokens](docs/resources/tokens.md)
+* [seqera_trace](docs/resources/trace.md)
+* [seqera_workspace_datasets](docs/resources/workspace_datasets.md)
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
@@ -77,10 +82,14 @@ provider "seqera" {
 * [seqera_credentials](docs/data-sources/credentials.md)
 * [seqera_current_user](docs/data-sources/current_user.md)
 * [seqera_datasets](docs/data-sources/datasets.md)
+* [seqera_data_studios](docs/data-sources/data_studios.md)
+* [seqera_orgs](docs/data-sources/orgs.md)
 * [seqera_pipeline](docs/data-sources/pipeline.md)
 * [seqera_pipelines](docs/data-sources/pipelines.md)
+* [seqera_tokens](docs/data-sources/tokens.md)
 * [seqera_user](docs/data-sources/user.md)
 * [seqera_user_workspaces](docs/data-sources/user_workspaces.md)
+* [seqera_workspace_datasets](docs/data-sources/workspace_datasets.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->
