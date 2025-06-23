@@ -26,7 +26,7 @@ resource "seqera_credential" "my_credential" {
     }
   }
   name          = "...my_name..."
-  provider_type = "ssh"
+  provider_type = "...my_provider_t"
   workspace_id  = 6
 }
 ```
@@ -37,7 +37,7 @@ resource "seqera_credential" "my_credential" {
 ### Required
 
 - `name` (String)
-- `provider_type` (String) must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
+- `provider_type` (String)
 
 ### Optional
 

@@ -9,10 +9,5 @@ terraform {
 
 provider "seqera" {
   server_url = "https://api.cloud.seqera.io"
-  bearer_auth = "xxx=="
+  bearer_auth = "eyJ0aWQiOiAxMTkwNH0uOGI1ZGJmNDViMDg5MDYxMjYwNGU2OTZiZTRkYjUzMGYzMGNjNWU5Yg=="
 }
-
-
-# data "seqera_user_workspaces" "shahbaz-test-workspace" {
-#   user_id = 5
-# }

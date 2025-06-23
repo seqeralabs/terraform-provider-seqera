@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 6e5b47b6c4b4be5bfc34c87cff991ec8
+  docChecksum: 6fefc56b897b7b10673bb35bf7d00436
   docVersion: 1.45.0
   speakeasyVersion: 1.568.0
   generationVersion: 2.632.2
   releaseVersion: 0.0.3
-  configChecksum: 536fc11394b8f75f1f66f52d9bd64a2b
+  configChecksum: 5c57e475af35b5e38b4380452a279681
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -444,6 +444,7 @@ generatedFiles:
   - internal/sdk/models/shared/createworkflowstarresponse.go
   - internal/sdk/models/shared/createworkspacerequest.go
   - internal/sdk/models/shared/createworkspaceresponse.go
+  - internal/sdk/models/shared/credentialsinput.go
   - internal/sdk/models/shared/credentialsoutput.go
   - internal/sdk/models/shared/datalinkcontentresponse.go
   - internal/sdk/models/shared/datalinkcontenttreelistresponse.go

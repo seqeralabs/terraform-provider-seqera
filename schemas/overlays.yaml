@@ -209,40 +209,40 @@ actions:
       x-speakeasy-name-override: providerType
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
     remove: true
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
-    update:
-    - aws
-    - azure
-    - google
-    - github
-    - gitlab
-    - bitbucket
-    - ssh
-    - k8s
-    - container-reg
-    - tw-agent
-    - codecommit
-    - gitea
-    - azurerepos
-    - seqeracompute
-    discriminator:
-      propertyName: discriminator
-      mapping:
-        aws: "#/components/schemas/AwsSecurityKeys"
-        azure: "#/components/schemas/AzureSecurityKeys"
-        google: "#/components/schemas/GoogleSecurityKeys"
-        github: "#/components/schemas/GitHubSecurityKeys"
-        gitlab: "#/components/schemas/GitLabSecurityKeys"
-        bitbucket: "#/components/schemas/BitBucketSecurityKeys"
-        ssh: "#/components/schemas/SSHSecurityKeys"
-        k8s: "#/components/schemas/K8sSecurityKeys"
-        container-reg: "#/components/schemas/ContainerRegistryKeys"
-        tw-agent: "#/components/schemas/AgentSecurityKeys"
-        codecommit: "#/components/schemas/CodeCommitSecurityKeys"
-        gitea: "#/components/schemas/GiteaSecurityKeys"
-        azurerepos: "#/components/schemas/AzureReposSecurityKeys"
-        seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
-        azure_entra: "#/components/schemas/AzureEntraKeys"
+  # - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
+  #   update:
+  #   - aws
+  #   - azure
+  #   - google
+  #   - github
+  #   - gitlab
+  #   - bitbucket
+  #   - ssh
+  #   - k8s
+  #   - container-reg
+  #   - tw-agent
+  #   - codecommit
+  #   - gitea
+  #   - azurerepos
+  #   - seqeracompute
+    # discriminator:
+    #   propertyName: discriminator
+    #   mapping:
+    #     aws: "#/components/schemas/AwsSecurityKeys"
+    #     azure: "#/components/schemas/AzureSecurityKeys"
+    #     google: "#/components/schemas/GoogleSecurityKeys"
+    #     github: "#/components/schemas/GitHubSecurityKeys"
+    #     gitlab: "#/components/schemas/GitLabSecurityKeys"
+    #     bitbucket: "#/components/schemas/BitBucketSecurityKeys"
+    #     ssh: "#/components/schemas/SSHSecurityKeys"
+    #     k8s: "#/components/schemas/K8sSecurityKeys"
+    #     container-reg: "#/components/schemas/ContainerRegistryKeys"
+    #     tw-agent: "#/components/schemas/AgentSecurityKeys"
+    #     codecommit: "#/components/schemas/CodeCommitSecurityKeys"
+    #     gitea: "#/components/schemas/GiteaSecurityKeys"
+    #     azurerepos: "#/components/schemas/AzureReposSecurityKeys"
+    #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
+    #     azure_entra: "#/components/schemas/AzureEntraKeys"
   - target: $["components"]["schemas"]["Credentials"]["properties"]["baseUrl"]
     update:
       x-speakeasy-param-computed: false

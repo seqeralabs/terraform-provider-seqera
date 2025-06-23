@@ -8739,21 +8739,7 @@ components:
         provider:
           maxLength: 16
           type: string
-          enum:
-            - aws
-            - azure
-            - google
-            - github
-            - gitlab
-            - bitbucket
-            - ssh
-            - k8s
-            - container-reg
-            - tw-agent
-            - codecommit
-            - gitea
-            - azurerepos
-            - seqeracompute
+          enum: []
           x-speakeasy-name-override: providerType
         baseUrl:
           maxLength: 200

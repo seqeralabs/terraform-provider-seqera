@@ -32,4 +32,7 @@ terraform:
   defaultErrorName: APIError
   enableTypeDeduplication: false
   environmentVariables: []
+  generateValidationHelpers: true
   packageName: seqera
+  validation:
+    enabled: true

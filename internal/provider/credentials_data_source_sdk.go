@@ -139,7 +139,7 @@ func (r *CredentialsDataSourceModel) RefreshFromSharedListCredentialsResponse(ct
 			credentials.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(credentialsItem.LastUpdated))
 			credentials.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(credentialsItem.LastUsed))
 			credentials.Name = types.StringValue(credentialsItem.Name)
-			credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
+			credentials.ProviderType = types.StringValue(credentialsItem.ProviderType)
 			if credentialsCount+1 > len(r.Credentials) {
 				r.Credentials = append(r.Credentials, credentials)
 			} else {

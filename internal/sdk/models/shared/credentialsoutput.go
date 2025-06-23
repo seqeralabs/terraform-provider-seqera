@@ -3,79 +3,15 @@
 package shared
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
-
-type ProviderType string
-
-const (
-	ProviderTypeAws           ProviderType = "aws"
-	ProviderTypeAzure         ProviderType = "azure"
-	ProviderTypeGoogle        ProviderType = "google"
-	ProviderTypeGithub        ProviderType = "github"
-	ProviderTypeGitlab        ProviderType = "gitlab"
-	ProviderTypeBitbucket     ProviderType = "bitbucket"
-	ProviderTypeSSH           ProviderType = "ssh"
-	ProviderTypeK8s           ProviderType = "k8s"
-	ProviderTypeContainerReg  ProviderType = "container-reg"
-	ProviderTypeTwAgent       ProviderType = "tw-agent"
-	ProviderTypeCodecommit    ProviderType = "codecommit"
-	ProviderTypeGitea         ProviderType = "gitea"
-	ProviderTypeAzurerepos    ProviderType = "azurerepos"
-	ProviderTypeSeqeracompute ProviderType = "seqeracompute"
-)
-
-func (e ProviderType) ToPointer() *ProviderType {
-	return &e
-}
-func (e *ProviderType) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "aws":
-		fallthrough
-	case "azure":
-		fallthrough
-	case "google":
-		fallthrough
-	case "github":
-		fallthrough
-	case "gitlab":
-		fallthrough
-	case "bitbucket":
-		fallthrough
-	case "ssh":
-		fallthrough
-	case "k8s":
-		fallthrough
-	case "container-reg":
-		fallthrough
-	case "tw-agent":
-		fallthrough
-	case "codecommit":
-		fallthrough
-	case "gitea":
-		fallthrough
-	case "azurerepos":
-		fallthrough
-	case "seqeracompute":
-		*e = ProviderType(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ProviderType: %v", v)
-	}
-}
 
 type CredentialsOutput struct {
 	CredentialsID *string             `json:"id,omitempty"`
 	Name          string              `json:"name"`
 	Description   *string             `json:"description,omitempty"`
-	ProviderType  ProviderType        `json:"provider"`
+	ProviderType  string              `json:"provider"`
 	BaseURL       *string             `json:"baseUrl,omitempty"`
 	Category      *string             `json:"category,omitempty"`
 	Deleted       *bool               `json:"deleted,omitempty"`
@@ -117,9 +53,9 @@ func (o *CredentialsOutput) GetDescription() *string {
 	return o.Description
 }
 
-func (o *CredentialsOutput) GetProviderType() ProviderType {
+func (o *CredentialsOutput) GetProviderType() string {
 	if o == nil {
-		return ProviderType("")
+		return ""
 	}
 	return o.ProviderType
 }
@@ -274,170 +210,6 @@ func (o *CredentialsOutput) GetKeysAws() *AwsSecurityKeysOutput {
 func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
 	if v := o.GetKeys(); v != nil {
 		return v.AzureSecurityKeysOutput
-	}
-	return nil
-}
-
-type CredentialsInput struct {
-	CredentialsID *string       `json:"id,omitempty"`
-	Name          string        `json:"name"`
-	Description   *string       `json:"description,omitempty"`
-	ProviderType  ProviderType  `json:"provider"`
-	BaseURL       *string       `json:"baseUrl,omitempty"`
-	Category      *string       `json:"category,omitempty"`
-	Keys          *SecurityKeys `json:"keys,omitempty"`
-}
-
-func (o *CredentialsInput) GetCredentialsID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CredentialsID
-}
-
-func (o *CredentialsInput) GetName() string {
-	if o == nil {
-		return ""
-	}
-	return o.Name
-}
-
-func (o *CredentialsInput) GetDescription() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Description
-}
-
-func (o *CredentialsInput) GetProviderType() ProviderType {
-	if o == nil {
-		return ProviderType("")
-	}
-	return o.ProviderType
-}
-
-func (o *CredentialsInput) GetBaseURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.BaseURL
-}
-
-func (o *CredentialsInput) GetCategory() *string {
-	if o == nil {
-		return nil
-	}
-	return o.Category
-}
-
-func (o *CredentialsInput) GetKeys() *SecurityKeys {
-	if o == nil {
-		return nil
-	}
-	return o.Keys
-}
-
-func (o *CredentialsInput) GetKeysGithub() *GitHubSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GitHubSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysAzurerepos() *AzureReposSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureReposSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysAzureEntra() *AzureEntraKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureEntraKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysContainerReg() *ContainerRegistryKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.ContainerRegistryKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysTwAgent() *AgentSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AgentSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysK8s() *K8sSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.K8sSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysSSH() *SSHSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.SSHSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysGoogle() *GoogleSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GoogleSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysBitbucket() *BitBucketSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.BitBucketSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysGitea() *GiteaSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GiteaSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysSeqeracompute() *SeqeraComputeSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.SeqeraComputeSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysCodecommit() *CodeCommitSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.CodeCommitSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysGitlab() *GitLabSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GitLabSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysAws() *AwsSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AwsSecurityKeys
-	}
-	return nil
-}
-
-func (o *CredentialsInput) GetKeysAzure() *AzureSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureSecurityKeys
 	}
 	return nil
 }
