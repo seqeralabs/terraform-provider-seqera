@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 326c1a509b51d32316cbcbba44063688
+  docChecksum: a37c4ab8c75ccc7c0eea0430f350126b
   docVersion: 1.45.0
   speakeasyVersion: 1.568.2
   generationVersion: 2.634.2
@@ -40,6 +40,8 @@ generatedFiles:
   - examples/data-sources/seqera_tokens/data-source.tf
   - examples/data-sources/seqera_user/data-source.tf
   - examples/data-sources/seqera_user_workspaces/data-source.tf
+  - examples/data-sources/seqera_workspace/data-source.tf
+  - examples/data-sources/seqera_workspaces/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/seqera_action/import.sh
   - examples/resources/seqera_action/resource.tf
@@ -52,6 +54,8 @@ generatedFiles:
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
   - examples/resources/seqera_tokens/resource.tf
+  - examples/resources/seqera_workspace/import.sh
+  - examples/resources/seqera_workspace/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -193,6 +197,7 @@ generatedFiles:
   - internal/provider/types/list_compute_envs_response_entry.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
+  - internal/provider/types/organization.go
   - internal/provider/types/organization_db_dto.go
   - internal/provider/types/pipeline_db_dto.go
   - internal/provider/types/security_keys.go
@@ -206,11 +211,19 @@ generatedFiles:
   - internal/provider/types/studio_user.go
   - internal/provider/types/univa_grid_engine_configuration.go
   - internal/provider/types/workflow_launch_request.go
+  - internal/provider/types/workspace.go
+  - internal/provider/types/workspace_db_dto.go
   - internal/provider/user_data_source.go
   - internal/provider/user_data_source_sdk.go
   - internal/provider/userworkspaces_data_source.go
   - internal/provider/userworkspaces_data_source_sdk.go
   - internal/provider/utils.go
+  - internal/provider/workspace_data_source.go
+  - internal/provider/workspace_data_source_sdk.go
+  - internal/provider/workspace_resource.go
+  - internal/provider/workspace_resource_sdk.go
+  - internal/provider/workspaces_data_source.go
+  - internal/provider/workspaces_data_source_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/actions.go
   - internal/sdk/avatars.go
@@ -1451,7 +1464,7 @@ examples:
   CreateOrganization:
     speakeasy-default-create-organization:
       requestBody:
-        application/json: {"organization": {"name": "<value>", "fullName": "Neil Brakus"}}
+        application/json: {}
       responses:
         "200":
           application/json: {}

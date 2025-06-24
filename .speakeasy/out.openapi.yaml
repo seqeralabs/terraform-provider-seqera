@@ -2961,10 +2961,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       responses:
         "200":
           description: OK
@@ -2994,10 +2994,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Organization update request
         content:
@@ -3041,10 +3041,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -3072,10 +3072,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3123,10 +3123,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3174,10 +3174,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Member addition request
         content:
@@ -3221,10 +3221,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -3251,10 +3251,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Organization member numeric identifier
@@ -3288,10 +3288,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Organization member numeric identifier
@@ -3332,10 +3332,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: include
           in: query
           description: Optional list of quota names to include
@@ -3373,10 +3373,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3423,10 +3423,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3470,10 +3470,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Team name to validate
@@ -3505,10 +3505,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3545,10 +3545,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3596,10 +3596,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3633,10 +3633,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3690,10 +3690,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3739,10 +3739,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3783,10 +3783,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3847,10 +3847,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       responses:
         "200":
           description: OK
@@ -3868,6 +3868,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workspaces#read
       x-speakeasy-name-override: list
     post:
       summary: Create workspace
@@ -3880,10 +3881,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Workspace create request
         content:
@@ -3914,6 +3915,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workspace#create
       x-speakeasy-name-override: create
   /orgs/{orgId}/workspaces/validate:
     get:
@@ -3927,10 +3929,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Workspace name to validate
@@ -3968,10 +3970,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -3979,6 +3981,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-name-override: id
       responses:
         "200":
           description: OK
@@ -3996,6 +3999,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workspace#read
       x-speakeasy-name-override: describe
     put:
       summary: Update workspace
@@ -4008,10 +4012,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4019,6 +4023,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-name-override: id
       requestBody:
         description: Workspace update request
         content:
@@ -4049,6 +4054,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workspace#update
       x-speakeasy-name-override: update
     delete:
       summary: Delete workspace
@@ -4061,10 +4067,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4072,6 +4078,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-name-override: id
       responses:
         "204":
           description: OK - No content
@@ -4085,6 +4092,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workspace#delete
       x-speakeasy-name-override: delete
   /orgs/{orgId}/workspaces/{workspaceId}/participants:
     get:
@@ -4098,10 +4106,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4156,10 +4164,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4193,10 +4201,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4247,10 +4255,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4291,10 +4299,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4343,10 +4351,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4395,10 +4403,10 @@ paths:
           in: path
           description: Organization numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -6100,10 +6108,10 @@ paths:
           in: path
           description: Token numeric identifier
           required: true
-          x-speakeasy-param-optional: true
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -7251,7 +7259,6 @@ paths:
       tags:
         - workflows
       operationId: DescribeWorkflowStar
-      x-speakeasy-group: workflows.star
       parameters:
         - name: workflowId
           in: path
@@ -7280,6 +7287,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+      x-speakeasy-group: workflows.star
       x-speakeasy-name-override: describe
     post:
       summary: Star workflow
@@ -7287,7 +7295,6 @@ paths:
       tags:
         - workflows
       operationId: CreateWorkflowStar
-      x-speakeasy-group: WorkflowStar
       parameters:
         - name: workflowId
           in: path
@@ -7322,6 +7329,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+      x-speakeasy-group: WorkflowStar
       x-speakeasy-name-override: star
     delete:
       summary: Unstar workflow
@@ -7329,7 +7337,6 @@ paths:
       tags:
         - workflows
       operationId: DeleteWorkflowStar
-      x-speakeasy-group: WorkflowStar
       parameters:
         - name: workflowId
           in: path
@@ -7358,6 +7365,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+      x-speakeasy-group: WorkflowStar
       x-speakeasy-name-override: unstar
   /workflow/{workflowId}/task/{taskId}:
     get:
@@ -8923,14 +8931,13 @@ components:
           type: boolean
       x-speakeasy-entity: Label
     CreateOrganizationRequest:
-      required:
-        - organization
       type: object
       properties:
         organization:
           $ref: "#/components/schemas/Organization"
         logoId:
           type: string
+      x-speakeasy-entity: Orgs
     CreateOrganizationResponse:
       type: object
       properties:
@@ -8999,6 +9006,7 @@ components:
       properties:
         workspace:
           $ref: "#/components/schemas/Workspace"
+      x-speakeasy-entity: Workspace
     CreateWorkspaceResponse:
       type: object
       properties:
@@ -11041,7 +11049,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-      x-speakeasy-entity: Orgs
     OrganizationDbDto:
       type: object
       properties:
@@ -13021,14 +13028,18 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
+          x-speakeasy-param-readonly: false
         fullName:
           maxLength: 100
           type: string
+          x-speakeasy-param-readonly: false
         description:
           maxLength: 1000
           type: string
+          x-speakeasy-param-readonly: false
         visibility:
           $ref: "#/components/schemas/Visibility"
+          x-speakeasy-param-readonly: false
         dateCreated:
           type: string
           format: date-time

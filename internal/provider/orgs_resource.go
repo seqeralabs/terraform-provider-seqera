@@ -8,11 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_int64planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_objectplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
+	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -30,16 +38,11 @@ type OrgsResource struct {
 
 // OrgsResourceModel describes the resource data model.
 type OrgsResourceModel struct {
-	Description   types.String                `tfsdk:"description"`
-	FullName      types.String                `tfsdk:"full_name"`
-	Location      types.String                `tfsdk:"location"`
 	LogoID        types.String                `tfsdk:"logo_id"`
-	Name          types.String                `tfsdk:"name"`
 	OrgID         types.Int64                 `tfsdk:"org_id"`
-	Organization  *tfTypes.OrganizationDbDto  `tfsdk:"organization"`
+	Organization  *tfTypes.Organization       `tfsdk:"organization"`
 	Organizations []tfTypes.OrganizationDbDto `tfsdk:"organizations"`
 	TotalSize     types.Int32                 `tfsdk:"total_size"`
-	Website       types.String                `tfsdk:"website"`
 }
 
 func (r *OrgsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -50,32 +53,8 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Orgs Resource",
 		Attributes: map[string]schema.Attribute{
-			"description": schema.StringAttribute{
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(1000),
-				},
-			},
-			"full_name": schema.StringAttribute{
-				Required: true,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-				},
-			},
-			"location": schema.StringAttribute{
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-				},
-			},
 			"logo_id": schema.StringAttribute{
 				Optional: true,
-			},
-			"name": schema.StringAttribute{
-				Required: true,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(40),
-				},
 			},
 			"org_id": schema.Int64Attribute{
 				Optional:    true,
@@ -83,27 +62,72 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"organization": schema.SingleNestedAttribute{
 				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(1000),
+						},
 					},
 					"full_name": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+							stringvalidator.UTF8LengthAtMost(100),
+						},
 					},
 					"location": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(100),
+						},
 					},
 					"logo_id": schema.StringAttribute{
 						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"logo_url": schema.StringAttribute{
 						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"member_id": schema.Int64Attribute{
 						Computed: true,
+						PlanModifiers: []planmodifier.Int64{
+							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+						},
 					},
 					"member_role": schema.StringAttribute{
-						Computed:    true,
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `must be one of ["owner", "member", "collaborator"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
@@ -115,16 +139,35 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 					"name": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+							stringvalidator.UTF8LengthAtMost(40),
+						},
 					},
 					"org_id": schema.Int64Attribute{
 						Computed: true,
+						PlanModifiers: []planmodifier.Int64{
+							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+						},
 					},
 					"paying": schema.BoolAttribute{
-						Computed:           true,
+						Computed: true,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
 						DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 					},
 					"type": schema.StringAttribute{
-						Computed:    true,
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `must be one of ["academic", "evaluating", "pro", "basic", "internal"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
@@ -138,8 +181,15 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 					"website": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
 					},
 				},
+				Description: `Requires replacement if changed.`,
 			},
 			"organizations": schema.ListNestedAttribute{
 				Computed: true,
@@ -205,9 +255,6 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"total_size": schema.Int32Attribute{
 				Computed: true,
-			},
-			"website": schema.StringAttribute{
-				Optional: true,
 			},
 		},
 	}

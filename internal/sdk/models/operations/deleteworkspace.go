@@ -11,7 +11,7 @@ type DeleteWorkspaceRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 	// Optional workspace numeric identifier
-	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
+	ID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 }
 
 func (o *DeleteWorkspaceRequest) GetOrgID() int64 {
@@ -21,11 +21,11 @@ func (o *DeleteWorkspaceRequest) GetOrgID() int64 {
 	return o.OrgID
 }
 
-func (o *DeleteWorkspaceRequest) GetWorkspaceID() int64 {
+func (o *DeleteWorkspaceRequest) GetID() int64 {
 	if o == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return o.ID
 }
 
 type DeleteWorkspaceResponse struct {

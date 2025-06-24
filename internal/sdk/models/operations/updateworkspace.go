@@ -11,7 +11,7 @@ type UpdateWorkspaceRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 	// Optional workspace numeric identifier
-	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
+	ID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Workspace update request
 	UpdateWorkspaceRequest shared.UpdateWorkspaceRequest `request:"mediaType=application/json"`
 }
@@ -23,11 +23,11 @@ func (o *UpdateWorkspaceRequest) GetOrgID() int64 {
 	return o.OrgID
 }
 
-func (o *UpdateWorkspaceRequest) GetWorkspaceID() int64 {
+func (o *UpdateWorkspaceRequest) GetID() int64 {
 	if o == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return o.ID
 }
 
 func (o *UpdateWorkspaceRequest) GetUpdateWorkspaceRequest() shared.UpdateWorkspaceRequest {

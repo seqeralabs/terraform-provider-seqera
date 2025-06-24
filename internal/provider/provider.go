@@ -109,6 +109,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewOrgsResource,
 		NewPipelineResource,
 		NewTokensResource,
+		NewWorkspaceResource,
 	}
 }
 
@@ -129,6 +130,8 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewTokensDataSource,
 		NewUserDataSource,
 		NewUserWorkspacesDataSource,
+		NewWorkspaceDataSource,
+		NewWorkspacesDataSource,
 	}
 }
 

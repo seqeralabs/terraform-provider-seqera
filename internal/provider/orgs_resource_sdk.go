@@ -12,77 +12,42 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *OrgsResourceModel) ToSharedOrganization(ctx context.Context) (*shared.Organization, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var name string
-	name = r.Name.ValueString()
-
-	var fullName string
-	fullName = r.FullName.ValueString()
-
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	location := new(string)
-	if !r.Location.IsUnknown() && !r.Location.IsNull() {
-		*location = r.Location.ValueString()
-	} else {
-		location = nil
-	}
-	website := new(string)
-	if !r.Website.IsUnknown() && !r.Website.IsNull() {
-		*website = r.Website.ValueString()
-	} else {
-		website = nil
-	}
-	out := shared.Organization{
-		Name:        name,
-		FullName:    fullName,
-		Description: description,
-		Location:    location,
-		Website:     website,
-	}
-
-	return &out, diags
-}
-
 func (r *OrgsResourceModel) ToSharedCreateOrganizationRequest(ctx context.Context) (*shared.CreateOrganizationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Organization.Name.ValueString()
+	var organization *shared.Organization
+	if r.Organization != nil {
+		var name string
+		name = r.Organization.Name.ValueString()
 
-	var fullName string
-	fullName = r.Organization.FullName.ValueString()
+		var fullName string
+		fullName = r.Organization.FullName.ValueString()
 
-	description := new(string)
-	if !r.Organization.Description.IsUnknown() && !r.Organization.Description.IsNull() {
-		*description = r.Organization.Description.ValueString()
-	} else {
-		description = nil
-	}
-	location := new(string)
-	if !r.Organization.Location.IsUnknown() && !r.Organization.Location.IsNull() {
-		*location = r.Organization.Location.ValueString()
-	} else {
-		location = nil
-	}
-	website := new(string)
-	if !r.Organization.Website.IsUnknown() && !r.Organization.Website.IsNull() {
-		*website = r.Organization.Website.ValueString()
-	} else {
-		website = nil
-	}
-	organization := shared.Organization{
-		Name:        name,
-		FullName:    fullName,
-		Description: description,
-		Location:    location,
-		Website:     website,
+		description := new(string)
+		if !r.Organization.Description.IsUnknown() && !r.Organization.Description.IsNull() {
+			*description = r.Organization.Description.ValueString()
+		} else {
+			description = nil
+		}
+		location := new(string)
+		if !r.Organization.Location.IsUnknown() && !r.Organization.Location.IsNull() {
+			*location = r.Organization.Location.ValueString()
+		} else {
+			location = nil
+		}
+		website := new(string)
+		if !r.Organization.Website.IsUnknown() && !r.Organization.Website.IsNull() {
+			*website = r.Organization.Website.ValueString()
+		} else {
+			website = nil
+		}
+		organization = &shared.Organization{
+			Name:        name,
+			FullName:    fullName,
+			Description: description,
+			Location:    location,
+			Website:     website,
+		}
 	}
 	logoID := new(string)
 	if !r.LogoID.IsUnknown() && !r.LogoID.IsNull() {
@@ -101,36 +66,6 @@ func (r *OrgsResourceModel) ToSharedCreateOrganizationRequest(ctx context.Contex
 func (r *OrgsResourceModel) ToSharedUpdateOrganizationRequest(ctx context.Context) (*shared.UpdateOrganizationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	fullName := new(string)
-	if !r.FullName.IsUnknown() && !r.FullName.IsNull() {
-		*fullName = r.FullName.ValueString()
-	} else {
-		fullName = nil
-	}
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	location := new(string)
-	if !r.Location.IsUnknown() && !r.Location.IsNull() {
-		*location = r.Location.ValueString()
-	} else {
-		location = nil
-	}
-	website := new(string)
-	if !r.Website.IsUnknown() && !r.Website.IsNull() {
-		*website = r.Website.ValueString()
-	} else {
-		website = nil
-	}
 	logoID := new(string)
 	if !r.LogoID.IsUnknown() && !r.LogoID.IsNull() {
 		*logoID = r.LogoID.ValueString()
@@ -138,12 +73,7 @@ func (r *OrgsResourceModel) ToSharedUpdateOrganizationRequest(ctx context.Contex
 		logoID = nil
 	}
 	out := shared.UpdateOrganizationRequest{
-		FullName:    fullName,
-		Name:        name,
-		Description: description,
-		Location:    location,
-		Website:     website,
-		LogoID:      logoID,
+		LogoID: logoID,
 	}
 
 	return &out, diags
@@ -198,7 +128,7 @@ func (r *OrgsResourceModel) RefreshFromSharedCreateOrganizationResponse(ctx cont
 		if resp.Organization == nil {
 			r.Organization = nil
 		} else {
-			r.Organization = &tfTypes.OrganizationDbDto{}
+			r.Organization = &tfTypes.Organization{}
 			r.Organization.Description = types.StringPointerValue(resp.Organization.Description)
 			r.Organization.FullName = types.StringPointerValue(resp.Organization.FullName)
 			r.Organization.Location = types.StringPointerValue(resp.Organization.Location)
