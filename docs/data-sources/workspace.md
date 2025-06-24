@@ -28,12 +28,12 @@ data "seqera_workspace" "my_workspace" {
 ### Required
 
 - `full_name` (String)
-- `id` (Number) Optional workspace numeric identifier
 - `name` (String)
 
 ### Optional
 
 - `description` (String)
+- `id` (Number) Optional workspace numeric identifier
 - `org_id` (Number) Organization numeric identifier
 
 ### Read-Only

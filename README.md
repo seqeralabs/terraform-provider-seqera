@@ -82,7 +82,7 @@ provider "seqera" {
 * [seqera_current_user](docs/data-sources/current_user.md)
 * [seqera_datasets](docs/data-sources/datasets.md)
 * [seqera_data_studios](docs/data-sources/data_studios.md)
-* [seqera_orgs](docs/data-sources/orgs.md)
+* [seqera_organization](docs/data-sources/organization.md)
 * [seqera_pipeline](docs/data-sources/pipeline.md)
 * [seqera_pipelines](docs/data-sources/pipelines.md)
 * [seqera_tokens](docs/data-sources/tokens.md)

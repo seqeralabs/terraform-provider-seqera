@@ -1022,8 +1022,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
   /data-links:
     get:
       summary: List data-links
@@ -2787,7 +2785,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#read
     post:
       summary: Create organization
       description: Creates a new organization.
@@ -2873,6 +2870,7 @@ paths:
             type: integer
             format: int64
           x-speakeasy-param-optional: true
+          # x-speakeasy-match: orgId
       responses:
         "200":
           description: OK
@@ -2890,6 +2888,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Organization#read
     put:
       summary: Update organization
       description: Updates the details of the organization identified by the given `orgId`.
@@ -3770,7 +3769,7 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-optional: false
       requestBody:
         description: Workspace create request
         content:
@@ -8718,6 +8717,7 @@ components:
       properties:
         organization:
           $ref: "#/components/schemas/OrganizationDbDto"
+      x-speakeasy-entity: Orgs
     CreatePipelineRequest:
       type: object
       properties:
@@ -10799,6 +10799,7 @@ components:
           nullable: true
           readOnly: true
           x-speakeasy-param-optional: true
+          #x-speakeasy-name-override: orgId
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -10844,8 +10845,10 @@ components:
           type: string
         logoId:
           type: string
+          x-speakeasy-param-optional: true
         logoUrl:
           type: string
+          x-speakeasy-param-optional: true
         memberId:
           type: integer
           format: int64

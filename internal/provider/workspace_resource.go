@@ -103,7 +103,7 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"org_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Organization numeric identifier`,
 			},
 			"visibility": schema.StringAttribute{

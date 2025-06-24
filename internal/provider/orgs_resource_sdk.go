@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
@@ -100,14 +99,6 @@ func (r *OrgsResourceModel) ToOperationsUpdateOrganizationRequest(ctx context.Co
 	return &out, diags
 }
 
-func (r *OrgsResourceModel) ToOperationsListOrganizationsRequest(ctx context.Context) (*operations.ListOrganizationsRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	out := operations.ListOrganizationsRequest{}
-
-	return &out, diags
-}
-
 func (r *OrgsResourceModel) ToOperationsDeleteOrganizationRequest(ctx context.Context) (*operations.DeleteOrganizationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -150,59 +141,6 @@ func (r *OrgsResourceModel) RefreshFromSharedCreateOrganizationResponse(ctx cont
 			}
 			r.Organization.Website = types.StringPointerValue(resp.Organization.Website)
 		}
-	}
-
-	return diags
-}
-
-func (r *OrgsResourceModel) RefreshFromSharedListOrganizationsResponse(ctx context.Context, resp *shared.ListOrganizationsResponse) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Organizations = []tfTypes.OrganizationDbDto{}
-		if len(r.Organizations) > len(resp.Organizations) {
-			r.Organizations = r.Organizations[:len(resp.Organizations)]
-		}
-		for organizationsCount, organizationsItem := range resp.Organizations {
-			var organizations tfTypes.OrganizationDbDto
-			organizations.Paying = types.BoolPointerValue(organizationsItem.Paying)
-			organizations.OrgID = types.Int64PointerValue(organizationsItem.OrgID)
-			organizations.Name = types.StringPointerValue(organizationsItem.Name)
-			organizations.FullName = types.StringPointerValue(organizationsItem.FullName)
-			organizations.Description = types.StringPointerValue(organizationsItem.Description)
-			organizations.Location = types.StringPointerValue(organizationsItem.Location)
-			organizations.Website = types.StringPointerValue(organizationsItem.Website)
-			organizations.LogoID = types.StringPointerValue(organizationsItem.LogoID)
-			organizations.LogoURL = types.StringPointerValue(organizationsItem.LogoURL)
-			organizations.MemberID = types.Int64PointerValue(organizationsItem.MemberID)
-			if organizationsItem.MemberRole != nil {
-				organizations.MemberRole = types.StringValue(string(*organizationsItem.MemberRole))
-			} else {
-				organizations.MemberRole = types.StringNull()
-			}
-			if organizationsItem.Type != nil {
-				organizations.Type = types.StringValue(string(*organizationsItem.Type))
-			} else {
-				organizations.Type = types.StringNull()
-			}
-			if organizationsCount+1 > len(r.Organizations) {
-				r.Organizations = append(r.Organizations, organizations)
-			} else {
-				r.Organizations[organizationsCount].Paying = organizations.Paying
-				r.Organizations[organizationsCount].OrgID = organizations.OrgID
-				r.Organizations[organizationsCount].Name = organizations.Name
-				r.Organizations[organizationsCount].FullName = organizations.FullName
-				r.Organizations[organizationsCount].Description = organizations.Description
-				r.Organizations[organizationsCount].Location = organizations.Location
-				r.Organizations[organizationsCount].Website = organizations.Website
-				r.Organizations[organizationsCount].LogoID = organizations.LogoID
-				r.Organizations[organizationsCount].LogoURL = organizations.LogoURL
-				r.Organizations[organizationsCount].MemberID = organizations.MemberID
-				r.Organizations[organizationsCount].MemberRole = organizations.MemberRole
-				r.Organizations[organizationsCount].Type = organizations.Type
-			}
-		}
-		r.TotalSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.TotalSize))
 	}
 
 	return diags

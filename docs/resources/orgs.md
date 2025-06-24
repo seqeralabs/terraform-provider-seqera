@@ -35,11 +35,6 @@ resource "seqera_orgs" "my_orgs" {
 - `org_id` (Number) Organization numeric identifier
 - `organization` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--organization))
 
-### Read-Only
-
-- `organizations` (Attributes List) (see [below for nested schema](#nestedatt--organizations))
-- `total_size` (Number)
-
 <a id="nestedatt--organization"></a>
 ### Nested Schema for `organization`
 
@@ -60,22 +55,3 @@ Read-Only:
 - `org_id` (Number)
 - `paying` (Boolean, Deprecated)
 - `type` (String) must be one of ["academic", "evaluating", "pro", "basic", "internal"]
-
-
-<a id="nestedatt--organizations"></a>
-### Nested Schema for `organizations`
-
-Read-Only:
-
-- `description` (String)
-- `full_name` (String)
-- `location` (String)
-- `logo_id` (String)
-- `logo_url` (String)
-- `member_id` (Number)
-- `member_role` (String) must be one of ["owner", "member", "collaborator"]
-- `name` (String)
-- `org_id` (Number)
-- `paying` (Boolean, Deprecated)
-- `type` (String) must be one of ["academic", "evaluating", "pro", "basic", "internal"]
-- `website` (String)

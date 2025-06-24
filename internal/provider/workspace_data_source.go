@@ -59,7 +59,8 @@ func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Required: true,
 			},
 			"id": schema.Int64Attribute{
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
 				Description: `Optional workspace numeric identifier`,
 			},
 			"last_updated": schema.StringAttribute{

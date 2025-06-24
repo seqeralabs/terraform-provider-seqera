@@ -32,6 +32,7 @@ resource "seqera_workspace" "my_workspace" {
 
 - `full_name` (String)
 - `name` (String)
+- `org_id` (Number) Organization numeric identifier
 - `visibility` (String) must be one of ["PRIVATE", "SHARED"]
 
 ### Optional
@@ -40,7 +41,6 @@ resource "seqera_workspace" "my_workspace" {
 - `description` (String)
 - `id` (Number) Optional workspace numeric identifier
 - `last_updated` (String) Requires replacement if changed.
-- `org_id` (Number) Organization numeric identifier
 
 ## Import
 

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 313fbdda66f6bbfee6ee701d6ff761fb
+  docChecksum: 367c37bf03e9fed99e2b87ad15fb5573
   docVersion: 1.45.0
   speakeasyVersion: 1.568.2
   generationVersion: 2.634.2
@@ -34,7 +34,7 @@ generatedFiles:
   - examples/data-sources/seqera_current_user/data-source.tf
   - examples/data-sources/seqera_data_studios/data-source.tf
   - examples/data-sources/seqera_datasets/data-source.tf
-  - examples/data-sources/seqera_orgs/data-source.tf
+  - examples/data-sources/seqera_organization/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipelines/data-source.tf
   - examples/data-sources/seqera_tokens/data-source.tf
@@ -96,8 +96,8 @@ generatedFiles:
   - internal/provider/datastudios_data_source_sdk.go
   - internal/provider/datastudios_resource.go
   - internal/provider/datastudios_resource_sdk.go
-  - internal/provider/orgs_data_source.go
-  - internal/provider/orgs_data_source_sdk.go
+  - internal/provider/organization_data_source.go
+  - internal/provider/organization_data_source_sdk.go
   - internal/provider/orgs_resource.go
   - internal/provider/orgs_resource_sdk.go
   - internal/provider/pipeline_data_source.go

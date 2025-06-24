@@ -9,14 +9,14 @@ data "seqera_user_workspaces" "test" {
 data "seqera_current_user" "my_currentuser" {
 }
 
-output "user_id" {
-  value = data.seqera_user.my_user.user_id
-}
+# output "user_id" {
+#   value = data.seqera_user.my_user.user_id
+# }
 
 
-output "current_user_id" {
-  value = data.seqera_current_user.my_currentuser
-}
+# output "current_user_id" {
+#   value = data.seqera_current_user.my_currentuser
+# }
 # output "test_workspace" {
 #   value = data.seqera_user_workspaces.test
 # }
@@ -29,17 +29,17 @@ locals {
 data "seqera_orgs" "my_orgs" {
 }
 
-output "orgs" {
-  value = data.seqera_orgs.my_orgs
+# output "orgs" {
+#   value = data.seqera_orgs.my_orgs
   
-}
+# }
 
 
 resource "seqera_orgs" "test_org" {
   organization = {
   description = "testing org for the terraform provider"
-  full_name   = "seqera_test_shahbaz_tf_provider_1"
-  name        = "seqera_test_shahbaz_tf_provider_1"
+  full_name   = "seqera_test_shahbaz_tf_provider2"
+  name        = "seqera_test_shahbaz_tf_provider"
   }
 }
 

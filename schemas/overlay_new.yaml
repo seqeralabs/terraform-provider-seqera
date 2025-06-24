@@ -4,15 +4,16 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
-  - target: $["paths"]["/orgs"]["get"]
-    update:
-      x-speakeasy-entity-operation: Orgs#read
   - target: $["paths"]["/orgs"]["post"]
     update:
       x-speakeasy-entity-operation: Orgs#create
   - target: $["paths"]["/orgs/{orgId}"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
+      # x-speakeasy-match: orgId
+  - target: $["paths"]["/orgs/{orgId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Organization#read
   - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
@@ -84,7 +85,7 @@ actions:
       x-speakeasy-entity-operation: Workspaces#read
   - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]["parameters"][0]
     update:
-      x-speakeasy-param-optional: true
+      x-speakeasy-param-optional: false
   - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
     update:
       x-speakeasy-entity-operation: Workspace#create
@@ -228,6 +229,9 @@ actions:
   - target: $["components"]["schemas"]["CreateOrganizationRequest"]
     update:
       x-speakeasy-entity: Orgs
+  - target: $["components"]["schemas"]["CreateOrganizationResponse"]
+    update:
+      x-speakeasy-entity: Orgs
   - target: $["components"]["schemas"]["CreatePipelineRequest"]
     update:
       x-speakeasy-entity: Pipelines
@@ -342,6 +346,13 @@ actions:
   - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
     update:
       x-speakeasy-param-optional: true
+      #x-speakeasy-name-override: orgId
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoId"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoUrl"]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["components"]["schemas"]["PipelineDbDto"]
     update:
       x-speakeasy-entity: Pipeline
@@ -366,6 +377,9 @@ actions:
       x-speakeasy-entity:
         - CurrentUser
         - User
+  - target: $["components"]["schemas"]["Visibility"]
+    update:
+      x-speakeasy-param-optional: false
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
     update:
       remove: true
@@ -373,6 +387,9 @@ actions:
     update:
       remove: true
       # Misc Schemas
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["components"]["schemas"]["Workspace"]["properties"]["name"]
     update:
       x-speakeasy-param-readonly: false

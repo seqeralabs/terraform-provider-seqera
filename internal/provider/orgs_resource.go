@@ -38,11 +38,9 @@ type OrgsResource struct {
 
 // OrgsResourceModel describes the resource data model.
 type OrgsResourceModel struct {
-	LogoID        types.String                `tfsdk:"logo_id"`
-	OrgID         types.Int64                 `tfsdk:"org_id"`
-	Organization  *tfTypes.Organization       `tfsdk:"organization"`
-	Organizations []tfTypes.OrganizationDbDto `tfsdk:"organizations"`
-	TotalSize     types.Int32                 `tfsdk:"total_size"`
+	LogoID       types.String          `tfsdk:"logo_id"`
+	OrgID        types.Int64           `tfsdk:"org_id"`
+	Organization *tfTypes.Organization `tfsdk:"organization"`
 }
 
 func (r *OrgsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -191,71 +189,6 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"organizations": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"description": schema.StringAttribute{
-							Computed: true,
-						},
-						"full_name": schema.StringAttribute{
-							Computed: true,
-						},
-						"location": schema.StringAttribute{
-							Computed: true,
-						},
-						"logo_id": schema.StringAttribute{
-							Computed: true,
-						},
-						"logo_url": schema.StringAttribute{
-							Computed: true,
-						},
-						"member_id": schema.Int64Attribute{
-							Computed: true,
-						},
-						"member_role": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be one of ["owner", "member", "collaborator"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"owner",
-									"member",
-									"collaborator",
-								),
-							},
-						},
-						"name": schema.StringAttribute{
-							Computed: true,
-						},
-						"org_id": schema.Int64Attribute{
-							Computed: true,
-						},
-						"paying": schema.BoolAttribute{
-							Computed:           true,
-							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-						},
-						"type": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be one of ["academic", "evaluating", "pro", "basic", "internal"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"academic",
-									"evaluating",
-									"pro",
-									"basic",
-									"internal",
-								),
-							},
-						},
-						"website": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
-			},
-			"total_size": schema.Int32Attribute{
-				Computed: true,
-			},
 		},
 	}
 }
@@ -335,43 +268,6 @@ func (r *OrgsResource) Create(ctx context.Context, req resource.CreateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsListOrganizationsRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Orgs.List(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.ListOrganizationsResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedListOrganizationsResponse(ctx, res1.ListOrganizationsResponse)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -395,41 +291,7 @@ func (r *OrgsResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListOrganizationsRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.Orgs.List(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
-		}
-		return
-	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode == 404 {
-		resp.State.RemoveResource(ctx)
-		return
-	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.ListOrganizationsResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedListOrganizationsResponse(ctx, res.ListOrganizationsResponse)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	// Not Implemented; we rely entirely on CREATE API request response
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -469,43 +331,6 @@ func (r *OrgsResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	}
 	if res.StatusCode != 204 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsListOrganizationsRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Orgs.List(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.ListOrganizationsResponse != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedListOrganizationsResponse(ctx, res1.ListOrganizationsResponse)...)
-
-	if resp.Diagnostics.HasError() {
 		return
 	}
 
@@ -563,5 +388,5 @@ func (r *OrgsResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 func (r *OrgsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource orgs. Reason: no ID fields found")
+	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource orgs.")
 }
