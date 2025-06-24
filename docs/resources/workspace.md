@@ -14,19 +14,14 @@ Workspace Resource
 
 ```terraform
 resource "seqera_workspace" "my_workspace" {
-  description = "...my_description..."
-  full_name   = "...my_full_name..."
-  name        = "...my_name..."
-  org_id      = 7
-  workspace = {
-    date_created = "2021-12-30T07:56:00.303Z"
-    description  = "...my_description..."
-    full_name    = "...my_full_name..."
-    id           = 10
-    last_updated = "2021-03-17T04:48:27.831Z"
-    name         = "...my_name..."
-    visibility   = "SHARED"
-  }
+  date_created = "2022-12-28T06:42:48.248Z"
+  description  = "...my_description..."
+  full_name    = "...my_full_name..."
+  id           = 1
+  last_updated = "2021-06-30T04:32:09.681Z"
+  name         = "...my_name..."
+  org_id       = 7
+  visibility   = "SHARED"
 }
 ```
 
@@ -37,35 +32,15 @@ resource "seqera_workspace" "my_workspace" {
 
 - `full_name` (String)
 - `name` (String)
+- `visibility` (String) must be one of ["PRIVATE", "SHARED"]
 
 ### Optional
 
-- `description` (String)
-- `org_id` (Number) Organization numeric identifier
-- `workspace` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--workspace))
-
-### Read-Only
-
-- `date_created` (String)
-- `id` (Number) Optional workspace numeric identifier
-- `last_updated` (String)
-- `visibility` (String) must be one of ["PRIVATE", "SHARED"]
-
-<a id="nestedatt--workspace"></a>
-### Nested Schema for `workspace`
-
-Required:
-
-- `full_name` (String) Requires replacement if changed.
-- `name` (String) Requires replacement if changed.
-- `visibility` (String) must be one of ["PRIVATE", "SHARED"]; Requires replacement if changed.
-
-Optional:
-
 - `date_created` (String) Requires replacement if changed.
-- `description` (String) Requires replacement if changed.
-- `id` (Number) Requires replacement if changed.
+- `description` (String)
+- `id` (Number) Optional workspace numeric identifier
 - `last_updated` (String) Requires replacement if changed.
+- `org_id` (Number) Organization numeric identifier
 
 ## Import
 

@@ -15,8 +15,6 @@ import (
 	"net/http"
 )
 
-// Upload new dataset version
-// Uploads the CSV or TSV content to create a new version of the dataset identified by the given `datasetId`.
 type Upload struct {
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration

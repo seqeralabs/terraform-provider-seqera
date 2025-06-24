@@ -11,14 +11,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
+	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
 )
@@ -38,15 +36,14 @@ type WorkspaceResource struct {
 
 // WorkspaceResourceModel describes the resource data model.
 type WorkspaceResourceModel struct {
-	DateCreated types.String       `tfsdk:"date_created"`
-	Description types.String       `tfsdk:"description"`
-	FullName    types.String       `tfsdk:"full_name"`
-	ID          types.Int64        `tfsdk:"id"`
-	LastUpdated types.String       `tfsdk:"last_updated"`
-	Name        types.String       `tfsdk:"name"`
-	OrgID       types.Int64        `tfsdk:"org_id"`
-	Visibility  types.String       `tfsdk:"visibility"`
-	Workspace   *tfTypes.Workspace `tfsdk:"workspace"`
+	DateCreated types.String `tfsdk:"date_created"`
+	Description types.String `tfsdk:"description"`
+	FullName    types.String `tfsdk:"full_name"`
+	ID          types.Int64  `tfsdk:"id"`
+	LastUpdated types.String `tfsdk:"last_updated"`
+	Name        types.String `tfsdk:"name"`
+	OrgID       types.Int64  `tfsdk:"org_id"`
+	Visibility  types.String `tfsdk:"visibility"`
 }
 
 func (r *WorkspaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -59,6 +56,12 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -78,10 +81,17 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"id": schema.Int64Attribute{
 				Computed:    true,
+				Optional:    true,
 				Description: `Optional workspace numeric identifier`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -97,7 +107,7 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Organization numeric identifier`,
 			},
 			"visibility": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `must be one of ["PRIVATE", "SHARED"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -105,85 +115,6 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 						"SHARED",
 					),
 				},
-			},
-			"workspace": schema.SingleNestedAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Attributes: map[string]schema.Attribute{
-					"date_created": schema.StringAttribute{
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-						},
-						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"description": schema.StringAttribute{
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-						},
-						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(1000),
-						},
-					},
-					"full_name": schema.StringAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-						},
-						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
-					},
-					"id": schema.Int64Attribute{
-						Optional: true,
-						PlanModifiers: []planmodifier.Int64{
-							int64planmodifier.RequiresReplaceIfConfigured(),
-						},
-						Description: `Requires replacement if changed.`,
-					},
-					"last_updated": schema.StringAttribute{
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-						},
-						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"name": schema.StringAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-						},
-						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(40),
-						},
-					},
-					"visibility": schema.StringAttribute{
-						Required: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-						},
-						Description: `must be one of ["PRIVATE", "SHARED"]; Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"PRIVATE",
-								"SHARED",
-							),
-						},
-					},
-				},
-				Description: `Requires replacement if changed.`,
 			},
 		},
 	}
@@ -254,43 +185,6 @@ func (r *WorkspaceResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedWorkspace(ctx, res.CreateWorkspaceResponse.Workspace)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsDescribeWorkspaceRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.Workspaces.Describe(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
-		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DescribeWorkspaceResponse != nil && res1.DescribeWorkspaceResponse.Workspace != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedWorkspace(ctx, res1.DescribeWorkspaceResponse.Workspace)...)
 
 	if resp.Diagnostics.HasError() {
 		return

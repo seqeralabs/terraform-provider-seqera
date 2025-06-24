@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: a37c4ab8c75ccc7c0eea0430f350126b
+  docChecksum: 313fbdda66f6bbfee6ee701d6ff761fb
   docVersion: 1.45.0
   speakeasyVersion: 1.568.2
   generationVersion: 2.634.2
@@ -211,7 +211,6 @@ generatedFiles:
   - internal/provider/types/studio_user.go
   - internal/provider/types/univa_grid_engine_configuration.go
   - internal/provider/types/workflow_launch_request.go
-  - internal/provider/types/workspace.go
   - internal/provider/types/workspace_db_dto.go
   - internal/provider/user_data_source.go
   - internal/provider/user_data_source_sdk.go

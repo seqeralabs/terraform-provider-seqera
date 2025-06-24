@@ -12,52 +12,63 @@ import (
 	"time"
 )
 
+func (r *WorkspaceResourceModel) ToSharedWorkspace(ctx context.Context) (*shared.Workspace, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	id := new(int64)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueInt64()
+	} else {
+		id = nil
+	}
+	var name string
+	name = r.Name.ValueString()
+
+	var fullName string
+	fullName = r.FullName.ValueString()
+
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	visibility := shared.Visibility(r.Visibility.ValueString())
+	dateCreated := new(time.Time)
+	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
+	} else {
+		dateCreated = nil
+	}
+	lastUpdated := new(time.Time)
+	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
+		*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.LastUpdated.ValueString())
+	} else {
+		lastUpdated = nil
+	}
+	out := shared.Workspace{
+		ID:          id,
+		Name:        name,
+		FullName:    fullName,
+		Description: description,
+		Visibility:  visibility,
+		DateCreated: dateCreated,
+		LastUpdated: lastUpdated,
+	}
+
+	return &out, diags
+}
+
 func (r *WorkspaceResourceModel) ToSharedCreateWorkspaceRequest(ctx context.Context) (*shared.CreateWorkspaceRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var workspace *shared.Workspace
-	if r.Workspace != nil {
-		id := new(int64)
-		if !r.Workspace.ID.IsUnknown() && !r.Workspace.ID.IsNull() {
-			*id = r.Workspace.ID.ValueInt64()
-		} else {
-			id = nil
-		}
-		var name string
-		name = r.Workspace.Name.ValueString()
+	workspace, workspaceDiags := r.ToSharedWorkspace(ctx)
+	diags.Append(workspaceDiags...)
 
-		var fullName string
-		fullName = r.Workspace.FullName.ValueString()
-
-		description := new(string)
-		if !r.Workspace.Description.IsUnknown() && !r.Workspace.Description.IsNull() {
-			*description = r.Workspace.Description.ValueString()
-		} else {
-			description = nil
-		}
-		visibility := shared.Visibility(r.Workspace.Visibility.ValueString())
-		dateCreated := new(time.Time)
-		if !r.Workspace.DateCreated.IsUnknown() && !r.Workspace.DateCreated.IsNull() {
-			*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Workspace.DateCreated.ValueString())
-		} else {
-			dateCreated = nil
-		}
-		lastUpdated := new(time.Time)
-		if !r.Workspace.LastUpdated.IsUnknown() && !r.Workspace.LastUpdated.IsNull() {
-			*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.Workspace.LastUpdated.ValueString())
-		} else {
-			lastUpdated = nil
-		}
-		workspace = &shared.Workspace{
-			ID:          id,
-			Name:        name,
-			FullName:    fullName,
-			Description: description,
-			Visibility:  visibility,
-			DateCreated: dateCreated,
-			LastUpdated: lastUpdated,
-		}
+	if diags.HasError() {
+		return nil, diags
 	}
+
 	out := shared.CreateWorkspaceRequest{
 		Workspace: workspace,
 	}
