@@ -47,7 +47,7 @@ resource  "seqera_workspace" "my_workspace" {
   description = "A test workspace created with Terraform"
   name        = "test-workspace-tf"
   full_name   = "Test Workspace for Terraform Provider"
-  id      = 85756379242889
+  org_id     = 85756379242889
   visibility = "PRIVATE"
 }
 
@@ -56,3 +56,4 @@ resource  "seqera_workspace" "my_workspace" {
 resource "seqera_tokens" "my_tokens" {
   name     = "terraform-test-token"
 }
+
