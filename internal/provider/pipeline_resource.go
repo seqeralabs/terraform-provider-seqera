@@ -460,7 +460,7 @@ func (r *PipelineResource) Create(ctx context.Context, req resource.CreateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.CreatePipeline(ctx, *request)
+	res, err := r.client.Pipelines.Create(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -520,7 +520,7 @@ func (r *PipelineResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.DescribePipeline(ctx, *request)
+	res, err := r.client.Pipelines.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -574,7 +574,7 @@ func (r *PipelineResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.UpdatePipeline(ctx, *request)
+	res, err := r.client.Pipelines.Update(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -611,7 +611,7 @@ func (r *PipelineResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Pipelines.DescribePipeline(ctx, *request1)
+	res1, err := r.client.Pipelines.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -671,7 +671,7 @@ func (r *PipelineResource) Delete(ctx context.Context, req resource.DeleteReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.DeletePipeline(ctx, *request)
+	res, err := r.client.Pipelines.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

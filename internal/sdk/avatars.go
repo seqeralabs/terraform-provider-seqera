@@ -30,8 +30,8 @@ func newAvatars(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks
 	}
 }
 
-// DownloadAvatar - Download the avatar image
-func (s *Avatars) DownloadAvatar(ctx context.Context, request operations.DownloadAvatarRequest, opts ...operations.Option) (*operations.DownloadAvatarResponse, error) {
+// Download the avatar image
+func (s *Avatars) Download(ctx context.Context, request operations.DownloadAvatarRequest, opts ...operations.Option) (*operations.DownloadAvatarResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

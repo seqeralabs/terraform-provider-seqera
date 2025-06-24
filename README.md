@@ -70,8 +70,6 @@ provider "seqera" {
 * [seqera_orgs](docs/resources/orgs.md)
 * [seqera_pipeline](docs/resources/pipeline.md)
 * [seqera_tokens](docs/resources/tokens.md)
-* [seqera_trace](docs/resources/trace.md)
-* [seqera_workspace_datasets](docs/resources/workspace_datasets.md)
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
@@ -89,7 +87,6 @@ provider "seqera" {
 * [seqera_tokens](docs/data-sources/tokens.md)
 * [seqera_user](docs/data-sources/user.md)
 * [seqera_user_workspaces](docs/data-sources/user_workspaces.md)
-* [seqera_workspace_datasets](docs/data-sources/workspace_datasets.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

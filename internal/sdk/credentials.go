@@ -31,9 +31,9 @@ func newCredentials(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *h
 	}
 }
 
-// ListCredentials - List credentials
+// List credentials
 // Lists all available credentials in a user context. Append `?workspaceId` to list credentials in a workspace context, and `?platformId` to filter credentials by computing platform.
-func (s *Credentials) ListCredentials(ctx context.Context, request operations.ListCredentialsRequest, opts ...operations.Option) (*operations.ListCredentialsResponse, error) {
+func (s *Credentials) List(ctx context.Context, request operations.ListCredentialsRequest, opts ...operations.Option) (*operations.ListCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -187,9 +187,9 @@ func (s *Credentials) ListCredentials(ctx context.Context, request operations.Li
 
 }
 
-// CreateCredentials - Create credentials
+// Create credentials
 // Creates new credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateCredentials(ctx context.Context, request operations.CreateCredentialsRequest, opts ...operations.Option) (*operations.CreateCredentialsResponse, error) {
+func (s *Credentials) Create(ctx context.Context, request operations.CreateCredentialsRequest, opts ...operations.Option) (*operations.CreateCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -350,9 +350,9 @@ func (s *Credentials) CreateCredentials(ctx context.Context, request operations.
 
 }
 
-// ValidateCredentialsName - Validate credential name
+// ValidateName - Validate credential name
 // Validates the given credentials name. Append `?name=<your_credential_name>`.
-func (s *Credentials) ValidateCredentialsName(ctx context.Context, request operations.ValidateCredentialsNameRequest, opts ...operations.Option) (*operations.ValidateCredentialsNameResponse, error) {
+func (s *Credentials) ValidateName(ctx context.Context, request operations.ValidateCredentialsNameRequest, opts ...operations.Option) (*operations.ValidateCredentialsNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -488,9 +488,9 @@ func (s *Credentials) ValidateCredentialsName(ctx context.Context, request opera
 
 }
 
-// DescribeCredentials - Describe credentials
+// Get - Describe credentials
 // Retrieves the details of the credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeCredentials(ctx context.Context, request operations.DescribeCredentialsRequest, opts ...operations.Option) (*operations.DescribeCredentialsResponse, error) {
+func (s *Credentials) Get(ctx context.Context, request operations.DescribeCredentialsRequest, opts ...operations.Option) (*operations.DescribeCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -644,9 +644,9 @@ func (s *Credentials) DescribeCredentials(ctx context.Context, request operation
 
 }
 
-// UpdateCredentials - Update credentials
+// Update credentials
 // Updates the details of the credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateCredentials(ctx context.Context, request operations.UpdateCredentialsRequest, opts ...operations.Option) (*operations.UpdateCredentialsResponse, error) {
+func (s *Credentials) Update(ctx context.Context, request operations.UpdateCredentialsRequest, opts ...operations.Option) (*operations.UpdateCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -787,9 +787,9 @@ func (s *Credentials) UpdateCredentials(ctx context.Context, request operations.
 
 }
 
-// DeleteCredentials - Delete credentials
+// Delete credentials
 // Deletes the credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteCredentials(ctx context.Context, request operations.DeleteCredentialsRequest, opts ...operations.Option) (*operations.DeleteCredentialsResponse, error) {
+func (s *Credentials) Delete(ctx context.Context, request operations.DeleteCredentialsRequest, opts ...operations.Option) (*operations.DeleteCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

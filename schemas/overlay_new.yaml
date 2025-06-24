@@ -1,7 +1,7 @@
 overlay: 1.0.0
 x-speakeasy-jsonpath: rfc9535
 info:
-  title: Overlay seqera-api-latest.yml => seqera-final.yaml
+  title: Overlay schemas/seqera-api-latest.yml => schemas/seqera-final.yaml
   version: 0.0.0
 actions:
   - target: $["paths"]["/orgs"]["get"]
@@ -10,30 +10,111 @@ actions:
   - target: $["paths"]["/orgs"]["post"]
     update:
       x-speakeasy-entity-operation: Orgs#create
+  - target: $["paths"]["/orgs/{orgId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["paths"]["/orgs/{orgId}"]["put"]
     update:
       x-speakeasy-entity-operation: Orgs#update
+  - target: $["paths"]["/orgs/{orgId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["paths"]["/orgs/{orgId}"]["delete"]
     update:
       x-speakeasy-entity-operation: Orgs#delete
-  # - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
-  #   update:
-  #     x-speakeasy-entity-operation: Workspaces#create
-  # # - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]
-  # #   update:
-  # #     x-speakeasy-entity-operation: Workspaces#read
-  # # - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][1]
-  # #   update:
-  # #     x-speakeasy-name-override: workspaceId
-  # - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]
-  #   update:
-  #     x-speakeasy-entity-operation: Workspaces#update
-  # # - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]["responses"]["200"]["content"]["application/json"]["schema"]["properties"]["workspaceId"]
-  # #   update:
-  # #     x-speakeasy-name-override: workspaceId
-  # - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]
-  #   update:
-  #     x-speakeasy-entity-operation: Workspaces#delete
+  - target: $["paths"]["/orgs/{orgId}/collaborators"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/members"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/members/leave"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/members/{memberId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/members/{memberId}/role"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/validate"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/validate"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["paths"]["/studios"]["get"]
     update:
       x-speakeasy-entity-operation: DataStudios#read
@@ -49,24 +130,24 @@ actions:
   - target: $["paths"]["/tokens"]["post"]
     update:
       x-speakeasy-entity-operation: Tokens#create
+  - target: $["paths"]["/tokens/{tokenId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["paths"]["/tokens/{tokenId}"]["delete"]
     update:
       x-speakeasy-entity-operation: Tokens#delete
-  # - target: $["paths"]["/trace/create"]["post"]
-  #   update:
-  #     x-speakeasy-entity-operation: Trace#create
-  # - target: $["paths"]["/workspaces/{workspaceId}/datasets"]["get"]
-  #   update:
-  #     x-speakeasy-entity-operation: WorkspaceDatasets#read
-  # - target: $["paths"]["/workspaces/{workspaceId}/datasets"]["post"]
-  #   update:
-  #     x-speakeasy-entity-operation: WorkspaceDatasets#create
-  # - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}"]["put"]
-  #   update:
-  #     x-speakeasy-entity-operation: WorkspaceDatasets#update
-  # - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}"]["delete"]
-  #   update:
-  #     x-speakeasy-entity-operation: WorkspaceDatasets#delete
+  - target: $["paths"]["/workflow/{workflowId}/star"]["get"]
+    update:
+      x-speakeasy-group: WorkflowStar
+  - target: $["paths"]["/workflow/{workflowId}/star"]["post"]
+    update:
+      x-speakeasy-group: WorkflowStar
+  - target: $["paths"]["/workflow/{workflowId}/star"]["delete"]
+    update:
+      x-speakeasy-group: WorkflowStar
+  - target: $["components"]["schemas"]["AccessToken"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["components"]["schemas"]["AccessToken"]
     update:
       x-speakeasy-entity: Tokens
@@ -122,10 +203,8 @@ actions:
       x-speakeasy-entity: Label
   - target: $["components"]["schemas"]["CreateOrganizationRequest"]
     update:
-      x-speakeasy-entity: Orgs
-  - target: $["components"]["schemas"]["CreateOrganizationResponse"]
-    update:
-      x-speakeasy-entity: Orgs
+      required:
+        - organization
   - target: $["components"]["schemas"]["CreatePipelineRequest"]
     update:
       x-speakeasy-entity: Pipelines
@@ -237,6 +316,12 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["MoabComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
+  - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["Organization"]
+    update:
+      x-speakeasy-entity: Orgs
   - target: $["components"]["schemas"]["PipelineDbDto"]
     update:
       x-speakeasy-entity: Pipeline
@@ -254,8 +339,6 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["SlurmComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  # - target: $["components"]["schemas"]["TraceProgressRequest"]["properties"]["containers"]
-  #   remove: true
   - target: $["components"]["schemas"]["UnivaComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["UserDbDto"]
@@ -263,14 +346,13 @@ actions:
       x-speakeasy-entity:
         - CurrentUser
         - User
-        ## Workflows
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
     update:
-      x-speakeasy-param-force-new: true
+      remove: true
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["pipeline"]
     update:
-      x-speakeasy-param-force-new: true
-      ## Misc Schemas
+      remove: true
+      # Misc Schemas
   - target: $["components"]["schemas"]["Workspace"]
     update:
       x-speakeasy-entity: Workspace

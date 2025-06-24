@@ -117,7 +117,7 @@ func (r *TokensResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"token_id": schema.Int64Attribute{
-				Required:    true,
+				Optional:    true,
 				Description: `Token numeric identifier`,
 			},
 		},
@@ -168,7 +168,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Tokens.CreateToken(ctx, *request)
+	res, err := r.client.Tokens.Create(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -199,7 +199,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Tokens.TokenList(ctx)
+	res1, err := r.client.Tokens.List(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -247,7 +247,7 @@ func (r *TokensResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	res, err := r.client.Tokens.TokenList(ctx)
+	res, err := r.client.Tokens.List(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -325,7 +325,7 @@ func (r *TokensResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Tokens.DeleteToken(ctx, *request)
+	res, err := r.client.Tokens.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

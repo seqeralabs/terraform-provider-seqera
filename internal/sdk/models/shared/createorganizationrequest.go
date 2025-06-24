@@ -3,13 +3,13 @@
 package shared
 
 type CreateOrganizationRequest struct {
-	Organization *Organization `json:"organization,omitempty"`
-	LogoID       *string       `json:"logoId,omitempty"`
+	Organization Organization `json:"organization"`
+	LogoID       *string      `json:"logoId,omitempty"`
 }
 
-func (o *CreateOrganizationRequest) GetOrganization() *Organization {
+func (o *CreateOrganizationRequest) GetOrganization() Organization {
 	if o == nil {
-		return nil
+		return Organization{}
 	}
 	return o.Organization
 }

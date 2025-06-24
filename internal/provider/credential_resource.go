@@ -755,7 +755,7 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.CreateCredentials(ctx, *request)
+	res, err := r.client.Credentials.Create(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -792,7 +792,7 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -852,7 +852,7 @@ func (r *CredentialResource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeCredentials(ctx, *request)
+	res, err := r.client.Credentials.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -906,7 +906,7 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.UpdateCredentials(ctx, *request)
+	res, err := r.client.Credentials.Update(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -934,7 +934,7 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -994,7 +994,7 @@ func (r *CredentialResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DeleteCredentials(ctx, *request)
+	res, err := r.client.Credentials.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

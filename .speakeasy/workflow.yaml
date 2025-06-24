@@ -4,6 +4,8 @@ sources:
     Seqera API:
         inputs:
             - location: schemas/seqera-final.yaml
+        overlays:
+            - location: .speakeasy/speakeasy-modifications-overlay.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

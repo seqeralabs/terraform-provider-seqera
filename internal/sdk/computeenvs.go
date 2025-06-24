@@ -16,7 +16,6 @@ import (
 	"net/url"
 )
 
-// ComputeEnvs - Compute environments
 type ComputeEnvs struct {
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration
@@ -31,9 +30,9 @@ func newComputeEnvs(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *h
 	}
 }
 
-// ListComputeEnvs - List compute environments
+// List compute environments
 // Lists all available compute environments in a user context. Append `?workspaceId` to list compute environments in a workspace context, and `?status` to filter by compute environment status.
-func (s *ComputeEnvs) ListComputeEnvs(ctx context.Context, request operations.ListComputeEnvsRequest, opts ...operations.Option) (*operations.ListComputeEnvsResponse, error) {
+func (s *ComputeEnvs) List(ctx context.Context, request operations.ListComputeEnvsRequest, opts ...operations.Option) (*operations.ListComputeEnvsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -187,9 +186,9 @@ func (s *ComputeEnvs) ListComputeEnvs(ctx context.Context, request operations.Li
 
 }
 
-// CreateComputeEnv - Create compute environment
+// Create compute environment
 // Creates a new compute environment. Append `?workspaceId` to create the environment in a workspace context.
-func (s *ComputeEnvs) CreateComputeEnv(ctx context.Context, request operations.CreateComputeEnvRequest, opts ...operations.Option) (*operations.CreateComputeEnvResponse, error) {
+func (s *ComputeEnvs) Create(ctx context.Context, request operations.CreateComputeEnvRequest, opts ...operations.Option) (*operations.CreateComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -350,9 +349,9 @@ func (s *ComputeEnvs) CreateComputeEnv(ctx context.Context, request operations.C
 
 }
 
-// ValidateComputeEnvName - Validate compute environment name
+// Validate compute environment name
 // Confirms the validity of the given compute environment name in a user context. Append `?name=<your_ce_name>`.
-func (s *ComputeEnvs) ValidateComputeEnvName(ctx context.Context, request operations.ValidateComputeEnvNameRequest, opts ...operations.Option) (*operations.ValidateComputeEnvNameResponse, error) {
+func (s *ComputeEnvs) Validate(ctx context.Context, request operations.ValidateComputeEnvNameRequest, opts ...operations.Option) (*operations.ValidateComputeEnvNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -488,9 +487,9 @@ func (s *ComputeEnvs) ValidateComputeEnvName(ctx context.Context, request operat
 
 }
 
-// DescribeComputeEnv - Describe compute environment
+// Get - Describe compute environment
 // Retrieves the details of the compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) DescribeComputeEnv(ctx context.Context, request operations.DescribeComputeEnvRequest, opts ...operations.Option) (*operations.DescribeComputeEnvResponse, error) {
+func (s *ComputeEnvs) Get(ctx context.Context, request operations.DescribeComputeEnvRequest, opts ...operations.Option) (*operations.DescribeComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -644,9 +643,9 @@ func (s *ComputeEnvs) DescribeComputeEnv(ctx context.Context, request operations
 
 }
 
-// UpdateComputeEnv - Update compute environment
+// Update compute environment
 // Updates the details of the compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) UpdateComputeEnv(ctx context.Context, request operations.UpdateComputeEnvRequest, opts ...operations.Option) (*operations.UpdateComputeEnvResponse, error) {
+func (s *ComputeEnvs) Update(ctx context.Context, request operations.UpdateComputeEnvRequest, opts ...operations.Option) (*operations.UpdateComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -789,9 +788,9 @@ func (s *ComputeEnvs) UpdateComputeEnv(ctx context.Context, request operations.U
 
 }
 
-// DeleteComputeEnv - Delete compute environment
+// Delete compute environment
 // Deletes the compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) DeleteComputeEnv(ctx context.Context, request operations.DeleteComputeEnvRequest, opts ...operations.Option) (*operations.DeleteComputeEnvResponse, error) {
+func (s *ComputeEnvs) Delete(ctx context.Context, request operations.DeleteComputeEnvRequest, opts ...operations.Option) (*operations.DeleteComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -927,9 +926,9 @@ func (s *ComputeEnvs) DeleteComputeEnv(ctx context.Context, request operations.D
 
 }
 
-// UpdateComputeEnvPrimary - Define primary compute environment
+// SetPrimary - Define primary compute environment
 // Selects the compute environment identified by the given `computeEnvId` as the primary compute environment in the given workspace context.
-func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request operations.UpdateComputeEnvPrimaryRequest, opts ...operations.Option) (*operations.UpdateComputeEnvPrimaryResponse, error) {
+func (s *ComputeEnvs) SetPrimary(ctx context.Context, request operations.UpdateComputeEnvPrimaryRequest, opts ...operations.Option) (*operations.UpdateComputeEnvPrimaryResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

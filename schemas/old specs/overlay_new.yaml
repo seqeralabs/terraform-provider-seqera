@@ -1,0 +1,261 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Overlay seqera-api-latest.yml => seqera-final.yaml
+  version: 0.0.0
+actions:
+  # - target: $["paths"]["/labels"]["get"]
+  #   update:
+  #     x-speakeasy-entity-operation: Labels#read
+  # - target: $["paths"]["/labels"]["post"]
+  #   update:
+  #     x-speakeasy-entity-operation: Labels#create
+  # - target: $["paths"]["/labels/{labelId}"]["put"]
+  #   update:
+  #     x-speakeasy-entity-operation: Labels#update
+  - target: $["paths"]["/orgs"]["get"]
+    update:
+      x-speakeasy-entity-operation: Orgs#read
+  - target: $["paths"]["/orgs"]["post"]
+    update:
+      x-speakeasy-entity-operation: Orgs#create
+  - target: $["paths"]["/orgs/{orgId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Orgs#update
+  - target: $["paths"]["/orgs/{orgId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Orgs#delete
+
+
+  - target: $["paths"]["/studios"]["get"]
+    update:
+      x-speakeasy-entity-operation: DataStudios#read
+  - target: $["paths"]["/studios"]["post"]
+    update:
+      x-speakeasy-entity-operation: DataStudios#create
+  - target: $["paths"]["/studios/{sessionId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: DataStudios#delete
+  
+  - target: $["paths"]["/tokens"]["get"]
+    update:
+      x-speakeasy-entity-operation: Tokens#read
+  - target: $["paths"]["/tokens"]["post"]
+    update:
+      x-speakeasy-entity-operation: Tokens#create
+  - target: $["paths"]["/tokens/{tokenId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Tokens#delete
+  - target: $["components"]["schemas"]["AccessToken"]
+    update:
+      x-speakeasy-entity: Tokens
+  - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.EventType"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.TowerActionConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.TowerActionEvent"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AgentSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AltairPbsComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzBatchConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzureEntraKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzureReposSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["AzureSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["BitBucketSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["CodeCommitSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["ComputeConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["ContainerRegistryKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
+    update:
+      x-speakeasy-entity: Tokens
+  - target: $["components"]["schemas"]["CreateDatasetRequest"]
+    update:
+      x-speakeasy-entity: Datasets
+  - target: $["components"]["schemas"]["CreateDatasetResponse"]
+    update:
+      x-speakeasy-entity: Datasets
+  - target: $["components"]["schemas"]["CreateLabelRequest"]
+    update:
+      x-speakeasy-entity: Label
+  - target: $["components"]["schemas"]["CreateLabelResponse"]
+    update:
+      x-speakeasy-entity: Label
+  # - target: $["components"]["schemas"]["CreateOrganizationRequest"]
+  #   update:
+  #     x-speakeasy-entity: Orgs
+  # - target: $["components"]["schemas"]["CreateOrganizationResponse"]
+  #   update:
+  #     x-speakeasy-entity: Orgs
+  - target: $["components"]["schemas"]["CreatePipelineRequest"]
+    update:
+      x-speakeasy-entity: Pipelines
+  - target: $["components"]["schemas"]["CreatePipelineResponse"]
+    update:
+      x-speakeasy-entity: Pipelines
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
+    remove: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
+    update:
+      - aws
+      - azure
+      - google
+      - github
+      - gitlab
+      - bitbucket
+      - ssh
+      - k8s
+      - container-reg
+      - tw-agent
+      - codecommit
+      - gitea
+      - azurerepos
+      - seqeracompute
+      # discriminator:
+      #   propertyName: discriminator
+      #   mapping:
+      #     aws: "#/components/schemas/AwsSecurityKeys"
+      #     azure: "#/components/schemas/AzureSecurityKeys"
+      #     google: "#/components/schemas/GoogleSecurityKeys"
+      #     github: "#/components/schemas/GitHubSecurityKeys"
+      #     gitlab: "#/components/schemas/GitLabSecurityKeys"
+      #     bitbucket: "#/components/schemas/BitBucketSecurityKeys"
+      #     ssh: "#/components/schemas/SSHSecurityKeys"
+      #     k8s: "#/components/schemas/K8sSecurityKeys"
+      #     container-reg: "#/components/schemas/ContainerRegistryKeys"
+      #     tw-agent: "#/components/schemas/AgentSecurityKeys"
+      #     codecommit: "#/components/schemas/CodeCommitSecurityKeys"
+      #     gitea: "#/components/schemas/GiteaSecurityKeys"
+      #     azurerepos: "#/components/schemas/AzureReposSecurityKeys"
+      #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
+      #     azure_entra: "#/components/schemas/AzureEntraKeys"
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
+    update:
+      x-speakeasy-name-override: providerType
+  - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
+    update:
+      x-speakeasy-entity: DataStudio
+  - target: $["components"]["schemas"]["DataStudioConfiguration"]
+    update:
+      x-speakeasy-entity: DataStudio
+  - target: $["components"]["schemas"]["DataStudioCreateRequest"]
+    update:
+      x-speakeasy-entity: DataStudio
+  - target: $["components"]["schemas"]["DataStudioDto"]
+    update:
+      x-speakeasy-entity: DataStudio
+  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]["properties"]["computeEnv"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["EksComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["password"]
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["password"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["GitLabSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GiteaSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GithubActionConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GithubActionEvent"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GkeComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleBatchConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleLifeSciencesConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["K8sComputeConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["K8sSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
+    update:
+      x-speakeasy-entity: Action
+  - target: $["components"]["schemas"]["ListComputeEnvsResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnvs
+      ## Compute Config Schemas
+  - target: $["components"]["schemas"]["ListCredentialsResponse"]
+    update:
+      x-speakeasy-entity: Credentials
+      ## Security Keys Schemas
+  - target: $["components"]["schemas"]["ListWorkspacesAndOrgResponse"]
+    update:
+      x-speakeasy-entity: UserWorkspaces
+  - target: $["components"]["schemas"]["LsfComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["MoabComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Organization"]
+    update:
+      x-speakeasy-entity: Orgs
+  - target: $["components"]["schemas"]["PipelineDbDto"]
+    update:
+      x-speakeasy-entity: Pipeline
+      ## Users
+  - target: $["components"]["schemas"]["SSHSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SecurityKeys"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SecurityKeys"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["SlurmComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["UnivaComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["UserDbDto"]
+    update:
+      x-speakeasy-entity:
+        - CurrentUser
+        - User
+
+  # Workflows
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
+    update:
+      x-speakeasy-param-force-new: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["pipeline"]
+    update:
+      x-speakeasy-param-force-new: true
+      # Misc Schemas
+  - target: $["components"]["schemas"]["Workspace"]
+    update:
+      x-speakeasy-entity: Workspace
+  - target: $
+    update:
+      servers:
+        - url: https://api.cloud.seqera.io

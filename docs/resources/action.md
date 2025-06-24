@@ -85,14 +85,14 @@ Optional:
 - `entry_name` (String)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
-- `id` (String) Requires replacement if changed.
+- `id` (String)
 - `label_ids` (List of Number)
 - `launch_container` (String)
 - `main_script` (String)
 - `optimization_id` (String)
 - `optimization_targets` (String)
 - `params_text` (String)
-- `pipeline` (String) Requires replacement if changed.
+- `pipeline` (String)
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pull_latest` (Boolean)

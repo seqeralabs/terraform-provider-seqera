@@ -969,7 +969,7 @@ func (r *DataStudiosResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.CreateDataStudio(ctx, *request)
+	res, err := r.client.Studios.Create(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1032,7 +1032,7 @@ func (r *DataStudiosResource) Read(ctx context.Context, req resource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.ListDataStudios(ctx, *request)
+	res, err := r.client.Studios.List(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1110,7 +1110,7 @@ func (r *DataStudiosResource) Delete(ctx context.Context, req resource.DeleteReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.DeleteDataStudio(ctx, *request)
+	res, err := r.client.Studios.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

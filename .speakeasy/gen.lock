@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 0d78e59527103dd5b78bbe2872e33e47
+  docChecksum: 326c1a509b51d32316cbcbba44063688
   docVersion: 1.45.0
-  speakeasyVersion: 1.568.0
-  generationVersion: 2.632.2
+  speakeasyVersion: 1.568.2
+  generationVersion: 2.634.2
   releaseVersion: 0.0.3
-  configChecksum: 5c57e475af35b5e38b4380452a279681
+  configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -16,6 +16,7 @@ features:
     getRequestBodies: 2.81.1
     globalSecurity: 2.81.12
     globalServerURLs: 2.82.2
+    groups: 2.81.2
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     nullables: 0.0.0
@@ -39,7 +40,6 @@ generatedFiles:
   - examples/data-sources/seqera_tokens/data-source.tf
   - examples/data-sources/seqera_user/data-source.tf
   - examples/data-sources/seqera_user_workspaces/data-source.tf
-  - examples/data-sources/seqera_workspace_datasets/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/seqera_action/import.sh
   - examples/resources/seqera_action/resource.tf
@@ -52,9 +52,6 @@ generatedFiles:
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
   - examples/resources/seqera_tokens/resource.tf
-  - examples/resources/seqera_trace/resource.tf
-  - examples/resources/seqera_workspace_datasets/import.sh
-  - examples/resources/seqera_workspace_datasets/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -124,8 +121,6 @@ generatedFiles:
   - internal/provider/tokens_data_source_sdk.go
   - internal/provider/tokens_resource.go
   - internal/provider/tokens_resource_sdk.go
-  - internal/provider/trace_resource.go
-  - internal/provider/trace_resource_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
@@ -198,7 +193,6 @@ generatedFiles:
   - internal/provider/types/list_compute_envs_response_entry.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
-  - internal/provider/types/organization.go
   - internal/provider/types/organization_db_dto.go
   - internal/provider/types/pipeline_db_dto.go
   - internal/provider/types/security_keys.go
@@ -217,17 +211,16 @@ generatedFiles:
   - internal/provider/userworkspaces_data_source.go
   - internal/provider/userworkspaces_data_source_sdk.go
   - internal/provider/utils.go
-  - internal/provider/workspacedatasets_data_source.go
-  - internal/provider/workspacedatasets_data_source_sdk.go
-  - internal/provider/workspacedatasets_resource.go
-  - internal/provider/workspacedatasets_resource_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/actions.go
   - internal/sdk/avatars.go
+  - internal/sdk/checkpoints.go
   - internal/sdk/computeenvs.go
   - internal/sdk/credentials.go
   - internal/sdk/datalinks.go
+  - internal/sdk/dataset.go
   - internal/sdk/datasets.go
+  - internal/sdk/datasetsworkspaces.go
   - internal/sdk/ga4gh.go
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/hooks/hooks.go
@@ -243,7 +236,11 @@ generatedFiles:
   - internal/sdk/internal/utils/security.go
   - internal/sdk/internal/utils/utils.go
   - internal/sdk/labels.go
+  - internal/sdk/labelsworkflows.go
   - internal/sdk/launch.go
+  - internal/sdk/members.go
+  - internal/sdk/metadata.go
+  - internal/sdk/metrics.go
   - internal/sdk/models/errors/apierror.go
   - internal/sdk/models/operations/addlabelstoactions.go
   - internal/sdk/models/operations/addlabelstopipelines.go
@@ -462,6 +459,7 @@ generatedFiles:
   - internal/sdk/models/shared/computeplatformdto.go
   - internal/sdk/models/shared/computeregion.go
   - internal/sdk/models/shared/configenvvariable.go
+  - internal/sdk/models/shared/containerdata.go
   - internal/sdk/models/shared/createaccesstokenrequest.go
   - internal/sdk/models/shared/createaccesstokenresponse.go
   - internal/sdk/models/shared/createactionrequest.go
@@ -702,14 +700,20 @@ generatedFiles:
   - internal/sdk/models/shared/workspacedbdto.go
   - internal/sdk/models/shared/wsprole.go
   - internal/sdk/orgs.go
+  - internal/sdk/participants.go
   - internal/sdk/pipelines.go
   - internal/sdk/pipelinesecrets.go
+  - internal/sdk/pipelineslaunch.go
   - internal/sdk/platforms.go
+  - internal/sdk/regions.go
   - internal/sdk/retry/config.go
   - internal/sdk/seqera.go
   - internal/sdk/serviceinfo.go
+  - internal/sdk/star.go
   - internal/sdk/studios.go
+  - internal/sdk/tasks.go
   - internal/sdk/teams.go
+  - internal/sdk/templates.go
   - internal/sdk/tokens.go
   - internal/sdk/trace.go
   - internal/sdk/types/bigint.go
@@ -717,8 +721,12 @@ generatedFiles:
   - internal/sdk/types/datetime.go
   - internal/sdk/types/decimal.go
   - internal/sdk/types/pointers.go
+  - internal/sdk/upload.go
   - internal/sdk/users.go
+  - internal/sdk/version.go
+  - internal/sdk/versions.go
   - internal/sdk/workflows.go
+  - internal/sdk/workflowstar.go
   - internal/sdk/workspaces.go
   - internal/validators/DateValidator.go
   - internal/validators/ExactlyOneChild.go
@@ -1443,7 +1451,7 @@ examples:
   CreateOrganization:
     speakeasy-default-create-organization:
       requestBody:
-        application/json: {}
+        application/json: {"organization": {"name": "<value>", "fullName": "Neil Brakus"}}
       responses:
         "200":
           application/json: {}

@@ -4586,7 +4586,7 @@ func (r *ComputeEnvResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.CreateComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.Create(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -4623,7 +4623,7 @@ func (r *ComputeEnvResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeComputeEnv(ctx, *request1)
+	res1, err := r.client.ComputeEnvs.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -4683,7 +4683,7 @@ func (r *ComputeEnvResource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DescribeComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -4737,7 +4737,7 @@ func (r *ComputeEnvResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.UpdateComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.Update(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -4765,7 +4765,7 @@ func (r *ComputeEnvResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeComputeEnv(ctx, *request1)
+	res1, err := r.client.ComputeEnvs.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -4825,7 +4825,7 @@ func (r *ComputeEnvResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DeleteComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

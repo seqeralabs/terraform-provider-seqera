@@ -1,0 +1,1524 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Speakeasy Modifications
+  version: 0.0.1
+  x-speakeasy-metadata:
+    type: speakeasy-modifications
+    before: ""
+    after: ""
+actions:
+  - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]
+    update:
+      x-speakeasy-name-override: addMember
+    x-speakeasy-metadata:
+      after: sdk.orgs.addMember()
+      before: sdk.orgs.CreateOrganizationMember()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/upload"]["post"]
+    update:
+      x-speakeasy-group: dataLinks.upload
+      x-speakeasy-name-override: generateUrl
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.upload.generateUrl()
+      before: sdk.data-links.GenerateDataLinkUploadUrl()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.teams.list()
+      before: sdk.teams.ListOrganizationTeams()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/upload/finish/{dirPath}"]["post"]
+    update:
+      x-speakeasy-name-override: finishUpload
+    x-speakeasy-metadata:
+      after: sdk.data-links.finishUpload()
+      before: sdk.data-links.FinishDataLinkUpload_1()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets"]["get"]
+    update:
+      x-speakeasy-name-override: listByWorkspace
+    x-speakeasy-metadata:
+      after: sdk.datasets.listByWorkspace()
+      before: sdk.datasets.ListDatasets()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.teams.delete()
+      before: sdk.teams.DeleteOrganizationTeam()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/log/{taskId}"]["get"]
+    update:
+      x-speakeasy-name-override: getTaskLog
+    x-speakeasy-metadata:
+      after: sdk.workflows.getTaskLog()
+      before: sdk.workflows.GetWorkflowTaskLog()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/trace/{workflowId}/begin"]["put"]
+    update:
+      x-speakeasy-name-override: begin
+    x-speakeasy-metadata:
+      after: sdk.trace.begin()
+      before: sdk.trace.UpdateTraceBegin()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/pipeline-secrets/{secretId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.pipeline-secrets.get()
+      before: sdk.pipeline-secrets.DescribePipelineSecret()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.datasets.create()
+      before: sdk.datasets.CreateDataset()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}/checkpoints"]["get"]
+    update:
+      x-speakeasy-name-override: listCheckpoints
+    x-speakeasy-metadata:
+      after: sdk.studios.listCheckpoints()
+      before: sdk.studios.ListDataStudioCheckpoints()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/actions/labels/remove"]["post"]
+    update:
+      x-speakeasy-group: actions
+      x-speakeasy-name-override: removeLabels
+    x-speakeasy-metadata:
+      after: sdk.actions.removeLabels()
+      before: sdk.labels.RemoveLabelsFromActions()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}/upload"]["post"]
+    update:
+      x-speakeasy-group: dataset.version
+      x-speakeasy-name-override: upload
+    x-speakeasy-metadata:
+      after: sdk.dataset.version.upload()
+      before: sdk.datasets.UploadDataset()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]
+    update:
+      x-speakeasy-name-override: updateStudioSettings
+    x-speakeasy-metadata:
+      after: sdk.workspaces.updateStudioSettings()
+      before: sdk.workspaces.UpdateDataStudiosWorkspaceSettings()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/users/{userId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.users.get()
+      before: sdk.users.DescribeUser()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/generate-download-url"]["get"]
+    update:
+      x-speakeasy-name-override: generate-download-url
+    x-speakeasy-metadata:
+      after: sdk.data-links.generate-download-url()
+      before: sdk.data-links.GenerateDownloadUrlDataLink()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/pipelines/{pipelineId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.pipelines.get()
+      before: sdk.pipelines.DescribePipeline()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.datasets.update()
+      before: sdk.datasets.UpdateDataset()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/credentials/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateName
+    x-speakeasy-metadata:
+      after: sdk.credentials.validateName()
+      before: sdk.credentials.ValidateCredentialsName()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/data-links"]["post"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.create()
+      before: sdk.data-links.CreateCustomDataLink()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/trace/{workflowId}/complete"]["put"]
+    update:
+      x-speakeasy-name-override: complete
+    x-speakeasy-metadata:
+      after: sdk.trace.complete()
+      before: sdk.trace.UpdateTraceComplete()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/actions/labels/apply"]["post"]
+    update:
+      x-speakeasy-group: actions
+      x-speakeasy-name-override: applyLabels
+    x-speakeasy-metadata:
+      after: sdk.actions.applyLabels()
+      before: sdk.labels.ApplyLabelsToActions()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/workflow/random-name"]["get"]
+    update:
+      x-speakeasy-name-override: randomName
+    x-speakeasy-metadata:
+      after: sdk.workflows.randomName()
+      before: sdk.workflows.GenerateRandomWorkflowName()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/datasets/{datasetId}/versions"]["get"]
+    update:
+      x-speakeasy-group: datasets.versions
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.datasets.versions.list()
+      before: sdk.datasets.ListDatasetVersionsV2()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/actions/{actionId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.actions.get()
+      before: sdk.actions.DescribeAction()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/trace/{workflowId}/progress"]["put"]
+    update:
+      x-speakeasy-name-override: updateProgress
+    x-speakeasy-metadata:
+      after: sdk.trace.updateProgress()
+      before: sdk.trace.UpdateTraceProgress()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/pipelines/repositories"]["get"]
+    update:
+      x-speakeasy-name-override: listRepositories
+    x-speakeasy-metadata:
+      after: sdk.pipelines.listRepositories()
+      before: sdk.pipelines.ListPipelineRepositories()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/pipeline-secrets"]["post"]
+    update:
+      x-speakeasy-group: pipelineSecrets
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.pipelineSecrets.create()
+      before: sdk.pipeline-secrets.CreatePipelineSecret()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/compute-envs/{computeEnvId}"]["put"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.computeEnvs.update()
+      before: sdk.compute-envs.UpdateComputeEnv()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/compute-envs"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.compute-envs.list()
+      before: sdk.compute-envs.ListComputeEnvs()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/actions/types"]["get"]
+    update:
+      x-speakeasy-name-override: listTypes
+    x-speakeasy-metadata:
+      after: sdk.actions.listTypes()
+      before: sdk.actions.ListActionTypes()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/ga4gh/wes/v1/runs/{run_id}/cancel"]["post"]
+    update:
+      x-speakeasy-name-override: cancelRun
+    x-speakeasy-metadata:
+      after: sdk.ga4gh.cancelRun()
+      before: sdk.ga4gh.Ga4ghRunCancel()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/browse-tree"]["get"]
+    update:
+      x-speakeasy-name-override: browseTree
+    x-speakeasy-metadata:
+      after: sdk.data-links.browseTree()
+      before: sdk.data-links.ExploreDataLinkTree()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/ga4gh/wes/v1/runs"]["get"]
+    update:
+      x-speakeasy-name-override: listRuns
+    x-speakeasy-metadata:
+      after: sdk.ga4gh.listRuns()
+      before: sdk.ga4gh.Ga4ghRunList()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/data-links/cache/refresh"]["get"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: refreshCache
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.refreshCache()
+      before: sdk.data-links.RefreshDataLinkCache()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}"]["delete"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.delete()
+      before: sdk.data-links.DeleteCustomDataLink()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/launch/{launchId}/datasets"]["get"]
+    update:
+      x-speakeasy-group: launch
+      x-speakeasy-name-override: listDatasets
+    x-speakeasy-metadata:
+      after: sdk.launch.listDatasets()
+      before: sdk.datasets.ListLaunchDatasetVersions()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/ga4gh/wes/v1/runs"]["post"]
+    update:
+      x-speakeasy-name-override: createRun
+    x-speakeasy-metadata:
+      after: sdk.ga4gh.createRun()
+      before: sdk.ga4gh.Ga4ghRunCreate()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/star"]["delete"]
+    update:
+      x-speakeasy-name-override: unstar
+    x-speakeasy-metadata:
+      after: sdk.workflows.unstar()
+      before: sdk.workflows.DeleteWorkflowStar()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/pipelines/labels/apply"]["post"]
+    update:
+      x-speakeasy-name-override: applyToPipelines
+    x-speakeasy-metadata:
+      after: sdk.labels.applyToPipelines()
+      before: sdk.labels.ApplyLabelsToPipelines()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/credentials"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.credentials.list()
+      before: sdk.credentials.ListCredentials()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/user/{userId}/workspaces"]["get"]
+    update:
+      x-speakeasy-name-override: listForUser
+    x-speakeasy-metadata:
+      after: sdk.workspaces.listForUser()
+      before: sdk.workspaces.ListWorkspacesUser()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]
+    update:
+      x-speakeasy-group: workspaces.participants
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.workspaces.participants.list()
+      before: sdk.workspaces.ListWorkspaceParticipants()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/users/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validate
+    x-speakeasy-metadata:
+      after: sdk.users.validate()
+      before: sdk.users.ValidateUserName()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/actions/{actionId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.actions.delete()
+      before: sdk.actions.DeleteAction()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/pipelines/labels/add"]["post"]
+    update:
+      x-speakeasy-group: pipelines
+      x-speakeasy-name-override: addLabels
+    x-speakeasy-metadata:
+      after: sdk.pipelines.addLabels()
+      before: sdk.labels.AddLabelsToPipelines()
+      created_at: 1750720729214
+      type: method-name
+  - target: $["paths"]["/actions"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.actions.create()
+      before: sdk.actions.CreateAction()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]
+    update:
+      x-speakeasy-name-override: getQuotas
+    x-speakeasy-metadata:
+      after: sdk.orgs.getQuotas()
+      before: sdk.orgs.DescribeOrganizationQuotas()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}/start"]["put"]
+    update:
+      x-speakeasy-name-override: start
+    x-speakeasy-metadata:
+      after: sdk.studios.start()
+      before: sdk.studios.StartDataStudio()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/actions"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.actions.list()
+      before: sdk.actions.ListActions()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/actions/{actionId}/pause"]["post"]
+    update:
+      x-speakeasy-name-override: pause
+    x-speakeasy-metadata:
+      after: sdk.actions.pause()
+      before: sdk.actions.PauseAction()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/trace/{workflowId}/heartbeat"]["put"]
+    update:
+      x-speakeasy-name-override: updateHeartbeat
+    x-speakeasy-metadata:
+      after: sdk.trace.updateHeartbeat()
+      before: sdk.trace.UpdateTraceHeartbeat()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/download"]["get"]
+    update:
+      x-speakeasy-name-override: downloadLog
+    x-speakeasy-metadata:
+      after: sdk.workflows.downloadLog()
+      before: sdk.workflows.DownloadWorkflowLog()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/workflow/launch"]["post"]
+    update:
+      x-speakeasy-name-override: launch
+    x-speakeasy-metadata:
+      after: sdk.workflows.launch()
+      before: sdk.workflows.CreateWorkflowLaunch()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}"]["get"]
+    update:
+      x-speakeasy-name-override: describe
+    x-speakeasy-metadata:
+      after: sdk.workflows.describe()
+      before: sdk.workflows.DescribeWorkflow()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.orgs.get()
+      before: sdk.orgs.DescribeOrganization()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}/checkpoints/{checkpointId}"]["get"]
+    update:
+      x-speakeasy-group: studios.checkpoints
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.studios.checkpoints.get()
+      before: sdk.studios.GetDataStudioCheckpoint()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteParticipant
+    x-speakeasy-metadata:
+      after: sdk.workspaces.deleteParticipant()
+      before: sdk.workspaces.DeleteWorkspaceParticipant()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/tokens/delete-all"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteAll
+    x-speakeasy-metadata:
+      after: sdk.tokens.deleteAll()
+      before: sdk.tokens.DeleteAllTokens()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.workspaces.update()
+      before: sdk.workspaces.UpdateWorkspace()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/pipelines/info"]["get"]
+    update:
+      x-speakeasy-name-override: getRepository
+    x-speakeasy-metadata:
+      after: sdk.pipelines.getRepository()
+      before: sdk.pipelines.DescribePipelineRepository()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/platforms"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.platforms.list()
+      before: sdk.platforms.ListPlatforms()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/compute-envs"]["post"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.computeEnvs.create()
+      before: sdk.compute-envs.CreateComputeEnv()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/compute-envs/validate"]["get"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: validate
+    x-speakeasy-metadata:
+      after: sdk.computeEnvs.validate()
+      before: sdk.compute-envs.ValidateComputeEnvName()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/script/download"]["get"]
+    update:
+      x-speakeasy-group: dataLinks
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.generateDownloadScript()
+      before: sdk.data-links.GenerateDownloadScript()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/ga4gh/wes/v1/service-info"]["get"]
+    update:
+      x-speakeasy-name-override: getServiceInfo
+    x-speakeasy-metadata:
+      after: sdk.ga4gh.getServiceInfo()
+      before: sdk.ga4gh.Ga4ghServiceInfo()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/star"]["post"]
+    update:
+      x-speakeasy-name-override: star
+    x-speakeasy-metadata:
+      after: sdk.workflows.star()
+      before: sdk.workflows.CreateWorkflowStar()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.datasets.delete()
+      before: sdk.datasets.DeleteDataset()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/studios/templates"]["get"]
+    update:
+      x-speakeasy-group: studios.templates
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.studios.templates.list()
+      before: sdk.studios.ListDataStudioTemplates()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/ga4gh/wes/v1/runs/{run_id}/status"]["get"]
+    update:
+      x-speakeasy-name-override: getStatus
+    x-speakeasy-metadata:
+      after: sdk.ga4gh.getStatus()
+      before: sdk.ga4gh.Ga4ghRunStatus()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/workflow/labels/apply"]["post"]
+    update:
+      x-speakeasy-name-override: applyToWorkflows
+    x-speakeasy-metadata:
+      after: sdk.labels.applyToWorkflows()
+      before: sdk.labels.ApplyLabelsToWorkflows()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/user-info"]["get"]
+    update:
+      x-speakeasy-name-override: getInfo
+    x-speakeasy-metadata:
+      after: sdk.users.getInfo()
+      before: sdk.users.UserInfo()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]
+    update:
+      x-speakeasy-name-override: listWorkspaces
+    x-speakeasy-metadata:
+      after: sdk.teams.listWorkspaces()
+      before: sdk.teams.ListWorkspacesByTeam()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["delete"]
+    update:
+      x-speakeasy-name-override: leave
+    x-speakeasy-metadata:
+      after: sdk.workspaces.leave()
+      before: sdk.workspaces.LeaveWorkspaceParticipant()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validate
+    x-speakeasy-metadata:
+      after: sdk.workspaces.validate()
+      before: sdk.workspaces.WorkspaceValidate()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/orgs"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.orgs.list()
+      before: sdk.orgs.ListOrganizations()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}/checkpoints/{checkpointId}"]["put"]
+    update:
+      x-speakeasy-name-override: updateCheckpoint
+    x-speakeasy-metadata:
+      after: sdk.studios.updateCheckpoint()
+      before: sdk.studios.UpdateDataStudioCheckpoint()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/pipeline-secrets/{secretId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.pipeline-secrets.delete()
+      before: sdk.pipeline-secrets.DeletePipelineSecret()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/trace/create"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.trace.create()
+      before: sdk.trace.CreateTrace()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/upload/finish"]["post"]
+    update:
+      x-speakeasy-name-override: finalize
+    x-speakeasy-metadata:
+      after: sdk.data-links.finalize()
+      before: sdk.data-links.FinishDataLinkUpload()
+      created_at: 1750720729215
+      type: method-name
+  - target: $["paths"]["/datasets/{datasetId}/upload"]["post"]
+    update:
+      x-speakeasy-name-override: upload
+    x-speakeasy-metadata:
+      after: sdk.datasets.upload()
+      before: sdk.datasets.UploadDatasetV2()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/log"]["get"]
+    update:
+      x-speakeasy-name-override: getLogs
+    x-speakeasy-metadata:
+      after: sdk.workflows.getLogs()
+      before: sdk.workflows.WorkflowLogs()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/actions/labels/add"]["post"]
+    update:
+      x-speakeasy-group: actions
+      x-speakeasy-name-override: addLabels
+    x-speakeasy-metadata:
+      after: sdk.actions.addLabels()
+      before: sdk.labels.AddLabelsToActions()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}/v/{version}/n/{fileName}"]["get"]
+    update:
+      x-speakeasy-group: dataset.version
+      x-speakeasy-name-override: download
+    x-speakeasy-metadata:
+      after: sdk.dataset.version.download()
+      before: sdk.datasets.DownloadDataset()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/avatars"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.avatars.create()
+      before: sdk.avatars.CreateAvatar()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/datasets"]["post"]
+    update:
+      x-speakeasy-group: dataset
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.dataset.create()
+      before: sdk.datasets.CreateDatasetV2()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.workspaces.delete()
+      before: sdk.workspaces.DeleteWorkspace()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.studios.get()
+      before: sdk.studios.DescribeDataStudio()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/labels"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.labels.list()
+      before: sdk.labels.ListLabels()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.teams.create()
+      before: sdk.teams.CreateOrganizationTeam()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/datasets"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.datasets.list()
+      before: sdk.datasets.ListDatasetsV2()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/browse/{path}"]["get"]
+    update:
+      x-speakeasy-name-override: browsePath
+    x-speakeasy-metadata:
+      after: sdk.data-links.browsePath()
+      before: sdk.data-links.ExploreDataLink_1()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/studios"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.studios.create()
+      before: sdk.studios.CreateDataStudio()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/studios/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateName
+    x-speakeasy-metadata:
+      after: sdk.studios.validateName()
+      before: sdk.studios.ValidateDataStudioName()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/credentials/{credentialsId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.credentials.get()
+      before: sdk.credentials.DescribeCredentials()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/credentials/{credentialsId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.credentials.update()
+      before: sdk.credentials.UpdateCredentials()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]
+    update:
+      x-speakeasy-name-override: addParticipant
+    x-speakeasy-metadata:
+      after: sdk.workspaces.addParticipant()
+      before: sdk.workspaces.CreateWorkspaceParticipant()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateName
+    x-speakeasy-metadata:
+      after: sdk.teams.validateName()
+      before: sdk.teams.ValidateTeamName()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.workspaces.list()
+      before: sdk.workspaces.ListWorkspaces()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/metrics"]["get"]
+    update:
+      x-speakeasy-group: workflows.metrics
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.workflows.metrics.get()
+      before: sdk.workflows.DescribeWorkflowMetrics()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.workspaces.create()
+      before: sdk.workspaces.CreateWorkspace()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipeline-secrets/{secretId}"]["put"]
+    update:
+      x-speakeasy-group: pipelineSecrets
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.pipelineSecrets.update()
+      before: sdk.pipeline-secrets.UpdatePipelineSecret()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.teams.update()
+      before: sdk.teams.UpdateOrganizationTeam()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.teams.get()
+      before: sdk.teams.DescribeOrganizationTeam()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipeline-secrets"]["get"]
+    update:
+      x-speakeasy-group: pipelineSecrets
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.pipelineSecrets.list()
+      before: sdk.pipeline-secrets.ListPipelineSecrets()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/content"]["delete"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: deleteContent
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.deleteContent()
+      before: sdk.data-links.DeleteDataLinkItem()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]
+    update:
+      x-speakeasy-group: teams.members
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.teams.members.create()
+      before: sdk.teams.CreateOrganizationTeamMember()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/credentials/{credentialsId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.credentials.delete()
+      before: sdk.credentials.DeleteCredentials()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.studios.delete()
+      before: sdk.studios.DeleteDataStudio()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/upload/{dirPath}"]["post"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: generateUploadUrl
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.generateUploadUrl()
+      before: sdk.data-links.GenerateDataLinkUploadUrl_1()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipeline-secrets/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateName
+    x-speakeasy-metadata:
+      after: sdk.pipeline-secrets.validateName()
+      before: sdk.pipeline-secrets.ValidatePipelineSecretName()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/tasks"]["get"]
+    update:
+      x-speakeasy-name-override: listTasks
+    x-speakeasy-metadata:
+      after: sdk.workflows.listTasks()
+      before: sdk.workflows.ListWorkflowTasks()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/members/leave"]["delete"]
+    update:
+      x-speakeasy-name-override: leave
+    x-speakeasy-metadata:
+      after: sdk.orgs.leave()
+      before: sdk.orgs.LeaveOrganization()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipelines/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateName
+    x-speakeasy-metadata:
+      after: sdk.pipelines.validateName()
+      before: sdk.pipelines.ValidatePipelineName()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteMember
+    x-speakeasy-metadata:
+      after: sdk.teams.deleteMember()
+      before: sdk.teams.DeleteOrganizationTeamMember()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/launch/{launchId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.launch.get()
+      before: sdk.launch.DescribeLaunch()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateName
+    x-speakeasy-metadata:
+      after: sdk.orgs.validateName()
+      before: sdk.orgs.ValidateOrganizationName()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipelines/{pipelineId}/launch"]["get"]
+    update:
+      x-speakeasy-group: pipelines.launch
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.pipelines.launch.get()
+      before: sdk.pipelines.DescribePipelineLaunch()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}"]["get"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.get()
+      before: sdk.data-links.DescribeDataLink()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/cancel"]["post"]
+    update:
+      x-speakeasy-name-override: cancel
+    x-speakeasy-metadata:
+      after: sdk.workflows.cancel()
+      before: sdk.workflows.CancelWorkflow()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/tokens"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.tokens.create()
+      before: sdk.tokens.CreateToken()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/progress"]["get"]
+    update:
+      x-speakeasy-name-override: getProgress
+    x-speakeasy-metadata:
+      after: sdk.workflows.getProgress()
+      before: sdk.workflows.DescribeWorkflowProgress()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/labels/{labelId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.labels.update()
+      before: sdk.labels.UpdateLabel()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.orgs.update()
+      before: sdk.orgs.UpdateOrganization()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]
+    update:
+      x-speakeasy-name-override: describe
+    x-speakeasy-metadata:
+      after: sdk.workspaces.describe()
+      before: sdk.workspaces.DescribeWorkspace()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/compute-envs/{computeEnvId}"]["delete"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.computeEnvs.delete()
+      before: sdk.compute-envs.DeleteComputeEnv()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipelines/{pipelineId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.pipelines.delete()
+      before: sdk.pipelines.DeletePipeline()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.data-links.update()
+      before: sdk.data-links.UpdateCustomDataLink()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}/lifespan"]["post"]
+    update:
+      x-speakeasy-name-override: extendLifespan
+    x-speakeasy-metadata:
+      after: sdk.studios.extendLifespan()
+      before: sdk.studios.ExtendDataStudioLifespan()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["get"]
+    update:
+      x-speakeasy-name-override: getStudioSettings
+    x-speakeasy-metadata:
+      after: sdk.workspaces.getStudioSettings()
+      before: sdk.workspaces.FindDataStudiosWorkspaceSettings()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/launch"]["get"]
+    update:
+      x-speakeasy-name-override: getLaunch
+    x-speakeasy-metadata:
+      after: sdk.workflows.getLaunch()
+      before: sdk.workflows.DescribeWorkflowLaunch()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}/metadata"]["get"]
+    update:
+      x-speakeasy-name-override: getMetadata
+    x-speakeasy-metadata:
+      after: sdk.datasets.getMetadata()
+      before: sdk.datasets.DescribeDataset()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.workflows.list()
+      before: sdk.workflows.ListWorkflows()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/labels/{labelId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.labels.delete()
+      before: sdk.labels.DeleteLabel()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/avatars/{avatarId}"]["get"]
+    update:
+      x-speakeasy-name-override: download
+    x-speakeasy-metadata:
+      after: sdk.avatars.download()
+      before: sdk.avatars.DownloadAvatar()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipelines/labels/remove"]["post"]
+    update:
+      x-speakeasy-name-override: removeFromPipelines
+    x-speakeasy-metadata:
+      after: sdk.labels.removeFromPipelines()
+      before: sdk.labels.RemoveLabelsFromPipelines()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/tokens/{tokenId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.tokens.delete()
+      before: sdk.tokens.DeleteToken()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/actions/{actionId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.actions.update()
+      before: sdk.actions.UpdateAction()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/task/{taskId}"]["get"]
+    update:
+      x-speakeasy-group: workflows.tasks
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.workflows.tasks.get()
+      before: sdk.workflows.DescribeWorkflowTask()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/platforms/{platformId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.platforms.get()
+      before: sdk.platforms.DescribePlatform()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/studios"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.studios.list()
+      before: sdk.studios.ListDataStudios()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/users/{userId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.users.delete()
+      before: sdk.users.DeleteUser()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/members"]["get"]
+    update:
+      x-speakeasy-name-override: listMembers
+    x-speakeasy-metadata:
+      after: sdk.orgs.listMembers()
+      before: sdk.orgs.ListOrganizationMembers()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipelines"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.pipelines.create()
+      before: sdk.pipelines.CreatePipeline()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/collaborators"]["get"]
+    update:
+      x-speakeasy-name-override: listCollaborators
+    x-speakeasy-metadata:
+      after: sdk.orgs.listCollaborators()
+      before: sdk.orgs.ListOrganizationCollaborators()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipelines/{pipelineId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.pipelines.update()
+      before: sdk.pipelines.UpdatePipeline()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/ga4gh/wes/v1/runs/{run_id}"]["get"]
+    update:
+      x-speakeasy-name-override: getRun
+    x-speakeasy-metadata:
+      after: sdk.ga4gh.getRun()
+      before: sdk.ga4gh.Ga4ghRunDescribe()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/studios/data-links"]["get"]
+    update:
+      x-speakeasy-name-override: listMountedDataLinks
+    x-speakeasy-metadata:
+      after: sdk.studios.listMountedDataLinks()
+      before: sdk.studios.ListMountedDataLinkIds()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/pipelines"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.pipelines.list()
+      before: sdk.pipelines.ListPipelines()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/datasets/{datasetId}/metadata"]["get"]
+    update:
+      x-speakeasy-group: dataset.metadata
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.dataset.metadata.get()
+      before: sdk.datasets.DescribeDatasetV2()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]
+    update:
+      x-speakeasy-name-override: listMembers
+    x-speakeasy-metadata:
+      after: sdk.teams.listMembers()
+      before: sdk.teams.ListOrganizationTeamMembers()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/members/{memberId}/role"]["put"]
+    update:
+      x-speakeasy-name-override: updateMemberRole
+    x-speakeasy-metadata:
+      after: sdk.orgs.updateMemberRole()
+      before: sdk.orgs.UpdateOrganizationMemberRole()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/labels"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.labels.create()
+      before: sdk.labels.CreateLabel()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.orgs.create()
+      before: sdk.orgs.CreateOrganization()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/tokens"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.tokens.list()
+      before: sdk.tokens.TokenList()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/compute-envs/{computeEnvId}/primary"]["post"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: setPrimary
+    x-speakeasy-metadata:
+      after: sdk.computeEnvs.setPrimary()
+      before: sdk.compute-envs.UpdateComputeEnvPrimary()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]
+    update:
+      x-speakeasy-group: workspaces.participants
+      x-speakeasy-name-override: updateRole
+    x-speakeasy-metadata:
+      after: sdk.workspaces.participants.updateRole()
+      before: sdk.workspaces.UpdateWorkspaceParticipantRole()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/data-links"]["get"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.dataLinks.list()
+      before: sdk.data-links.ListDataLinks()
+      created_at: 1750720729216
+      type: method-name
+  - target: $["paths"]["/datasets/versions"]["get"]
+    update:
+      x-speakeasy-group: datasets.versions
+      x-speakeasy-name-override: listLatest
+    x-speakeasy-metadata:
+      after: sdk.datasets.versions.listLatest()
+      before: sdk.datasets.ListLatestDatasetVersionsV2()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workflow/delete"]["post"]
+    update:
+      x-speakeasy-name-override: deleteMany
+    x-speakeasy-metadata:
+      after: sdk.workflows.deleteMany()
+      before: sdk.workflows.DeleteWorkflowMany()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workflow/labels/add"]["post"]
+    update:
+      x-speakeasy-name-override: addToWorkflows
+    x-speakeasy-metadata:
+      after: sdk.labels.addToWorkflows()
+      before: sdk.labels.AddLabelsToWorkflows()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/pipelines/{pipelineId}/schema"]["get"]
+    update:
+      x-speakeasy-name-override: getSchema
+    x-speakeasy-metadata:
+      after: sdk.pipelines.getSchema()
+      before: sdk.pipelines.DescribePipelineSchema()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/service-info"]["get"]
+    update:
+      x-speakeasy-group: serviceInfo
+    x-speakeasy-metadata:
+      after: sdk.serviceInfo.info()
+      before: sdk.service-info.Info()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.workflows.delete()
+      before: sdk.workflows.DeleteWorkflow()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workflow/labels/remove"]["post"]
+    update:
+      x-speakeasy-group: labels.workflows
+      x-speakeasy-name-override: remove
+    x-speakeasy-metadata:
+      after: sdk.labels.workflows.remove()
+      before: sdk.labels.RemoveLabelsFromWorkflows()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/studios/{sessionId}/stop"]["put"]
+    update:
+      x-speakeasy-name-override: stop
+    x-speakeasy-metadata:
+      after: sdk.studios.stop()
+      before: sdk.studios.StopDataStudio()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/download/{filePath}"]["get"]
+    update:
+      x-speakeasy-name-override: download
+    x-speakeasy-metadata:
+      after: sdk.data-links.download()
+      before: sdk.data-links.DownloadDataLink()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/datasets/{datasetId}"]["put"]
+    update:
+      x-speakeasy-group: dataset
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.dataset.update()
+      before: sdk.datasets.UpdateDatasetV2()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/actions/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateName
+    x-speakeasy-metadata:
+      after: sdk.actions.validateName()
+      before: sdk.actions.ValidateActionName()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/platforms/{platformId}/regions"]["get"]
+    update:
+      x-speakeasy-group: platforms.regions
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.platforms.regions.list()
+      before: sdk.platforms.ListPlatformRegions()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/users/{userId}"]["post"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.users.update()
+      before: sdk.users.UpdateUser()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workflow/validate"]["get"]
+    update:
+      x-speakeasy-name-override: validateConstraints
+    x-speakeasy-metadata:
+      after: sdk.workflows.validateConstraints()
+      before: sdk.workflows.ValidateWorkflowConstraints()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets/versions"]["get"]
+    update:
+      x-speakeasy-group: datasets.workspaces
+      x-speakeasy-name-override: listVersions
+    x-speakeasy-metadata:
+      after: sdk.datasets.workspaces.listVersions()
+      before: sdk.datasets.ListWorkspaceDatasetVersions()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/star"]["get"]
+    update:
+      x-speakeasy-group: workflows.star
+      x-speakeasy-name-override: describe
+    x-speakeasy-metadata:
+      after: sdk.workflows.star.describe()
+      before: sdk.workflows.DescribeWorkflowStar()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/credentials"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.credentials.create()
+      before: sdk.credentials.CreateCredentials()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/compute-envs/{computeEnvId}"]["get"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.computeEnvs.get()
+      before: sdk.compute-envs.DescribeComputeEnv()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/datasets/{datasetId}/v/{version}/n/{fileName}"]["get"]
+    update:
+      x-speakeasy-name-override: download
+    x-speakeasy-metadata:
+      after: sdk.datasets.download()
+      before: sdk.datasets.DownloadDatasetV2()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/actions/{actionId}/launch"]["post"]
+    update:
+      x-speakeasy-name-override: launch
+    x-speakeasy-metadata:
+      after: sdk.actions.launch()
+      before: sdk.actions.LaunchAction()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workflow/{workflowId}/download/{taskId}"]["get"]
+    update:
+      x-speakeasy-name-override: download-task-log
+    x-speakeasy-metadata:
+      after: sdk.workflows.download-task-log()
+      before: sdk.workflows.DownloadWorkflowTaskLog()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.orgs.delete()
+      before: sdk.orgs.DeleteOrganization()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/workspaces/{workspaceId}/datasets/{datasetId}/versions"]["get"]
+    update:
+      x-speakeasy-name-override: listVersions
+    x-speakeasy-metadata:
+      after: sdk.datasets.listVersions()
+      before: sdk.datasets.ListDatasetVersions()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/orgs/{orgId}/members/{memberId}"]["delete"]
+    update:
+      x-speakeasy-name-override: removeMember
+    x-speakeasy-metadata:
+      after: sdk.orgs.removeMember()
+      before: sdk.orgs.DeleteOrganizationMember()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/datasets/{datasetId}"]["delete"]
+    update:
+      x-speakeasy-group: dataset
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.dataset.delete()
+      before: sdk.datasets.DeleteDatasetV2()
+      created_at: 1750720729217
+      type: method-name
+  - target: $["paths"]["/data-links/{dataLinkId}/browse"]["get"]
+    update:
+      x-speakeasy-name-override: browse
+    x-speakeasy-metadata:
+      after: sdk.data-links.browse()
+      before: sdk.data-links.ExploreDataLink()
+      created_at: 1750720729217
+      type: method-name

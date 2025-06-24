@@ -31,9 +31,9 @@ func newOrgs(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks.Ho
 	}
 }
 
-// ListOrganizations - List organizations
+// List organizations
 // Lists all available organizations in a user context.
-func (s *Orgs) ListOrganizations(ctx context.Context, request operations.ListOrganizationsRequest, opts ...operations.Option) (*operations.ListOrganizationsResponse, error) {
+func (s *Orgs) List(ctx context.Context, request operations.ListOrganizationsRequest, opts ...operations.Option) (*operations.ListOrganizationsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -187,9 +187,9 @@ func (s *Orgs) ListOrganizations(ctx context.Context, request operations.ListOrg
 
 }
 
-// CreateOrganization - Create organization
+// Create organization
 // Creates a new organization.
-func (s *Orgs) CreateOrganization(ctx context.Context, request shared.CreateOrganizationRequest, opts ...operations.Option) (*operations.CreateOrganizationResponse, error) {
+func (s *Orgs) Create(ctx context.Context, request shared.CreateOrganizationRequest, opts ...operations.Option) (*operations.CreateOrganizationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -348,9 +348,9 @@ func (s *Orgs) CreateOrganization(ctx context.Context, request shared.CreateOrga
 
 }
 
-// ValidateOrganizationName - Validate organization name
+// ValidateName - Validate organization name
 // Confirms the validity of the given organization name. Append `?name=<your_org_name>`.
-func (s *Orgs) ValidateOrganizationName(ctx context.Context, request operations.ValidateOrganizationNameRequest, opts ...operations.Option) (*operations.ValidateOrganizationNameResponse, error) {
+func (s *Orgs) ValidateName(ctx context.Context, request operations.ValidateOrganizationNameRequest, opts ...operations.Option) (*operations.ValidateOrganizationNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -486,9 +486,9 @@ func (s *Orgs) ValidateOrganizationName(ctx context.Context, request operations.
 
 }
 
-// DescribeOrganization - Describe organization
+// Get - Describe organization
 // Retrieves the details of the organization identified by the given `orgId`.
-func (s *Orgs) DescribeOrganization(ctx context.Context, request operations.DescribeOrganizationRequest, opts ...operations.Option) (*operations.DescribeOrganizationResponse, error) {
+func (s *Orgs) Get(ctx context.Context, request operations.DescribeOrganizationRequest, opts ...operations.Option) (*operations.DescribeOrganizationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -638,9 +638,9 @@ func (s *Orgs) DescribeOrganization(ctx context.Context, request operations.Desc
 
 }
 
-// UpdateOrganization - Update organization
+// Update organization
 // Updates the details of the organization identified by the given `orgId`.
-func (s *Orgs) UpdateOrganization(ctx context.Context, request operations.UpdateOrganizationRequest, opts ...operations.Option) (*operations.UpdateOrganizationResponse, error) {
+func (s *Orgs) Update(ctx context.Context, request operations.UpdateOrganizationRequest, opts ...operations.Option) (*operations.UpdateOrganizationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -780,9 +780,9 @@ func (s *Orgs) UpdateOrganization(ctx context.Context, request operations.Update
 
 }
 
-// DeleteOrganization - Delete organization
+// Delete organization
 // Deletes the organization identified by the given `orgId`.
-func (s *Orgs) DeleteOrganization(ctx context.Context, request operations.DeleteOrganizationRequest, opts ...operations.Option) (*operations.DeleteOrganizationResponse, error) {
+func (s *Orgs) Delete(ctx context.Context, request operations.DeleteOrganizationRequest, opts ...operations.Option) (*operations.DeleteOrganizationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -912,9 +912,9 @@ func (s *Orgs) DeleteOrganization(ctx context.Context, request operations.Delete
 
 }
 
-// ListOrganizationCollaborators - List organization collaborators
+// ListCollaborators - List organization collaborators
 // Lists the collaborators of the organization identified by the given `orgId`.
-func (s *Orgs) ListOrganizationCollaborators(ctx context.Context, request operations.ListOrganizationCollaboratorsRequest, opts ...operations.Option) (*operations.ListOrganizationCollaboratorsResponse, error) {
+func (s *Orgs) ListCollaborators(ctx context.Context, request operations.ListOrganizationCollaboratorsRequest, opts ...operations.Option) (*operations.ListOrganizationCollaboratorsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1068,9 +1068,9 @@ func (s *Orgs) ListOrganizationCollaborators(ctx context.Context, request operat
 
 }
 
-// ListOrganizationMembers - List organization members
+// ListMembers - List organization members
 // Lists the members of the organization identified by the given `orgId`.
-func (s *Orgs) ListOrganizationMembers(ctx context.Context, request operations.ListOrganizationMembersRequest, opts ...operations.Option) (*operations.ListOrganizationMembersResponse, error) {
+func (s *Orgs) ListMembers(ctx context.Context, request operations.ListOrganizationMembersRequest, opts ...operations.Option) (*operations.ListOrganizationMembersResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1224,9 +1224,9 @@ func (s *Orgs) ListOrganizationMembers(ctx context.Context, request operations.L
 
 }
 
-// CreateOrganizationMember - Add organization member
+// AddMember - Add organization member
 // Adds a new member to the organization identified by the given `orgId`.
-func (s *Orgs) CreateOrganizationMember(ctx context.Context, request operations.CreateOrganizationMemberRequest, opts ...operations.Option) (*operations.CreateOrganizationMemberResponse, error) {
+func (s *Orgs) AddMember(ctx context.Context, request operations.CreateOrganizationMemberRequest, opts ...operations.Option) (*operations.CreateOrganizationMemberResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1385,9 +1385,9 @@ func (s *Orgs) CreateOrganizationMember(ctx context.Context, request operations.
 
 }
 
-// LeaveOrganization - Leave organization
+// Leave organization
 // Removes the requesting user from the organization identified by the given `orgId`.
-func (s *Orgs) LeaveOrganization(ctx context.Context, request operations.LeaveOrganizationRequest, opts ...operations.Option) (*operations.LeaveOrganizationResponse, error) {
+func (s *Orgs) Leave(ctx context.Context, request operations.LeaveOrganizationRequest, opts ...operations.Option) (*operations.LeaveOrganizationResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1517,9 +1517,9 @@ func (s *Orgs) LeaveOrganization(ctx context.Context, request operations.LeaveOr
 
 }
 
-// DeleteOrganizationMember - Delete member
+// RemoveMember - Delete member
 // Deletes the member identified by the given `memberId`.
-func (s *Orgs) DeleteOrganizationMember(ctx context.Context, request operations.DeleteOrganizationMemberRequest, opts ...operations.Option) (*operations.DeleteOrganizationMemberResponse, error) {
+func (s *Orgs) RemoveMember(ctx context.Context, request operations.DeleteOrganizationMemberRequest, opts ...operations.Option) (*operations.DeleteOrganizationMemberResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1649,9 +1649,9 @@ func (s *Orgs) DeleteOrganizationMember(ctx context.Context, request operations.
 
 }
 
-// UpdateOrganizationMemberRole - Update member role
+// UpdateMemberRole - Update member role
 // Updates the role of the member identified by the given `memberId`.
-func (s *Orgs) UpdateOrganizationMemberRole(ctx context.Context, request operations.UpdateOrganizationMemberRoleRequest, opts ...operations.Option) (*operations.UpdateOrganizationMemberRoleResponse, error) {
+func (s *Orgs) UpdateMemberRole(ctx context.Context, request operations.UpdateOrganizationMemberRoleRequest, opts ...operations.Option) (*operations.UpdateOrganizationMemberRoleResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1788,9 +1788,9 @@ func (s *Orgs) UpdateOrganizationMemberRole(ctx context.Context, request operati
 
 }
 
-// DescribeOrganizationQuotas - Describe organization quotas
+// GetQuotas - Describe organization quotas
 // Retrieves the details of the organization quotas identified by the given `orgId`.
-func (s *Orgs) DescribeOrganizationQuotas(ctx context.Context, request operations.DescribeOrganizationQuotasRequest, opts ...operations.Option) (*operations.DescribeOrganizationQuotasResponse, error) {
+func (s *Orgs) GetQuotas(ctx context.Context, request operations.DescribeOrganizationQuotasRequest, opts ...operations.Option) (*operations.DescribeOrganizationQuotasResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

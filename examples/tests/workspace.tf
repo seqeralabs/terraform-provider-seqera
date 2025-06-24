@@ -26,10 +26,12 @@ locals {
 }
 
 
-# resource "seqera_orgs" "my_orgs" {
-#   organization = {
-#     description = "testing org"
-#     full_name   = "seqera_test_shahbaz_tf_provider"
-#     name        = "seqera_test_shahbaz_tf_provider"
-#   }
-# }
+
+resource "seqera_orgs" "my_org" {
+  description = "testing org for the terraform provider"
+  full_name   = "seqera_test_shahbaz_tf_provider"
+  name        = "seqera_test_shahbaz_tf_provider"
+}
+resource "seqera_tokens" "my_tokens" {
+  name     = "terraform-test-token"
+}

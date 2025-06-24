@@ -398,7 +398,7 @@ func (r *DataStudiosDataSource) Read(ctx context.Context, req datasource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.ListDataStudios(ctx, *request)
+	res, err := r.client.Studios.List(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
