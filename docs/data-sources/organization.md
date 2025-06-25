@@ -46,3 +46,4 @@ Read-Only:
 - `paying` (Boolean, Deprecated)
 - `type` (String)
 - `website` (String)
+- `x_speakeasy_entity` (String) Parsed as JSON.

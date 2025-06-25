@@ -237,8 +237,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Requires replacement if changed.`,
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 			},
 			"optimization_id": schema.StringAttribute{
 				Computed: true,

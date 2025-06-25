@@ -55,3 +55,4 @@ Read-Only:
 - `org_id` (Number)
 - `paying` (Boolean, Deprecated)
 - `type` (String) must be one of ["academic", "evaluating", "pro", "basic", "internal"]
+- `x_speakeasy_entity` (String) Parsed as JSON.

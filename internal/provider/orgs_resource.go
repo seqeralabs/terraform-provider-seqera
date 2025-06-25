@@ -20,6 +20,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
+	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
 	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
@@ -185,6 +186,16 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
+					},
+					"x_speakeasy_entity": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Parsed as JSON.`,
+						Validators: []validator.String{
+							validators.IsValidJSON(),
+						},
 					},
 				},
 				Description: `Requires replacement if changed.`,

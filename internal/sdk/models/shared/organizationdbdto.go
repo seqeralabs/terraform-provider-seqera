@@ -4,18 +4,19 @@ package shared
 
 type OrganizationDbDto struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	Paying      *bool    `json:"paying,omitempty"`
-	OrgID       *int64   `json:"orgId,omitempty"`
-	Name        *string  `json:"name,omitempty"`
-	FullName    *string  `json:"fullName,omitempty"`
-	Description *string  `json:"description,omitempty"`
-	Location    *string  `json:"location,omitempty"`
-	Website     *string  `json:"website,omitempty"`
-	LogoID      *string  `json:"logoId,omitempty"`
-	LogoURL     *string  `json:"logoUrl,omitempty"`
-	MemberID    *int64   `json:"memberId,omitempty"`
-	MemberRole  *OrgRole `json:"memberRole,omitempty"`
-	Type        *OrgType `json:"type,omitempty"`
+	Paying           *bool    `json:"paying,omitempty"`
+	OrgID            *int64   `json:"orgId,omitempty"`
+	Name             *string  `json:"name,omitempty"`
+	FullName         *string  `json:"fullName,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+	Location         *string  `json:"location,omitempty"`
+	Website          *string  `json:"website,omitempty"`
+	LogoID           *string  `json:"logoId,omitempty"`
+	LogoURL          *string  `json:"logoUrl,omitempty"`
+	MemberID         *int64   `json:"memberId,omitempty"`
+	MemberRole       *OrgRole `json:"memberRole,omitempty"`
+	Type             *OrgType `json:"type,omitempty"`
+	XSpeakeasyEntity any      `json:"x-speakeasy-entity,omitempty"`
 }
 
 func (o *OrganizationDbDto) GetPaying() *bool {
@@ -100,4 +101,11 @@ func (o *OrganizationDbDto) GetType() *OrgType {
 		return nil
 	}
 	return o.Type
+}
+
+func (o *OrganizationDbDto) GetXSpeakeasyEntity() any {
+	if o == nil {
+		return nil
+	}
+	return o.XSpeakeasyEntity
 }

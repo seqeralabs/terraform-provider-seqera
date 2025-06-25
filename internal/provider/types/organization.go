@@ -7,16 +7,17 @@ import (
 )
 
 type Organization struct {
-	Description types.String `tfsdk:"description"`
-	FullName    types.String `tfsdk:"full_name"`
-	Location    types.String `tfsdk:"location"`
-	LogoID      types.String `tfsdk:"logo_id"`
-	LogoURL     types.String `tfsdk:"logo_url"`
-	MemberID    types.Int64  `tfsdk:"member_id"`
-	MemberRole  types.String `tfsdk:"member_role"`
-	Name        types.String `tfsdk:"name"`
-	OrgID       types.Int64  `tfsdk:"org_id"`
-	Paying      types.Bool   `tfsdk:"paying"`
-	Type        types.String `tfsdk:"type"`
-	Website     types.String `tfsdk:"website"`
+	Description      types.String `tfsdk:"description"`
+	FullName         types.String `tfsdk:"full_name"`
+	Location         types.String `tfsdk:"location"`
+	LogoID           types.String `tfsdk:"logo_id"`
+	LogoURL          types.String `tfsdk:"logo_url"`
+	MemberID         types.Int64  `tfsdk:"member_id"`
+	MemberRole       types.String `tfsdk:"member_role"`
+	Name             types.String `tfsdk:"name"`
+	OrgID            types.Int64  `tfsdk:"org_id"`
+	Paying           types.Bool   `tfsdk:"paying"`
+	Type             types.String `tfsdk:"type"`
+	Website          types.String `tfsdk:"website"`
+	XSpeakeasyEntity types.String `tfsdk:"x_speakeasy_entity"`
 }

@@ -1022,6 +1022,8 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#delete
+      x-speakeasy-entity-operation: Credential#delete
+      x-speakeasy-entity-operation: Credential#delete
   /data-links:
     get:
       summary: List data-links
@@ -8711,18 +8713,17 @@ components:
           $ref: "#/components/schemas/Organization"
         logoId:
           type: string
-      x-speakeasy-entity: Orgs
     CreateOrganizationResponse:
       type: object
       properties:
         organization:
           $ref: "#/components/schemas/OrganizationDbDto"
-      x-speakeasy-entity: Orgs
     CreatePipelineRequest:
       type: object
       properties:
         name:
           type: string
+          x-speakeasy-param-optional: false
         description:
           type: string
         icon:
@@ -10799,6 +10800,7 @@ components:
           nullable: true
           readOnly: true
           x-speakeasy-param-optional: true
+          x-speakeasy-entity: Orgs
           #x-speakeasy-name-override: orgId
         name:
           maxLength: 40
@@ -10856,6 +10858,7 @@ components:
           $ref: "#/components/schemas/OrgRole"
         type:
           $ref: "#/components/schemas/OrgType"
+        x-speakeasy-entity: Orgs
     OrganizationQuotas:
       type: object
       properties:
