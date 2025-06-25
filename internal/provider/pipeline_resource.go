@@ -50,7 +50,6 @@ type PipelineResourceModel struct {
 	HeadJobCpus         types.Int32              `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb     types.Int32              `tfsdk:"head_job_memory_mb"`
 	Icon                types.String             `tfsdk:"icon"`
-	ID                  types.String             `tfsdk:"id"`
 	LabelIds            []types.Int64            `tfsdk:"label_ids"`
 	Labels              []tfTypes.LabelDbDto     `tfsdk:"labels"`
 	LastUpdated         types.String             `tfsdk:"last_updated"`
@@ -176,13 +175,6 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			"icon": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
-			},
-			"id": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional:    true,

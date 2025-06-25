@@ -24,7 +24,6 @@ resource "seqera_action" "my_action" {
     entry_name         = "...my_entry_name..."
     head_job_cpus      = 3
     head_job_memory_mb = 4
-    id                 = "...my_id..."
     label_ids = [
       2
     ]
@@ -85,7 +84,6 @@ Optional:
 - `entry_name` (String)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
-- `id` (String)
 - `label_ids` (List of Number)
 - `launch_container` (String)
 - `main_script` (String)

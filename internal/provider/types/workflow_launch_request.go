@@ -14,7 +14,6 @@ type WorkflowLaunchRequest struct {
 	EntryName           types.String   `tfsdk:"entry_name"`
 	HeadJobCpus         types.Int32    `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb     types.Int32    `tfsdk:"head_job_memory_mb"`
-	ID                  types.String   `tfsdk:"id"`
 	LabelIds            []types.Int64  `tfsdk:"label_ids"`
 	LaunchContainer     types.String   `tfsdk:"launch_container"`
 	MainScript          types.String   `tfsdk:"main_script"`

@@ -232,6 +232,9 @@ actions:
   - target: $["components"]["schemas"]["CreatePipelineRequest"]
     update:
       x-speakeasy-entity: Pipelines
+  - target: $["components"]["schemas"]["CreatePipelineRequest"]["properties"]["launch"]
+    update:
+      x-speakeasy-entity: Pipelines
   - target: $["components"]["schemas"]["CreatePipelineResponse"]
     update:
       x-speakeasy-entity: Pipelines
@@ -343,11 +346,11 @@ actions:
   - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
     update:
       x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
+  - target: $["components"]["schemas"]["Organization"]
     update:
       x-speakeasy-entity: Orgs
       #x-speakeasy-name-override: orgId
-  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]
+  - target: $["components"]["schemas"]["OrganizationDbDto"]
     update:
       x-speakeasy-entity: Orgs
   - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoId"]
@@ -384,11 +387,7 @@ actions:
     update:
       x-speakeasy-param-optional: false
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
-    update:
-      remove: true
-  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["pipeline"]
-    update:
-      remove: true
+    remove: true
       # Misc Schemas
   - target: $["components"]["schemas"]["Workspace"]["properties"]["id"]
     update:

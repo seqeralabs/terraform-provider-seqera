@@ -24,8 +24,8 @@ data "seqera_current_user" "my_currentuser" {
 # }
 
 
-data "seqera_orgs" "my_orgs" {
-}
+# data "seqera_orgs" "my_orgs" {
+# }
 
 # output "orgs" {
 #   value = data.seqera_orgs.my_orgs
@@ -34,11 +34,9 @@ data "seqera_orgs" "my_orgs" {
 
 
 resource "seqera_orgs" "test_org" {
-  organization = {
   description = "testing org for the terraform provider"
   full_name   = "seqera_test_shahbaz_tf_provider"
   name        = "seqera_test_shahbaz_tf_provider"
-  }
 }
 
 resource  "seqera_workspace" "my_workspace" {

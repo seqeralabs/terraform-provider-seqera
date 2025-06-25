@@ -2200,9 +2200,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"head_job_memory_mb": schema.Int32Attribute{
 						Optional: true,
 					},
-					"id": schema.StringAttribute{
-						Optional: true,
-					},
 					"label_ids": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.Int64Type,

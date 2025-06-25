@@ -155,7 +155,6 @@ func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Conte
 		r.HeadJobCpus = rPriorData.HeadJobCpus
 		r.HeadJobMemoryMb = rPriorData.HeadJobMemoryMb
 		r.Icon = types.StringPointerValue(resp.Icon)
-		r.ID = rPriorData.ID
 		r.LabelIds = rPriorData.LabelIds
 		r.Labels = []tfTypes.LabelDbDto{}
 		if len(r.Labels) > len(resp.Labels) {

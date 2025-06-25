@@ -87,10 +87,6 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 					"website": schema.StringAttribute{
 						Computed: true,
 					},
-					"x_speakeasy_entity": schema.StringAttribute{
-						Computed:    true,
-						Description: `Parsed as JSON.`,
-					},
 				},
 			},
 		},

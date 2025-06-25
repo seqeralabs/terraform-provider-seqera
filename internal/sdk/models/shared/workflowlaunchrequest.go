@@ -8,7 +8,6 @@ import (
 )
 
 type WorkflowLaunchRequest struct {
-	ID               *string  `json:"id,omitempty"`
 	ComputeEnvID     *string  `json:"computeEnvId,omitempty"`
 	RunName          *string  `json:"runName,omitempty"`
 	Pipeline         *string  `json:"pipeline,omitempty"`
@@ -49,13 +48,6 @@ func (w *WorkflowLaunchRequest) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (o *WorkflowLaunchRequest) GetID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ID
 }
 
 func (o *WorkflowLaunchRequest) GetComputeEnvID() *string {

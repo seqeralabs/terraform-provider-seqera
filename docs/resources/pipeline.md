@@ -25,7 +25,6 @@ resource "seqera_pipeline" "my_pipeline" {
   head_job_cpus      = 4
   head_job_memory_mb = 9
   icon               = "...my_icon..."
-  id                 = "...my_id..."
   label_ids = [
     7
   ]
@@ -75,7 +74,6 @@ resource "seqera_pipeline" "my_pipeline" {
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `icon` (String)
-- `id` (String) Requires replacement if changed.
 - `label_ids` (List of Number)
 - `launch_container` (String) Requires replacement if changed.
 - `main_script` (String) Requires replacement if changed.

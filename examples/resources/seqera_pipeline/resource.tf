@@ -10,7 +10,6 @@ resource "seqera_pipeline" "my_pipeline" {
   head_job_cpus      = 4
   head_job_memory_mb = 9
   icon               = "...my_icon..."
-  id                 = "...my_id..."
   label_ids = [
     7
   ]

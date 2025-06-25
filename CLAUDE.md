@@ -94,10 +94,11 @@ speakeasy run --skip-versioning
 
 ### Code Generation Workflow
 1. Only modify the OpenAPI specifications in `schemas/seqera-final.yaml` to add speakeasy annotations.
-2. Generate the overlay file from the edited specifiecation.
+2. Generate the overlay file from the edited specifiecation using `speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml`.
 3. You can run `speakeasy run --skip-versioning ` to test your changes generate new code. 
 4. Test changes with local provider builds, do not apply only use terraform plan for now.
-5. Update documentation and examples as needed
+5. Update documentation and examples as needed. 
+6. You can run `speakeasy lint openapi -s seqera-final.yaml` to check for schema errors.
 
 ### Testing
 - Use `examples/tests` directory for integration testing

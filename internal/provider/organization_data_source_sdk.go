@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
@@ -53,12 +52,6 @@ func (r *OrganizationDataSourceModel) RefreshFromSharedDescribeOrganizationRespo
 				r.Organization.Type = types.StringNull()
 			}
 			r.Organization.Website = types.StringPointerValue(resp.Organization.Website)
-			if resp.Organization.XSpeakeasyEntity == nil {
-				r.Organization.XSpeakeasyEntity = types.StringNull()
-			} else {
-				xSpeakeasyEntityResult, _ := json.Marshal(resp.Organization.XSpeakeasyEntity)
-				r.Organization.XSpeakeasyEntity = types.StringValue(string(xSpeakeasyEntityResult))
-			}
 		}
 	}
 

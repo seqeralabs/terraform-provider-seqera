@@ -8,20 +8,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
-	speakeasy_int64planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
-	speakeasy_objectplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
-	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
-	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
-	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -39,9 +29,18 @@ type OrgsResource struct {
 
 // OrgsResourceModel describes the resource data model.
 type OrgsResourceModel struct {
-	LogoID       types.String          `tfsdk:"logo_id"`
-	OrgID        types.Int64           `tfsdk:"org_id"`
-	Organization *tfTypes.Organization `tfsdk:"organization"`
+	Description types.String `tfsdk:"description"`
+	FullName    types.String `tfsdk:"full_name"`
+	Location    types.String `tfsdk:"location"`
+	LogoID      types.String `tfsdk:"logo_id"`
+	LogoURL     types.String `tfsdk:"logo_url"`
+	MemberID    types.Int64  `tfsdk:"member_id"`
+	MemberRole  types.String `tfsdk:"member_role"`
+	Name        types.String `tfsdk:"name"`
+	OrgID       types.Int64  `tfsdk:"org_id"`
+	Paying      types.Bool   `tfsdk:"paying"`
+	Type        types.String `tfsdk:"type"`
+	Website     types.String `tfsdk:"website"`
 }
 
 func (r *OrgsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -52,153 +51,77 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Orgs Resource",
 		Attributes: map[string]schema.Attribute{
-			"logo_id": schema.StringAttribute{
-				Optional: true,
-			},
-			"org_id": schema.Int64Attribute{
-				Optional:    true,
-				Description: `Organization numeric identifier`,
-			},
-			"organization": schema.SingleNestedAttribute{
+			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					objectplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(1000),
 				},
-				Attributes: map[string]schema.Attribute{
-					"description": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(1000),
-						},
-					},
-					"full_name": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Not Null; Requires replacement if changed.`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-							stringvalidator.UTF8LengthAtMost(100),
-						},
-					},
-					"location": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
-					},
-					"logo_id": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-					},
-					"logo_url": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-					},
-					"member_id": schema.Int64Attribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.Int64{
-							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
-						},
-					},
-					"member_role": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `must be one of ["owner", "member", "collaborator"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"owner",
-								"member",
-								"collaborator",
-							),
-						},
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Not Null; Requires replacement if changed.`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-							stringvalidator.UTF8LengthAtMost(40),
-						},
-					},
-					"org_id": schema.Int64Attribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.Int64{
-							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
-						},
-					},
-					"paying": schema.BoolAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.Bool{
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-					},
-					"type": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `must be one of ["academic", "evaluating", "pro", "basic", "internal"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"academic",
-								"evaluating",
-								"pro",
-								"basic",
-								"internal",
-							),
-						},
-					},
-					"website": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
-					},
-					"x_speakeasy_entity": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Parsed as JSON.`,
-						Validators: []validator.String{
-							validators.IsValidJSON(),
-						},
-					},
+			},
+			"full_name": schema.StringAttribute{
+				Required: true,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(100),
 				},
-				Description: `Requires replacement if changed.`,
+			},
+			"location": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(100),
+				},
+			},
+			"logo_id": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+			},
+			"logo_url": schema.StringAttribute{
+				Computed: true,
+			},
+			"member_id": schema.Int64Attribute{
+				Computed: true,
+			},
+			"member_role": schema.StringAttribute{
+				Computed:    true,
+				Description: `must be one of ["owner", "member", "collaborator"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"owner",
+						"member",
+						"collaborator",
+					),
+				},
+			},
+			"name": schema.StringAttribute{
+				Required: true,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(40),
+				},
+			},
+			"org_id": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Organization numeric identifier`,
+			},
+			"paying": schema.BoolAttribute{
+				Computed:           true,
+				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `must be one of ["academic", "evaluating", "pro", "basic", "internal"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"academic",
+						"evaluating",
+						"pro",
+						"basic",
+						"internal",
+					),
+				},
+			},
+			"website": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
 			},
 		},
 	}
@@ -264,11 +187,11 @@ func (r *OrgsResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateOrganizationResponse != nil) {
+	if !(res.CreateOrganizationResponse != nil && res.CreateOrganizationResponse.Organization != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCreateOrganizationResponse(ctx, res.CreateOrganizationResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedOrganizationDbDto(ctx, res.CreateOrganizationResponse.Organization)...)
 
 	if resp.Diagnostics.HasError() {
 		return

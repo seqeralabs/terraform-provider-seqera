@@ -8955,6 +8955,7 @@ components:
           type: string
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
+          x-speakeasy-entity: Pipelines
         labelIds:
           type: array
           items:
@@ -11025,8 +11026,6 @@ components:
           nullable: true
           readOnly: true
           x-speakeasy-param-optional: true
-          x-speakeasy-entity: Orgs
-          #x-speakeasy-name-override: orgId
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11051,6 +11050,8 @@ components:
           type: string
           format: date-time
           readOnly: true
+      x-speakeasy-entity: Orgs
+      #x-speakeasy-name-override: orgId
     OrganizationDbDto:
       type: object
       properties:
@@ -11083,7 +11084,7 @@ components:
           $ref: "#/components/schemas/OrgRole"
         type:
           $ref: "#/components/schemas/OrgType"
-        x-speakeasy-entity: Orgs
+      x-speakeasy-entity: Orgs
     OrganizationQuotas:
       type: object
       properties:
@@ -12714,17 +12715,12 @@ components:
     WorkflowLaunchRequest:
       type: object
       properties:
-        id:
-          type: string
-          remove: true
         computeEnvId:
           type: string
         runName:
           type: string
         pipeline:
           type: string
-          remove: true
-          # Misc Schemas
         workDir:
           type: string
         revision:
