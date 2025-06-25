@@ -8730,13 +8730,11 @@ components:
           type: string
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
-          x-speakeasy-entity: Pipelines
         labelIds:
           type: array
           items:
             type: integer
             format: int64
-      x-speakeasy-entity: Pipelines
     CreatePipelineResponse:
       type: object
       properties:
@@ -12558,6 +12556,7 @@ components:
         dateCreated:
           type: string
           format: date-time
+      x-speakeasy-entity: Pipelines
     WorkflowLaunchResponse:
       type: object
       properties:

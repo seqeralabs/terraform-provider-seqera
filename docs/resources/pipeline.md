@@ -14,45 +14,50 @@ Pipeline Resource
 
 ```terraform
 resource "seqera_pipeline" "my_pipeline" {
-  compute_env_id = "...my_compute_env_id..."
-  config_profiles = [
-    "..."
-  ]
-  config_text        = "...my_config_text..."
-  date_created       = "2020-04-27T05:44:01.599Z"
-  description        = "...my_description..."
-  entry_name         = "...my_entry_name..."
-  head_job_cpus      = 4
-  head_job_memory_mb = 9
-  icon               = "...my_icon..."
+  description = "...my_description..."
+  icon        = "...my_icon..."
   label_ids = [
     7
   ]
-  launch_container     = "...my_launch_container..."
-  main_script          = "...my_main_script..."
-  name                 = "...my_name..."
-  optimization_id      = "...my_optimization_id..."
-  optimization_targets = "...my_optimization_targets..."
-  params_text          = "...my_params_text..."
-  pipeline             = "...my_pipeline..."
-  post_run_script      = "...my_post_run_script..."
-  pre_run_script       = "...my_pre_run_script..."
-  pull_latest          = true
-  resume               = true
-  revision             = "...my_revision..."
-  run_name             = "...my_run_name..."
-  schema_name          = "...my_schema_name..."
-  session_id           = "...my_session_id..."
-  stub_run             = false
-  tower_config         = "...my_tower_config..."
-  user_secrets = [
-    "..."
-  ]
-  work_dir     = "...my_work_dir..."
+  launch = {
+    compute_env_id = "...my_compute_env_id..."
+    config_profiles = [
+      "..."
+    ]
+    config_text        = "...my_config_text..."
+    date_created       = "2022-01-03T00:33:46.725Z"
+    entry_name         = "...my_entry_name..."
+    head_job_cpus      = 6
+    head_job_memory_mb = 4
+    label_ids = [
+      3
+    ]
+    launch_container     = "...my_launch_container..."
+    main_script          = "...my_main_script..."
+    optimization_id      = "...my_optimization_id..."
+    optimization_targets = "...my_optimization_targets..."
+    params_text          = "...my_params_text..."
+    pipeline             = "...my_pipeline..."
+    post_run_script      = "...my_post_run_script..."
+    pre_run_script       = "...my_pre_run_script..."
+    pull_latest          = true
+    resume               = false
+    revision             = "...my_revision..."
+    run_name             = "...my_run_name..."
+    schema_name          = "...my_schema_name..."
+    session_id           = "...my_session_id..."
+    stub_run             = false
+    tower_config         = "...my_tower_config..."
+    user_secrets = [
+      "..."
+    ]
+    work_dir = "...my_work_dir..."
+    workspace_secrets = [
+      "..."
+    ]
+  }
+  name         = "...my_name..."
   workspace_id = 3
-  workspace_secrets = [
-    "..."
-  ]
 }
 ```
 
@@ -65,36 +70,11 @@ resource "seqera_pipeline" "my_pipeline" {
 
 ### Optional
 
-- `compute_env_id` (String) Requires replacement if changed.
-- `config_profiles` (List of String) Requires replacement if changed.
-- `config_text` (String) Requires replacement if changed.
-- `date_created` (String) Requires replacement if changed.
 - `description` (String)
-- `entry_name` (String) Requires replacement if changed.
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
 - `icon` (String)
 - `label_ids` (List of Number)
-- `launch_container` (String) Requires replacement if changed.
-- `main_script` (String) Requires replacement if changed.
-- `optimization_id` (String) Requires replacement if changed.
-- `optimization_targets` (String) Requires replacement if changed.
-- `params_text` (String) Requires replacement if changed.
-- `pipeline` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pull_latest` (Boolean) Requires replacement if changed.
-- `resume` (Boolean) Requires replacement if changed.
-- `revision` (String) Requires replacement if changed.
-- `run_name` (String) Requires replacement if changed.
-- `schema_name` (String) Requires replacement if changed.
-- `session_id` (String) Requires replacement if changed.
-- `stub_run` (Boolean) Requires replacement if changed.
-- `tower_config` (String) Requires replacement if changed.
-- `user_secrets` (List of String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `workspace_id` (Number) Workspace numeric identifier
-- `workspace_secrets` (List of String) Requires replacement if changed.
 
 ### Read-Only
 
@@ -102,7 +82,9 @@ resource "seqera_pipeline" "my_pipeline" {
 - `deleted` (Boolean)
 - `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
 - `last_updated` (String)
+- `optimization_id` (String)
 - `optimization_status` (String) must be one of ["OPTIMIZED", "OPTIMIZABLE", "UNAVAILABLE"]
+- `optimization_targets` (String)
 - `org_id` (Number)
 - `org_name` (String)
 - `pipeline_id` (Number) Pipeline numeric identifier
@@ -113,6 +95,40 @@ resource "seqera_pipeline" "my_pipeline" {
 - `user_name` (String)
 - `visibility` (String)
 - `workspace_name` (String)
+
+<a id="nestedatt--launch"></a>
+### Nested Schema for `launch`
+
+Optional:
+
+- `compute_env_id` (String)
+- `config_profiles` (List of String)
+- `config_text` (String)
+- `date_created` (String)
+- `entry_name` (String)
+- `head_job_cpus` (Number)
+- `head_job_memory_mb` (Number)
+- `label_ids` (List of Number)
+- `launch_container` (String)
+- `main_script` (String)
+- `optimization_id` (String)
+- `optimization_targets` (String)
+- `params_text` (String)
+- `pipeline` (String)
+- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `pull_latest` (Boolean)
+- `resume` (Boolean)
+- `revision` (String)
+- `run_name` (String)
+- `schema_name` (String)
+- `session_id` (String)
+- `stub_run` (Boolean)
+- `tower_config` (String)
+- `user_secrets` (List of String)
+- `work_dir` (String)
+- `workspace_secrets` (List of String)
+
 
 <a id="nestedatt--compute_env"></a>
 ### Nested Schema for `compute_env`

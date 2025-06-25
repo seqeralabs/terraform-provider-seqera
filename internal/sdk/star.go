@@ -15,8 +15,6 @@ import (
 	"net/http"
 )
 
-// Star workflow
-// Adds the workflow identified by the given `workflowId` to your list of starred workflows.
 type Star struct {
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration

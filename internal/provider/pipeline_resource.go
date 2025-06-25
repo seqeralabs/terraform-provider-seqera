@@ -9,15 +9,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
@@ -39,52 +33,29 @@ type PipelineResource struct {
 
 // PipelineResourceModel describes the resource data model.
 type PipelineResourceModel struct {
-	ComputeEnv          *tfTypes.ComputeEnvDbDto `tfsdk:"compute_env"`
-	ComputeEnvID        types.String             `tfsdk:"compute_env_id"`
-	ConfigProfiles      []types.String           `tfsdk:"config_profiles"`
-	ConfigText          types.String             `tfsdk:"config_text"`
-	DateCreated         types.String             `tfsdk:"date_created"`
-	Deleted             types.Bool               `tfsdk:"deleted"`
-	Description         types.String             `tfsdk:"description"`
-	EntryName           types.String             `tfsdk:"entry_name"`
-	HeadJobCpus         types.Int32              `tfsdk:"head_job_cpus"`
-	HeadJobMemoryMb     types.Int32              `tfsdk:"head_job_memory_mb"`
-	Icon                types.String             `tfsdk:"icon"`
-	LabelIds            []types.Int64            `tfsdk:"label_ids"`
-	Labels              []tfTypes.LabelDbDto     `tfsdk:"labels"`
-	LastUpdated         types.String             `tfsdk:"last_updated"`
-	LaunchContainer     types.String             `tfsdk:"launch_container"`
-	MainScript          types.String             `tfsdk:"main_script"`
-	Name                types.String             `tfsdk:"name"`
-	OptimizationID      types.String             `tfsdk:"optimization_id"`
-	OptimizationStatus  types.String             `tfsdk:"optimization_status"`
-	OptimizationTargets types.String             `tfsdk:"optimization_targets"`
-	OrgID               types.Int64              `tfsdk:"org_id"`
-	OrgName             types.String             `tfsdk:"org_name"`
-	ParamsText          types.String             `tfsdk:"params_text"`
-	Pipeline            types.String             `tfsdk:"pipeline"`
-	PipelineID          types.Int64              `tfsdk:"pipeline_id"`
-	PostRunScript       types.String             `tfsdk:"post_run_script"`
-	PreRunScript        types.String             `tfsdk:"pre_run_script"`
-	PullLatest          types.Bool               `tfsdk:"pull_latest"`
-	Repository          types.String             `tfsdk:"repository"`
-	Resume              types.Bool               `tfsdk:"resume"`
-	Revision            types.String             `tfsdk:"revision"`
-	RunName             types.String             `tfsdk:"run_name"`
-	SchemaName          types.String             `tfsdk:"schema_name"`
-	SessionID           types.String             `tfsdk:"session_id"`
-	StubRun             types.Bool               `tfsdk:"stub_run"`
-	TowerConfig         types.String             `tfsdk:"tower_config"`
-	UserFirstName       types.String             `tfsdk:"user_first_name"`
-	UserID              types.Int64              `tfsdk:"user_id"`
-	UserLastName        types.String             `tfsdk:"user_last_name"`
-	UserName            types.String             `tfsdk:"user_name"`
-	UserSecrets         []types.String           `tfsdk:"user_secrets"`
-	Visibility          types.String             `tfsdk:"visibility"`
-	WorkDir             types.String             `tfsdk:"work_dir"`
-	WorkspaceID         types.Int64              `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceName       types.String             `tfsdk:"workspace_name"`
-	WorkspaceSecrets    []types.String           `tfsdk:"workspace_secrets"`
+	ComputeEnv          *tfTypes.ComputeEnvDbDto       `tfsdk:"compute_env"`
+	Deleted             types.Bool                     `tfsdk:"deleted"`
+	Description         types.String                   `tfsdk:"description"`
+	Icon                types.String                   `tfsdk:"icon"`
+	LabelIds            []types.Int64                  `tfsdk:"label_ids"`
+	Labels              []tfTypes.LabelDbDto           `tfsdk:"labels"`
+	LastUpdated         types.String                   `tfsdk:"last_updated"`
+	Launch              *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
+	Name                types.String                   `tfsdk:"name"`
+	OptimizationID      types.String                   `tfsdk:"optimization_id"`
+	OptimizationStatus  types.String                   `tfsdk:"optimization_status"`
+	OptimizationTargets types.String                   `tfsdk:"optimization_targets"`
+	OrgID               types.Int64                    `tfsdk:"org_id"`
+	OrgName             types.String                   `tfsdk:"org_name"`
+	PipelineID          types.Int64                    `tfsdk:"pipeline_id"`
+	Repository          types.String                   `tfsdk:"repository"`
+	UserFirstName       types.String                   `tfsdk:"user_first_name"`
+	UserID              types.Int64                    `tfsdk:"user_id"`
+	UserLastName        types.String                   `tfsdk:"user_last_name"`
+	UserName            types.String                   `tfsdk:"user_name"`
+	Visibility          types.String                   `tfsdk:"visibility"`
+	WorkspaceID         types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceName       types.String                   `tfsdk:"workspace_name"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -112,65 +83,12 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 					},
 				},
 			},
-			"compute_env_id": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"config_profiles": schema.ListAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				ElementType: types.StringType,
-				Description: `Requires replacement if changed.`,
-			},
-			"config_text": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"date_created": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
 			"deleted": schema.BoolAttribute{
 				Computed: true,
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
-			},
-			"entry_name": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"head_job_cpus": schema.Int32Attribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Int32{
-					int32planmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"head_job_memory_mb": schema.Int32Attribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Int32{
-					int32planmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"icon": schema.StringAttribute{
 				Computed: true,
@@ -214,31 +132,106 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 					validators.IsRFC3339(),
 				},
 			},
-			"launch_container": schema.StringAttribute{
+			"launch": schema.SingleNestedAttribute{
 				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+				Attributes: map[string]schema.Attribute{
+					"compute_env_id": schema.StringAttribute{
+						Optional: true,
+					},
+					"config_profiles": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+					},
+					"config_text": schema.StringAttribute{
+						Optional: true,
+					},
+					"date_created": schema.StringAttribute{
+						Optional: true,
+						Validators: []validator.String{
+							validators.IsRFC3339(),
+						},
+					},
+					"entry_name": schema.StringAttribute{
+						Optional: true,
+					},
+					"head_job_cpus": schema.Int32Attribute{
+						Optional: true,
+					},
+					"head_job_memory_mb": schema.Int32Attribute{
+						Optional: true,
+					},
+					"label_ids": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.Int64Type,
+					},
+					"launch_container": schema.StringAttribute{
+						Optional: true,
+					},
+					"main_script": schema.StringAttribute{
+						Optional: true,
+					},
+					"optimization_id": schema.StringAttribute{
+						Optional: true,
+					},
+					"optimization_targets": schema.StringAttribute{
+						Optional: true,
+					},
+					"params_text": schema.StringAttribute{
+						Optional: true,
+					},
+					"pipeline": schema.StringAttribute{
+						Optional: true,
+					},
+					"post_run_script": schema.StringAttribute{
+						Optional:    true,
+						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+					},
+					"pre_run_script": schema.StringAttribute{
+						Optional:    true,
+						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+					},
+					"pull_latest": schema.BoolAttribute{
+						Optional: true,
+					},
+					"resume": schema.BoolAttribute{
+						Optional: true,
+					},
+					"revision": schema.StringAttribute{
+						Optional: true,
+					},
+					"run_name": schema.StringAttribute{
+						Optional: true,
+					},
+					"schema_name": schema.StringAttribute{
+						Optional: true,
+					},
+					"session_id": schema.StringAttribute{
+						Optional: true,
+					},
+					"stub_run": schema.BoolAttribute{
+						Optional: true,
+					},
+					"tower_config": schema.StringAttribute{
+						Optional: true,
+					},
+					"user_secrets": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+					},
+					"work_dir": schema.StringAttribute{
+						Optional: true,
+					},
+					"workspace_secrets": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+					},
 				},
-				Description: `Requires replacement if changed.`,
-			},
-			"main_script": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
 			},
 			"optimization_id": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"optimization_status": schema.StringAttribute{
 				Computed:    true,
@@ -253,12 +246,6 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"optimization_targets": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"org_id": schema.Int64Attribute{
 				Computed: true,
@@ -266,96 +253,12 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			"org_name": schema.StringAttribute{
 				Computed: true,
 			},
-			"params_text": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"pipeline": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
 			"pipeline_id": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Pipeline numeric identifier`,
 			},
-			"post_run_script": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
-			},
-			"pre_run_script": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
-			},
-			"pull_latest": schema.BoolAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
 			"repository": schema.StringAttribute{
 				Computed: true,
-			},
-			"resume": schema.BoolAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"revision": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"run_name": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"schema_name": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"session_id": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"stub_run": schema.BoolAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"tower_config": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"user_first_name": schema.StringAttribute{
 				Computed: true,
@@ -369,23 +272,8 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			"user_name": schema.StringAttribute{
 				Computed: true,
 			},
-			"user_secrets": schema.ListAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				ElementType: types.StringType,
-				Description: `Requires replacement if changed.`,
-			},
 			"visibility": schema.StringAttribute{
 				Computed: true,
-			},
-			"work_dir": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Computed:    true,
@@ -394,14 +282,6 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"workspace_name": schema.StringAttribute{
 				Computed: true,
-			},
-			"workspace_secrets": schema.ListAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				ElementType: types.StringType,
-				Description: `Requires replacement if changed.`,
 			},
 		},
 	}
@@ -472,6 +352,43 @@ func (r *PipelineResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res.CreatePipelineResponse.Pipeline)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsDescribePipelineRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Pipelines.Get(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DescribePipelineResponse != nil && res1.DescribePipelineResponse.Pipeline != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res1.DescribePipelineResponse.Pipeline)...)
 
 	if resp.Diagnostics.HasError() {
 		return
