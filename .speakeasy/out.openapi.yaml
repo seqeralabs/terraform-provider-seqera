@@ -3380,6 +3380,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3429,6 +3430,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3459,6 +3461,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Teams#create
       x-speakeasy-name-override: create
   /orgs/{orgId}/teams/validate:
     get:
@@ -3475,6 +3478,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Team name to validate
@@ -3509,6 +3513,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3516,6 +3521,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-readonly: true
       responses:
         "200":
           description: OK
@@ -3533,6 +3539,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Teams#read
       x-speakeasy-name-override: get
     put:
       summary: Update team
@@ -3548,6 +3555,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3583,6 +3591,7 @@ paths:
           description: UpdateOrganizationTeam 204 response
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Teams#update
       x-speakeasy-name-override: update
     delete:
       summary: Delete team
@@ -3598,6 +3607,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3605,6 +3615,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -3618,6 +3629,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Teams#delete
       x-speakeasy-name-override: delete
   /orgs/{orgId}/teams/{teamId}/members:
     get:
@@ -3634,6 +3646,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3641,6 +3654,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3690,6 +3704,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3697,6 +3712,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3738,6 +3754,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3745,6 +3762,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Member numeric identifier
@@ -3781,6 +3799,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -8896,7 +8915,6 @@ components:
         description:
           type: string
       x-speakeasy-entity: Datasets
-    x-speakeasy-entity: Datasets
     CreateDatasetResponse:
       type: object
       properties:
@@ -8971,7 +8989,6 @@ components:
           type: string
         value:
           type: string
-    x-speakeasy-entity: PipelineSecret
     CreatePipelineSecretResponse:
       type: object
       properties:
@@ -9430,6 +9447,7 @@ components:
         sessionId:
           type: string
           x-speakeasy-param-readonly: true
+          x-speakeasy-name-override: sessionId
         workspaceId:
           type: integer
           format: int64
@@ -11927,7 +11945,7 @@ components:
           format: int64
           nullable: true
           readOnly: true
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-readonly: true
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11949,7 +11967,7 @@ components:
         teamId:
           type: integer
           format: int64
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-readonly: true
         name:
           type: string
         description:
@@ -13075,6 +13093,7 @@ components:
         - launch
         - connect
         - view
+    x-speakeasy-entity: PipelineSecret
   securitySchemes:
     BearerAuth:
       type: http

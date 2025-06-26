@@ -4,6 +4,18 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
+  # - target: $["paths"]["/data-links"]["post"]
+  #   update:
+  #     x-speakeasy-entity-operation: DataLink#create
+  # - target: $["paths"]["/data-links/{dataLinkId}"]["get"]
+  #   update:
+  #     x-speakeasy-entity-operation: DataLink#read
+  # - target: $["paths"]["/data-links/{dataLinkId}"]["put"]
+  #   update:
+  #     x-speakeasy-entity-operation: DataLink#update
+  # - target: $["paths"]["/data-links/{dataLinkId}"]["delete"]
+  #   update:
+  #     x-speakeasy-entity-operation: DataLink#delete
   - target: $["paths"]["/datasets"]["get"]["x-speakeasy-entity-operation"]
     remove: true
   - target: $["paths"]["/datasets"]["post"]
@@ -285,6 +297,9 @@ actions:
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
     update:
       x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+    update:
+      x-speakeasy-name-override: sessionId
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]["x-speakeasy-param-optional"]
     remove: true
   - target: $["components"]["schemas"]["DataStudioDto"]
@@ -427,3 +442,60 @@ actions:
     update:
       servers:
         - url: https://api.cloud.seqera.io
+  - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
+    update:
+      x-speakeasy-entity-operation: Teams#create
+  - target: $["paths"]["/orgs/{orgId}/teams/validate"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Teams#read
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Teams#update
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Teams#delete
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
