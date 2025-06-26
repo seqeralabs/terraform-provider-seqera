@@ -9297,6 +9297,7 @@ components:
       properties:
         sessionId:
           type: string
+          x-speakeasy-param-optional: true
         workspaceId:
           type: integer
           format: int64
@@ -11815,6 +11816,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+      x-speakeasy-entity: teams
     TeamDbDto:
       type: object
       properties:
@@ -11830,6 +11832,7 @@ components:
         membersCount:
           type: integer
           format: int64
+      x-speakeasy-entity: teams
     TraceBeginRequest:
       type: object
       properties:

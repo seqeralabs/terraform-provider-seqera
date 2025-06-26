@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: fc0aeb112fe269e320a7d1f04c8714ed
+  docChecksum: 3c9adbc90dddd36e8937a995cb3bde2b
   docVersion: 1.45.0
-  speakeasyVersion: 1.568.2
-  generationVersion: 2.634.2
+  speakeasyVersion: 1.570.1
+  generationVersion: 2.638.1
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
@@ -33,9 +33,9 @@ generatedFiles:
   - examples/data-sources/seqera_credentials/data-source.tf
   - examples/data-sources/seqera_current_user/data-source.tf
   - examples/data-sources/seqera_data_studios/data-source.tf
-  - examples/data-sources/seqera_datasets/data-source.tf
   - examples/data-sources/seqera_organization/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
+  - examples/data-sources/seqera_pipeline_secret/data-source.tf
   - examples/data-sources/seqera_pipelines/data-source.tf
   - examples/data-sources/seqera_tokens/data-source.tf
   - examples/data-sources/seqera_user/data-source.tf
@@ -50,9 +50,12 @@ generatedFiles:
   - examples/resources/seqera_credential/import.sh
   - examples/resources/seqera_credential/resource.tf
   - examples/resources/seqera_data_studios/resource.tf
+  - examples/resources/seqera_datasets/resource.tf
   - examples/resources/seqera_orgs/resource.tf
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
+  - examples/resources/seqera_pipeline_secret/import.sh
+  - examples/resources/seqera_pipeline_secret/resource.tf
   - examples/resources/seqera_tokens/resource.tf
   - examples/resources/seqera_workspace/import.sh
   - examples/resources/seqera_workspace/resource.tf
@@ -90,8 +93,8 @@ generatedFiles:
   - internal/provider/credentials_data_source_sdk.go
   - internal/provider/currentuser_data_source.go
   - internal/provider/currentuser_data_source_sdk.go
-  - internal/provider/datasets_data_source.go
-  - internal/provider/datasets_data_source_sdk.go
+  - internal/provider/datasets_resource.go
+  - internal/provider/datasets_resource_sdk.go
   - internal/provider/datastudios_data_source.go
   - internal/provider/datastudios_data_source_sdk.go
   - internal/provider/datastudios_resource.go
@@ -106,6 +109,10 @@ generatedFiles:
   - internal/provider/pipeline_resource_sdk.go
   - internal/provider/pipelines_data_source.go
   - internal/provider/pipelines_data_source_sdk.go
+  - internal/provider/pipelinesecret_data_source.go
+  - internal/provider/pipelinesecret_data_source_sdk.go
+  - internal/provider/pipelinesecret_resource.go
+  - internal/provider/pipelinesecret_resource_sdk.go
   - internal/provider/provider.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go

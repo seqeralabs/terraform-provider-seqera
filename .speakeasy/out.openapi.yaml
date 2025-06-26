@@ -2056,7 +2056,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Datasets#read
       x-speakeasy-name-override: list
     post:
       summary: Create dataset
@@ -2101,6 +2100,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Datasets#create
       x-speakeasy-group: dataset
       x-speakeasy-name-override: create
   /datasets/versions:
@@ -2188,6 +2188,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Dataset#update
       x-speakeasy-group: dataset
       x-speakeasy-name-override: update
     delete:
@@ -2222,6 +2223,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Dataset#delete
       x-speakeasy-group: dataset
       x-speakeasy-name-override: delete
   /datasets/{datasetId}/metadata:
@@ -2261,6 +2263,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Dataset#read
       x-speakeasy-group: dataset.metadata
       x-speakeasy-name-override: get
   /datasets/{datasetId}/upload:
@@ -3377,7 +3380,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3427,7 +3429,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3474,7 +3475,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Team name to validate
@@ -3509,7 +3509,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3549,7 +3548,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3600,7 +3598,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3637,7 +3634,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3694,7 +3690,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3743,7 +3738,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3787,7 +3781,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -4518,6 +4511,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#create
       x-speakeasy-group: pipelineSecrets
       x-speakeasy-name-override: create
   /pipeline-secrets/validate:
@@ -4597,6 +4591,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#read
       x-speakeasy-name-override: get
     put:
       summary: Update secret
@@ -4638,6 +4633,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#update
       x-speakeasy-group: pipelineSecrets
       x-speakeasy-name-override: update
     delete:
@@ -4673,6 +4669,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#delete
       x-speakeasy-name-override: delete
   /pipelines:
     get:
@@ -5647,6 +5644,7 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -8898,12 +8896,12 @@ components:
         description:
           type: string
       x-speakeasy-entity: Datasets
+    x-speakeasy-entity: Datasets
     CreateDatasetResponse:
       type: object
       properties:
         dataset:
           $ref: "#/components/schemas/Dataset"
-      x-speakeasy-entity: Datasets
     CreateLabelRequest:
       type: object
       properties:
@@ -8973,6 +8971,7 @@ components:
           type: string
         value:
           type: string
+    x-speakeasy-entity: PipelineSecret
     CreatePipelineSecretResponse:
       type: object
       properties:
@@ -9430,6 +9429,7 @@ components:
       properties:
         sessionId:
           type: string
+          x-speakeasy-param-readonly: true
         workspaceId:
           type: integer
           format: int64
@@ -11304,6 +11304,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+      x-speakeasy-entity: PipelineSecret
     PlatformMetainfo:
       type: object
       discriminator:
@@ -11926,6 +11927,7 @@ components:
           format: int64
           nullable: true
           readOnly: true
+          x-speakeasy-param-optional: true
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11947,6 +11949,7 @@ components:
         teamId:
           type: integer
           format: int64
+          x-speakeasy-param-optional: true
         name:
           type: string
         description:

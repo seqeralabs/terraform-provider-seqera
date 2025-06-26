@@ -6,7 +6,6 @@ terraform {
     }
   }
 }
-
 provider "seqera" {
   server_url  = var.seqera_server_url
   bearer_auth = var.seqera_bearer_auth

@@ -4,6 +4,20 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
+  - target: $["paths"]["/datasets"]["get"]["x-speakeasy-entity-operation"]
+    remove: true
+  - target: $["paths"]["/datasets"]["post"]
+    update:
+      x-speakeasy-entity-operation: Datasets#create
+  - target: $["paths"]["/datasets/{datasetId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Dataset#update
+  - target: $["paths"]["/datasets/{datasetId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Dataset#delete
+  - target: $["paths"]["/datasets/{datasetId}/metadata"]["get"]
+    update:
+      x-speakeasy-entity-operation: Dataset#read
   - target: $["paths"]["/orgs"]["post"]
     update:
       x-speakeasy-entity-operation: Orgs#create
@@ -45,36 +59,6 @@ actions:
     update:
       x-speakeasy-param-optional: true
   - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/validate"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
   - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]
@@ -140,12 +124,27 @@ actions:
   - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
+  - target: $["paths"]["/pipeline-secrets"]["post"]
+    update:
+      x-speakeasy-entity-operation: PipelineSecret#create
+  - target: $["paths"]["/pipeline-secrets/{secretId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: PipelineSecret#read
+  - target: $["paths"]["/pipeline-secrets/{secretId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: PipelineSecret#update
+  - target: $["paths"]["/pipeline-secrets/{secretId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: PipelineSecret#delete
   - target: $["paths"]["/studios"]["get"]
     update:
       x-speakeasy-entity-operation: DataStudios#read
   - target: $["paths"]["/studios"]["post"]
     update:
       x-speakeasy-entity-operation: DataStudios#create
+  - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["paths"]["/studios/{sessionId}"]["delete"]
     update:
       x-speakeasy-entity-operation: DataStudios#delete
@@ -217,7 +216,7 @@ actions:
   - target: $["components"]["schemas"]["CreateDatasetRequest"]
     update:
       x-speakeasy-entity: Datasets
-  - target: $["components"]["schemas"]["CreateDatasetResponse"]
+  - target: $["components"]["schemas"]
     update:
       x-speakeasy-entity: Datasets
   - target: $["components"]["schemas"]["CreateLabelRequest"]
@@ -232,6 +231,9 @@ actions:
   - target: $["components"]["schemas"]["CreatePipelineResponse"]
     update:
       x-speakeasy-entity: Pipelines
+  - target: $["components"]["schemas"]
+    update:
+      x-speakeasy-entity: PipelineSecret
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
     remove: true
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
@@ -280,6 +282,11 @@ actions:
   - target: $["components"]["schemas"]["DataStudioCreateRequest"]
     update:
       x-speakeasy-entity: DataStudio
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]["x-speakeasy-param-optional"]
+    remove: true
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: DataStudio
@@ -357,6 +364,9 @@ actions:
     update:
       x-speakeasy-entity: Pipeline
       ## Users
+  - target: $["components"]["schemas"]["PipelineSecret"]
+    update:
+      x-speakeasy-entity: PipelineSecret
   - target: $["components"]["schemas"]["SSHSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["SecurityKeys"]["properties"]["discriminator"]["readOnly"]
@@ -369,6 +379,16 @@ actions:
   - target: $["components"]["schemas"]["SeqeraComputeSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["SlurmComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Team"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["Team"]["x-speakeasy-entity"]
+    remove: true
+  - target: $["components"]["schemas"]["TeamDbDto"]["properties"]["teamId"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["TeamDbDto"]["x-speakeasy-entity"]
     remove: true
   - target: $["components"]["schemas"]["UnivaComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true

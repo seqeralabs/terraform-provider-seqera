@@ -1995,7 +1995,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Datasets#read
     post:
       summary: Create dataset
       description: Creates a new dataset in the user context. Include the dataset file and details in your request body. Append `?workspaceId` to create the dataset in a workspace context.
@@ -2039,6 +2038,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Datasets#create
   /datasets/versions:
     get:
       summary: List latest dataset versions
@@ -2122,6 +2122,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Dataset#update
     delete:
       summary: Delete dataset
       description: Deletes the dataset identified by the given `datasetId`.
@@ -2154,6 +2155,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Dataset#delete
   /datasets/{datasetId}/metadata:
     get:
       summary: Describe dataset
@@ -2191,6 +2193,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Dataset#read
   /datasets/{datasetId}/upload:
     post:
       summary: Upload new dataset version
@@ -3275,7 +3278,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3324,7 +3326,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3370,7 +3371,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Team name to validate
@@ -3404,7 +3404,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3443,7 +3442,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3493,7 +3491,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3529,7 +3526,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3585,7 +3581,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3632,7 +3627,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3675,7 +3669,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -4388,6 +4381,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#create
   /pipeline-secrets/validate:
     get:
       summary: Validate secret name
@@ -4464,6 +4458,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#read
     put:
       summary: Update secret
       description: Updates the pipeline secret identified by the given `secretId`.
@@ -4504,6 +4499,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#update
     delete:
       summary: Delete secret
       description: Deletes the pipeline secret identified by the given `secretId`.
@@ -4537,6 +4533,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PipelineSecret#delete
   /pipelines:
     get:
       summary: List pipelines
@@ -5484,6 +5481,7 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -8673,12 +8671,12 @@ components:
         description:
           type: string
       x-speakeasy-entity: Datasets
+    x-speakeasy-entity: Datasets
     CreateDatasetResponse:
       type: object
       properties:
         dataset:
           $ref: "#/components/schemas/Dataset"
-      x-speakeasy-entity: Datasets
     CreateLabelRequest:
       type: object
       properties:
@@ -8748,6 +8746,7 @@ components:
           type: string
         value:
           type: string
+    x-speakeasy-entity: PipelineSecret
     CreatePipelineSecretResponse:
       type: object
       properties:
@@ -9205,6 +9204,7 @@ components:
       properties:
         sessionId:
           type: string
+          x-speakeasy-param-readonly: true
         workspaceId:
           type: integer
           format: int64
@@ -11079,6 +11079,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+      x-speakeasy-entity: PipelineSecret
     PlatformMetainfo:
       type: object
       discriminator:
@@ -11701,6 +11702,7 @@ components:
           format: int64
           nullable: true
           readOnly: true
+          x-speakeasy-param-optional: true
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11722,6 +11724,7 @@ components:
         teamId:
           type: integer
           format: int64
+          x-speakeasy-param-optional: true
         name:
           type: string
         description:

@@ -10,8 +10,8 @@ resource "seqera_compute_env" "aws_batch_compute_env" {
     config = {
       aws_batch = {
         discriminator    = "aws-batch"
-        region          = "us-east-1" # e.g., "us-east-1"
-        work_dir        = local.work_dir # e.g., "s3://my-bucket/work"
+        region          = "us-east-1" 
+        work_dir        = local.work_dir 
         
         
         # Head job configuration
@@ -35,13 +35,8 @@ resource "seqera_compute_env" "aws_batch_compute_env" {
           max_cpus      = 1000
           
 
-          # Storage
           ebs_auto_scale  = false
-          
-          # Optional: GPU support
           gpu_enabled = false
-          
-          # Optional: ARM64 support
           arm64_enabled = false
           
         #   # Optional: EC2 key pair for debugging
