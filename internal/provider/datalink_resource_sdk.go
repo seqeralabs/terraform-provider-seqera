@@ -32,9 +32,9 @@ func (r *DataLinkResourceModel) ToSharedDataLinkCreateRequest(ctx context.Contex
 	} else {
 		typeVar = nil
 	}
-	providerType := new(shared.DataLinkProvider)
+	providerType := new(shared.ProviderType)
 	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
-		*providerType = shared.DataLinkProvider(r.ProviderType.ValueString())
+		*providerType = shared.ProviderType(r.ProviderType.ValueString())
 	} else {
 		providerType = nil
 	}
@@ -210,11 +210,7 @@ func (r *DataLinkResourceModel) RefreshFromSharedDataLinkDto(ctx context.Context
 			var credentials tfTypes.DataLinkCredentials
 			credentials.ID = types.StringValue(credentialsItem.ID)
 			credentials.Name = types.StringValue(credentialsItem.Name)
-			if credentialsItem.ProviderType != nil {
-				credentials.ProviderType = types.StringValue(string(*credentialsItem.ProviderType))
-			} else {
-				credentials.ProviderType = types.StringNull()
-			}
+			credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
 			if credentialsCount+1 > len(r.Credentials) {
 				r.Credentials = append(r.Credentials, credentials)
 			} else {

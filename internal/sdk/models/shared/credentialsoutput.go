@@ -9,29 +9,29 @@ import (
 	"time"
 )
 
-type ProviderType string
+type CredentialsProviderType string
 
 const (
-	ProviderTypeAws           ProviderType = "aws"
-	ProviderTypeAzure         ProviderType = "azure"
-	ProviderTypeGoogle        ProviderType = "google"
-	ProviderTypeGithub        ProviderType = "github"
-	ProviderTypeGitlab        ProviderType = "gitlab"
-	ProviderTypeBitbucket     ProviderType = "bitbucket"
-	ProviderTypeSSH           ProviderType = "ssh"
-	ProviderTypeK8s           ProviderType = "k8s"
-	ProviderTypeContainerReg  ProviderType = "container-reg"
-	ProviderTypeTwAgent       ProviderType = "tw-agent"
-	ProviderTypeCodecommit    ProviderType = "codecommit"
-	ProviderTypeGitea         ProviderType = "gitea"
-	ProviderTypeAzurerepos    ProviderType = "azurerepos"
-	ProviderTypeSeqeracompute ProviderType = "seqeracompute"
+	CredentialsProviderTypeAws           CredentialsProviderType = "aws"
+	CredentialsProviderTypeAzure         CredentialsProviderType = "azure"
+	CredentialsProviderTypeGoogle        CredentialsProviderType = "google"
+	CredentialsProviderTypeGithub        CredentialsProviderType = "github"
+	CredentialsProviderTypeGitlab        CredentialsProviderType = "gitlab"
+	CredentialsProviderTypeBitbucket     CredentialsProviderType = "bitbucket"
+	CredentialsProviderTypeSSH           CredentialsProviderType = "ssh"
+	CredentialsProviderTypeK8s           CredentialsProviderType = "k8s"
+	CredentialsProviderTypeContainerReg  CredentialsProviderType = "container-reg"
+	CredentialsProviderTypeTwAgent       CredentialsProviderType = "tw-agent"
+	CredentialsProviderTypeCodecommit    CredentialsProviderType = "codecommit"
+	CredentialsProviderTypeGitea         CredentialsProviderType = "gitea"
+	CredentialsProviderTypeAzurerepos    CredentialsProviderType = "azurerepos"
+	CredentialsProviderTypeSeqeracompute CredentialsProviderType = "seqeracompute"
 )
 
-func (e ProviderType) ToPointer() *ProviderType {
+func (e CredentialsProviderType) ToPointer() *CredentialsProviderType {
 	return &e
 }
-func (e *ProviderType) UnmarshalJSON(data []byte) error {
+func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -64,25 +64,25 @@ func (e *ProviderType) UnmarshalJSON(data []byte) error {
 	case "azurerepos":
 		fallthrough
 	case "seqeracompute":
-		*e = ProviderType(v)
+		*e = CredentialsProviderType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for ProviderType: %v", v)
+		return fmt.Errorf("invalid value for CredentialsProviderType: %v", v)
 	}
 }
 
 type CredentialsOutput struct {
-	CredentialsID *string             `json:"id,omitempty"`
-	Name          string              `json:"name"`
-	Description   *string             `json:"description,omitempty"`
-	ProviderType  ProviderType        `json:"provider"`
-	BaseURL       *string             `json:"baseUrl,omitempty"`
-	Category      *string             `json:"category,omitempty"`
-	Deleted       *bool               `json:"deleted,omitempty"`
-	LastUsed      *time.Time          `json:"lastUsed,omitempty"`
-	DateCreated   *time.Time          `json:"dateCreated,omitempty"`
-	LastUpdated   *time.Time          `json:"lastUpdated,omitempty"`
-	Keys          *SecurityKeysOutput `json:"keys,omitempty"`
+	CredentialsID *string                 `json:"id,omitempty"`
+	Name          string                  `json:"name"`
+	Description   *string                 `json:"description,omitempty"`
+	ProviderType  CredentialsProviderType `json:"provider"`
+	BaseURL       *string                 `json:"baseUrl,omitempty"`
+	Category      *string                 `json:"category,omitempty"`
+	Deleted       *bool                   `json:"deleted,omitempty"`
+	LastUsed      *time.Time              `json:"lastUsed,omitempty"`
+	DateCreated   *time.Time              `json:"dateCreated,omitempty"`
+	LastUpdated   *time.Time              `json:"lastUpdated,omitempty"`
+	Keys          *SecurityKeysOutput     `json:"keys,omitempty"`
 }
 
 func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -117,9 +117,9 @@ func (o *CredentialsOutput) GetDescription() *string {
 	return o.Description
 }
 
-func (o *CredentialsOutput) GetProviderType() ProviderType {
+func (o *CredentialsOutput) GetProviderType() CredentialsProviderType {
 	if o == nil {
-		return ProviderType("")
+		return CredentialsProviderType("")
 	}
 	return o.ProviderType
 }
@@ -279,13 +279,13 @@ func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
 }
 
 type CredentialsInput struct {
-	CredentialsID *string       `json:"id,omitempty"`
-	Name          string        `json:"name"`
-	Description   *string       `json:"description,omitempty"`
-	ProviderType  ProviderType  `json:"provider"`
-	BaseURL       *string       `json:"baseUrl,omitempty"`
-	Category      *string       `json:"category,omitempty"`
-	Keys          *SecurityKeys `json:"keys,omitempty"`
+	CredentialsID *string                 `json:"id,omitempty"`
+	Name          string                  `json:"name"`
+	Description   *string                 `json:"description,omitempty"`
+	ProviderType  CredentialsProviderType `json:"provider"`
+	BaseURL       *string                 `json:"baseUrl,omitempty"`
+	Category      *string                 `json:"category,omitempty"`
+	Keys          *SecurityKeys           `json:"keys,omitempty"`
 }
 
 func (o *CredentialsInput) GetCredentialsID() *string {
@@ -309,9 +309,9 @@ func (o *CredentialsInput) GetDescription() *string {
 	return o.Description
 }
 
-func (o *CredentialsInput) GetProviderType() ProviderType {
+func (o *CredentialsInput) GetProviderType() CredentialsProviderType {
 	if o == nil {
-		return ProviderType("")
+		return CredentialsProviderType("")
 	}
 	return o.ProviderType
 }

@@ -8922,7 +8922,7 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/DataLinkType"
-        providerType:
+        provider:
           $ref: "#/components/schemas/DataLinkProvider"
         resourceRef:
           type: string
@@ -8941,7 +8941,7 @@ components:
           type: string
         name:
           type: string
-        providerType:
+        provider:
           $ref: "#/components/schemas/DataLinkProvider"
     DataLinkDeleteItemRequest:
       type: object
@@ -8985,7 +8985,7 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/DataLinkType"
-        providerType:
+        provider:
           $ref: "#/components/schemas/DataLinkProvider"
         region:
           type: string
@@ -9071,6 +9071,7 @@ components:
         - azure
         - azure_entra
         - seqeracompute
+      x-speakeasy-name-override: providerType
     DataLinkResponse:
       type: object
       properties:

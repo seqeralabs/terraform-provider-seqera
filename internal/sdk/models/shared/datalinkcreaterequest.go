@@ -3,13 +3,13 @@
 package shared
 
 type DataLinkCreateRequest struct {
-	Name             *string           `json:"name,omitempty"`
-	Description      *string           `json:"description,omitempty"`
-	Type             *DataLinkType     `json:"type,omitempty"`
-	ProviderType     *DataLinkProvider `json:"providerType,omitempty"`
-	ResourceRef      *string           `json:"resourceRef,omitempty"`
-	PublicAccessible *bool             `json:"publicAccessible,omitempty"`
-	CredentialsID    *string           `json:"credentialsId,omitempty"`
+	Name             *string       `json:"name,omitempty"`
+	Description      *string       `json:"description,omitempty"`
+	Type             *DataLinkType `json:"type,omitempty"`
+	ProviderType     *ProviderType `json:"provider,omitempty"`
+	ResourceRef      *string       `json:"resourceRef,omitempty"`
+	PublicAccessible *bool         `json:"publicAccessible,omitempty"`
+	CredentialsID    *string       `json:"credentialsId,omitempty"`
 }
 
 func (o *DataLinkCreateRequest) GetName() *string {
@@ -33,7 +33,7 @@ func (o *DataLinkCreateRequest) GetType() *DataLinkType {
 	return o.Type
 }
 
-func (o *DataLinkCreateRequest) GetProviderType() *DataLinkProvider {
+func (o *DataLinkCreateRequest) GetProviderType() *ProviderType {
 	if o == nil {
 		return nil
 	}

@@ -50,11 +50,7 @@ func (r *DataLinkDataSourceModel) RefreshFromSharedDataLinkDto(ctx context.Conte
 			var credentials tfTypes.DataLinkCredentials
 			credentials.ID = types.StringValue(credentialsItem.ID)
 			credentials.Name = types.StringValue(credentialsItem.Name)
-			if credentialsItem.ProviderType != nil {
-				credentials.ProviderType = types.StringValue(string(*credentialsItem.ProviderType))
-			} else {
-				credentials.ProviderType = types.StringNull()
-			}
+			credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
 			if credentialsCount+1 > len(r.Credentials) {
 				r.Credentials = append(r.Credentials, credentials)
 			} else {

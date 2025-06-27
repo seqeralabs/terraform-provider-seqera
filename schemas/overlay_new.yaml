@@ -336,27 +336,12 @@ actions:
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
     update:
       x-speakeasy-name-override: providerType
-  - target: $["components"]["schemas"]["DataLinkCreateRequest"]["properties"]
-    update:
-      providerType:
-        $ref: "#/components/schemas/DataLinkProvider"
-  - target: $["components"]["schemas"]["DataLinkCreateRequest"]["properties"]["provider"]
-    remove: true
-  - target: $["components"]["schemas"]["DataLinkCredentials"]["properties"]
-    update:
-      providerType:
-        $ref: "#/components/schemas/DataLinkProvider"
-  - target: $["components"]["schemas"]["DataLinkCredentials"]["properties"]["provider"]
-    remove: true
   - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
     update:
       x-speakeasy-name-override: dataLinkId
-  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]
+  - target: $["components"]["schemas"]["DataLinkProvider"]
     update:
-      providerType:
-        $ref: "#/components/schemas/DataLinkProvider"
-  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["provider"]
-    remove: true
+      x-speakeasy-name-override: providerType
   - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
     update:
       x-speakeasy-entity: DataStudio

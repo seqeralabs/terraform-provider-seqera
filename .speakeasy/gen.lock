@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: c12e20f1d7c2d498ced119deb5a0b19b
+  docChecksum: ebebf056aed28a2f9392f224c394b6ac
   docVersion: 1.45.0
   speakeasyVersion: 1.570.2
   generationVersion: 2.638.5
@@ -528,7 +528,6 @@ generatedFiles:
   - internal/sdk/models/shared/datalinkitemtype.go
   - internal/sdk/models/shared/datalinkmultipartuploadrequest.go
   - internal/sdk/models/shared/datalinkmultipartuploadresponse.go
-  - internal/sdk/models/shared/datalinkprovider.go
   - internal/sdk/models/shared/datalinkresponse.go
   - internal/sdk/models/shared/datalinksimpleitem.go
   - internal/sdk/models/shared/datalinkslistresponse.go
@@ -657,6 +656,7 @@ generatedFiles:
   - internal/sdk/models/shared/podcleanuppolicy.go
   - internal/sdk/models/shared/processload.go
   - internal/sdk/models/shared/progressdata.go
+  - internal/sdk/models/shared/providertype.go
   - internal/sdk/models/shared/randomworkflownameresponse.go
   - internal/sdk/models/shared/resourcedata.go
   - internal/sdk/models/shared/runid.go

@@ -30,7 +30,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	} else {
 		description = nil
 	}
-	providerType := shared.ProviderType(r.ProviderType.ValueString())
+	providerType := shared.CredentialsProviderType(r.ProviderType.ValueString())
 	baseURL := new(string)
 	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
 		*baseURL = r.BaseURL.ValueString()

@@ -186,11 +186,7 @@ func (r *DataStudiosResourceModel) RefreshFromSharedDataStudioCreateResponse(ctx
 					var credentials tfTypes.DataLinkCredentials
 					credentials.ID = types.StringValue(credentialsItem.ID)
 					credentials.Name = types.StringValue(credentialsItem.Name)
-					if credentialsItem.ProviderType != nil {
-						credentials.ProviderType = types.StringValue(string(*credentialsItem.ProviderType))
-					} else {
-						credentials.ProviderType = types.StringNull()
-					}
+					credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
 					if credentialsCount+1 > len(mountedDataLinks.Credentials) {
 						mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
 					} else {
@@ -470,11 +466,7 @@ func (r *DataStudiosResourceModel) RefreshFromSharedDataStudioListResponse(ctx c
 					var credentials tfTypes.DataLinkCredentials
 					credentials.ID = types.StringValue(credentialsItem.ID)
 					credentials.Name = types.StringValue(credentialsItem.Name)
-					if credentialsItem.ProviderType != nil {
-						credentials.ProviderType = types.StringValue(string(*credentialsItem.ProviderType))
-					} else {
-						credentials.ProviderType = types.StringNull()
-					}
+					credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
 					if credentialsCount+1 > len(mountedDataLinks.Credentials) {
 						mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
 					} else {

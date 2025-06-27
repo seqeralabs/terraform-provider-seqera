@@ -39,7 +39,7 @@ type DataLinkDto struct {
 	Description      *string               `json:"description,omitempty"`
 	ResourceRef      *string               `json:"resourceRef,omitempty"`
 	Type             *DataLinkType         `json:"type,omitempty"`
-	ProviderType     *DataLinkProvider     `json:"providerType,omitempty"`
+	ProviderType     *ProviderType         `json:"provider,omitempty"`
 	Region           *string               `json:"region,omitempty"`
 	Credentials      []DataLinkCredentials `json:"credentials,omitempty"`
 	PublicAccessible *bool                 `json:"publicAccessible,omitempty"`
@@ -83,7 +83,7 @@ func (o *DataLinkDto) GetType() *DataLinkType {
 	return o.Type
 }
 
-func (o *DataLinkDto) GetProviderType() *DataLinkProvider {
+func (o *DataLinkDto) GetProviderType() *ProviderType {
 	if o == nil {
 		return nil
 	}
