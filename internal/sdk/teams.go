@@ -17,8 +17,6 @@ import (
 
 // Teams in an organization context
 type Teams struct {
-	Members *Members
-
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -29,13 +27,12 @@ func newTeams(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks.H
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
-		Members:          newMembers(rootSDK, sdkConfig, hooks),
 	}
 }
 
-// List organization teams
+// ListOrganizationTeams - List organization teams
 // Lists all teams in the organization identified by the given `orgId`.
-func (s *Teams) List(ctx context.Context, request operations.ListOrganizationTeamsRequest, opts ...operations.Option) (*operations.ListOrganizationTeamsResponse, error) {
+func (s *Teams) ListOrganizationTeams(ctx context.Context, request operations.ListOrganizationTeamsRequest, opts ...operations.Option) (*operations.ListOrganizationTeamsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -189,9 +186,9 @@ func (s *Teams) List(ctx context.Context, request operations.ListOrganizationTea
 
 }
 
-// Create team
+// CreateOrganizationTeam - Create team
 // Creates a new team in the organization identified by the given `orgId`.
-func (s *Teams) Create(ctx context.Context, request operations.CreateOrganizationTeamRequest, opts ...operations.Option) (*operations.CreateOrganizationTeamResponse, error) {
+func (s *Teams) CreateOrganizationTeam(ctx context.Context, request operations.CreateOrganizationTeamRequest, opts ...operations.Option) (*operations.CreateOrganizationTeamResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -350,9 +347,9 @@ func (s *Teams) Create(ctx context.Context, request operations.CreateOrganizatio
 
 }
 
-// ValidateName - Validate team name
+// ValidateTeamName - Validate team name
 // Confirms the validity of the given team name. Append `?name=<your_team_name>`.
-func (s *Teams) ValidateName(ctx context.Context, request operations.ValidateTeamNameRequest, opts ...operations.Option) (*operations.ValidateTeamNameResponse, error) {
+func (s *Teams) ValidateTeamName(ctx context.Context, request operations.ValidateTeamNameRequest, opts ...operations.Option) (*operations.ValidateTeamNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -486,9 +483,9 @@ func (s *Teams) ValidateName(ctx context.Context, request operations.ValidateTea
 
 }
 
-// Get - Describe team
+// DescribeOrganizationTeam - Describe team
 // Retrieves the details of the team identified by the given `teamId`.
-func (s *Teams) Get(ctx context.Context, request operations.DescribeOrganizationTeamRequest, opts ...operations.Option) (*operations.DescribeOrganizationTeamResponse, error) {
+func (s *Teams) DescribeOrganizationTeam(ctx context.Context, request operations.DescribeOrganizationTeamRequest, opts ...operations.Option) (*operations.DescribeOrganizationTeamResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -638,9 +635,9 @@ func (s *Teams) Get(ctx context.Context, request operations.DescribeOrganization
 
 }
 
-// Update team
+// UpdateOrganizationTeam - Update team
 // Updates the details of the team identified by the given `teamId`.
-func (s *Teams) Update(ctx context.Context, request operations.UpdateOrganizationTeamRequest, opts ...operations.Option) (*operations.UpdateOrganizationTeamResponse, error) {
+func (s *Teams) UpdateOrganizationTeam(ctx context.Context, request operations.UpdateOrganizationTeamRequest, opts ...operations.Option) (*operations.UpdateOrganizationTeamResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -781,9 +778,9 @@ func (s *Teams) Update(ctx context.Context, request operations.UpdateOrganizatio
 
 }
 
-// Delete team
+// DeleteOrganizationTeam - Delete team
 // Deletes the team identified by the given `teamId`.
-func (s *Teams) Delete(ctx context.Context, request operations.DeleteOrganizationTeamRequest, opts ...operations.Option) (*operations.DeleteOrganizationTeamResponse, error) {
+func (s *Teams) DeleteOrganizationTeam(ctx context.Context, request operations.DeleteOrganizationTeamRequest, opts ...operations.Option) (*operations.DeleteOrganizationTeamResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -913,9 +910,9 @@ func (s *Teams) Delete(ctx context.Context, request operations.DeleteOrganizatio
 
 }
 
-// ListMembers - List team members
+// ListOrganizationTeamMembers - List team members
 // Lists the team members associated with the given `teamId`.
-func (s *Teams) ListMembers(ctx context.Context, request operations.ListOrganizationTeamMembersRequest, opts ...operations.Option) (*operations.ListOrganizationTeamMembersResponse, error) {
+func (s *Teams) ListOrganizationTeamMembers(ctx context.Context, request operations.ListOrganizationTeamMembersRequest, opts ...operations.Option) (*operations.ListOrganizationTeamMembersResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1069,9 +1066,168 @@ func (s *Teams) ListMembers(ctx context.Context, request operations.ListOrganiza
 
 }
 
-// DeleteMember - Delete team member
+// CreateOrganizationTeamMember - Create team member
+// Adds a new member to the team identified by the given `teamId`.
+func (s *Teams) CreateOrganizationTeamMember(ctx context.Context, request operations.CreateOrganizationTeamMemberRequest, opts ...operations.Option) (*operations.CreateOrganizationTeamMemberResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/orgs/{orgId}/teams/{teamId}/members", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "CreateOrganizationTeamMember",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateTeamMemberRequest", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.CreateOrganizationTeamMemberResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.AddTeamMemberResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.AddTeamMemberResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// DeleteOrganizationTeamMember - Delete team member
 // Deletes the team member identified by the given `memberId`.
-func (s *Teams) DeleteMember(ctx context.Context, request operations.DeleteOrganizationTeamMemberRequest, opts ...operations.Option) (*operations.DeleteOrganizationTeamMemberResponse, error) {
+func (s *Teams) DeleteOrganizationTeamMember(ctx context.Context, request operations.DeleteOrganizationTeamMemberRequest, opts ...operations.Option) (*operations.DeleteOrganizationTeamMemberResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1201,9 +1357,9 @@ func (s *Teams) DeleteMember(ctx context.Context, request operations.DeleteOrgan
 
 }
 
-// ListWorkspaces - List team workspaces
+// ListWorkspacesByTeam - List team workspaces
 // Lists all the workspaces of which the given `teamId` is a participant.
-func (s *Teams) ListWorkspaces(ctx context.Context, request operations.ListWorkspacesByTeamRequest, opts ...operations.Option) (*operations.ListWorkspacesByTeamResponse, error) {
+func (s *Teams) ListWorkspacesByTeam(ctx context.Context, request operations.ListWorkspacesByTeamRequest, opts ...operations.Option) (*operations.ListWorkspacesByTeamResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

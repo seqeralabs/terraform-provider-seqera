@@ -126,12 +126,12 @@ Read-Only:
 Read-Only:
 
 - `credentials` (Attributes List) (see [below for nested schema](#nestedatt--studios--mounted_data_links--credentials))
+- `data_link_id` (String)
 - `description` (String)
 - `hidden` (Boolean)
-- `id` (String)
 - `message` (String)
 - `name` (String)
-- `provider` (String)
+- `provider_type` (String)
 - `public_accessible` (Boolean)
 - `region` (String)
 - `resource_ref` (String)
@@ -145,7 +145,7 @@ Read-Only:
 
 - `id` (String)
 - `name` (String)
-- `provider` (String)
+- `provider_type` (String)
 
 
 

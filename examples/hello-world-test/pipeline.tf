@@ -14,3 +14,10 @@ resource "seqera_pipeline" "hello_world_minimal" {
   }
   workspace_id = resource.seqera_workspace.my_workspace.id
 }
+
+
+resource "seqera_pipeline_secret" "my_pipelinesecret" {
+  name         = "test_secret"
+  value        = "SECRET_VALUE"
+  workspace_id = resource.seqera_workspace.my_workspace.id
+}

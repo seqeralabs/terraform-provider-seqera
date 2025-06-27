@@ -103,7 +103,7 @@ func (r *TokensDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		return
 	}
 
-	res, err := r.client.Tokens.List(ctx)
+	res, err := r.client.Tokens.TokenList(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

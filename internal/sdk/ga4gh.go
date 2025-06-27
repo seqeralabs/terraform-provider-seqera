@@ -31,9 +31,9 @@ func newGa4gh(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks.H
 	}
 }
 
-// ListRuns - GA4GH: List runs
+// Ga4ghRunList - GA4GH: List runs
 // Uses the GA4GH workflow execution service API to list all run records.
-func (s *Ga4gh) ListRuns(ctx context.Context, request operations.Ga4ghRunListRequest, opts ...operations.Option) (*operations.Ga4ghRunListResponse, error) {
+func (s *Ga4gh) Ga4ghRunList(ctx context.Context, request operations.Ga4ghRunListRequest, opts ...operations.Option) (*operations.Ga4ghRunListResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -187,9 +187,9 @@ func (s *Ga4gh) ListRuns(ctx context.Context, request operations.Ga4ghRunListReq
 
 }
 
-// CreateRun - GA4GH: Launch run
+// Ga4ghRunCreate - GA4GH: Launch run
 // Uses the GA4GH workflow execution service API to launch a new run. Runs are launched in the user workspace context by default. To launch in an organization workspace context, include the `workspaceId` in `workflow_engine_parameters`. Runs are launched with the workspace primary compute environment by default. To launch with a different compute environment, include the `computeEnvId` in `workflow_engine_parameters`.
-func (s *Ga4gh) CreateRun(ctx context.Context, request shared.RunRequest, opts ...operations.Option) (*operations.Ga4ghRunCreateResponse, error) {
+func (s *Ga4gh) Ga4ghRunCreate(ctx context.Context, request shared.RunRequest, opts ...operations.Option) (*operations.Ga4ghRunCreateResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -346,9 +346,9 @@ func (s *Ga4gh) CreateRun(ctx context.Context, request shared.RunRequest, opts .
 
 }
 
-// GetRun - GA4GH: Describe run
+// Ga4ghRunDescribe - GA4GH: Describe run
 // Uses the GA4GH workflow execution service API to retrieve the details of the run assoiated with the given `run_id`.
-func (s *Ga4gh) GetRun(ctx context.Context, request operations.Ga4ghRunDescribeRequest, opts ...operations.Option) (*operations.Ga4ghRunDescribeResponse, error) {
+func (s *Ga4gh) Ga4ghRunDescribe(ctx context.Context, request operations.Ga4ghRunDescribeRequest, opts ...operations.Option) (*operations.Ga4ghRunDescribeResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -498,9 +498,9 @@ func (s *Ga4gh) GetRun(ctx context.Context, request operations.Ga4ghRunDescribeR
 
 }
 
-// CancelRun - GA4GH: Cancel run
+// Ga4ghRunCancel - GA4GH: Cancel run
 // Uses the GA4GH workflow execution service API to cancel the run associated with the given `run_id`.
-func (s *Ga4gh) CancelRun(ctx context.Context, request operations.Ga4ghRunCancelRequest, opts ...operations.Option) (*operations.Ga4ghRunCancelResponse, error) {
+func (s *Ga4gh) Ga4ghRunCancel(ctx context.Context, request operations.Ga4ghRunCancelRequest, opts ...operations.Option) (*operations.Ga4ghRunCancelResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -657,9 +657,9 @@ func (s *Ga4gh) CancelRun(ctx context.Context, request operations.Ga4ghRunCancel
 
 }
 
-// GetStatus - GA4GH: Retrieve run status
+// Ga4ghRunStatus - GA4GH: Retrieve run status
 // Uses the GA4GH workflow execution service API to retrieve the status of the run associated with the given `run_id`.
-func (s *Ga4gh) GetStatus(ctx context.Context, request operations.Ga4ghRunStatusRequest, opts ...operations.Option) (*operations.Ga4ghRunStatusResponse, error) {
+func (s *Ga4gh) Ga4ghRunStatus(ctx context.Context, request operations.Ga4ghRunStatusRequest, opts ...operations.Option) (*operations.Ga4ghRunStatusResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -809,8 +809,8 @@ func (s *Ga4gh) GetStatus(ctx context.Context, request operations.Ga4ghRunStatus
 
 }
 
-// GetServiceInfo - GA4GH workflow execution service API info
-func (s *Ga4gh) GetServiceInfo(ctx context.Context, opts ...operations.Option) (*operations.Ga4ghServiceInfoResponse, error) {
+// Ga4ghServiceInfo - GA4GH workflow execution service API info
+func (s *Ga4gh) Ga4ghServiceInfo(ctx context.Context, opts ...operations.Option) (*operations.Ga4ghServiceInfoResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

@@ -168,7 +168,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Tokens.Create(ctx, *request)
+	res, err := r.client.Tokens.CreateToken(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -199,7 +199,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Tokens.List(ctx)
+	res1, err := r.client.Tokens.TokenList(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -247,7 +247,7 @@ func (r *TokensResource) Read(ctx context.Context, req resource.ReadRequest, res
 		return
 	}
 
-	res, err := r.client.Tokens.List(ctx)
+	res, err := r.client.Tokens.TokenList(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -325,7 +325,7 @@ func (r *TokensResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Tokens.Delete(ctx, *request)
+	res, err := r.client.Tokens.DeleteToken(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

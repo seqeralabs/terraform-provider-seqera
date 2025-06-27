@@ -7,7 +7,7 @@ import (
 )
 
 type DataLinkCredentials struct {
-	ID       types.String `tfsdk:"id"`
-	Name     types.String `tfsdk:"name"`
-	Provider types.String `tfsdk:"provider"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	ProviderType types.String `tfsdk:"provider_type"`
 }

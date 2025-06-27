@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.45.0 and generator version 2.638.1
+// Generated from OpenAPI doc version 1.45.0 and generator version 2.638.5
 
 import (
 	"context"
@@ -18,6 +18,7 @@ import (
 
 // ServerList contains the list of servers available to the SDK
 var ServerList = []string{
+	"https://api.cloud.seqera.io",
 	"https://api.cloud.seqera.io",
 }
 
@@ -52,8 +53,11 @@ type Seqera struct {
 	SDKVersion string
 	// Pipeline actions
 	Actions *Actions
+	// Labels and resource labels
+	Labels *Labels
 	// Avatars
-	Avatars     *Avatars
+	Avatars *Avatars
+	// Compute environments
 	ComputeEnvs *ComputeEnvs
 	// Credentials
 	Credentials *Credentials
@@ -61,11 +65,8 @@ type Seqera struct {
 	DataLinks *DataLinks
 	// Pipeline input datasets (samplesheets) in CSV or TSV format
 	Datasets *Datasets
-	Dataset  *Dataset
 	// GA4GH workflow execution service runs
 	Ga4gh *Ga4gh
-	// Labels and resource labels
-	Labels *Labels
 	// Workflow launch events
 	Launch *Launch
 	// Organizations
@@ -79,7 +80,8 @@ type Seqera struct {
 	// Pipelines
 	Pipelines *Pipelines
 	// Computing platforms
-	Platforms   *Platforms
+	Platforms *Platforms
+	// Seqera Platform API service information
 	ServiceInfo *ServiceInfo
 	// Studios and Studio sessions
 	Studios *Studios
@@ -169,7 +171,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.0.3",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.0.3 2.638.1 1.45.0 github.com/speakeasy/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.0.3 2.638.5 1.45.0 github.com/speakeasy/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -191,14 +193,13 @@ func New(opts ...SDKOption) *Seqera {
 	}
 
 	sdk.Actions = newActions(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Labels = newLabels(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Avatars = newAvatars(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ComputeEnvs = newComputeEnvs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.DataLinks = newDataLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Datasets = newDatasets(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Dataset = newDataset(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Ga4gh = newGa4gh(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Labels = newLabels(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Launch = newLaunch(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)

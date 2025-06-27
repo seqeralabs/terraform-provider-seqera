@@ -1022,8 +1022,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
   /data-links:
     get:
       summary: List data-links
@@ -1137,6 +1135,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataLink#create
   /data-links/cache/refresh:
     get:
       summary: Refresh data-link cache
@@ -1211,6 +1210,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataLink#read
     put:
       summary: Update data-link
       description: Update the data-link associated with the given `dataLinkId`.
@@ -1260,6 +1260,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataLink#update
     delete:
       summary: Delete data-link
       description: Deletes the data-link associated with the given `dataLinkId`.
@@ -1300,6 +1301,7 @@ paths:
           description: DeleteCustomDataLink 204 response
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataLink#delete
   /data-links/{dataLinkId}/browse:
     get:
       summary: Explore data-link
@@ -3278,7 +3280,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3327,7 +3328,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3358,7 +3358,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#create
   /orgs/{orgId}/teams/validate:
     get:
       summary: Validate team name
@@ -3374,7 +3373,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Team name to validate
@@ -3408,7 +3406,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3416,7 +3413,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-readonly: true
       responses:
         "200":
           description: OK
@@ -3434,7 +3430,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#read
     put:
       summary: Update team
       description: Updates the details of the team identified by the given `teamId`.
@@ -3449,7 +3444,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3485,7 +3479,6 @@ paths:
           description: UpdateOrganizationTeam 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#update
     delete:
       summary: Delete team
       description: Deletes the team identified by the given `teamId`.
@@ -3500,7 +3493,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3508,7 +3500,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -3522,7 +3513,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#delete
   /orgs/{orgId}/teams/{teamId}/members:
     get:
       summary: List team members
@@ -3538,7 +3528,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3546,7 +3535,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3595,7 +3583,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3603,7 +3590,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3643,7 +3629,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3651,7 +3636,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Member numeric identifier
@@ -3687,7 +3671,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -8920,7 +8903,7 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/DataLinkType"
-        provider:
+        providerType:
           $ref: "#/components/schemas/DataLinkProvider"
         resourceRef:
           type: string
@@ -8939,7 +8922,7 @@ components:
           type: string
         name:
           type: string
-        provider:
+        providerType:
           $ref: "#/components/schemas/DataLinkProvider"
     DataLinkDeleteItemRequest:
       type: object
@@ -8974,6 +8957,7 @@ components:
       properties:
         id:
           type: string
+          x-speakeasy-name-override: dataLinkId
         name:
           type: string
         description:
@@ -8982,7 +8966,7 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/DataLinkType"
-        provider:
+        providerType:
           $ref: "#/components/schemas/DataLinkProvider"
         region:
           type: string
@@ -11024,6 +11008,7 @@ components:
           type: string
         provider:
           type: string
+          x-speakeasy-name-override: repositoryProvider
         configFiles:
           type: array
           items:
@@ -11720,7 +11705,7 @@ components:
           format: int64
           nullable: true
           readOnly: true
-          x-speakeasy-param-readonly: true
+          x-speakeasy-param-optional: true
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11742,7 +11727,7 @@ components:
         teamId:
           type: integer
           format: int64
-          x-speakeasy-param-readonly: true
+          x-speakeasy-param-optional: true
         name:
           type: string
         description:
@@ -12868,7 +12853,6 @@ components:
         - launch
         - connect
         - view
-    x-speakeasy-entity: PipelineSecret
   securitySchemes:
     BearerAuth:
       type: http

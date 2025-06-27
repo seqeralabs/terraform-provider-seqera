@@ -31,8 +31,8 @@ func newUsers(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks.H
 	}
 }
 
-// GetInfo - Describe current user
-func (s *Users) GetInfo(ctx context.Context, opts ...operations.Option) (*operations.UserInfoResponse, error) {
+// UserInfo - Describe current user
+func (s *Users) UserInfo(ctx context.Context, opts ...operations.Option) (*operations.UserInfoResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -182,8 +182,8 @@ func (s *Users) GetInfo(ctx context.Context, opts ...operations.Option) (*operat
 
 }
 
-// Validate - Check that the user name is valid
-func (s *Users) Validate(ctx context.Context, request operations.ValidateUserNameRequest, opts ...operations.Option) (*operations.ValidateUserNameResponse, error) {
+// ValidateUserName - Check that the user name is valid
+func (s *Users) ValidateUserName(ctx context.Context, request operations.ValidateUserNameRequest, opts ...operations.Option) (*operations.ValidateUserNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -319,10 +319,10 @@ func (s *Users) Validate(ctx context.Context, request operations.ValidateUserNam
 
 }
 
-// Get - Describe a user entity
+// DescribeUser - Describe a user entity
 //
 // Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-func (s *Users) Get(ctx context.Context, request operations.DescribeUserRequest, opts ...operations.Option) (*operations.DescribeUserResponse, error) {
+func (s *Users) DescribeUser(ctx context.Context, request operations.DescribeUserRequest, opts ...operations.Option) (*operations.DescribeUserResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -472,8 +472,8 @@ func (s *Users) Get(ctx context.Context, request operations.DescribeUserRequest,
 
 }
 
-// Update an user entity
-func (s *Users) Update(ctx context.Context, request operations.UpdateUserRequest, opts ...operations.Option) (*operations.UpdateUserResponse, error) {
+// UpdateUser - Update an user entity
+func (s *Users) UpdateUser(ctx context.Context, request operations.UpdateUserRequest, opts ...operations.Option) (*operations.UpdateUserResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -610,8 +610,8 @@ func (s *Users) Update(ctx context.Context, request operations.UpdateUserRequest
 
 }
 
-// Delete a user entity
-func (s *Users) Delete(ctx context.Context, request operations.DeleteUserRequest, opts ...operations.Option) (*operations.DeleteUserResponse, error) {
+// DeleteUser - Delete a user entity
+func (s *Users) DeleteUser(ctx context.Context, request operations.DeleteUserRequest, opts ...operations.Option) (*operations.DeleteUserResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

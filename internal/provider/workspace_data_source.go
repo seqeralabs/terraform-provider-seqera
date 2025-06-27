@@ -124,7 +124,7 @@ func (r *WorkspaceDataSource) Read(ctx context.Context, req datasource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Workspaces.Describe(ctx, *request)
+	res, err := r.client.Workspaces.DescribeWorkspace(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

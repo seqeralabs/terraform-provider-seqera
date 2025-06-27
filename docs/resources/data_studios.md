@@ -156,12 +156,12 @@ Read-Only:
 Read-Only:
 
 - `credentials` (Attributes List) (see [below for nested schema](#nestedatt--studio--mounted_data_links--credentials))
+- `data_link_id` (String)
 - `description` (String)
 - `hidden` (Boolean)
-- `id` (String)
 - `message` (String)
 - `name` (String)
-- `provider` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
 - `public_accessible` (Boolean)
 - `region` (String)
 - `resource_ref` (String)
@@ -175,7 +175,7 @@ Read-Only:
 
 - `id` (String)
 - `name` (String)
-- `provider` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
 
 
 
@@ -319,12 +319,12 @@ Read-Only:
 Read-Only:
 
 - `credentials` (Attributes List) (see [below for nested schema](#nestedatt--studios--mounted_data_links--credentials))
+- `data_link_id` (String)
 - `description` (String)
 - `hidden` (Boolean)
-- `id` (String)
 - `message` (String)
 - `name` (String)
-- `provider` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
 - `public_accessible` (Boolean)
 - `region` (String)
 - `resource_ref` (String)
@@ -338,7 +338,7 @@ Read-Only:
 
 - `id` (String)
 - `name` (String)
-- `provider` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
 
 
 

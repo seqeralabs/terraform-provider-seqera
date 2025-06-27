@@ -16,6 +16,7 @@ import (
 	"net/url"
 )
 
+// ServiceInfo - Seqera Platform API service information
 type ServiceInfo struct {
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration

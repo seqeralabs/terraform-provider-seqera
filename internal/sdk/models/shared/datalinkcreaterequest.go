@@ -6,7 +6,7 @@ type DataLinkCreateRequest struct {
 	Name             *string           `json:"name,omitempty"`
 	Description      *string           `json:"description,omitempty"`
 	Type             *DataLinkType     `json:"type,omitempty"`
-	Provider         *DataLinkProvider `json:"provider,omitempty"`
+	ProviderType     *DataLinkProvider `json:"providerType,omitempty"`
 	ResourceRef      *string           `json:"resourceRef,omitempty"`
 	PublicAccessible *bool             `json:"publicAccessible,omitempty"`
 	CredentialsID    *string           `json:"credentialsId,omitempty"`
@@ -33,11 +33,11 @@ func (o *DataLinkCreateRequest) GetType() *DataLinkType {
 	return o.Type
 }
 
-func (o *DataLinkCreateRequest) GetProvider() *DataLinkProvider {
+func (o *DataLinkCreateRequest) GetProviderType() *DataLinkProvider {
 	if o == nil {
 		return nil
 	}
-	return o.Provider
+	return o.ProviderType
 }
 
 func (o *DataLinkCreateRequest) GetResourceRef() *string {

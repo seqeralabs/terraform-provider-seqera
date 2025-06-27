@@ -18,8 +18,6 @@ import (
 
 // Pipelines
 type Pipelines struct {
-	Launch *PipelinesLaunch
-
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -30,13 +28,12 @@ func newPipelines(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hoo
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
-		Launch:           newPipelinesLaunch(rootSDK, sdkConfig, hooks),
 	}
 }
 
-// List pipelines
+// ListPipelines - List pipelines
 // Lists all available pipelines in a user context, enriched by `attributes`. Append `workspaceId` to list pipelines in a workspace context.
-func (s *Pipelines) List(ctx context.Context, request operations.ListPipelinesRequest, opts ...operations.Option) (*operations.ListPipelinesResponse, error) {
+func (s *Pipelines) ListPipelines(ctx context.Context, request operations.ListPipelinesRequest, opts ...operations.Option) (*operations.ListPipelinesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -190,9 +187,9 @@ func (s *Pipelines) List(ctx context.Context, request operations.ListPipelinesRe
 
 }
 
-// Create pipeline
+// CreatePipeline - Create pipeline
 // Creates a new pipeline in a user context. Append `?workspaceId` to create the pipeline in a workspace context.
-func (s *Pipelines) Create(ctx context.Context, request operations.CreatePipelineRequest, opts ...operations.Option) (*operations.CreatePipelineResponse, error) {
+func (s *Pipelines) CreatePipeline(ctx context.Context, request operations.CreatePipelineRequest, opts ...operations.Option) (*operations.CreatePipelineResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -355,9 +352,9 @@ func (s *Pipelines) Create(ctx context.Context, request operations.CreatePipelin
 
 }
 
-// GetRepository - Describe remote pipeline repository
+// DescribePipelineRepository - Describe remote pipeline repository
 // Retrieves the details of a remote Nextflow pipeline Git repository. Append the repository name or full URL with `?name`.
-func (s *Pipelines) GetRepository(ctx context.Context, request operations.DescribePipelineRepositoryRequest, opts ...operations.Option) (*operations.DescribePipelineRepositoryResponse, error) {
+func (s *Pipelines) DescribePipelineRepository(ctx context.Context, request operations.DescribePipelineRepositoryRequest, opts ...operations.Option) (*operations.DescribePipelineRepositoryResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -511,131 +508,9 @@ func (s *Pipelines) GetRepository(ctx context.Context, request operations.Descri
 
 }
 
-// AddLabels - Add labels to pipelines
-// Adds the given list of labels to the given pipelines. Existing labels are preserved.
-func (s *Pipelines) AddLabels(ctx context.Context, request operations.AddLabelsToPipelinesRequest, opts ...operations.Option) (*operations.AddLabelsToPipelinesResponse, error) {
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := url.JoinPath(baseURL, "/pipelines/labels/add")
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "AddLabelsToPipelines",
-		OAuth2Scopes:     []string{},
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociatePipelineLabelsRequest", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
-	}
-
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
-
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-		if err != nil {
-			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
-		}
-	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	res := &operations.AddLabelsToPipelinesResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 403:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// ListRepositories - List user pipeline repositories
+// ListPipelineRepositories - List user pipeline repositories
 // Lists known Nextflow pipeline Git repositories, extracted from existing runs. Append `?workspaceId` to list repositories in a workspace context.
-func (s *Pipelines) ListRepositories(ctx context.Context, request operations.ListPipelineRepositoriesRequest, opts ...operations.Option) (*operations.ListPipelineRepositoriesResponse, error) {
+func (s *Pipelines) ListPipelineRepositories(ctx context.Context, request operations.ListPipelineRepositoriesRequest, opts ...operations.Option) (*operations.ListPipelineRepositoriesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -789,9 +664,9 @@ func (s *Pipelines) ListRepositories(ctx context.Context, request operations.Lis
 
 }
 
-// ValidateName - Validate pipeline name
+// ValidatePipelineName - Validate pipeline name
 // Confirms the validity of the given pipeline `name` in a user context. Append `?name=<your_pipeline_name>`. Append `?workspaceId` to validate the name in a workspace context.
-func (s *Pipelines) ValidateName(ctx context.Context, request operations.ValidatePipelineNameRequest, opts ...operations.Option) (*operations.ValidatePipelineNameResponse, error) {
+func (s *Pipelines) ValidatePipelineName(ctx context.Context, request operations.ValidatePipelineNameRequest, opts ...operations.Option) (*operations.ValidatePipelineNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -927,9 +802,9 @@ func (s *Pipelines) ValidateName(ctx context.Context, request operations.Validat
 
 }
 
-// Get - Describe pipeline
+// DescribePipeline - Describe pipeline
 // Retrieves the details of the pipeline identified by the given `pipelineId`, enriched by `attributes`.
-func (s *Pipelines) Get(ctx context.Context, request operations.DescribePipelineRequest, opts ...operations.Option) (*operations.DescribePipelineResponse, error) {
+func (s *Pipelines) DescribePipeline(ctx context.Context, request operations.DescribePipelineRequest, opts ...operations.Option) (*operations.DescribePipelineResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1083,13 +958,13 @@ func (s *Pipelines) Get(ctx context.Context, request operations.DescribePipeline
 
 }
 
-// Update pipeline
+// UpdatePipeline - Update pipeline
 // Updates the details of the pipeline identified by the given `pipelineId`.
 //
 //	**Note**: If `labelIds` is `null`, empty, or ommitted, existing pipeline labels are removed.
 //	Include `labelIds: [<label-id-1>,<label-id-2>]` to override existing labels. Labels to be preserved must be included.
 //	To append a list of labels to multiple pipelines, use `/pipelines/labels/add`.
-func (s *Pipelines) Update(ctx context.Context, request operations.UpdatePipelineRequest, opts ...operations.Option) (*operations.UpdatePipelineResponse, error) {
+func (s *Pipelines) UpdatePipeline(ctx context.Context, request operations.UpdatePipelineRequest, opts ...operations.Option) (*operations.UpdatePipelineResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1252,9 +1127,9 @@ func (s *Pipelines) Update(ctx context.Context, request operations.UpdatePipelin
 
 }
 
-// Delete pipeline
+// DeletePipeline - Delete pipeline
 // Deletes the pipeline identified by the given `pipelineId`.
-func (s *Pipelines) Delete(ctx context.Context, request operations.DeletePipelineRequest, opts ...operations.Option) (*operations.DeletePipelineResponse, error) {
+func (s *Pipelines) DeletePipeline(ctx context.Context, request operations.DeletePipelineRequest, opts ...operations.Option) (*operations.DeletePipelineResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1388,12 +1263,168 @@ func (s *Pipelines) Delete(ctx context.Context, request operations.DeletePipelin
 
 }
 
-// GetSchema - Describe pipeline schema
+// DescribePipelineLaunch - Describe pipeline launch
+// Retrieves the launch details of the pipeline identified by the given `pipelineId`.
+func (s *Pipelines) DescribePipelineLaunch(ctx context.Context, request operations.DescribePipelineLaunchRequest, opts ...operations.Option) (*operations.DescribePipelineLaunchResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/pipelines/{pipelineId}/launch", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "DescribePipelineLaunch",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.DescribePipelineLaunchResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DescribeLaunchResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DescribeLaunchResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// DescribePipelineSchema - Describe pipeline schema
 // Retrieves the pipeline schema of the pipeline identified by the given `pipelineId`, enriched by `attributes`.
 //
 //	`200 - OK` responses include the pipeline schema.
 //	`204 - OK` responses indicate a successful request, with no saved schema found for the given pipeline ID.
-func (s *Pipelines) GetSchema(ctx context.Context, request operations.DescribePipelineSchemaRequest, opts ...operations.Option) (*operations.DescribePipelineSchemaResponse, error) {
+func (s *Pipelines) DescribePipelineSchema(ctx context.Context, request operations.DescribePipelineSchemaRequest, opts ...operations.Option) (*operations.DescribePipelineSchemaResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

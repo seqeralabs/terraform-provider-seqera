@@ -31,9 +31,9 @@ func newActions(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks
 	}
 }
 
-// List actions
+// ListActions - List actions
 // Lists all available actions in a user context, enriched by `attributes`. Append `?workspaceId` to list actions in a workspace context.
-func (s *Actions) List(ctx context.Context, request operations.ListActionsRequest, opts ...operations.Option) (*operations.ListActionsResponse, error) {
+func (s *Actions) ListActions(ctx context.Context, request operations.ListActionsRequest, opts ...operations.Option) (*operations.ListActionsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -187,9 +187,9 @@ func (s *Actions) List(ctx context.Context, request operations.ListActionsReques
 
 }
 
-// Create action
+// CreateAction - Create action
 // Creates a new pipeline action. Append `?workspaceId` to associate the action with the given workspace.
-func (s *Actions) Create(ctx context.Context, request operations.CreateActionRequest, opts ...operations.Option) (*operations.CreateActionResponse, error) {
+func (s *Actions) CreateAction(ctx context.Context, request operations.CreateActionRequest, opts ...operations.Option) (*operations.CreateActionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -350,375 +350,9 @@ func (s *Actions) Create(ctx context.Context, request operations.CreateActionReq
 
 }
 
-// AddLabels - Add labels to actions
-// Adds the given list of labels to the given pipeline actions. Existing labels are preserved.
-func (s *Actions) AddLabels(ctx context.Context, request operations.AddLabelsToActionsRequest, opts ...operations.Option) (*operations.AddLabelsToActionsResponse, error) {
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := url.JoinPath(baseURL, "/actions/labels/add")
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "AddLabelsToActions",
-		OAuth2Scopes:     []string{},
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateActionLabelsRequest", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
-	}
-
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
-
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-		if err != nil {
-			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
-		}
-	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	res := &operations.AddLabelsToActionsResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 403:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// ApplyLabels - Replace action labels
-// Applies the given list of labels to the given pipeline actions. Existing labels are replaced — include labels to be preserved in `labelIds`.
-func (s *Actions) ApplyLabels(ctx context.Context, request operations.ApplyLabelsToActionsRequest, opts ...operations.Option) (*operations.ApplyLabelsToActionsResponse, error) {
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := url.JoinPath(baseURL, "/actions/labels/apply")
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "ApplyLabelsToActions",
-		OAuth2Scopes:     []string{},
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateActionLabelsRequest", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
-	}
-
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
-
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-		if err != nil {
-			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
-		}
-	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	res := &operations.ApplyLabelsToActionsResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 403:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// RemoveLabels - Remove labels from actions
-// Removes the given list of labels from the given pipeline actions.
-func (s *Actions) RemoveLabels(ctx context.Context, request operations.RemoveLabelsFromActionsRequest, opts ...operations.Option) (*operations.RemoveLabelsFromActionsResponse, error) {
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := url.JoinPath(baseURL, "/actions/labels/remove")
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "RemoveLabelsFromActions",
-		OAuth2Scopes:     []string{},
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateActionLabelsRequest", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
-	}
-
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
-
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-		if err != nil {
-			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
-		}
-	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	res := &operations.RemoveLabelsFromActionsResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 403:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// ListTypes - List action event types
+// ListActionTypes - List action event types
 // Lists the supported event types that trigger a pipeline action. Append `?workspaceId` to list event types in a workspace context.
-func (s *Actions) ListTypes(ctx context.Context, request operations.ListActionTypesRequest, opts ...operations.Option) (*operations.ListActionTypesResponse, error) {
+func (s *Actions) ListActionTypes(ctx context.Context, request operations.ListActionTypesRequest, opts ...operations.Option) (*operations.ListActionTypesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -872,9 +506,9 @@ func (s *Actions) ListTypes(ctx context.Context, request operations.ListActionTy
 
 }
 
-// ValidateName - Validate action name
+// ValidateActionName - Validate action name
 // Confirms the validity of the given action name. Append `?name=<your_action_name>`.
-func (s *Actions) ValidateName(ctx context.Context, request operations.ValidateActionNameRequest, opts ...operations.Option) (*operations.ValidateActionNameResponse, error) {
+func (s *Actions) ValidateActionName(ctx context.Context, request operations.ValidateActionNameRequest, opts ...operations.Option) (*operations.ValidateActionNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1010,9 +644,9 @@ func (s *Actions) ValidateName(ctx context.Context, request operations.ValidateA
 
 }
 
-// Get - Describe action
+// DescribeAction - Describe action
 // Retrieves the details of the action identified by the given `actionId`.
-func (s *Actions) Get(ctx context.Context, request operations.DescribeActionRequest, opts ...operations.Option) (*operations.DescribeActionResponse, error) {
+func (s *Actions) DescribeAction(ctx context.Context, request operations.DescribeActionRequest, opts ...operations.Option) (*operations.DescribeActionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1166,9 +800,9 @@ func (s *Actions) Get(ctx context.Context, request operations.DescribeActionRequ
 
 }
 
-// Update action
+// UpdateAction - Update action
 // Updates the details of the action identified by the given `actionId`. The `source` of an existing action cannot be changed.
-func (s *Actions) Update(ctx context.Context, request operations.UpdateActionRequest, opts ...operations.Option) (*operations.UpdateActionResponse, error) {
+func (s *Actions) UpdateAction(ctx context.Context, request operations.UpdateActionRequest, opts ...operations.Option) (*operations.UpdateActionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1309,9 +943,9 @@ func (s *Actions) Update(ctx context.Context, request operations.UpdateActionReq
 
 }
 
-// Delete action
+// DeleteAction - Delete action
 // Deletes the pipeline action identified by the given `actionId`.
-func (s *Actions) Delete(ctx context.Context, request operations.DeleteActionRequest, opts ...operations.Option) (*operations.DeleteActionResponse, error) {
+func (s *Actions) DeleteAction(ctx context.Context, request operations.DeleteActionRequest, opts ...operations.Option) (*operations.DeleteActionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1445,9 +1079,9 @@ func (s *Actions) Delete(ctx context.Context, request operations.DeleteActionReq
 
 }
 
-// Launch - Trigger Tower Launch action
+// LaunchAction - Trigger Tower Launch action
 // Triggers the execution of the Tower Launch action identified by the given `actionId`.
-func (s *Actions) Launch(ctx context.Context, request operations.LaunchActionRequest, opts ...operations.Option) (*operations.LaunchActionResponse, error) {
+func (s *Actions) LaunchAction(ctx context.Context, request operations.LaunchActionRequest, opts ...operations.Option) (*operations.LaunchActionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1608,9 +1242,9 @@ func (s *Actions) Launch(ctx context.Context, request operations.LaunchActionReq
 
 }
 
-// Pause or resume action
+// PauseAction - Pause or resume action
 // Pauses or resumes the pipeline action identified by the given `actionId`.
-func (s *Actions) Pause(ctx context.Context, request operations.PauseActionRequest, opts ...operations.Option) (*operations.PauseActionResponse, error) {
+func (s *Actions) PauseAction(ctx context.Context, request operations.PauseActionRequest, opts ...operations.Option) (*operations.PauseActionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

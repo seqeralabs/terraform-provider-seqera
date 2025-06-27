@@ -34,12 +34,12 @@ func (e *DataLinkDtoStatus) UnmarshalJSON(data []byte) error {
 }
 
 type DataLinkDto struct {
-	ID               *string               `json:"id,omitempty"`
+	DataLinkID       *string               `json:"id,omitempty"`
 	Name             *string               `json:"name,omitempty"`
 	Description      *string               `json:"description,omitempty"`
 	ResourceRef      *string               `json:"resourceRef,omitempty"`
 	Type             *DataLinkType         `json:"type,omitempty"`
-	Provider         *DataLinkProvider     `json:"provider,omitempty"`
+	ProviderType     *DataLinkProvider     `json:"providerType,omitempty"`
 	Region           *string               `json:"region,omitempty"`
 	Credentials      []DataLinkCredentials `json:"credentials,omitempty"`
 	PublicAccessible *bool                 `json:"publicAccessible,omitempty"`
@@ -48,11 +48,11 @@ type DataLinkDto struct {
 	Message          *string               `json:"message,omitempty"`
 }
 
-func (o *DataLinkDto) GetID() *string {
+func (o *DataLinkDto) GetDataLinkID() *string {
 	if o == nil {
 		return nil
 	}
-	return o.ID
+	return o.DataLinkID
 }
 
 func (o *DataLinkDto) GetName() *string {
@@ -83,11 +83,11 @@ func (o *DataLinkDto) GetType() *DataLinkType {
 	return o.Type
 }
 
-func (o *DataLinkDto) GetProvider() *DataLinkProvider {
+func (o *DataLinkDto) GetProviderType() *DataLinkProvider {
 	if o == nil {
 		return nil
 	}
-	return o.Provider
+	return o.ProviderType
 }
 
 func (o *DataLinkDto) GetRegion() *string {

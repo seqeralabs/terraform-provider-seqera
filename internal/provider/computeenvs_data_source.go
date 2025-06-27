@@ -143,7 +143,7 @@ func (r *ComputeEnvsDataSource) Read(ctx context.Context, req datasource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.List(ctx, *request)
+	res, err := r.client.ComputeEnvs.ListComputeEnvs(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

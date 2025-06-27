@@ -346,7 +346,7 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 											"name": schema.StringAttribute{
 												Computed: true,
 											},
-											"provider": schema.StringAttribute{
+											"provider_type": schema.StringAttribute{
 												Computed:    true,
 												Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
 												Validators: []validator.String{
@@ -362,13 +362,13 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 										},
 									},
 								},
+								"data_link_id": schema.StringAttribute{
+									Computed: true,
+								},
 								"description": schema.StringAttribute{
 									Computed: true,
 								},
 								"hidden": schema.BoolAttribute{
-									Computed: true,
-								},
-								"id": schema.StringAttribute{
 									Computed: true,
 								},
 								"message": schema.StringAttribute{
@@ -377,7 +377,7 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 								"name": schema.StringAttribute{
 									Computed: true,
 								},
-								"provider": schema.StringAttribute{
+								"provider_type": schema.StringAttribute{
 									Computed:    true,
 									Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
 									Validators: []validator.String{
@@ -705,7 +705,7 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 												"name": schema.StringAttribute{
 													Computed: true,
 												},
-												"provider": schema.StringAttribute{
+												"provider_type": schema.StringAttribute{
 													Computed:    true,
 													Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
 													Validators: []validator.String{
@@ -721,13 +721,13 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 											},
 										},
 									},
+									"data_link_id": schema.StringAttribute{
+										Computed: true,
+									},
 									"description": schema.StringAttribute{
 										Computed: true,
 									},
 									"hidden": schema.BoolAttribute{
-										Computed: true,
-									},
-									"id": schema.StringAttribute{
 										Computed: true,
 									},
 									"message": schema.StringAttribute{
@@ -736,7 +736,7 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 									"name": schema.StringAttribute{
 										Computed: true,
 									},
-									"provider": schema.StringAttribute{
+									"provider_type": schema.StringAttribute{
 										Computed:    true,
 										Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
 										Validators: []validator.String{
@@ -969,7 +969,7 @@ func (r *DataStudiosResource) Create(ctx context.Context, req resource.CreateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.Create(ctx, *request)
+	res, err := r.client.Studios.CreateDataStudio(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1032,7 +1032,7 @@ func (r *DataStudiosResource) Read(ctx context.Context, req resource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.List(ctx, *request)
+	res, err := r.client.Studios.ListDataStudios(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1110,7 +1110,7 @@ func (r *DataStudiosResource) Delete(ctx context.Context, req resource.DeleteReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.Delete(ctx, *request)
+	res, err := r.client.Studios.DeleteDataStudio(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

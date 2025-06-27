@@ -46,7 +46,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Actions#read
-      x-speakeasy-name-override: list
     post:
       summary: Create action
       description: Creates a new pipeline action. Append `?workspaceId` to associate the action with the given workspace.
@@ -85,7 +84,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Action#create
-      x-speakeasy-name-override: create
   /actions/labels/add:
     post:
       summary: Add labels to actions
@@ -114,8 +112,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: actions
-      x-speakeasy-name-override: addLabels
   /actions/labels/apply:
     post:
       summary: Replace action labels
@@ -144,8 +140,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: actions
-      x-speakeasy-name-override: applyLabels
   /actions/labels/remove:
     post:
       summary: Remove labels from actions
@@ -174,8 +168,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: actions
-      x-speakeasy-name-override: removeLabels
   /actions/types:
     get:
       summary: List action event types
@@ -207,7 +199,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listTypes
   /actions/validate:
     get:
       summary: Validate action name
@@ -246,7 +237,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateName
   /actions/{actionId}:
     get:
       summary: Describe action
@@ -292,7 +282,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Action#read
-      x-speakeasy-name-override: get
     put:
       summary: Update action
       description: Updates the details of the action identified by the given `actionId`. The `source` of an existing action cannot be changed.
@@ -333,7 +322,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Action#update
-      x-speakeasy-name-override: update
     delete:
       summary: Delete action
       description: Deletes the pipeline action identified by the given `actionId`.
@@ -367,7 +355,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Action#delete
-      x-speakeasy-name-override: delete
   /actions/{actionId}/launch:
     post:
       summary: Trigger Tower Launch action
@@ -412,7 +399,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: launch
   /actions/{actionId}/pause:
     post:
       summary: Pause or resume action
@@ -451,7 +437,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: pause
   /avatars:
     post:
       summary: Create the avatar image
@@ -488,7 +473,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: create
   /avatars/{avatarId}:
     get:
       summary: Download the avatar image
@@ -522,7 +506,6 @@ paths:
           description: Not found element
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: download
   /compute-envs:
     get:
       summary: List compute environments
@@ -560,7 +543,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: ComputeEnvs#read
-      x-speakeasy-name-override: list
     post:
       summary: Create compute environment
       description: Creates a new compute environment. Append `?workspaceId` to create the environment in a workspace context.
@@ -599,8 +581,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: ComputeEnv#create
-      x-speakeasy-group: computeEnvs
-      x-speakeasy-name-override: create
   /compute-envs/validate:
     get:
       summary: Validate compute environment name
@@ -639,8 +619,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-group: computeEnvs
-      x-speakeasy-name-override: validate
   /compute-envs/{computeEnvId}:
     get:
       summary: Describe compute environment
@@ -686,8 +664,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: ComputeEnv#read
-      x-speakeasy-group: computeEnvs
-      x-speakeasy-name-override: get
     put:
       summary: Update compute environment
       description: Updates the details of the compute environment identified by the given `computeEnvId`.
@@ -734,8 +710,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: ComputeEnv#update
-      x-speakeasy-group: computeEnvs
-      x-speakeasy-name-override: update
     delete:
       summary: Delete compute environment
       description: Deletes the compute environment identified by the given `computeEnvId`.
@@ -775,8 +749,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: ComputeEnv#delete
-      x-speakeasy-group: computeEnvs
-      x-speakeasy-name-override: delete
   /compute-envs/{computeEnvId}/primary:
     post:
       summary: Define primary compute environment
@@ -815,8 +787,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: computeEnvs
-      x-speakeasy-name-override: setPrimary
   /credentials:
     get:
       summary: List credentials
@@ -854,7 +824,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credentials#read
-      x-speakeasy-name-override: list
     post:
       summary: Create credentials
       description: Creates new credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -893,7 +862,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#create
-      x-speakeasy-name-override: create
   /credentials/validate:
     get:
       summary: Validate credential name
@@ -932,7 +900,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateName
   /credentials/{credentialsId}:
     get:
       summary: Describe credentials
@@ -971,7 +938,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#read
-      x-speakeasy-name-override: get
     put:
       summary: Update credentials
       description: Updates the details of the credentials identified by the given `credentialsId`.
@@ -1012,7 +978,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#update
-      x-speakeasy-name-override: update
     delete:
       summary: Delete credentials
       description: Deletes the credentials identified by the given `credentialsId`.
@@ -1057,9 +1022,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-name-override: delete
   /data-links:
     get:
       summary: List data-links
@@ -1130,8 +1092,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
-      x-speakeasy-name-override: list
     post:
       summary: Create data-link
       description: Creates a new data-link in a user context. Append `?workspaceId=` to create the data-link in a workspace context.
@@ -1175,8 +1135,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
-      x-speakeasy-name-override: create
+      x-speakeasy-entity-operation: DataLink#create
   /data-links/cache/refresh:
     get:
       summary: Refresh data-link cache
@@ -1203,8 +1162,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
-      x-speakeasy-name-override: refreshCache
   /data-links/{dataLinkId}:
     get:
       summary: Describe data-link
@@ -1253,8 +1210,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
-      x-speakeasy-name-override: get
+      x-speakeasy-entity-operation: DataLink#read
     put:
       summary: Update data-link
       description: Update the data-link associated with the given `dataLinkId`.
@@ -1304,7 +1260,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: update
+      x-speakeasy-entity-operation: DataLink#update
     delete:
       summary: Delete data-link
       description: Deletes the data-link associated with the given `dataLinkId`.
@@ -1345,8 +1301,7 @@ paths:
           description: DeleteCustomDataLink 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
-      x-speakeasy-name-override: delete
+      x-speakeasy-entity-operation: DataLink#delete
   /data-links/{dataLinkId}/browse:
     get:
       summary: Explore data-link
@@ -1411,7 +1366,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: browse
   /data-links/{dataLinkId}/browse-tree:
     get:
       tags:
@@ -1467,7 +1421,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: browseTree
   /data-links/{dataLinkId}/browse/{path}:
     get:
       summary: Explore data-link path
@@ -1538,7 +1491,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: browsePath
   /data-links/{dataLinkId}/content:
     delete:
       tags:
@@ -1593,8 +1545,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
-      x-speakeasy-name-override: deleteContent
   /data-links/{dataLinkId}/download/{filePath}:
     get:
       tags:
@@ -1650,7 +1600,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: download
   /data-links/{dataLinkId}/generate-download-url:
     get:
       tags:
@@ -1709,7 +1658,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: generate-download-url
   /data-links/{dataLinkId}/script/download:
     get:
       tags:
@@ -1772,7 +1720,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
   /data-links/{dataLinkId}/upload:
     post:
       tags:
@@ -1834,8 +1781,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks.upload
-      x-speakeasy-name-override: generateUrl
   /data-links/{dataLinkId}/upload/finish:
     post:
       tags:
@@ -1892,7 +1837,6 @@ paths:
                 type: object
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: finalize
   /data-links/{dataLinkId}/upload/finish/{dirPath}:
     post:
       tags:
@@ -1955,7 +1899,6 @@ paths:
                 type: object
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: finishUpload
   /data-links/{dataLinkId}/upload/{dirPath}:
     post:
       tags:
@@ -2023,8 +1966,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataLinks
-      x-speakeasy-name-override: generateUploadUrl
   /datasets:
     get:
       summary: List datasets
@@ -2056,7 +1997,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: list
     post:
       summary: Create dataset
       description: Creates a new dataset in the user context. Include the dataset file and details in your request body. Append `?workspaceId` to create the dataset in a workspace context.
@@ -2101,8 +2041,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Datasets#create
-      x-speakeasy-group: dataset
-      x-speakeasy-name-override: create
   /datasets/versions:
     get:
       summary: List latest dataset versions
@@ -2140,8 +2078,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: datasets.versions
-      x-speakeasy-name-override: listLatest
   /datasets/{datasetId}:
     put:
       summary: Update dataset
@@ -2189,8 +2125,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Dataset#update
-      x-speakeasy-group: dataset
-      x-speakeasy-name-override: update
     delete:
       summary: Delete dataset
       description: Deletes the dataset identified by the given `datasetId`.
@@ -2224,8 +2158,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Dataset#delete
-      x-speakeasy-group: dataset
-      x-speakeasy-name-override: delete
   /datasets/{datasetId}/metadata:
     get:
       summary: Describe dataset
@@ -2264,8 +2196,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Dataset#read
-      x-speakeasy-group: dataset.metadata
-      x-speakeasy-name-override: get
   /datasets/{datasetId}/upload:
     post:
       summary: Upload new dataset version
@@ -2315,7 +2245,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: upload
   /datasets/{datasetId}/v/{version}/n/{fileName}:
     get:
       summary: Download dataset content
@@ -2372,7 +2301,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: download
   /datasets/{datasetId}/versions:
     get:
       summary: List all dataset versions
@@ -2415,8 +2343,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: datasets.versions
-      x-speakeasy-name-override: list
   /ga4gh/wes/v1/runs:
     get:
       summary: "GA4GH: List runs"
@@ -2451,7 +2377,6 @@ paths:
                 $ref: "#/components/schemas/WesErrorResponse"
         "403":
           description: Operation not allowed
-      x-speakeasy-name-override: listRuns
     post:
       summary: "GA4GH: Launch run"
       description: "Uses the GA4GH workflow execution service API to launch a new run. Runs are launched in the user workspace context by default. To launch in an organization workspace context, include the `workspaceId` in `workflow_engine_parameters`. Runs are launched with the workspace primary compute environment by default. To launch with a different compute environment, include the `computeEnvId` in `workflow_engine_parameters`."
@@ -2483,7 +2408,6 @@ paths:
                 $ref: "#/components/schemas/WesErrorResponse"
         "403":
           description: Operation not allowed
-      x-speakeasy-name-override: createRun
   /ga4gh/wes/v1/runs/{run_id}:
     get:
       summary: "GA4GH: Describe run"
@@ -2513,7 +2437,6 @@ paths:
                 $ref: "#/components/schemas/WesErrorResponse"
         "403":
           description: Operation not allowed
-      x-speakeasy-name-override: getRun
   /ga4gh/wes/v1/runs/{run_id}/cancel:
     post:
       summary: "GA4GH: Cancel run"
@@ -2548,7 +2471,6 @@ paths:
                 $ref: "#/components/schemas/WesErrorResponse"
         "403":
           description: Operation not allowed
-      x-speakeasy-name-override: cancelRun
   /ga4gh/wes/v1/runs/{run_id}/status:
     get:
       summary: "GA4GH: Retrieve run status"
@@ -2578,7 +2500,6 @@ paths:
                 $ref: "#/components/schemas/WesErrorResponse"
         "403":
           description: Operation not allowed
-      x-speakeasy-name-override: getStatus
   /ga4gh/wes/v1/service-info:
     get:
       summary: GA4GH workflow execution service API info
@@ -2600,7 +2521,6 @@ paths:
                 $ref: "#/components/schemas/WesErrorResponse"
         "403":
           description: Operation not allowed
-      x-speakeasy-name-override: getServiceInfo
   /labels:
     get:
       summary: List labels
@@ -2659,7 +2579,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: list
     post:
       summary: Create label
       description: "Creates a new label or returns an existing label based on name/value. By default the operation works in a user context, append `?workspaceId` to create/retrieve a label in a workspace context. Resource labels include `resource: true` and a `value`."
@@ -2697,7 +2616,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: create
   /labels/{labelId}:
     put:
       summary: Update label
@@ -2743,7 +2661,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: update
     delete:
       summary: Delete label
       description: Deletes the label identified by the given `labelId`.
@@ -2777,7 +2694,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: delete
   /launch/{launchId}:
     get:
       summary: Describe Launch record
@@ -2815,7 +2731,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: get
   /launch/{launchId}/datasets:
     get:
       summary: Describe launch datasets
@@ -2847,8 +2762,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: launch
-      x-speakeasy-name-override: listDatasets
   /orgs:
     get:
       summary: List organizations
@@ -2879,7 +2792,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: list
     post:
       summary: Create organization
       description: Creates a new organization.
@@ -2917,7 +2829,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Orgs#create
-      x-speakeasy-name-override: create
   /orgs/validate:
     get:
       summary: Validate organization name
@@ -2950,7 +2861,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateName
   /orgs/{orgId}:
     get:
       summary: Describe organization
@@ -2986,7 +2896,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Organization#read
-      x-speakeasy-name-override: get
     put:
       summary: Update organization
       description: Updates the details of the organization identified by the given `orgId`.
@@ -3033,7 +2942,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Orgs#update
-      x-speakeasy-name-override: update
     delete:
       summary: Delete organization
       description: Deletes the organization identified by the given `orgId`.
@@ -3063,7 +2971,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Orgs#delete
-      x-speakeasy-name-override: delete
   /orgs/{orgId}/collaborators:
     get:
       summary: List organization collaborators
@@ -3114,7 +3021,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listCollaborators
   /orgs/{orgId}/members:
     get:
       summary: List organization members
@@ -3165,7 +3071,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listMembers
   /orgs/{orgId}/members/add:
     put:
       summary: Add organization member
@@ -3212,7 +3117,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: addMember
   /orgs/{orgId}/members/leave:
     delete:
       summary: Leave organization
@@ -3242,7 +3146,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: leave
   /orgs/{orgId}/members/{memberId}:
     delete:
       summary: Delete member
@@ -3279,7 +3182,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: removeMember
   /orgs/{orgId}/members/{memberId}/role:
     put:
       summary: Update member role
@@ -3323,7 +3225,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: updateMemberRole
   /orgs/{orgId}/quotas:
     get:
       summary: Describe organization quotas
@@ -3364,7 +3265,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getQuotas
   /orgs/{orgId}/teams:
     get:
       summary: List organization teams
@@ -3380,7 +3280,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3415,7 +3314,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: list
     post:
       summary: Create team
       description: Creates a new team in the organization identified by the given `orgId`.
@@ -3430,7 +3328,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3461,8 +3358,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#create
-      x-speakeasy-name-override: create
   /orgs/{orgId}/teams/validate:
     get:
       summary: Validate team name
@@ -3478,7 +3373,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Team name to validate
@@ -3497,7 +3391,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateName
   /orgs/{orgId}/teams/{teamId}:
     get:
       summary: Describe team
@@ -3513,7 +3406,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3521,7 +3413,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-readonly: true
       responses:
         "200":
           description: OK
@@ -3539,8 +3430,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#read
-      x-speakeasy-name-override: get
     put:
       summary: Update team
       description: Updates the details of the team identified by the given `teamId`.
@@ -3555,7 +3444,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3591,8 +3479,6 @@ paths:
           description: UpdateOrganizationTeam 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#update
-      x-speakeasy-name-override: update
     delete:
       summary: Delete team
       description: Deletes the team identified by the given `teamId`.
@@ -3607,7 +3493,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3615,7 +3500,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -3629,8 +3513,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#delete
-      x-speakeasy-name-override: delete
   /orgs/{orgId}/teams/{teamId}/members:
     get:
       summary: List team members
@@ -3646,7 +3528,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3654,7 +3535,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3689,7 +3569,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listMembers
     post:
       summary: Create team member
       description: Adds a new member to the team identified by the given `teamId`.
@@ -3704,7 +3583,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3712,7 +3590,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3737,8 +3614,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: teams.members
-      x-speakeasy-name-override: create
   /orgs/{orgId}/teams/{teamId}/members/{memberId}/delete:
     delete:
       summary: Delete team member
@@ -3754,7 +3629,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3762,7 +3636,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Member numeric identifier
@@ -3783,7 +3656,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: deleteMember
   /orgs/{orgId}/teams/{teamId}/workspaces:
     get:
       summary: List team workspaces
@@ -3799,7 +3671,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3847,7 +3718,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listWorkspaces
   /orgs/{orgId}/workspaces:
     get:
       summary: List organization workspaces
@@ -3882,7 +3752,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Workspaces#read
-      x-speakeasy-name-override: list
     post:
       summary: Create workspace
       description: Creates a new organization workspace.
@@ -3929,7 +3798,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Workspace#create
-      x-speakeasy-name-override: create
   /orgs/{orgId}/workspaces/validate:
     get:
       summary: Validate workspace name
@@ -3970,7 +3838,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validate
   /orgs/{orgId}/workspaces/{workspaceId}:
     get:
       summary: Describe workspace
@@ -4013,7 +3880,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Workspace#read
-      x-speakeasy-name-override: describe
     put:
       summary: Update workspace
       description: Updates the details of the workspace identified by the given `workspaceId`.
@@ -4068,7 +3934,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Workspace#update
-      x-speakeasy-name-override: update
     delete:
       summary: Delete workspace
       description: Deletes the workspace identified by the given `workspaceId`.
@@ -4106,7 +3971,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Workspace#delete
-      x-speakeasy-name-override: delete
   /orgs/{orgId}/workspaces/{workspaceId}/participants:
     get:
       summary: List workspace participants
@@ -4164,8 +4028,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: workspaces.participants
-      x-speakeasy-name-override: list
     delete:
       summary: Leave workspace
       description: Removes the requesting user from the given workspace.
@@ -4201,7 +4063,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: leave
   /orgs/{orgId}/workspaces/{workspaceId}/participants/add:
     put:
       summary: Create workspace participant
@@ -4255,7 +4116,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: addParticipant
   /orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}:
     delete:
       summary: Delete workspace participant
@@ -4299,7 +4159,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: deleteParticipant
   /orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role:
     put:
       summary: Update participant role
@@ -4350,8 +4209,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: workspaces.participants
-      x-speakeasy-name-override: updateRole
   /orgs/{orgId}/workspaces/{workspaceId}/settings/studios:
     get:
       summary: List workspace Studios settings
@@ -4404,7 +4261,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getStudioSettings
     put:
       summary: Update workspace Studios settings
       description: Updates the Studios settings of the workspace identified by the given `workspaceId`.
@@ -4459,7 +4315,6 @@ paths:
                 type: object
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: updateStudioSettings
   /pipeline-secrets:
     get:
       summary: List pipeline secrets
@@ -4491,8 +4346,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: pipelineSecrets
-      x-speakeasy-name-override: list
     post:
       summary: Create pipeline secret
       description: Creates a new pipeline secret in the user context. Append `?workspaceId` to create the secret in a workspace context.
@@ -4531,8 +4384,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: PipelineSecret#create
-      x-speakeasy-group: pipelineSecrets
-      x-speakeasy-name-override: create
   /pipeline-secrets/validate:
     get:
       summary: Validate secret name
@@ -4571,7 +4422,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateName
   /pipeline-secrets/{secretId}:
     get:
       summary: Describe pipeline secret
@@ -4611,7 +4461,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: PipelineSecret#read
-      x-speakeasy-name-override: get
     put:
       summary: Update secret
       description: Updates the pipeline secret identified by the given `secretId`.
@@ -4653,8 +4502,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: PipelineSecret#update
-      x-speakeasy-group: pipelineSecrets
-      x-speakeasy-name-override: update
     delete:
       summary: Delete secret
       description: Deletes the pipeline secret identified by the given `secretId`.
@@ -4689,7 +4536,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: PipelineSecret#delete
-      x-speakeasy-name-override: delete
   /pipelines:
     get:
       summary: List pipelines
@@ -4752,7 +4598,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Pipelines#read
-      x-speakeasy-name-override: list
     post:
       summary: Create pipeline
       description: Creates a new pipeline in a user context. Append `?workspaceId` to create the pipeline in a workspace context.
@@ -4797,7 +4642,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Pipeline#create
-      x-speakeasy-name-override: create
   /pipelines/info:
     get:
       summary: Describe remote pipeline repository
@@ -4844,7 +4688,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getRepository
   /pipelines/labels/add:
     post:
       summary: Add labels to pipelines
@@ -4873,8 +4716,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: pipelines
-      x-speakeasy-name-override: addLabels
   /pipelines/labels/apply:
     post:
       summary: Replace pipeline labels
@@ -4903,7 +4744,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: applyToPipelines
   /pipelines/labels/remove:
     post:
       summary: Remove labels from pipelines
@@ -4932,7 +4772,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: removeFromPipelines
   /pipelines/repositories:
     get:
       summary: List user pipeline repositories
@@ -4964,7 +4803,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listRepositories
   /pipelines/validate:
     get:
       summary: Validate pipeline name
@@ -5009,7 +4847,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateName
   /pipelines/{pipelineId}:
     get:
       summary: Describe pipeline
@@ -5064,7 +4901,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Pipeline#read
-      x-speakeasy-name-override: get
     put:
       summary: Update pipeline
       description: "Updates the details of the pipeline identified by the given `pipelineId`. \n            **Note**: If `labelIds` is `null`, empty, or ommitted, existing pipeline labels are removed.\n            Include `labelIds: [<label-id-1>,<label-id-2>]` to override existing labels. Labels to be preserved must be included.\n            To append a list of labels to multiple pipelines, use `/pipelines/labels/add`."
@@ -5116,7 +4952,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Pipeline#update
-      x-speakeasy-name-override: update
     delete:
       summary: Delete pipeline
       description: Deletes the pipeline identified by the given `pipelineId`.
@@ -5151,7 +4986,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Pipeline#delete
-      x-speakeasy-name-override: delete
   /pipelines/{pipelineId}/launch:
     get:
       summary: Describe pipeline launch
@@ -5197,8 +5031,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: pipelines.launch
-      x-speakeasy-name-override: get
   /pipelines/{pipelineId}/schema:
     get:
       summary: Describe pipeline schema
@@ -5254,7 +5086,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getSchema
   /platforms:
     get:
       summary: List platforms
@@ -5292,7 +5123,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: list
   /platforms/{platformId}:
     get:
       summary: Describe platform
@@ -5340,7 +5170,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: get
   /platforms/{platformId}/regions:
     get:
       summary: List platform regions
@@ -5378,8 +5207,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: platforms.regions
-      x-speakeasy-name-override: list
   /service-info:
     get:
       summary: General Seqera service features and version.
@@ -5399,7 +5226,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-speakeasy-group: serviceInfo
   /studios:
     get:
       summary: List Studios
@@ -5462,7 +5288,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: DataStudios#read
-      x-speakeasy-name-override: list
     post:
       summary: Create Studio
       description: "Creates a new Studio environment, starting it by default. Default behavior can be changed using the query parameter `autoStart=false`."
@@ -5524,7 +5349,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: DataStudios#create
-      x-speakeasy-name-override: create
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -5566,7 +5390,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listMountedDataLinks
   /studios/templates:
     get:
       summary: List available Studio templates
@@ -5616,8 +5439,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: studios.templates
-      x-speakeasy-name-override: list
   /studios/validate:
     get:
       summary: Validate Studio name
@@ -5648,7 +5469,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateName
   /studios/{sessionId}:
     get:
       summary: Describe Studio
@@ -5693,7 +5513,6 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: get
     delete:
       summary: Delete Studio
       description: "Deletes the Studio associated with the given Studio session ID."
@@ -5727,7 +5546,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: DataStudios#delete
-      x-speakeasy-name-override: delete
   /studios/{sessionId}/checkpoints:
     get:
       summary: List Studio checkpoints
@@ -5788,7 +5606,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listCheckpoints
   /studios/{sessionId}/checkpoints/{checkpointId}:
     get:
       summary: Get Studio checkpoint
@@ -5839,8 +5656,6 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-group: studios.checkpoints
-      x-speakeasy-name-override: get
     put:
       summary: Update Studio checkpoint name
       description: "Updates the name of the given Studio checkpoint ID."
@@ -5902,7 +5717,6 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: updateCheckpoint
   /studios/{sessionId}/lifespan:
     post:
       description: "Extends the lifespan of the given Studio session ID."
@@ -5945,7 +5759,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: extendLifespan
   /studios/{sessionId}/start:
     put:
       summary: Start Studio
@@ -5990,7 +5803,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: start
   /studios/{sessionId}/stop:
     put:
       summary: Stop Studio
@@ -6028,7 +5840,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: stop
   /tokens:
     get:
       summary: List tokens
@@ -6054,7 +5865,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Tokens#read
-      x-speakeasy-name-override: list
     post:
       summary: Create token
       description: "Creates an API access token with the details in the given request body."
@@ -6092,7 +5902,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Tokens#create
-      x-speakeasy-name-override: create
   /tokens/delete-all:
     delete:
       summary: Delete all user tokens
@@ -6113,7 +5922,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: deleteAll
   /tokens/{tokenId}:
     delete:
       summary: Delete token
@@ -6144,7 +5952,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Tokens#delete
-      x-speakeasy-name-override: delete
   /trace/create:
     post:
       summary: Create workflow execution trace
@@ -6183,7 +5990,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: create
   /trace/{workflowId}/begin:
     put:
       summary: Signal workflow execution start
@@ -6228,7 +6034,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: begin
   /trace/{workflowId}/complete:
     put:
       summary: Signal workflow execution completion
@@ -6273,7 +6078,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: complete
   /trace/{workflowId}/heartbeat:
     put:
       summary: Signal workflow execution heartbeat
@@ -6318,7 +6122,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: updateHeartbeat
   /trace/{workflowId}/progress:
     put:
       summary: Store workflow task execution metadata
@@ -6363,7 +6166,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: updateProgress
   /user-info:
     get:
       summary: Describe current user
@@ -6388,7 +6190,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: CurrentUser#read
-      x-speakeasy-name-override: getInfo
   /user/{userId}/workspaces:
     get:
       summary: List user workspaces and organizations
@@ -6422,7 +6223,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: UserWorkspaces#read
-      x-speakeasy-name-override: listForUser
   /users/validate:
     get:
       summary: Check that the user name is valid
@@ -6454,7 +6254,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validate
   /users/{userId}:
     get:
       summary: Describe a user entity
@@ -6488,7 +6287,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: User#read
-      x-speakeasy-name-override: get
     post:
       summary: Update an user entity
       tags:
@@ -6522,7 +6320,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: update
     delete:
       summary: Delete a user entity
       tags:
@@ -6549,7 +6346,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: delete
   /workflow:
     get:
       summary: List workflows
@@ -6606,7 +6402,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: list
   /workflow/delete:
     post:
       summary: Delete workflows
@@ -6650,7 +6445,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: deleteMany
   /workflow/labels/add:
     post:
       summary: Add labels to workflows
@@ -6679,7 +6473,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: addToWorkflows
   /workflow/labels/apply:
     post:
       summary: Replace workflow labels
@@ -6708,7 +6501,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: applyToWorkflows
   /workflow/labels/remove:
     post:
       summary: Remove labels from workflows
@@ -6737,8 +6529,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: labels.workflows
-      x-speakeasy-name-override: remove
   /workflow/launch:
     post:
       summary: Launch workflow
@@ -6784,7 +6574,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: launch
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -6802,7 +6591,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: randomName
   /workflow/validate:
     get:
       summary: Validate run name
@@ -6840,7 +6628,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: validateConstraints
   /workflow/{workflowId}:
     get:
       summary: Describe workflow
@@ -6886,7 +6673,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: describe
     delete:
       summary: Delete the Workflow entity with the given ID
       tags:
@@ -6923,7 +6709,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: delete
   /workflow/{workflowId}/cancel:
     post:
       summary: Cancel workflow
@@ -6962,7 +6747,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: cancel
   /workflow/{workflowId}/download:
     get:
       summary: Download workflow files
@@ -7006,7 +6790,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: downloadLog
   /workflow/{workflowId}/download/{taskId}:
     get:
       summary: Download workflow task files
@@ -7057,7 +6840,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: download-task-log
   /workflow/{workflowId}/launch:
     get:
       summary: Describe workflow launch
@@ -7101,7 +6883,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getLaunch
   /workflow/{workflowId}/log:
     get:
       summary: Get workflow logs
@@ -7144,7 +6925,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getLogs
   /workflow/{workflowId}/log/{taskId}:
     get:
       summary: Get workflow task logs
@@ -7194,7 +6974,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getTaskLog
   /workflow/{workflowId}/metrics:
     get:
       summary: Get the execution metrics for the given Workflow ID
@@ -7231,8 +7010,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: workflows.metrics
-      x-speakeasy-name-override: get
   /workflow/{workflowId}/progress:
     get:
       summary: Retrieve the execution progress for the given Workflow ID
@@ -7269,7 +7046,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getProgress
   /workflow/{workflowId}/star:
     get:
       summary: Check workflow star status
@@ -7305,8 +7081,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-speakeasy-group: workflows.star
-      x-speakeasy-name-override: describe
+      x-speakeasy-group: WorkflowStar
     post:
       summary: Star workflow
       description: Adds the workflow identified by the given `workflowId` to your list of starred workflows.
@@ -7348,7 +7123,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-speakeasy-group: WorkflowStar
-      x-speakeasy-name-override: star
     delete:
       summary: Unstar workflow
       description: Removes the workflow identified by the given `workflowId` from your list of starred workflows.
@@ -7384,7 +7158,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
       x-speakeasy-group: WorkflowStar
-      x-speakeasy-name-override: unstar
   /workflow/{workflowId}/task/{taskId}:
     get:
       summary: Describe a task entity with the given ID
@@ -7428,8 +7201,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-group: workflows.tasks
-      x-speakeasy-name-override: get
   /workflow/{workflowId}/tasks:
     get:
       summary: List the tasks for the given Workflow ID and filter parameters
@@ -7493,7 +7264,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listTasks
   /workspaces/{workspaceId}/datasets:
     get:
       summary: List available datasets
@@ -7527,7 +7297,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listByWorkspace
     post:
       summary: Create dataset
       description: Creates a new dataset in the given workspace context. Include the dataset file and details in your request body.
@@ -7573,7 +7342,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: create
   /workspaces/{workspaceId}/datasets/versions:
     get:
       summary: List latest dataset versions
@@ -7612,8 +7380,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-group: datasets.workspaces
-      x-speakeasy-name-override: listVersions
   /workspaces/{workspaceId}/datasets/{datasetId}:
     put:
       summary: Update dataset
@@ -7662,7 +7428,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: update
     delete:
       summary: Delete dataset
       description: Deletes the dataset identified by the given `datasetId`.
@@ -7697,7 +7462,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: delete
   /workspaces/{workspaceId}/datasets/{datasetId}/metadata:
     get:
       summary: Describe dataset
@@ -7737,7 +7501,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: getMetadata
   /workspaces/{workspaceId}/datasets/{datasetId}/upload:
     post:
       summary: Upload new dataset version
@@ -7789,8 +7552,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataset.version
-      x-speakeasy-name-override: upload
   /workspaces/{workspaceId}/datasets/{datasetId}/v/{version}/n/{fileName}:
     get:
       summary: Download dataset content
@@ -7848,8 +7609,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-group: dataset.version
-      x-speakeasy-name-override: download
   /workspaces/{workspaceId}/datasets/{datasetId}/versions:
     get:
       summary: List all dataset versions
@@ -7894,7 +7653,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-name-override: listVersions
 components:
   schemas:
     AbstractGridConfig:
@@ -9145,7 +8903,7 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/DataLinkType"
-        provider:
+        providerType:
           $ref: "#/components/schemas/DataLinkProvider"
         resourceRef:
           type: string
@@ -9164,7 +8922,7 @@ components:
           type: string
         name:
           type: string
-        provider:
+        providerType:
           $ref: "#/components/schemas/DataLinkProvider"
     DataLinkDeleteItemRequest:
       type: object
@@ -9199,6 +8957,7 @@ components:
       properties:
         id:
           type: string
+          x-speakeasy-name-override: dataLinkId
         name:
           type: string
         description:
@@ -9207,7 +8966,7 @@ components:
           type: string
         type:
           $ref: "#/components/schemas/DataLinkType"
-        provider:
+        providerType:
           $ref: "#/components/schemas/DataLinkProvider"
         region:
           type: string
@@ -11249,6 +11008,7 @@ components:
           type: string
         provider:
           type: string
+          x-speakeasy-name-override: repositoryProvider
         configFiles:
           type: array
           items:
@@ -11945,7 +11705,7 @@ components:
           format: int64
           nullable: true
           readOnly: true
-          x-speakeasy-param-readonly: true
+          x-speakeasy-param-optional: true
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11967,7 +11727,7 @@ components:
         teamId:
           type: integer
           format: int64
-          x-speakeasy-param-readonly: true
+          x-speakeasy-param-optional: true
         name:
           type: string
         description:
@@ -12385,6 +12145,8 @@ components:
         deleted:
           type: boolean
       x-speakeasy-entity:
+        - CurrentUser
+        - User
         - CurrentUser
         - User
     Visibility:
@@ -13093,7 +12855,6 @@ components:
         - launch
         - connect
         - view
-    x-speakeasy-entity: PipelineSecret
   securitySchemes:
     BearerAuth:
       type: http
@@ -13143,4 +12904,5 @@ tags:
   - name: workspaces
     description: Workspaces in an organization context
 servers:
+  - url: https://api.cloud.seqera.io
   - url: https://api.cloud.seqera.io

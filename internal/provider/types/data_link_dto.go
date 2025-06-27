@@ -8,12 +8,12 @@ import (
 
 type DataLinkDto struct {
 	Credentials      []DataLinkCredentials `tfsdk:"credentials"`
+	DataLinkID       types.String          `tfsdk:"data_link_id"`
 	Description      types.String          `tfsdk:"description"`
 	Hidden           types.Bool            `tfsdk:"hidden"`
-	ID               types.String          `tfsdk:"id"`
 	Message          types.String          `tfsdk:"message"`
 	Name             types.String          `tfsdk:"name"`
-	Provider         types.String          `tfsdk:"provider"`
+	ProviderType     types.String          `tfsdk:"provider_type"`
 	PublicAccessible types.Bool            `tfsdk:"public_accessible"`
 	Region           types.String          `tfsdk:"region"`
 	ResourceRef      types.String          `tfsdk:"resource_ref"`

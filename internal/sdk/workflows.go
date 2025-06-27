@@ -18,10 +18,6 @@ import (
 
 // Workflows - Workflow executions
 type Workflows struct {
-	Metrics *Metrics
-	Star    *Star
-	Tasks   *Tasks
-
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -32,15 +28,12 @@ func newWorkflows(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hoo
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
-		Metrics:          newMetrics(rootSDK, sdkConfig, hooks),
-		Star:             newStar(rootSDK, sdkConfig, hooks),
-		Tasks:            newTasks(rootSDK, sdkConfig, hooks),
 	}
 }
 
-// List workflows
+// ListWorkflows - List workflows
 // Lists all workflow records, enriched with `attributes`. Append `?workspaceId` to list workflow records in a workspace context.
-func (s *Workflows) List(ctx context.Context, request operations.ListWorkflowsRequest, opts ...operations.Option) (*operations.ListWorkflowsResponse, error) {
+func (s *Workflows) ListWorkflows(ctx context.Context, request operations.ListWorkflowsRequest, opts ...operations.Option) (*operations.ListWorkflowsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -194,9 +187,9 @@ func (s *Workflows) List(ctx context.Context, request operations.ListWorkflowsRe
 
 }
 
-// DeleteMany - Delete workflows
+// DeleteWorkflowMany - Delete workflows
 // Deletes the workflow records identified by the given list of `workflowIds`.
-func (s *Workflows) DeleteMany(ctx context.Context, request operations.DeleteWorkflowManyRequest, opts ...operations.Option) (*operations.DeleteWorkflowManyResponse, error) {
+func (s *Workflows) DeleteWorkflowMany(ctx context.Context, request operations.DeleteWorkflowManyRequest, opts ...operations.Option) (*operations.DeleteWorkflowManyResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -357,9 +350,9 @@ func (s *Workflows) DeleteMany(ctx context.Context, request operations.DeleteWor
 
 }
 
-// Launch workflow
+// CreateWorkflowLaunch - Launch workflow
 // Submits a workflow execution.
-func (s *Workflows) Launch(ctx context.Context, request operations.CreateWorkflowLaunchRequest, opts ...operations.Option) (*operations.CreateWorkflowLaunchResponse, error) {
+func (s *Workflows) CreateWorkflowLaunch(ctx context.Context, request operations.CreateWorkflowLaunchRequest, opts ...operations.Option) (*operations.CreateWorkflowLaunchResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -520,8 +513,8 @@ func (s *Workflows) Launch(ctx context.Context, request operations.CreateWorkflo
 
 }
 
-// RandomName - Generates a random name
-func (s *Workflows) RandomName(ctx context.Context, opts ...operations.Option) (*operations.GenerateRandomWorkflowNameResponse, error) {
+// GenerateRandomWorkflowName - Generates a random name
+func (s *Workflows) GenerateRandomWorkflowName(ctx context.Context, opts ...operations.Option) (*operations.GenerateRandomWorkflowNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -650,9 +643,9 @@ func (s *Workflows) RandomName(ctx context.Context, opts ...operations.Option) (
 
 }
 
-// ValidateConstraints - Validate run name
+// ValidateWorkflowConstraints - Validate run name
 // Check that the given run name of a workflow has a valid format. When the session ID is given: check that no other workflow in the system exists with the combination of both elements.
-func (s *Workflows) ValidateConstraints(ctx context.Context, request operations.ValidateWorkflowConstraintsRequest, opts ...operations.Option) (*operations.ValidateWorkflowConstraintsResponse, error) {
+func (s *Workflows) ValidateWorkflowConstraints(ctx context.Context, request operations.ValidateWorkflowConstraintsRequest, opts ...operations.Option) (*operations.ValidateWorkflowConstraintsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -788,9 +781,9 @@ func (s *Workflows) ValidateConstraints(ctx context.Context, request operations.
 
 }
 
-// Describe workflow
+// DescribeWorkflow - Describe workflow
 // Retrieves the details of the workflow record associated with the given `workflowId`.
-func (s *Workflows) Describe(ctx context.Context, request operations.DescribeWorkflowRequest, opts ...operations.Option) (*operations.DescribeWorkflowResponse, error) {
+func (s *Workflows) DescribeWorkflow(ctx context.Context, request operations.DescribeWorkflowRequest, opts ...operations.Option) (*operations.DescribeWorkflowResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -944,8 +937,8 @@ func (s *Workflows) Describe(ctx context.Context, request operations.DescribeWor
 
 }
 
-// Delete the Workflow entity with the given ID
-func (s *Workflows) Delete(ctx context.Context, request operations.DeleteWorkflowRequest, opts ...operations.Option) (*operations.DeleteWorkflowResponse, error) {
+// DeleteWorkflow - Delete the Workflow entity with the given ID
+func (s *Workflows) DeleteWorkflow(ctx context.Context, request operations.DeleteWorkflowRequest, opts ...operations.Option) (*operations.DeleteWorkflowResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1079,9 +1072,9 @@ func (s *Workflows) Delete(ctx context.Context, request operations.DeleteWorkflo
 
 }
 
-// Cancel workflow
+// CancelWorkflow - Cancel workflow
 // Cancels the workflow execution identified by the given `workflowId`.
-func (s *Workflows) Cancel(ctx context.Context, request operations.CancelWorkflowRequest, opts ...operations.Option) (*operations.CancelWorkflowResponse, error) {
+func (s *Workflows) CancelWorkflow(ctx context.Context, request operations.CancelWorkflowRequest, opts ...operations.Option) (*operations.CancelWorkflowResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1222,9 +1215,9 @@ func (s *Workflows) Cancel(ctx context.Context, request operations.CancelWorkflo
 
 }
 
-// DownloadLog - Download workflow files
+// DownloadWorkflowLog - Download workflow files
 // Downloads the workflow files for the Nextflow main job associated with the given `workflowId`.
-func (s *Workflows) DownloadLog(ctx context.Context, request operations.DownloadWorkflowLogRequest, opts ...operations.Option) (*operations.DownloadWorkflowLogResponse, error) {
+func (s *Workflows) DownloadWorkflowLog(ctx context.Context, request operations.DownloadWorkflowLogRequest, opts ...operations.Option) (*operations.DownloadWorkflowLogResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1373,9 +1366,9 @@ func (s *Workflows) DownloadLog(ctx context.Context, request operations.Download
 
 }
 
-// DownloadTaskLog - Download workflow task files
+// DownloadWorkflowTaskLog - Download workflow task files
 // Downloads the workflow files of the task identified by the given `taskId`.
-func (s *Workflows) DownloadTaskLog(ctx context.Context, request operations.DownloadWorkflowTaskLogRequest, opts ...operations.Option) (*operations.DownloadWorkflowTaskLogResponse, error) {
+func (s *Workflows) DownloadWorkflowTaskLog(ctx context.Context, request operations.DownloadWorkflowTaskLogRequest, opts ...operations.Option) (*operations.DownloadWorkflowTaskLogResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1524,9 +1517,9 @@ func (s *Workflows) DownloadTaskLog(ctx context.Context, request operations.Down
 
 }
 
-// GetLaunch - Describe workflow launch
+// DescribeWorkflowLaunch - Describe workflow launch
 // Retrieves the details of the workflow launch associated with the given `workflowId`.
-func (s *Workflows) GetLaunch(ctx context.Context, request operations.DescribeWorkflowLaunchRequest, opts ...operations.Option) (*operations.DescribeWorkflowLaunchResponse, error) {
+func (s *Workflows) DescribeWorkflowLaunch(ctx context.Context, request operations.DescribeWorkflowLaunchRequest, opts ...operations.Option) (*operations.DescribeWorkflowLaunchResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1682,9 +1675,9 @@ func (s *Workflows) GetLaunch(ctx context.Context, request operations.DescribeWo
 
 }
 
-// GetLogs - Get workflow logs
+// WorkflowLogs - Get workflow logs
 // Retrieves the output logs for the Nextflow main job of the workflow identified by the given `workflowId`.
-func (s *Workflows) GetLogs(ctx context.Context, request operations.WorkflowLogsRequest, opts ...operations.Option) (*operations.WorkflowLogsResponse, error) {
+func (s *Workflows) WorkflowLogs(ctx context.Context, request operations.WorkflowLogsRequest, opts ...operations.Option) (*operations.WorkflowLogsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1838,9 +1831,9 @@ func (s *Workflows) GetLogs(ctx context.Context, request operations.WorkflowLogs
 
 }
 
-// GetTaskLog - Get workflow task logs
+// GetWorkflowTaskLog - Get workflow task logs
 // Retrieves the output logs for the workflow task identified by the given `taskId`.
-func (s *Workflows) GetTaskLog(ctx context.Context, request operations.GetWorkflowTaskLogRequest, opts ...operations.Option) (*operations.GetWorkflowTaskLogResponse, error) {
+func (s *Workflows) GetWorkflowTaskLog(ctx context.Context, request operations.GetWorkflowTaskLogRequest, opts ...operations.Option) (*operations.GetWorkflowTaskLogResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1994,8 +1987,163 @@ func (s *Workflows) GetTaskLog(ctx context.Context, request operations.GetWorkfl
 
 }
 
-// GetProgress - Retrieve the execution progress for the given Workflow ID
-func (s *Workflows) GetProgress(ctx context.Context, request operations.DescribeWorkflowProgressRequest, opts ...operations.Option) (*operations.DescribeWorkflowProgressResponse, error) {
+// DescribeWorkflowMetrics - Get the execution metrics for the given Workflow ID
+func (s *Workflows) DescribeWorkflowMetrics(ctx context.Context, request operations.DescribeWorkflowMetricsRequest, opts ...operations.Option) (*operations.DescribeWorkflowMetricsResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/workflow/{workflowId}/metrics", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "DescribeWorkflowMetrics",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.DescribeWorkflowMetricsResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.GetWorkflowMetricsResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.GetWorkflowMetricsResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// DescribeWorkflowProgress - Retrieve the execution progress for the given Workflow ID
+func (s *Workflows) DescribeWorkflowProgress(ctx context.Context, request operations.DescribeWorkflowProgressRequest, opts ...operations.Option) (*operations.DescribeWorkflowProgressResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2149,8 +2297,163 @@ func (s *Workflows) GetProgress(ctx context.Context, request operations.Describe
 
 }
 
-// ListTasks - List the tasks for the given Workflow ID and filter parameters
-func (s *Workflows) ListTasks(ctx context.Context, request operations.ListWorkflowTasksRequest, opts ...operations.Option) (*operations.ListWorkflowTasksResponse, error) {
+// DescribeWorkflowTask - Describe a task entity with the given ID
+func (s *Workflows) DescribeWorkflowTask(ctx context.Context, request operations.DescribeWorkflowTaskRequest, opts ...operations.Option) (*operations.DescribeWorkflowTaskResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/workflow/{workflowId}/task/{taskId}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "DescribeWorkflowTask",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.DescribeWorkflowTaskResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DescribeTaskResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DescribeTaskResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// ListWorkflowTasks - List the tasks for the given Workflow ID and filter parameters
+func (s *Workflows) ListWorkflowTasks(ctx context.Context, request operations.ListWorkflowTasksRequest, opts ...operations.Option) (*operations.ListWorkflowTasksResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

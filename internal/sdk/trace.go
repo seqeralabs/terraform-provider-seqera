@@ -31,9 +31,9 @@ func newTrace(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks.H
 	}
 }
 
-// Create workflow execution trace
+// CreateTrace - Create workflow execution trace
 // Creates a new workflow execution trace.
-func (s *Trace) Create(ctx context.Context, request operations.CreateTraceRequest, opts ...operations.Option) (*operations.CreateTraceResponse, error) {
+func (s *Trace) CreateTrace(ctx context.Context, request operations.CreateTraceRequest, opts ...operations.Option) (*operations.CreateTraceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -194,9 +194,9 @@ func (s *Trace) Create(ctx context.Context, request operations.CreateTraceReques
 
 }
 
-// Begin - Signal workflow execution start
+// UpdateTraceBegin - Signal workflow execution start
 // Updates the workflow execution trace for the given `workflowId`.
-func (s *Trace) Begin(ctx context.Context, request operations.UpdateTraceBeginRequest, opts ...operations.Option) (*operations.UpdateTraceBeginResponse, error) {
+func (s *Trace) UpdateTraceBegin(ctx context.Context, request operations.UpdateTraceBeginRequest, opts ...operations.Option) (*operations.UpdateTraceBeginResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -357,9 +357,9 @@ func (s *Trace) Begin(ctx context.Context, request operations.UpdateTraceBeginRe
 
 }
 
-// Complete - Signal workflow execution completion
+// UpdateTraceComplete - Signal workflow execution completion
 // Updates the workflow execution trace for the given `workflowId`.
-func (s *Trace) Complete(ctx context.Context, request operations.UpdateTraceCompleteRequest, opts ...operations.Option) (*operations.UpdateTraceCompleteResponse, error) {
+func (s *Trace) UpdateTraceComplete(ctx context.Context, request operations.UpdateTraceCompleteRequest, opts ...operations.Option) (*operations.UpdateTraceCompleteResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -520,9 +520,9 @@ func (s *Trace) Complete(ctx context.Context, request operations.UpdateTraceComp
 
 }
 
-// UpdateHeartbeat - Signal workflow execution heartbeat
+// UpdateTraceHeartbeat - Signal workflow execution heartbeat
 // Update the workflow execution trace heartbeat for the given `workflowId` to signal that execution is ongoing.
-func (s *Trace) UpdateHeartbeat(ctx context.Context, request operations.UpdateTraceHeartbeatRequest, opts ...operations.Option) (*operations.UpdateTraceHeartbeatResponse, error) {
+func (s *Trace) UpdateTraceHeartbeat(ctx context.Context, request operations.UpdateTraceHeartbeatRequest, opts ...operations.Option) (*operations.UpdateTraceHeartbeatResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -683,9 +683,9 @@ func (s *Trace) UpdateHeartbeat(ctx context.Context, request operations.UpdateTr
 
 }
 
-// UpdateProgress - Store workflow task execution metadata
+// UpdateTraceProgress - Store workflow task execution metadata
 // Store the execution metadata for one or more tasks in the given `workflowId`.
-func (s *Trace) UpdateProgress(ctx context.Context, request operations.UpdateTraceProgressRequest, opts ...operations.Option) (*operations.UpdateTraceProgressResponse, error) {
+func (s *Trace) UpdateTraceProgress(ctx context.Context, request operations.UpdateTraceProgressRequest, opts ...operations.Option) (*operations.UpdateTraceProgressResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

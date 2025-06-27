@@ -3,17 +3,17 @@
 package shared
 
 type PipelineInfo struct {
-	ProjectName   *string     `json:"projectName,omitempty"`
-	SimpleName    *string     `json:"simpleName,omitempty"`
-	RepositoryURL *string     `json:"repositoryUrl,omitempty"`
-	CloneURL      *string     `json:"cloneUrl,omitempty"`
-	Provider      *string     `json:"provider,omitempty"`
-	ConfigFiles   []string    `json:"configFiles,omitempty"`
-	WorkDirs      []string    `json:"workDirs,omitempty"`
-	Revisions     []string    `json:"revisions,omitempty"`
-	Profiles      []string    `json:"profiles,omitempty"`
-	Manifest      *WfManifest `json:"manifest,omitempty"`
-	Warnings      []string    `json:"warnings,omitempty"`
+	ProjectName        *string     `json:"projectName,omitempty"`
+	SimpleName         *string     `json:"simpleName,omitempty"`
+	RepositoryURL      *string     `json:"repositoryUrl,omitempty"`
+	CloneURL           *string     `json:"cloneUrl,omitempty"`
+	RepositoryProvider *string     `json:"provider,omitempty"`
+	ConfigFiles        []string    `json:"configFiles,omitempty"`
+	WorkDirs           []string    `json:"workDirs,omitempty"`
+	Revisions          []string    `json:"revisions,omitempty"`
+	Profiles           []string    `json:"profiles,omitempty"`
+	Manifest           *WfManifest `json:"manifest,omitempty"`
+	Warnings           []string    `json:"warnings,omitempty"`
 }
 
 func (o *PipelineInfo) GetProjectName() *string {
@@ -44,11 +44,11 @@ func (o *PipelineInfo) GetCloneURL() *string {
 	return o.CloneURL
 }
 
-func (o *PipelineInfo) GetProvider() *string {
+func (o *PipelineInfo) GetRepositoryProvider() *string {
 	if o == nil {
 		return nil
 	}
-	return o.Provider
+	return o.RepositoryProvider
 }
 
 func (o *PipelineInfo) GetConfigFiles() []string {

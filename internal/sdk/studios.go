@@ -18,9 +18,6 @@ import (
 
 // Studios and Studio sessions
 type Studios struct {
-	Templates   *Templates
-	Checkpoints *Checkpoints
-
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -31,14 +28,12 @@ func newStudios(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
-		Templates:        newTemplates(rootSDK, sdkConfig, hooks),
-		Checkpoints:      newCheckpoints(rootSDK, sdkConfig, hooks),
 	}
 }
 
-// List Studios
+// ListDataStudios - List Studios
 // Lists all available Studios in a user context. Append `?workspaceId` to list Studios in a workspace context.
-func (s *Studios) List(ctx context.Context, request operations.ListDataStudiosRequest, opts ...operations.Option) (*operations.ListDataStudiosResponse, error) {
+func (s *Studios) ListDataStudios(ctx context.Context, request operations.ListDataStudiosRequest, opts ...operations.Option) (*operations.ListDataStudiosResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -194,9 +189,9 @@ func (s *Studios) List(ctx context.Context, request operations.ListDataStudiosRe
 
 }
 
-// Create Studio
+// CreateDataStudio - Create Studio
 // Creates a new Studio environment, starting it by default. Default behavior can be changed using the query parameter `autoStart=false`.
-func (s *Studios) Create(ctx context.Context, request operations.CreateDataStudioRequest, opts ...operations.Option) (*operations.CreateDataStudioResponse, error) {
+func (s *Studios) CreateDataStudio(ctx context.Context, request operations.CreateDataStudioRequest, opts ...operations.Option) (*operations.CreateDataStudioResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -363,9 +358,9 @@ func (s *Studios) Create(ctx context.Context, request operations.CreateDataStudi
 
 }
 
-// ListMountedDataLinks - List mounted data-links
+// ListMountedDataLinkIds - List mounted data-links
 // Lists the IDs of all available data-links mounted in existing Studios. Append `orgId` or `?workspaceId` to list mounted data-links in an organization or workspace context, respectively.
-func (s *Studios) ListMountedDataLinks(ctx context.Context, request operations.ListMountedDataLinkIdsRequest, opts ...operations.Option) (*operations.ListMountedDataLinkIdsResponse, error) {
+func (s *Studios) ListMountedDataLinkIds(ctx context.Context, request operations.ListMountedDataLinkIdsRequest, opts ...operations.Option) (*operations.ListMountedDataLinkIdsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -498,9 +493,167 @@ func (s *Studios) ListMountedDataLinks(ctx context.Context, request operations.L
 
 }
 
-// ValidateName - Validate Studio name
+// ListDataStudioTemplates - List available Studio templates
+// Returns the list of available, configured Studio templates.
+func (s *Studios) ListDataStudioTemplates(ctx context.Context, request operations.ListDataStudioTemplatesRequest, opts ...operations.Option) (*operations.ListDataStudioTemplatesResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := url.JoinPath(baseURL, "/studios/templates")
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "ListDataStudioTemplates",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.ListDataStudioTemplatesResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DataStudioTemplatesListResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DataStudioTemplatesListResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// ValidateDataStudioName - Validate Studio name
 // Confirms the availability of the given name for a Studio in the user context. Append `?workspaceId=` to validate the name in a workspace context.
-func (s *Studios) ValidateName(ctx context.Context, request operations.ValidateDataStudioNameRequest, opts ...operations.Option) (*operations.ValidateDataStudioNameResponse, error) {
+func (s *Studios) ValidateDataStudioName(ctx context.Context, request operations.ValidateDataStudioNameRequest, opts ...operations.Option) (*operations.ValidateDataStudioNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -617,9 +770,9 @@ func (s *Studios) ValidateName(ctx context.Context, request operations.ValidateD
 
 }
 
-// Get - Describe Studio
+// DescribeDataStudio - Describe Studio
 // Retrieves the details of the Studio session identified by the given `sessionId`.
-func (s *Studios) Get(ctx context.Context, request operations.DescribeDataStudioRequest, opts ...operations.Option) (*operations.DescribeDataStudioResponse, error) {
+func (s *Studios) DescribeDataStudio(ctx context.Context, request operations.DescribeDataStudioRequest, opts ...operations.Option) (*operations.DescribeDataStudioResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -775,9 +928,9 @@ func (s *Studios) Get(ctx context.Context, request operations.DescribeDataStudio
 
 }
 
-// Delete Studio
+// DeleteDataStudio - Delete Studio
 // Deletes the Studio associated with the given Studio session ID.
-func (s *Studios) Delete(ctx context.Context, request operations.DeleteDataStudioRequest, opts ...operations.Option) (*operations.DeleteDataStudioResponse, error) {
+func (s *Studios) DeleteDataStudio(ctx context.Context, request operations.DeleteDataStudioRequest, opts ...operations.Option) (*operations.DeleteDataStudioResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -911,9 +1064,9 @@ func (s *Studios) Delete(ctx context.Context, request operations.DeleteDataStudi
 
 }
 
-// ListCheckpoints - List Studio checkpoints
+// ListDataStudioCheckpoints - List Studio checkpoints
 // Retrieves the list of checkpoints for the given Studio session ID.
-func (s *Studios) ListCheckpoints(ctx context.Context, request operations.ListDataStudioCheckpointsRequest, opts ...operations.Option) (*operations.ListDataStudioCheckpointsResponse, error) {
+func (s *Studios) ListDataStudioCheckpoints(ctx context.Context, request operations.ListDataStudioCheckpointsRequest, opts ...operations.Option) (*operations.ListDataStudioCheckpointsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1069,9 +1222,167 @@ func (s *Studios) ListCheckpoints(ctx context.Context, request operations.ListDa
 
 }
 
-// UpdateCheckpoint - Update Studio checkpoint name
+// GetDataStudioCheckpoint - Get Studio checkpoint
+// Retrieves the details of the given Studio checkpoint ID.
+func (s *Studios) GetDataStudioCheckpoint(ctx context.Context, request operations.GetDataStudioCheckpointRequest, opts ...operations.Option) (*operations.GetDataStudioCheckpointResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/studios/{sessionId}/checkpoints/{checkpointId}", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "GetDataStudioCheckpoint",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.GetDataStudioCheckpointResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.DataStudioCheckpointDto
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.DataStudioCheckpointDto = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// UpdateDataStudioCheckpoint - Update Studio checkpoint name
 // Updates the name of the given Studio checkpoint ID.
-func (s *Studios) UpdateCheckpoint(ctx context.Context, request operations.UpdateDataStudioCheckpointRequest, opts ...operations.Option) (*operations.UpdateDataStudioCheckpointResponse, error) {
+func (s *Studios) UpdateDataStudioCheckpoint(ctx context.Context, request operations.UpdateDataStudioCheckpointRequest, opts ...operations.Option) (*operations.UpdateDataStudioCheckpointResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1236,8 +1547,8 @@ func (s *Studios) UpdateCheckpoint(ctx context.Context, request operations.Updat
 
 }
 
-// ExtendLifespan - Extends the lifespan of the given Studio session ID.
-func (s *Studios) ExtendLifespan(ctx context.Context, request operations.ExtendDataStudioLifespanRequest, opts ...operations.Option) (*operations.ExtendDataStudioLifespanResponse, error) {
+// ExtendDataStudioLifespan - Extends the lifespan of the given Studio session ID.
+func (s *Studios) ExtendDataStudioLifespan(ctx context.Context, request operations.ExtendDataStudioLifespanRequest, opts ...operations.Option) (*operations.ExtendDataStudioLifespanResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1393,9 +1704,9 @@ func (s *Studios) ExtendLifespan(ctx context.Context, request operations.ExtendD
 
 }
 
-// Start Studio
+// StartDataStudio - Start Studio
 // Starts the given Studio session ID.
-func (s *Studios) Start(ctx context.Context, request operations.StartDataStudioRequest, opts ...operations.Option) (*operations.StartDataStudioResponse, error) {
+func (s *Studios) StartDataStudio(ctx context.Context, request operations.StartDataStudioRequest, opts ...operations.Option) (*operations.StartDataStudioResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1556,9 +1867,9 @@ func (s *Studios) Start(ctx context.Context, request operations.StartDataStudioR
 
 }
 
-// Stop Studio
+// StopDataStudio - Stop Studio
 // Stops the given Studio session ID.
-func (s *Studios) Stop(ctx context.Context, request operations.StopDataStudioRequest, opts ...operations.Option) (*operations.StopDataStudioResponse, error) {
+func (s *Studios) StopDataStudio(ctx context.Context, request operations.StopDataStudioRequest, opts ...operations.Option) (*operations.StopDataStudioResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

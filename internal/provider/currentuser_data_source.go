@@ -154,7 +154,7 @@ func (r *CurrentUserDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	res, err := r.client.Users.GetInfo(ctx)
+	res, err := r.client.Users.UserInfo(ctx)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

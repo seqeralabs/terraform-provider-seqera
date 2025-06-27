@@ -3,9 +3,9 @@
 package shared
 
 type DataLinkCredentials struct {
-	ID       string           `json:"id"`
-	Name     string           `json:"name"`
-	Provider DataLinkProvider `json:"provider"`
+	ID           string            `json:"id"`
+	Name         string            `json:"name"`
+	ProviderType *DataLinkProvider `json:"providerType,omitempty"`
 }
 
 func (o *DataLinkCredentials) GetID() string {
@@ -22,9 +22,9 @@ func (o *DataLinkCredentials) GetName() string {
 	return o.Name
 }
 
-func (o *DataLinkCredentials) GetProvider() DataLinkProvider {
+func (o *DataLinkCredentials) GetProviderType() *DataLinkProvider {
 	if o == nil {
-		return DataLinkProvider("")
+		return nil
 	}
-	return o.Provider
+	return o.ProviderType
 }

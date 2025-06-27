@@ -4,18 +4,18 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
-  # - target: $["paths"]["/data-links"]["post"]
-  #   update:
-  #     x-speakeasy-entity-operation: DataLink#create
-  # - target: $["paths"]["/data-links/{dataLinkId}"]["get"]
-  #   update:
-  #     x-speakeasy-entity-operation: DataLink#read
-  # - target: $["paths"]["/data-links/{dataLinkId}"]["put"]
-  #   update:
-  #     x-speakeasy-entity-operation: DataLink#update
-  # - target: $["paths"]["/data-links/{dataLinkId}"]["delete"]
-  #   update:
-  #     x-speakeasy-entity-operation: DataLink#delete
+  - target: $["paths"]["/data-links"]["post"]
+    update:
+      x-speakeasy-entity-operation: DataLink#create
+  - target: $["paths"]["/data-links/{dataLinkId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: DataLink#read
+  - target: $["paths"]["/data-links/{dataLinkId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: DataLink#update
+  - target: $["paths"]["/data-links/{dataLinkId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: DataLink#delete
   - target: $["paths"]["/datasets"]["get"]["x-speakeasy-entity-operation"]
     remove: true
   - target: $["paths"]["/datasets"]["post"]
@@ -228,9 +228,6 @@ actions:
   - target: $["components"]["schemas"]["CreateDatasetRequest"]
     update:
       x-speakeasy-entity: Datasets
-  - target: $["components"]["schemas"]
-    update:
-      x-speakeasy-entity: Datasets
   - target: $["components"]["schemas"]["CreateLabelRequest"]
     update:
       x-speakeasy-entity: Label
@@ -243,9 +240,6 @@ actions:
   - target: $["components"]["schemas"]["CreatePipelineResponse"]
     update:
       x-speakeasy-entity: Pipelines
-  - target: $["components"]["schemas"]
-    update:
-      x-speakeasy-entity: PipelineSecret
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
     remove: true
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
@@ -283,6 +277,18 @@ actions:
       #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
       #     azure_entra: "#/components/schemas/AzureEntraKeys"
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
+    update:
+      x-speakeasy-name-override: providerType
+  - target: $["components"]["schemas"]["DataLinkCreateRequest"]["properties"]["provider"]
+    update:
+      x-speakeasy-name-override: providerType
+  - target: $["components"]["schemas"]["DataLinkCredentials"]["properties"]["provider"]
+    update:
+      x-speakeasy-name-override: providerType
+  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: dataLinkId
+  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["provider"]
     update:
       x-speakeasy-name-override: providerType
   - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
@@ -379,6 +385,9 @@ actions:
     update:
       x-speakeasy-entity: Pipeline
       ## Users
+  - target: $["components"]["schemas"]["PipelineInfo"]["properties"]["provider"]
+    update:
+      x-speakeasy-name-override: repositoryProvider
   - target: $["components"]["schemas"]["PipelineSecret"]
     update:
       x-speakeasy-entity: PipelineSecret
@@ -442,60 +451,3 @@ actions:
     update:
       servers:
         - url: https://api.cloud.seqera.io
-  - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
-    update:
-      x-speakeasy-entity-operation: Teams#create
-  - target: $["paths"]["/orgs/{orgId}/teams/validate"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Teams#read
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Teams#update
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Teams#delete
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true

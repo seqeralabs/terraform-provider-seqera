@@ -31,9 +31,9 @@ func newTokens(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hooks.
 	}
 }
 
-// List tokens
+// TokenList - List tokens
 // Retrieves the list of all available API access tokens.
-func (s *Tokens) List(ctx context.Context, opts ...operations.Option) (*operations.TokenListResponse, error) {
+func (s *Tokens) TokenList(ctx context.Context, opts ...operations.Option) (*operations.TokenListResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -183,9 +183,9 @@ func (s *Tokens) List(ctx context.Context, opts ...operations.Option) (*operatio
 
 }
 
-// Create token
+// CreateToken - Create token
 // Creates an API access token with the details in the given request body.
-func (s *Tokens) Create(ctx context.Context, request shared.CreateAccessTokenRequest, opts ...operations.Option) (*operations.CreateTokenResponse, error) {
+func (s *Tokens) CreateToken(ctx context.Context, request shared.CreateAccessTokenRequest, opts ...operations.Option) (*operations.CreateTokenResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -344,9 +344,9 @@ func (s *Tokens) Create(ctx context.Context, request shared.CreateAccessTokenReq
 
 }
 
-// DeleteAll - Delete all user tokens
+// DeleteAllTokens - Delete all user tokens
 // Deletes all API access tokens in the user context.
-func (s *Tokens) DeleteAll(ctx context.Context, opts ...operations.Option) (*operations.DeleteAllTokensResponse, error) {
+func (s *Tokens) DeleteAllTokens(ctx context.Context, opts ...operations.Option) (*operations.DeleteAllTokensResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -476,9 +476,9 @@ func (s *Tokens) DeleteAll(ctx context.Context, opts ...operations.Option) (*ope
 
 }
 
-// Delete token
+// DeleteToken - Delete token
 // Deletes the given API access token ID.
-func (s *Tokens) Delete(ctx context.Context, request operations.DeleteTokenRequest, opts ...operations.Option) (*operations.DeleteTokenResponse, error) {
+func (s *Tokens) DeleteToken(ctx context.Context, request operations.DeleteTokenRequest, opts ...operations.Option) (*operations.DeleteTokenResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

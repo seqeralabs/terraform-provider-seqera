@@ -1046,8 +1046,6 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
-      x-speakeasy-entity-operation: Credential#delete
   /data-links:
     get:
       summary: List data-links 
@@ -11816,7 +11814,7 @@ components:
           type: string
           format: date-time
           readOnly: true
-      x-speakeasy-entity: teams
+      x-speakeasy-entity: Teams
     TeamDbDto:
       type: object
       properties:
@@ -11832,7 +11830,7 @@ components:
         membersCount:
           type: integer
           format: int64
-      x-speakeasy-entity: teams
+      x-speakeasy-entity: Teams
     TraceBeginRequest:
       type: object
       properties:

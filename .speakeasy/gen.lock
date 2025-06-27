@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 3c9adbc90dddd36e8937a995cb3bde2b
+  docChecksum: 7e845afb1eed94772e170956998c5542
   docVersion: 1.45.0
-  speakeasyVersion: 1.570.1
-  generationVersion: 2.638.1
+  speakeasyVersion: 1.570.2
+  generationVersion: 2.638.5
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
@@ -32,7 +32,9 @@ generatedFiles:
   - examples/data-sources/seqera_credential/data-source.tf
   - examples/data-sources/seqera_credentials/data-source.tf
   - examples/data-sources/seqera_current_user/data-source.tf
+  - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_data_studios/data-source.tf
+  - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_organization/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
@@ -49,6 +51,8 @@ generatedFiles:
   - examples/resources/seqera_compute_env/resource.tf
   - examples/resources/seqera_credential/import.sh
   - examples/resources/seqera_credential/resource.tf
+  - examples/resources/seqera_data_link/import.sh
+  - examples/resources/seqera_data_link/resource.tf
   - examples/resources/seqera_data_studios/resource.tf
   - examples/resources/seqera_datasets/resource.tf
   - examples/resources/seqera_orgs/resource.tf
@@ -93,6 +97,12 @@ generatedFiles:
   - internal/provider/credentials_data_source_sdk.go
   - internal/provider/currentuser_data_source.go
   - internal/provider/currentuser_data_source_sdk.go
+  - internal/provider/datalink_data_source.go
+  - internal/provider/datalink_data_source_sdk.go
+  - internal/provider/datalink_resource.go
+  - internal/provider/datalink_resource_sdk.go
+  - internal/provider/dataset_data_source.go
+  - internal/provider/dataset_data_source_sdk.go
   - internal/provider/datasets_resource.go
   - internal/provider/datasets_resource_sdk.go
   - internal/provider/datastudios_data_source.go
@@ -232,13 +242,10 @@ generatedFiles:
   - internal/sdk/.gitattributes
   - internal/sdk/actions.go
   - internal/sdk/avatars.go
-  - internal/sdk/checkpoints.go
   - internal/sdk/computeenvs.go
   - internal/sdk/credentials.go
   - internal/sdk/datalinks.go
-  - internal/sdk/dataset.go
   - internal/sdk/datasets.go
-  - internal/sdk/datasetsworkspaces.go
   - internal/sdk/ga4gh.go
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/hooks/hooks.go
@@ -254,11 +261,7 @@ generatedFiles:
   - internal/sdk/internal/utils/security.go
   - internal/sdk/internal/utils/utils.go
   - internal/sdk/labels.go
-  - internal/sdk/labelsworkflows.go
   - internal/sdk/launch.go
-  - internal/sdk/members.go
-  - internal/sdk/metadata.go
-  - internal/sdk/metrics.go
   - internal/sdk/models/errors/apierror.go
   - internal/sdk/models/operations/addlabelstoactions.go
   - internal/sdk/models/operations/addlabelstopipelines.go
@@ -718,20 +721,14 @@ generatedFiles:
   - internal/sdk/models/shared/workspacedbdto.go
   - internal/sdk/models/shared/wsprole.go
   - internal/sdk/orgs.go
-  - internal/sdk/participants.go
   - internal/sdk/pipelines.go
   - internal/sdk/pipelinesecrets.go
-  - internal/sdk/pipelineslaunch.go
   - internal/sdk/platforms.go
-  - internal/sdk/regions.go
   - internal/sdk/retry/config.go
   - internal/sdk/seqera.go
   - internal/sdk/serviceinfo.go
-  - internal/sdk/star.go
   - internal/sdk/studios.go
-  - internal/sdk/tasks.go
   - internal/sdk/teams.go
-  - internal/sdk/templates.go
   - internal/sdk/tokens.go
   - internal/sdk/trace.go
   - internal/sdk/types/bigint.go
@@ -739,10 +736,7 @@ generatedFiles:
   - internal/sdk/types/datetime.go
   - internal/sdk/types/decimal.go
   - internal/sdk/types/pointers.go
-  - internal/sdk/upload.go
   - internal/sdk/users.go
-  - internal/sdk/version.go
-  - internal/sdk/versions.go
   - internal/sdk/workflows.go
   - internal/sdk/workflowstar.go
   - internal/sdk/workspaces.go

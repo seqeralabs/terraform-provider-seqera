@@ -2335,7 +2335,7 @@ func (r *ActionResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Actions.Create(ctx, *request)
+	res, err := r.client.Actions.CreateAction(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -2372,7 +2372,7 @@ func (r *ActionResource) Create(ctx context.Context, req resource.CreateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Actions.Get(ctx, *request1)
+	res1, err := r.client.Actions.DescribeAction(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -2432,7 +2432,7 @@ func (r *ActionResource) Read(ctx context.Context, req resource.ReadRequest, res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Actions.Get(ctx, *request)
+	res, err := r.client.Actions.DescribeAction(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -2486,7 +2486,7 @@ func (r *ActionResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Actions.Update(ctx, *request)
+	res, err := r.client.Actions.UpdateAction(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -2514,7 +2514,7 @@ func (r *ActionResource) Update(ctx context.Context, req resource.UpdateRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Actions.Get(ctx, *request1)
+	res1, err := r.client.Actions.DescribeAction(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -2574,7 +2574,7 @@ func (r *ActionResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Actions.Delete(ctx, *request)
+	res, err := r.client.Actions.DeleteAction(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

@@ -137,7 +137,7 @@ func (r *OrganizationDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Orgs.Get(ctx, *request)
+	res, err := r.client.Orgs.DescribeOrganization(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

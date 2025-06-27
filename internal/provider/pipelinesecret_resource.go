@@ -145,7 +145,7 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.PipelineSecrets.Create(ctx, *request)
+	res, err := r.client.PipelineSecrets.CreatePipelineSecret(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -182,7 +182,7 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.PipelineSecrets.Get(ctx, *request1)
+	res1, err := r.client.PipelineSecrets.DescribePipelineSecret(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -242,7 +242,7 @@ func (r *PipelineSecretResource) Read(ctx context.Context, req resource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.PipelineSecrets.Get(ctx, *request)
+	res, err := r.client.PipelineSecrets.DescribePipelineSecret(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -296,7 +296,7 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.PipelineSecrets.Update(ctx, *request)
+	res, err := r.client.PipelineSecrets.UpdatePipelineSecret(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -324,7 +324,7 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.PipelineSecrets.Get(ctx, *request1)
+	res1, err := r.client.PipelineSecrets.DescribePipelineSecret(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -384,7 +384,7 @@ func (r *PipelineSecretResource) Delete(ctx context.Context, req resource.Delete
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.PipelineSecrets.Delete(ctx, *request)
+	res, err := r.client.PipelineSecrets.DeletePipelineSecret(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

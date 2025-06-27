@@ -145,24 +145,28 @@ func (r *DataStudiosDataSourceModel) RefreshFromSharedDataStudioListResponse(ctx
 					var credentials tfTypes.DataLinkCredentials
 					credentials.ID = types.StringValue(credentialsItem.ID)
 					credentials.Name = types.StringValue(credentialsItem.Name)
-					credentials.Provider = types.StringValue(string(credentialsItem.Provider))
+					if credentialsItem.ProviderType != nil {
+						credentials.ProviderType = types.StringValue(string(*credentialsItem.ProviderType))
+					} else {
+						credentials.ProviderType = types.StringNull()
+					}
 					if credentialsCount+1 > len(mountedDataLinks.Credentials) {
 						mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
 					} else {
 						mountedDataLinks.Credentials[credentialsCount].ID = credentials.ID
 						mountedDataLinks.Credentials[credentialsCount].Name = credentials.Name
-						mountedDataLinks.Credentials[credentialsCount].Provider = credentials.Provider
+						mountedDataLinks.Credentials[credentialsCount].ProviderType = credentials.ProviderType
 					}
 				}
+				mountedDataLinks.DataLinkID = types.StringPointerValue(mountedDataLinksItem.DataLinkID)
 				mountedDataLinks.Description = types.StringPointerValue(mountedDataLinksItem.Description)
 				mountedDataLinks.Hidden = types.BoolPointerValue(mountedDataLinksItem.Hidden)
-				mountedDataLinks.ID = types.StringPointerValue(mountedDataLinksItem.ID)
 				mountedDataLinks.Message = types.StringPointerValue(mountedDataLinksItem.Message)
 				mountedDataLinks.Name = types.StringPointerValue(mountedDataLinksItem.Name)
-				if mountedDataLinksItem.Provider != nil {
-					mountedDataLinks.Provider = types.StringValue(string(*mountedDataLinksItem.Provider))
+				if mountedDataLinksItem.ProviderType != nil {
+					mountedDataLinks.ProviderType = types.StringValue(string(*mountedDataLinksItem.ProviderType))
 				} else {
-					mountedDataLinks.Provider = types.StringNull()
+					mountedDataLinks.ProviderType = types.StringNull()
 				}
 				mountedDataLinks.PublicAccessible = types.BoolPointerValue(mountedDataLinksItem.PublicAccessible)
 				mountedDataLinks.Region = types.StringPointerValue(mountedDataLinksItem.Region)
@@ -181,12 +185,12 @@ func (r *DataStudiosDataSourceModel) RefreshFromSharedDataStudioListResponse(ctx
 					studios.MountedDataLinks = append(studios.MountedDataLinks, mountedDataLinks)
 				} else {
 					studios.MountedDataLinks[mountedDataLinksCount].Credentials = mountedDataLinks.Credentials
+					studios.MountedDataLinks[mountedDataLinksCount].DataLinkID = mountedDataLinks.DataLinkID
 					studios.MountedDataLinks[mountedDataLinksCount].Description = mountedDataLinks.Description
 					studios.MountedDataLinks[mountedDataLinksCount].Hidden = mountedDataLinks.Hidden
-					studios.MountedDataLinks[mountedDataLinksCount].ID = mountedDataLinks.ID
 					studios.MountedDataLinks[mountedDataLinksCount].Message = mountedDataLinks.Message
 					studios.MountedDataLinks[mountedDataLinksCount].Name = mountedDataLinks.Name
-					studios.MountedDataLinks[mountedDataLinksCount].Provider = mountedDataLinks.Provider
+					studios.MountedDataLinks[mountedDataLinksCount].ProviderType = mountedDataLinks.ProviderType
 					studios.MountedDataLinks[mountedDataLinksCount].PublicAccessible = mountedDataLinks.PublicAccessible
 					studios.MountedDataLinks[mountedDataLinksCount].Region = mountedDataLinks.Region
 					studios.MountedDataLinks[mountedDataLinksCount].ResourceRef = mountedDataLinks.ResourceRef

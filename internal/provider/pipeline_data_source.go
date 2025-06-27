@@ -223,7 +223,7 @@ func (r *PipelineDataSource) Read(ctx context.Context, req datasource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Pipelines.Get(ctx, *request)
+	res, err := r.client.Pipelines.DescribePipeline(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

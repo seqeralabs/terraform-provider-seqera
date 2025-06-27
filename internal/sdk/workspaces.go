@@ -17,8 +17,6 @@ import (
 
 // Workspaces in an organization context
 type Workspaces struct {
-	Participants *Participants
-
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -29,13 +27,12 @@ func newWorkspaces(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *ho
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
-		Participants:     newParticipants(rootSDK, sdkConfig, hooks),
 	}
 }
 
-// List organization workspaces
+// ListWorkspaces - List organization workspaces
 // Lists the organization workspaces in `orgId` to which the requesting user belongs.
-func (s *Workspaces) List(ctx context.Context, request operations.ListWorkspacesRequest, opts ...operations.Option) (*operations.ListWorkspacesResponse, error) {
+func (s *Workspaces) ListWorkspaces(ctx context.Context, request operations.ListWorkspacesRequest, opts ...operations.Option) (*operations.ListWorkspacesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -185,9 +182,9 @@ func (s *Workspaces) List(ctx context.Context, request operations.ListWorkspaces
 
 }
 
-// Create workspace
+// CreateWorkspace - Create workspace
 // Creates a new organization workspace.
-func (s *Workspaces) Create(ctx context.Context, request operations.CreateWorkspaceRequest, opts ...operations.Option) (*operations.CreateWorkspaceResponse, error) {
+func (s *Workspaces) CreateWorkspace(ctx context.Context, request operations.CreateWorkspaceRequest, opts ...operations.Option) (*operations.CreateWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -346,9 +343,9 @@ func (s *Workspaces) Create(ctx context.Context, request operations.CreateWorksp
 
 }
 
-// Validate workspace name
+// WorkspaceValidate - Validate workspace name
 // Confirms the validity of the given workspace name. Append `?name=<your_workspace_name>`.
-func (s *Workspaces) Validate(ctx context.Context, request operations.WorkspaceValidateRequest, opts ...operations.Option) (*operations.WorkspaceValidateResponse, error) {
+func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.WorkspaceValidateRequest, opts ...operations.Option) (*operations.WorkspaceValidateResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -484,9 +481,9 @@ func (s *Workspaces) Validate(ctx context.Context, request operations.WorkspaceV
 
 }
 
-// Describe workspace
+// DescribeWorkspace - Describe workspace
 // Retrieves the details of the workspace identified by the given `workspaceId`.
-func (s *Workspaces) Describe(ctx context.Context, request operations.DescribeWorkspaceRequest, opts ...operations.Option) (*operations.DescribeWorkspaceResponse, error) {
+func (s *Workspaces) DescribeWorkspace(ctx context.Context, request operations.DescribeWorkspaceRequest, opts ...operations.Option) (*operations.DescribeWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -636,9 +633,9 @@ func (s *Workspaces) Describe(ctx context.Context, request operations.DescribeWo
 
 }
 
-// Update workspace
+// UpdateWorkspace - Update workspace
 // Updates the details of the workspace identified by the given `workspaceId`.
-func (s *Workspaces) Update(ctx context.Context, request operations.UpdateWorkspaceRequest, opts ...operations.Option) (*operations.UpdateWorkspaceResponse, error) {
+func (s *Workspaces) UpdateWorkspace(ctx context.Context, request operations.UpdateWorkspaceRequest, opts ...operations.Option) (*operations.UpdateWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -797,9 +794,9 @@ func (s *Workspaces) Update(ctx context.Context, request operations.UpdateWorksp
 
 }
 
-// Delete workspace
+// DeleteWorkspace - Delete workspace
 // Deletes the workspace identified by the given `workspaceId`.
-func (s *Workspaces) Delete(ctx context.Context, request operations.DeleteWorkspaceRequest, opts ...operations.Option) (*operations.DeleteWorkspaceResponse, error) {
+func (s *Workspaces) DeleteWorkspace(ctx context.Context, request operations.DeleteWorkspaceRequest, opts ...operations.Option) (*operations.DeleteWorkspaceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -929,9 +926,165 @@ func (s *Workspaces) Delete(ctx context.Context, request operations.DeleteWorksp
 
 }
 
-// Leave workspace
+// ListWorkspaceParticipants - List workspace participants
+// Lists the participants of the workspace identified by the given `workspaceId`.
+func (s *Workspaces) ListWorkspaceParticipants(ctx context.Context, request operations.ListWorkspaceParticipantsRequest, opts ...operations.Option) (*operations.ListWorkspaceParticipantsResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/orgs/{orgId}/workspaces/{workspaceId}/participants", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "ListWorkspaceParticipants",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+
+	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.ListWorkspaceParticipantsResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 200:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ListParticipantsResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ListParticipantsResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// LeaveWorkspaceParticipant - Leave workspace
 // Removes the requesting user from the given workspace.
-func (s *Workspaces) Leave(ctx context.Context, request operations.LeaveWorkspaceParticipantRequest, opts ...operations.Option) (*operations.LeaveWorkspaceParticipantResponse, error) {
+func (s *Workspaces) LeaveWorkspaceParticipant(ctx context.Context, request operations.LeaveWorkspaceParticipantRequest, opts ...operations.Option) (*operations.LeaveWorkspaceParticipantResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1061,9 +1214,9 @@ func (s *Workspaces) Leave(ctx context.Context, request operations.LeaveWorkspac
 
 }
 
-// AddParticipant - Create workspace participant
+// CreateWorkspaceParticipant - Create workspace participant
 // Adds a new participant to the workspace identified by the given `workspaceId`.
-func (s *Workspaces) AddParticipant(ctx context.Context, request operations.CreateWorkspaceParticipantRequest, opts ...operations.Option) (*operations.CreateWorkspaceParticipantResponse, error) {
+func (s *Workspaces) CreateWorkspaceParticipant(ctx context.Context, request operations.CreateWorkspaceParticipantRequest, opts ...operations.Option) (*operations.CreateWorkspaceParticipantResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1222,9 +1375,9 @@ func (s *Workspaces) AddParticipant(ctx context.Context, request operations.Crea
 
 }
 
-// DeleteParticipant - Delete workspace participant
+// DeleteWorkspaceParticipant - Delete workspace participant
 // Deletes the given participant from the given workspace.
-func (s *Workspaces) DeleteParticipant(ctx context.Context, request operations.DeleteWorkspaceParticipantRequest, opts ...operations.Option) (*operations.DeleteWorkspaceParticipantResponse, error) {
+func (s *Workspaces) DeleteWorkspaceParticipant(ctx context.Context, request operations.DeleteWorkspaceParticipantRequest, opts ...operations.Option) (*operations.DeleteWorkspaceParticipantResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1354,9 +1507,148 @@ func (s *Workspaces) DeleteParticipant(ctx context.Context, request operations.D
 
 }
 
-// GetStudioSettings - List workspace Studios settings
+// UpdateWorkspaceParticipantRole - Update participant role
+// Updates the role of the given participant in the given workspace.
+func (s *Workspaces) UpdateWorkspaceParticipantRole(ctx context.Context, request operations.UpdateWorkspaceParticipantRoleRequest, opts ...operations.Option) (*operations.UpdateWorkspaceParticipantRoleResponse, error) {
+	o := operations.Options{}
+	supportedOptions := []string{
+		operations.SupportedOptionTimeout,
+	}
+
+	for _, opt := range opts {
+		if err := opt(&o, supportedOptions...); err != nil {
+			return nil, fmt.Errorf("error applying option: %w", err)
+		}
+	}
+
+	var baseURL string
+	if o.ServerURL == nil {
+		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
+	} else {
+		baseURL = *o.ServerURL
+	}
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role", request, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error generating URL: %w", err)
+	}
+
+	hookCtx := hooks.HookContext{
+		SDK:              s.rootSDK,
+		SDKConfiguration: s.sdkConfiguration,
+		BaseURL:          baseURL,
+		Context:          ctx,
+		OperationID:      "UpdateWorkspaceParticipantRole",
+		OAuth2Scopes:     []string{},
+		SecuritySource:   s.sdkConfiguration.Security,
+	}
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateParticipantRoleRequest", "json", `request:"mediaType=application/json"`)
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := o.Timeout
+	if timeout == nil {
+		timeout = s.sdkConfiguration.Timeout
+	}
+
+	if timeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *timeout)
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
+	if reqContentType != "" {
+		req.Header.Set("Content-Type", reqContentType)
+	}
+
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+		return nil, err
+	}
+
+	for k, v := range o.SetHeaders {
+		req.Header.Set(k, v)
+	}
+
+	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRes, err := s.sdkConfiguration.Client.Do(req)
+	if err != nil || httpRes == nil {
+		if err != nil {
+			err = fmt.Errorf("error sending request: %w", err)
+		} else {
+			err = fmt.Errorf("error sending request: no response")
+		}
+
+		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
+		return nil, err
+	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
+		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
+		if err != nil {
+			return nil, err
+		} else if _httpRes != nil {
+			httpRes = _httpRes
+		}
+	} else {
+		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	res := &operations.UpdateWorkspaceParticipantRoleResponse{
+		StatusCode:  httpRes.StatusCode,
+		ContentType: httpRes.Header.Get("Content-Type"),
+		RawResponse: httpRes,
+	}
+
+	switch {
+	case httpRes.StatusCode == 204:
+	case httpRes.StatusCode == 400:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.ErrorResponse
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.ErrorResponse = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	case httpRes.StatusCode == 403:
+	default:
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	}
+
+	return res, nil
+
+}
+
+// FindDataStudiosWorkspaceSettings - List workspace Studios settings
 // Retrieves the Studios settings of the workspace identified by the given `workspaceId`.
-func (s *Workspaces) GetStudioSettings(ctx context.Context, request operations.FindDataStudiosWorkspaceSettingsRequest, opts ...operations.Option) (*operations.FindDataStudiosWorkspaceSettingsResponse, error) {
+func (s *Workspaces) FindDataStudiosWorkspaceSettings(ctx context.Context, request operations.FindDataStudiosWorkspaceSettingsRequest, opts ...operations.Option) (*operations.FindDataStudiosWorkspaceSettingsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1515,9 +1807,9 @@ func (s *Workspaces) GetStudioSettings(ctx context.Context, request operations.F
 
 }
 
-// UpdateStudioSettings - Update workspace Studios settings
+// UpdateDataStudiosWorkspaceSettings - Update workspace Studios settings
 // Updates the Studios settings of the workspace identified by the given `workspaceId`.
-func (s *Workspaces) UpdateStudioSettings(ctx context.Context, request operations.UpdateDataStudiosWorkspaceSettingsRequest, opts ...operations.Option) (*operations.UpdateDataStudiosWorkspaceSettingsResponse, error) {
+func (s *Workspaces) UpdateDataStudiosWorkspaceSettings(ctx context.Context, request operations.UpdateDataStudiosWorkspaceSettingsRequest, opts ...operations.Option) (*operations.UpdateDataStudiosWorkspaceSettingsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1677,9 +1969,9 @@ func (s *Workspaces) UpdateStudioSettings(ctx context.Context, request operation
 
 }
 
-// ListForUser - List user workspaces and organizations
+// ListWorkspacesUser - List user workspaces and organizations
 // Lists the workspaces and organizations to which the user identified by the given `userId` belongs.
-func (s *Workspaces) ListForUser(ctx context.Context, request operations.ListWorkspacesUserRequest, opts ...operations.Option) (*operations.ListWorkspacesUserResponse, error) {
+func (s *Workspaces) ListWorkspacesUser(ctx context.Context, request operations.ListWorkspacesUserRequest, opts ...operations.Option) (*operations.ListWorkspacesUserResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

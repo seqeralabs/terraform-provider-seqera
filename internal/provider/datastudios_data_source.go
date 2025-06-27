@@ -201,19 +201,19 @@ func (r *DataStudiosDataSource) Schema(ctx context.Context, req datasource.Schem
 												"name": schema.StringAttribute{
 													Computed: true,
 												},
-												"provider": schema.StringAttribute{
+												"provider_type": schema.StringAttribute{
 													Computed: true,
 												},
 											},
 										},
 									},
+									"data_link_id": schema.StringAttribute{
+										Computed: true,
+									},
 									"description": schema.StringAttribute{
 										Computed: true,
 									},
 									"hidden": schema.BoolAttribute{
-										Computed: true,
-									},
-									"id": schema.StringAttribute{
 										Computed: true,
 									},
 									"message": schema.StringAttribute{
@@ -222,7 +222,7 @@ func (r *DataStudiosDataSource) Schema(ctx context.Context, req datasource.Schem
 									"name": schema.StringAttribute{
 										Computed: true,
 									},
-									"provider": schema.StringAttribute{
+									"provider_type": schema.StringAttribute{
 										Computed: true,
 									},
 									"public_accessible": schema.BoolAttribute{
@@ -398,7 +398,7 @@ func (r *DataStudiosDataSource) Read(ctx context.Context, req datasource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.List(ctx, *request)
+	res, err := r.client.Studios.ListDataStudios(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

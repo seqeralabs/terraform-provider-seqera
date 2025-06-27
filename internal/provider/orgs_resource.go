@@ -171,7 +171,7 @@ func (r *OrgsResource) Create(ctx context.Context, req resource.CreateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Orgs.Create(ctx, *request)
+	res, err := r.client.Orgs.CreateOrganization(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -251,7 +251,7 @@ func (r *OrgsResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Orgs.Update(ctx, *request)
+	res, err := r.client.Orgs.UpdateOrganization(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -302,7 +302,7 @@ func (r *OrgsResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Orgs.Delete(ctx, *request)
+	res, err := r.client.Orgs.DeleteOrganization(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
