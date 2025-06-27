@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: ebebf056aed28a2f9392f224c394b6ac
+  docChecksum: d2b6b59ab219a1400b222c42df695f2f
   docVersion: 1.45.0
   speakeasyVersion: 1.570.2
   generationVersion: 2.638.5
@@ -35,6 +35,7 @@ generatedFiles:
   - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_data_studios/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
+  - examples/data-sources/seqera_labels/data-source.tf
   - examples/data-sources/seqera_organization/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
@@ -56,6 +57,7 @@ generatedFiles:
   - examples/resources/seqera_data_link/resource.tf
   - examples/resources/seqera_data_studios/resource.tf
   - examples/resources/seqera_datasets/resource.tf
+  - examples/resources/seqera_labels/resource.tf
   - examples/resources/seqera_orgs/resource.tf
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
@@ -112,6 +114,10 @@ generatedFiles:
   - internal/provider/datastudios_data_source_sdk.go
   - internal/provider/datastudios_resource.go
   - internal/provider/datastudios_resource_sdk.go
+  - internal/provider/labels_data_source.go
+  - internal/provider/labels_data_source_sdk.go
+  - internal/provider/labels_resource.go
+  - internal/provider/labels_resource_sdk.go
   - internal/provider/organization_data_source.go
   - internal/provider/organization_data_source_sdk.go
   - internal/provider/orgs_resource.go

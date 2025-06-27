@@ -2579,6 +2579,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Labels#read
     post:
       summary: Create label
       description: "Creates a new label or returns an existing label based on name/value. By default the operation works in a user context, append `?workspaceId` to create/retrieve a label in a workspace context. Resource labels include `resource: true` and a `value`."
@@ -2616,6 +2617,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Labels#create
   /labels/{labelId}:
     put:
       summary: Update label
@@ -2661,6 +2663,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Labels#update
     delete:
       summary: Delete label
       description: Deletes the label identified by the given `labelId`.
@@ -2694,6 +2697,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Labels#delete
   /launch/{launchId}:
     get:
       summary: Describe Launch record
