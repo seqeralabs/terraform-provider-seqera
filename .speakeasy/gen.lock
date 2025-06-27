@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 7e845afb1eed94772e170956998c5542
+  docChecksum: c12e20f1d7c2d498ced119deb5a0b19b
   docVersion: 1.45.0
   speakeasyVersion: 1.570.2
   generationVersion: 2.638.5
@@ -39,6 +39,7 @@ generatedFiles:
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
   - examples/data-sources/seqera_pipelines/data-source.tf
+  - examples/data-sources/seqera_teams/data-source.tf
   - examples/data-sources/seqera_tokens/data-source.tf
   - examples/data-sources/seqera_user/data-source.tf
   - examples/data-sources/seqera_user_workspaces/data-source.tf
@@ -60,6 +61,8 @@ generatedFiles:
   - examples/resources/seqera_pipeline/resource.tf
   - examples/resources/seqera_pipeline_secret/import.sh
   - examples/resources/seqera_pipeline_secret/resource.tf
+  - examples/resources/seqera_teams/import.sh
+  - examples/resources/seqera_teams/resource.tf
   - examples/resources/seqera_tokens/resource.tf
   - examples/resources/seqera_workspace/import.sh
   - examples/resources/seqera_workspace/resource.tf
@@ -138,6 +141,10 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/teams_data_source.go
+  - internal/provider/teams_data_source_sdk.go
+  - internal/provider/teams_resource.go
+  - internal/provider/teams_resource_sdk.go
   - internal/provider/tokens_data_source.go
   - internal/provider/tokens_data_source_sdk.go
   - internal/provider/tokens_resource.go

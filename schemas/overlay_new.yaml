@@ -73,6 +73,63 @@ actions:
   - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
+    update:
+      x-speakeasy-entity-operation: Teams#create
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Teams#read
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Teams#update
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Teams#delete
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
   - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
@@ -279,18 +336,27 @@ actions:
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
     update:
       x-speakeasy-name-override: providerType
+  - target: $["components"]["schemas"]["DataLinkCreateRequest"]["properties"]
+    update:
+      providerType:
+        $ref: "#/components/schemas/DataLinkProvider"
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]["properties"]["provider"]
+    remove: true
+  - target: $["components"]["schemas"]["DataLinkCredentials"]["properties"]
     update:
-      x-speakeasy-name-override: providerType
+      providerType:
+        $ref: "#/components/schemas/DataLinkProvider"
   - target: $["components"]["schemas"]["DataLinkCredentials"]["properties"]["provider"]
-    update:
-      x-speakeasy-name-override: providerType
+    remove: true
   - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
     update:
       x-speakeasy-name-override: dataLinkId
-  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["provider"]
+  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]
     update:
-      x-speakeasy-name-override: providerType
+      providerType:
+        $ref: "#/components/schemas/DataLinkProvider"
+  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["provider"]
+    remove: true
   - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
     update:
       x-speakeasy-entity: DataStudio
@@ -407,13 +473,15 @@ actions:
   - target: $["components"]["schemas"]["Team"]["properties"]["id"]
     update:
       x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["Team"]["x-speakeasy-entity"]
-    remove: true
+  - target: $["components"]["schemas"]["Team"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: teamId
   - target: $["components"]["schemas"]["TeamDbDto"]["properties"]["teamId"]
     update:
       x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["TeamDbDto"]["x-speakeasy-entity"]
-    remove: true
+  - target: $["components"]["schemas"]["TeamDbDto"]["properties"]["teamId"]
+    update:
+      x-speakeasy-name-override: teamId
   - target: $["components"]["schemas"]["UnivaComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["UserDbDto"]
