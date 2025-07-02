@@ -5,7 +5,7 @@ sources:
         inputs:
             - location: schemas/seqera-final.yaml
         overlays:
-            - location: schemas/overlay_new.yaml
+            - location: schemas/overlay.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

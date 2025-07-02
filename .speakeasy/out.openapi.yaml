@@ -5507,6 +5507,7 @@ paths:
           schema:
             type: string
           x-speakeasy-param-optional: true
+          x-speakeasy-terraform-ignore: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -7878,6 +7879,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         connectionId:
           type: string
         workDir:
@@ -8277,6 +8279,7 @@ components:
         - properties:
             discriminator:
               type: string
+              x-speakeasy-param-suppress-computed-diff: true
             tenantId:
               type: string
             clientId:
@@ -8289,6 +8292,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         username:
           type: string
         password:
@@ -8299,6 +8303,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         batchName:
           type: string
         storageName:
@@ -8314,6 +8319,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         username:
           type: string
         password:
@@ -8334,6 +8340,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         username:
           type: string
         password:
@@ -8621,6 +8628,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         userName:
           type: string
         password:
@@ -9856,6 +9864,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         username:
           type: string
         password:
@@ -9868,6 +9877,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         username:
           type: string
         password:
@@ -9881,6 +9891,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         username:
           type: string
         password:
@@ -10135,6 +10146,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         data:
           type: string
           writeOnly: true
@@ -10253,11 +10265,13 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
     K8sSecurityKeys:
       type: object
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         certificate:
           type: string
         privateKey:
@@ -11370,6 +11384,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         privateKey:
           type: string
           writeOnly: true
@@ -11441,6 +11456,7 @@ components:
         - properties:
             discriminator:
               type: string
+              x-speakeasy-param-suppress-computed-diff: true
     ServiceInfo:
       type: object
       properties:

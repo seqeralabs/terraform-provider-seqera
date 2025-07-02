@@ -11,6 +11,7 @@ resource "seqera_credential" "aws_credential" {
       access_key      = var.access_key
       secret_key      = var.secret_key
       assume_role_arn = "arn:aws:iam::128997144437:role/TowerDevelopmentRole"  
+      discriminator = "aws"
     }
       
   }
