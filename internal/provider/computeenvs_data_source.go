@@ -23,6 +23,7 @@ func NewComputeEnvsDataSource() datasource.DataSource {
 
 // ComputeEnvsDataSource is the data source implementation.
 type ComputeEnvsDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

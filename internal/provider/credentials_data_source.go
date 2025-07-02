@@ -23,6 +23,7 @@ func NewCredentialsDataSource() datasource.DataSource {
 
 // CredentialsDataSource is the data source implementation.
 type CredentialsDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

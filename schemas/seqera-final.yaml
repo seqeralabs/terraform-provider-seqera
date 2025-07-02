@@ -8182,6 +8182,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-param-suppress-computed-diff: true
         accessKey:
           type: string
         secretKey:
@@ -8879,6 +8880,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          x-speakeasy-param-suppress-computed-diff: true
         dateCreated:
           type: string
           format: date-time
@@ -8888,6 +8890,7 @@ components:
           type: string
           format: date-time
           readOnly: true
+          x-speakeasy-param-suppress-computed-diff: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
       x-speakeasy-entity: Credential

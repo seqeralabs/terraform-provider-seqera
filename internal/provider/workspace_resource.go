@@ -31,6 +31,7 @@ func NewWorkspaceResource() resource.Resource {
 
 // WorkspaceResource defines the resource implementation.
 type WorkspaceResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
@@ -372,5 +373,4 @@ func (r *WorkspaceResource) ImportState(ctx context.Context, req resource.Import
 
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), data.ID)...)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("org_id"), data.OrgID)...)
-
 }

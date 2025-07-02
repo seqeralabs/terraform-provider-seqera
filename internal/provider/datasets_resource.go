@@ -29,6 +29,7 @@ func NewDatasetsResource() resource.Resource {
 
 // DatasetsResource defines the resource implementation.
 type DatasetsResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

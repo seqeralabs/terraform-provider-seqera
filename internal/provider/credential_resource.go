@@ -31,6 +31,7 @@ func NewCredentialResource() resource.Resource {
 
 // CredentialResource defines the resource implementation.
 type CredentialResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
@@ -665,12 +666,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"last_used": schema.StringAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},

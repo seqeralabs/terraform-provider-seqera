@@ -22,6 +22,7 @@ func NewCurrentUserDataSource() datasource.DataSource {
 
 // CurrentUserDataSource is the data source implementation.
 type CurrentUserDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

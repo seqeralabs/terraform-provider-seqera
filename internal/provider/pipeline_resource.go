@@ -28,6 +28,7 @@ func NewPipelineResource() resource.Resource {
 
 // PipelineResource defines the resource implementation.
 type PipelineResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

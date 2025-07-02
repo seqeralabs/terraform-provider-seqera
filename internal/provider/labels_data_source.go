@@ -23,6 +23,7 @@ func NewLabelsDataSource() datasource.DataSource {
 
 // LabelsDataSource is the data source implementation.
 type LabelsDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

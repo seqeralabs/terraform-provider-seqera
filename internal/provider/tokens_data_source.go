@@ -22,6 +22,7 @@ func NewTokensDataSource() datasource.DataSource {
 
 // TokensDataSource is the data source implementation.
 type TokensDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

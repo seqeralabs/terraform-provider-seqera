@@ -23,6 +23,7 @@ func NewDataLinkDataSource() datasource.DataSource {
 
 // DataLinkDataSource is the data source implementation.
 type DataLinkDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

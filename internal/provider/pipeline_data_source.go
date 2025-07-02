@@ -23,6 +23,7 @@ func NewPipelineDataSource() datasource.DataSource {
 
 // PipelineDataSource is the data source implementation.
 type PipelineDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

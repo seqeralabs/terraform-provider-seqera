@@ -23,6 +23,7 @@ func NewActionsDataSource() datasource.DataSource {
 
 // ActionsDataSource is the data source implementation.
 type ActionsDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

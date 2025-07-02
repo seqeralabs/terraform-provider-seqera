@@ -23,6 +23,7 @@ func NewDatasetDataSource() datasource.DataSource {
 
 // DatasetDataSource is the data source implementation.
 type DatasetDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

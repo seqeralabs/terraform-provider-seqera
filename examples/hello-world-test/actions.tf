@@ -23,6 +23,6 @@ resource "seqera_action" "my_action" {
     work_dir = local.work_dir
   }
   name         = "terraform-hello-world-action"
-  #source       = "github"
   workspace_id = resource.seqera_workspace.my_workspace.id
+  source = "tower" 
 }

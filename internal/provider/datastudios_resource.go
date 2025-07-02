@@ -32,6 +32,7 @@ func NewDataStudiosResource() resource.Resource {
 
 // DataStudiosResource defines the resource implementation.
 type DataStudiosResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

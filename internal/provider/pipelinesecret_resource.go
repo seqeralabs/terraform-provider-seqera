@@ -30,6 +30,7 @@ func NewPipelineSecretResource() resource.Resource {
 
 // PipelineSecretResource defines the resource implementation.
 type PipelineSecretResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

@@ -27,6 +27,7 @@ func NewTeamsResource() resource.Resource {
 
 // TeamsResource defines the resource implementation.
 type TeamsResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
@@ -403,5 +404,4 @@ func (r *TeamsResource) ImportState(ctx context.Context, req resource.ImportStat
 
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("org_id"), data.OrgID)...)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("team_id"), data.TeamID)...)
-
 }

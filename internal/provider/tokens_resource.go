@@ -29,6 +29,7 @@ func NewTokensResource() resource.Resource {
 
 // TokensResource defines the resource implementation.
 type TokensResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

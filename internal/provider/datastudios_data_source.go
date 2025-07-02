@@ -23,6 +23,7 @@ func NewDataStudiosDataSource() datasource.DataSource {
 
 // DataStudiosDataSource is the data source implementation.
 type DataStudiosDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

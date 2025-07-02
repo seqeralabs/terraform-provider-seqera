@@ -22,6 +22,7 @@ func NewTeamsDataSource() datasource.DataSource {
 
 // TeamsDataSource is the data source implementation.
 type TeamsDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

@@ -44,6 +44,7 @@ func NewComputeEnvResource() resource.Resource {
 
 // ComputeEnvResource defines the resource implementation.
 type ComputeEnvResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

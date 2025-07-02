@@ -30,6 +30,7 @@ func NewActionResource() resource.Resource {
 
 // ActionResource defines the resource implementation.
 type ActionResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

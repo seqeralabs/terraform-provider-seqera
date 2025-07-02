@@ -24,6 +24,7 @@ func NewOrgsResource() resource.Resource {
 
 // OrgsResource defines the resource implementation.
 type OrgsResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

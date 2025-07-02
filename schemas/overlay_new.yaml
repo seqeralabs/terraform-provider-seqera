@@ -30,6 +30,18 @@ actions:
   - target: $["paths"]["/datasets/{datasetId}/metadata"]["get"]
     update:
       x-speakeasy-entity-operation: Dataset#read
+  - target: $["paths"]["/labels"]["get"]
+    update:
+      x-speakeasy-entity-operation: Labels#read
+  - target: $["paths"]["/labels"]["post"]
+    update:
+      x-speakeasy-entity-operation: Labels#create
+  - target: $["paths"]["/labels/{labelId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Labels#update
+  - target: $["paths"]["/labels/{labelId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Labels#delete
   - target: $["paths"]["/orgs"]["post"]
     update:
       x-speakeasy-entity-operation: Orgs#create
@@ -261,6 +273,9 @@ actions:
   - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["AzBatchConfig"]["properties"]["discriminator"]["readOnly"]
@@ -336,6 +351,12 @@ actions:
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
     update:
       x-speakeasy-name-override: providerType
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
     update:
       x-speakeasy-name-override: dataLinkId

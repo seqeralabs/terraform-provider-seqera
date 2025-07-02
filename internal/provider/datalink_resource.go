@@ -31,6 +31,7 @@ func NewDataLinkResource() resource.Resource {
 
 // DataLinkResource defines the resource implementation.
 type DataLinkResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

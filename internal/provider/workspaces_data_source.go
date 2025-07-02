@@ -23,6 +23,7 @@ func NewWorkspacesDataSource() datasource.DataSource {
 
 // WorkspacesDataSource is the data source implementation.
 type WorkspacesDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

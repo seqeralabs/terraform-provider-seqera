@@ -28,6 +28,7 @@ func NewLabelsResource() resource.Resource {
 
 // LabelsResource defines the resource implementation.
 type LabelsResource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 

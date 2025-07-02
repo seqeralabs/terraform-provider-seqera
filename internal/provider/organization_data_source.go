@@ -23,6 +23,7 @@ func NewOrganizationDataSource() datasource.DataSource {
 
 // OrganizationDataSource is the data source implementation.
 type OrganizationDataSource struct {
+	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
