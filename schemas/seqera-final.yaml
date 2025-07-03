@@ -8779,6 +8779,9 @@ components:
           type: string
         value:
           type: string
+      required:
+        - name
+        - value
     CreatePipelineSecretResponse:
       type: object
       properties:
@@ -8819,8 +8822,6 @@ components:
           $ref: "#/components/schemas/Workspace"
     Credentials:
       required:
-        - name
-        - provider
         - name
         - provider
         - keys

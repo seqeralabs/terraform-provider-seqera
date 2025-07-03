@@ -306,6 +306,8 @@ actions:
   - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
     update:
       x-speakeasy-entity: Tokens
+  - target: $["components"]["schemas"]["CreateDatasetRequest"]["required"][*]
+    remove: true
   - target: $["components"]["schemas"]["CreateDatasetRequest"]
     update:
       x-speakeasy-entity: Datasets
@@ -326,6 +328,13 @@ actions:
   - target: $["components"]["schemas"]["CreatePipelineResponse"]
     update:
       x-speakeasy-entity: Pipelines
+  - target: $["components"]["schemas"]["CreatePipelineSecretRequest"]["required"]
+    remove: true
+  - target: $["components"]["schemas"]["CreatePipelineSecretRequest"]
+    update:
+      required:
+        - name
+        - value
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
     remove: true
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
@@ -371,6 +380,8 @@ actions:
   - target: $["components"]["schemas"]["Credentials"]["properties"]["lastUpdated"]
     update:
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]["required"][*]
+    remove: true
   - target: $["components"]["schemas"]["Credentials"]["required"]
     update:
       - name
@@ -379,6 +390,8 @@ actions:
   - target: $["paths"]["/credentials"]["post"]["parameters"][0]
     update:
       required: true
+  - target: $["components"]["schemas"]["DataLinkCreateRequest"]["required"][*]
+    remove: true
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]
     update:
       required:
@@ -424,7 +437,9 @@ actions:
   - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]
     update:
       x-speakeasy-entity: ComputeEnv
-  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["x-speakeasy-entity"]
+    remove: true
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]
     update:
       x-speakeasy-entity: Workflows
   - target: $["components"]["schemas"]["EksComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]

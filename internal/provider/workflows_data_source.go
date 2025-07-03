@@ -29,20 +29,19 @@ type WorkflowsDataSource struct {
 
 // WorkflowsDataSourceModel describes the data model.
 type WorkflowsDataSourceModel struct {
-	Attributes       []types.String              `queryParam:"style=form,explode=false,name=attributes" tfsdk:"attributes"`
-	JobInfo          *tfTypes.JobInfoDto         `tfsdk:"job_info"`
-	Labels           []tfTypes.LabelDbDto        `tfsdk:"labels"`
-	Messages         []types.String              `tfsdk:"messages"`
-	Optimized        types.Bool                  `tfsdk:"optimized"`
-	OrgID            types.Int64                 `tfsdk:"org_id"`
-	OrgName          types.String                `tfsdk:"org_name"`
-	Platform         *tfTypes.ComputePlatformDto `tfsdk:"platform"`
-	Progress         *tfTypes.ProgressData       `tfsdk:"progress"`
-	Workflow         *tfTypes.Workflow           `tfsdk:"workflow"`
-	WorkflowID       types.String                `tfsdk:"workflow_id"`
-	WorkspaceID      types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceName    types.String                `tfsdk:"workspace_name"`
-	XSpeakeasyEntity types.String                `tfsdk:"x_speakeasy_entity"`
+	Attributes    []types.String              `queryParam:"style=form,explode=false,name=attributes" tfsdk:"attributes"`
+	JobInfo       *tfTypes.JobInfoDto         `tfsdk:"job_info"`
+	Labels        []tfTypes.LabelDbDto        `tfsdk:"labels"`
+	Messages      []types.String              `tfsdk:"messages"`
+	Optimized     types.Bool                  `tfsdk:"optimized"`
+	OrgID         types.Int64                 `tfsdk:"org_id"`
+	OrgName       types.String                `tfsdk:"org_name"`
+	Platform      *tfTypes.ComputePlatformDto `tfsdk:"platform"`
+	Progress      *tfTypes.ProgressData       `tfsdk:"progress"`
+	Workflow      *tfTypes.Workflow           `tfsdk:"workflow"`
+	WorkflowID    types.String                `tfsdk:"workflow_id"`
+	WorkspaceID   types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceName types.String                `tfsdk:"workspace_name"`
 }
 
 // Metadata returns the data source type name.
@@ -569,10 +568,6 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"workspace_name": schema.StringAttribute{
 				Computed: true,
-			},
-			"x_speakeasy_entity": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
 			},
 		},
 	}

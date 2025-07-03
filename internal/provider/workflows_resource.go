@@ -82,7 +82,6 @@ type WorkflowsResourceModel struct {
 	WorkspaceID         types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 	WorkspaceName       types.String                `tfsdk:"workspace_name"`
 	WorkspaceSecrets    []types.String              `tfsdk:"workspace_secrets"`
-	XSpeakeasyEntity    types.String                `tfsdk:"x_speakeasy_entity"`
 }
 
 func (r *WorkflowsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -943,13 +942,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				ElementType: types.StringType,
 				Description: `Requires replacement if changed.`,
-			},
-			"x_speakeasy_entity": schema.StringAttribute{
-				Computed:    true,
-				Description: `Parsed as JSON.`,
-				Validators: []validator.String{
-					validators.IsValidJSON(),
-				},
 			},
 		},
 	}

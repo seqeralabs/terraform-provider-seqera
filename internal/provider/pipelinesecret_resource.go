@@ -76,8 +76,7 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -92,7 +91,7 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 				Description: `Secret numeric identifier`,
 			},
 			"value": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

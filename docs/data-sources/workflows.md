@@ -46,7 +46,6 @@ data "seqera_workflows" "my_workflows" {
 - `progress` (Attributes) (see [below for nested schema](#nestedatt--progress))
 - `workflow` (Attributes) (see [below for nested schema](#nestedatt--workflow))
 - `workspace_name` (String)
-- `x_speakeasy_entity` (String) Parsed as JSON.
 
 <a id="nestedatt--job_info"></a>
 ### Nested Schema for `job_info`

@@ -301,12 +301,6 @@ func (r *WorkflowsDataSourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx
 		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
-		if resp.XSpeakeasyEntity == nil {
-			r.XSpeakeasyEntity = types.StringNull()
-		} else {
-			xSpeakeasyEntityResult, _ := json.Marshal(resp.XSpeakeasyEntity)
-			r.XSpeakeasyEntity = types.StringValue(string(xSpeakeasyEntityResult))
-		}
 	}
 
 	return diags

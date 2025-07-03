@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 4ad777d17a2fd262a50fdbee84a4b91e
+  docChecksum: f7b3ba6fe53a0a2e25835a8fd1a2a15e
   docVersion: 1.45.0
   speakeasyVersion: 1.575.3
   generationVersion: 2.648.5
@@ -1881,7 +1881,7 @@ examples:
   CreatePipelineSecret:
     speakeasy-default-create-pipeline-secret:
       requestBody:
-        application/json: {}
+        application/json: {"name": "<value>", "value": "<value>"}
       responses:
         "200":
           application/json: {}

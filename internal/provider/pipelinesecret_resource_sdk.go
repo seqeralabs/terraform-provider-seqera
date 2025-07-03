@@ -14,18 +14,12 @@ import (
 func (r *PipelineSecretResourceModel) ToSharedCreatePipelineSecretRequest(ctx context.Context) (*shared.CreatePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	value := new(string)
-	if !r.Value.IsUnknown() && !r.Value.IsNull() {
-		*value = r.Value.ValueString()
-	} else {
-		value = nil
-	}
+	var name string
+	name = r.Name.ValueString()
+
+	var value string
+	value = r.Value.ValueString()
+
 	out := shared.CreatePipelineSecretRequest{
 		Name:  name,
 		Value: value,

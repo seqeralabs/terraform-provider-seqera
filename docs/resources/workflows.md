@@ -104,7 +104,6 @@ resource "seqera_workflows" "my_workflows" {
 - `workflow` (Attributes) (see [below for nested schema](#nestedatt--workflow))
 - `workflow_id` (String) Workflow string identifier
 - `workspace_name` (String)
-- `x_speakeasy_entity` (String) Parsed as JSON.
 
 <a id="nestedatt--job_info"></a>
 ### Nested Schema for `job_info`

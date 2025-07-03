@@ -3,20 +3,20 @@
 package shared
 
 type CreatePipelineSecretRequest struct {
-	Name  *string `json:"name,omitempty"`
-	Value *string `json:"value,omitempty"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
-func (o *CreatePipelineSecretRequest) GetName() *string {
+func (o *CreatePipelineSecretRequest) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *CreatePipelineSecretRequest) GetValue() *string {
+func (o *CreatePipelineSecretRequest) GetValue() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Value
 }

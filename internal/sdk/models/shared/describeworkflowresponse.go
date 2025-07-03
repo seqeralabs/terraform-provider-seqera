@@ -3,18 +3,17 @@
 package shared
 
 type DescribeWorkflowResponse struct {
-	Workflow         *Workflow           `json:"workflow,omitempty"`
-	Progress         *ProgressData       `json:"progress,omitempty"`
-	Platform         *ComputePlatformDto `json:"platform,omitempty"`
-	JobInfo          *JobInfoDto         `json:"jobInfo,omitempty"`
-	OrgID            *int64              `json:"orgId,omitempty"`
-	OrgName          *string             `json:"orgName,omitempty"`
-	WorkspaceID      *int64              `json:"workspaceId,omitempty"`
-	WorkspaceName    *string             `json:"workspaceName,omitempty"`
-	Labels           []LabelDbDto        `json:"labels,omitempty"`
-	Optimized        *bool               `json:"optimized,omitempty"`
-	Messages         []string            `json:"messages,omitempty"`
-	XSpeakeasyEntity any                 `json:"x-speakeasy-entity,omitempty"`
+	Workflow      *Workflow           `json:"workflow,omitempty"`
+	Progress      *ProgressData       `json:"progress,omitempty"`
+	Platform      *ComputePlatformDto `json:"platform,omitempty"`
+	JobInfo       *JobInfoDto         `json:"jobInfo,omitempty"`
+	OrgID         *int64              `json:"orgId,omitempty"`
+	OrgName       *string             `json:"orgName,omitempty"`
+	WorkspaceID   *int64              `json:"workspaceId,omitempty"`
+	WorkspaceName *string             `json:"workspaceName,omitempty"`
+	Labels        []LabelDbDto        `json:"labels,omitempty"`
+	Optimized     *bool               `json:"optimized,omitempty"`
+	Messages      []string            `json:"messages,omitempty"`
 }
 
 func (o *DescribeWorkflowResponse) GetWorkflow() *Workflow {
@@ -92,11 +91,4 @@ func (o *DescribeWorkflowResponse) GetMessages() []string {
 		return nil
 	}
 	return o.Messages
-}
-
-func (o *DescribeWorkflowResponse) GetXSpeakeasyEntity() any {
-	if o == nil {
-		return nil
-	}
-	return o.XSpeakeasyEntity
 }

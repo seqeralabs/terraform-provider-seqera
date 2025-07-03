@@ -8705,7 +8705,6 @@ components:
       x-speakeasy-entity: Datasets
       required:
         - name
-        - name
     CreateDatasetResponse:
       type: object
       properties:
@@ -8780,6 +8779,9 @@ components:
           type: string
         value:
           type: string
+      required:
+        - name
+        - value
     CreatePipelineSecretResponse:
       type: object
       properties:
@@ -8820,11 +8822,6 @@ components:
           $ref: "#/components/schemas/Workspace"
     Credentials:
       required:
-        - name
-        - provider
-        - name
-        - provider
-        - keys
         - name
         - provider
         - keys
@@ -8953,13 +8950,6 @@ components:
         credentialsId:
           type: string
       required:
-        - credentialsId
-        - description
-        - name
-        - provider
-        - publicAccessible
-        - resourceRef
-        - type
         - credentialsId
         - description
         - name
@@ -9701,7 +9691,7 @@ components:
           type: array
           items:
             type: string
-        x-speakeasy-entity: Workflows
+      x-speakeasy-entity: Workflows
     DescribeWorkspaceResponse:
       type: object
       properties:
