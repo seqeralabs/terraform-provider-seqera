@@ -42,12 +42,12 @@
 
 resource "seqera_workflows" "my_workflows" {
   compute_env_id = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
-  pipeline             = resource.seqera_pipeline.hello_world_minimal.name
-  pull_latest          = true
-  resume               = true
-  revision             = "master"
-  source_workspace_id  = resource.seqera_workspace.my_workspace.id
-  stub_run             = true
+  pipeline             = "nextflow-io/hello"
+  # pull_latest          = true
+  # resume               = true
+  # revision             = "master"
+  # source_workspace_id  = resource.seqera_workspace.my_workspace.id
+  # stub_run             = true
   work_dir     = local.work_dir
   workspace_id = resource.seqera_workspace.my_workspace.id
 }
