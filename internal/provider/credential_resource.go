@@ -37,19 +37,19 @@ type CredentialResource struct {
 
 // CredentialResourceModel describes the resource data model.
 type CredentialResourceModel struct {
-	BaseURL       types.String          `tfsdk:"base_url"`
-	Category      types.String          `tfsdk:"category"`
-	Checked       types.Bool            `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
-	CredentialsID types.String          `tfsdk:"credentials_id"`
-	DateCreated   types.String          `tfsdk:"date_created"`
-	Deleted       types.Bool            `tfsdk:"deleted"`
-	Description   types.String          `tfsdk:"description"`
-	Keys          *tfTypes.SecurityKeys `tfsdk:"keys"`
-	LastUpdated   types.String          `tfsdk:"last_updated"`
-	LastUsed      types.String          `tfsdk:"last_used"`
-	Name          types.String          `tfsdk:"name"`
-	ProviderType  types.String          `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL       types.String         `tfsdk:"base_url"`
+	Category      types.String         `tfsdk:"category"`
+	Checked       types.Bool           `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
+	CredentialsID types.String         `tfsdk:"credentials_id"`
+	DateCreated   types.String         `tfsdk:"date_created"`
+	Deleted       types.Bool           `tfsdk:"deleted"`
+	Description   types.String         `tfsdk:"description"`
+	Keys          tfTypes.SecurityKeys `tfsdk:"keys"`
+	LastUpdated   types.String         `tfsdk:"last_updated"`
+	LastUsed      types.String         `tfsdk:"last_used"`
+	Name          types.String         `tfsdk:"name"`
+	ProviderType  types.String         `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64          `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *CredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -106,7 +106,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional: true,
 			},
 			"keys": schema.SingleNestedAttribute{
-				Optional: true,
+				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"aws": schema.SingleNestedAttribute{
 						Optional: true,
@@ -711,7 +711,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 		},

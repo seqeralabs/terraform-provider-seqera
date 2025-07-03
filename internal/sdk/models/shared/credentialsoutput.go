@@ -82,7 +82,7 @@ type CredentialsOutput struct {
 	LastUsed      *time.Time              `json:"lastUsed,omitempty"`
 	DateCreated   *time.Time              `json:"dateCreated,omitempty"`
 	LastUpdated   *time.Time              `json:"lastUpdated,omitempty"`
-	Keys          *SecurityKeysOutput     `json:"keys,omitempty"`
+	Keys          SecurityKeysOutput      `json:"keys"`
 }
 
 func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -166,116 +166,71 @@ func (o *CredentialsOutput) GetLastUpdated() *time.Time {
 	return o.LastUpdated
 }
 
-func (o *CredentialsOutput) GetKeys() *SecurityKeysOutput {
+func (o *CredentialsOutput) GetKeys() SecurityKeysOutput {
 	if o == nil {
-		return nil
+		return SecurityKeysOutput{}
 	}
 	return o.Keys
 }
 
 func (o *CredentialsOutput) GetKeysGithub() *GitHubSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.GitHubSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().GitHubSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysAzurerepos() *AzureReposSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureReposSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().AzureReposSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysAzureEntra() *AzureEntraKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureEntraKeysOutput
-	}
-	return nil
+	return o.GetKeys().AzureEntraKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysContainerReg() *ContainerRegistryKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.ContainerRegistryKeysOutput
-	}
-	return nil
+	return o.GetKeys().ContainerRegistryKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysTwAgent() *AgentSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AgentSecurityKeys
-	}
-	return nil
+	return o.GetKeys().AgentSecurityKeys
 }
 
 func (o *CredentialsOutput) GetKeysK8s() *K8sSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.K8sSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().K8sSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysSSH() *SSHSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.SSHSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().SSHSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysGoogle() *GoogleSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.GoogleSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().GoogleSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysBitbucket() *BitBucketSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.BitBucketSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().BitBucketSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysGitea() *GiteaSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.GiteaSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().GiteaSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysSeqeracompute() *SeqeraComputeSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.SeqeraComputeSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().SeqeraComputeSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysCodecommit() *CodeCommitSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.CodeCommitSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().CodeCommitSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysGitlab() *GitLabSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.GitLabSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().GitLabSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysAws() *AwsSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.AwsSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().AwsSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureSecurityKeysOutput
-	}
-	return nil
+	return o.GetKeys().AzureSecurityKeysOutput
 }
 
 type CredentialsInput struct {
@@ -285,7 +240,7 @@ type CredentialsInput struct {
 	ProviderType  CredentialsProviderType `json:"provider"`
 	BaseURL       *string                 `json:"baseUrl,omitempty"`
 	Category      *string                 `json:"category,omitempty"`
-	Keys          *SecurityKeys           `json:"keys,omitempty"`
+	Keys          SecurityKeys            `json:"keys"`
 }
 
 func (o *CredentialsInput) GetCredentialsID() *string {
@@ -330,114 +285,69 @@ func (o *CredentialsInput) GetCategory() *string {
 	return o.Category
 }
 
-func (o *CredentialsInput) GetKeys() *SecurityKeys {
+func (o *CredentialsInput) GetKeys() SecurityKeys {
 	if o == nil {
-		return nil
+		return SecurityKeys{}
 	}
 	return o.Keys
 }
 
 func (o *CredentialsInput) GetKeysGithub() *GitHubSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GitHubSecurityKeys
-	}
-	return nil
+	return o.GetKeys().GitHubSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysAzurerepos() *AzureReposSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureReposSecurityKeys
-	}
-	return nil
+	return o.GetKeys().AzureReposSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysAzureEntra() *AzureEntraKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureEntraKeys
-	}
-	return nil
+	return o.GetKeys().AzureEntraKeys
 }
 
 func (o *CredentialsInput) GetKeysContainerReg() *ContainerRegistryKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.ContainerRegistryKeys
-	}
-	return nil
+	return o.GetKeys().ContainerRegistryKeys
 }
 
 func (o *CredentialsInput) GetKeysTwAgent() *AgentSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AgentSecurityKeys
-	}
-	return nil
+	return o.GetKeys().AgentSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysK8s() *K8sSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.K8sSecurityKeys
-	}
-	return nil
+	return o.GetKeys().K8sSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysSSH() *SSHSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.SSHSecurityKeys
-	}
-	return nil
+	return o.GetKeys().SSHSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysGoogle() *GoogleSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GoogleSecurityKeys
-	}
-	return nil
+	return o.GetKeys().GoogleSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysBitbucket() *BitBucketSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.BitBucketSecurityKeys
-	}
-	return nil
+	return o.GetKeys().BitBucketSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysGitea() *GiteaSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GiteaSecurityKeys
-	}
-	return nil
+	return o.GetKeys().GiteaSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysSeqeracompute() *SeqeraComputeSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.SeqeraComputeSecurityKeys
-	}
-	return nil
+	return o.GetKeys().SeqeraComputeSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysCodecommit() *CodeCommitSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.CodeCommitSecurityKeys
-	}
-	return nil
+	return o.GetKeys().CodeCommitSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysGitlab() *GitLabSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.GitLabSecurityKeys
-	}
-	return nil
+	return o.GetKeys().GitLabSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysAws() *AwsSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AwsSecurityKeys
-	}
-	return nil
+	return o.GetKeys().AwsSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysAzure() *AzureSecurityKeys {
-	if v := o.GetKeys(); v != nil {
-		return v.AzureSecurityKeys
-	}
-	return nil
+	return o.GetKeys().AzureSecurityKeys
 }

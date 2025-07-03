@@ -29,18 +29,18 @@ type CredentialDataSource struct {
 
 // CredentialDataSourceModel describes the data model.
 type CredentialDataSourceModel struct {
-	BaseURL       types.String                `tfsdk:"base_url"`
-	Category      types.String                `tfsdk:"category"`
-	CredentialsID types.String                `tfsdk:"credentials_id"`
-	DateCreated   types.String                `tfsdk:"date_created"`
-	Deleted       types.Bool                  `tfsdk:"deleted"`
-	Description   types.String                `tfsdk:"description"`
-	Keys          *tfTypes.SecurityKeysOutput `tfsdk:"keys"`
-	LastUpdated   types.String                `tfsdk:"last_updated"`
-	LastUsed      types.String                `tfsdk:"last_used"`
-	Name          types.String                `tfsdk:"name"`
-	ProviderType  types.String                `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL       types.String               `tfsdk:"base_url"`
+	Category      types.String               `tfsdk:"category"`
+	CredentialsID types.String               `tfsdk:"credentials_id"`
+	DateCreated   types.String               `tfsdk:"date_created"`
+	Deleted       types.Bool                 `tfsdk:"deleted"`
+	Description   types.String               `tfsdk:"description"`
+	Keys          tfTypes.SecurityKeysOutput `tfsdk:"keys"`
+	LastUpdated   types.String               `tfsdk:"last_updated"`
+	LastUsed      types.String               `tfsdk:"last_used"`
+	Name          types.String               `tfsdk:"name"`
+	ProviderType  types.String               `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64                `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.

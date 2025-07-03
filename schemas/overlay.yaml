@@ -366,6 +366,14 @@ actions:
   - target: $["components"]["schemas"]["Credentials"]["properties"]["lastUpdated"]
     update:
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]["required"]
+    update:
+      - name
+      - provider
+      - keys
+  - target: $["paths"]["/credentials"]["post"]["parameters"][0]
+    update:
+      required: true
   - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
     update:
       x-speakeasy-name-override: dataLinkId

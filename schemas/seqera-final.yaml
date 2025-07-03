@@ -837,6 +837,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Credentials create request
         content:
@@ -2678,7 +2679,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-readonly: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -6599,7 +6599,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#create 
+      x-speakeasy-entity-operation: Workflows#create
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -8817,6 +8817,9 @@ components:
       required:
         - name
         - provider
+        - name
+        - provider
+        - keys
       type: object
       properties:
         id:

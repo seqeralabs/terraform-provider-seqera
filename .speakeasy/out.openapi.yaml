@@ -837,6 +837,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Credentials create request
         content:
@@ -8816,6 +8817,12 @@ components:
       required:
         - name
         - provider
+        - name
+        - provider
+        - keys
+        - name
+        - provider
+        - keys
       type: object
       properties:
         id:

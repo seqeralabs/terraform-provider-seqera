@@ -36,8 +36,10 @@ resource "seqera_credential" "my_credential" {
 
 ### Required
 
+- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `name` (String)
 - `provider_type` (String) must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
+- `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
 
@@ -46,8 +48,6 @@ resource "seqera_credential" "my_credential" {
 - `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
 - `credentials_id` (String) Credentials string identifier
 - `description` (String)
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 

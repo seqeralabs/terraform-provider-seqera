@@ -9,14 +9,14 @@ import (
 
 type CreateCredentialsRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Credentials create request
 	CreateCredentialsRequest shared.CreateCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateCredentialsRequest) GetWorkspaceID() *int64 {
+func (o *CreateCredentialsRequest) GetWorkspaceID() int64 {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.WorkspaceID
 }
