@@ -1106,6 +1106,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Data-link creation request
         content:
@@ -8947,6 +8948,21 @@ components:
           type: boolean
         credentialsId:
           type: string
+      required:
+        - credentialsId
+        - description
+        - name
+        - provider
+        - publicAccessible
+        - resourceRef
+        - type
+        - credentialsId
+        - description
+        - name
+        - provider
+        - publicAccessible
+        - resourceRef
+        - type
     DataLinkCredentials:
       required:
         - id

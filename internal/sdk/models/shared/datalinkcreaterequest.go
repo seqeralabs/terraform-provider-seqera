@@ -3,60 +3,60 @@
 package shared
 
 type DataLinkCreateRequest struct {
-	Name             *string       `json:"name,omitempty"`
-	Description      *string       `json:"description,omitempty"`
-	Type             *DataLinkType `json:"type,omitempty"`
-	ProviderType     *ProviderType `json:"provider,omitempty"`
-	ResourceRef      *string       `json:"resourceRef,omitempty"`
-	PublicAccessible *bool         `json:"publicAccessible,omitempty"`
-	CredentialsID    *string       `json:"credentialsId,omitempty"`
+	Name             string       `json:"name"`
+	Description      string       `json:"description"`
+	Type             DataLinkType `json:"type"`
+	ProviderType     ProviderType `json:"provider"`
+	ResourceRef      string       `json:"resourceRef"`
+	PublicAccessible bool         `json:"publicAccessible"`
+	CredentialsID    string       `json:"credentialsId"`
 }
 
-func (o *DataLinkCreateRequest) GetName() *string {
+func (o *DataLinkCreateRequest) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *DataLinkCreateRequest) GetDescription() *string {
+func (o *DataLinkCreateRequest) GetDescription() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Description
 }
 
-func (o *DataLinkCreateRequest) GetType() *DataLinkType {
+func (o *DataLinkCreateRequest) GetType() DataLinkType {
 	if o == nil {
-		return nil
+		return DataLinkType("")
 	}
 	return o.Type
 }
 
-func (o *DataLinkCreateRequest) GetProviderType() *ProviderType {
+func (o *DataLinkCreateRequest) GetProviderType() ProviderType {
 	if o == nil {
-		return nil
+		return ProviderType("")
 	}
 	return o.ProviderType
 }
 
-func (o *DataLinkCreateRequest) GetResourceRef() *string {
+func (o *DataLinkCreateRequest) GetResourceRef() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.ResourceRef
 }
 
-func (o *DataLinkCreateRequest) GetPublicAccessible() *bool {
+func (o *DataLinkCreateRequest) GetPublicAccessible() bool {
 	if o == nil {
-		return nil
+		return false
 	}
 	return o.PublicAccessible
 }
 
-func (o *DataLinkCreateRequest) GetCredentialsID() *string {
+func (o *DataLinkCreateRequest) GetCredentialsID() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.CredentialsID
 }

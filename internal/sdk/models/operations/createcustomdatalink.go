@@ -9,14 +9,14 @@ import (
 
 type CreateCustomDataLinkRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Data-link creation request
 	DataLinkCreateRequest shared.DataLinkCreateRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateCustomDataLinkRequest) GetWorkspaceID() *int64 {
+func (o *CreateCustomDataLinkRequest) GetWorkspaceID() int64 {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.WorkspaceID
 }

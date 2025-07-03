@@ -14,48 +14,23 @@ import (
 func (r *DataLinkResourceModel) ToSharedDataLinkCreateRequest(ctx context.Context) (*shared.DataLinkCreateRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	typeVar := new(shared.DataLinkType)
-	if !r.Type.IsUnknown() && !r.Type.IsNull() {
-		*typeVar = shared.DataLinkType(r.Type.ValueString())
-	} else {
-		typeVar = nil
-	}
-	providerType := new(shared.ProviderType)
-	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
-		*providerType = shared.ProviderType(r.ProviderType.ValueString())
-	} else {
-		providerType = nil
-	}
-	resourceRef := new(string)
-	if !r.ResourceRef.IsUnknown() && !r.ResourceRef.IsNull() {
-		*resourceRef = r.ResourceRef.ValueString()
-	} else {
-		resourceRef = nil
-	}
-	publicAccessible := new(bool)
-	if !r.PublicAccessible.IsUnknown() && !r.PublicAccessible.IsNull() {
-		*publicAccessible = r.PublicAccessible.ValueBool()
-	} else {
-		publicAccessible = nil
-	}
-	credentialsID := new(string)
-	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
-		*credentialsID = r.CredentialsID.ValueString()
-	} else {
-		credentialsID = nil
-	}
+	var name string
+	name = r.Name.ValueString()
+
+	var description string
+	description = r.Description.ValueString()
+
+	typeVar := shared.DataLinkType(r.Type.ValueString())
+	providerType := shared.ProviderType(r.ProviderType.ValueString())
+	var resourceRef string
+	resourceRef = r.ResourceRef.ValueString()
+
+	var publicAccessible bool
+	publicAccessible = r.PublicAccessible.ValueBool()
+
+	var credentialsID string
+	credentialsID = r.CredentialsID.ValueString()
+
 	out := shared.DataLinkCreateRequest{
 		Name:             name,
 		Description:      description,
@@ -72,12 +47,9 @@ func (r *DataLinkResourceModel) ToSharedDataLinkCreateRequest(ctx context.Contex
 func (r *DataLinkResourceModel) ToOperationsCreateCustomDataLinkRequest(ctx context.Context) (*operations.CreateCustomDataLinkRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	dataLinkCreateRequest, dataLinkCreateRequestDiags := r.ToSharedDataLinkCreateRequest(ctx)
 	diags.Append(dataLinkCreateRequestDiags...)
 

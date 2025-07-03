@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 8d3c48901e7cb4d003cc86742f1dd0f2
+  docChecksum: 3e777c4827f552af189b18214fbbbd0a
   docVersion: 1.45.0
   speakeasyVersion: 1.575.3
   generationVersion: 2.648.5
@@ -955,6 +955,9 @@ examples:
           application/json: {"message": "<value>"}
   CreateComputeEnv:
     speakeasy-default-create-compute-env:
+      parameters:
+        query:
+          workspaceId: 692724
       requestBody:
         application/json: {}
       responses:
@@ -1066,8 +1069,11 @@ examples:
           application/json: {"message": "<value>"}
   CreateCustomDataLink:
     speakeasy-default-create-custom-data-link:
+      parameters:
+        query:
+          workspaceId: 601301
       requestBody:
-        application/json: {}
+        application/json: {"name": "<value>", "description": "insidious cap phooey coolly", "type": "bucket", "provider": "google", "resourceRef": "<value>", "publicAccessible": true, "credentialsId": "<id>"}
       responses:
         "200":
           application/json: {}

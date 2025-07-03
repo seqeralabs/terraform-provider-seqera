@@ -88,15 +88,14 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"credentials_id": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 			},
 			"data_link_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Data-link string identifier`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 			},
 			"hidden": schema.BoolAttribute{
 				Computed: true,
@@ -105,12 +104,10 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed: true,
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 			},
 			"provider_type": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -127,8 +124,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"public_accessible": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
@@ -139,8 +135,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed: true,
 			},
 			"resource_ref": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -158,8 +153,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"type": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -170,7 +164,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 		},

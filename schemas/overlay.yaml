@@ -374,6 +374,19 @@ actions:
   - target: $["paths"]["/credentials"]["post"]["parameters"][0]
     update:
       required: true
+  - target: $["components"]["schemas"]["DataLinkCreateRequest"]
+    update:
+      required:
+        - credentialsId
+        - description
+        - name
+        - provider
+        - publicAccessible
+        - resourceRef
+        - type
+  - target: $["paths"]["/data-links"]["post"]["parameters"][0]
+    update:
+      required: true
   - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
     update:
       x-speakeasy-name-override: dataLinkId
