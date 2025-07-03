@@ -1,9 +1,9 @@
-speakeasyVersion: 1.575.0
+speakeasyVersion: 1.575.3
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:a1391b71758a45659d7cb9f08975e4d0e96084830b495de2dfaafc3d508c1e1b
-        sourceBlobDigest: sha256:01cd899df5a3d41cbfce0d32a292dbddfb17220d236981a9c39552962d14bc77
+        sourceRevisionDigest: sha256:007d99ea403a2f394b1b872a75f78580128897267075cf781130e2c91ff55876
+        sourceBlobDigest: sha256:8d6ea6e4d517044d14fc60d4498fd7cc4e08de26de8f63b50aca62669129da05
         tags:
             - latest
             - 1.45.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:a1391b71758a45659d7cb9f08975e4d0e96084830b495de2dfaafc3d508c1e1b
-        sourceBlobDigest: sha256:01cd899df5a3d41cbfce0d32a292dbddfb17220d236981a9c39552962d14bc77
+        sourceRevisionDigest: sha256:007d99ea403a2f394b1b872a75f78580128897267075cf781130e2c91ff55876
+        sourceBlobDigest: sha256:8d6ea6e4d517044d14fc60d4498fd7cc4e08de26de8f63b50aca62669129da05
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -21,7 +21,7 @@ workflow:
             inputs:
                 - location: schemas/seqera-final.yaml
             overlays:
-                - location: schemas/overlay_new.yaml
+                - location: schemas/overlay.yaml
             output: .speakeasy/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

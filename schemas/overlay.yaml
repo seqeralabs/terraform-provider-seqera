@@ -226,6 +226,9 @@ actions:
   - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
+  - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $["paths"]["/studios/{sessionId}"]["delete"]
     update:
       x-speakeasy-entity-operation: DataStudios#delete
@@ -241,6 +244,15 @@ actions:
   - target: $["paths"]["/tokens/{tokenId}"]["delete"]
     update:
       x-speakeasy-entity-operation: Tokens#delete
+  - target: $["paths"]["/workflow/launch"]["post"]
+    update:
+      x-speakeasy-entity-operation: Workflows#create
+  - target: $["paths"]["/workflow/{workflowId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Workflows#read
+  - target: $["paths"]["/workflow/{workflowId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Workflows#delete
   - target: $["paths"]["/workflow/{workflowId}/star"]["get"]
     update:
       x-speakeasy-group: WorkflowStar
@@ -264,9 +276,6 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["Action.TowerActionEvent"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AgentSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["AgentSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["AltairPbsComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
@@ -276,43 +285,22 @@ actions:
   - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["AzBatchConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AzureEntraKeys"]["allOf"][1]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["AzureEntraKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AzureReposSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["AzureReposSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AzureSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["AzureSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["BitBucketSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["BitBucketSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["CodeCommitSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["CodeCommitSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["ComputeConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["ContainerRegistryKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["ContainerRegistryKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
@@ -410,11 +398,11 @@ actions:
   - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]
     update:
       x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]
+    update:
+      x-speakeasy-entity: Workflows
   - target: $["components"]["schemas"]["EksComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["password"]
@@ -423,14 +411,8 @@ actions:
   - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["password"]
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $["components"]["schemas"]["GitLabSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["GitLabSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GiteaSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["GiteaSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["GithubActionConfig"]["properties"]["discriminator"]["readOnly"]
@@ -443,21 +425,15 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["GoogleLifeSciencesConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["K8sComputeConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["K8sPlatformMetaInfo"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $["components"]["schemas"]["K8sSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["K8sSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
+  - target: $["components"]["schemas"]["Launch"]["properties"]["id"]
+    update:
+      x-speakeasy-param-readonly: true
   - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
     update:
       x-speakeasy-entity: Action
@@ -502,9 +478,6 @@ actions:
   - target: $["components"]["schemas"]["PipelineSecret"]
     update:
       x-speakeasy-entity: PipelineSecret
-  - target: $["components"]["schemas"]["SSHSecurityKeys"]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["SSHSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["SecurityKeys"]["properties"]["discriminator"]["readOnly"]
@@ -514,9 +487,6 @@ actions:
       x-speakeasy-param-computed: false
   - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeSecurityKeys"]["allOf"][1]["properties"]["discriminator"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $["components"]["schemas"]["SeqeraComputeSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["SlurmComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
@@ -547,7 +517,7 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]
     update:
-      x-speakeasy-entity: Pipelines
+      x-speakeasy-entity: Workflows
   - target: $["components"]["schemas"]["Workspace"]["properties"]["id"]
     update:
       x-speakeasy-param-optional: true

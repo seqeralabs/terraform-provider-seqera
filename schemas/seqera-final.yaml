@@ -2678,6 +2678,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-readonly: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -6598,6 +6599,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workflows#create 
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -6697,6 +6699,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workflows#read
     delete:
       summary: Delete the Workflow entity with the given ID
       tags:
@@ -6733,6 +6736,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workflows#delete
   /workflow/{workflowId}/cancel:
     post:
       summary: Cancel workflow
@@ -9671,6 +9675,7 @@ components:
           type: array
           items:
             type: string
+        x-speakeasy-entity: Workflows
     DescribeWorkspaceResponse:
       type: object
       properties:
@@ -10298,6 +10303,7 @@ components:
         id:
           maxLength: 22
           type: string
+          x-speakeasy-param-readonly: true
         computeEnv:
           nullable: true
           allOf:
@@ -12593,7 +12599,7 @@ components:
         dateCreated:
           type: string
           format: date-time
-      x-speakeasy-entity: Pipelines
+      x-speakeasy-entity: Workflows
     WorkflowLaunchResponse:
       type: object
       properties:

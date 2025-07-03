@@ -75,6 +75,7 @@ provider "seqera" {
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
 * [seqera_teams](docs/resources/teams.md)
 * [seqera_tokens](docs/resources/tokens.md)
+* [seqera_workflows](docs/resources/workflows.md)
 * [seqera_workspace](docs/resources/workspace.md)
 ### Data Sources
 
@@ -97,6 +98,7 @@ provider "seqera" {
 * [seqera_tokens](docs/data-sources/tokens.md)
 * [seqera_user](docs/data-sources/user.md)
 * [seqera_user_workspaces](docs/data-sources/user_workspaces.md)
+* [seqera_workflows](docs/data-sources/workflows.md)
 * [seqera_workspace](docs/data-sources/workspace.md)
 * [seqera_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
