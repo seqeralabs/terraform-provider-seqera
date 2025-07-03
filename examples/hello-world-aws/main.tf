@@ -34,7 +34,6 @@ resource "seqera_credential" "aws_credential" {
       access_key      = var.access_key
       secret_key      = var.secret_key
       assume_role_arn = "arn:aws:iam::128997144437:role/TowerDevelopmentRole"  
-      discriminator = "aws"
     }
       
   }
@@ -89,18 +88,18 @@ resource "seqera_compute_env" "aws_batch_compute_env" {
         }
         
         # Optional: Custom Nextflow configuration
-        nextflow_config = <<-EOF
-          process {
-            executor = 'awsbatch'
-            queue = 'default'
-          }
-          aws {
-            region = 'us-east-1'}'
-            batch {
-              cliPath = '/home/ec2-user/miniconda/bin/aws'
-            }
-          }
-        EOF
+        # nextflow_config = <<-EOF
+        #   process {
+        #     executor = 'awsbatch'
+        #     queue = 'default'
+        #   }
+        #   aws {
+        #     region = 'us-east-1''
+        #     batch {
+        #       cliPath = '/home/ec2-user/miniconda/bin/aws'
+        #     }
+        #   }
+        # EOF
         
         # Optional: Pre and post-run scripts
         pre_run_script = <<-EOF

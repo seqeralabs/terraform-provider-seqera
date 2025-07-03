@@ -226,9 +226,9 @@ actions:
   - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
-  - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
+  - target: $["paths"]["/studios/{sessionId}"]["delete"]["parameters"][0]
     update:
-      x-speakeasy-terraform-ignore: true
+      x-speakeasy-param-optional: true
   - target: $["paths"]["/studios/{sessionId}"]["delete"]
     update:
       x-speakeasy-entity-operation: DataStudios#delete
@@ -426,8 +426,8 @@ actions:
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
     update:
       x-speakeasy-name-override: sessionId
-  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]["x-speakeasy-param-optional"]
-    remove: true
+  # - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]["x-speakeasy-param-optional"]
+  #   remove: true
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: DataStudio

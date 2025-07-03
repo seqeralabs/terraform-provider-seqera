@@ -5510,7 +5510,6 @@ paths:
           schema:
             type: string
           x-speakeasy-param-optional: true
-          x-speakeasy-terraform-ignore: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -5553,6 +5552,7 @@ paths:
           required: true
           schema:
             type: string
+          x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -9252,6 +9252,7 @@ components:
       properties:
         sessionId:
           type: string
+          x-speakeasy-param-optional: true
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
         workspaceId:

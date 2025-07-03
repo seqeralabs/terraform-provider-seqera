@@ -184,7 +184,7 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"session_id": schema.StringAttribute{
-				Required:    true,
+				Optional:    true,
 				Description: `Studio session numeric identifier`,
 			},
 			"spot": schema.BoolAttribute{

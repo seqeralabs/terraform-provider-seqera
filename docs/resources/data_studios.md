@@ -46,7 +46,6 @@ resource "seqera_data_studios" "my_datastudios" {
 - `compute_env_id` (String) Requires replacement if changed.
 - `data_studio_tool_url` (String) Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
-- `session_id` (String) Studio session numeric identifier
 
 ### Optional
 
@@ -61,6 +60,7 @@ resource "seqera_data_studios" "my_datastudios" {
 - `lifespan_hours` (Number) Requires replacement if changed.
 - `memory` (Number) Requires replacement if changed.
 - `mount_data` (List of String) Requires replacement if changed.
+- `session_id` (String) Studio session numeric identifier
 - `spot` (Boolean) Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
