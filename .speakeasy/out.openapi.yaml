@@ -3336,7 +3336,7 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-optional: false
       requestBody:
         description: Team create request
         content:

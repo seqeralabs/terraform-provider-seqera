@@ -27,12 +27,12 @@ resource "seqera_teams" "my_teams" {
 ### Required
 
 - `name` (String)
+- `org_id` (Number) Organization numeric identifier
 
 ### Optional
 
 - `avatar_id` (String)
 - `description` (String)
-- `org_id` (Number) Organization numeric identifier
 
 ### Read-Only
 

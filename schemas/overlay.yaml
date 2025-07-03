@@ -90,7 +90,7 @@ actions:
       x-speakeasy-param-optional: true
   - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
     update:
-      x-speakeasy-param-optional: true
+      x-speakeasy-param-optional: false
   - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
     update:
       x-speakeasy-entity-operation: Teams#create

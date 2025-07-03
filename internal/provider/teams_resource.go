@@ -73,7 +73,7 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"org_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Organization numeric identifier`,
 			},
 			"team_id": schema.Int64Attribute{
