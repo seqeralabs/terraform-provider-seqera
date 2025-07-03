@@ -309,6 +309,11 @@ actions:
   - target: $["components"]["schemas"]["CreateDatasetRequest"]
     update:
       x-speakeasy-entity: Datasets
+      required:
+        - name
+  - target: $["paths"]["/datasets"]["post"]["parameters"][0]
+    update:
+      required: true
   - target: $["components"]["schemas"]["CreateLabelRequest"]
     update:
       x-speakeasy-entity: Label

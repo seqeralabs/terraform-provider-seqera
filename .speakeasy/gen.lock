@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 3e777c4827f552af189b18214fbbbd0a
+  docChecksum: 4ad777d17a2fd262a50fdbee84a4b91e
   docVersion: 1.45.0
   speakeasyVersion: 1.575.3
   generationVersion: 2.648.5
@@ -1243,8 +1243,11 @@ examples:
           application/json: {"message": "<value>"}
   CreateDatasetV2:
     speakeasy-default-create-dataset-v2:
+      parameters:
+        query:
+          workspaceId: 631977
       requestBody:
-        application/json: {}
+        application/json: {"name": "<value>"}
       responses:
         "200":
           application/json: {}
@@ -1343,7 +1346,7 @@ examples:
         path:
           workspaceId: 751126
       requestBody:
-        application/json: {}
+        application/json: {"name": "<value>"}
       responses:
         "200":
           application/json: {}

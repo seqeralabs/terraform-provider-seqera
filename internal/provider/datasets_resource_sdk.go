@@ -15,12 +15,9 @@ import (
 func (r *DatasetsResourceModel) ToSharedCreateDatasetRequest(ctx context.Context) (*shared.CreateDatasetRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
+	var name string
+	name = r.Name.ValueString()
+
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()
@@ -38,12 +35,9 @@ func (r *DatasetsResourceModel) ToSharedCreateDatasetRequest(ctx context.Context
 func (r *DatasetsResourceModel) ToOperationsCreateDatasetV2Request(ctx context.Context) (*operations.CreateDatasetV2Request, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createDatasetRequest, createDatasetRequestDiags := r.ToSharedCreateDatasetRequest(ctx)
 	diags.Append(createDatasetRequestDiags...)
 

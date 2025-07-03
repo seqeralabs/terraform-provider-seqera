@@ -3,13 +3,13 @@
 package shared
 
 type CreateDatasetRequest struct {
-	Name        *string `json:"name,omitempty"`
+	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 }
 
-func (o *CreateDatasetRequest) GetName() *string {
+func (o *CreateDatasetRequest) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }

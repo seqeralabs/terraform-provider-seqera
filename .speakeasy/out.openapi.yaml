@@ -2012,6 +2012,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Dataset create request
         content:
@@ -8702,6 +8703,9 @@ components:
         description:
           type: string
       x-speakeasy-entity: Datasets
+      required:
+        - name
+        - name
     CreateDatasetResponse:
       type: object
       properties:
