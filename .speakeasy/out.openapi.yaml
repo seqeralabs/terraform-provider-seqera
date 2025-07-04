@@ -8530,6 +8530,7 @@ components:
             - moab-platform
             - local-platform
             - seqeracompute-platform
+          x-speakeasy-plan-validators: ComputeConfigValidator
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:

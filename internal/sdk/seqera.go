@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.45.0 and generator version 2.648.5
+// Generated from OpenAPI doc version 1.45.0 and generator version 2.648.7
 
 import (
 	"context"
@@ -171,7 +171,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.0.3",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.0.3 2.648.5 1.45.0 github.com/speakeasy/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.0.3 2.648.7 1.45.0 github.com/speakeasy/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

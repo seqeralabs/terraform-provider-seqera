@@ -195,9 +195,11 @@ resource "seqera_teams" "my_teams" {
 
 ## Launch a workflow
 
+
 resource "seqera_workflows" "my_workflows" {
   compute_env_id = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
   pipeline             = "nextflow-io/hello"
   work_dir     = local.work_dir
   workspace_id = resource.seqera_workspace.my_workspace.id
+  depends_on = [ seqera_compute_env.aws_batch_compute_env ]
 }

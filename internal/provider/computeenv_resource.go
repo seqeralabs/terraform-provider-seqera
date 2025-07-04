@@ -31,6 +31,7 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
 	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/objectvalidators"
+	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
@@ -4491,6 +4492,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"local-platform",
 								"seqeracompute-platform",
 							),
+							custom_stringvalidators.ComputeConfigValidator(),
 						},
 					},
 					"primary": schema.BoolAttribute{

@@ -475,6 +475,9 @@ actions:
   - target: $["components"]["schemas"]["Launch"]["properties"]["id"]
     update:
       x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
+    update:
+      x-speakeasy-plan-validators: ComputeConfigValidator   
   - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
     update:
       x-speakeasy-entity: Action
