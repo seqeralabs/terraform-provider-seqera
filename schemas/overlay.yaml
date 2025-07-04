@@ -64,27 +64,27 @@ actions:
   - target: $["paths"]["/orgs/{orgId}"]["delete"]
     update:
       x-speakeasy-entity-operation: Orgs#delete
-  - target: $["paths"]["/orgs/{orgId}/collaborators"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/members"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/members/leave"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/members/{memberId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/members/{memberId}/role"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
+  # - target: $["paths"]["/orgs/{orgId}/collaborators"]["get"]["parameters"][0]
+  #   update:
+  #     x-speakeasy-param-optional: true
+  # - target: $["paths"]["/orgs/{orgId}/members"]["get"]["parameters"][0]
+  #   update:
+  #     x-speakeasy-param-optional: true
+  # - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]["parameters"][0]
+  #   update:
+  #     x-speakeasy-param-optional: true
+  # - target: $["paths"]["/orgs/{orgId}/members/leave"]["delete"]["parameters"][0]
+  #   update:
+  #     x-speakeasy-param-optional: true
+  # - target: $["paths"]["/orgs/{orgId}/members/{memberId}"]["delete"]["parameters"][0]
+  #   update:
+  #     x-speakeasy-param-optional: true
+  # - target: $["paths"]["/orgs/{orgId}/members/{memberId}/role"]["put"]["parameters"][0]
+  #   update:
+  #     x-speakeasy-param-optional: true
+  # - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
+  #   update:
+  #     x-speakeasy-param-optional: true
   - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
@@ -482,6 +482,9 @@ actions:
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
     update:
       x-speakeasy-plan-validators: ComputeConfigValidator   
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
+    update:
+      x-speakeasy-param-optional: false
   - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
     update:
       x-speakeasy-entity: Action
@@ -493,9 +496,9 @@ actions:
     update:
       x-speakeasy-entity: Credentials
       ## Security Keys Schemas
-  - target: $["components"]["schemas"]["ListWorkspacesAndOrgResponse"]
-    update:
-      x-speakeasy-entity: UserWorkspaces
+  # - target: $["components"]["schemas"]["ListWorkspacesAndOrgResponse"]
+  #   update:
+  #     x-speakeasy-entity: UserWorkspaces
   - target: $["components"]["schemas"]["LsfComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["MoabComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]

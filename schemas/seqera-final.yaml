@@ -2993,7 +2993,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3043,7 +3042,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3093,7 +3091,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Member addition request
         content:
@@ -3139,7 +3136,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -3168,7 +3164,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Organization member numeric identifier
@@ -3204,7 +3199,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Organization member numeric identifier
@@ -3247,7 +3241,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: include
           in: query
           description: Optional list of quota names to include
@@ -8531,6 +8524,7 @@ components:
             - local-platform
             - seqeracompute-platform
           x-speakeasy-plan-validators: ComputeConfigValidator
+          x-speakeasy-param-optional: false
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -10668,7 +10662,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OrgAndWorkspaceDto"
-      x-speakeasy-entity: UserWorkspaces
     ListWorkspacesResponse:
       type: object
       properties:
