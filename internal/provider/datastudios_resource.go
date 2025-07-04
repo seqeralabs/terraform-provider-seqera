@@ -6,17 +6,25 @@ import (
 	"context"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_int32planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
+	speakeasy_int64planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_listplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
@@ -38,26 +46,35 @@ type DataStudiosResource struct {
 
 // DataStudiosResourceModel describes the resource data model.
 type DataStudiosResourceModel struct {
-	AutoStart           types.Bool              `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
-	ComputeEnvID        types.String            `tfsdk:"compute_env_id"`
-	CondaEnvironment    types.String            `tfsdk:"conda_environment"`
-	CPU                 types.Int32             `tfsdk:"cpu"`
-	DataStudioToolURL   types.String            `tfsdk:"data_studio_tool_url"`
-	Description         types.String            `tfsdk:"description"`
-	Gpu                 types.Int32             `tfsdk:"gpu"`
-	InitialCheckpointID types.Int64             `tfsdk:"initial_checkpoint_id"`
-	IsPrivate           types.Bool              `tfsdk:"is_private"`
-	LabelIds            []types.Int64           `tfsdk:"label_ids"`
-	LifespanHours       types.Int32             `tfsdk:"lifespan_hours"`
-	Memory              types.Int32             `tfsdk:"memory"`
-	MountData           []types.String          `tfsdk:"mount_data"`
-	Name                types.String            `tfsdk:"name"`
-	SessionID           types.String            `tfsdk:"session_id"`
-	Spot                types.Bool              `tfsdk:"spot"`
-	Studio              *tfTypes.DataStudioDto  `tfsdk:"studio"`
-	Studios             []tfTypes.DataStudioDto `tfsdk:"studios"`
-	TotalSize           types.Int64             `tfsdk:"total_size"`
-	WorkspaceID         types.Int64             `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ActiveConnections      []tfTypes.ActiveConnection             `tfsdk:"active_connections"`
+	AutoStart              types.Bool                             `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
+	BaseImage              types.String                           `tfsdk:"base_image"`
+	ComputeEnv             *tfTypes.DataStudioComputeEnvDto       `tfsdk:"compute_env"`
+	ComputeEnvID           types.String                           `tfsdk:"compute_env_id"`
+	Configuration          *tfTypes.DataStudioConfiguration       `tfsdk:"configuration"`
+	CustomImage            types.Bool                             `tfsdk:"custom_image"`
+	DataStudioToolURL      types.String                           `tfsdk:"data_studio_tool_url"`
+	DateCreated            types.String                           `tfsdk:"date_created"`
+	Description            types.String                           `tfsdk:"description"`
+	EffectiveLifespanHours types.Int32                            `tfsdk:"effective_lifespan_hours"`
+	InitialCheckpointID    types.Int64                            `tfsdk:"initial_checkpoint_id"`
+	IsPrivate              types.Bool                             `tfsdk:"is_private"`
+	LabelIds               []types.Int64                          `tfsdk:"label_ids"`
+	Labels                 []tfTypes.LabelDbDto                   `tfsdk:"labels"`
+	LastStarted            types.String                           `tfsdk:"last_started"`
+	LastUpdated            types.String                           `tfsdk:"last_updated"`
+	MountedDataLinks       []tfTypes.DataLinkDto                  `tfsdk:"mounted_data_links"`
+	Name                   types.String                           `tfsdk:"name"`
+	ParentCheckpoint       *tfTypes.DataStudioDtoParentCheckpoint `tfsdk:"parent_checkpoint"`
+	Progress               []tfTypes.DataStudioProgressStep       `tfsdk:"progress"`
+	SessionID              types.String                           `tfsdk:"session_id"`
+	Spot                   types.Bool                             `tfsdk:"spot"`
+	StatusInfo             *tfTypes.DataStudioStatusInfo          `tfsdk:"status_info"`
+	StudioURL              types.String                           `tfsdk:"studio_url"`
+	Template               *tfTypes.DataStudioTemplate            `tfsdk:"template"`
+	User                   *tfTypes.StudioUser                    `tfsdk:"user"`
+	WaveBuildURL           types.String                           `tfsdk:"wave_build_url"`
+	WorkspaceID            types.Int64                            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *DataStudiosResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -68,12 +85,63 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "DataStudios Resource",
 		Attributes: map[string]schema.Attribute{
+			"active_connections": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"avatar": schema.StringAttribute{
+							Computed: true,
+						},
+						"email": schema.StringAttribute{
+							Computed: true,
+						},
+						"id": schema.Int64Attribute{
+							Computed: true,
+						},
+						"last_active": schema.StringAttribute{
+							Computed: true,
+							Validators: []validator.String{
+								validators.IsRFC3339(),
+							},
+						},
+						"user_name": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+			},
 			"auto_start": schema.BoolAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.`,
+			},
+			"base_image": schema.StringAttribute{
+				Computed: true,
+			},
+			"compute_env": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"credentials_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+					},
+					"platform": schema.StringAttribute{
+						Computed: true,
+					},
+					"region": schema.StringAttribute{
+						Computed: true,
+					},
+					"work_dir": schema.StringAttribute{
+						Computed: true,
+					},
+				},
 			},
 			"compute_env_id": schema.StringAttribute{
 				Required: true,
@@ -85,22 +153,77 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 					stringvalidator.UTF8LengthAtLeast(1),
 				},
 			},
-			"conda_environment": schema.StringAttribute{
+			"configuration": schema.SingleNestedAttribute{
+				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"conda_environment": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(2048),
+						},
+					},
+					"cpu": schema.Int32Attribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Int32{
+							int32planmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"gpu": schema.Int32Attribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Int32{
+							int32planmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"lifespan_hours": schema.Int32Attribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Int32{
+							int32planmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"memory": schema.Int32Attribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Int32{
+							int32planmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"mount_data": schema.ListAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Requires replacement if changed.`,
+					},
 				},
 				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(2048),
-				},
 			},
-			"cpu": schema.Int32Attribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Int32{
-					int32planmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
+			"custom_image": schema.BoolAttribute{
+				Computed: true,
 			},
 			"data_studio_tool_url": schema.StringAttribute{
 				Required: true,
@@ -112,22 +235,26 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 					stringvalidator.UTF8LengthAtLeast(1),
 				},
 			},
+			"date_created": schema.StringAttribute{
+				Computed: true,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
 			"description": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2048),
 				},
 			},
-			"gpu": schema.Int32Attribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Int32{
-					int32planmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
+			"effective_lifespan_hours": schema.Int32Attribute{
+				Computed: true,
 			},
 			"initial_checkpoint_id": schema.Int64Attribute{
 				Optional: true,
@@ -137,9 +264,11 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Requires replacement if changed.`,
 			},
 			"is_private": schema.BoolAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
 				Description: `Requires replacement if changed.`,
 			},
@@ -151,587 +280,55 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 				ElementType: types.Int64Type,
 				Description: `Requires replacement if changed.`,
 			},
-			"lifespan_hours": schema.Int32Attribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Int32{
-					int32planmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"memory": schema.Int32Attribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Int32{
-					int32planmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"mount_data": schema.ListAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					listplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				ElementType: types.StringType,
-				Description: `Requires replacement if changed.`,
-			},
-			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(1, 80),
-				},
-			},
-			"session_id": schema.StringAttribute{
-				Optional:    true,
-				Description: `Studio session numeric identifier`,
-			},
-			"spot": schema.BoolAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					boolplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"studio": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"active_connections": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"avatar": schema.StringAttribute{
-									Computed: true,
-								},
-								"email": schema.StringAttribute{
-									Computed: true,
-								},
-								"id": schema.Int64Attribute{
-									Computed: true,
-								},
-								"last_active": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										validators.IsRFC3339(),
-									},
-								},
-								"user_name": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-					},
-					"base_image": schema.StringAttribute{
-						Computed: true,
-					},
-					"compute_env": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"credentials_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"id": schema.StringAttribute{
-								Computed: true,
-							},
-							"name": schema.StringAttribute{
-								Computed: true,
-							},
-							"platform": schema.StringAttribute{
-								Computed: true,
-							},
-							"region": schema.StringAttribute{
-								Computed: true,
-							},
-							"work_dir": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"configuration": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"conda_environment": schema.StringAttribute{
-								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(2048),
-								},
-							},
-							"cpu": schema.Int32Attribute{
-								Computed: true,
-							},
-							"gpu": schema.Int32Attribute{
-								Computed: true,
-							},
-							"lifespan_hours": schema.Int32Attribute{
-								Computed: true,
-							},
-							"memory": schema.Int32Attribute{
-								Computed: true,
-							},
-							"mount_data": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-						},
-					},
-					"custom_image": schema.BoolAttribute{
-						Computed: true,
-					},
-					"date_created": schema.StringAttribute{
-						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"description": schema.StringAttribute{
-						Computed: true,
-					},
-					"effective_lifespan_hours": schema.Int32Attribute{
-						Computed: true,
-					},
-					"is_private": schema.BoolAttribute{
-						Computed: true,
-					},
-					"labels": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"date_created": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										validators.IsRFC3339(),
-									},
-								},
-								"id": schema.Int64Attribute{
-									Computed: true,
-								},
-								"is_default": schema.BoolAttribute{
-									Computed: true,
-								},
-								"name": schema.StringAttribute{
-									Computed: true,
-								},
-								"resource": schema.BoolAttribute{
-									Computed: true,
-								},
-								"value": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-					},
-					"last_started": schema.StringAttribute{
-						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"last_updated": schema.StringAttribute{
-						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"mounted_data_links": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"credentials": schema.ListNestedAttribute{
-									Computed: true,
-									NestedObject: schema.NestedAttributeObject{
-										Attributes: map[string]schema.Attribute{
-											"id": schema.StringAttribute{
-												Computed: true,
-											},
-											"name": schema.StringAttribute{
-												Computed: true,
-											},
-											"provider_type": schema.StringAttribute{
-												Computed:    true,
-												Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
-												Validators: []validator.String{
-													stringvalidator.OneOf(
-														"aws",
-														"google",
-														"azure",
-														"azure_entra",
-														"seqeracompute",
-													),
-												},
-											},
-										},
-									},
-								},
-								"data_link_id": schema.StringAttribute{
-									Computed: true,
-								},
-								"description": schema.StringAttribute{
-									Computed: true,
-								},
-								"hidden": schema.BoolAttribute{
-									Computed: true,
-								},
-								"message": schema.StringAttribute{
-									Computed: true,
-								},
-								"name": schema.StringAttribute{
-									Computed: true,
-								},
-								"provider_type": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"aws",
-											"google",
-											"azure",
-											"azure_entra",
-											"seqeracompute",
-										),
-									},
-								},
-								"public_accessible": schema.BoolAttribute{
-									Computed: true,
-								},
-								"region": schema.StringAttribute{
-									Computed: true,
-								},
-								"resource_ref": schema.StringAttribute{
-									Computed: true,
-								},
-								"status": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["VALID", "INVALID"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"VALID",
-											"INVALID",
-										),
-									},
-								},
-								"type": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be "bucket"`,
-									Validators: []validator.String{
-										stringvalidator.OneOf("bucket"),
-									},
-								},
-							},
-						},
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-					},
-					"parent_checkpoint": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"checkpoint_id": schema.Int64Attribute{
-								Computed: true,
-							},
-							"checkpoint_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"session_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"studio_name": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"progress": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"message": schema.StringAttribute{
-									Computed: true,
-								},
-								"status": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["pending", "in-progress", "succeeded", "errored"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"pending",
-											"in-progress",
-											"succeeded",
-											"errored",
-										),
-									},
-								},
-								"warnings": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-								},
-							},
-						},
-					},
-					"session_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"status_info": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"last_update": schema.StringAttribute{
-								Computed: true,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
-							},
-							"message": schema.StringAttribute{
-								Computed: true,
-							},
-							"status": schema.StringAttribute{
-								Computed:    true,
-								Description: `must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"starting",
-										"running",
-										"stopping",
-										"stopped",
-										"errored",
-										"building",
-										"buildFailed",
-									),
-								},
-							},
-						},
-					},
-					"studio_url": schema.StringAttribute{
-						Computed: true,
-					},
-					"template": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"icon": schema.StringAttribute{
-								Computed: true,
-							},
-							"repository": schema.StringAttribute{
-								Computed: true,
-							},
-							"status": schema.StringAttribute{
-								Computed:    true,
-								Description: `must be one of ["recommended", "deprecated", "experimental", "unsupported"]`,
-								Validators: []validator.String{
-									stringvalidator.OneOf(
-										"recommended",
-										"deprecated",
-										"experimental",
-										"unsupported",
-									),
-								},
-							},
-							"tool": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"user": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"avatar": schema.StringAttribute{
-								Computed: true,
-							},
-							"email": schema.StringAttribute{
-								Computed: true,
-							},
-							"id": schema.Int64Attribute{
-								Computed: true,
-							},
-							"user_name": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"wave_build_url": schema.StringAttribute{
-						Computed: true,
-					},
-					"workspace_id": schema.Int64Attribute{
-						Computed: true,
-					},
-				},
-			},
-			"studios": schema.ListNestedAttribute{
+			"labels": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"active_connections": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"avatar": schema.StringAttribute{
-										Computed: true,
-									},
-									"email": schema.StringAttribute{
-										Computed: true,
-									},
-									"id": schema.Int64Attribute{
-										Computed: true,
-									},
-									"last_active": schema.StringAttribute{
-										Computed: true,
-										Validators: []validator.String{
-											validators.IsRFC3339(),
-										},
-									},
-									"user_name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"base_image": schema.StringAttribute{
-							Computed: true,
-						},
-						"compute_env": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"credentials_id": schema.StringAttribute{
-									Computed: true,
-								},
-								"id": schema.StringAttribute{
-									Computed: true,
-								},
-								"name": schema.StringAttribute{
-									Computed: true,
-								},
-								"platform": schema.StringAttribute{
-									Computed: true,
-								},
-								"region": schema.StringAttribute{
-									Computed: true,
-								},
-								"work_dir": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"configuration": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"conda_environment": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(2048),
-									},
-								},
-								"cpu": schema.Int32Attribute{
-									Computed: true,
-								},
-								"gpu": schema.Int32Attribute{
-									Computed: true,
-								},
-								"lifespan_hours": schema.Int32Attribute{
-									Computed: true,
-								},
-								"memory": schema.Int32Attribute{
-									Computed: true,
-								},
-								"mount_data": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-								},
-							},
-						},
-						"custom_image": schema.BoolAttribute{
-							Computed: true,
-						},
 						"date_created": schema.StringAttribute{
 							Computed: true,
 							Validators: []validator.String{
 								validators.IsRFC3339(),
 							},
 						},
-						"description": schema.StringAttribute{
+						"id": schema.Int64Attribute{
 							Computed: true,
 						},
-						"effective_lifespan_hours": schema.Int32Attribute{
+						"is_default": schema.BoolAttribute{
 							Computed: true,
 						},
-						"is_private": schema.BoolAttribute{
+						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"labels": schema.ListNestedAttribute{
+						"resource": schema.BoolAttribute{
+							Computed: true,
+						},
+						"value": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+			},
+			"last_started": schema.StringAttribute{
+				Computed: true,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"last_updated": schema.StringAttribute{
+				Computed: true,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"mounted_data_links": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"credentials": schema.ListNestedAttribute{
 							Computed: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"date_created": schema.StringAttribute{
-										Computed: true,
-										Validators: []validator.String{
-											validators.IsRFC3339(),
-										},
-									},
-									"id": schema.Int64Attribute{
-										Computed: true,
-									},
-									"is_default": schema.BoolAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"resource": schema.BoolAttribute{
-										Computed: true,
-									},
-									"value": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"last_started": schema.StringAttribute{
-							Computed: true,
-							Validators: []validator.String{
-								validators.IsRFC3339(),
-							},
-						},
-						"last_updated": schema.StringAttribute{
-							Computed: true,
-							Validators: []validator.String{
-								validators.IsRFC3339(),
-							},
-						},
-						"mounted_data_links": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"credentials": schema.ListNestedAttribute{
-										Computed: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"id": schema.StringAttribute{
-													Computed: true,
-												},
-												"name": schema.StringAttribute{
-													Computed: true,
-												},
-												"provider_type": schema.StringAttribute{
-													Computed:    true,
-													Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
-													Validators: []validator.String{
-														stringvalidator.OneOf(
-															"aws",
-															"google",
-															"azure",
-															"azure_entra",
-															"seqeracompute",
-														),
-													},
-												},
-											},
-										},
-									},
-									"data_link_id": schema.StringAttribute{
-										Computed: true,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"hidden": schema.BoolAttribute{
-										Computed: true,
-									},
-									"message": schema.StringAttribute{
+									"id": schema.StringAttribute{
 										Computed: true,
 									},
 									"name": schema.StringAttribute{
@@ -750,175 +347,215 @@ func (r *DataStudiosResource) Schema(ctx context.Context, req resource.SchemaReq
 											),
 										},
 									},
-									"public_accessible": schema.BoolAttribute{
-										Computed: true,
-									},
-									"region": schema.StringAttribute{
-										Computed: true,
-									},
-									"resource_ref": schema.StringAttribute{
-										Computed: true,
-									},
-									"status": schema.StringAttribute{
-										Computed:    true,
-										Description: `must be one of ["VALID", "INVALID"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"VALID",
-												"INVALID",
-											),
-										},
-									},
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `must be "bucket"`,
-										Validators: []validator.String{
-											stringvalidator.OneOf("bucket"),
-										},
-									},
 								},
 							},
+						},
+						"data_link_id": schema.StringAttribute{
+							Computed: true,
+						},
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"hidden": schema.BoolAttribute{
+							Computed: true,
+						},
+						"message": schema.StringAttribute{
+							Computed: true,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"parent_checkpoint": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"checkpoint_id": schema.Int64Attribute{
-									Computed: true,
-								},
-								"checkpoint_name": schema.StringAttribute{
-									Computed: true,
-								},
-								"session_id": schema.StringAttribute{
-									Computed: true,
-								},
-								"studio_name": schema.StringAttribute{
-									Computed: true,
-								},
+						"provider_type": schema.StringAttribute{
+							Computed:    true,
+							Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"aws",
+									"google",
+									"azure",
+									"azure_entra",
+									"seqeracompute",
+								),
 							},
 						},
-						"progress": schema.ListNestedAttribute{
+						"public_accessible": schema.BoolAttribute{
 							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"message": schema.StringAttribute{
-										Computed: true,
-									},
-									"status": schema.StringAttribute{
-										Computed:    true,
-										Description: `must be one of ["pending", "in-progress", "succeeded", "errored"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"pending",
-												"in-progress",
-												"succeeded",
-												"errored",
-											),
-										},
-									},
-									"warnings": schema.ListAttribute{
-										Computed:    true,
-										ElementType: types.StringType,
-									},
-								},
+						},
+						"region": schema.StringAttribute{
+							Computed: true,
+						},
+						"resource_ref": schema.StringAttribute{
+							Computed: true,
+						},
+						"status": schema.StringAttribute{
+							Computed:    true,
+							Description: `must be one of ["VALID", "INVALID"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"VALID",
+									"INVALID",
+								),
 							},
 						},
-						"session_id": schema.StringAttribute{
-							Computed: true,
-						},
-						"status_info": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"last_update": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										validators.IsRFC3339(),
-									},
-								},
-								"message": schema.StringAttribute{
-									Computed: true,
-								},
-								"status": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"starting",
-											"running",
-											"stopping",
-											"stopped",
-											"errored",
-											"building",
-											"buildFailed",
-										),
-									},
-								},
+						"type": schema.StringAttribute{
+							Computed:    true,
+							Description: `must be "bucket"`,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bucket"),
 							},
-						},
-						"studio_url": schema.StringAttribute{
-							Computed: true,
-						},
-						"template": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"icon": schema.StringAttribute{
-									Computed: true,
-								},
-								"repository": schema.StringAttribute{
-									Computed: true,
-								},
-								"status": schema.StringAttribute{
-									Computed:    true,
-									Description: `must be one of ["recommended", "deprecated", "experimental", "unsupported"]`,
-									Validators: []validator.String{
-										stringvalidator.OneOf(
-											"recommended",
-											"deprecated",
-											"experimental",
-											"unsupported",
-										),
-									},
-								},
-								"tool": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"user": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"avatar": schema.StringAttribute{
-									Computed: true,
-								},
-								"email": schema.StringAttribute{
-									Computed: true,
-								},
-								"id": schema.Int64Attribute{
-									Computed: true,
-								},
-								"user_name": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"wave_build_url": schema.StringAttribute{
-							Computed: true,
-						},
-						"workspace_id": schema.Int64Attribute{
-							Computed: true,
 						},
 					},
 				},
 			},
-			"total_size": schema.Int64Attribute{
+			"name": schema.StringAttribute{
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthBetween(1, 80),
+				},
+			},
+			"parent_checkpoint": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"checkpoint_id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"checkpoint_name": schema.StringAttribute{
+						Computed: true,
+					},
+					"session_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"studio_name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"progress": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"message": schema.StringAttribute{
+							Computed: true,
+						},
+						"status": schema.StringAttribute{
+							Computed:    true,
+							Description: `must be one of ["pending", "in-progress", "succeeded", "errored"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"pending",
+									"in-progress",
+									"succeeded",
+									"errored",
+								),
+							},
+						},
+						"warnings": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+						},
+					},
+				},
+			},
+			"session_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Studio session numeric identifier`,
+			},
+			"spot": schema.BoolAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Bool{
+					boolplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
+			},
+			"status_info": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"last_update": schema.StringAttribute{
+						Computed: true,
+						Validators: []validator.String{
+							validators.IsRFC3339(),
+						},
+					},
+					"message": schema.StringAttribute{
+						Computed: true,
+					},
+					"status": schema.StringAttribute{
+						Computed:    true,
+						Description: `must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"starting",
+								"running",
+								"stopping",
+								"stopped",
+								"errored",
+								"building",
+								"buildFailed",
+							),
+						},
+					},
+				},
+			},
+			"studio_url": schema.StringAttribute{
+				Computed: true,
+			},
+			"template": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"icon": schema.StringAttribute{
+						Computed: true,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+					},
+					"status": schema.StringAttribute{
+						Computed:    true,
+						Description: `must be one of ["recommended", "deprecated", "experimental", "unsupported"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"recommended",
+								"deprecated",
+								"experimental",
+								"unsupported",
+							),
+						},
+					},
+					"tool": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"user": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"avatar": schema.StringAttribute{
+						Computed: true,
+					},
+					"email": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"user_name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"wave_build_url": schema.StringAttribute{
 				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
 				},
 				Description: `Workspace numeric identifier. Requires replacement if changed.`,
 			},
@@ -989,11 +626,51 @@ func (r *DataStudiosResource) Create(ctx context.Context, req resource.CreateReq
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DataStudioCreateResponse != nil) {
+	if !(res.DataStudioCreateResponse != nil && res.DataStudioCreateResponse.Studio != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioCreateResponse(ctx, res.DataStudioCreateResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioDto(ctx, res.DataStudioCreateResponse.Studio)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsDescribeDataStudioRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Studios.DescribeDataStudio(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	switch res1.StatusCode {
+	case 200, 202:
+		break
+	default:
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DataStudioDto != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioDto(ctx, res1.DataStudioDto)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1027,13 +704,13 @@ func (r *DataStudiosResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListDataStudiosRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeDataStudioRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.ListDataStudios(ctx, *request)
+	res, err := r.client.Studios.DescribeDataStudio(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -1049,15 +726,18 @@ func (r *DataStudiosResource) Read(ctx context.Context, req resource.ReadRequest
 		resp.State.RemoveResource(ctx)
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 202:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DataStudioListResponse != nil) {
+	if !(res.DataStudioDto != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioListResponse(ctx, res.DataStudioListResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioDto(ctx, res.DataStudioDto)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -1131,5 +811,5 @@ func (r *DataStudiosResource) Delete(ctx context.Context, req resource.DeleteReq
 }
 
 func (r *DataStudiosResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource data_studios. Reason: no ID fields found")
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("session_id"), req.ID)...)
 }

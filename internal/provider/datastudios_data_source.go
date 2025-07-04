@@ -29,13 +29,29 @@ type DataStudiosDataSource struct {
 
 // DataStudiosDataSourceModel describes the data model.
 type DataStudiosDataSourceModel struct {
-	Attributes  []types.String          `queryParam:"style=form,explode=true,name=attributes" tfsdk:"attributes"`
-	Max         types.Int32             `queryParam:"style=form,explode=true,name=max" tfsdk:"max"`
-	Offset      types.Int32             `queryParam:"style=form,explode=true,name=offset" tfsdk:"offset"`
-	Search      types.String            `queryParam:"style=form,explode=true,name=search" tfsdk:"search"`
-	Studios     []tfTypes.DataStudioDto `tfsdk:"studios"`
-	TotalSize   types.Int64             `tfsdk:"total_size"`
-	WorkspaceID types.Int64             `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ActiveConnections      []tfTypes.ActiveConnection             `tfsdk:"active_connections"`
+	BaseImage              types.String                           `tfsdk:"base_image"`
+	ComputeEnv             *tfTypes.DataStudioComputeEnvDto       `tfsdk:"compute_env"`
+	Configuration          *tfTypes.DataStudioConfiguration       `tfsdk:"configuration"`
+	CustomImage            types.Bool                             `tfsdk:"custom_image"`
+	DateCreated            types.String                           `tfsdk:"date_created"`
+	Description            types.String                           `tfsdk:"description"`
+	EffectiveLifespanHours types.Int32                            `tfsdk:"effective_lifespan_hours"`
+	IsPrivate              types.Bool                             `tfsdk:"is_private"`
+	Labels                 []tfTypes.LabelDbDto                   `tfsdk:"labels"`
+	LastStarted            types.String                           `tfsdk:"last_started"`
+	LastUpdated            types.String                           `tfsdk:"last_updated"`
+	MountedDataLinks       []tfTypes.DataLinkDto                  `tfsdk:"mounted_data_links"`
+	Name                   types.String                           `tfsdk:"name"`
+	ParentCheckpoint       *tfTypes.DataStudioDtoParentCheckpoint `tfsdk:"parent_checkpoint"`
+	Progress               []tfTypes.DataStudioProgressStep       `tfsdk:"progress"`
+	SessionID              types.String                           `tfsdk:"session_id"`
+	StatusInfo             *tfTypes.DataStudioStatusInfo          `tfsdk:"status_info"`
+	StudioURL              types.String                           `tfsdk:"studio_url"`
+	Template               *tfTypes.DataStudioTemplate            `tfsdk:"template"`
+	User                   *tfTypes.StudioUser                    `tfsdk:"user"`
+	WaveBuildURL           types.String                           `tfsdk:"wave_build_url"`
+	WorkspaceID            types.Int64                            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -49,175 +65,133 @@ func (r *DataStudiosDataSource) Schema(ctx context.Context, req datasource.Schem
 		MarkdownDescription: "DataStudios DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"attributes": schema.ListAttribute{
-				Optional:    true,
-				ElementType: types.StringType,
-				Description: `Optional attribute values to be included in the response (` + "`" + `labels` + "`" + `). Returns an empty value (` + "`" + `labels: null` + "`" + `) if omitted.`,
-			},
-			"max": schema.Int32Attribute{
-				Optional:    true,
-				Description: `Pagination max results`,
-			},
-			"offset": schema.Int32Attribute{
-				Optional:    true,
-				Description: `Pagination offset`,
-			},
-			"search": schema.StringAttribute{
-				Optional:    true,
-				Description: `Optional search criteria, allowing free text search on name and templateUrl and keywords: ` + "`" + `userId` + "`" + `, ` + "`" + `computeEnvId` + "`" + ` and ` + "`" + `status` + "`" + `.`,
-			},
-			"studios": schema.ListNestedAttribute{
+			"active_connections": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"active_connections": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"avatar": schema.StringAttribute{
-										Computed: true,
-									},
-									"email": schema.StringAttribute{
-										Computed: true,
-									},
-									"id": schema.Int64Attribute{
-										Computed: true,
-									},
-									"last_active": schema.StringAttribute{
-										Computed: true,
-									},
-									"user_name": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"base_image": schema.StringAttribute{
+						"avatar": schema.StringAttribute{
 							Computed: true,
 						},
-						"compute_env": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"credentials_id": schema.StringAttribute{
-									Computed: true,
-								},
-								"id": schema.StringAttribute{
-									Computed: true,
-								},
-								"name": schema.StringAttribute{
-									Computed: true,
-								},
-								"platform": schema.StringAttribute{
-									Computed: true,
-								},
-								"region": schema.StringAttribute{
-									Computed: true,
-								},
-								"work_dir": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"configuration": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"conda_environment": schema.StringAttribute{
-									Computed: true,
-								},
-								"cpu": schema.Int32Attribute{
-									Computed: true,
-								},
-								"gpu": schema.Int32Attribute{
-									Computed: true,
-								},
-								"lifespan_hours": schema.Int32Attribute{
-									Computed: true,
-								},
-								"memory": schema.Int32Attribute{
-									Computed: true,
-								},
-								"mount_data": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
-								},
-							},
-						},
-						"custom_image": schema.BoolAttribute{
+						"email": schema.StringAttribute{
 							Computed: true,
 						},
+						"id": schema.Int64Attribute{
+							Computed: true,
+						},
+						"last_active": schema.StringAttribute{
+							Computed: true,
+						},
+						"user_name": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+			},
+			"base_image": schema.StringAttribute{
+				Computed: true,
+			},
+			"compute_env": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"credentials_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+					},
+					"platform": schema.StringAttribute{
+						Computed: true,
+					},
+					"region": schema.StringAttribute{
+						Computed: true,
+					},
+					"work_dir": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"configuration": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"conda_environment": schema.StringAttribute{
+						Computed: true,
+					},
+					"cpu": schema.Int32Attribute{
+						Computed: true,
+					},
+					"gpu": schema.Int32Attribute{
+						Computed: true,
+					},
+					"lifespan_hours": schema.Int32Attribute{
+						Computed: true,
+					},
+					"memory": schema.Int32Attribute{
+						Computed: true,
+					},
+					"mount_data": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"custom_image": schema.BoolAttribute{
+				Computed: true,
+			},
+			"date_created": schema.StringAttribute{
+				Computed: true,
+			},
+			"description": schema.StringAttribute{
+				Computed: true,
+			},
+			"effective_lifespan_hours": schema.Int32Attribute{
+				Computed: true,
+			},
+			"is_private": schema.BoolAttribute{
+				Computed: true,
+			},
+			"labels": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
 						"date_created": schema.StringAttribute{
 							Computed: true,
 						},
-						"description": schema.StringAttribute{
+						"id": schema.Int64Attribute{
 							Computed: true,
 						},
-						"effective_lifespan_hours": schema.Int32Attribute{
+						"is_default": schema.BoolAttribute{
 							Computed: true,
 						},
-						"is_private": schema.BoolAttribute{
+						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"labels": schema.ListNestedAttribute{
+						"resource": schema.BoolAttribute{
+							Computed: true,
+						},
+						"value": schema.StringAttribute{
+							Computed: true,
+						},
+					},
+				},
+			},
+			"last_started": schema.StringAttribute{
+				Computed: true,
+			},
+			"last_updated": schema.StringAttribute{
+				Computed: true,
+			},
+			"mounted_data_links": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"credentials": schema.ListNestedAttribute{
 							Computed: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"date_created": schema.StringAttribute{
-										Computed: true,
-									},
-									"id": schema.Int64Attribute{
-										Computed: true,
-									},
-									"is_default": schema.BoolAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"resource": schema.BoolAttribute{
-										Computed: true,
-									},
-									"value": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-						"last_started": schema.StringAttribute{
-							Computed: true,
-						},
-						"last_updated": schema.StringAttribute{
-							Computed: true,
-						},
-						"mounted_data_links": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"credentials": schema.ListNestedAttribute{
-										Computed: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"id": schema.StringAttribute{
-													Computed: true,
-												},
-												"name": schema.StringAttribute{
-													Computed: true,
-												},
-												"provider_type": schema.StringAttribute{
-													Computed: true,
-												},
-											},
-										},
-									},
-									"data_link_id": schema.StringAttribute{
-										Computed: true,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"hidden": schema.BoolAttribute{
-										Computed: true,
-									},
-									"message": schema.StringAttribute{
+									"id": schema.StringAttribute{
 										Computed: true,
 									},
 									"name": schema.StringAttribute{
@@ -226,128 +200,142 @@ func (r *DataStudiosDataSource) Schema(ctx context.Context, req datasource.Schem
 									"provider_type": schema.StringAttribute{
 										Computed: true,
 									},
-									"public_accessible": schema.BoolAttribute{
-										Computed: true,
-									},
-									"region": schema.StringAttribute{
-										Computed: true,
-									},
-									"resource_ref": schema.StringAttribute{
-										Computed: true,
-									},
-									"status": schema.StringAttribute{
-										Computed: true,
-									},
-									"type": schema.StringAttribute{
-										Computed: true,
-									},
 								},
 							},
+						},
+						"data_link_id": schema.StringAttribute{
+							Computed: true,
+						},
+						"description": schema.StringAttribute{
+							Computed: true,
+						},
+						"hidden": schema.BoolAttribute{
+							Computed: true,
+						},
+						"message": schema.StringAttribute{
+							Computed: true,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"parent_checkpoint": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"checkpoint_id": schema.Int64Attribute{
-									Computed: true,
-								},
-								"checkpoint_name": schema.StringAttribute{
-									Computed: true,
-								},
-								"session_id": schema.StringAttribute{
-									Computed: true,
-								},
-								"studio_name": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"progress": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"message": schema.StringAttribute{
-										Computed: true,
-									},
-									"status": schema.StringAttribute{
-										Computed: true,
-									},
-									"warnings": schema.ListAttribute{
-										Computed:    true,
-										ElementType: types.StringType,
-									},
-								},
-							},
-						},
-						"session_id": schema.StringAttribute{
+						"provider_type": schema.StringAttribute{
 							Computed: true,
 						},
-						"status_info": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"last_update": schema.StringAttribute{
-									Computed: true,
-								},
-								"message": schema.StringAttribute{
-									Computed: true,
-								},
-								"status": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"studio_url": schema.StringAttribute{
+						"public_accessible": schema.BoolAttribute{
 							Computed: true,
 						},
-						"template": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"icon": schema.StringAttribute{
-									Computed: true,
-								},
-								"repository": schema.StringAttribute{
-									Computed: true,
-								},
-								"status": schema.StringAttribute{
-									Computed: true,
-								},
-								"tool": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"user": schema.SingleNestedAttribute{
-							Computed: true,
-							Attributes: map[string]schema.Attribute{
-								"avatar": schema.StringAttribute{
-									Computed: true,
-								},
-								"email": schema.StringAttribute{
-									Computed: true,
-								},
-								"id": schema.Int64Attribute{
-									Computed: true,
-								},
-								"user_name": schema.StringAttribute{
-									Computed: true,
-								},
-							},
-						},
-						"wave_build_url": schema.StringAttribute{
+						"region": schema.StringAttribute{
 							Computed: true,
 						},
-						"workspace_id": schema.Int64Attribute{
+						"resource_ref": schema.StringAttribute{
+							Computed: true,
+						},
+						"status": schema.StringAttribute{
+							Computed: true,
+						},
+						"type": schema.StringAttribute{
 							Computed: true,
 						},
 					},
 				},
 			},
-			"total_size": schema.Int64Attribute{
+			"name": schema.StringAttribute{
+				Computed: true,
+			},
+			"parent_checkpoint": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"checkpoint_id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"checkpoint_name": schema.StringAttribute{
+						Computed: true,
+					},
+					"session_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"studio_name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"progress": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"message": schema.StringAttribute{
+							Computed: true,
+						},
+						"status": schema.StringAttribute{
+							Computed: true,
+						},
+						"warnings": schema.ListAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+						},
+					},
+				},
+			},
+			"session_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Studio session numeric identifier`,
+			},
+			"status_info": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"last_update": schema.StringAttribute{
+						Computed: true,
+					},
+					"message": schema.StringAttribute{
+						Computed: true,
+					},
+					"status": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"studio_url": schema.StringAttribute{
+				Computed: true,
+			},
+			"template": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"icon": schema.StringAttribute{
+						Computed: true,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+					},
+					"status": schema.StringAttribute{
+						Computed: true,
+					},
+					"tool": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"user": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"avatar": schema.StringAttribute{
+						Computed: true,
+					},
+					"email": schema.StringAttribute{
+						Computed: true,
+					},
+					"id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"user_name": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"wave_build_url": schema.StringAttribute{
 				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Workspace numeric identifier`,
 			},
@@ -393,13 +381,13 @@ func (r *DataStudiosDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsListDataStudiosRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeDataStudioRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Studios.ListDataStudios(ctx, *request)
+	res, err := r.client.Studios.DescribeDataStudio(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -411,15 +399,18 @@ func (r *DataStudiosDataSource) Read(ctx context.Context, req datasource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case 200, 202:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DataStudioListResponse != nil) {
+	if !(res.DataStudioDto != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioListResponse(ctx, res.DataStudioListResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioDto(ctx, res.DataStudioDto)...)
 
 	if resp.Diagnostics.HasError() {
 		return

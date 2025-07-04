@@ -12,6 +12,109 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *DataStudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Context) (*shared.DataStudioCreateRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var name string
+	name = r.Name.ValueString()
+
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	var dataStudioToolURL string
+	dataStudioToolURL = r.DataStudioToolURL.ValueString()
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	initialCheckpointID := new(int64)
+	if !r.InitialCheckpointID.IsUnknown() && !r.InitialCheckpointID.IsNull() {
+		*initialCheckpointID = r.InitialCheckpointID.ValueInt64()
+	} else {
+		initialCheckpointID = nil
+	}
+	var configuration *shared.DataStudioConfiguration
+	if r.Configuration != nil {
+		gpu := new(int)
+		if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
+			*gpu = int(r.Configuration.Gpu.ValueInt32())
+		} else {
+			gpu = nil
+		}
+		cpu := new(int)
+		if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
+			*cpu = int(r.Configuration.CPU.ValueInt32())
+		} else {
+			cpu = nil
+		}
+		memory := new(int)
+		if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
+			*memory = int(r.Configuration.Memory.ValueInt32())
+		} else {
+			memory = nil
+		}
+		mountData := make([]string, 0, len(r.Configuration.MountData))
+		for _, mountDataItem := range r.Configuration.MountData {
+			mountData = append(mountData, mountDataItem.ValueString())
+		}
+		condaEnvironment := new(string)
+		if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
+			*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
+		} else {
+			condaEnvironment = nil
+		}
+		lifespanHours := new(int)
+		if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
+			*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
+		} else {
+			lifespanHours = nil
+		}
+		configuration = &shared.DataStudioConfiguration{
+			Gpu:              gpu,
+			CPU:              cpu,
+			Memory:           memory,
+			MountData:        mountData,
+			CondaEnvironment: condaEnvironment,
+			LifespanHours:    lifespanHours,
+		}
+	}
+	isPrivate := new(bool)
+	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {
+		*isPrivate = r.IsPrivate.ValueBool()
+	} else {
+		isPrivate = nil
+	}
+	var labelIds []int64
+	if r.LabelIds != nil {
+		labelIds = make([]int64, 0, len(r.LabelIds))
+		for _, labelIdsItem := range r.LabelIds {
+			labelIds = append(labelIds, labelIdsItem.ValueInt64())
+		}
+	}
+	spot := new(bool)
+	if !r.Spot.IsUnknown() && !r.Spot.IsNull() {
+		*spot = r.Spot.ValueBool()
+	} else {
+		spot = nil
+	}
+	out := shared.DataStudioCreateRequest{
+		Name:                name,
+		Description:         description,
+		DataStudioToolURL:   dataStudioToolURL,
+		ComputeEnvID:        computeEnvID,
+		InitialCheckpointID: initialCheckpointID,
+		Configuration:       configuration,
+		IsPrivate:           isPrivate,
+		LabelIds:            labelIds,
+		Spot:                spot,
+	}
+
+	return &out, diags
+}
+
 func (r *DataStudiosResourceModel) ToOperationsCreateDataStudioRequest(ctx context.Context) (*operations.CreateDataStudioRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -27,16 +130,27 @@ func (r *DataStudiosResourceModel) ToOperationsCreateDataStudioRequest(ctx conte
 	} else {
 		autoStart = nil
 	}
+	dataStudioCreateRequest, dataStudioCreateRequestDiags := r.ToSharedDataStudioCreateRequest(ctx)
+	diags.Append(dataStudioCreateRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := operations.CreateDataStudioRequest{
-		WorkspaceID: workspaceID,
-		AutoStart:   autoStart,
+		WorkspaceID:             workspaceID,
+		AutoStart:               autoStart,
+		DataStudioCreateRequest: *dataStudioCreateRequest,
 	}
 
 	return &out, diags
 }
 
-func (r *DataStudiosResourceModel) ToOperationsListDataStudiosRequest(ctx context.Context) (*operations.ListDataStudiosRequest, diag.Diagnostics) {
+func (r *DataStudiosResourceModel) ToOperationsDescribeDataStudioRequest(ctx context.Context) (*operations.DescribeDataStudioRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var sessionID string
+	sessionID = r.SessionID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -44,7 +158,8 @@ func (r *DataStudiosResourceModel) ToOperationsListDataStudiosRequest(ctx contex
 	} else {
 		workspaceID = nil
 	}
-	out := operations.ListDataStudiosRequest{
+	out := operations.DescribeDataStudioRequest{
+		SessionID:   sessionID,
 		WorkspaceID: workspaceID,
 	}
 
@@ -71,508 +186,221 @@ func (r *DataStudiosResourceModel) ToOperationsDeleteDataStudioRequest(ctx conte
 	return &out, diags
 }
 
-func (r *DataStudiosResourceModel) RefreshFromSharedDataStudioCreateResponse(ctx context.Context, resp *shared.DataStudioCreateResponse) diag.Diagnostics {
+func (r *DataStudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Context, resp *shared.DataStudioDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.AutoStart = rPriorData.AutoStart
-		r.ComputeEnvID = rPriorData.ComputeEnvID
-		r.CondaEnvironment = rPriorData.CondaEnvironment
-		r.CPU = rPriorData.CPU
-		r.DataStudioToolURL = rPriorData.DataStudioToolURL
-		r.Description = rPriorData.Description
-		r.Gpu = rPriorData.Gpu
-		r.InitialCheckpointID = rPriorData.InitialCheckpointID
-		r.IsPrivate = rPriorData.IsPrivate
-		r.LabelIds = rPriorData.LabelIds
-		r.LifespanHours = rPriorData.LifespanHours
-		r.Memory = rPriorData.Memory
-		r.MountData = rPriorData.MountData
-		r.Name = rPriorData.Name
-		r.SessionID = rPriorData.SessionID
-		r.Spot = rPriorData.Spot
-		if resp.Studio == nil {
-			r.Studio = nil
+		r.ActiveConnections = []tfTypes.ActiveConnection{}
+		if len(r.ActiveConnections) > len(resp.ActiveConnections) {
+			r.ActiveConnections = r.ActiveConnections[:len(resp.ActiveConnections)]
+		}
+		for activeConnectionsCount, activeConnectionsItem := range resp.ActiveConnections {
+			var activeConnections tfTypes.ActiveConnection
+			activeConnections.Avatar = types.StringValue(activeConnectionsItem.Avatar)
+			activeConnections.Email = types.StringValue(activeConnectionsItem.Email)
+			activeConnections.ID = types.Int64Value(activeConnectionsItem.ID)
+			activeConnections.LastActive = types.StringValue(typeconvert.TimeToString(activeConnectionsItem.LastActive))
+			activeConnections.UserName = types.StringValue(activeConnectionsItem.UserName)
+			if activeConnectionsCount+1 > len(r.ActiveConnections) {
+				r.ActiveConnections = append(r.ActiveConnections, activeConnections)
+			} else {
+				r.ActiveConnections[activeConnectionsCount].Avatar = activeConnections.Avatar
+				r.ActiveConnections[activeConnectionsCount].Email = activeConnections.Email
+				r.ActiveConnections[activeConnectionsCount].ID = activeConnections.ID
+				r.ActiveConnections[activeConnectionsCount].LastActive = activeConnections.LastActive
+				r.ActiveConnections[activeConnectionsCount].UserName = activeConnections.UserName
+			}
+		}
+		r.BaseImage = types.StringPointerValue(resp.BaseImage)
+		if resp.ComputeEnv == nil {
+			r.ComputeEnv = nil
 		} else {
-			r.Studio = &tfTypes.DataStudioDto{}
-			r.Studio.ActiveConnections = []tfTypes.ActiveConnection{}
-			if len(r.Studio.ActiveConnections) > len(resp.Studio.ActiveConnections) {
-				r.Studio.ActiveConnections = r.Studio.ActiveConnections[:len(resp.Studio.ActiveConnections)]
-			}
-			for activeConnectionsCount, activeConnectionsItem := range resp.Studio.ActiveConnections {
-				var activeConnections tfTypes.ActiveConnection
-				activeConnections.Avatar = types.StringValue(activeConnectionsItem.Avatar)
-				activeConnections.Email = types.StringValue(activeConnectionsItem.Email)
-				activeConnections.ID = types.Int64Value(activeConnectionsItem.ID)
-				activeConnections.LastActive = types.StringValue(typeconvert.TimeToString(activeConnectionsItem.LastActive))
-				activeConnections.UserName = types.StringValue(activeConnectionsItem.UserName)
-				if activeConnectionsCount+1 > len(r.Studio.ActiveConnections) {
-					r.Studio.ActiveConnections = append(r.Studio.ActiveConnections, activeConnections)
-				} else {
-					r.Studio.ActiveConnections[activeConnectionsCount].Avatar = activeConnections.Avatar
-					r.Studio.ActiveConnections[activeConnectionsCount].Email = activeConnections.Email
-					r.Studio.ActiveConnections[activeConnectionsCount].ID = activeConnections.ID
-					r.Studio.ActiveConnections[activeConnectionsCount].LastActive = activeConnections.LastActive
-					r.Studio.ActiveConnections[activeConnectionsCount].UserName = activeConnections.UserName
-				}
-			}
-			r.Studio.BaseImage = types.StringPointerValue(resp.Studio.BaseImage)
-			if resp.Studio.ComputeEnv == nil {
-				r.Studio.ComputeEnv = nil
-			} else {
-				r.Studio.ComputeEnv = &tfTypes.DataStudioComputeEnvDto{}
-				r.Studio.ComputeEnv.CredentialsID = types.StringPointerValue(resp.Studio.ComputeEnv.CredentialsID)
-				r.Studio.ComputeEnv.ID = types.StringPointerValue(resp.Studio.ComputeEnv.ID)
-				r.Studio.ComputeEnv.Name = types.StringPointerValue(resp.Studio.ComputeEnv.Name)
-				r.Studio.ComputeEnv.Platform = types.StringPointerValue(resp.Studio.ComputeEnv.Platform)
-				r.Studio.ComputeEnv.Region = types.StringPointerValue(resp.Studio.ComputeEnv.Region)
-				r.Studio.ComputeEnv.WorkDir = types.StringPointerValue(resp.Studio.ComputeEnv.WorkDir)
-			}
-			if resp.Studio.Configuration == nil {
-				r.Studio.Configuration = nil
-			} else {
-				r.Studio.Configuration = &tfTypes.DataStudioConfiguration{}
-				r.Studio.Configuration.CondaEnvironment = types.StringPointerValue(resp.Studio.Configuration.CondaEnvironment)
-				r.Studio.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Studio.Configuration.CPU))
-				r.Studio.Configuration.Gpu = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Studio.Configuration.Gpu))
-				r.Studio.Configuration.LifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Studio.Configuration.LifespanHours))
-				r.Studio.Configuration.Memory = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Studio.Configuration.Memory))
-				r.Studio.Configuration.MountData = make([]types.String, 0, len(resp.Studio.Configuration.MountData))
-				for _, v := range resp.Studio.Configuration.MountData {
-					r.Studio.Configuration.MountData = append(r.Studio.Configuration.MountData, types.StringValue(v))
-				}
-			}
-			r.Studio.CustomImage = types.BoolPointerValue(resp.Studio.CustomImage)
-			r.Studio.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Studio.DateCreated))
-			r.Studio.Description = types.StringPointerValue(resp.Studio.Description)
-			r.Studio.EffectiveLifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Studio.EffectiveLifespanHours))
-			r.Studio.IsPrivate = types.BoolPointerValue(resp.Studio.IsPrivate)
-			if resp.Studio.Labels != nil {
-				r.Studio.Labels = []tfTypes.LabelDbDto{}
-				if len(r.Studio.Labels) > len(resp.Studio.Labels) {
-					r.Studio.Labels = r.Studio.Labels[:len(resp.Studio.Labels)]
-				}
-				for labelsCount, labelsItem := range resp.Studio.Labels {
-					var labels tfTypes.LabelDbDto
-					labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-					labels.ID = types.Int64PointerValue(labelsItem.ID)
-					labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-					labels.Name = types.StringPointerValue(labelsItem.Name)
-					labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-					labels.Value = types.StringPointerValue(labelsItem.Value)
-					if labelsCount+1 > len(r.Studio.Labels) {
-						r.Studio.Labels = append(r.Studio.Labels, labels)
-					} else {
-						r.Studio.Labels[labelsCount].DateCreated = labels.DateCreated
-						r.Studio.Labels[labelsCount].ID = labels.ID
-						r.Studio.Labels[labelsCount].IsDefault = labels.IsDefault
-						r.Studio.Labels[labelsCount].Name = labels.Name
-						r.Studio.Labels[labelsCount].Resource = labels.Resource
-						r.Studio.Labels[labelsCount].Value = labels.Value
-					}
-				}
-			}
-			r.Studio.LastStarted = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Studio.LastStarted))
-			r.Studio.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Studio.LastUpdated))
-			r.Studio.MountedDataLinks = []tfTypes.DataLinkDto{}
-			if len(r.Studio.MountedDataLinks) > len(resp.Studio.MountedDataLinks) {
-				r.Studio.MountedDataLinks = r.Studio.MountedDataLinks[:len(resp.Studio.MountedDataLinks)]
-			}
-			for mountedDataLinksCount, mountedDataLinksItem := range resp.Studio.MountedDataLinks {
-				var mountedDataLinks tfTypes.DataLinkDto
-				mountedDataLinks.Credentials = []tfTypes.DataLinkCredentials{}
-				for credentialsCount, credentialsItem := range mountedDataLinksItem.Credentials {
-					var credentials tfTypes.DataLinkCredentials
-					credentials.ID = types.StringValue(credentialsItem.ID)
-					credentials.Name = types.StringValue(credentialsItem.Name)
-					credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
-					if credentialsCount+1 > len(mountedDataLinks.Credentials) {
-						mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
-					} else {
-						mountedDataLinks.Credentials[credentialsCount].ID = credentials.ID
-						mountedDataLinks.Credentials[credentialsCount].Name = credentials.Name
-						mountedDataLinks.Credentials[credentialsCount].ProviderType = credentials.ProviderType
-					}
-				}
-				mountedDataLinks.DataLinkID = types.StringPointerValue(mountedDataLinksItem.DataLinkID)
-				mountedDataLinks.Description = types.StringPointerValue(mountedDataLinksItem.Description)
-				mountedDataLinks.Hidden = types.BoolPointerValue(mountedDataLinksItem.Hidden)
-				mountedDataLinks.Message = types.StringPointerValue(mountedDataLinksItem.Message)
-				mountedDataLinks.Name = types.StringPointerValue(mountedDataLinksItem.Name)
-				if mountedDataLinksItem.ProviderType != nil {
-					mountedDataLinks.ProviderType = types.StringValue(string(*mountedDataLinksItem.ProviderType))
-				} else {
-					mountedDataLinks.ProviderType = types.StringNull()
-				}
-				mountedDataLinks.PublicAccessible = types.BoolPointerValue(mountedDataLinksItem.PublicAccessible)
-				mountedDataLinks.Region = types.StringPointerValue(mountedDataLinksItem.Region)
-				mountedDataLinks.ResourceRef = types.StringPointerValue(mountedDataLinksItem.ResourceRef)
-				if mountedDataLinksItem.Status != nil {
-					mountedDataLinks.Status = types.StringValue(string(*mountedDataLinksItem.Status))
-				} else {
-					mountedDataLinks.Status = types.StringNull()
-				}
-				if mountedDataLinksItem.Type != nil {
-					mountedDataLinks.Type = types.StringValue(string(*mountedDataLinksItem.Type))
-				} else {
-					mountedDataLinks.Type = types.StringNull()
-				}
-				if mountedDataLinksCount+1 > len(r.Studio.MountedDataLinks) {
-					r.Studio.MountedDataLinks = append(r.Studio.MountedDataLinks, mountedDataLinks)
-				} else {
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Credentials = mountedDataLinks.Credentials
-					r.Studio.MountedDataLinks[mountedDataLinksCount].DataLinkID = mountedDataLinks.DataLinkID
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Description = mountedDataLinks.Description
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Hidden = mountedDataLinks.Hidden
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Message = mountedDataLinks.Message
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Name = mountedDataLinks.Name
-					r.Studio.MountedDataLinks[mountedDataLinksCount].ProviderType = mountedDataLinks.ProviderType
-					r.Studio.MountedDataLinks[mountedDataLinksCount].PublicAccessible = mountedDataLinks.PublicAccessible
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Region = mountedDataLinks.Region
-					r.Studio.MountedDataLinks[mountedDataLinksCount].ResourceRef = mountedDataLinks.ResourceRef
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Status = mountedDataLinks.Status
-					r.Studio.MountedDataLinks[mountedDataLinksCount].Type = mountedDataLinks.Type
-				}
-			}
-			r.Studio.Name = types.StringPointerValue(resp.Studio.Name)
-			if resp.Studio.ParentCheckpoint == nil {
-				r.Studio.ParentCheckpoint = nil
-			} else {
-				r.Studio.ParentCheckpoint = &tfTypes.DataStudioDtoParentCheckpoint{}
-				r.Studio.ParentCheckpoint.CheckpointID = types.Int64PointerValue(resp.Studio.ParentCheckpoint.CheckpointID)
-				r.Studio.ParentCheckpoint.CheckpointName = types.StringPointerValue(resp.Studio.ParentCheckpoint.CheckpointName)
-				r.Studio.ParentCheckpoint.SessionID = types.StringPointerValue(resp.Studio.ParentCheckpoint.SessionID)
-				r.Studio.ParentCheckpoint.StudioName = types.StringPointerValue(resp.Studio.ParentCheckpoint.StudioName)
-			}
-			r.Studio.Progress = []tfTypes.DataStudioProgressStep{}
-			if len(r.Studio.Progress) > len(resp.Studio.Progress) {
-				r.Studio.Progress = r.Studio.Progress[:len(resp.Studio.Progress)]
-			}
-			for progressCount, progressItem := range resp.Studio.Progress {
-				var progress tfTypes.DataStudioProgressStep
-				progress.Message = types.StringPointerValue(progressItem.Message)
-				if progressItem.Status != nil {
-					progress.Status = types.StringValue(string(*progressItem.Status))
-				} else {
-					progress.Status = types.StringNull()
-				}
-				progress.Warnings = make([]types.String, 0, len(progressItem.Warnings))
-				for _, v := range progressItem.Warnings {
-					progress.Warnings = append(progress.Warnings, types.StringValue(v))
-				}
-				if progressCount+1 > len(r.Studio.Progress) {
-					r.Studio.Progress = append(r.Studio.Progress, progress)
-				} else {
-					r.Studio.Progress[progressCount].Message = progress.Message
-					r.Studio.Progress[progressCount].Status = progress.Status
-					r.Studio.Progress[progressCount].Warnings = progress.Warnings
-				}
-			}
-			r.Studio.SessionID = types.StringPointerValue(resp.Studio.SessionID)
-			if resp.Studio.StatusInfo == nil {
-				r.Studio.StatusInfo = nil
-			} else {
-				r.Studio.StatusInfo = &tfTypes.DataStudioStatusInfo{}
-				r.Studio.StatusInfo.LastUpdate = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Studio.StatusInfo.LastUpdate))
-				r.Studio.StatusInfo.Message = types.StringPointerValue(resp.Studio.StatusInfo.Message)
-				if resp.Studio.StatusInfo.Status != nil {
-					r.Studio.StatusInfo.Status = types.StringValue(string(*resp.Studio.StatusInfo.Status))
-				} else {
-					r.Studio.StatusInfo.Status = types.StringNull()
-				}
-			}
-			r.Studio.StudioURL = types.StringPointerValue(resp.Studio.StudioURL)
-			if resp.Studio.Template == nil {
-				r.Studio.Template = nil
-			} else {
-				r.Studio.Template = &tfTypes.DataStudioTemplate{}
-				r.Studio.Template.Icon = types.StringPointerValue(resp.Studio.Template.Icon)
-				r.Studio.Template.Repository = types.StringPointerValue(resp.Studio.Template.Repository)
-				if resp.Studio.Template.Status != nil {
-					r.Studio.Template.Status = types.StringValue(string(*resp.Studio.Template.Status))
-				} else {
-					r.Studio.Template.Status = types.StringNull()
-				}
-				r.Studio.Template.Tool = types.StringPointerValue(resp.Studio.Template.Tool)
-			}
-			if resp.Studio.User == nil {
-				r.Studio.User = nil
-			} else {
-				r.Studio.User = &tfTypes.StudioUser{}
-				r.Studio.User.Avatar = types.StringValue(resp.Studio.User.Avatar)
-				r.Studio.User.Email = types.StringValue(resp.Studio.User.Email)
-				r.Studio.User.ID = types.Int64Value(resp.Studio.User.ID)
-				r.Studio.User.UserName = types.StringValue(resp.Studio.User.UserName)
-			}
-			r.Studio.WaveBuildURL = types.StringPointerValue(resp.Studio.WaveBuildURL)
-			r.Studio.WorkspaceID = types.Int64PointerValue(resp.Studio.WorkspaceID)
+			r.ComputeEnv = &tfTypes.DataStudioComputeEnvDto{}
+			r.ComputeEnv.CredentialsID = types.StringPointerValue(resp.ComputeEnv.CredentialsID)
+			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
+			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
+			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
+			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
+			r.ComputeEnv.WorkDir = types.StringPointerValue(resp.ComputeEnv.WorkDir)
 		}
-		r.Studios = rPriorData.Studios
-		r.TotalSize = rPriorData.TotalSize
-		r.WorkspaceID = rPriorData.WorkspaceID
-	}
-
-	return diags
-}
-
-func (r *DataStudiosResourceModel) RefreshFromSharedDataStudioListResponse(ctx context.Context, resp *shared.DataStudioListResponse) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		rPriorData := r
-		r.AutoStart = rPriorData.AutoStart
-		r.ComputeEnvID = rPriorData.ComputeEnvID
-		r.CondaEnvironment = rPriorData.CondaEnvironment
-		r.CPU = rPriorData.CPU
-		r.DataStudioToolURL = rPriorData.DataStudioToolURL
-		r.Description = rPriorData.Description
-		r.Gpu = rPriorData.Gpu
-		r.InitialCheckpointID = rPriorData.InitialCheckpointID
-		r.IsPrivate = rPriorData.IsPrivate
-		r.LabelIds = rPriorData.LabelIds
-		r.LifespanHours = rPriorData.LifespanHours
-		r.Memory = rPriorData.Memory
-		r.MountData = rPriorData.MountData
-		r.Name = rPriorData.Name
-		r.SessionID = rPriorData.SessionID
-		r.Spot = rPriorData.Spot
-		r.Studio = rPriorData.Studio
-		r.Studios = []tfTypes.DataStudioDto{}
-		if len(r.Studios) > len(resp.Studios) {
-			r.Studios = r.Studios[:len(resp.Studios)]
-		}
-		for studiosCount, studiosItem := range resp.Studios {
-			var studios tfTypes.DataStudioDto
-			studios.SessionID = types.StringPointerValue(studiosItem.SessionID)
-			studios.WorkspaceID = types.Int64PointerValue(studiosItem.WorkspaceID)
-			if studiosItem.ParentCheckpoint == nil {
-				studios.ParentCheckpoint = nil
-			} else {
-				studios.ParentCheckpoint = &tfTypes.DataStudioDtoParentCheckpoint{}
-				studios.ParentCheckpoint.CheckpointID = types.Int64PointerValue(studiosItem.ParentCheckpoint.CheckpointID)
-				studios.ParentCheckpoint.CheckpointName = types.StringPointerValue(studiosItem.ParentCheckpoint.CheckpointName)
-				studios.ParentCheckpoint.SessionID = types.StringPointerValue(studiosItem.ParentCheckpoint.SessionID)
-				studios.ParentCheckpoint.StudioName = types.StringPointerValue(studiosItem.ParentCheckpoint.StudioName)
-			}
-			if studiosItem.User == nil {
-				studios.User = nil
-			} else {
-				studios.User = &tfTypes.StudioUser{}
-				studios.User.ID = types.Int64Value(studiosItem.User.ID)
-				studios.User.UserName = types.StringValue(studiosItem.User.UserName)
-				studios.User.Email = types.StringValue(studiosItem.User.Email)
-				studios.User.Avatar = types.StringValue(studiosItem.User.Avatar)
-			}
-			studios.Name = types.StringPointerValue(studiosItem.Name)
-			studios.Description = types.StringPointerValue(studiosItem.Description)
-			studios.StudioURL = types.StringPointerValue(studiosItem.StudioURL)
-			if studiosItem.ComputeEnv == nil {
-				studios.ComputeEnv = nil
-			} else {
-				studios.ComputeEnv = &tfTypes.DataStudioComputeEnvDto{}
-				studios.ComputeEnv.ID = types.StringPointerValue(studiosItem.ComputeEnv.ID)
-				studios.ComputeEnv.Name = types.StringPointerValue(studiosItem.ComputeEnv.Name)
-				studios.ComputeEnv.Platform = types.StringPointerValue(studiosItem.ComputeEnv.Platform)
-				studios.ComputeEnv.Region = types.StringPointerValue(studiosItem.ComputeEnv.Region)
-				studios.ComputeEnv.CredentialsID = types.StringPointerValue(studiosItem.ComputeEnv.CredentialsID)
-				studios.ComputeEnv.WorkDir = types.StringPointerValue(studiosItem.ComputeEnv.WorkDir)
-			}
-			if studiosItem.Template == nil {
-				studios.Template = nil
-			} else {
-				studios.Template = &tfTypes.DataStudioTemplate{}
-				studios.Template.Repository = types.StringPointerValue(studiosItem.Template.Repository)
-				studios.Template.Icon = types.StringPointerValue(studiosItem.Template.Icon)
-				if studiosItem.Template.Status != nil {
-					studios.Template.Status = types.StringValue(string(*studiosItem.Template.Status))
-				} else {
-					studios.Template.Status = types.StringNull()
-				}
-				studios.Template.Tool = types.StringPointerValue(studiosItem.Template.Tool)
-			}
-			if studiosItem.Configuration == nil {
-				studios.Configuration = nil
-			} else {
-				studios.Configuration = &tfTypes.DataStudioConfiguration{}
-				studios.Configuration.Gpu = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(studiosItem.Configuration.Gpu))
-				studios.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(studiosItem.Configuration.CPU))
-				studios.Configuration.Memory = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(studiosItem.Configuration.Memory))
-				studios.Configuration.MountData = make([]types.String, 0, len(studiosItem.Configuration.MountData))
-				for _, v := range studiosItem.Configuration.MountData {
-					studios.Configuration.MountData = append(studios.Configuration.MountData, types.StringValue(v))
-				}
-				studios.Configuration.CondaEnvironment = types.StringPointerValue(studiosItem.Configuration.CondaEnvironment)
-				studios.Configuration.LifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(studiosItem.Configuration.LifespanHours))
-			}
-			studios.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(studiosItem.DateCreated))
-			studios.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(studiosItem.LastUpdated))
-			studios.LastStarted = types.StringPointerValue(typeconvert.TimePointerToStringPointer(studiosItem.LastStarted))
-			studios.EffectiveLifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(studiosItem.EffectiveLifespanHours))
-			studios.ActiveConnections = []tfTypes.ActiveConnection{}
-			for activeConnectionsCount, activeConnectionsItem := range studiosItem.ActiveConnections {
-				var activeConnections tfTypes.ActiveConnection
-				activeConnections.ID = types.Int64Value(activeConnectionsItem.ID)
-				activeConnections.UserName = types.StringValue(activeConnectionsItem.UserName)
-				activeConnections.Email = types.StringValue(activeConnectionsItem.Email)
-				activeConnections.Avatar = types.StringValue(activeConnectionsItem.Avatar)
-				activeConnections.LastActive = types.StringValue(typeconvert.TimeToString(activeConnectionsItem.LastActive))
-				if activeConnectionsCount+1 > len(studios.ActiveConnections) {
-					studios.ActiveConnections = append(studios.ActiveConnections, activeConnections)
-				} else {
-					studios.ActiveConnections[activeConnectionsCount].ID = activeConnections.ID
-					studios.ActiveConnections[activeConnectionsCount].UserName = activeConnections.UserName
-					studios.ActiveConnections[activeConnectionsCount].Email = activeConnections.Email
-					studios.ActiveConnections[activeConnectionsCount].Avatar = activeConnections.Avatar
-					studios.ActiveConnections[activeConnectionsCount].LastActive = activeConnections.LastActive
-				}
-			}
-			if studiosItem.StatusInfo == nil {
-				studios.StatusInfo = nil
-			} else {
-				studios.StatusInfo = &tfTypes.DataStudioStatusInfo{}
-				if studiosItem.StatusInfo.Status != nil {
-					studios.StatusInfo.Status = types.StringValue(string(*studiosItem.StatusInfo.Status))
-				} else {
-					studios.StatusInfo.Status = types.StringNull()
-				}
-				studios.StatusInfo.Message = types.StringPointerValue(studiosItem.StatusInfo.Message)
-				studios.StatusInfo.LastUpdate = types.StringPointerValue(typeconvert.TimePointerToStringPointer(studiosItem.StatusInfo.LastUpdate))
-			}
-			studios.WaveBuildURL = types.StringPointerValue(studiosItem.WaveBuildURL)
-			studios.BaseImage = types.StringPointerValue(studiosItem.BaseImage)
-			studios.CustomImage = types.BoolPointerValue(studiosItem.CustomImage)
-			studios.IsPrivate = types.BoolPointerValue(studiosItem.IsPrivate)
-			studios.MountedDataLinks = []tfTypes.DataLinkDto{}
-			for mountedDataLinksCount, mountedDataLinksItem := range studiosItem.MountedDataLinks {
-				var mountedDataLinks tfTypes.DataLinkDto
-				mountedDataLinks.DataLinkID = types.StringPointerValue(mountedDataLinksItem.DataLinkID)
-				mountedDataLinks.Name = types.StringPointerValue(mountedDataLinksItem.Name)
-				mountedDataLinks.Description = types.StringPointerValue(mountedDataLinksItem.Description)
-				mountedDataLinks.ResourceRef = types.StringPointerValue(mountedDataLinksItem.ResourceRef)
-				if mountedDataLinksItem.Type != nil {
-					mountedDataLinks.Type = types.StringValue(string(*mountedDataLinksItem.Type))
-				} else {
-					mountedDataLinks.Type = types.StringNull()
-				}
-				if mountedDataLinksItem.ProviderType != nil {
-					mountedDataLinks.ProviderType = types.StringValue(string(*mountedDataLinksItem.ProviderType))
-				} else {
-					mountedDataLinks.ProviderType = types.StringNull()
-				}
-				mountedDataLinks.Region = types.StringPointerValue(mountedDataLinksItem.Region)
-				mountedDataLinks.Credentials = []tfTypes.DataLinkCredentials{}
-				for credentialsCount, credentialsItem := range mountedDataLinksItem.Credentials {
-					var credentials tfTypes.DataLinkCredentials
-					credentials.ID = types.StringValue(credentialsItem.ID)
-					credentials.Name = types.StringValue(credentialsItem.Name)
-					credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
-					if credentialsCount+1 > len(mountedDataLinks.Credentials) {
-						mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
-					} else {
-						mountedDataLinks.Credentials[credentialsCount].ID = credentials.ID
-						mountedDataLinks.Credentials[credentialsCount].Name = credentials.Name
-						mountedDataLinks.Credentials[credentialsCount].ProviderType = credentials.ProviderType
-					}
-				}
-				mountedDataLinks.PublicAccessible = types.BoolPointerValue(mountedDataLinksItem.PublicAccessible)
-				mountedDataLinks.Hidden = types.BoolPointerValue(mountedDataLinksItem.Hidden)
-				if mountedDataLinksItem.Status != nil {
-					mountedDataLinks.Status = types.StringValue(string(*mountedDataLinksItem.Status))
-				} else {
-					mountedDataLinks.Status = types.StringNull()
-				}
-				mountedDataLinks.Message = types.StringPointerValue(mountedDataLinksItem.Message)
-				if mountedDataLinksCount+1 > len(studios.MountedDataLinks) {
-					studios.MountedDataLinks = append(studios.MountedDataLinks, mountedDataLinks)
-				} else {
-					studios.MountedDataLinks[mountedDataLinksCount].DataLinkID = mountedDataLinks.DataLinkID
-					studios.MountedDataLinks[mountedDataLinksCount].Name = mountedDataLinks.Name
-					studios.MountedDataLinks[mountedDataLinksCount].Description = mountedDataLinks.Description
-					studios.MountedDataLinks[mountedDataLinksCount].ResourceRef = mountedDataLinks.ResourceRef
-					studios.MountedDataLinks[mountedDataLinksCount].Type = mountedDataLinks.Type
-					studios.MountedDataLinks[mountedDataLinksCount].ProviderType = mountedDataLinks.ProviderType
-					studios.MountedDataLinks[mountedDataLinksCount].Region = mountedDataLinks.Region
-					studios.MountedDataLinks[mountedDataLinksCount].Credentials = mountedDataLinks.Credentials
-					studios.MountedDataLinks[mountedDataLinksCount].PublicAccessible = mountedDataLinks.PublicAccessible
-					studios.MountedDataLinks[mountedDataLinksCount].Hidden = mountedDataLinks.Hidden
-					studios.MountedDataLinks[mountedDataLinksCount].Status = mountedDataLinks.Status
-					studios.MountedDataLinks[mountedDataLinksCount].Message = mountedDataLinks.Message
-				}
-			}
-			studios.Progress = []tfTypes.DataStudioProgressStep{}
-			for progressCount, progressItem := range studiosItem.Progress {
-				var progress tfTypes.DataStudioProgressStep
-				if progressItem.Status != nil {
-					progress.Status = types.StringValue(string(*progressItem.Status))
-				} else {
-					progress.Status = types.StringNull()
-				}
-				progress.Message = types.StringPointerValue(progressItem.Message)
-				progress.Warnings = make([]types.String, 0, len(progressItem.Warnings))
-				for _, v := range progressItem.Warnings {
-					progress.Warnings = append(progress.Warnings, types.StringValue(v))
-				}
-				if progressCount+1 > len(studios.Progress) {
-					studios.Progress = append(studios.Progress, progress)
-				} else {
-					studios.Progress[progressCount].Status = progress.Status
-					studios.Progress[progressCount].Message = progress.Message
-					studios.Progress[progressCount].Warnings = progress.Warnings
-				}
-			}
-			if studiosItem.Labels != nil {
-				studios.Labels = []tfTypes.LabelDbDto{}
-				for labelsCount, labelsItem := range studiosItem.Labels {
-					var labels tfTypes.LabelDbDto
-					labels.ID = types.Int64PointerValue(labelsItem.ID)
-					labels.Name = types.StringPointerValue(labelsItem.Name)
-					labels.Value = types.StringPointerValue(labelsItem.Value)
-					labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-					labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-					labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-					if labelsCount+1 > len(studios.Labels) {
-						studios.Labels = append(studios.Labels, labels)
-					} else {
-						studios.Labels[labelsCount].ID = labels.ID
-						studios.Labels[labelsCount].Name = labels.Name
-						studios.Labels[labelsCount].Value = labels.Value
-						studios.Labels[labelsCount].Resource = labels.Resource
-						studios.Labels[labelsCount].IsDefault = labels.IsDefault
-						studios.Labels[labelsCount].DateCreated = labels.DateCreated
-					}
-				}
-			}
-			if studiosCount+1 > len(r.Studios) {
-				r.Studios = append(r.Studios, studios)
-			} else {
-				r.Studios[studiosCount].SessionID = studios.SessionID
-				r.Studios[studiosCount].WorkspaceID = studios.WorkspaceID
-				r.Studios[studiosCount].ParentCheckpoint = studios.ParentCheckpoint
-				r.Studios[studiosCount].User = studios.User
-				r.Studios[studiosCount].Name = studios.Name
-				r.Studios[studiosCount].Description = studios.Description
-				r.Studios[studiosCount].StudioURL = studios.StudioURL
-				r.Studios[studiosCount].ComputeEnv = studios.ComputeEnv
-				r.Studios[studiosCount].Template = studios.Template
-				r.Studios[studiosCount].Configuration = studios.Configuration
-				r.Studios[studiosCount].DateCreated = studios.DateCreated
-				r.Studios[studiosCount].LastUpdated = studios.LastUpdated
-				r.Studios[studiosCount].LastStarted = studios.LastStarted
-				r.Studios[studiosCount].EffectiveLifespanHours = studios.EffectiveLifespanHours
-				r.Studios[studiosCount].ActiveConnections = studios.ActiveConnections
-				r.Studios[studiosCount].StatusInfo = studios.StatusInfo
-				r.Studios[studiosCount].WaveBuildURL = studios.WaveBuildURL
-				r.Studios[studiosCount].BaseImage = studios.BaseImage
-				r.Studios[studiosCount].CustomImage = studios.CustomImage
-				r.Studios[studiosCount].IsPrivate = studios.IsPrivate
-				r.Studios[studiosCount].MountedDataLinks = studios.MountedDataLinks
-				r.Studios[studiosCount].Progress = studios.Progress
-				r.Studios[studiosCount].Labels = studios.Labels
+		if resp.Configuration == nil {
+			r.Configuration = nil
+		} else {
+			r.Configuration = &tfTypes.DataStudioConfiguration{}
+			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
+			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))
+			r.Configuration.Gpu = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Gpu))
+			r.Configuration.LifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.LifespanHours))
+			r.Configuration.Memory = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Memory))
+			r.Configuration.MountData = make([]types.String, 0, len(resp.Configuration.MountData))
+			for _, v := range resp.Configuration.MountData {
+				r.Configuration.MountData = append(r.Configuration.MountData, types.StringValue(v))
 			}
 		}
-		r.TotalSize = types.Int64Value(resp.TotalSize)
-		r.WorkspaceID = rPriorData.WorkspaceID
+		r.CustomImage = types.BoolPointerValue(resp.CustomImage)
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.Description = types.StringPointerValue(resp.Description)
+		r.EffectiveLifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.EffectiveLifespanHours))
+		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
+		if resp.Labels != nil {
+			r.Labels = []tfTypes.LabelDbDto{}
+			if len(r.Labels) > len(resp.Labels) {
+				r.Labels = r.Labels[:len(resp.Labels)]
+			}
+			for labelsCount, labelsItem := range resp.Labels {
+				var labels tfTypes.LabelDbDto
+				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+				labels.ID = types.Int64PointerValue(labelsItem.ID)
+				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+				labels.Name = types.StringPointerValue(labelsItem.Name)
+				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+				labels.Value = types.StringPointerValue(labelsItem.Value)
+				if labelsCount+1 > len(r.Labels) {
+					r.Labels = append(r.Labels, labels)
+				} else {
+					r.Labels[labelsCount].DateCreated = labels.DateCreated
+					r.Labels[labelsCount].ID = labels.ID
+					r.Labels[labelsCount].IsDefault = labels.IsDefault
+					r.Labels[labelsCount].Name = labels.Name
+					r.Labels[labelsCount].Resource = labels.Resource
+					r.Labels[labelsCount].Value = labels.Value
+				}
+			}
+		}
+		r.LastStarted = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastStarted))
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.MountedDataLinks = []tfTypes.DataLinkDto{}
+		if len(r.MountedDataLinks) > len(resp.MountedDataLinks) {
+			r.MountedDataLinks = r.MountedDataLinks[:len(resp.MountedDataLinks)]
+		}
+		for mountedDataLinksCount, mountedDataLinksItem := range resp.MountedDataLinks {
+			var mountedDataLinks tfTypes.DataLinkDto
+			mountedDataLinks.Credentials = []tfTypes.DataLinkCredentials{}
+			for credentialsCount, credentialsItem := range mountedDataLinksItem.Credentials {
+				var credentials tfTypes.DataLinkCredentials
+				credentials.ID = types.StringValue(credentialsItem.ID)
+				credentials.Name = types.StringValue(credentialsItem.Name)
+				credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
+				if credentialsCount+1 > len(mountedDataLinks.Credentials) {
+					mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
+				} else {
+					mountedDataLinks.Credentials[credentialsCount].ID = credentials.ID
+					mountedDataLinks.Credentials[credentialsCount].Name = credentials.Name
+					mountedDataLinks.Credentials[credentialsCount].ProviderType = credentials.ProviderType
+				}
+			}
+			mountedDataLinks.DataLinkID = types.StringPointerValue(mountedDataLinksItem.DataLinkID)
+			mountedDataLinks.Description = types.StringPointerValue(mountedDataLinksItem.Description)
+			mountedDataLinks.Hidden = types.BoolPointerValue(mountedDataLinksItem.Hidden)
+			mountedDataLinks.Message = types.StringPointerValue(mountedDataLinksItem.Message)
+			mountedDataLinks.Name = types.StringPointerValue(mountedDataLinksItem.Name)
+			if mountedDataLinksItem.ProviderType != nil {
+				mountedDataLinks.ProviderType = types.StringValue(string(*mountedDataLinksItem.ProviderType))
+			} else {
+				mountedDataLinks.ProviderType = types.StringNull()
+			}
+			mountedDataLinks.PublicAccessible = types.BoolPointerValue(mountedDataLinksItem.PublicAccessible)
+			mountedDataLinks.Region = types.StringPointerValue(mountedDataLinksItem.Region)
+			mountedDataLinks.ResourceRef = types.StringPointerValue(mountedDataLinksItem.ResourceRef)
+			if mountedDataLinksItem.Status != nil {
+				mountedDataLinks.Status = types.StringValue(string(*mountedDataLinksItem.Status))
+			} else {
+				mountedDataLinks.Status = types.StringNull()
+			}
+			if mountedDataLinksItem.Type != nil {
+				mountedDataLinks.Type = types.StringValue(string(*mountedDataLinksItem.Type))
+			} else {
+				mountedDataLinks.Type = types.StringNull()
+			}
+			if mountedDataLinksCount+1 > len(r.MountedDataLinks) {
+				r.MountedDataLinks = append(r.MountedDataLinks, mountedDataLinks)
+			} else {
+				r.MountedDataLinks[mountedDataLinksCount].Credentials = mountedDataLinks.Credentials
+				r.MountedDataLinks[mountedDataLinksCount].DataLinkID = mountedDataLinks.DataLinkID
+				r.MountedDataLinks[mountedDataLinksCount].Description = mountedDataLinks.Description
+				r.MountedDataLinks[mountedDataLinksCount].Hidden = mountedDataLinks.Hidden
+				r.MountedDataLinks[mountedDataLinksCount].Message = mountedDataLinks.Message
+				r.MountedDataLinks[mountedDataLinksCount].Name = mountedDataLinks.Name
+				r.MountedDataLinks[mountedDataLinksCount].ProviderType = mountedDataLinks.ProviderType
+				r.MountedDataLinks[mountedDataLinksCount].PublicAccessible = mountedDataLinks.PublicAccessible
+				r.MountedDataLinks[mountedDataLinksCount].Region = mountedDataLinks.Region
+				r.MountedDataLinks[mountedDataLinksCount].ResourceRef = mountedDataLinks.ResourceRef
+				r.MountedDataLinks[mountedDataLinksCount].Status = mountedDataLinks.Status
+				r.MountedDataLinks[mountedDataLinksCount].Type = mountedDataLinks.Type
+			}
+		}
+		r.Name = types.StringPointerValue(resp.Name)
+		if resp.ParentCheckpoint == nil {
+			r.ParentCheckpoint = nil
+		} else {
+			r.ParentCheckpoint = &tfTypes.DataStudioDtoParentCheckpoint{}
+			r.ParentCheckpoint.CheckpointID = types.Int64PointerValue(resp.ParentCheckpoint.CheckpointID)
+			r.ParentCheckpoint.CheckpointName = types.StringPointerValue(resp.ParentCheckpoint.CheckpointName)
+			r.ParentCheckpoint.SessionID = types.StringPointerValue(resp.ParentCheckpoint.SessionID)
+			r.ParentCheckpoint.StudioName = types.StringPointerValue(resp.ParentCheckpoint.StudioName)
+		}
+		r.Progress = []tfTypes.DataStudioProgressStep{}
+		if len(r.Progress) > len(resp.Progress) {
+			r.Progress = r.Progress[:len(resp.Progress)]
+		}
+		for progressCount, progressItem := range resp.Progress {
+			var progress tfTypes.DataStudioProgressStep
+			progress.Message = types.StringPointerValue(progressItem.Message)
+			if progressItem.Status != nil {
+				progress.Status = types.StringValue(string(*progressItem.Status))
+			} else {
+				progress.Status = types.StringNull()
+			}
+			progress.Warnings = make([]types.String, 0, len(progressItem.Warnings))
+			for _, v := range progressItem.Warnings {
+				progress.Warnings = append(progress.Warnings, types.StringValue(v))
+			}
+			if progressCount+1 > len(r.Progress) {
+				r.Progress = append(r.Progress, progress)
+			} else {
+				r.Progress[progressCount].Message = progress.Message
+				r.Progress[progressCount].Status = progress.Status
+				r.Progress[progressCount].Warnings = progress.Warnings
+			}
+		}
+		r.SessionID = types.StringPointerValue(resp.SessionID)
+		if resp.StatusInfo == nil {
+			r.StatusInfo = nil
+		} else {
+			r.StatusInfo = &tfTypes.DataStudioStatusInfo{}
+			r.StatusInfo.LastUpdate = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StatusInfo.LastUpdate))
+			r.StatusInfo.Message = types.StringPointerValue(resp.StatusInfo.Message)
+			if resp.StatusInfo.Status != nil {
+				r.StatusInfo.Status = types.StringValue(string(*resp.StatusInfo.Status))
+			} else {
+				r.StatusInfo.Status = types.StringNull()
+			}
+		}
+		r.StudioURL = types.StringPointerValue(resp.StudioURL)
+		if resp.Template == nil {
+			r.Template = nil
+		} else {
+			r.Template = &tfTypes.DataStudioTemplate{}
+			r.Template.Icon = types.StringPointerValue(resp.Template.Icon)
+			r.Template.Repository = types.StringPointerValue(resp.Template.Repository)
+			if resp.Template.Status != nil {
+				r.Template.Status = types.StringValue(string(*resp.Template.Status))
+			} else {
+				r.Template.Status = types.StringNull()
+			}
+			r.Template.Tool = types.StringPointerValue(resp.Template.Tool)
+		}
+		if resp.User == nil {
+			r.User = nil
+		} else {
+			r.User = &tfTypes.StudioUser{}
+			r.User.Avatar = types.StringValue(resp.User.Avatar)
+			r.User.Email = types.StringValue(resp.User.Email)
+			r.User.ID = types.Int64Value(resp.User.ID)
+			r.User.UserName = types.StringValue(resp.User.UserName)
+		}
+		r.WaveBuildURL = types.StringPointerValue(resp.WaveBuildURL)
+		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
 	return diags

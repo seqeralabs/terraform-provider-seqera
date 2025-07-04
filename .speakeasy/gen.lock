@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 68dbbd860d97544eaa44534031942e73
+  docChecksum: afd9c8959a15c3af76926258bd15aef3
   docVersion: 1.45.0
   speakeasyVersion: 1.575.5
   generationVersion: 2.648.7
@@ -56,6 +56,7 @@ generatedFiles:
   - examples/resources/seqera_credential/resource.tf
   - examples/resources/seqera_data_link/import.sh
   - examples/resources/seqera_data_link/resource.tf
+  - examples/resources/seqera_data_studios/import.sh
   - examples/resources/seqera_data_studios/resource.tf
   - examples/resources/seqera_datasets/resource.tf
   - examples/resources/seqera_labels/resource.tf
@@ -201,7 +202,6 @@ generatedFiles:
   - internal/provider/types/data_link_dto.go
   - internal/provider/types/data_studio_compute_env_dto.go
   - internal/provider/types/data_studio_configuration.go
-  - internal/provider/types/data_studio_dto.go
   - internal/provider/types/data_studio_dto_parent_checkpoint.go
   - internal/provider/types/data_studio_progress_step.go
   - internal/provider/types/data_studio_status_info.go

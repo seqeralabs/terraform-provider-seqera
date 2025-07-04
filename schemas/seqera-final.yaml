@@ -5313,7 +5313,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataStudios#read
     post:
       summary: Create Studio
       description: "Creates a new Studio environment, starting it by default. Default behavior can be changed using the query parameter `autoStart=false`."
@@ -5539,6 +5538,7 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: DataStudios#read
     delete:
       summary: Delete Studio
       description: "Deletes the Studio associated with the given Studio session ID."
@@ -9179,7 +9179,7 @@ components:
               type: string
             workDir:
               type: string
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
     DataStudioConfiguration:
       type: object
       properties:
@@ -9206,7 +9206,7 @@ components:
           minimum: 0
           type: integer
           format: int32
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
     DataStudioCreateRequest:
       required:
         - computeEnvId
@@ -9243,7 +9243,7 @@ components:
         spot:
           type: boolean
           nullable: true
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
     DataStudioCreateResponse:
       type: object
       properties:
@@ -9315,7 +9315,7 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:

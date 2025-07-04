@@ -14,12 +14,6 @@ DataStudios DataSource
 
 ```terraform
 data "seqera_data_studios" "my_datastudios" {
-  attributes = [
-    "labels"
-  ]
-  max          = 3
-  offset       = 9
-  search       = "...my_search..."
   workspace_id = 5
 }
 ```
@@ -29,48 +23,35 @@ data "seqera_data_studios" "my_datastudios" {
 
 ### Optional
 
-- `attributes` (List of String) Optional attribute values to be included in the response (`labels`). Returns an empty value (`labels: null`) if omitted.
-- `max` (Number) Pagination max results
-- `offset` (Number) Pagination offset
-- `search` (String) Optional search criteria, allowing free text search on name and templateUrl and keywords: `userId`, `computeEnvId` and `status`.
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 
-- `studios` (Attributes List) (see [below for nested schema](#nestedatt--studios))
-- `total_size` (Number)
-
-<a id="nestedatt--studios"></a>
-### Nested Schema for `studios`
-
-Read-Only:
-
-- `active_connections` (Attributes List) (see [below for nested schema](#nestedatt--studios--active_connections))
+- `active_connections` (Attributes List) (see [below for nested schema](#nestedatt--active_connections))
 - `base_image` (String)
-- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--studios--compute_env))
-- `configuration` (Attributes) (see [below for nested schema](#nestedatt--studios--configuration))
+- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--compute_env))
+- `configuration` (Attributes) (see [below for nested schema](#nestedatt--configuration))
 - `custom_image` (Boolean)
 - `date_created` (String)
 - `description` (String)
 - `effective_lifespan_hours` (Number)
 - `is_private` (Boolean)
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--studios--labels))
+- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
 - `last_started` (String)
 - `last_updated` (String)
-- `mounted_data_links` (Attributes List) (see [below for nested schema](#nestedatt--studios--mounted_data_links))
+- `mounted_data_links` (Attributes List) (see [below for nested schema](#nestedatt--mounted_data_links))
 - `name` (String)
-- `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--studios--parent_checkpoint))
-- `progress` (Attributes List) (see [below for nested schema](#nestedatt--studios--progress))
-- `session_id` (String)
-- `status_info` (Attributes) (see [below for nested schema](#nestedatt--studios--status_info))
+- `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--parent_checkpoint))
+- `progress` (Attributes List) (see [below for nested schema](#nestedatt--progress))
+- `session_id` (String) Studio session numeric identifier
+- `status_info` (Attributes) (see [below for nested schema](#nestedatt--status_info))
 - `studio_url` (String)
-- `template` (Attributes) (see [below for nested schema](#nestedatt--studios--template))
-- `user` (Attributes) (see [below for nested schema](#nestedatt--studios--user))
+- `template` (Attributes) (see [below for nested schema](#nestedatt--template))
+- `user` (Attributes) (see [below for nested schema](#nestedatt--user))
 - `wave_build_url` (String)
-- `workspace_id` (Number)
 
-<a id="nestedatt--studios--active_connections"></a>
-### Nested Schema for `studios.active_connections`
+<a id="nestedatt--active_connections"></a>
+### Nested Schema for `active_connections`
 
 Read-Only:
 
@@ -81,8 +62,8 @@ Read-Only:
 - `user_name` (String)
 
 
-<a id="nestedatt--studios--compute_env"></a>
-### Nested Schema for `studios.compute_env`
+<a id="nestedatt--compute_env"></a>
+### Nested Schema for `compute_env`
 
 Read-Only:
 
@@ -94,8 +75,8 @@ Read-Only:
 - `work_dir` (String)
 
 
-<a id="nestedatt--studios--configuration"></a>
-### Nested Schema for `studios.configuration`
+<a id="nestedatt--configuration"></a>
+### Nested Schema for `configuration`
 
 Read-Only:
 
@@ -107,8 +88,8 @@ Read-Only:
 - `mount_data` (List of String)
 
 
-<a id="nestedatt--studios--labels"></a>
-### Nested Schema for `studios.labels`
+<a id="nestedatt--labels"></a>
+### Nested Schema for `labels`
 
 Read-Only:
 
@@ -120,12 +101,12 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--studios--mounted_data_links"></a>
-### Nested Schema for `studios.mounted_data_links`
+<a id="nestedatt--mounted_data_links"></a>
+### Nested Schema for `mounted_data_links`
 
 Read-Only:
 
-- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--studios--mounted_data_links--credentials))
+- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--mounted_data_links--credentials))
 - `data_link_id` (String)
 - `description` (String)
 - `hidden` (Boolean)
@@ -138,8 +119,8 @@ Read-Only:
 - `status` (String)
 - `type` (String)
 
-<a id="nestedatt--studios--mounted_data_links--credentials"></a>
-### Nested Schema for `studios.mounted_data_links.credentials`
+<a id="nestedatt--mounted_data_links--credentials"></a>
+### Nested Schema for `mounted_data_links.credentials`
 
 Read-Only:
 
@@ -149,8 +130,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--studios--parent_checkpoint"></a>
-### Nested Schema for `studios.parent_checkpoint`
+<a id="nestedatt--parent_checkpoint"></a>
+### Nested Schema for `parent_checkpoint`
 
 Read-Only:
 
@@ -160,8 +141,8 @@ Read-Only:
 - `studio_name` (String)
 
 
-<a id="nestedatt--studios--progress"></a>
-### Nested Schema for `studios.progress`
+<a id="nestedatt--progress"></a>
+### Nested Schema for `progress`
 
 Read-Only:
 
@@ -170,8 +151,8 @@ Read-Only:
 - `warnings` (List of String)
 
 
-<a id="nestedatt--studios--status_info"></a>
-### Nested Schema for `studios.status_info`
+<a id="nestedatt--status_info"></a>
+### Nested Schema for `status_info`
 
 Read-Only:
 
@@ -180,8 +161,8 @@ Read-Only:
 - `status` (String)
 
 
-<a id="nestedatt--studios--template"></a>
-### Nested Schema for `studios.template`
+<a id="nestedatt--template"></a>
+### Nested Schema for `template`
 
 Read-Only:
 
@@ -191,8 +172,8 @@ Read-Only:
 - `tool` (String)
 
 
-<a id="nestedatt--studios--user"></a>
-### Nested Schema for `studios.user`
+<a id="nestedatt--user"></a>
+### Nested Schema for `user`
 
 Read-Only:
 

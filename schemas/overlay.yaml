@@ -217,9 +217,6 @@ actions:
   - target: $["paths"]["/pipeline-secrets/{secretId}"]["delete"]
     update:
       x-speakeasy-entity-operation: PipelineSecret#delete
-  - target: $["paths"]["/studios"]["get"]
-    update:
-      x-speakeasy-entity-operation: DataStudios#read
   - target: $["paths"]["/studios"]["post"]
     update:
       x-speakeasy-entity-operation: DataStudios#create
@@ -232,6 +229,9 @@ actions:
   - target: $["paths"]["/studios/{sessionId}"]["delete"]
     update:
       x-speakeasy-entity-operation: DataStudios#delete
+  - target: $["paths"]["/studios/{sessionId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: DataStudios#read
   - target: $["paths"]["/tokens"]["get"]
     update:
       x-speakeasy-entity-operation: Tokens#read
@@ -416,13 +416,14 @@ actions:
       x-speakeasy-name-override: providerType
   - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
     update:
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
   - target: $["components"]["schemas"]["DataStudioConfiguration"]
     update:
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
   - target: $["components"]["schemas"]["DataStudioCreateRequest"]
     update:
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
+
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
     update:
       x-speakeasy-param-readonly: true
@@ -433,7 +434,7 @@ actions:
   #   remove: true
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
-      x-speakeasy-entity: DataStudio
+      x-speakeasy-entity: DataStudios
   - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]["properties"]["computeEnv"]
     update:
       x-speakeasy-entity: ComputeEnv

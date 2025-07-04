@@ -14,25 +14,26 @@ DataStudios Resource
 
 ```terraform
 resource "seqera_data_studios" "my_datastudios" {
-  auto_start            = true
-  compute_env_id        = "...my_compute_env_id..."
-  conda_environment     = "...my_conda_environment..."
-  cpu                   = 2
+  auto_start     = true
+  compute_env_id = "...my_compute_env_id..."
+  configuration = {
+    conda_environment = "...my_conda_environment..."
+    cpu               = 6
+    gpu               = 8
+    lifespan_hours    = 5
+    memory            = 9
+    mount_data = [
+      "..."
+    ]
+  }
   data_studio_tool_url  = "...my_data_studio_tool_url..."
   description           = "...my_description..."
-  gpu                   = 8
   initial_checkpoint_id = 8
   is_private            = true
   label_ids = [
     8
   ]
-  lifespan_hours = 9
-  memory         = 5
-  mount_data = [
-    "..."
-  ]
   name         = "...my_name..."
-  session_id   = "...my_session_id..."
   spot         = false
   workspace_id = 5
 }
@@ -50,57 +51,50 @@ resource "seqera_data_studios" "my_datastudios" {
 ### Optional
 
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
-- `conda_environment` (String) Requires replacement if changed.
-- `cpu` (Number) Requires replacement if changed.
+- `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
 - `description` (String) Requires replacement if changed.
-- `gpu` (Number) Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
 - `is_private` (Boolean) Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
-- `lifespan_hours` (Number) Requires replacement if changed.
-- `memory` (Number) Requires replacement if changed.
-- `mount_data` (List of String) Requires replacement if changed.
-- `session_id` (String) Studio session numeric identifier
 - `spot` (Boolean) Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
-- `studio` (Attributes) (see [below for nested schema](#nestedatt--studio))
-- `studios` (Attributes List) (see [below for nested schema](#nestedatt--studios))
-- `total_size` (Number)
-
-<a id="nestedatt--studio"></a>
-### Nested Schema for `studio`
-
-Read-Only:
-
-- `active_connections` (Attributes List) (see [below for nested schema](#nestedatt--studio--active_connections))
+- `active_connections` (Attributes List) (see [below for nested schema](#nestedatt--active_connections))
 - `base_image` (String)
-- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--studio--compute_env))
-- `configuration` (Attributes) (see [below for nested schema](#nestedatt--studio--configuration))
+- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--compute_env))
 - `custom_image` (Boolean)
 - `date_created` (String)
-- `description` (String)
 - `effective_lifespan_hours` (Number)
-- `is_private` (Boolean)
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--studio--labels))
+- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
 - `last_started` (String)
 - `last_updated` (String)
-- `mounted_data_links` (Attributes List) (see [below for nested schema](#nestedatt--studio--mounted_data_links))
-- `name` (String)
-- `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--studio--parent_checkpoint))
-- `progress` (Attributes List) (see [below for nested schema](#nestedatt--studio--progress))
-- `session_id` (String)
-- `status_info` (Attributes) (see [below for nested schema](#nestedatt--studio--status_info))
+- `mounted_data_links` (Attributes List) (see [below for nested schema](#nestedatt--mounted_data_links))
+- `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--parent_checkpoint))
+- `progress` (Attributes List) (see [below for nested schema](#nestedatt--progress))
+- `session_id` (String) Studio session numeric identifier
+- `status_info` (Attributes) (see [below for nested schema](#nestedatt--status_info))
 - `studio_url` (String)
-- `template` (Attributes) (see [below for nested schema](#nestedatt--studio--template))
-- `user` (Attributes) (see [below for nested schema](#nestedatt--studio--user))
+- `template` (Attributes) (see [below for nested schema](#nestedatt--template))
+- `user` (Attributes) (see [below for nested schema](#nestedatt--user))
 - `wave_build_url` (String)
-- `workspace_id` (Number)
 
-<a id="nestedatt--studio--active_connections"></a>
-### Nested Schema for `studio.active_connections`
+<a id="nestedatt--configuration"></a>
+### Nested Schema for `configuration`
+
+Optional:
+
+- `conda_environment` (String) Requires replacement if changed.
+- `cpu` (Number) Requires replacement if changed.
+- `gpu` (Number) Requires replacement if changed.
+- `lifespan_hours` (Number) Requires replacement if changed.
+- `memory` (Number) Requires replacement if changed.
+- `mount_data` (List of String) Requires replacement if changed.
+
+
+<a id="nestedatt--active_connections"></a>
+### Nested Schema for `active_connections`
 
 Read-Only:
 
@@ -111,8 +105,8 @@ Read-Only:
 - `user_name` (String)
 
 
-<a id="nestedatt--studio--compute_env"></a>
-### Nested Schema for `studio.compute_env`
+<a id="nestedatt--compute_env"></a>
+### Nested Schema for `compute_env`
 
 Read-Only:
 
@@ -124,21 +118,8 @@ Read-Only:
 - `work_dir` (String)
 
 
-<a id="nestedatt--studio--configuration"></a>
-### Nested Schema for `studio.configuration`
-
-Read-Only:
-
-- `conda_environment` (String)
-- `cpu` (Number)
-- `gpu` (Number)
-- `lifespan_hours` (Number)
-- `memory` (Number)
-- `mount_data` (List of String)
-
-
-<a id="nestedatt--studio--labels"></a>
-### Nested Schema for `studio.labels`
+<a id="nestedatt--labels"></a>
+### Nested Schema for `labels`
 
 Read-Only:
 
@@ -150,12 +131,12 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--studio--mounted_data_links"></a>
-### Nested Schema for `studio.mounted_data_links`
+<a id="nestedatt--mounted_data_links"></a>
+### Nested Schema for `mounted_data_links`
 
 Read-Only:
 
-- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--studio--mounted_data_links--credentials))
+- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--mounted_data_links--credentials))
 - `data_link_id` (String)
 - `description` (String)
 - `hidden` (Boolean)
@@ -168,8 +149,8 @@ Read-Only:
 - `status` (String) must be one of ["VALID", "INVALID"]
 - `type` (String) must be "bucket"
 
-<a id="nestedatt--studio--mounted_data_links--credentials"></a>
-### Nested Schema for `studio.mounted_data_links.credentials`
+<a id="nestedatt--mounted_data_links--credentials"></a>
+### Nested Schema for `mounted_data_links.credentials`
 
 Read-Only:
 
@@ -179,8 +160,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--studio--parent_checkpoint"></a>
-### Nested Schema for `studio.parent_checkpoint`
+<a id="nestedatt--parent_checkpoint"></a>
+### Nested Schema for `parent_checkpoint`
 
 Read-Only:
 
@@ -190,8 +171,8 @@ Read-Only:
 - `studio_name` (String)
 
 
-<a id="nestedatt--studio--progress"></a>
-### Nested Schema for `studio.progress`
+<a id="nestedatt--progress"></a>
+### Nested Schema for `progress`
 
 Read-Only:
 
@@ -200,8 +181,8 @@ Read-Only:
 - `warnings` (List of String)
 
 
-<a id="nestedatt--studio--status_info"></a>
-### Nested Schema for `studio.status_info`
+<a id="nestedatt--status_info"></a>
+### Nested Schema for `status_info`
 
 Read-Only:
 
@@ -210,8 +191,8 @@ Read-Only:
 - `status` (String) must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]
 
 
-<a id="nestedatt--studio--template"></a>
-### Nested Schema for `studio.template`
+<a id="nestedatt--template"></a>
+### Nested Schema for `template`
 
 Read-Only:
 
@@ -221,8 +202,8 @@ Read-Only:
 - `tool` (String)
 
 
-<a id="nestedatt--studio--user"></a>
-### Nested Schema for `studio.user`
+<a id="nestedatt--user"></a>
+### Nested Schema for `user`
 
 Read-Only:
 
@@ -231,165 +212,10 @@ Read-Only:
 - `id` (Number)
 - `user_name` (String)
 
+## Import
 
+Import is supported using the following syntax:
 
-<a id="nestedatt--studios"></a>
-### Nested Schema for `studios`
-
-Read-Only:
-
-- `active_connections` (Attributes List) (see [below for nested schema](#nestedatt--studios--active_connections))
-- `base_image` (String)
-- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--studios--compute_env))
-- `configuration` (Attributes) (see [below for nested schema](#nestedatt--studios--configuration))
-- `custom_image` (Boolean)
-- `date_created` (String)
-- `description` (String)
-- `effective_lifespan_hours` (Number)
-- `is_private` (Boolean)
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--studios--labels))
-- `last_started` (String)
-- `last_updated` (String)
-- `mounted_data_links` (Attributes List) (see [below for nested schema](#nestedatt--studios--mounted_data_links))
-- `name` (String)
-- `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--studios--parent_checkpoint))
-- `progress` (Attributes List) (see [below for nested schema](#nestedatt--studios--progress))
-- `session_id` (String)
-- `status_info` (Attributes) (see [below for nested schema](#nestedatt--studios--status_info))
-- `studio_url` (String)
-- `template` (Attributes) (see [below for nested schema](#nestedatt--studios--template))
-- `user` (Attributes) (see [below for nested schema](#nestedatt--studios--user))
-- `wave_build_url` (String)
-- `workspace_id` (Number)
-
-<a id="nestedatt--studios--active_connections"></a>
-### Nested Schema for `studios.active_connections`
-
-Read-Only:
-
-- `avatar` (String)
-- `email` (String)
-- `id` (Number)
-- `last_active` (String)
-- `user_name` (String)
-
-
-<a id="nestedatt--studios--compute_env"></a>
-### Nested Schema for `studios.compute_env`
-
-Read-Only:
-
-- `credentials_id` (String)
-- `id` (String)
-- `name` (String)
-- `platform` (String)
-- `region` (String)
-- `work_dir` (String)
-
-
-<a id="nestedatt--studios--configuration"></a>
-### Nested Schema for `studios.configuration`
-
-Read-Only:
-
-- `conda_environment` (String)
-- `cpu` (Number)
-- `gpu` (Number)
-- `lifespan_hours` (Number)
-- `memory` (Number)
-- `mount_data` (List of String)
-
-
-<a id="nestedatt--studios--labels"></a>
-### Nested Schema for `studios.labels`
-
-Read-Only:
-
-- `date_created` (String)
-- `id` (Number)
-- `is_default` (Boolean)
-- `name` (String)
-- `resource` (Boolean)
-- `value` (String)
-
-
-<a id="nestedatt--studios--mounted_data_links"></a>
-### Nested Schema for `studios.mounted_data_links`
-
-Read-Only:
-
-- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--studios--mounted_data_links--credentials))
-- `data_link_id` (String)
-- `description` (String)
-- `hidden` (Boolean)
-- `message` (String)
-- `name` (String)
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
-- `public_accessible` (Boolean)
-- `region` (String)
-- `resource_ref` (String)
-- `status` (String) must be one of ["VALID", "INVALID"]
-- `type` (String) must be "bucket"
-
-<a id="nestedatt--studios--mounted_data_links--credentials"></a>
-### Nested Schema for `studios.mounted_data_links.credentials`
-
-Read-Only:
-
-- `id` (String)
-- `name` (String)
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
-
-
-
-<a id="nestedatt--studios--parent_checkpoint"></a>
-### Nested Schema for `studios.parent_checkpoint`
-
-Read-Only:
-
-- `checkpoint_id` (Number)
-- `checkpoint_name` (String)
-- `session_id` (String)
-- `studio_name` (String)
-
-
-<a id="nestedatt--studios--progress"></a>
-### Nested Schema for `studios.progress`
-
-Read-Only:
-
-- `message` (String)
-- `status` (String) must be one of ["pending", "in-progress", "succeeded", "errored"]
-- `warnings` (List of String)
-
-
-<a id="nestedatt--studios--status_info"></a>
-### Nested Schema for `studios.status_info`
-
-Read-Only:
-
-- `last_update` (String)
-- `message` (String)
-- `status` (String) must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]
-
-
-<a id="nestedatt--studios--template"></a>
-### Nested Schema for `studios.template`
-
-Read-Only:
-
-- `icon` (String)
-- `repository` (String)
-- `status` (String) must be one of ["recommended", "deprecated", "experimental", "unsupported"]
-- `tool` (String)
-
-
-<a id="nestedatt--studios--user"></a>
-### Nested Schema for `studios.user`
-
-Read-Only:
-
-- `avatar` (String)
-- `email` (String)
-- `id` (Number)
-- `user_name` (String)
+```shell
+terraform import seqera_data_studios.my_seqera_data_studios ""
+```
