@@ -19,6 +19,7 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -708,6 +709,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"azurerepos",
 						"seqeracompute",
 					),
+					custom_stringvalidators.CredentialsConfigValidator(),
 				},
 			},
 			"workspace_id": schema.Int64Attribute{

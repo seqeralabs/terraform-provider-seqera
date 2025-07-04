@@ -390,6 +390,9 @@ actions:
   - target: $["paths"]["/credentials"]["post"]["parameters"][0]
     update:
       required: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
+    update:
+      x-speakeasy-plan-validators: CredentialsConfigValidator
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]["required"][*]
     remove: true
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]

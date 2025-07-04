@@ -8876,6 +8876,7 @@ components:
             #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
             #     azure_entra: "#/components/schemas/AzureEntraKeys"
           x-speakeasy-name-override: providerType
+          x-speakeasy-plan-validators: CredentialsConfigValidator
         baseUrl:
           maxLength: 200
           pattern: ""
