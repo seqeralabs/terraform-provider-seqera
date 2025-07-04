@@ -1,6 +1,6 @@
-# seqera
+# Seqera Platform Terraform Provider
 
-Terraform Provider for the *seqera* API.
+Terraform Provider for the Seqera Platform API.
 
 <div align="left">
     <a href="https://www.speakeasy.com/?utm_source=seqera&utm_campaign=terraform"><img src="https://custom-icon-badges.demolab.com/badge/-Built%20By%20Speakeasy-212015?style=for-the-badge&logoColor=FBE331&logo=speakeasy&labelColor=545454" /></a>
@@ -10,28 +10,19 @@ Terraform Provider for the *seqera* API.
 </div>
 
 
-## 🏗 **Welcome to your new Terraform Provider!** 🏗
-
-It has been generated successfully based on your OpenAPI spec. However, it is not yet ready for production use. Here are some next steps:
-- [ ] 🛠 Add resources and datasources to your SDK by [annotating your OAS](https://www.speakeasy.com/docs/customize-terraform/terraform-extensions#map-api-entities-to-terraform-resources)
-- [ ] ♻️ Refine your terraform provider quickly by iterating locally with the [Speakeasy CLI](https://github.com/speakeasy-api/speakeasy)
-- [ ] 🎁 Publish your terraform provider to hashicorp registry by [configuring automatic publishing](https://www.speakeasy.com/docs/terraform-publishing)
-- [ ] ✨ When ready to productionize, delete this section from the README
-
 <!-- Start Summary [summary] -->
 ## Summary
 
-Seqera API: Seqera Platform services API
+Th Seqera terraform provider enables Terraform to manage [Seqera platform](https://cloud.seqera.io) resources. For more information on Seqera Platform please check out our [documentation here](https://docs.seqera.io/). 
+
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
 <!-- $toc-max-depth=2 -->
-* [seqera](#seqera)
-  * [🏗 **Welcome to your new Terraform Provider!** 🏗](#welcome-to-your-new-terraform-provider)
-  * [Installation](#installation)
-  * [Available Resources and Data Sources](#available-resources-and-data-sources)
-  * [Testing the provider locally](#testing-the-provider-locally)
+* [Installation](#installation)
+* [Available Resources and Data Sources](#available-resources-and-data-sources)
+* [Testing the provider locally](#testing-the-provider-locally)
 * [Development](#development)
   * [Contributions](#contributions)
 
@@ -63,44 +54,11 @@ provider "seqera" {
 
 ### Resources
 
-* [seqera_action](docs/resources/action.md)
-* [seqera_compute_env](docs/resources/compute_env.md)
-* [seqera_credential](docs/resources/credential.md)
-* [seqera_data_link](docs/resources/data_link.md)
-* [seqera_datasets](docs/resources/datasets.md)
-* [seqera_data_studios](docs/resources/data_studios.md)
-* [seqera_labels](docs/resources/labels.md)
-* [seqera_orgs](docs/resources/orgs.md)
-* [seqera_pipeline](docs/resources/pipeline.md)
-* [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
-* [seqera_teams](docs/resources/teams.md)
-* [seqera_tokens](docs/resources/tokens.md)
-* [seqera_workflows](docs/resources/workflows.md)
-* [seqera_workspace](docs/resources/workspace.md)
+For an updated list of available resources and relevant documentation please go to the [documetation](docs/resources/)
 ### Data Sources
 
-* [seqera_action](docs/data-sources/action.md)
-* [seqera_actions](docs/data-sources/actions.md)
-* [seqera_compute_env](docs/data-sources/compute_env.md)
-* [seqera_compute_envs](docs/data-sources/compute_envs.md)
-* [seqera_credential](docs/data-sources/credential.md)
-* [seqera_credentials](docs/data-sources/credentials.md)
-* [seqera_current_user](docs/data-sources/current_user.md)
-* [seqera_data_link](docs/data-sources/data_link.md)
-* [seqera_dataset](docs/data-sources/dataset.md)
-* [seqera_data_studios](docs/data-sources/data_studios.md)
-* [seqera_labels](docs/data-sources/labels.md)
-* [seqera_organization](docs/data-sources/organization.md)
-* [seqera_pipeline](docs/data-sources/pipeline.md)
-* [seqera_pipelines](docs/data-sources/pipelines.md)
-* [seqera_pipeline_secret](docs/data-sources/pipeline_secret.md)
-* [seqera_teams](docs/data-sources/teams.md)
-* [seqera_tokens](docs/data-sources/tokens.md)
-* [seqera_user](docs/data-sources/user.md)
-* [seqera_user_workspaces](docs/data-sources/user_workspaces.md)
-* [seqera_workflows](docs/data-sources/workflows.md)
-* [seqera_workspace](docs/data-sources/workspace.md)
-* [seqera_workspaces](docs/data-sources/workspaces.md)
+For an updated list of available resources and relevant documentation please go to the [documetation](docs/data-sources/)
+
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->
