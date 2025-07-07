@@ -490,7 +490,11 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"data": schema.StringAttribute{
-								Optional: true,
+								Optional:    true,
+								Description: `Parsed as JSON.`,
+								Validators: []validator.String{
+									validators.IsValidJSON(),
+								},
 							},
 							"discriminator": schema.StringAttribute{
 								Computed: true,

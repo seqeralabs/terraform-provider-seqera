@@ -13,16 +13,16 @@ Terraform Provider for the Seqera Platform API.
 <!-- Start Summary [summary] -->
 ## Summary
 
-Th Seqera terraform provider enables Terraform to manage [Seqera platform](https://cloud.seqera.io) resources. For more information on Seqera Platform please check out our [documentation here](https://docs.seqera.io/). 
-
+Seqera API: Seqera Platform services API
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
 <!-- $toc-max-depth=2 -->
-* [Installation](#installation)
-* [Available Resources and Data Sources](#available-resources-and-data-sources)
-* [Testing the provider locally](#testing-the-provider-locally)
+* [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
+  * [Installation](#installation)
+  * [Available Resources and Data Sources](#available-resources-and-data-sources)
+  * [Testing the provider locally](#testing-the-provider-locally)
 * [Development](#development)
   * [Contributions](#contributions)
 
@@ -54,11 +54,44 @@ provider "seqera" {
 
 ### Resources
 
-For an updated list of available resources and relevant documentation please go to the [documetation](docs/resources/)
+* [seqera_action](docs/resources/action.md)
+* [seqera_compute_env](docs/resources/compute_env.md)
+* [seqera_credential](docs/resources/credential.md)
+* [seqera_data_link](docs/resources/data_link.md)
+* [seqera_datasets](docs/resources/datasets.md)
+* [seqera_data_studios](docs/resources/data_studios.md)
+* [seqera_labels](docs/resources/labels.md)
+* [seqera_orgs](docs/resources/orgs.md)
+* [seqera_pipeline](docs/resources/pipeline.md)
+* [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
+* [seqera_teams](docs/resources/teams.md)
+* [seqera_tokens](docs/resources/tokens.md)
+* [seqera_workflows](docs/resources/workflows.md)
+* [seqera_workspace](docs/resources/workspace.md)
 ### Data Sources
 
-For an updated list of available resources and relevant documentation please go to the [documetation](docs/data-sources/)
-
+* [seqera_action](docs/data-sources/action.md)
+* [seqera_actions](docs/data-sources/actions.md)
+* [seqera_compute_env](docs/data-sources/compute_env.md)
+* [seqera_compute_envs](docs/data-sources/compute_envs.md)
+* [seqera_credential](docs/data-sources/credential.md)
+* [seqera_credentials](docs/data-sources/credentials.md)
+* [seqera_current_user](docs/data-sources/current_user.md)
+* [seqera_data_link](docs/data-sources/data_link.md)
+* [seqera_dataset](docs/data-sources/dataset.md)
+* [seqera_data_studios](docs/data-sources/data_studios.md)
+* [seqera_labels](docs/data-sources/labels.md)
+* [seqera_organization](docs/data-sources/organization.md)
+* [seqera_pipeline](docs/data-sources/pipeline.md)
+* [seqera_pipelines](docs/data-sources/pipelines.md)
+* [seqera_pipeline_secret](docs/data-sources/pipeline_secret.md)
+* [seqera_teams](docs/data-sources/teams.md)
+* [seqera_tokens](docs/data-sources/tokens.md)
+* [seqera_user](docs/data-sources/user.md)
+* [seqera_user_workspaces](docs/data-sources/user_workspaces.md)
+* [seqera_workflows](docs/data-sources/workflows.md)
+* [seqera_workspace](docs/data-sources/workspace.md)
+* [seqera_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

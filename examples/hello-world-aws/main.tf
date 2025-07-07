@@ -223,6 +223,5 @@ resource "seqera_data_studios" "my_datastudios" {
   workspace_id          = resource.seqera_workspace.my_workspace.id
   data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
   depends_on = [ seqera_compute_env.aws_batch_compute_env]
-
 }
 

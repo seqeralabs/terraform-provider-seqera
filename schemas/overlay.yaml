@@ -470,6 +470,11 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["GoogleLifeSciencesConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
+  - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["data"]["type"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["data"]["type"]
+    update:
+      type: object
   - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["K8sComputeConfig"]["properties"]["discriminator"]["readOnly"]

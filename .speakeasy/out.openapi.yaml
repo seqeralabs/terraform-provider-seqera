@@ -10154,7 +10154,6 @@ components:
         discriminator:
           type: string
         data:
-          type: string
           writeOnly: true
     GridPlatformMetainfo:
       type: object
