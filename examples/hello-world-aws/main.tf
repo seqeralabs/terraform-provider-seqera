@@ -206,7 +206,7 @@ resource "seqera_workflows" "my_workflows" {
 
 ## Data Studi
 
-resource "seqera_data_studios" "my_datastudios" {
+resource "seqera_studios" "my_datastudios" {
   compute_env_id        = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
   description           = "Data studio"
   name                  = "Terraform-Data-Studio"

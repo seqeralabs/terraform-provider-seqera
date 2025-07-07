@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 14d722c566f209cc279aa1c6aee16426
+  docChecksum: 3e17e74971202933304138b0b67f6627
   docVersion: 1.45.0
   speakeasyVersion: 1.575.5
   generationVersion: 2.648.7
@@ -33,13 +33,13 @@ generatedFiles:
   - examples/data-sources/seqera_credentials/data-source.tf
   - examples/data-sources/seqera_current_user/data-source.tf
   - examples/data-sources/seqera_data_link/data-source.tf
-  - examples/data-sources/seqera_data_studios/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
   - examples/data-sources/seqera_organization/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
   - examples/data-sources/seqera_pipelines/data-source.tf
+  - examples/data-sources/seqera_studios/data-source.tf
   - examples/data-sources/seqera_teams/data-source.tf
   - examples/data-sources/seqera_tokens/data-source.tf
   - examples/data-sources/seqera_user/data-source.tf
@@ -56,8 +56,6 @@ generatedFiles:
   - examples/resources/seqera_credential/resource.tf
   - examples/resources/seqera_data_link/import.sh
   - examples/resources/seqera_data_link/resource.tf
-  - examples/resources/seqera_data_studios/import.sh
-  - examples/resources/seqera_data_studios/resource.tf
   - examples/resources/seqera_datasets/resource.tf
   - examples/resources/seqera_labels/resource.tf
   - examples/resources/seqera_orgs/resource.tf
@@ -65,6 +63,8 @@ generatedFiles:
   - examples/resources/seqera_pipeline/resource.tf
   - examples/resources/seqera_pipeline_secret/import.sh
   - examples/resources/seqera_pipeline_secret/resource.tf
+  - examples/resources/seqera_studios/import.sh
+  - examples/resources/seqera_studios/resource.tf
   - examples/resources/seqera_teams/import.sh
   - examples/resources/seqera_teams/resource.tf
   - examples/resources/seqera_tokens/resource.tf
@@ -114,10 +114,6 @@ generatedFiles:
   - internal/provider/dataset_data_source_sdk.go
   - internal/provider/datasets_resource.go
   - internal/provider/datasets_resource_sdk.go
-  - internal/provider/datastudios_data_source.go
-  - internal/provider/datastudios_data_source_sdk.go
-  - internal/provider/datastudios_resource.go
-  - internal/provider/datastudios_resource_sdk.go
   - internal/provider/labels_data_source.go
   - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
@@ -151,6 +147,10 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/studios_data_source.go
+  - internal/provider/studios_data_source_sdk.go
+  - internal/provider/studios_resource.go
+  - internal/provider/studios_resource_sdk.go
   - internal/provider/teams_data_source.go
   - internal/provider/teams_data_source_sdk.go
   - internal/provider/teams_resource.go

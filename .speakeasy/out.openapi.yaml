@@ -5366,7 +5366,7 @@ paths:
                 $ref: "#/components/schemas/DataStudioCreateResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataStudios#create
+      x-speakeasy-entity-operation: Studios#create
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -5531,7 +5531,7 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataStudios#read
+      x-speakeasy-entity-operation: Studios#read
     delete:
       summary: Delete Studio
       description: "Deletes the Studio associated with the given Studio session ID."
@@ -5565,7 +5565,7 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataStudios#delete
+      x-speakeasy-entity-operation: Studios#delete
   /studios/{sessionId}/checkpoints:
     get:
       summary: List Studio checkpoints
@@ -9173,7 +9173,7 @@ components:
               type: string
             workDir:
               type: string
-      x-speakeasy-entity: DataStudios
+      x-speakeasy-entity: Studios
     DataStudioConfiguration:
       type: object
       properties:
@@ -9200,7 +9200,7 @@ components:
           minimum: 0
           type: integer
           format: int32
-      x-speakeasy-entity: DataStudios
+      x-speakeasy-entity: Studios
     DataStudioCreateRequest:
       required:
         - computeEnvId
@@ -9237,7 +9237,7 @@ components:
         spot:
           type: boolean
           nullable: true
-      x-speakeasy-entity: DataStudios
+      x-speakeasy-entity: Studios
     DataStudioCreateResponse:
       type: object
       properties:
@@ -9309,7 +9309,7 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: DataStudios
+      x-speakeasy-entity: Studios
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
