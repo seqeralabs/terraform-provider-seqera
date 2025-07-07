@@ -21,7 +21,7 @@ resource "seqera_credential" "my_credential" {
   description    = "...my_description..."
   keys = {
     google = {
-      data          = "{ \"see\": \"documentation\" }"
+      data          = "...my_data..."
       discriminator = "...my_discriminator..."
     }
   }
@@ -192,7 +192,7 @@ Optional:
 
 Optional:
 
-- `data` (String) Parsed as JSON.
+- `data` (String)
 - `discriminator` (String)
 
 

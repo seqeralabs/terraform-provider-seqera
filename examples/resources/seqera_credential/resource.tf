@@ -6,7 +6,7 @@ resource "seqera_credential" "my_credential" {
   description    = "...my_description..."
   keys = {
     google = {
-      data          = "{ \"see\": \"documentation\" }"
+      data          = "...my_data..."
       discriminator = "...my_discriminator..."
     }
   }

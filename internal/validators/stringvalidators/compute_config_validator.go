@@ -57,7 +57,7 @@ func (v StringComputeConfigValidatorValidator) ValidateString(ctx context.Contex
 		"aws-cloud":              {"aws-cloud"},
 		"azure-batch":            {"azure-batch"},
 		"google-lifesciences":    {"google-lifesciences"},
-		"google-batch":           {"google-batch"},
+		"google-batch":           {"google_batch"},
 		"seqeracompute-platform": {"seqeracompute-platform"},
 		"k8s-platform":           {"k8s-platform"},
 		"eks-platform":           {"eks-platform"},

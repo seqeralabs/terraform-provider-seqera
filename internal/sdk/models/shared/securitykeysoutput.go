@@ -1200,7 +1200,7 @@ func (o *GitHubSecurityKeys) GetPassword() *string {
 
 type GoogleSecurityKeys struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Data          any     `json:"data,omitempty"`
+	Data          *string `json:"data,omitempty"`
 }
 
 func (o *GoogleSecurityKeys) GetDiscriminator() *string {
@@ -1210,7 +1210,7 @@ func (o *GoogleSecurityKeys) GetDiscriminator() *string {
 	return o.Discriminator
 }
 
-func (o *GoogleSecurityKeys) GetData() any {
+func (o *GoogleSecurityKeys) GetData() *string {
 	if o == nil {
 		return nil
 	}

@@ -4,7 +4,6 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/provider/typeconvert"
@@ -91,9 +90,11 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			discriminator1 = nil
 		}
-		var data interface{}
+		data := new(string)
 		if !r.Keys.Google.Data.IsUnknown() && !r.Keys.Google.Data.IsNull() {
-			_ = json.Unmarshal([]byte(r.Keys.Google.Data.ValueString()), &data)
+			*data = r.Keys.Google.Data.ValueString()
+		} else {
+			data = nil
 		}
 		googleSecurityKeys = &shared.GoogleSecurityKeys{
 			Discriminator: discriminator1,
