@@ -10,3 +10,8 @@ variable "secret_key" {
     sensitive = true
   
 }
+
+locals {
+  service_account_key = file("${path.module}/service-account-key.json")
+  gcp_work_dir = "gs://terraform-provider-testing"
+}

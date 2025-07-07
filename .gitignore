@@ -5,4 +5,4 @@
 **/.speakeasy/temp/
 **/.speakeasy/logs/
 ./examples/tests/terraform.tf
-/examples/hello-world-gcp/service-account-key.json
+/examples/hello-world-examples/service-account-key.json
