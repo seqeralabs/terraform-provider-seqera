@@ -54,18 +54,18 @@ func (v StringComputeConfigValidatorValidator) ValidateString(ctx context.Contex
 	// TODO: We can probably import this from the OpenAPI spec instead of hardcoding it
 	platformConfigMap := map[string][]string{
 		"aws-batch":              {"aws_batch"},
-		"aws-cloud":              {"aws-cloud"},
-		"azure-batch":            {"azure-batch"},
-		"google-lifesciences":    {"google-lifesciences"},
+		"aws-cloud":              {"aws_cloud"},
+		"azure-batch":            {"azure_batch"},
+		"google-lifesciences":    {"google_lifesciences"},
 		"google-batch":           {"google_batch"},
-		"seqeracompute-platform": {"seqeracompute-platform"},
-		"k8s-platform":           {"k8s-platform"},
-		"eks-platform":           {"eks-platform"},
-		"gke-platform":           {"gke-platform"},
-		"slurm-platform":         {"slurm-platform"},
-		"lsf-platform":           {"lsf-platform"},
-		"altair-platform":        {"altair-platform"},
-		"uge-platform":           {"uge-platform"},
+		"seqeracompute-platform": {"seqeracompute_platform"},
+		"k8s-platform":           {"k8s_platform"},
+		"eks-platform":           {"eks_platform"},
+		"gke-platform":           {"gke_platform"},
+		"slurm-platform":         {"slurm_platform"},
+		"lsf-platform":           {"lsf_platform"},
+		"altair-platform":        {"altair_platform"},
+		"uge-platform":           {"uge_platform"},
 	}
 
 	// Get the expected config field names for this platform

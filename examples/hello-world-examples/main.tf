@@ -56,3 +56,15 @@ module "gcp_batch" {
     seqera_bearer_auth = var.seqera_bearer_auth
     seqera_server_url = var.seqera_server_url
 }
+
+module "azure_batch" {
+    source = "./modules/azure"
+    batch_key = var.azure_batch_key 
+    batch_name = local.azure_batch_name
+    storage_key = var.azure_storage_key
+    storage_name = local.azure_storage_name
+    seqera_bearer_auth = var.seqera_bearer_auth
+    seqera_server_url = var.seqera_server_url
+    workspace_id = resource.seqera_workspace.my_workspace.id
+    work_dir = local.azure_work_dir
+}
