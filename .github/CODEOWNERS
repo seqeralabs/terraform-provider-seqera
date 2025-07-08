@@ -1,0 +1,7 @@
+# Ordering is important! The last codeowner in the file takes precedence over the previous ones
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#example-of-a-codeowners-file
+
+# Let the devops team review anything by default
+* @seqeralabs/devops 
+
+
