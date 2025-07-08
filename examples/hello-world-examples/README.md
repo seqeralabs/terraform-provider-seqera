@@ -45,3 +45,35 @@ shahbaz.mahmood@Shahbazs-MacBook-Pro terraform-provider-seqera % go build .
 export TF_VAR_seqera_server_url="https://api.cloud.seqera.io"
 export TF_VAR_seqera_bearer_auth="your-token-here"
 ```
+
+
+## Using this Terraform. 
+
+Currently all terraform state is stored locally on your machine. Additionally for each cloud provider we need to provide some enviornment variables for access keys and such. List of required environment variables:
+```sh
+TF_VAR_seqera_server_url=https://api.cloud.seqera.io # or enterprise URL
+TF_VAR_seqera_bearer_auth=$BEARER_KEY
+TF_VAR_secret_key=$AWS_SECRET_KEY
+TF_VAR_access_key=$AWS_ACCESS_KEY
+TF_VAR_azure_batch_key=$AZURE_BATCH_KEY
+TF_VAR_azure_storage_key=$AZURE_STORAGE_KEY
+```
+
+Additionally, you will need to update the locals terraform code with your working directories for each cloud provider. 
+```terraform
+locals {
+  service_account_key = file("${path.module}/service-account-key.json")
+  gcp_work_dir = "gs://terraform-provider-testing"
+  azure_batch_name = "seqeralabs"
+  azure_storage_name = "seqeralabs"
+  azure_work_dir = "az://terraform-provider"
+}
+```
+
+Finally, for GCP make sure you service account key json is present in the below location:
+`service_account_key = file("${path.module}/service-account-key.json")`
+
+
+***NOTE*** 
+You may need to run `terraform init` for the module calls to work, the command will fail but you should be able to run tf apply without failure. 
+
