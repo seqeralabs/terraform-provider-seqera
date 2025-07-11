@@ -393,6 +393,9 @@ actions:
   - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
     update:
       x-speakeasy-plan-validators: CredentialsConfigValidator
+  - target: $["components"]["schemas"]["GoogleSecurityKeys"]
+    update:
+      x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]["required"][*]
     remove: true
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]

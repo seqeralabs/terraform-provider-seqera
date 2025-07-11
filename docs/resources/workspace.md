@@ -47,5 +47,5 @@ resource "seqera_workspace" "my_workspace" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import seqera_workspace.my_seqera_workspace "{ \"id\": 0,  \"org_id\": 0}"
+terraform import seqera_workspace.my_seqera_workspace '{"id": 0, "org_id": 0}'
 ```

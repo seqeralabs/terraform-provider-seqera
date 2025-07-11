@@ -407,7 +407,8 @@ func (r *PipelineSecretResource) ImportState(ctx context.Context, req resource.I
 	secretID, err := strconv.Atoi(req.ID)
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("ID must be an integer but was %s", req.ID))
+		return
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("secret_id"), int64(secretID))...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("secret_id"), secretID)...)
 }

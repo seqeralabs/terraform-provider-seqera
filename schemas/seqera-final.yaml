@@ -10156,6 +10156,7 @@ components:
         data:
           type: string
           writeOnly: true
+      x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
     GridPlatformMetainfo:
       type: object
       properties:

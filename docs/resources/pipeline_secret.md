@@ -45,5 +45,5 @@ resource "seqera_pipeline_secret" "my_pipelinesecret" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import seqera_pipeline_secret.my_seqera_pipeline_secret "0"
+terraform import seqera_pipeline_secret.my_seqera_pipeline_secret 0
 ```
