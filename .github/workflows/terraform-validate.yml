@@ -58,26 +58,28 @@ jobs:
       run: terraform validate
 
 
-    
-    - name: Create GCP service account key
-      run: |
-        cd examples/hello-world-examples
-        echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > service-account-key.json
-        
+    #
+    # - name: Create GCP service account key
+    #   run: |
+    #     cd examples/hello-world-examples
+    #     echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > service-account-key.json
+
 
     - name: Create terraform.tfvars for testing
       run: |
         cd examples/hello-world-examples
-        cat > terraform.tfvars << 'EOF'
-        seqera_server_url = "${{ vars.SEQERA_SERVER_URL || 'https://api.cloud.seqera.io' }}"
-        seqera_bearer_auth = "${{ secrets.SEQERA_BEARER_AUTH }}"
-        access_key = "${{ secrets.AWS_ACCESS_KEY }}"
-        secret_key = "${{ secrets.AWS_SECRET_KEY }}"
-        azure_batch_key = "${{ secrets.AZURE_BATCH_KEY }}"
-        azure_storage_key = "${{ secrets.AZURE_STORAGE_KEY }}"
-        EOF
+
+      env:
+        TF_VAR_seqera_server_url: ${{ vars.SEQERA_SERVER_URL || 'https://api.cloud.seqera.io' }}
+        TF_VAR_seqera_bearer_auth: ${{ secrets.SEQERA_BEARER_AUTH }}
+        TF_VAR_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+        TF_VAR_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+        TF_VAR_azure_batch_key: ${{ secrets.AZURE_BATCH_KEY }}
+        TF_VAR_azure_storage_key: ${{ secrets.AZURE_STORAGE_KEY }}
+
+
+
 
     - name: Terraform Plan
       working-directory: ./examples/tests
       run: terraform plan
-
