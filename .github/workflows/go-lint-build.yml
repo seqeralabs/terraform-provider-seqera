@@ -2,9 +2,9 @@ name: Go Lint and Build
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ master ]
 
 jobs:
   lint-and-build:
@@ -35,7 +35,7 @@ jobs:
     - name: Run go vet
       run: go vet ./...
 
-    - name: Install golint
+    - name: Install golangci
       run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@e9d425110dcd46293652c5981b0a479d091d9f88 #v2.2.2
 
     - name: Run golangci lint
@@ -43,7 +43,7 @@ jobs:
 
     - name: Run go fmt
       run: |
-        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+        if [ "$(gofmt -s -l -d . | wc -l)" -gt 0 ]; then
           echo "The following files are not formatted properly:"
           gofmt -s -l .
           exit 1

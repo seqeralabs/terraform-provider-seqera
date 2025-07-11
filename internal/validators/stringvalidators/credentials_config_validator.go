@@ -35,7 +35,7 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 	// Get the parent object to access the keys field
 	parentPath := req.Path.ParentPath()
 	var parentObj types.Object
-	
+
 	// Get the parent object from the configuration
 	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, parentPath, &parentObj)...)
 	if resp.Diagnostics.HasError() {
@@ -138,39 +138,39 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 func schemaNameToKeysFieldName(schemaName string) string {
 	// Map schema names directly to the field names used in SecurityKeysOutput
 	switch schemaName {
-		case "AgentSecurityKeys":
-			return "tw_agent"
-		case "AwsSecurityKeys":
-			return "aws"
-		case "AzureEntraKeys":
-			return "azure_entra"
-		case "AzureReposSecurityKeys":
-			return "azurerepos"
-		case "AzureSecurityKeys":
-			return "azure"
-		case "BitBucketSecurityKeys":
-			return "bitbucket"
-		case "CodeCommitSecurityKeys":
-			return "codecommit"
-		case "ContainerRegistryKeys":
-			return "container_reg"
-		case "GiteaSecurityKeys":
-			return "gitea"
-		case "GitHubSecurityKeys":
-			return "github"
-		case "GitLabSecurityKeys":
-			return "gitlab"
-		case "GoogleSecurityKeys":
-			return "google"
-		case "K8sSecurityKeys":
-			return "k8s"
-		case "SeqeraComputeSecurityKeys":
-			return "seqeracompute"
-		case "SSHSecurityKeys":
-			return "ssh"
-		default:
-			// Fallback to lowercase
-			return strings.ToLower(schemaName)
+	case "AgentSecurityKeys":
+		return "tw_agent"
+	case "AwsSecurityKeys":
+		return "aws"
+	case "AzureEntraKeys":
+		return "azure_entra"
+	case "AzureReposSecurityKeys":
+		return "azurerepos"
+	case "AzureSecurityKeys":
+		return "azure"
+	case "BitBucketSecurityKeys":
+		return "bitbucket"
+	case "CodeCommitSecurityKeys":
+		return "codecommit"
+	case "ContainerRegistryKeys":
+		return "container_reg"
+	case "GiteaSecurityKeys":
+		return "gitea"
+	case "GitHubSecurityKeys":
+		return "github"
+	case "GitLabSecurityKeys":
+		return "gitlab"
+	case "GoogleSecurityKeys":
+		return "google"
+	case "K8sSecurityKeys":
+		return "k8s"
+	case "SeqeraComputeSecurityKeys":
+		return "seqeracompute"
+	case "SSHSecurityKeys":
+		return "ssh"
+	default:
+		// Fallback to lowercase
+		return strings.ToLower(schemaName)
 	}
 }
 
