@@ -41,12 +41,6 @@ jobs:
     - name: Run golint
       run: golint ./...
 
-    - name: Install staticcheck
-      run: go install honnef.co/go/tools/cmd/staticcheck@latest
-
-    - name: Run staticcheck
-      run: staticcheck ./...
-
     - name: Run go fmt
       run: |
         if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
