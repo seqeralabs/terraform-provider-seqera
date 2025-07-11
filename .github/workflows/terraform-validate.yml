@@ -1,0 +1,83 @@
+name: Terraform Validate and Plan
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  terraform-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+    - name: Set up Go
+      uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+      with:
+        go-version: '1.21'
+
+    - name: Cache Go modules
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Build provider
+      run: go build -o terraform-provider-seqera
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd #v3.1.2
+      with:
+        terraform_version: "1.5.0"
+
+    - name: Create .terraformrc with dev overrides
+      run: |
+        cat > ~/.terraformrc << EOF
+        provider_installation {
+          dev_overrides {
+            "registry.terraform.io/seqeralabs/seqera" = "${{ github.workspace }}"
+          }
+          direct {}
+        }
+        EOF
+
+    - name: Terraform Format Check
+      working-directory: ./examples/tests
+      run: terraform fmt -check
+
+    - name: Terraform Init
+      working-directory: ./examples/tests
+      run: terraform init
+
+    - name: Terraform Validate
+      working-directory: ./examples/tests
+      run: terraform validate
+
+
+    
+    - name: Create GCP service account key
+      run: |
+        cd examples/hello-world-examples
+        echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > service-account-key.json
+        
+
+    - name: Create terraform.tfvars for testing
+      run: |
+        cd examples/hello-world-examples
+        cat > terraform.tfvars << 'EOF'
+        seqera_server_url = "${{ vars.SEQERA_SERVER_URL || 'https://api.cloud.seqera.io' }}"
+        seqera_bearer_auth = "${{ secrets.SEQERA_BEARER_AUTH }}"
+        access_key = "${{ secrets.AWS_ACCESS_KEY }}"
+        secret_key = "${{ secrets.AWS_SECRET_KEY }}"
+        azure_batch_key = "${{ secrets.AZURE_BATCH_KEY }}"
+        azure_storage_key = "${{ secrets.AZURE_STORAGE_KEY }}"
+        EOF
+
+    - name: Terraform Plan
+      working-directory: ./examples/tests
+      run: terraform plan
+
