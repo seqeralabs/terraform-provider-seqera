@@ -46,17 +46,12 @@ jobs:
         EOF
 
     - name: Terraform Format Check
-      working-directory: ./examples/tests
+      working-directory: ./examples/tests/hello-world-examples
       run: terraform fmt -check
 
-    - name: Terraform Init
-      working-directory: ./examples/tests
-      run: terraform init
-
     - name: Terraform Validate
-      working-directory: ./examples/tests
+      working-directory: ./examples/tests/hello-world-examples
       run: terraform validate
-
 
     #
     # - name: Create GCP service account key
@@ -64,11 +59,9 @@ jobs:
     #     cd examples/hello-world-examples
     #     echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > service-account-key.json
 
-
-    - name: Create terraform.tfvars for testing
-      run: |
-        cd examples/hello-world-examples
-
+    - name: Terraform Plan
+      working-directory: ./examples/tests/hello-world-examples
+      run: terraform plan
       env:
         TF_VAR_seqera_server_url: ${{ vars.SEQERA_SERVER_URL || 'https://api.cloud.seqera.io' }}
         TF_VAR_seqera_bearer_auth: ${{ secrets.SEQERA_BEARER_AUTH }}
@@ -76,10 +69,3 @@ jobs:
         TF_VAR_secret_key: ${{ secrets.AWS_SECRET_KEY }}
         TF_VAR_azure_batch_key: ${{ secrets.AZURE_BATCH_KEY }}
         TF_VAR_azure_storage_key: ${{ secrets.AZURE_STORAGE_KEY }}
-
-
-
-
-    - name: Terraform Plan
-      working-directory: ./examples/tests
-      run: terraform plan
