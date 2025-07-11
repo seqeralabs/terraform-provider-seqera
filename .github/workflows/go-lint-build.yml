@@ -43,7 +43,7 @@ jobs:
 
     - name: Run go fmt
       run: |
-        if [ "$(gofmt -s -l -d . | wc -l)" -gt 0 ]; then
+        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
           echo "The following files are not formatted properly:"
           gofmt -s -l .
           exit 1
