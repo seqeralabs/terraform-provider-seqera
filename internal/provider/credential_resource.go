@@ -19,6 +19,7 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	custom_objectvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
@@ -514,6 +515,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
+							custom_objectvalidators.GoogleKeysCrdentialValidator(),
 						},
 					},
 					"k8s": schema.SingleNestedAttribute{

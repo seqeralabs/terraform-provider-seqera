@@ -45,5 +45,5 @@ resource "seqera_teams" "my_teams" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import seqera_teams.my_seqera_teams "{ \"org_id\": 0,  \"team_id\": 0}"
+terraform import seqera_teams.my_seqera_teams '{"org_id": 0, "team_id": 0}'
 ```

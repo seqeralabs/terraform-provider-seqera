@@ -603,7 +603,8 @@ func (r *PipelineResource) ImportState(ctx context.Context, req resource.ImportS
 	pipelineID, err := strconv.Atoi(req.ID)
 	if err != nil {
 		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("ID must be an integer but was %s", req.ID))
+		return
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pipeline_id"), int64(pipelineID))...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pipeline_id"), pipelineID)...)
 }
