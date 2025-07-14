@@ -1,0 +1,38 @@
+name: Speakeasy Lint and Generate
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+    paths:
+      - 'schemas/**'
+      - '.speakeasy/**'
+
+jobs:
+  speakeasy-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+    - name: Install Speakeasy
+      run: |
+        curl -fsSL https://raw.githubusercontent.com/speakeasy-api/speakeasy/main/install.sh | sh
+        echo "/usr/local/bin" >> $GITHUB_PATH
+
+    - name: Verify Speakeasy Installation
+      run: speakeasy --version
+
+    - name: Lint OpenAPI Schema
+      run: speakeasy lint openapi -s schemas/seqera-final.yaml
+
+    - name: Generate Provider Code (Dry Run)
+      run: speakeasy run --skip-versioning
+
+    - name: Check for uncommitted changes
+      run: |
+        git diff --exit-code || {
+          echo "Generated code differs from committed code. Please run 'speakeasy run --skip-versioning' and commit the changes."
+          exit 1
+        }
