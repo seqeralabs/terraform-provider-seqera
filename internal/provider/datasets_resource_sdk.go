@@ -12,24 +12,25 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *DatasetsResourceModel) ToSharedCreateDatasetRequest(ctx context.Context) (*shared.CreateDatasetRequest, diag.Diagnostics) {
+func (r *DatasetsResourceModel) RefreshFromSharedCreateDatasetResponse(ctx context.Context, resp *shared.CreateDatasetResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
+	if resp != nil {
+		if resp.Dataset == nil {
+			r.Dataset = nil
+		} else {
+			r.Dataset = &tfTypes.Dataset{}
+			r.Dataset.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.DateCreated))
+			r.Dataset.Deleted = types.BoolPointerValue(resp.Dataset.Deleted)
+			r.Dataset.Description = types.StringPointerValue(resp.Dataset.Description)
+			r.Dataset.ID = types.StringPointerValue(resp.Dataset.ID)
+			r.Dataset.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.LastUpdated))
+			r.Dataset.MediaType = types.StringPointerValue(resp.Dataset.MediaType)
+			r.Dataset.Name = types.StringValue(resp.Dataset.Name)
+		}
 	}
-	out := shared.CreateDatasetRequest{
-		Name:        name,
-		Description: description,
-	}
 
-	return &out, diags
+	return diags
 }
 
 func (r *DatasetsResourceModel) ToOperationsCreateDatasetV2Request(ctx context.Context) (*operations.CreateDatasetV2Request, diag.Diagnostics) {
@@ -53,23 +54,22 @@ func (r *DatasetsResourceModel) ToOperationsCreateDatasetV2Request(ctx context.C
 	return &out, diags
 }
 
-func (r *DatasetsResourceModel) RefreshFromSharedCreateDatasetResponse(ctx context.Context, resp *shared.CreateDatasetResponse) diag.Diagnostics {
+func (r *DatasetsResourceModel) ToSharedCreateDatasetRequest(ctx context.Context) (*shared.CreateDatasetRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	if resp != nil {
-		if resp.Dataset == nil {
-			r.Dataset = nil
-		} else {
-			r.Dataset = &tfTypes.Dataset{}
-			r.Dataset.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.DateCreated))
-			r.Dataset.Deleted = types.BoolPointerValue(resp.Dataset.Deleted)
-			r.Dataset.Description = types.StringPointerValue(resp.Dataset.Description)
-			r.Dataset.ID = types.StringPointerValue(resp.Dataset.ID)
-			r.Dataset.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.LastUpdated))
-			r.Dataset.MediaType = types.StringPointerValue(resp.Dataset.MediaType)
-			r.Dataset.Name = types.StringValue(resp.Dataset.Name)
-		}
+	var name string
+	name = r.Name.ValueString()
+
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	out := shared.CreateDatasetRequest{
+		Name:        name,
+		Description: description,
 	}
 
-	return diags
+	return &out, diags
 }

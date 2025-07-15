@@ -11,21 +11,28 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *PipelineSecretResourceModel) ToSharedCreatePipelineSecretRequest(ctx context.Context) (*shared.CreatePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) RefreshFromSharedCreatePipelineSecretResponse(ctx context.Context, resp *shared.CreatePipelineSecretResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
-	var value string
-	value = r.Value.ValueString()
-
-	out := shared.CreatePipelineSecretRequest{
-		Name:  name,
-		Value: value,
+	if resp != nil {
+		r.SecretID = types.Int64PointerValue(resp.SecretID)
 	}
 
-	return &out, diags
+	return diags
+}
+
+func (r *PipelineSecretResourceModel) RefreshFromSharedPipelineSecret(ctx context.Context, resp *shared.PipelineSecret) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.ID = types.Int64PointerValue(resp.ID)
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		r.Name = types.StringValue(resp.Name)
+	}
+
+	return diags
 }
 
 func (r *PipelineSecretResourceModel) ToOperationsCreatePipelineSecretRequest(ctx context.Context) (*operations.CreatePipelineSecretRequest, diag.Diagnostics) {
@@ -52,17 +59,41 @@ func (r *PipelineSecretResourceModel) ToOperationsCreatePipelineSecretRequest(ct
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToSharedUpdatePipelineSecretRequest(ctx context.Context) (*shared.UpdatePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToOperationsDeletePipelineSecretRequest(ctx context.Context) (*operations.DeletePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	value := new(string)
-	if !r.Value.IsUnknown() && !r.Value.IsNull() {
-		*value = r.Value.ValueString()
+	var secretID int64
+	secretID = r.SecretID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
 	} else {
-		value = nil
+		workspaceID = nil
 	}
-	out := shared.UpdatePipelineSecretRequest{
-		Value: value,
+	out := operations.DeletePipelineSecretRequest{
+		SecretID:    secretID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineSecretResourceModel) ToOperationsDescribePipelineSecretRequest(ctx context.Context) (*operations.DescribePipelineSecretRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var secretID int64
+	secretID = r.SecretID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DescribePipelineSecretRequest{
+		SecretID:    secretID,
+		WorkspaceID: workspaceID,
 	}
 
 	return &out, diags
@@ -96,66 +127,35 @@ func (r *PipelineSecretResourceModel) ToOperationsUpdatePipelineSecretRequest(ct
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToOperationsDescribePipelineSecretRequest(ctx context.Context) (*operations.DescribePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToSharedCreatePipelineSecretRequest(ctx context.Context) (*shared.CreatePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var secretID int64
-	secretID = r.SecretID.ValueInt64()
+	var name string
+	name = r.Name.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DescribePipelineSecretRequest{
-		SecretID:    secretID,
-		WorkspaceID: workspaceID,
+	var value string
+	value = r.Value.ValueString()
+
+	out := shared.CreatePipelineSecretRequest{
+		Name:  name,
+		Value: value,
 	}
 
 	return &out, diags
 }
 
-func (r *PipelineSecretResourceModel) ToOperationsDeletePipelineSecretRequest(ctx context.Context) (*operations.DeletePipelineSecretRequest, diag.Diagnostics) {
+func (r *PipelineSecretResourceModel) ToSharedUpdatePipelineSecretRequest(ctx context.Context) (*shared.UpdatePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var secretID int64
-	secretID = r.SecretID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
+	value := new(string)
+	if !r.Value.IsUnknown() && !r.Value.IsNull() {
+		*value = r.Value.ValueString()
 	} else {
-		workspaceID = nil
+		value = nil
 	}
-	out := operations.DeletePipelineSecretRequest{
-		SecretID:    secretID,
-		WorkspaceID: workspaceID,
+	out := shared.UpdatePipelineSecretRequest{
+		Value: value,
 	}
 
 	return &out, diags
-}
-
-func (r *PipelineSecretResourceModel) RefreshFromSharedCreatePipelineSecretResponse(ctx context.Context, resp *shared.CreatePipelineSecretResponse) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.SecretID = types.Int64PointerValue(resp.SecretID)
-	}
-
-	return diags
-}
-
-func (r *PipelineSecretResourceModel) RefreshFromSharedPipelineSecret(ctx context.Context, resp *shared.PipelineSecret) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.ID = types.Int64PointerValue(resp.ID)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
-		r.Name = types.StringValue(resp.Name)
-	}
-
-	return diags
 }

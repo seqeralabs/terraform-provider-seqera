@@ -10,6 +10,20 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *TeamsDataSourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, resp *shared.TeamDbDto) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.AvatarURL = types.StringPointerValue(resp.AvatarURL)
+		r.Description = types.StringPointerValue(resp.Description)
+		r.MembersCount = types.Int64PointerValue(resp.MembersCount)
+		r.Name = types.StringPointerValue(resp.Name)
+		r.TeamID = types.Int64PointerValue(resp.TeamID)
+	}
+
+	return diags
+}
+
 func (r *TeamsDataSourceModel) ToOperationsDescribeOrganizationTeamRequest(ctx context.Context) (*operations.DescribeOrganizationTeamRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -25,18 +39,4 @@ func (r *TeamsDataSourceModel) ToOperationsDescribeOrganizationTeamRequest(ctx c
 	}
 
 	return &out, diags
-}
-
-func (r *TeamsDataSourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, resp *shared.TeamDbDto) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.AvatarURL = types.StringPointerValue(resp.AvatarURL)
-		r.Description = types.StringPointerValue(resp.Description)
-		r.MembersCount = types.Int64PointerValue(resp.MembersCount)
-		r.Name = types.StringPointerValue(resp.Name)
-		r.TeamID = types.Int64PointerValue(resp.TeamID)
-	}
-
-	return diags
 }

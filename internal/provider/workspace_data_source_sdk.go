@@ -11,6 +11,22 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *WorkspaceDataSourceModel) RefreshFromSharedWorkspace(ctx context.Context, resp *shared.Workspace) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.Description = types.StringPointerValue(resp.Description)
+		r.FullName = types.StringValue(resp.FullName)
+		r.ID = types.Int64PointerValue(resp.ID)
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.Name = types.StringValue(resp.Name)
+		r.Visibility = types.StringValue(string(resp.Visibility))
+	}
+
+	return diags
+}
+
 func (r *WorkspaceDataSourceModel) ToOperationsDescribeWorkspaceRequest(ctx context.Context) (*operations.DescribeWorkspaceRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -26,20 +42,4 @@ func (r *WorkspaceDataSourceModel) ToOperationsDescribeWorkspaceRequest(ctx cont
 	}
 
 	return &out, diags
-}
-
-func (r *WorkspaceDataSourceModel) RefreshFromSharedWorkspace(ctx context.Context, resp *shared.Workspace) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Description = types.StringPointerValue(resp.Description)
-		r.FullName = types.StringValue(resp.FullName)
-		r.ID = types.Int64PointerValue(resp.ID)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.Name = types.StringValue(resp.Name)
-		r.Visibility = types.StringValue(string(resp.Visibility))
-	}
-
-	return diags
 }

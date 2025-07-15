@@ -486,7 +486,7 @@ actions:
       x-speakeasy-param-readonly: true
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
     update:
-      x-speakeasy-plan-validators: ComputeConfigValidator   
+      x-speakeasy-plan-validators: ComputeConfigValidator
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
     update:
       x-speakeasy-param-optional: false
@@ -596,3 +596,745 @@ actions:
     update:
       servers:
         - url: https://api.cloud.seqera.io
+  - target: $.paths["/actions"].get
+    update:
+      description: Lists all available actions in a user context, enriched by `attributes`. Append `?workspaceId`
+        to list actions in a workspace context.
+
+  - target: $.paths["/actions"].post
+    update:
+      description: Creates a new pipeline action. Append `?workspaceId` to associate the action with the
+        given workspace.
+
+  - target: $.paths["/actions/labels/add"].post
+    update:
+      description: Adds the given list of labels to the given pipeline actions. Existing labels are preserved.
+
+  - target: $.paths["/actions/labels/apply"].post
+    update:
+      description: Applies the given list of labels to the given pipeline actions. Existing labels are replaced
+        — include labels to be preserved in `labelIds`.
+
+  - target: $.paths["/actions/labels/remove"].post
+    update:
+      description: Removes the given list of labels from the given pipeline actions.
+
+  - target: $.paths["/actions/types"].get
+    update:
+      description: Lists the supported event types that trigger a pipeline action. Append `?workspaceId`
+        to list event types in a workspace context.
+
+  - target: $.paths["/actions/validate"].get
+    update:
+      description: Confirms the validity of the given action name. Append `?name=<your_action_name>`.
+
+  - target: $.paths["/actions/{actionId}"].get
+    update:
+      description: Retrieves the details of the action identified by the given `actionId`.
+
+  - target: $.paths["/actions/{actionId}"].put
+    update:
+      description: Updates the details of the action identified by the given `actionId`. The `source` of
+        an existing action cannot be changed.
+
+  - target: $.paths["/actions/{actionId}"].delete
+    update:
+      description: Deletes the pipeline action identified by the given `actionId`.
+
+  - target: $.paths["/actions/{actionId}/launch"].post
+    update:
+      description: Triggers the execution of the Tower Launch action identified by the given `actionId`.
+
+  - target: $.paths["/actions/{actionId}/pause"].post
+    update:
+      description: Pauses or resumes the pipeline action identified by the given `actionId`.
+
+  - target: $.paths["/compute-envs"].get
+    update:
+      description: Lists all available compute environments in a user context. Append `?workspaceId` to
+        list compute environments in a workspace context, and `?status` to filter by compute environment
+        status.
+
+  - target: $.paths["/compute-envs"].post
+    update:
+      description: Creates a new compute environment. Append `?workspaceId` to create the environment in
+        a workspace context.
+
+  - target: $.paths["/compute-envs/validate"].get
+    update:
+      description: Confirms the validity of the given compute environment name in a user context. Append
+        `?name=<your_ce_name>`.
+
+  - target: $.paths["/compute-envs/{computeEnvId}"].get
+    update:
+      description: Retrieves the details of the compute environment identified by the given `computeEnvId`.
+
+  - target: $.paths["/compute-envs/{computeEnvId}"].put
+    update:
+      description: Updates the details of the compute environment identified by the given `computeEnvId`.
+
+  - target: $.paths["/compute-envs/{computeEnvId}"].delete
+    update:
+      description: Deletes the compute environment identified by the given `computeEnvId`.
+
+  - target: $.paths["/compute-envs/{computeEnvId}/primary"].post
+    update:
+      description: Selects the compute environment identified by the given `computeEnvId` as the primary
+        compute environment in the given workspace context.
+
+  - target: $.paths["/credentials"].get
+    update:
+      description: Lists all available credentials in a user context. Append `?workspaceId` to list credentials
+        in a workspace context, and `?platformId` to filter credentials by computing platform.
+
+  - target: $.paths["/credentials"].post
+    update:
+      description: Creates new credentials in a user context. Append `?workspaceId` to create the credentials
+        in a workspace context.
+
+  - target: $.paths["/credentials/validate"].get
+    update:
+      description: Validates the given credentials name. Append `?name=<your_credential_name>`.
+
+  - target: $.paths["/credentials/{credentialsId}"].get
+    update:
+      description: Retrieves the details of the credentials identified by the given `credentialsId`.
+
+  - target: $.paths["/credentials/{credentialsId}"].put
+    update:
+      description: Updates the details of the credentials identified by the given `credentialsId`.
+
+  - target: $.paths["/credentials/{credentialsId}"].delete
+    update:
+      description: Deletes the credentials identified by the given `credentialsId`.
+
+  - target: $.paths["/data-links"].get
+    update:
+      description: Retrieves all available data-links in a user context. Append `?workspaceId={your-workspace-id}`
+        to retrieve data-links in a workspace context.
+
+  - target: $.paths["/data-links"].post
+    update:
+      description: Creates a new data-link in a user context. Append `?workspaceId=` to create the data-link
+        in a workspace context.
+
+  - target: $.paths["/data-links/cache/refresh"].get
+    update:
+      description: Refreshes the data-link cache for the given `workspaceId` or `credentialsId`.
+
+  - target: $.paths["/data-links/{dataLinkId}"].get
+    update:
+      description: Retrieves the details of the data-link associated with the given `dataLinkId`.
+
+  - target: $.paths["/data-links/{dataLinkId}"].put
+    update:
+      description: Update the data-link associated with the given `dataLinkId`.
+
+  - target: $.paths["/data-links/{dataLinkId}"].delete
+    update:
+      description: Deletes the data-link associated with the given `dataLinkId`.
+
+  - target: $.paths["/data-links/{dataLinkId}/browse"].get
+    update:
+      description: Retrieves the content of the data-link associated with the given `dataLinkId`.
+
+  - target: $.paths["/data-links/{dataLinkId}/browse/{path}"].get
+    update:
+      description: Retrieves the content of the data-link associated with the given `dataLinkId`, at the
+        given `path`.
+
+  - target: $.paths["/data-links/{dataLinkId}/content"].delete
+    update:
+      description: Deletes the content of the data-link associated with the given `dataLinkId`. The data-link
+        itself is preserved.
+
+  - target: $.paths["/data-links/{dataLinkId}/download/{filePath}"].get
+    update:
+      description: Downloads the content at the given `filePath` in the data-link associated with the given
+        `dataLinkId`.
+
+  - target: $.paths["/data-links/{dataLinkId}/generate-download-url"].get
+    update:
+      description: Returns a URL to download files from the data-link associated with the given `dataLinkId`.
+
+  - target: $.paths["/data-links/{dataLinkId}/script/download"].get
+    update:
+      description: Creates a script to download files from the data-link associated with the given `dataLinkId`.   Append
+        `?dirs` or `?files` to specify a list of files or paths to download within the data-link.
+
+  - target: $.paths["/data-links/{dataLinkId}/upload"].post
+    update:
+      description: |-
+        Creates a URL to upload files to the data-link associated with the given `dataLinkId`.
+        For AWS S3 data-links, an additional follow-up request must be sent after your file upload has completed (or encountered an error) to finalize the upload - see the `/upload/finish` endpoint.
+
+  - target: $.paths["/data-links/{dataLinkId}/upload/finish"].post
+    update:
+      description: Finish upload of a data-link file. This is necessary for AWS S3 data-links (`DataLinkProvider=aws`)
+        to finalize a successful file upload, or abort an upload if an error was encountered while uploading
+        a file using an upload URL from the `/upload` endpoint.
+
+  - target: $.paths["/data-links/{dataLinkId}/upload/finish/{dirPath}"].post
+    update:
+      description: Finish upload of a data-link file, specifying a file path (`dirPath`). This is necessary
+        for AWS S3 data-links (`DataLinkProvider=aws`) to finalize a successful file upload, or abort an
+        upload if an error was encountered while uploading a file using an upload URL from the `/upload`
+        endpoint.
+
+  - target: $.paths["/data-links/{dataLinkId}/upload/{dirPath}"].post
+    update:
+      description: |-
+        Creates a URL to upload files to the data-link associated with the given `dataLinkId`, specifying a file path (`dirPath`).
+        For AWS S3 data-links, an additional follow-up request must be sent after your file upload has completed (or encountered an error) to finalize the upload - see the `/upload/finish` endpoint.
+
+  - target: $.paths["/datasets"].get
+    update:
+      description: Lists all available datasets in a user context. Append `?workspaceId` to list datasets
+        in a workspace context.
+
+  - target: $.paths["/datasets"].post
+    update:
+      description: Creates a new dataset in the user context. Include the dataset file and details in your
+        request body. Append `?workspaceId` to create the dataset in a workspace context.
+
+  - target: $.paths["/datasets/versions"].get
+    update:
+      description: Lists the latest version of each dataset in the user context. Append `?workspaceId` to
+        list latest versions in a workspace context.
+
+  - target: $.paths["/datasets/{datasetId}"].put
+    update:
+      description: Updates the details of the dataset identified by the given `datasetId`.
+
+  - target: $.paths["/datasets/{datasetId}"].delete
+    update:
+      description: Deletes the dataset identified by the given `datasetId`.
+
+  - target: $.paths["/datasets/{datasetId}/metadata"].get
+    update:
+      description: Retrieves the metadata of the dataset identified by the given `datasetId`.
+
+  - target: $.paths["/datasets/{datasetId}/upload"].post
+    update:
+      description: Uploads the CSV or TSV content to create a new version of the dataset identified by the
+        given `datasetId`.
+
+  - target: $.paths["/datasets/{datasetId}/v/{version}/n/{fileName}"].get
+    update:
+      description: Downloads the content of the dataset identified by the given `datasetId` and `version`.
+
+  - target: $.paths["/datasets/{datasetId}/versions"].get
+    update:
+      description: Lists all versions of the given `datasetId`.
+
+  - target: $.paths["/ga4gh/wes/v1/runs"].get
+    update:
+      description: Uses the GA4GH workflow execution service API to list all run records.
+
+  - target: $.paths["/ga4gh/wes/v1/runs"].post
+    update:
+      description: Uses the GA4GH workflow execution service API to launch a new run. Runs are launched
+        in the user workspace context by default. To launch in an organization workspace context, include
+        the `workspaceId` in `workflow_engine_parameters`. Runs are launched with the workspace primary
+        compute environment by default. To launch with a different compute environment, include the `computeEnvId`
+        in `workflow_engine_parameters`.
+
+  - target: $.paths["/ga4gh/wes/v1/runs/{run_id}"].get
+    update:
+      description: Uses the GA4GH workflow execution service API to retrieve the details of the run assoiated
+        with the given `run_id`.
+
+  - target: $.paths["/ga4gh/wes/v1/runs/{run_id}/cancel"].post
+    update:
+      description: Uses the GA4GH workflow execution service API to cancel the run associated with the given
+        `run_id`.
+
+  - target: $.paths["/ga4gh/wes/v1/runs/{run_id}/status"].get
+    update:
+      description: Uses the GA4GH workflow execution service API to retrieve the status of the run associated
+        with the given `run_id`.
+
+  - target: $.paths["/labels"].get
+    update:
+      description: Lists all available labels in a user context. Append `?workspaceId` to list labels in
+        a workspace context.
+
+  - target: $.paths["/labels"].post
+    update:
+      description: 'Creates a new label or returns an existing label based on name/value. By default the
+        operation works in a user context, append `?workspaceId` to create/retrieve a label in a workspace
+        context. Resource labels include `resource: true` and a `value`.'
+
+  - target: $.paths["/labels/{labelId}"].put
+    update:
+      description: Updates the label identified by the given `labelId`.
+
+  - target: $.paths["/labels/{labelId}"].delete
+    update:
+      description: Deletes the label identified by the given `labelId`.
+
+  - target: $.paths["/launch/{launchId}"].get
+    update:
+      description: Retrieves the details of the launch identified by the given `launchId`.
+
+  - target: $.paths["/launch/{launchId}/datasets"].get
+    update:
+      description: Retrieves the details of the datasets used in the launch identified by the given `launchId`.
+
+  - target: $.paths["/orgs"].get
+    update:
+      description: Lists all available organizations in a user context.
+
+  - target: $.paths["/orgs"].post
+    update:
+      description: Creates a new organization.
+
+  - target: $.paths["/orgs/validate"].get
+    update:
+      description: Confirms the validity of the given organization name. Append `?name=<your_org_name>`.
+
+  - target: $.paths["/orgs/{orgId}"].get
+    update:
+      description: Retrieves the details of the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}"].put
+    update:
+      description: Updates the details of the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}"].delete
+    update:
+      description: Deletes the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/collaborators"].get
+    update:
+      description: Lists the collaborators of the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/members"].get
+    update:
+      description: Lists the members of the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/members/add"].put
+    update:
+      description: Adds a new member to the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/members/leave"].delete
+    update:
+      description: Removes the requesting user from the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/members/{memberId}"].delete
+    update:
+      description: Deletes the member identified by the given `memberId`.
+
+  - target: $.paths["/orgs/{orgId}/members/{memberId}/role"].put
+    update:
+      description: Updates the role of the member identified by the given `memberId`.
+
+  - target: $.paths["/orgs/{orgId}/quotas"].get
+    update:
+      description: Retrieves the details of the organization quotas identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/teams"].get
+    update:
+      description: Lists all teams in the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/teams"].post
+    update:
+      description: Creates a new team in the organization identified by the given `orgId`.
+
+  - target: $.paths["/orgs/{orgId}/teams/validate"].get
+    update:
+      description: Confirms the validity of the given team name. Append `?name=<your_team_name>`.
+
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}"].get
+    update:
+      description: Retrieves the details of the team identified by the given `teamId`.
+
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}"].put
+    update:
+      description: Updates the details of the team identified by the given `teamId`.
+
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}"].delete
+    update:
+      description: Deletes the team identified by the given `teamId`.
+
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}/members"].get
+    update:
+      description: Lists the team members associated with the given `teamId`.
+
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}/members"].post
+    update:
+      description: Adds a new member to the team identified by the given `teamId`.
+
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"].delete
+    update:
+      description: Deletes the team member identified by the given `memberId`.
+
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}/workspaces"].get
+    update:
+      description: Lists all the workspaces of which the given `teamId` is a participant.
+
+  - target: $.paths["/orgs/{orgId}/workspaces"].get
+    update:
+      description: Lists the organization workspaces in `orgId` to which the requesting user belongs.
+
+  - target: $.paths["/orgs/{orgId}/workspaces"].post
+    update:
+      description: Creates a new organization workspace.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/validate"].get
+    update:
+      description: Confirms the validity of the given workspace name. Append `?name=<your_workspace_name>`.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}"].get
+    update:
+      description: Retrieves the details of the workspace identified by the given `workspaceId`.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}"].put
+    update:
+      description: Updates the details of the workspace identified by the given `workspaceId`.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}"].delete
+    update:
+      description: Deletes the workspace identified by the given `workspaceId`.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/participants"].get
+    update:
+      description: Lists the participants of the workspace identified by the given `workspaceId`.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/participants"].delete
+    update:
+      description: Removes the requesting user from the given workspace.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"].put
+    update:
+      description: Adds a new participant to the workspace identified by the given `workspaceId`.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"].delete
+    update:
+      description: Deletes the given participant from the given workspace.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"].put
+    update:
+      description: Updates the role of the given participant in the given workspace.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].get
+    update:
+      description: Retrieves the Studios settings of the workspace identified by the given `workspaceId`.
+
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].put
+    update:
+      description: Updates the Studios settings of the workspace identified by the given `workspaceId`.
+
+  - target: $.paths["/pipeline-secrets"].get
+    update:
+      description: Lists all available pipeline secrets in a user context. Append `?workspaceId` to list
+        secrets in a workspace context.
+
+  - target: $.paths["/pipeline-secrets"].post
+    update:
+      description: Creates a new pipeline secret in the user context. Append `?workspaceId` to create the
+        secret in a workspace context.
+
+  - target: $.paths["/pipeline-secrets/validate"].get
+    update:
+      description: Confirms the validity of the given pipeline secret name in a user context. Append `?name=<your_secret_name>`.
+        Append `?workspaceId` to validate the name in a workspace context.
+
+  - target: $.paths["/pipeline-secrets/{secretId}"].get
+    update:
+      description: Retrieves the details of the pipeline secret identified by the given `secretId`.
+
+  - target: $.paths["/pipeline-secrets/{secretId}"].put
+    update:
+      description: Updates the pipeline secret identified by the given `secretId`.
+
+  - target: $.paths["/pipeline-secrets/{secretId}"].delete
+    update:
+      description: Deletes the pipeline secret identified by the given `secretId`.
+
+  - target: $.paths["/pipelines"].get
+    update:
+      description: Lists all available pipelines in a user context, enriched by `attributes`. Append `workspaceId`
+        to list pipelines in a workspace context.
+
+  - target: $.paths["/pipelines"].post
+    update:
+      description: Creates a new pipeline in a user context. Append `?workspaceId` to create the pipeline
+        in a workspace context.
+
+  - target: $.paths["/pipelines/info"].get
+    update:
+      description: Retrieves the details of a remote Nextflow pipeline Git repository. Append the repository
+        name or full URL with `?name`.
+
+  - target: $.paths["/pipelines/labels/add"].post
+    update:
+      description: Adds the given list of labels to the given pipelines. Existing labels are preserved.
+
+  - target: $.paths["/pipelines/labels/apply"].post
+    update:
+      description: Applies the given list of labels to the given pipelines. Existing labels are replaced
+        — include labels to be preserved in `labelIds`.
+
+  - target: $.paths["/pipelines/labels/remove"].post
+    update:
+      description: Removes the given list of labels from the given pipelines.
+
+  - target: $.paths["/pipelines/repositories"].get
+    update:
+      description: Lists known Nextflow pipeline Git repositories, extracted from existing runs. Append
+        `?workspaceId` to list repositories in a workspace context.
+
+  - target: $.paths["/pipelines/validate"].get
+    update:
+      description: Confirms the validity of the given pipeline `name` in a user context. Append `?name=<your_pipeline_name>`.
+        Append `?workspaceId` to validate the name in a workspace context.
+
+  - target: $.paths["/pipelines/{pipelineId}"].get
+    update:
+      description: Retrieves the details of the pipeline identified by the given `pipelineId`, enriched
+        by `attributes`.
+
+  - target: $.paths["/pipelines/{pipelineId}"].put
+    update:
+      description: "Updates the details of the pipeline identified by the given `pipelineId`. \n       \
+        \     **Note**: If `labelIds` is `null`, empty, or ommitted, existing pipeline labels are removed.\n\
+        \            Include `labelIds: [<label-id-1>,<label-id-2>]` to override existing labels. Labels\
+        \ to be preserved must be included.\n            To append a list of labels to multiple pipelines,\
+        \ use `/pipelines/labels/add`."
+
+  - target: $.paths["/pipelines/{pipelineId}"].delete
+    update:
+      description: Deletes the pipeline identified by the given `pipelineId`.
+
+  - target: $.paths["/pipelines/{pipelineId}/launch"].get
+    update:
+      description: Retrieves the launch details of the pipeline identified by the given `pipelineId`.
+
+  - target: $.paths["/pipelines/{pipelineId}/schema"].get
+    update:
+      description: "Retrieves the pipeline schema of the pipeline identified by the given `pipelineId`,\
+        \ enriched by `attributes`.\n            `200 - OK` responses include the pipeline schema.\n   \
+        \         `204 - OK` responses indicate a successful request, with no saved schema found for the\
+        \ given pipeline ID.\n            "
+
+  - target: $.paths["/platforms"].get
+    update:
+      description: Lists all available computing platforms in a user context. Append `?workspaceId` to list
+        platforms in a workspace context.
+
+  - target: $.paths["/platforms/{platformId}"].get
+    update:
+      description: Retrieves the details of the computing platform identified by the given `platformId`.
+
+  - target: $.paths["/platforms/{platformId}/regions"].get
+    update:
+      description: Lists the available regions for the computing platform identified by the given `platformId`.
+
+  - target: $.paths["/studios"].get
+    update:
+      description: Lists all available Studios in a user context. Append `?workspaceId` to list Studios
+        in a workspace context.
+
+  - target: $.paths["/studios"].post
+    update:
+      description: Creates a new Studio environment, starting it by default. Default behavior can be changed
+        using the query parameter `autoStart=false`.
+
+  - target: $.paths["/studios/data-links"].get
+    update:
+      description: Lists the IDs of all available data-links mounted in existing Studios. Append `orgId`
+        or `?workspaceId` to list mounted data-links in an organization or workspace context, respectively.
+
+  - target: $.paths["/studios/templates"].get
+    update:
+      description: Returns the list of available, configured Studio templates.
+
+  - target: $.paths["/studios/validate"].get
+    update:
+      description: Confirms the availability of the given name for a Studio in the user context. Append
+        `?workspaceId=` to validate the name in a workspace context.
+
+  - target: $.paths["/studios/{sessionId}"].get
+    update:
+      description: Retrieves the details of the Studio session identified by the given `sessionId`.
+
+  - target: $.paths["/studios/{sessionId}"].delete
+    update:
+      description: Deletes the Studio associated with the given Studio session ID.
+
+  - target: $.paths["/studios/{sessionId}/checkpoints"].get
+    update:
+      description: Retrieves the list of checkpoints for the given Studio session ID.
+
+  - target: $.paths["/studios/{sessionId}/checkpoints/{checkpointId}"].get
+    update:
+      description: Retrieves the details of the given Studio checkpoint ID.
+
+  - target: $.paths["/studios/{sessionId}/checkpoints/{checkpointId}"].put
+    update:
+      description: Updates the name of the given Studio checkpoint ID.
+
+  - target: $.paths["/studios/{sessionId}/lifespan"].post
+    update:
+      description: Extends the lifespan of the given Studio session ID.
+
+  - target: $.paths["/studios/{sessionId}/start"].put
+    update:
+      description: Starts the given Studio session ID.
+
+  - target: $.paths["/studios/{sessionId}/stop"].put
+    update:
+      description: Stops the given Studio session ID.
+
+  - target: $.paths["/tokens"].get
+    update:
+      description: Retrieves the list of all available API access tokens.
+
+  - target: $.paths["/tokens"].post
+    update:
+      description: Creates an API access token with the details in the given request body.
+
+  - target: $.paths["/tokens/delete-all"].delete
+    update:
+      description: Deletes all API access tokens in the user context.
+
+  - target: $.paths["/tokens/{tokenId}"].delete
+    update:
+      description: Deletes the given API access token ID.
+
+  - target: $.paths["/trace/create"].post
+    update:
+      description: Creates a new workflow execution trace.
+
+  - target: $.paths["/trace/{workflowId}/begin"].put
+    update:
+      description: Updates the workflow execution trace for the given `workflowId`.
+
+  - target: $.paths["/trace/{workflowId}/complete"].put
+    update:
+      description: Updates the workflow execution trace for the given `workflowId`.
+
+  - target: $.paths["/trace/{workflowId}/heartbeat"].put
+    update:
+      description: Update the workflow execution trace heartbeat for the given `workflowId` to signal that
+        execution is ongoing.
+
+  - target: $.paths["/trace/{workflowId}/progress"].put
+    update:
+      description: Store the execution metadata for one or more tasks in the given `workflowId`.
+
+  - target: $.paths["/user/{userId}/workspaces"].get
+    update:
+      description: Lists the workspaces and organizations to which the user identified by the given `userId`
+        belongs.
+
+  - target: $.paths["/workflow"].get
+    update:
+      description: Lists all workflow records, enriched with `attributes`. Append `?workspaceId` to list
+        workflow records in a workspace context.
+
+  - target: $.paths["/workflow/delete"].post
+    update:
+      description: Deletes the workflow records identified by the given list of `workflowIds`.
+
+  - target: $.paths["/workflow/labels/add"].post
+    update:
+      description: Adds the given list of labels to the given workflows. Existing labels are preserved.
+
+  - target: $.paths["/workflow/labels/apply"].post
+    update:
+      description: Applies the given list of labels to the given workflows. Existing labels are replaced
+        — include labels to be preserved in `labelIds`.
+
+  - target: $.paths["/workflow/labels/remove"].post
+    update:
+      description: Removes the given list of labels from the given workflows.
+
+  - target: $.paths["/workflow/launch"].post
+    update:
+      description: Submits a workflow execution.
+
+  - target: $.paths["/workflow/validate"].get
+    update:
+      description: 'Check that the given run name of a workflow has a valid format. When the session ID
+        is given: check that no other workflow in the system exists with the combination of both elements.'
+
+  - target: $.paths["/workflow/{workflowId}"].get
+    update:
+      description: Retrieves the details of the workflow record associated with the given `workflowId`.
+
+  - target: $.paths["/workflow/{workflowId}/cancel"].post
+    update:
+      description: Cancels the workflow execution identified by the given `workflowId`.
+
+  - target: $.paths["/workflow/{workflowId}/download"].get
+    update:
+      description: Downloads the workflow files for the Nextflow main job associated with the given `workflowId`.
+
+  - target: $.paths["/workflow/{workflowId}/download/{taskId}"].get
+    update:
+      description: Downloads the workflow files of the task identified by the given `taskId`.
+
+  - target: $.paths["/workflow/{workflowId}/launch"].get
+    update:
+      description: Retrieves the details of the workflow launch associated with the given `workflowId`.
+
+  - target: $.paths["/workflow/{workflowId}/log"].get
+    update:
+      description: Retrieves the output logs for the Nextflow main job of the workflow identified by the
+        given `workflowId`.
+
+  - target: $.paths["/workflow/{workflowId}/log/{taskId}"].get
+    update:
+      description: Retrieves the output logs for the workflow task identified by the given `taskId`.
+
+  - target: $.paths["/workflow/{workflowId}/star"].get
+    update:
+      description: Confirms whether the given `workflowId` is starred.
+
+  - target: $.paths["/workflow/{workflowId}/star"].post
+    update:
+      description: Adds the workflow identified by the given `workflowId` to your list of starred workflows.
+
+  - target: $.paths["/workflow/{workflowId}/star"].delete
+    update:
+      description: Removes the workflow identified by the given `workflowId` from your list of starred workflows.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets"].get
+    update:
+      description: Lists all available datasets in the workspace context identified by the given `workspaceId`.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets"].post
+    update:
+      description: Creates a new dataset in the given workspace context. Include the dataset file and details
+        in your request body.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/versions"].get
+    update:
+      description: Lists the latest version of each dataset associated with the given `workspaceId`.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}"].put
+    update:
+      description: Updates the details of the dataset identified by the given `datasetId`.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}"].delete
+    update:
+      description: Deletes the dataset identified by the given `datasetId`.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/metadata"].get
+    update:
+      description: Retrieves the metadata of the dataset identified by the given `datasetId`.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/upload"].post
+    update:
+      description: Uploads the CSV or TSV content to create a new version of the dataset identified by the
+        given `datasetId`.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/v/{version}/n/{fileName}"].get
+    update:
+      description: Downloads the content of the dataset identified by the given `datasetId` and `version`.
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/versions"].get
+    update:
+      description: Lists all versions of the given `datasetId`.

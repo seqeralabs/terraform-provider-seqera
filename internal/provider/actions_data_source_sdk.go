@@ -12,27 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *ActionsDataSourceModel) ToOperationsListActionsRequest(ctx context.Context) (*operations.ListActionsRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	attributes := make([]shared.ActionQueryAttribute, 0, len(r.Attributes))
-	for _, attributesItem := range r.Attributes {
-		attributes = append(attributes, shared.ActionQueryAttribute(attributesItem.ValueString()))
-	}
-	out := operations.ListActionsRequest{
-		WorkspaceID: workspaceID,
-		Attributes:  attributes,
-	}
-
-	return &out, diags
-}
-
 func (r *ActionsDataSourceModel) RefreshFromSharedListActionsResponse(ctx context.Context, resp *shared.ListActionsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -118,4 +97,25 @@ func (r *ActionsDataSourceModel) RefreshFromSharedListActionsResponse(ctx contex
 	}
 
 	return diags
+}
+
+func (r *ActionsDataSourceModel) ToOperationsListActionsRequest(ctx context.Context) (*operations.ListActionsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	attributes := make([]shared.ActionQueryAttribute, 0, len(r.Attributes))
+	for _, attributesItem := range r.Attributes {
+		attributes = append(attributes, shared.ActionQueryAttribute(attributesItem.ValueString()))
+	}
+	out := operations.ListActionsRequest{
+		WorkspaceID: workspaceID,
+		Attributes:  attributes,
+	}
+
+	return &out, diags
 }

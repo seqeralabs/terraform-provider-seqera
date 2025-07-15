@@ -12,38 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *PipelineDataSourceModel) ToOperationsDescribePipelineRequest(ctx context.Context) (*operations.DescribePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pipelineID int64
-	pipelineID = r.PipelineID.ValueInt64()
-
-	attributes := make([]shared.PipelineQueryAttribute, 0, len(r.Attributes))
-	for _, attributesItem := range r.Attributes {
-		attributes = append(attributes, shared.PipelineQueryAttribute(attributesItem.ValueString()))
-	}
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	sourceWorkspaceID := new(int64)
-	if !r.SourceWorkspaceID.IsUnknown() && !r.SourceWorkspaceID.IsNull() {
-		*sourceWorkspaceID = r.SourceWorkspaceID.ValueInt64()
-	} else {
-		sourceWorkspaceID = nil
-	}
-	out := operations.DescribePipelineRequest{
-		PipelineID:        pipelineID,
-		Attributes:        attributes,
-		WorkspaceID:       workspaceID,
-		SourceWorkspaceID: sourceWorkspaceID,
-	}
-
-	return &out, diags
-}
-
 func (r *PipelineDataSourceModel) RefreshFromSharedPipelineDbDto(ctx context.Context, resp *shared.PipelineDbDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -106,4 +74,36 @@ func (r *PipelineDataSourceModel) RefreshFromSharedPipelineDbDto(ctx context.Con
 	}
 
 	return diags
+}
+
+func (r *PipelineDataSourceModel) ToOperationsDescribePipelineRequest(ctx context.Context) (*operations.DescribePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pipelineID int64
+	pipelineID = r.PipelineID.ValueInt64()
+
+	attributes := make([]shared.PipelineQueryAttribute, 0, len(r.Attributes))
+	for _, attributesItem := range r.Attributes {
+		attributes = append(attributes, shared.PipelineQueryAttribute(attributesItem.ValueString()))
+	}
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	sourceWorkspaceID := new(int64)
+	if !r.SourceWorkspaceID.IsUnknown() && !r.SourceWorkspaceID.IsNull() {
+		*sourceWorkspaceID = r.SourceWorkspaceID.ValueInt64()
+	} else {
+		sourceWorkspaceID = nil
+	}
+	out := operations.DescribePipelineRequest{
+		PipelineID:        pipelineID,
+		Attributes:        attributes,
+		WorkspaceID:       workspaceID,
+		SourceWorkspaceID: sourceWorkspaceID,
+	}
+
+	return &out, diags
 }

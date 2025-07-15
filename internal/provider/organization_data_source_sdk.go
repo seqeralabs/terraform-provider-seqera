@@ -11,19 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *OrganizationDataSourceModel) ToOperationsDescribeOrganizationRequest(ctx context.Context) (*operations.DescribeOrganizationRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	out := operations.DescribeOrganizationRequest{
-		OrgID: orgID,
-	}
-
-	return &out, diags
-}
-
 func (r *OrganizationDataSourceModel) RefreshFromSharedDescribeOrganizationResponse(ctx context.Context, resp *shared.DescribeOrganizationResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -56,4 +43,17 @@ func (r *OrganizationDataSourceModel) RefreshFromSharedDescribeOrganizationRespo
 	}
 
 	return diags
+}
+
+func (r *OrganizationDataSourceModel) ToOperationsDescribeOrganizationRequest(ctx context.Context) (*operations.DescribeOrganizationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	out := operations.DescribeOrganizationRequest{
+		OrgID: orgID,
+	}
+
+	return &out, diags
 }
