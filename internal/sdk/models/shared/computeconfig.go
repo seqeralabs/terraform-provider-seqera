@@ -2377,6 +2377,8 @@ const (
 	ComputeConfigTypeUgePlatform           ComputeConfigType = "uge-platform"
 )
 
+// ComputeConfig - Configuration settings for compute environments including work directories,
+// pre/post run scripts, and environment-specific parameters.
 type ComputeConfig struct {
 	AWSBatchConfiguration           *AWSBatchConfiguration           `queryParam:"inline"`
 	AWSCloudConfiguration           *AWSCloudConfiguration           `queryParam:"inline"`

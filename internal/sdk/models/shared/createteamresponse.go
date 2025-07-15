@@ -3,6 +3,9 @@
 package shared
 
 type CreateTeamResponse struct {
+	// Represents a team within an organization.
+	// Contains team membership, permissions, and access controls
+	// for collaborative workspace management.
 	Team *TeamDbDto `json:"team,omitempty"`
 }
 

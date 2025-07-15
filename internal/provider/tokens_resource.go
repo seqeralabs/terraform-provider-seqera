@@ -116,6 +116,9 @@ func (r *TokensResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 				},
+				MarkdownDescription: `Represents an API access token for authentication.` + "\n" +
+					`Contains token metadata, permissions, and expiration information` + "\n" +
+					`for secure API access to platform resources.`,
 			},
 			"token_id": schema.Int64Attribute{
 				Optional:    true,

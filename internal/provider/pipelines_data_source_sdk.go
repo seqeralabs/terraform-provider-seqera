@@ -12,55 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *PipelinesDataSourceModel) ToOperationsListPipelinesRequest(ctx context.Context) (*operations.ListPipelinesRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	attributes := make([]shared.PipelineQueryAttribute, 0, len(r.Attributes))
-	for _, attributesItem := range r.Attributes {
-		attributes = append(attributes, shared.PipelineQueryAttribute(attributesItem.ValueString()))
-	}
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	max := new(int)
-	if !r.Max.IsUnknown() && !r.Max.IsNull() {
-		*max = int(r.Max.ValueInt32())
-	} else {
-		max = nil
-	}
-	offset := new(int)
-	if !r.Offset.IsUnknown() && !r.Offset.IsNull() {
-		*offset = int(r.Offset.ValueInt32())
-	} else {
-		offset = nil
-	}
-	search := new(string)
-	if !r.Search.IsUnknown() && !r.Search.IsNull() {
-		*search = r.Search.ValueString()
-	} else {
-		search = nil
-	}
-	visibility := new(string)
-	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
-		*visibility = r.Visibility.ValueString()
-	} else {
-		visibility = nil
-	}
-	out := operations.ListPipelinesRequest{
-		Attributes:  attributes,
-		WorkspaceID: workspaceID,
-		Max:         max,
-		Offset:      offset,
-		Search:      search,
-		Visibility:  visibility,
-	}
-
-	return &out, diags
-}
-
 func (r *PipelinesDataSourceModel) RefreshFromSharedListPipelinesResponse(ctx context.Context, resp *shared.ListPipelinesResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -153,4 +104,53 @@ func (r *PipelinesDataSourceModel) RefreshFromSharedListPipelinesResponse(ctx co
 	}
 
 	return diags
+}
+
+func (r *PipelinesDataSourceModel) ToOperationsListPipelinesRequest(ctx context.Context) (*operations.ListPipelinesRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	attributes := make([]shared.PipelineQueryAttribute, 0, len(r.Attributes))
+	for _, attributesItem := range r.Attributes {
+		attributes = append(attributes, shared.PipelineQueryAttribute(attributesItem.ValueString()))
+	}
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	max := new(int)
+	if !r.Max.IsUnknown() && !r.Max.IsNull() {
+		*max = int(r.Max.ValueInt32())
+	} else {
+		max = nil
+	}
+	offset := new(int)
+	if !r.Offset.IsUnknown() && !r.Offset.IsNull() {
+		*offset = int(r.Offset.ValueInt32())
+	} else {
+		offset = nil
+	}
+	search := new(string)
+	if !r.Search.IsUnknown() && !r.Search.IsNull() {
+		*search = r.Search.ValueString()
+	} else {
+		search = nil
+	}
+	visibility := new(string)
+	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
+		*visibility = r.Visibility.ValueString()
+	} else {
+		visibility = nil
+	}
+	out := operations.ListPipelinesRequest{
+		Attributes:  attributes,
+		WorkspaceID: workspaceID,
+		Max:         max,
+		Offset:      offset,
+		Search:      search,
+		Visibility:  visibility,
+	}
+
+	return &out, diags
 }

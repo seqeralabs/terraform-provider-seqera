@@ -7736,6 +7736,10 @@ components:
           type: string
           format: date-time
       x-speakeasy-entity: Tokens
+      description: |
+        Represents an API access token for authentication.
+        Contains token metadata, permissions, and expiration information
+        for secure API access to platform resources.
     Action.ConfigType:
       type: object
       properties:
@@ -7832,6 +7836,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
+      description: |
+        Represents a pipeline action in the Seqera Platform.
+        Contains action configuration, triggers, and execution settings
+        for automated pipeline workflows.
     ActiveConnection:
       type: object
       allOf:
@@ -8390,6 +8398,9 @@ components:
         - $ref: "#/components/schemas/UnivaComputeConfig"
         - $ref: "#/components/schemas/AltairPbsComputeConfig"
         - $ref: "#/components/schemas/MoabComputeConfig"
+      description: |
+        Configuration settings for compute environments including work directories,
+        pre/post run scripts, and environment-specific parameters.
     ComputeEnv.Status:
       type: string
       readOnly: true
@@ -8902,6 +8913,10 @@ components:
         keys:
           $ref: "#/components/schemas/SecurityKeys"
       x-speakeasy-entity: Credential
+      description: |
+        Represents credentials used for authentication with various platforms and services.
+        Contains authentication information for accessing cloud providers, Git repositories,
+        and other external services within the Seqera Platform.
     DataLink.Status:
       type: string
       readOnly: true
@@ -9027,6 +9042,10 @@ components:
               readOnly: true
         message:
           type: string
+      description: |
+        Represents a data link connection to external storage systems.
+        Provides access to cloud storage, file systems, and data repositories
+        for pipeline input/output operations.
     DataLinkFinishMultiPartUploadRequest:
       type: object
       properties:
@@ -9310,6 +9329,10 @@ components:
           items:
             $ref: "#/components/schemas/LabelDbDto"
       x-speakeasy-entity: Studios
+      description: |
+        Represents a Studio session for interactive data analysis.
+        Contains configuration and runtime information for Jupyter-based
+        computational environments.
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -9518,6 +9541,10 @@ components:
           type: string
           format: date-time
           readOnly: true
+      description: |
+        Represents a dataset in the Seqera Platform.
+        Contains dataset metadata, versioning information, and access
+        controls for data management and sharing.
     DatasetVersionDbDto:
       type: object
       properties:
@@ -10302,6 +10329,10 @@ components:
         dateCreated:
           type: string
           format: date-time
+      description: |
+        Represents a label for organizing and categorizing resources.
+        Provides metadata tagging capabilities for pipelines, workflows,
+        and other platform resources.
     LabelType:
       type: string
       enum:
@@ -10906,6 +10937,10 @@ components:
         type:
           $ref: "#/components/schemas/OrgType"
       x-speakeasy-entity: Orgs
+      description: |
+        Represents an organization in the Seqera Platform.
+        Contains organizational metadata, settings, and member management
+        information for multi-tenant environments.
     OrganizationQuotas:
       type: object
       properties:
@@ -11041,6 +11076,11 @@ components:
           $ref: "#/components/schemas/ComputeEnvDbDto"
       x-speakeasy-entity: Pipeline
       ## Users
+
+      description: |
+        Represents a pipeline configuration in the Seqera Platform.
+        Contains pipeline metadata, configuration settings, and execution parameters
+        for Nextflow workflows.
     PipelineInfo:
       type: object
       properties:
@@ -11129,6 +11169,10 @@ components:
           format: date-time
           readOnly: true
       x-speakeasy-entity: PipelineSecret
+      description: |
+        Represents a secure secret for pipeline execution.
+        Contains encrypted sensitive data such as API keys, passwords,
+        and configuration values used in workflows.
     PlatformMetainfo:
       type: object
       discriminator:
@@ -11787,6 +11831,10 @@ components:
           type: integer
           format: int64
       x-speakeasy-entity: Teams
+      description: |-
+        Represents a team within an organization.
+        Contains team membership, permissions, and access controls
+        for collaborative workspace management.
     TraceBeginRequest:
       type: object
       properties:
@@ -11801,6 +11849,10 @@ components:
             type: string
         towerLaunch:
           type: boolean
+      description: |
+        Represents workflow execution trace information.
+        Contains metadata and progress tracking data for monitoring
+        pipeline execution and performance metrics.
     TraceBeginResponse:
       type: object
       properties:
@@ -12543,6 +12595,10 @@ components:
           type: boolean
         success:
           type: boolean
+      description: |
+        Represents a workflow execution record.
+        Contains execution status, metadata, and results from pipeline
+        runs including logs and performance metrics.
     WorkflowLaunchRequest:
       type: object
       properties:
@@ -12896,6 +12952,10 @@ components:
           type: string
         visibility:
           $ref: "#/components/schemas/Visibility"
+      description: |
+        Represents a workspace in the Seqera Platform.
+        Contains workspace configuration, member permissions, and resource
+        isolation settings for project organization.
     WspRole:
       type: string
       enum:

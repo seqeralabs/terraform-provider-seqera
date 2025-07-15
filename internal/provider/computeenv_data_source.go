@@ -1460,6 +1460,8 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 								},
 							},
 						},
+						MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+							`pre/post run scripts, and environment-specific parameters.`,
 					},
 					"credentials_id": schema.StringAttribute{
 						Computed: true,

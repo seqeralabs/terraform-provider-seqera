@@ -70,6 +70,9 @@ func (r *DatasetDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						Computed: true,
 					},
 				},
+				MarkdownDescription: `Represents a dataset in the Seqera Platform.` + "\n" +
+					`Contains dataset metadata, versioning information, and access` + "\n" +
+					`controls for data management and sharing.`,
 			},
 			"dataset_id": schema.StringAttribute{
 				Required:    true,

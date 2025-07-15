@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// ActionResponseDto - Represents a pipeline action in the Seqera Platform.
+// Contains action configuration, triggers, and execution settings
+// for automated pipeline workflows.
 type ActionResponseDto struct {
 	ID          *string           `json:"id,omitempty"`
 	Launch      *Launch           `json:"launch,omitempty"`

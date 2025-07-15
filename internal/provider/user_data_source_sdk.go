@@ -11,19 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *UserDataSourceModel) ToOperationsDescribeUserRequest(ctx context.Context) (*operations.DescribeUserRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var userID int64
-	userID = r.UserID.ValueInt64()
-
-	out := operations.DescribeUserRequest{
-		UserID: userID,
-	}
-
-	return &out, diags
-}
-
 func (r *UserDataSourceModel) RefreshFromSharedUserDbDto(ctx context.Context, resp *shared.UserDbDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -47,4 +34,17 @@ func (r *UserDataSourceModel) RefreshFromSharedUserDbDto(ctx context.Context, re
 	}
 
 	return diags
+}
+
+func (r *UserDataSourceModel) ToOperationsDescribeUserRequest(ctx context.Context) (*operations.DescribeUserRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var userID int64
+	userID = r.UserID.ValueInt64()
+
+	out := operations.DescribeUserRequest{
+		UserID: userID,
+	}
+
+	return &out, diags
 }

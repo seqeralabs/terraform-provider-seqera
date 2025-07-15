@@ -32,7 +32,9 @@ data "seqera_dataset" "my_dataset" {
 
 ### Read-Only
 
-- `dataset` (Attributes) (see [below for nested schema](#nestedatt--dataset))
+- `dataset` (Attributes) Represents a dataset in the Seqera Platform.
+Contains dataset metadata, versioning information, and access
+controls for data management and sharing. (see [below for nested schema](#nestedatt--dataset))
 
 <a id="nestedatt--dataset"></a>
 ### Nested Schema for `dataset`

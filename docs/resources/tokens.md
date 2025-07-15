@@ -34,7 +34,9 @@ resource "seqera_tokens" "my_tokens" {
 - `date_created` (String)
 - `id` (Number) The ID of this resource.
 - `last_used` (String)
-- `token` (Attributes) (see [below for nested schema](#nestedatt--token))
+- `token` (Attributes) Represents an API access token for authentication.
+Contains token metadata, permissions, and expiration information
+for secure API access to platform resources. (see [below for nested schema](#nestedatt--token))
 
 <a id="nestedatt--token"></a>
 ### Nested Schema for `token`

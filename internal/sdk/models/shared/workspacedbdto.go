@@ -2,6 +2,9 @@
 
 package shared
 
+// WorkspaceDbDto - Represents a workspace in the Seqera Platform.
+// Contains workspace configuration, member permissions, and resource
+// isolation settings for project organization.
 type WorkspaceDbDto struct {
 	ID          *int64      `json:"id,omitempty"`
 	Name        *string     `json:"name,omitempty"`

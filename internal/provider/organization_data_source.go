@@ -89,6 +89,9 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 						Computed: true,
 					},
 				},
+				MarkdownDescription: `Represents an organization in the Seqera Platform.` + "\n" +
+					`Contains organizational metadata, settings, and member management` + "\n" +
+					`information for multi-tenant environments.`,
 			},
 		},
 	}

@@ -44,7 +44,8 @@ data "seqera_compute_env" "my_computeenv" {
 Read-Only:
 
 - `compute_env_id` (String)
-- `config` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config))
+- `config` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters. (see [below for nested schema](#nestedatt--compute_env--config))
 - `credentials_id` (String)
 - `date_created` (String)
 - `deleted` (Boolean)

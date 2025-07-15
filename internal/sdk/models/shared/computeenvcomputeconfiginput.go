@@ -111,9 +111,12 @@ type ComputeEnvComputeConfigInput struct {
 	Name          string                          `json:"name"`
 	Description   *string                         `json:"description,omitempty"`
 	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
-	Config        ComputeConfig                   `json:"config"`
-	Status        *ComputeEnvComputeConfigStatus  `json:"status,omitempty"`
-	Message       *string                         `json:"message,omitempty"`
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config  ComputeConfig                  `json:"config"`
+	Status  *ComputeEnvComputeConfigStatus `json:"status,omitempty"`
+	Message *string                        `json:"message,omitempty"`
 }
 
 func (o *ComputeEnvComputeConfigInput) GetCredentialsID() *string {
@@ -229,14 +232,17 @@ type ComputeEnvComputeConfig struct {
 	Name          string                          `json:"name"`
 	Description   *string                         `json:"description,omitempty"`
 	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
-	Config        ComputeConfig                   `json:"config"`
-	DateCreated   *time.Time                      `json:"dateCreated,omitempty"`
-	LastUpdated   *time.Time                      `json:"lastUpdated,omitempty"`
-	LastUsed      *time.Time                      `json:"lastUsed,omitempty"`
-	Deleted       *bool                           `json:"deleted,omitempty"`
-	Status        *ComputeEnvComputeConfigStatus  `json:"status,omitempty"`
-	Message       *string                         `json:"message,omitempty"`
-	Primary       *bool                           `json:"primary,omitempty"`
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config      ComputeConfig                  `json:"config"`
+	DateCreated *time.Time                     `json:"dateCreated,omitempty"`
+	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
+	LastUsed    *time.Time                     `json:"lastUsed,omitempty"`
+	Deleted     *bool                          `json:"deleted,omitempty"`
+	Status      *ComputeEnvComputeConfigStatus `json:"status,omitempty"`
+	Message     *string                        `json:"message,omitempty"`
+	Primary     *bool                          `json:"primary,omitempty"`
 }
 
 func (c ComputeEnvComputeConfig) MarshalJSON() ([]byte, error) {

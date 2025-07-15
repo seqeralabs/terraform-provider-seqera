@@ -3,6 +3,10 @@
 package shared
 
 type DescribeDatasetResponse struct {
+	// Represents a dataset in the Seqera Platform.
+	// Contains dataset metadata, versioning information, and access
+	// controls for data management and sharing.
+	//
 	Dataset *Dataset `json:"dataset,omitempty"`
 }
 

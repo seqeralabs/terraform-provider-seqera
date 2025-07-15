@@ -3,6 +3,10 @@
 package shared
 
 type DescribeOrganizationResponse struct {
+	// Represents an organization in the Seqera Platform.
+	// Contains organizational metadata, settings, and member management
+	// information for multi-tenant environments.
+	//
 	Organization *OrganizationDbDto `json:"organization,omitempty"`
 }
 

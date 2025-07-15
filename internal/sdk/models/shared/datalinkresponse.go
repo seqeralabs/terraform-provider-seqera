@@ -3,6 +3,10 @@
 package shared
 
 type DataLinkResponse struct {
+	// Represents a data link connection to external storage systems.
+	// Provides access to cloud storage, file systems, and data repositories
+	// for pipeline input/output operations.
+	//
 	DataLink *DataLinkDto `json:"dataLink,omitempty"`
 }
 

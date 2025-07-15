@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// PipelineDbDto - Represents a pipeline configuration in the Seqera Platform.
+// Contains pipeline metadata, configuration settings, and execution parameters
+// for Nextflow workflows.
 type PipelineDbDto struct {
 	PipelineID          *int64                      `json:"pipelineId,omitempty"`
 	Name                *string                     `json:"name,omitempty"`

@@ -81,7 +81,9 @@ resource "seqera_compute_env" "my_computeenv" {
 
 Optional:
 
-- `config` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config))
+- `config` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config))
 - `credentials_id` (String) Requires replacement if changed.
 - `description` (String) Requires replacement if changed.
 - `message` (String) Requires replacement if changed.

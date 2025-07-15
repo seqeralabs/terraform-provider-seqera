@@ -3,6 +3,10 @@
 package shared
 
 type DescribeCredentialsResponse struct {
+	// Represents credentials used for authentication with various platforms and services.
+	// Contains authentication information for accessing cloud providers, Git repositories,
+	// and other external services within the Seqera Platform.
+	//
 	Credentials *CredentialsOutput `json:"credentials,omitempty"`
 }
 

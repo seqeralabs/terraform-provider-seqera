@@ -2,6 +2,9 @@
 
 package shared
 
+// OrganizationDbDto - Represents an organization in the Seqera Platform.
+// Contains organizational metadata, settings, and member management
+// information for multi-tenant environments.
 type OrganizationDbDto struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	Paying      *bool    `json:"paying,omitempty"`

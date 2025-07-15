@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// LabelDbDto - Represents a label for organizing and categorizing resources.
+// Provides metadata tagging capabilities for pipelines, workflows,
+// and other platform resources.
 type LabelDbDto struct {
 	ID          *int64     `json:"id,omitempty"`
 	Name        *string    `json:"name,omitempty"`

@@ -3,6 +3,10 @@
 package shared
 
 type DataStudioCreateResponse struct {
+	// Represents a Studio session for interactive data analysis.
+	// Contains configuration and runtime information for Jupyter-based
+	// computational environments.
+	//
 	Studio *DataStudioDto `json:"studio,omitempty"`
 }
 

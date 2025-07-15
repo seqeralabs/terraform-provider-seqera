@@ -10,6 +10,93 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *OrgsResourceModel) RefreshFromSharedOrganizationDbDto(ctx context.Context, resp *shared.OrganizationDbDto) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Description = types.StringPointerValue(resp.Description)
+		r.FullName = types.StringPointerValue(resp.FullName)
+		r.Location = types.StringPointerValue(resp.Location)
+		r.LogoID = types.StringPointerValue(resp.LogoID)
+		r.LogoURL = types.StringPointerValue(resp.LogoURL)
+		r.MemberID = types.Int64PointerValue(resp.MemberID)
+		if resp.MemberRole != nil {
+			r.MemberRole = types.StringValue(string(*resp.MemberRole))
+		} else {
+			r.MemberRole = types.StringNull()
+		}
+		r.Name = types.StringPointerValue(resp.Name)
+		r.OrgID = types.Int64PointerValue(resp.OrgID)
+		r.Paying = types.BoolPointerValue(resp.Paying)
+		if resp.Type != nil {
+			r.Type = types.StringValue(string(*resp.Type))
+		} else {
+			r.Type = types.StringNull()
+		}
+		r.Website = types.StringPointerValue(resp.Website)
+	}
+
+	return diags
+}
+
+func (r *OrgsResourceModel) ToOperationsDeleteOrganizationRequest(ctx context.Context) (*operations.DeleteOrganizationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	out := operations.DeleteOrganizationRequest{
+		OrgID: orgID,
+	}
+
+	return &out, diags
+}
+
+func (r *OrgsResourceModel) ToOperationsUpdateOrganizationRequest(ctx context.Context) (*operations.UpdateOrganizationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	updateOrganizationRequest, updateOrganizationRequestDiags := r.ToSharedUpdateOrganizationRequest(ctx)
+	diags.Append(updateOrganizationRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateOrganizationRequest{
+		OrgID:                     orgID,
+		UpdateOrganizationRequest: *updateOrganizationRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *OrgsResourceModel) ToSharedCreateOrganizationRequest(ctx context.Context) (*shared.CreateOrganizationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	organization, organizationDiags := r.ToSharedOrganization(ctx)
+	diags.Append(organizationDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	logoID := new(string)
+	if !r.LogoID.IsUnknown() && !r.LogoID.IsNull() {
+		*logoID = r.LogoID.ValueString()
+	} else {
+		logoID = nil
+	}
+	out := shared.CreateOrganizationRequest{
+		Organization: organization,
+		LogoID:       logoID,
+	}
+
+	return &out, diags
+}
+
 func (r *OrgsResourceModel) ToSharedOrganization(ctx context.Context) (*shared.Organization, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -43,30 +130,6 @@ func (r *OrgsResourceModel) ToSharedOrganization(ctx context.Context) (*shared.O
 		Description: description,
 		Location:    location,
 		Website:     website,
-	}
-
-	return &out, diags
-}
-
-func (r *OrgsResourceModel) ToSharedCreateOrganizationRequest(ctx context.Context) (*shared.CreateOrganizationRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	organization, organizationDiags := r.ToSharedOrganization(ctx)
-	diags.Append(organizationDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	logoID := new(string)
-	if !r.LogoID.IsUnknown() && !r.LogoID.IsNull() {
-		*logoID = r.LogoID.ValueString()
-	} else {
-		logoID = nil
-	}
-	out := shared.CreateOrganizationRequest{
-		Organization: organization,
-		LogoID:       logoID,
 	}
 
 	return &out, diags
@@ -135,67 +198,4 @@ func (r *OrgsResourceModel) ToSharedUpdateOrganizationRequest(ctx context.Contex
 	}
 
 	return &out, diags
-}
-
-func (r *OrgsResourceModel) ToOperationsUpdateOrganizationRequest(ctx context.Context) (*operations.UpdateOrganizationRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	updateOrganizationRequest, updateOrganizationRequestDiags := r.ToSharedUpdateOrganizationRequest(ctx)
-	diags.Append(updateOrganizationRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateOrganizationRequest{
-		OrgID:                     orgID,
-		UpdateOrganizationRequest: *updateOrganizationRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *OrgsResourceModel) ToOperationsDeleteOrganizationRequest(ctx context.Context) (*operations.DeleteOrganizationRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	out := operations.DeleteOrganizationRequest{
-		OrgID: orgID,
-	}
-
-	return &out, diags
-}
-
-func (r *OrgsResourceModel) RefreshFromSharedOrganizationDbDto(ctx context.Context, resp *shared.OrganizationDbDto) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Description = types.StringPointerValue(resp.Description)
-		r.FullName = types.StringPointerValue(resp.FullName)
-		r.Location = types.StringPointerValue(resp.Location)
-		r.LogoID = types.StringPointerValue(resp.LogoID)
-		r.LogoURL = types.StringPointerValue(resp.LogoURL)
-		r.MemberID = types.Int64PointerValue(resp.MemberID)
-		if resp.MemberRole != nil {
-			r.MemberRole = types.StringValue(string(*resp.MemberRole))
-		} else {
-			r.MemberRole = types.StringNull()
-		}
-		r.Name = types.StringPointerValue(resp.Name)
-		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.Paying = types.BoolPointerValue(resp.Paying)
-		if resp.Type != nil {
-			r.Type = types.StringValue(string(*resp.Type))
-		} else {
-			r.Type = types.StringNull()
-		}
-		r.Website = types.StringPointerValue(resp.Website)
-	}
-
-	return diags
 }

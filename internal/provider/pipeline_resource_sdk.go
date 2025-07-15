@@ -13,6 +13,162 @@ import (
 	"time"
 )
 
+func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Context, resp *shared.PipelineDbDto) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		if resp.ComputeEnv == nil {
+			r.ComputeEnv = nil
+		} else {
+			r.ComputeEnv = &tfTypes.ComputeEnvDbDto{}
+			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
+			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
+			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
+			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
+		}
+		r.Deleted = types.BoolPointerValue(resp.Deleted)
+		r.Description = types.StringPointerValue(resp.Description)
+		r.Icon = types.StringPointerValue(resp.Icon)
+		r.Labels = []tfTypes.LabelDbDto{}
+		if len(r.Labels) > len(resp.Labels) {
+			r.Labels = r.Labels[:len(resp.Labels)]
+		}
+		for labelsCount, labelsItem := range resp.Labels {
+			var labels tfTypes.LabelDbDto
+			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+			labels.ID = types.Int64PointerValue(labelsItem.ID)
+			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+			labels.Name = types.StringPointerValue(labelsItem.Name)
+			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+			labels.Value = types.StringPointerValue(labelsItem.Value)
+			if labelsCount+1 > len(r.Labels) {
+				r.Labels = append(r.Labels, labels)
+			} else {
+				r.Labels[labelsCount].DateCreated = labels.DateCreated
+				r.Labels[labelsCount].ID = labels.ID
+				r.Labels[labelsCount].IsDefault = labels.IsDefault
+				r.Labels[labelsCount].Name = labels.Name
+				r.Labels[labelsCount].Resource = labels.Resource
+				r.Labels[labelsCount].Value = labels.Value
+			}
+		}
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.Name = types.StringPointerValue(resp.Name)
+		r.OptimizationID = types.StringPointerValue(resp.OptimizationID)
+		if resp.OptimizationStatus != nil {
+			r.OptimizationStatus = types.StringValue(string(*resp.OptimizationStatus))
+		} else {
+			r.OptimizationStatus = types.StringNull()
+		}
+		r.OptimizationTargets = types.StringPointerValue(resp.OptimizationTargets)
+		r.OrgID = types.Int64PointerValue(resp.OrgID)
+		r.OrgName = types.StringPointerValue(resp.OrgName)
+		r.PipelineID = types.Int64PointerValue(resp.PipelineID)
+		r.Repository = types.StringPointerValue(resp.Repository)
+		r.UserFirstName = types.StringPointerValue(resp.UserFirstName)
+		r.UserID = types.Int64PointerValue(resp.UserID)
+		r.UserLastName = types.StringPointerValue(resp.UserLastName)
+		r.UserName = types.StringPointerValue(resp.UserName)
+		r.Visibility = types.StringPointerValue(resp.Visibility)
+		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
+		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
+	}
+
+	return diags
+}
+
+func (r *PipelineResourceModel) ToOperationsCreatePipelineRequest(ctx context.Context) (*operations.CreatePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	createPipelineRequest, createPipelineRequestDiags := r.ToSharedCreatePipelineRequest(ctx)
+	diags.Append(createPipelineRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreatePipelineRequest{
+		WorkspaceID:           workspaceID,
+		CreatePipelineRequest: *createPipelineRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToOperationsDeletePipelineRequest(ctx context.Context) (*operations.DeletePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pipelineID int64
+	pipelineID = r.PipelineID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DeletePipelineRequest{
+		PipelineID:  pipelineID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToOperationsDescribePipelineRequest(ctx context.Context) (*operations.DescribePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pipelineID int64
+	pipelineID = r.PipelineID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DescribePipelineRequest{
+		PipelineID:  pipelineID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToOperationsUpdatePipelineRequest(ctx context.Context) (*operations.UpdatePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pipelineID int64
+	pipelineID = r.PipelineID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	updatePipelineRequest, updatePipelineRequestDiags := r.ToSharedUpdatePipelineRequest(ctx)
+	diags.Append(updatePipelineRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdatePipelineRequest{
+		PipelineID:            pipelineID,
+		WorkspaceID:           workspaceID,
+		UpdatePipelineRequest: *updatePipelineRequest,
+	}
+
+	return &out, diags
+}
+
 func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Context) (*shared.CreatePipelineRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -230,30 +386,6 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		Icon:        icon,
 		Launch:      launch,
 		LabelIds:    labelIds1,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsCreatePipelineRequest(ctx context.Context) (*operations.CreatePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	createPipelineRequest, createPipelineRequestDiags := r.ToSharedCreatePipelineRequest(ctx)
-	diags.Append(createPipelineRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreatePipelineRequest{
-		WorkspaceID:           workspaceID,
-		CreatePipelineRequest: *createPipelineRequest,
 	}
 
 	return &out, diags
@@ -479,136 +611,4 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	}
 
 	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsUpdatePipelineRequest(ctx context.Context) (*operations.UpdatePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pipelineID int64
-	pipelineID = r.PipelineID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	updatePipelineRequest, updatePipelineRequestDiags := r.ToSharedUpdatePipelineRequest(ctx)
-	diags.Append(updatePipelineRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdatePipelineRequest{
-		PipelineID:            pipelineID,
-		WorkspaceID:           workspaceID,
-		UpdatePipelineRequest: *updatePipelineRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsDescribePipelineRequest(ctx context.Context) (*operations.DescribePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pipelineID int64
-	pipelineID = r.PipelineID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DescribePipelineRequest{
-		PipelineID:  pipelineID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsDeletePipelineRequest(ctx context.Context) (*operations.DeletePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pipelineID int64
-	pipelineID = r.PipelineID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DeletePipelineRequest{
-		PipelineID:  pipelineID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Context, resp *shared.PipelineDbDto) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		if resp.ComputeEnv == nil {
-			r.ComputeEnv = nil
-		} else {
-			r.ComputeEnv = &tfTypes.ComputeEnvDbDto{}
-			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
-			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
-			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
-			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
-		}
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		r.Icon = types.StringPointerValue(resp.Icon)
-		r.Labels = []tfTypes.LabelDbDto{}
-		if len(r.Labels) > len(resp.Labels) {
-			r.Labels = r.Labels[:len(resp.Labels)]
-		}
-		for labelsCount, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-			if labelsCount+1 > len(r.Labels) {
-				r.Labels = append(r.Labels, labels)
-			} else {
-				r.Labels[labelsCount].DateCreated = labels.DateCreated
-				r.Labels[labelsCount].ID = labels.ID
-				r.Labels[labelsCount].IsDefault = labels.IsDefault
-				r.Labels[labelsCount].Name = labels.Name
-				r.Labels[labelsCount].Resource = labels.Resource
-				r.Labels[labelsCount].Value = labels.Value
-			}
-		}
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.Name = types.StringPointerValue(resp.Name)
-		r.OptimizationID = types.StringPointerValue(resp.OptimizationID)
-		if resp.OptimizationStatus != nil {
-			r.OptimizationStatus = types.StringValue(string(*resp.OptimizationStatus))
-		} else {
-			r.OptimizationStatus = types.StringNull()
-		}
-		r.OptimizationTargets = types.StringPointerValue(resp.OptimizationTargets)
-		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.OrgName = types.StringPointerValue(resp.OrgName)
-		r.PipelineID = types.Int64PointerValue(resp.PipelineID)
-		r.Repository = types.StringPointerValue(resp.Repository)
-		r.UserFirstName = types.StringPointerValue(resp.UserFirstName)
-		r.UserID = types.Int64PointerValue(resp.UserID)
-		r.UserLastName = types.StringPointerValue(resp.UserLastName)
-		r.UserName = types.StringPointerValue(resp.UserName)
-		r.Visibility = types.StringPointerValue(resp.Visibility)
-		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
-		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
-	}
-
-	return diags
 }

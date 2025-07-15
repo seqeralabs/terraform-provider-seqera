@@ -12,26 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *CredentialDataSourceModel) ToOperationsDescribeCredentialsRequest(ctx context.Context) (*operations.DescribeCredentialsRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DescribeCredentialsRequest{
-		CredentialsID: credentialsID,
-		WorkspaceID:   workspaceID,
-	}
-
-	return &out, diags
-}
-
 func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx context.Context, resp *shared.CredentialsOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -131,4 +111,24 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 	}
 
 	return diags
+}
+
+func (r *CredentialDataSourceModel) ToOperationsDescribeCredentialsRequest(ctx context.Context) (*operations.DescribeCredentialsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var credentialsID string
+	credentialsID = r.CredentialsID.ValueString()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DescribeCredentialsRequest{
+		CredentialsID: credentialsID,
+		WorkspaceID:   workspaceID,
+	}
+
+	return &out, diags
 }

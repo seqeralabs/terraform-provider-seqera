@@ -11,6 +11,20 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *PipelineSecretDataSourceModel) RefreshFromSharedPipelineSecret(ctx context.Context, resp *shared.PipelineSecret) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.ID = types.Int64PointerValue(resp.ID)
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		r.Name = types.StringValue(resp.Name)
+	}
+
+	return diags
+}
+
 func (r *PipelineSecretDataSourceModel) ToOperationsDescribePipelineSecretRequest(ctx context.Context) (*operations.DescribePipelineSecretRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -29,18 +43,4 @@ func (r *PipelineSecretDataSourceModel) ToOperationsDescribePipelineSecretReques
 	}
 
 	return &out, diags
-}
-
-func (r *PipelineSecretDataSourceModel) RefreshFromSharedPipelineSecret(ctx context.Context, resp *shared.PipelineSecret) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.ID = types.Int64PointerValue(resp.ID)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
-		r.Name = types.StringValue(resp.Name)
-	}
-
-	return diags
 }

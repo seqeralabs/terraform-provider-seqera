@@ -71,6 +71,9 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// CredentialsOutput - Represents credentials used for authentication with various platforms and services.
+// Contains authentication information for accessing cloud providers, Git repositories,
+// and other external services within the Seqera Platform.
 type CredentialsOutput struct {
 	CredentialsID *string                 `json:"id,omitempty"`
 	Name          string                  `json:"name"`
@@ -233,6 +236,9 @@ func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
 	return o.GetKeys().AzureSecurityKeysOutput
 }
 
+// CredentialsInput - Represents credentials used for authentication with various platforms and services.
+// Contains authentication information for accessing cloud providers, Git repositories,
+// and other external services within the Seqera Platform.
 type CredentialsInput struct {
 	CredentialsID *string                 `json:"id,omitempty"`
 	Name          string                  `json:"name"`

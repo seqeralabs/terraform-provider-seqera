@@ -1923,6 +1923,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												},
 											},
 										},
+										MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+											`pre/post run scripts, and environment-specific parameters.`,
 									},
 									"credentials_id": schema.StringAttribute{
 										Computed: true,
@@ -2168,6 +2170,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 				},
+				MarkdownDescription: `Represents a pipeline action in the Seqera Platform.` + "\n" +
+					`Contains action configuration, triggers, and execution settings` + "\n" +
+					`for automated pipeline workflows.`,
 			},
 			"action_id": schema.StringAttribute{
 				Computed:    true,

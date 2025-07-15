@@ -11,19 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *WorkspacesDataSourceModel) ToOperationsListWorkspacesRequest(ctx context.Context) (*operations.ListWorkspacesRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	out := operations.ListWorkspacesRequest{
-		OrgID: orgID,
-	}
-
-	return &out, diags
-}
-
 func (r *WorkspacesDataSourceModel) RefreshFromSharedListWorkspacesResponse(ctx context.Context, resp *shared.ListWorkspacesResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -56,4 +43,17 @@ func (r *WorkspacesDataSourceModel) RefreshFromSharedListWorkspacesResponse(ctx 
 	}
 
 	return diags
+}
+
+func (r *WorkspacesDataSourceModel) ToOperationsListWorkspacesRequest(ctx context.Context) (*operations.ListWorkspacesRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	out := operations.ListWorkspacesRequest{
+		OrgID: orgID,
+	}
+
+	return &out, diags
 }

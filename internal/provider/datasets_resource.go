@@ -92,6 +92,9 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 					},
 				},
+				MarkdownDescription: `Represents a dataset in the Seqera Platform.` + "\n" +
+					`Contains dataset metadata, versioning information, and access` + "\n" +
+					`controls for data management and sharing.`,
 			},
 			"description": schema.StringAttribute{
 				Optional: true,

@@ -27,7 +27,9 @@ data "seqera_organization" "my_organization" {
 
 ### Read-Only
 
-- `organization` (Attributes) (see [below for nested schema](#nestedatt--organization))
+- `organization` (Attributes) Represents an organization in the Seqera Platform.
+Contains organizational metadata, settings, and member management
+information for multi-tenant environments. (see [below for nested schema](#nestedatt--organization))
 
 <a id="nestedatt--organization"></a>
 ### Nested Schema for `organization`

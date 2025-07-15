@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// DataStudioDto - Represents a Studio session for interactive data analysis.
+// Contains configuration and runtime information for Jupyter-based
+// computational environments.
 type DataStudioDto struct {
 	SessionID              *string                        `json:"sessionId,omitempty"`
 	WorkspaceID            *int64                         `json:"workspaceId,omitempty"`

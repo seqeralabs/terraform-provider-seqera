@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// WorkflowDbDto - Represents a workflow execution record.
+// Contains execution status, metadata, and results from pipeline
+// runs including logs and performance metrics.
 type WorkflowDbDto struct {
 	Messages          []string        `json:"messages,omitempty"`
 	ID                *string         `json:"id,omitempty"`

@@ -69,7 +69,9 @@ resource "seqera_action" "my_action" {
 
 ### Read-Only
 
-- `action` (Attributes) (see [below for nested schema](#nestedatt--action))
+- `action` (Attributes) Represents a pipeline action in the Seqera Platform.
+Contains action configuration, triggers, and execution settings
+for automated pipeline workflows. (see [below for nested schema](#nestedatt--action))
 - `action_id` (String) Action string identifier
 
 <a id="nestedatt--launch"></a>
@@ -239,7 +241,8 @@ Read-Only:
 Read-Only:
 
 - `compute_env_id` (String)
-- `config` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config))
+- `config` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters. (see [below for nested schema](#nestedatt--action--launch--compute_env--config))
 - `credentials_id` (String)
 - `date_created` (String)
 - `deleted` (Boolean)

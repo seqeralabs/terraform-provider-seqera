@@ -12,6 +12,156 @@ import (
 	"time"
 )
 
+func (r *WorkspaceResourceModel) RefreshFromSharedWorkspace(ctx context.Context, resp *shared.Workspace) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.Description = types.StringPointerValue(resp.Description)
+		r.FullName = types.StringValue(resp.FullName)
+		r.ID = types.Int64PointerValue(resp.ID)
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.Name = types.StringValue(resp.Name)
+		r.Visibility = types.StringValue(string(resp.Visibility))
+	}
+
+	return diags
+}
+
+func (r *WorkspaceResourceModel) ToOperationsCreateWorkspaceRequest(ctx context.Context) (*operations.CreateWorkspaceRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	createWorkspaceRequest, createWorkspaceRequestDiags := r.ToSharedCreateWorkspaceRequest(ctx)
+	diags.Append(createWorkspaceRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateWorkspaceRequest{
+		OrgID:                  orgID,
+		CreateWorkspaceRequest: *createWorkspaceRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *WorkspaceResourceModel) ToOperationsDeleteWorkspaceRequest(ctx context.Context) (*operations.DeleteWorkspaceRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	var id int64
+	id = r.ID.ValueInt64()
+
+	out := operations.DeleteWorkspaceRequest{
+		OrgID: orgID,
+		ID:    id,
+	}
+
+	return &out, diags
+}
+
+func (r *WorkspaceResourceModel) ToOperationsDescribeWorkspaceRequest(ctx context.Context) (*operations.DescribeWorkspaceRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	var id int64
+	id = r.ID.ValueInt64()
+
+	out := operations.DescribeWorkspaceRequest{
+		OrgID: orgID,
+		ID:    id,
+	}
+
+	return &out, diags
+}
+
+func (r *WorkspaceResourceModel) ToOperationsUpdateWorkspaceRequest(ctx context.Context) (*operations.UpdateWorkspaceRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	var id int64
+	id = r.ID.ValueInt64()
+
+	updateWorkspaceRequest, updateWorkspaceRequestDiags := r.ToSharedUpdateWorkspaceRequest(ctx)
+	diags.Append(updateWorkspaceRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateWorkspaceRequest{
+		OrgID:                  orgID,
+		ID:                     id,
+		UpdateWorkspaceRequest: *updateWorkspaceRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *WorkspaceResourceModel) ToSharedCreateWorkspaceRequest(ctx context.Context) (*shared.CreateWorkspaceRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspace, workspaceDiags := r.ToSharedWorkspace(ctx)
+	diags.Append(workspaceDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := shared.CreateWorkspaceRequest{
+		Workspace: workspace,
+	}
+
+	return &out, diags
+}
+
+func (r *WorkspaceResourceModel) ToSharedUpdateWorkspaceRequest(ctx context.Context) (*shared.UpdateWorkspaceRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	fullName := new(string)
+	if !r.FullName.IsUnknown() && !r.FullName.IsNull() {
+		*fullName = r.FullName.ValueString()
+	} else {
+		fullName = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	visibility := new(shared.Visibility)
+	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
+		*visibility = shared.Visibility(r.Visibility.ValueString())
+	} else {
+		visibility = nil
+	}
+	out := shared.UpdateWorkspaceRequest{
+		Name:        name,
+		FullName:    fullName,
+		Description: description,
+		Visibility:  visibility,
+	}
+
+	return &out, diags
+}
+
 func (r *WorkspaceResourceModel) ToSharedWorkspace(ctx context.Context) (*shared.Workspace, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -57,154 +207,4 @@ func (r *WorkspaceResourceModel) ToSharedWorkspace(ctx context.Context) (*shared
 	}
 
 	return &out, diags
-}
-
-func (r *WorkspaceResourceModel) ToSharedCreateWorkspaceRequest(ctx context.Context) (*shared.CreateWorkspaceRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspace, workspaceDiags := r.ToSharedWorkspace(ctx)
-	diags.Append(workspaceDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := shared.CreateWorkspaceRequest{
-		Workspace: workspace,
-	}
-
-	return &out, diags
-}
-
-func (r *WorkspaceResourceModel) ToOperationsCreateWorkspaceRequest(ctx context.Context) (*operations.CreateWorkspaceRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	createWorkspaceRequest, createWorkspaceRequestDiags := r.ToSharedCreateWorkspaceRequest(ctx)
-	diags.Append(createWorkspaceRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateWorkspaceRequest{
-		OrgID:                  orgID,
-		CreateWorkspaceRequest: *createWorkspaceRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *WorkspaceResourceModel) ToSharedUpdateWorkspaceRequest(ctx context.Context) (*shared.UpdateWorkspaceRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	fullName := new(string)
-	if !r.FullName.IsUnknown() && !r.FullName.IsNull() {
-		*fullName = r.FullName.ValueString()
-	} else {
-		fullName = nil
-	}
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	visibility := new(shared.Visibility)
-	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
-		*visibility = shared.Visibility(r.Visibility.ValueString())
-	} else {
-		visibility = nil
-	}
-	out := shared.UpdateWorkspaceRequest{
-		Name:        name,
-		FullName:    fullName,
-		Description: description,
-		Visibility:  visibility,
-	}
-
-	return &out, diags
-}
-
-func (r *WorkspaceResourceModel) ToOperationsUpdateWorkspaceRequest(ctx context.Context) (*operations.UpdateWorkspaceRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	var id int64
-	id = r.ID.ValueInt64()
-
-	updateWorkspaceRequest, updateWorkspaceRequestDiags := r.ToSharedUpdateWorkspaceRequest(ctx)
-	diags.Append(updateWorkspaceRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateWorkspaceRequest{
-		OrgID:                  orgID,
-		ID:                     id,
-		UpdateWorkspaceRequest: *updateWorkspaceRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *WorkspaceResourceModel) ToOperationsDescribeWorkspaceRequest(ctx context.Context) (*operations.DescribeWorkspaceRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	var id int64
-	id = r.ID.ValueInt64()
-
-	out := operations.DescribeWorkspaceRequest{
-		OrgID: orgID,
-		ID:    id,
-	}
-
-	return &out, diags
-}
-
-func (r *WorkspaceResourceModel) ToOperationsDeleteWorkspaceRequest(ctx context.Context) (*operations.DeleteWorkspaceRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	var id int64
-	id = r.ID.ValueInt64()
-
-	out := operations.DeleteWorkspaceRequest{
-		OrgID: orgID,
-		ID:    id,
-	}
-
-	return &out, diags
-}
-
-func (r *WorkspaceResourceModel) RefreshFromSharedWorkspace(ctx context.Context, resp *shared.Workspace) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Description = types.StringPointerValue(resp.Description)
-		r.FullName = types.StringValue(resp.FullName)
-		r.ID = types.Int64PointerValue(resp.ID)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.Name = types.StringValue(resp.Name)
-		r.Visibility = types.StringValue(string(resp.Visibility))
-	}
-
-	return diags
 }

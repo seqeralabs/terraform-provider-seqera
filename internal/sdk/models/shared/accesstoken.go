@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// AccessToken - Represents an API access token for authentication.
+// Contains token metadata, permissions, and expiration information
+// for secure API access to platform resources.
 type AccessToken struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	BasicAuth   *string    `json:"basicAuth,omitempty"`

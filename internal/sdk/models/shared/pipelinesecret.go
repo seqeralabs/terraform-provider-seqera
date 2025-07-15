@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// PipelineSecret - Represents a secure secret for pipeline execution.
+// Contains encrypted sensitive data such as API keys, passwords,
+// and configuration values used in workflows.
 type PipelineSecret struct {
 	ID          *int64     `json:"id,omitempty"`
 	Name        string     `json:"name"`

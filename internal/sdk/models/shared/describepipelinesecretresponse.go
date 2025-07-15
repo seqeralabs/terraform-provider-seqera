@@ -3,6 +3,10 @@
 package shared
 
 type DescribePipelineSecretResponse struct {
+	// Represents a secure secret for pipeline execution.
+	// Contains encrypted sensitive data such as API keys, passwords,
+	// and configuration values used in workflows.
+	//
 	PipelineSecret *PipelineSecret `json:"pipelineSecret,omitempty"`
 }
 

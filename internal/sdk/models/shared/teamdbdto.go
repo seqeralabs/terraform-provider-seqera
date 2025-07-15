@@ -2,6 +2,9 @@
 
 package shared
 
+// TeamDbDto - Represents a team within an organization.
+// Contains team membership, permissions, and access controls
+// for collaborative workspace management.
 type TeamDbDto struct {
 	TeamID       *int64  `json:"teamId,omitempty"`
 	Name         *string `json:"name,omitempty"`

@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// Dataset - Represents a dataset in the Seqera Platform.
+// Contains dataset metadata, versioning information, and access
+// controls for data management and sharing.
 type Dataset struct {
 	ID          *string    `json:"id,omitempty"`
 	Name        string     `json:"name"`

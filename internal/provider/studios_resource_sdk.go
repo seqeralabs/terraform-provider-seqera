@@ -12,180 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Context) (*shared.DataStudioCreateRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var name string
-	name = r.Name.ValueString()
-
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	var dataStudioToolURL string
-	dataStudioToolURL = r.DataStudioToolURL.ValueString()
-
-	var computeEnvID string
-	computeEnvID = r.ComputeEnvID.ValueString()
-
-	initialCheckpointID := new(int64)
-	if !r.InitialCheckpointID.IsUnknown() && !r.InitialCheckpointID.IsNull() {
-		*initialCheckpointID = r.InitialCheckpointID.ValueInt64()
-	} else {
-		initialCheckpointID = nil
-	}
-	var configuration *shared.DataStudioConfiguration
-	if r.Configuration != nil {
-		gpu := new(int)
-		if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
-			*gpu = int(r.Configuration.Gpu.ValueInt32())
-		} else {
-			gpu = nil
-		}
-		cpu := new(int)
-		if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
-			*cpu = int(r.Configuration.CPU.ValueInt32())
-		} else {
-			cpu = nil
-		}
-		memory := new(int)
-		if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
-			*memory = int(r.Configuration.Memory.ValueInt32())
-		} else {
-			memory = nil
-		}
-		mountData := make([]string, 0, len(r.Configuration.MountData))
-		for _, mountDataItem := range r.Configuration.MountData {
-			mountData = append(mountData, mountDataItem.ValueString())
-		}
-		condaEnvironment := new(string)
-		if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
-			*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
-		} else {
-			condaEnvironment = nil
-		}
-		lifespanHours := new(int)
-		if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
-			*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
-		} else {
-			lifespanHours = nil
-		}
-		configuration = &shared.DataStudioConfiguration{
-			Gpu:              gpu,
-			CPU:              cpu,
-			Memory:           memory,
-			MountData:        mountData,
-			CondaEnvironment: condaEnvironment,
-			LifespanHours:    lifespanHours,
-		}
-	}
-	isPrivate := new(bool)
-	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {
-		*isPrivate = r.IsPrivate.ValueBool()
-	} else {
-		isPrivate = nil
-	}
-	var labelIds []int64
-	if r.LabelIds != nil {
-		labelIds = make([]int64, 0, len(r.LabelIds))
-		for _, labelIdsItem := range r.LabelIds {
-			labelIds = append(labelIds, labelIdsItem.ValueInt64())
-		}
-	}
-	spot := new(bool)
-	if !r.Spot.IsUnknown() && !r.Spot.IsNull() {
-		*spot = r.Spot.ValueBool()
-	} else {
-		spot = nil
-	}
-	out := shared.DataStudioCreateRequest{
-		Name:                name,
-		Description:         description,
-		DataStudioToolURL:   dataStudioToolURL,
-		ComputeEnvID:        computeEnvID,
-		InitialCheckpointID: initialCheckpointID,
-		Configuration:       configuration,
-		IsPrivate:           isPrivate,
-		LabelIds:            labelIds,
-		Spot:                spot,
-	}
-
-	return &out, diags
-}
-
-func (r *StudiosResourceModel) ToOperationsCreateDataStudioRequest(ctx context.Context) (*operations.CreateDataStudioRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	autoStart := new(bool)
-	if !r.AutoStart.IsUnknown() && !r.AutoStart.IsNull() {
-		*autoStart = r.AutoStart.ValueBool()
-	} else {
-		autoStart = nil
-	}
-	dataStudioCreateRequest, dataStudioCreateRequestDiags := r.ToSharedDataStudioCreateRequest(ctx)
-	diags.Append(dataStudioCreateRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreateDataStudioRequest{
-		WorkspaceID:             workspaceID,
-		AutoStart:               autoStart,
-		DataStudioCreateRequest: *dataStudioCreateRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *StudiosResourceModel) ToOperationsDescribeDataStudioRequest(ctx context.Context) (*operations.DescribeDataStudioRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var sessionID string
-	sessionID = r.SessionID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DescribeDataStudioRequest{
-		SessionID:   sessionID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
-func (r *StudiosResourceModel) ToOperationsDeleteDataStudioRequest(ctx context.Context) (*operations.DeleteDataStudioRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var sessionID string
-	sessionID = r.SessionID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DeleteDataStudioRequest{
-		SessionID:   sessionID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
 func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Context, resp *shared.DataStudioDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -404,4 +230,178 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 	}
 
 	return diags
+}
+
+func (r *StudiosResourceModel) ToOperationsCreateDataStudioRequest(ctx context.Context) (*operations.CreateDataStudioRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	autoStart := new(bool)
+	if !r.AutoStart.IsUnknown() && !r.AutoStart.IsNull() {
+		*autoStart = r.AutoStart.ValueBool()
+	} else {
+		autoStart = nil
+	}
+	dataStudioCreateRequest, dataStudioCreateRequestDiags := r.ToSharedDataStudioCreateRequest(ctx)
+	diags.Append(dataStudioCreateRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateDataStudioRequest{
+		WorkspaceID:             workspaceID,
+		AutoStart:               autoStart,
+		DataStudioCreateRequest: *dataStudioCreateRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *StudiosResourceModel) ToOperationsDeleteDataStudioRequest(ctx context.Context) (*operations.DeleteDataStudioRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var sessionID string
+	sessionID = r.SessionID.ValueString()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DeleteDataStudioRequest{
+		SessionID:   sessionID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *StudiosResourceModel) ToOperationsDescribeDataStudioRequest(ctx context.Context) (*operations.DescribeDataStudioRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var sessionID string
+	sessionID = r.SessionID.ValueString()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DescribeDataStudioRequest{
+		SessionID:   sessionID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Context) (*shared.DataStudioCreateRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var name string
+	name = r.Name.ValueString()
+
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	var dataStudioToolURL string
+	dataStudioToolURL = r.DataStudioToolURL.ValueString()
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	initialCheckpointID := new(int64)
+	if !r.InitialCheckpointID.IsUnknown() && !r.InitialCheckpointID.IsNull() {
+		*initialCheckpointID = r.InitialCheckpointID.ValueInt64()
+	} else {
+		initialCheckpointID = nil
+	}
+	var configuration *shared.DataStudioConfiguration
+	if r.Configuration != nil {
+		gpu := new(int)
+		if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
+			*gpu = int(r.Configuration.Gpu.ValueInt32())
+		} else {
+			gpu = nil
+		}
+		cpu := new(int)
+		if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
+			*cpu = int(r.Configuration.CPU.ValueInt32())
+		} else {
+			cpu = nil
+		}
+		memory := new(int)
+		if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
+			*memory = int(r.Configuration.Memory.ValueInt32())
+		} else {
+			memory = nil
+		}
+		mountData := make([]string, 0, len(r.Configuration.MountData))
+		for _, mountDataItem := range r.Configuration.MountData {
+			mountData = append(mountData, mountDataItem.ValueString())
+		}
+		condaEnvironment := new(string)
+		if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
+			*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
+		} else {
+			condaEnvironment = nil
+		}
+		lifespanHours := new(int)
+		if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
+			*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
+		} else {
+			lifespanHours = nil
+		}
+		configuration = &shared.DataStudioConfiguration{
+			Gpu:              gpu,
+			CPU:              cpu,
+			Memory:           memory,
+			MountData:        mountData,
+			CondaEnvironment: condaEnvironment,
+			LifespanHours:    lifespanHours,
+		}
+	}
+	isPrivate := new(bool)
+	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {
+		*isPrivate = r.IsPrivate.ValueBool()
+	} else {
+		isPrivate = nil
+	}
+	var labelIds []int64
+	if r.LabelIds != nil {
+		labelIds = make([]int64, 0, len(r.LabelIds))
+		for _, labelIdsItem := range r.LabelIds {
+			labelIds = append(labelIds, labelIdsItem.ValueInt64())
+		}
+	}
+	spot := new(bool)
+	if !r.Spot.IsUnknown() && !r.Spot.IsNull() {
+		*spot = r.Spot.ValueBool()
+	} else {
+		spot = nil
+	}
+	out := shared.DataStudioCreateRequest{
+		Name:                name,
+		Description:         description,
+		DataStudioToolURL:   dataStudioToolURL,
+		ComputeEnvID:        computeEnvID,
+		InitialCheckpointID: initialCheckpointID,
+		Configuration:       configuration,
+		IsPrivate:           isPrivate,
+		LabelIds:            labelIds,
+		Spot:                spot,
+	}
+
+	return &out, diags
 }

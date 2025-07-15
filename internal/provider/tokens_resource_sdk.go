@@ -12,33 +12,16 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *TokensResourceModel) ToSharedCreateAccessTokenRequest(ctx context.Context) (*shared.CreateAccessTokenRequest, diag.Diagnostics) {
+func (r *TokensResourceModel) RefreshFromSharedAccessToken(ctx context.Context, resp *shared.AccessToken) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	out := shared.CreateAccessTokenRequest{
-		Name: name,
-	}
+	r.BasicAuth = types.StringPointerValue(resp.BasicAuth)
+	r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+	r.ID = types.Int64PointerValue(resp.ID)
+	r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+	r.Name = types.StringValue(resp.Name)
 
-	return &out, diags
-}
-
-func (r *TokensResourceModel) ToOperationsDeleteTokenRequest(ctx context.Context) (*operations.DeleteTokenRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var tokenID int64
-	tokenID = r.TokenID.ValueInt64()
-
-	out := operations.DeleteTokenRequest{
-		TokenID: tokenID,
-	}
-
-	return &out, diags
+	return diags
 }
 
 func (r *TokensResourceModel) RefreshFromSharedCreateAccessTokenResponse(ctx context.Context, resp *shared.CreateAccessTokenResponse) diag.Diagnostics {
@@ -61,14 +44,31 @@ func (r *TokensResourceModel) RefreshFromSharedCreateAccessTokenResponse(ctx con
 	return diags
 }
 
-func (r *TokensResourceModel) RefreshFromSharedAccessToken(ctx context.Context, resp *shared.AccessToken) diag.Diagnostics {
+func (r *TokensResourceModel) ToOperationsDeleteTokenRequest(ctx context.Context) (*operations.DeleteTokenRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	r.BasicAuth = types.StringPointerValue(resp.BasicAuth)
-	r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-	r.ID = types.Int64PointerValue(resp.ID)
-	r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
-	r.Name = types.StringValue(resp.Name)
+	var tokenID int64
+	tokenID = r.TokenID.ValueInt64()
 
-	return diags
+	out := operations.DeleteTokenRequest{
+		TokenID: tokenID,
+	}
+
+	return &out, diags
+}
+
+func (r *TokensResourceModel) ToSharedCreateAccessTokenRequest(ctx context.Context) (*shared.CreateAccessTokenRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	out := shared.CreateAccessTokenRequest{
+		Name: name,
+	}
+
+	return &out, diags
 }

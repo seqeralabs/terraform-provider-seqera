@@ -12,31 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *ComputeEnvDataSourceModel) ToOperationsDescribeComputeEnvRequest(ctx context.Context) (*operations.DescribeComputeEnvRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var computeEnvID string
-	computeEnvID = r.ComputeEnvID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	attributes := make([]shared.ComputeEnvQueryAttribute, 0, len(r.Attributes))
-	for _, attributesItem := range r.Attributes {
-		attributes = append(attributes, shared.ComputeEnvQueryAttribute(attributesItem.ValueString()))
-	}
-	out := operations.DescribeComputeEnvRequest{
-		ComputeEnvID: computeEnvID,
-		WorkspaceID:  workspaceID,
-		Attributes:   attributes,
-	}
-
-	return &out, diags
-}
-
 func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(ctx context.Context, resp *shared.DescribeComputeEnvResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -832,4 +807,29 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 	}
 
 	return diags
+}
+
+func (r *ComputeEnvDataSourceModel) ToOperationsDescribeComputeEnvRequest(ctx context.Context) (*operations.DescribeComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var computeEnvID string
+	computeEnvID = r.ComputeEnvID.ValueString()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	attributes := make([]shared.ComputeEnvQueryAttribute, 0, len(r.Attributes))
+	for _, attributesItem := range r.Attributes {
+		attributes = append(attributes, shared.ComputeEnvQueryAttribute(attributesItem.ValueString()))
+	}
+	out := operations.DescribeComputeEnvRequest{
+		ComputeEnvID: computeEnvID,
+		WorkspaceID:  workspaceID,
+		Attributes:   attributes,
+	}
+
+	return &out, diags
 }

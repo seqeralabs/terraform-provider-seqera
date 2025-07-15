@@ -33,6 +33,9 @@ func (e *DataLinkDtoStatus) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// DataLinkDto - Represents a data link connection to external storage systems.
+// Provides access to cloud storage, file systems, and data repositories
+// for pipeline input/output operations.
 type DataLinkDto struct {
 	DataLinkID       *string               `json:"id,omitempty"`
 	Name             *string               `json:"name,omitempty"`

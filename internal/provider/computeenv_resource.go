@@ -4317,7 +4317,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 						},
-						Description: `Not Null; Requires replacement if changed.`,
+						MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+							`pre/post run scripts, and environment-specific parameters.` + "\n" +
+							`Not Null; Requires replacement if changed.`,
 						Validators: []validator.Object{
 							speakeasy_objectvalidators.NotNull(),
 						},
