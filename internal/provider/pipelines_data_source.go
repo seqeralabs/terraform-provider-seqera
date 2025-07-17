@@ -88,32 +88,40 @@ func (r *PipelinesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed: true,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Detailed description of the pipeline's purpose and functionality`,
 						},
 						"icon": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Icon identifier or URL for visual representation`,
 						},
 						"labels": schema.ListNestedAttribute{
 							Computed: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"date_created": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Timestamp when the label was created`,
 									},
 									"id": schema.Int64Attribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Unique numeric identifier for the label`,
 									},
 									"is_default": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Flag indicating if this is a default system label`,
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Name or key of the label`,
 									},
 									"resource": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Flag indicating if this is a resource-level label`,
 									},
 									"value": schema.StringAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Value associated with the label`,
 									},
 								},
 							},
@@ -122,7 +130,8 @@ func (r *PipelinesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed: true,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Display name for the pipeline`,
 						},
 						"optimization_id": schema.StringAttribute{
 							Computed: true,
@@ -140,22 +149,27 @@ func (r *PipelinesDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed: true,
 						},
 						"pipeline_id": schema.Int64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unique numeric identifier for the pipeline`,
 						},
 						"repository": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Git repository URL containing the pipeline source code`,
 						},
 						"user_first_name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `First name of the user who created the pipeline`,
 						},
 						"user_id": schema.Int64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Numeric identifier of the user who created the pipeline`,
 						},
 						"user_last_name": schema.StringAttribute{
 							Computed: true,
 						},
 						"user_name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Username of the pipeline creator`,
 						},
 						"visibility": schema.StringAttribute{
 							Computed: true,

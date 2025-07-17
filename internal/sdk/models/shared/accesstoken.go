@@ -11,11 +11,17 @@ import (
 // Contains token metadata, permissions, and expiration information
 // for secure API access to platform resources.
 type AccessToken struct {
+	// Deprecated basic authentication string
+	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	BasicAuth   *string    `json:"basicAuth,omitempty"`
-	ID          *int64     `json:"id,omitempty"`
-	Name        string     `json:"name"`
-	LastUsed    *time.Time `json:"lastUsed,omitempty"`
+	BasicAuth *string `json:"basicAuth,omitempty"`
+	// Unique numeric identifier for the access token (nullable)
+	ID *int64 `json:"id,omitempty"`
+	// Display name for the token (1-50 characters)
+	Name string `json:"name"`
+	// Timestamp when the token was last used for authentication
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Timestamp when the token was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 }
 

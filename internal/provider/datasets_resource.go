@@ -59,16 +59,19 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 					},
 					"deleted": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Read-only flag indicating if the dataset has been deleted`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Detailed description of the dataset contents and purpose (max 1000 characters)`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(1000),
 						},
 					},
 					"id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Unique identifier for the dataset (max 22 characters)`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(22),
 						},
@@ -80,13 +83,15 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 					},
 					"media_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `MIME type or media type of the dataset content (max 80 characters)`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(80),
 						},
 					},
 					"name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Dataset name following naming conventions (1-100 characters)`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(100),
 						},

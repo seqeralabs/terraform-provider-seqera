@@ -37,13 +37,19 @@ func (e *DataLinkDtoStatus) UnmarshalJSON(data []byte) error {
 // Provides access to cloud storage, file systems, and data repositories
 // for pipeline input/output operations.
 type DataLinkDto struct {
-	DataLinkID       *string               `json:"id,omitempty"`
-	Name             *string               `json:"name,omitempty"`
-	Description      *string               `json:"description,omitempty"`
-	ResourceRef      *string               `json:"resourceRef,omitempty"`
-	Type             *DataLinkType         `json:"type,omitempty"`
-	ProviderType     *ProviderType         `json:"provider,omitempty"`
-	Region           *string               `json:"region,omitempty"`
+	// Unique identifier for the data link
+	DataLinkID *string `json:"id,omitempty"`
+	// Display name for the data link connection
+	Name *string `json:"name,omitempty"`
+	// Description of the data link's purpose and contents
+	Description *string `json:"description,omitempty"`
+	// Reference identifier for the external resource
+	ResourceRef  *string       `json:"resourceRef,omitempty"`
+	Type         *DataLinkType `json:"type,omitempty"`
+	ProviderType *ProviderType `json:"provider,omitempty"`
+	// Geographic region where the data link is hosted
+	Region *string `json:"region,omitempty"`
+	// Array of credentials required to access the data link
 	Credentials      []DataLinkCredentials `json:"credentials,omitempty"`
 	PublicAccessible *bool                 `json:"publicAccessible,omitempty"`
 	Hidden           *bool                 `json:"hidden,omitempty"`

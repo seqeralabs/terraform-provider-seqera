@@ -130,20 +130,20 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--altair_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--altair_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
 - `host_name` (String) Requires replacement if changed.
 - `launch_dir` (String) Requires replacement if changed.
 - `max_queue_size` (Number) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `port` (Number) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--altair_platform--environment"></a>
 ### Nested Schema for `compute_env.config.altair_platform.environment`
@@ -165,10 +165,10 @@ Optional:
 - `cli_path` (String) Requires replacement if changed.
 - `compute_job_role` (String) Requires replacement if changed.
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
 - `execution_role` (String) Requires replacement if changed.
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
@@ -179,15 +179,15 @@ Optional:
 - `head_queue` (String) Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_batch--environment"></a>
 ### Nested Schema for `compute_env.config.aws_batch.environment`
@@ -245,24 +245,24 @@ Optional:
 
 - `allow_buckets` (List of String) Requires replacement if changed.
 - `arm64_enabled` (Boolean) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `ebs_boot_size` (Number) Requires replacement if changed.
 - `ec2_key_pair` (String) Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `gpu_enabled` (Boolean) Requires replacement if changed.
 - `image_id` (String) Requires replacement if changed.
 - `instance_profile_arn` (String) Requires replacement if changed.
 - `instance_type` (String) Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
 - `subnet_id` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.aws_cloud.environment`
@@ -284,19 +284,19 @@ Optional:
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
 - `managed_identity_client_id` (String) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--azure_batch--environment"></a>
 ### Nested Schema for `compute_env.config.azure_batch.environment`
@@ -329,18 +329,18 @@ Optional:
 
 - `cluster_name` (String) The AWS EKS cluster name. Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
 - `head_service_account` (String) Requires replacement if changed.
 - `namespace` (String) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) AWS region. Requires replacement if changed.
 - `server` (String) Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
@@ -348,7 +348,7 @@ Optional:
 - `storage_claim_name` (String) Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--eks_platform--environment"></a>
 ### Nested Schema for `compute_env.config.eks_platform.environment`
@@ -369,18 +369,18 @@ Optional:
 
 - `cluster_name` (String) The GKE cluster name. Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
 - `head_service_account` (String) Requires replacement if changed.
 - `namespace` (String) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) The GKE cluster region - or - zone. Requires replacement if changed.
 - `server` (String) Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
@@ -388,7 +388,7 @@ Optional:
 - `storage_claim_name` (String) Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--gke_platform--environment"></a>
 ### Nested Schema for `compute_env.config.gke_platform.environment`
@@ -412,8 +412,8 @@ Optional:
 - `copy_image` (String) Requires replacement if changed.
 - `cpu_platform` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_instance_template` (String) Requires replacement if changed.
@@ -422,11 +422,11 @@ Optional:
 - `location` (String) Requires replacement if changed.
 - `machine_type` (String) Requires replacement if changed.
 - `network` (String) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `nfs_mount` (String) Requires replacement if changed.
 - `nfs_target` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `project_id` (String) Requires replacement if changed.
 - `service_account` (String) Requires replacement if changed.
 - `spot` (Boolean) Requires replacement if changed.
@@ -435,7 +435,7 @@ Optional:
 - `subnetwork` (String) Requires replacement if changed.
 - `use_private_address` (Boolean) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_batch--environment"></a>
 ### Nested Schema for `compute_env.config.google_batch.environment`
@@ -457,24 +457,24 @@ Optional:
 - `boot_disk_size_gb` (Number) Requires replacement if changed.
 - `copy_image` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `labels` (Map of String) Requires replacement if changed.
 - `location` (String) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `nfs_mount` (String) Requires replacement if changed.
 - `nfs_target` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `preemptible` (Boolean) Requires replacement if changed.
 - `project_id` (String) Requires replacement if changed.
 - `region` (String) Requires replacement if changed.
 - `ssh_daemon` (Boolean) Requires replacement if changed.
 - `ssh_image` (String) Requires replacement if changed.
 - `use_private_address` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 - `zones` (List of String) Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_lifesciences--environment"></a>
@@ -495,23 +495,23 @@ Optional:
 Optional:
 
 - `compute_service_account` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
 - `head_service_account` (String) Requires replacement if changed.
 - `namespace` (String) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `server` (String) Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
 - `ssl_cert` (String) Requires replacement if changed.
 - `storage_claim_name` (String) Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--k8s_platform--environment"></a>
 ### Nested Schema for `compute_env.config.k8s_platform.environment`
@@ -531,23 +531,23 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
 - `host_name` (String) Requires replacement if changed.
 - `launch_dir` (String) Requires replacement if changed.
 - `max_queue_size` (Number) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `per_job_mem_limit` (Boolean) Requires replacement if changed.
 - `per_task_reserve` (Boolean) Requires replacement if changed.
 - `port` (Number) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `unit_for_limits` (String) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--lsf_platform--environment"></a>
 ### Nested Schema for `compute_env.config.lsf_platform.environment`
@@ -567,20 +567,20 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--moab_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--moab_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
 - `host_name` (String) Requires replacement if changed.
 - `launch_dir` (String) Requires replacement if changed.
 - `max_queue_size` (Number) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `port` (Number) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--moab_platform--environment"></a>
 ### Nested Schema for `compute_env.config.moab_platform.environment`
@@ -602,10 +602,10 @@ Optional:
 - `cli_path` (String) Requires replacement if changed.
 - `compute_job_role` (String) Requires replacement if changed.
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
 - `execution_role` (String) Requires replacement if changed.
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
@@ -616,15 +616,15 @@ Optional:
 - `head_queue` (String) Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--seqeracompute_platform--environment"></a>
 ### Nested Schema for `compute_env.config.seqeracompute_platform.environment`
@@ -681,20 +681,20 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--slurm_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--slurm_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
 - `host_name` (String) Requires replacement if changed.
 - `launch_dir` (String) Requires replacement if changed.
 - `max_queue_size` (Number) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `port` (Number) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--slurm_platform--environment"></a>
 ### Nested Schema for `compute_env.config.slurm_platform.environment`
@@ -714,20 +714,20 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) property to select the compute config platform. Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--uge_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--uge_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
 - `host_name` (String) Requires replacement if changed.
 - `launch_dir` (String) Requires replacement if changed.
 - `max_queue_size` (Number) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `port` (Number) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--uge_platform--environment"></a>
 ### Nested Schema for `compute_env.config.uge_platform.environment`
@@ -747,12 +747,12 @@ Optional:
 
 Read-Only:
 
-- `date_created` (String)
-- `id` (Number)
-- `is_default` (Boolean)
-- `name` (String)
-- `resource` (Boolean)
-- `value` (String)
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label
 
 ## Import
 

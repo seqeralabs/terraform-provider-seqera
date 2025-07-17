@@ -48,16 +48,20 @@ func (r *TeamsDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 
 		Attributes: map[string]schema.Attribute{
 			"avatar_url": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `URL to the team's avatar or profile image`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Description of the team's purpose and responsibilities`,
 			},
 			"members_count": schema.Int64Attribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Total number of members in the team`,
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Display name for the team`,
 			},
 			"org_id": schema.Int64Attribute{
 				Optional:    true,

@@ -59,18 +59,22 @@ func (r *TokensResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"basic_auth": schema.StringAttribute{
 				Computed:           true,
 				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+				Description:        `Deprecated basic authentication string`,
 			},
 			"date_created": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Timestamp when the token was created`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"id": schema.Int64Attribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Unique numeric identifier for the access token (nullable)`,
 			},
 			"last_used": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Timestamp when the token was last used for authentication`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -93,24 +97,29 @@ func (r *TokensResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"basic_auth": schema.StringAttribute{
 						Computed:           true,
 						DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+						Description:        `Deprecated basic authentication string`,
 					},
 					"date_created": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Timestamp when the token was created`,
 						Validators: []validator.String{
 							validators.IsRFC3339(),
 						},
 					},
 					"id": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Unique numeric identifier for the access token (nullable)`,
 					},
 					"last_used": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Timestamp when the token was last used for authentication`,
 						Validators: []validator.String{
 							validators.IsRFC3339(),
 						},
 					},
 					"name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Display name for the token (1-50 characters)`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthBetween(1, 50),
 						},

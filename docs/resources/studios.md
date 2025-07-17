@@ -73,9 +73,9 @@ resource "seqera_studios" "my_studios" {
 - `mounted_data_links` (Attributes List) (see [below for nested schema](#nestedatt--mounted_data_links))
 - `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--parent_checkpoint))
 - `progress` (Attributes List) (see [below for nested schema](#nestedatt--progress))
-- `session_id` (String) Studio session numeric identifier
+- `session_id` (String) Unique identifier for the Studio session
 - `status_info` (Attributes) (see [below for nested schema](#nestedatt--status_info))
-- `studio_url` (String)
+- `studio_url` (String) URL to access the running Studio instance
 - `template` (Attributes) (see [below for nested schema](#nestedatt--template))
 - `user` (Attributes) (see [below for nested schema](#nestedatt--user))
 - `wave_build_url` (String)
@@ -123,12 +123,12 @@ Read-Only:
 
 Read-Only:
 
-- `date_created` (String)
-- `id` (Number)
-- `is_default` (Boolean)
-- `name` (String)
-- `resource` (Boolean)
-- `value` (String)
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label
 
 
 <a id="nestedatt--mounted_data_links"></a>
@@ -136,16 +136,16 @@ Read-Only:
 
 Read-Only:
 
-- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--mounted_data_links--credentials))
-- `data_link_id` (String)
-- `description` (String)
+- `credentials` (Attributes List) Array of credentials required to access the data link (see [below for nested schema](#nestedatt--mounted_data_links--credentials))
+- `data_link_id` (String) Unique identifier for the data link
+- `description` (String) Description of the data link's purpose and contents
 - `hidden` (Boolean)
 - `message` (String)
-- `name` (String)
+- `name` (String) Display name for the data link connection
 - `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
 - `public_accessible` (Boolean)
-- `region` (String)
-- `resource_ref` (String)
+- `region` (String) Geographic region where the data link is hosted
+- `resource_ref` (String) Reference identifier for the external resource
 - `status` (String) must be one of ["VALID", "INVALID"]
 - `type` (String) must be "bucket"
 

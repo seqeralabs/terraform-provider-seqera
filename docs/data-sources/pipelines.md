@@ -49,22 +49,22 @@ Read-Only:
 
 - `compute_env` (Attributes) (see [below for nested schema](#nestedatt--pipelines--compute_env))
 - `deleted` (Boolean)
-- `description` (String)
-- `icon` (String)
+- `description` (String) Detailed description of the pipeline's purpose and functionality
+- `icon` (String) Icon identifier or URL for visual representation
 - `labels` (Attributes List) (see [below for nested schema](#nestedatt--pipelines--labels))
 - `last_updated` (String)
-- `name` (String)
+- `name` (String) Display name for the pipeline
 - `optimization_id` (String)
 - `optimization_status` (String)
 - `optimization_targets` (String)
 - `org_id` (Number)
 - `org_name` (String)
-- `pipeline_id` (Number)
-- `repository` (String)
-- `user_first_name` (String)
-- `user_id` (Number)
+- `pipeline_id` (Number) Unique numeric identifier for the pipeline
+- `repository` (String) Git repository URL containing the pipeline source code
+- `user_first_name` (String) First name of the user who created the pipeline
+- `user_id` (Number) Numeric identifier of the user who created the pipeline
 - `user_last_name` (String)
-- `user_name` (String)
+- `user_name` (String) Username of the pipeline creator
 - `visibility` (String)
 - `workspace_id` (Number)
 - `workspace_name` (String)
@@ -85,9 +85,9 @@ Read-Only:
 
 Read-Only:
 
-- `date_created` (String)
-- `id` (Number)
-- `is_default` (Boolean)
-- `name` (String)
-- `resource` (Boolean)
-- `value` (String)
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label

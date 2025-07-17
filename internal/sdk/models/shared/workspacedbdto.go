@@ -6,9 +6,13 @@ package shared
 // Contains workspace configuration, member permissions, and resource
 // isolation settings for project organization.
 type WorkspaceDbDto struct {
-	ID          *int64      `json:"id,omitempty"`
-	Name        *string     `json:"name,omitempty"`
-	FullName    *string     `json:"fullName,omitempty"`
+	// Unique numeric identifier for the workspace
+	ID *int64 `json:"id,omitempty"`
+	// Short name or handle for the workspace
+	Name *string `json:"name,omitempty"`
+	// Complete display name for the workspace
+	FullName *string `json:"fullName,omitempty"`
+	// Detailed description of the workspace's purpose
 	Description *string     `json:"description,omitempty"`
 	Visibility  *Visibility `json:"visibility,omitempty"`
 }

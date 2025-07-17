@@ -703,3 +703,305 @@ actions:
         Represents a team within an organization.
         Contains team membership, permissions, and access controls
         for collaborative workspace management.
+  - target: $.components.schemas.ActionResponseDto.properties.id
+    update:
+      description: Unique identifier for the action
+  - target: $.components.schemas.ActionResponseDto.properties.launch
+    update:
+      description: Launch configuration and parameters for the action
+  - target: $.components.schemas.ActionResponseDto.properties.name
+    update:
+      description: Human-readable name for the action
+  - target: $.components.schemas.ActionResponseDto.properties.hookId
+    update:
+      description: Identifier for the webhook associated with this action
+  - target: $.components.schemas.ActionResponseDto.properties.hookUrl
+    update:
+      description: URL endpoint for the webhook that triggers this action
+  - target: $.components.schemas.ActionResponseDto.properties.message
+    update:
+      description: Status or informational message about the action
+  - target: $.components.schemas.ActionResponseDto.properties.source
+    update:
+      description: Source system or trigger that initiated the action
+  - target: $.components.schemas.ActionResponseDto.properties.status
+    update:
+      description: Current execution status of the action
+  - target: $.components.schemas.ActionResponseDto.properties.config
+    update:
+      description: Configuration type and settings for the action
+
+  # Credentials field descriptions
+  - target: $.components.schemas.Credentials.properties.id
+    update:
+      description: Unique identifier for the credential (max 22 characters)
+  - target: $.components.schemas.Credentials.properties.name
+    update:
+      description: Display name for the credential (max 100 characters)
+  - target: $.components.schemas.Credentials.properties.description
+    update:
+      description: Optional description explaining the purpose of the credential
+  - target: $.components.schemas.Credentials.properties.provider
+    update:
+      description: Cloud or service provider type (e.g., aws, azure, gcp)
+  - target: $.components.schemas.Credentials.properties.dateCreated
+    update:
+      description: Timestamp when the credential was created
+  - target: $.components.schemas.Credentials.properties.lastUsed
+    update:
+      description: Timestamp when the credential was last used
+  - target: $.components.schemas.Credentials.properties.deleted
+    update:
+      description: Flag indicating if the credential has been soft-deleted
+
+  # Dataset field descriptions
+  - target: $.components.schemas.Dataset.properties.id
+    update:
+      description: Unique identifier for the dataset (max 22 characters)
+  - target: $.components.schemas.Dataset.properties.name
+    update:
+      description: Dataset name following naming conventions (1-100 characters)
+  - target: $.components.schemas.Dataset.properties.description
+    update:
+      description: Detailed description of the dataset contents and purpose (max 1000 characters)
+  - target: $.components.schemas.Dataset.properties.mediaType
+    update:
+      description: MIME type or media type of the dataset content (max 80 characters)
+  - target: $.components.schemas.Dataset.properties.deleted
+    update:
+      description: Read-only flag indicating if the dataset has been deleted
+
+  # OrganizationDbDto field descriptions
+  - target: $.components.schemas.OrganizationDbDto.properties.orgId
+    update:
+      description: Unique numeric identifier for the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.name
+    update:
+      description: Short name or handle for the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.fullName
+    update:
+      description: Complete formal name of the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.description
+    update:
+      description: Detailed description of the organization's purpose and activities
+  - target: $.components.schemas.OrganizationDbDto.properties.location
+    update:
+      description: Geographic location or address of the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.website
+    update:
+      description: Official website URL for the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.logoId
+    update:
+      description: Identifier for the organization's logo image
+  - target: $.components.schemas.OrganizationDbDto.properties.paying
+    update:
+      description: Deprecated flag indicating if organization has paid subscription
+
+  # PipelineDbDto field descriptions
+  - target: $.components.schemas.PipelineDbDto.properties.pipelineId
+    update:
+      description: Unique numeric identifier for the pipeline
+  - target: $.components.schemas.PipelineDbDto.properties.name
+    update:
+      description: Display name for the pipeline
+  - target: $.components.schemas.PipelineDbDto.properties.description
+    update:
+      description: Detailed description of the pipeline's purpose and functionality
+  - target: $.components.schemas.PipelineDbDto.properties.icon
+    update:
+      description: Icon identifier or URL for visual representation
+  - target: $.components.schemas.PipelineDbDto.properties.repository
+    update:
+      description: Git repository URL containing the pipeline source code
+  - target: $.components.schemas.PipelineDbDto.properties.userId
+    update:
+      description: Numeric identifier of the user who created the pipeline
+  - target: $.components.schemas.PipelineDbDto.properties.userName
+    update:
+      description: Username of the pipeline creator
+  - target: $.components.schemas.PipelineDbDto.properties.userFirstName
+    update:
+      description: First name of the user who created the pipeline
+
+  # TeamDbDto field descriptions
+  - target: $.components.schemas.TeamDbDto.properties.teamId
+    update:
+      description: Unique numeric identifier for the team
+  - target: $.components.schemas.TeamDbDto.properties.name
+    update:
+      description: Display name for the team
+  - target: $.components.schemas.TeamDbDto.properties.description
+    update:
+      description: Description of the team's purpose and responsibilities
+  - target: $.components.schemas.TeamDbDto.properties.avatarUrl
+    update:
+      description: URL to the team's avatar or profile image
+  - target: $.components.schemas.TeamDbDto.properties.membersCount
+    update:
+      description: Total number of members in the team
+
+  # WorkflowDbDto field descriptions
+  - target: $.components.schemas.WorkflowDbDto.properties.id
+    update:
+      description: Unique identifier for the workflow execution
+  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+    update:
+      description: Numeric identifier of the user who owns this workflow
+  - target: $.components.schemas.WorkflowDbDto.properties.submit
+    update:
+      description: Timestamp when the workflow was submitted for execution
+  - target: $.components.schemas.WorkflowDbDto.properties.start
+    update:
+      description: Timestamp when the workflow execution actually started
+  - target: $.components.schemas.WorkflowDbDto.properties.complete
+    update:
+      description: Timestamp when the workflow execution completed
+  - target: $.components.schemas.WorkflowDbDto.properties.messages
+    update:
+      description: Array of status messages and logs from workflow execution
+
+  # ComputeConfig field descriptions
+  - target: $.components.schemas.ComputeConfig.properties.workDir
+    update:
+      description: Working directory path for workflow execution
+  - target: $.components.schemas.ComputeConfig.properties.preRunScript
+    update:
+      description: Shell script to execute before workflow starts
+  - target: $.components.schemas.ComputeConfig.properties.postRunScript
+    update:
+      description: Shell script to execute after workflow completes
+  - target: $.components.schemas.ComputeConfig.properties.environment
+    update:
+      description: Array of environment variables for the compute environment
+  - target: $.components.schemas.ComputeConfig.properties.nextflowConfig
+    update:
+      description: Nextflow configuration settings and parameters
+  - target: $.components.schemas.ComputeConfig.properties.discriminator
+    update:
+      description: Read-only property identifying the compute platform type
+
+  # DataLinkDto field descriptions
+  - target: $.components.schemas.DataLinkDto.properties.id
+    update:
+      description: Unique identifier for the data link
+  - target: $.components.schemas.DataLinkDto.properties.name
+    update:
+      description: Display name for the data link connection
+  - target: $.components.schemas.DataLinkDto.properties.description
+    update:
+      description: Description of the data link's purpose and contents
+  - target: $.components.schemas.DataLinkDto.properties.resourceRef
+    update:
+      description: Reference identifier for the external resource
+  - target: $.components.schemas.DataLinkDto.properties.type
+    update:
+      description: Type of data link (e.g., S3, Azure Blob, etc.)
+  - target: $.components.schemas.DataLinkDto.properties.provider
+    update:
+      description: Cloud provider hosting the data link
+  - target: $.components.schemas.DataLinkDto.properties.region
+    update:
+      description: Geographic region where the data link is hosted
+  - target: $.components.schemas.DataLinkDto.properties.credentials
+    update:
+      description: Array of credentials required to access the data link
+
+  # LabelDbDto field descriptions
+  - target: $.components.schemas.LabelDbDto.properties.id
+    update:
+      description: Unique numeric identifier for the label
+  - target: $.components.schemas.LabelDbDto.properties.name
+    update:
+      description: Name or key of the label
+  - target: $.components.schemas.LabelDbDto.properties.value
+    update:
+      description: Value associated with the label
+  - target: $.components.schemas.LabelDbDto.properties.resource
+    update:
+      description: Flag indicating if this is a resource-level label
+  - target: $.components.schemas.LabelDbDto.properties.isDefault
+    update:
+      description: Flag indicating if this is a default system label
+  - target: $.components.schemas.LabelDbDto.properties.isDynamic
+    update:
+      description: Flag indicating if the label value is dynamically generated
+  - target: $.components.schemas.LabelDbDto.properties.isInterpolated
+    update:
+      description: Flag indicating if the label value supports variable interpolation
+  - target: $.components.schemas.LabelDbDto.properties.dateCreated
+    update:
+      description: Timestamp when the label was created
+
+  # PipelineSecret field descriptions
+  - target: $.components.schemas.PipelineSecret.properties.id
+    update:
+      description: Unique numeric identifier for the secret (nullable)
+  - target: $.components.schemas.PipelineSecret.properties.name
+    update:
+      description: Secret name following naming conventions (max 100 characters)
+  - target: $.components.schemas.PipelineSecret.properties.lastUsed
+    update:
+      description: Read-only timestamp when the secret was last accessed
+  - target: $.components.schemas.PipelineSecret.properties.dateCreated
+    update:
+      description: Read-only timestamp when the secret was created
+
+  # DataStudioDto field descriptions
+  - target: $.components.schemas.DataStudioDto.properties.sessionId
+    update:
+      description: Unique identifier for the Studio session
+  - target: $.components.schemas.DataStudioDto.properties.workspaceId
+    update:
+      description: Numeric identifier of the workspace containing the Studio
+  - target: $.components.schemas.DataStudioDto.properties.parentCheckpoint
+    update:
+      description: Reference to the parent checkpoint for session restoration
+  - target: $.components.schemas.DataStudioDto.properties.user
+    update:
+      description: User information for the Studio session owner
+  - target: $.components.schemas.DataStudioDto.properties.name
+    update:
+      description: Display name for the Studio session
+  - target: $.components.schemas.DataStudioDto.properties.description
+    update:
+      description: Description of the Studio session's purpose
+  - target: $.components.schemas.DataStudioDto.properties.studioUrl
+    update:
+      description: URL to access the running Studio instance
+  - target: $.components.schemas.DataStudioDto.properties.computeEnv
+    update:
+      description: Compute environment configuration for the Studio
+
+  # AccessToken field descriptions
+  - target: $.components.schemas.AccessToken.properties.id
+    update:
+      description: Unique numeric identifier for the access token (nullable)
+  - target: $.components.schemas.AccessToken.properties.name
+    update:
+      description: Display name for the token (1-50 characters)
+  - target: $.components.schemas.AccessToken.properties.lastUsed
+    update:
+      description: Timestamp when the token was last used for authentication
+  - target: $.components.schemas.AccessToken.properties.dateCreated
+    update:
+      description: Timestamp when the token was created
+  - target: $.components.schemas.AccessToken.properties.basicAuth
+    update:
+      description: Deprecated basic authentication string
+
+  # WorkspaceDbDto field descriptions
+  - target: $.components.schemas.WorkspaceDbDto.properties.id
+    update:
+      description: Unique numeric identifier for the workspace
+  - target: $.components.schemas.WorkspaceDbDto.properties.name
+    update:
+      description: Short name or handle for the workspace
+  - target: $.components.schemas.WorkspaceDbDto.properties.fullName
+    update:
+      description: Complete display name for the workspace
+  - target: $.components.schemas.WorkspaceDbDto.properties.description
+    update:
+      description: Detailed description of the workspace's purpose
+  - target: $.components.schemas.WorkspaceDbDto.properties.visibility
+    update:
+      description: Visibility level of the workspace (public, private, etc.)

@@ -49,19 +49,23 @@ func (r *PipelineSecretDataSource) Schema(ctx context.Context, req datasource.Sc
 
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Read-only timestamp when the secret was created`,
 			},
 			"id": schema.Int64Attribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Unique numeric identifier for the secret (nullable)`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
 			},
 			"last_used": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Read-only timestamp when the secret was last accessed`,
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Secret name following naming conventions (max 100 characters)`,
 			},
 			"secret_id": schema.Int64Attribute{
 				Required:    true,

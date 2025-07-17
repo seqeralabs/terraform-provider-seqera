@@ -52,16 +52,20 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Detailed description of the organization's purpose and activities`,
 					},
 					"full_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Complete formal name of the organization`,
 					},
 					"location": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Geographic location or address of the organization`,
 					},
 					"logo_id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Identifier for the organization's logo image`,
 					},
 					"logo_url": schema.StringAttribute{
 						Computed: true,
@@ -73,20 +77,24 @@ func (r *OrganizationDataSource) Schema(ctx context.Context, req datasource.Sche
 						Computed: true,
 					},
 					"name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Short name or handle for the organization`,
 					},
 					"org_id": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Unique numeric identifier for the organization`,
 					},
 					"paying": schema.BoolAttribute{
 						Computed:           true,
 						DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+						Description:        `Deprecated flag indicating if organization has paid subscription`,
 					},
 					"type": schema.StringAttribute{
 						Computed: true,
 					},
 					"website": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Official website URL for the organization`,
 					},
 				},
 				MarkdownDescription: `Represents an organization in the Seqera Platform.` + "\n" +

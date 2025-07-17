@@ -84,7 +84,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Credentials string identifier`,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(22),
 				},
@@ -94,6 +94,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
+				Description: `Timestamp when the credential was created`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -103,9 +104,11 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
+				Description: `Flag indicating if the credential has been soft-deleted`,
 			},
 			"description": schema.StringAttribute{
-				Optional: true,
+				Optional:    true,
+				Description: `Optional description explaining the purpose of the credential`,
 			},
 			"keys": schema.SingleNestedAttribute{
 				Required: true,
@@ -681,19 +684,21 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
+				Description: `Timestamp when the credential was last used`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Display name for the credential (max 100 characters)`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
 			},
 			"provider_type": schema.StringAttribute{
 				Required:    true,
-				Description: `must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
+				Description: `Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"aws",

@@ -6,19 +6,28 @@ package shared
 // Contains organizational metadata, settings, and member management
 // information for multi-tenant environments.
 type OrganizationDbDto struct {
+	// Deprecated flag indicating if organization has paid subscription
+	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	Paying      *bool    `json:"paying,omitempty"`
-	OrgID       *int64   `json:"orgId,omitempty"`
-	Name        *string  `json:"name,omitempty"`
-	FullName    *string  `json:"fullName,omitempty"`
-	Description *string  `json:"description,omitempty"`
-	Location    *string  `json:"location,omitempty"`
-	Website     *string  `json:"website,omitempty"`
-	LogoID      *string  `json:"logoId,omitempty"`
-	LogoURL     *string  `json:"logoUrl,omitempty"`
-	MemberID    *int64   `json:"memberId,omitempty"`
-	MemberRole  *OrgRole `json:"memberRole,omitempty"`
-	Type        *OrgType `json:"type,omitempty"`
+	Paying *bool `json:"paying,omitempty"`
+	// Unique numeric identifier for the organization
+	OrgID *int64 `json:"orgId,omitempty"`
+	// Short name or handle for the organization
+	Name *string `json:"name,omitempty"`
+	// Complete formal name of the organization
+	FullName *string `json:"fullName,omitempty"`
+	// Detailed description of the organization's purpose and activities
+	Description *string `json:"description,omitempty"`
+	// Geographic location or address of the organization
+	Location *string `json:"location,omitempty"`
+	// Official website URL for the organization
+	Website *string `json:"website,omitempty"`
+	// Identifier for the organization's logo image
+	LogoID     *string  `json:"logoId,omitempty"`
+	LogoURL    *string  `json:"logoUrl,omitempty"`
+	MemberID   *int64   `json:"memberId,omitempty"`
+	MemberRole *OrgRole `json:"memberRole,omitempty"`
+	Type       *OrgType `json:"type,omitempty"`
 }
 
 func (o *OrganizationDbDto) GetPaying() *bool {

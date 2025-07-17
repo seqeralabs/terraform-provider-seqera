@@ -11,11 +11,17 @@ import (
 // Contains execution status, metadata, and results from pipeline
 // runs including logs and performance metrics.
 type WorkflowDbDto struct {
-	Messages          []string        `json:"messages,omitempty"`
-	ID                *string         `json:"id,omitempty"`
-	OwnerID           *int64          `json:"ownerId,omitempty"`
-	Submit            *time.Time      `json:"submit,omitempty"`
-	Start             *time.Time      `json:"start,omitempty"`
+	// Array of status messages and logs from workflow execution
+	Messages []string `json:"messages,omitempty"`
+	// Unique identifier for the workflow execution
+	ID *string `json:"id,omitempty"`
+	// Numeric identifier of the user who owns this workflow
+	OwnerID *int64 `json:"ownerId,omitempty"`
+	// Timestamp when the workflow was submitted for execution
+	Submit *time.Time `json:"submit,omitempty"`
+	// Timestamp when the workflow execution actually started
+	Start *time.Time `json:"start,omitempty"`
+	// Timestamp when the workflow execution completed
 	Complete          *time.Time      `json:"complete,omitempty"`
 	DateCreated       *time.Time      `json:"dateCreated,omitempty"`
 	LastUpdated       *time.Time      `json:"lastUpdated,omitempty"`

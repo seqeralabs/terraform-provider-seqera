@@ -44,9 +44,9 @@ controls for data management and sharing. (see [below for nested schema](#nested
 Read-Only:
 
 - `date_created` (String)
-- `deleted` (Boolean)
-- `description` (String)
-- `id` (String)
+- `deleted` (Boolean) Read-only flag indicating if the dataset has been deleted
+- `description` (String) Detailed description of the dataset contents and purpose (max 1000 characters)
+- `id` (String) Unique identifier for the dataset (max 22 characters)
 - `last_updated` (String)
-- `media_type` (String)
-- `name` (String)
+- `media_type` (String) MIME type or media type of the dataset content (max 80 characters)
+- `name` (String) Dataset name following naming conventions (1-100 characters)

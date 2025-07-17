@@ -10,11 +10,13 @@ import (
 )
 
 type MoabConfiguration struct {
+	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript           *string `json:"postRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Nextflow configuration settings and parameters
 	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
@@ -25,9 +27,10 @@ type MoabConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// property to select the compute config platform
-	Discriminator *string             `json:"discriminator,omitempty"`
-	Environment   []ConfigEnvVariable `json:"environment,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (o *MoabConfiguration) GetWorkDir() *string {
@@ -136,11 +139,13 @@ func (o *MoabConfiguration) GetEnvironment() []ConfigEnvVariable {
 }
 
 type AltairPBSConfiguration struct {
+	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript           *string `json:"postRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Nextflow configuration settings and parameters
 	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
@@ -151,9 +156,10 @@ type AltairPBSConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// property to select the compute config platform
-	Discriminator *string             `json:"discriminator,omitempty"`
-	Environment   []ConfigEnvVariable `json:"environment,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (o *AltairPBSConfiguration) GetWorkDir() *string {
@@ -262,11 +268,13 @@ func (o *AltairPBSConfiguration) GetEnvironment() []ConfigEnvVariable {
 }
 
 type UnivaGridEngineConfiguration struct {
+	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript           *string `json:"postRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Nextflow configuration settings and parameters
 	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
@@ -277,9 +285,10 @@ type UnivaGridEngineConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// property to select the compute config platform
-	Discriminator *string             `json:"discriminator,omitempty"`
-	Environment   []ConfigEnvVariable `json:"environment,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (o *UnivaGridEngineConfiguration) GetWorkDir() *string {
@@ -388,27 +397,30 @@ func (o *UnivaGridEngineConfiguration) GetEnvironment() []ConfigEnvVariable {
 }
 
 type GoogleGKEClusterConfiguration struct {
-	// property to select the compute config platform
+	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
-	WorkDir       *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript         *string             `json:"postRunScript,omitempty"`
-	Server                *string             `json:"server,omitempty"`
-	SslCert               *string             `json:"sslCert,omitempty"`
-	Namespace             *string             `json:"namespace,omitempty"`
-	ComputeServiceAccount *string             `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    *string             `json:"headServiceAccount,omitempty"`
-	StorageClaimName      *string             `json:"storageClaimName,omitempty"`
-	StorageMountPath      *string             `json:"storageMountPath,omitempty"`
-	PodCleanup            *PodCleanupPolicy   `json:"podCleanup,omitempty"`
-	HeadPodSpec           *string             `json:"headPodSpec,omitempty"`
-	ServicePodSpec        *string             `json:"servicePodSpec,omitempty"`
-	Environment           []ConfigEnvVariable `json:"environment,omitempty"`
-	HeadJobCpus           *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb       *int                `json:"headJobMemoryMb,omitempty"`
-	NextflowConfig        *string             `json:"nextflowConfig,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript         *string           `json:"postRunScript,omitempty"`
+	Server                *string           `json:"server,omitempty"`
+	SslCert               *string           `json:"sslCert,omitempty"`
+	Namespace             *string           `json:"namespace,omitempty"`
+	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
+	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
+	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
+	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
+	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
+	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
+	ServicePodSpec        *string           `json:"servicePodSpec,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
+	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// The GKE cluster region - or - zone
 	Region *string `json:"region,omitempty"`
 	// The GKE cluster name
@@ -572,27 +584,30 @@ func (o *GoogleGKEClusterConfiguration) GetWaveEnabled() *bool {
 }
 
 type AmazonEKSClusterConfiguration struct {
-	// property to select the compute config platform
+	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
-	WorkDir       *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript         *string             `json:"postRunScript,omitempty"`
-	Server                *string             `json:"server,omitempty"`
-	SslCert               *string             `json:"sslCert,omitempty"`
-	Namespace             *string             `json:"namespace,omitempty"`
-	ComputeServiceAccount *string             `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    *string             `json:"headServiceAccount,omitempty"`
-	StorageClaimName      *string             `json:"storageClaimName,omitempty"`
-	StorageMountPath      *string             `json:"storageMountPath,omitempty"`
-	PodCleanup            *PodCleanupPolicy   `json:"podCleanup,omitempty"`
-	HeadPodSpec           *string             `json:"headPodSpec,omitempty"`
-	ServicePodSpec        *string             `json:"servicePodSpec,omitempty"`
-	Environment           []ConfigEnvVariable `json:"environment,omitempty"`
-	HeadJobCpus           *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb       *int                `json:"headJobMemoryMb,omitempty"`
-	NextflowConfig        *string             `json:"nextflowConfig,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript         *string           `json:"postRunScript,omitempty"`
+	Server                *string           `json:"server,omitempty"`
+	SslCert               *string           `json:"sslCert,omitempty"`
+	Namespace             *string           `json:"namespace,omitempty"`
+	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
+	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
+	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
+	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
+	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
+	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
+	ServicePodSpec        *string           `json:"servicePodSpec,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
+	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// AWS region
 	Region *string `json:"region,omitempty"`
 	// The AWS EKS cluster name
@@ -756,27 +771,30 @@ func (o *AmazonEKSClusterConfiguration) GetFusion2Enabled() *bool {
 }
 
 type KubernetesComputeConfiguration struct {
-	// property to select the compute config platform
+	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
-	WorkDir       *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript         *string             `json:"postRunScript,omitempty"`
-	Server                *string             `json:"server,omitempty"`
-	SslCert               *string             `json:"sslCert,omitempty"`
-	Namespace             *string             `json:"namespace,omitempty"`
-	ComputeServiceAccount *string             `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    *string             `json:"headServiceAccount,omitempty"`
-	StorageClaimName      *string             `json:"storageClaimName,omitempty"`
-	StorageMountPath      *string             `json:"storageMountPath,omitempty"`
-	PodCleanup            *PodCleanupPolicy   `json:"podCleanup,omitempty"`
-	HeadPodSpec           *string             `json:"headPodSpec,omitempty"`
-	ServicePodSpec        *string             `json:"servicePodSpec,omitempty"`
-	Environment           []ConfigEnvVariable `json:"environment,omitempty"`
-	HeadJobCpus           *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb       *int                `json:"headJobMemoryMb,omitempty"`
-	NextflowConfig        *string             `json:"nextflowConfig,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript         *string           `json:"postRunScript,omitempty"`
+	Server                *string           `json:"server,omitempty"`
+	SslCert               *string           `json:"sslCert,omitempty"`
+	Namespace             *string           `json:"namespace,omitempty"`
+	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
+	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
+	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
+	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
+	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
+	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
+	ServicePodSpec        *string           `json:"servicePodSpec,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
+	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 }
 
 func (o *KubernetesComputeConfiguration) GetDiscriminator() *string {
@@ -906,11 +924,13 @@ func (o *KubernetesComputeConfiguration) GetNextflowConfig() *string {
 }
 
 type SlurmConfiguration struct {
+	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript           *string `json:"postRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Nextflow configuration settings and parameters
 	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
@@ -921,9 +941,10 @@ type SlurmConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// property to select the compute config platform
-	Discriminator *string             `json:"discriminator,omitempty"`
-	Environment   []ConfigEnvVariable `json:"environment,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (o *SlurmConfiguration) GetWorkDir() *string {
@@ -1032,11 +1053,13 @@ func (o *SlurmConfiguration) GetEnvironment() []ConfigEnvVariable {
 }
 
 type IBMLSFConfiguration struct {
+	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript           *string `json:"postRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Nextflow configuration settings and parameters
 	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
@@ -1047,12 +1070,13 @@ type IBMLSFConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// property to select the compute config platform
-	Discriminator  *string             `json:"discriminator,omitempty"`
-	UnitForLimits  *string             `json:"unitForLimits,omitempty"`
-	PerJobMemLimit *bool               `json:"perJobMemLimit,omitempty"`
-	PerTaskReserve *bool               `json:"perTaskReserve,omitempty"`
-	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator  *string `json:"discriminator,omitempty"`
+	UnitForLimits  *string `json:"unitForLimits,omitempty"`
+	PerJobMemLimit *bool   `json:"perJobMemLimit,omitempty"`
+	PerTaskReserve *bool   `json:"perTaskReserve,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (o *IBMLSFConfiguration) GetWorkDir() *string {
@@ -1182,12 +1206,13 @@ func (o *IBMLSFConfiguration) GetEnvironment() []ConfigEnvVariable {
 }
 
 type AzureBatchConfiguration struct {
-	// property to select the compute config platform
+	// Read-only property identifying the compute platform type
 	Discriminator *string `json:"discriminator,omitempty"`
-	WorkDir       *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
 	Region        *string `json:"region,omitempty"`
 	HeadPool      *string `json:"headPool,omitempty"`
@@ -1197,11 +1222,13 @@ type AzureBatchConfiguration struct {
 	TokenDuration           *string             `json:"tokenDuration,omitempty"`
 	DeleteJobsOnCompletion  *JobCleanupPolicy   `json:"deleteJobsOnCompletion,omitempty"`
 	DeletePoolsOnCompletion *bool               `json:"deletePoolsOnCompletion,omitempty"`
-	Environment             []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled             *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled          *bool               `json:"fusion2Enabled,omitempty"`
-	NextflowConfig          *string             `json:"nextflowConfig,omitempty"`
-	ManagedIdentityClientID *string             `json:"managedIdentityClientId,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	WaveEnabled    *bool               `json:"waveEnabled,omitempty"`
+	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
+	ManagedIdentityClientID *string `json:"managedIdentityClientId,omitempty"`
 }
 
 func (o *AzureBatchConfiguration) GetDiscriminator() *string {
@@ -1317,9 +1344,10 @@ func (o *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
 }
 
 type GoogleBatchServiceConfiguration struct {
-	// property to select the compute config platform
-	Discriminator     *string           `json:"discriminator,omitempty"`
-	Location          *string           `json:"location,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
+	Location      *string `json:"location,omitempty"`
+	// Working directory path for workflow execution
 	WorkDir           *string           `json:"workDir,omitempty"`
 	Spot              *bool             `json:"spot,omitempty"`
 	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
@@ -1332,15 +1360,17 @@ type GoogleBatchServiceConfiguration struct {
 	CopyImage         *string           `json:"copyImage,omitempty"`
 	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
 	Labels            map[string]string `json:"labels,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript               *string             `json:"postRunScript,omitempty"`
-	HeadJobCpus                 *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb             *int                `json:"headJobMemoryMb,omitempty"`
-	NextflowConfig              *string             `json:"nextflowConfig,omitempty"`
-	NfsTarget                   *string             `json:"nfsTarget,omitempty"`
-	NfsMount                    *string             `json:"nfsMount,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript   *string `json:"postRunScript,omitempty"`
+	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	NfsTarget      *string `json:"nfsTarget,omitempty"`
+	NfsMount       *string `json:"nfsMount,omitempty"`
+	// Array of environment variables for the compute environment
 	Environment                 []ConfigEnvVariable `json:"environment,omitempty"`
 	WaveEnabled                 *bool               `json:"waveEnabled,omitempty"`
 	Fusion2Enabled              *bool               `json:"fusion2Enabled,omitempty"`
@@ -1555,11 +1585,12 @@ func (o *GoogleBatchServiceConfiguration) GetComputeJobsInstanceTemplate() *stri
 }
 
 type GoogleLifeSciencesConfiguration struct {
-	// property to select the compute config platform
-	Discriminator     *string           `json:"discriminator,omitempty"`
-	Region            *string           `json:"region,omitempty"`
-	Zones             []string          `json:"zones,omitempty"`
-	Location          *string           `json:"location,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string  `json:"discriminator,omitempty"`
+	Region        *string  `json:"region,omitempty"`
+	Zones         []string `json:"zones,omitempty"`
+	Location      *string  `json:"location,omitempty"`
+	// Working directory path for workflow execution
 	WorkDir           *string           `json:"workDir,omitempty"`
 	Preemptible       *bool             `json:"preemptible,omitempty"`
 	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
@@ -1570,16 +1601,18 @@ type GoogleLifeSciencesConfiguration struct {
 	CopyImage         *string           `json:"copyImage,omitempty"`
 	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
 	Labels            map[string]string `json:"labels,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript   *string             `json:"postRunScript,omitempty"`
-	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
-	NextflowConfig  *string             `json:"nextflowConfig,omitempty"`
-	NfsTarget       *string             `json:"nfsTarget,omitempty"`
-	NfsMount        *string             `json:"nfsMount,omitempty"`
-	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript   *string `json:"postRunScript,omitempty"`
+	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	NfsTarget      *string `json:"nfsTarget,omitempty"`
+	NfsMount       *string `json:"nfsMount,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (o *GoogleLifeSciencesConfiguration) GetDiscriminator() *string {
@@ -1742,7 +1775,7 @@ type SeqeraComputeConfiguration struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
-	// property to select the compute config platform
+	// Read-only property identifying the compute platform type
 	Discriminator      *string `json:"discriminator,omitempty"`
 	Region             *string `json:"region,omitempty"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
@@ -1753,22 +1786,25 @@ type SeqeraComputeConfiguration struct {
 	HeadQueue          *string `json:"headQueue,omitempty"`
 	HeadJobRole        *string `json:"headJobRole,omitempty"`
 	CliPath            *string `json:"cliPath,omitempty"`
-	WorkDir            *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript       *string             `json:"postRunScript,omitempty"`
-	HeadJobCpus         *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb     *int                `json:"headJobMemoryMb,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript   *string `json:"postRunScript,omitempty"`
+	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	// Array of environment variables for the compute environment
 	Environment         []ConfigEnvVariable `json:"environment,omitempty"`
 	WaveEnabled         *bool               `json:"waveEnabled,omitempty"`
 	Fusion2Enabled      *bool               `json:"fusion2Enabled,omitempty"`
 	NvnmeStorageEnabled *bool               `json:"nvnmeStorageEnabled,omitempty"`
 	LogGroup            *string             `json:"logGroup,omitempty"`
-	NextflowConfig      *string             `json:"nextflowConfig,omitempty"`
-	FusionSnapshots     *bool               `json:"fusionSnapshots,omitempty"`
-	Forge               *ForgeConfig        `json:"forge,omitempty"`
-	ForgedResources     []map[string]any    `json:"forgedResources,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
+	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
+	Forge           *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (o *SeqeraComputeConfiguration) GetStorageType() *string {
@@ -1961,18 +1997,21 @@ func (o *SeqeraComputeConfiguration) GetForgedResources() []map[string]any {
 }
 
 type AWSCloudConfiguration struct {
-	// property to select the compute config platform
+	// Read-only property identifying the compute platform type
 	Discriminator *string  `json:"discriminator,omitempty"`
 	AllowBuckets  []string `json:"allowBuckets,omitempty"`
 	Region        *string  `json:"region,omitempty"`
 	InstanceType  *string  `json:"instanceType,omitempty"`
 	ImageID       *string  `json:"imageId,omitempty"`
-	WorkDir       *string  `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript      *string             `json:"postRunScript,omitempty"`
-	NextflowConfig     *string             `json:"nextflowConfig,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Array of environment variables for the compute environment
 	Environment        []ConfigEnvVariable `json:"environment,omitempty"`
 	WaveEnabled        *bool               `json:"waveEnabled,omitempty"`
 	Fusion2Enabled     *bool               `json:"fusion2Enabled,omitempty"`
@@ -2140,7 +2179,7 @@ type AWSBatchConfiguration struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
-	// property to select the compute config platform
+	// Read-only property identifying the compute platform type
 	Discriminator      *string `json:"discriminator,omitempty"`
 	Region             *string `json:"region,omitempty"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
@@ -2151,22 +2190,25 @@ type AWSBatchConfiguration struct {
 	HeadQueue          *string `json:"headQueue,omitempty"`
 	HeadJobRole        *string `json:"headJobRole,omitempty"`
 	CliPath            *string `json:"cliPath,omitempty"`
-	WorkDir            *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript       *string             `json:"postRunScript,omitempty"`
-	HeadJobCpus         *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb     *int                `json:"headJobMemoryMb,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript   *string `json:"postRunScript,omitempty"`
+	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	// Array of environment variables for the compute environment
 	Environment         []ConfigEnvVariable `json:"environment,omitempty"`
 	WaveEnabled         *bool               `json:"waveEnabled,omitempty"`
 	Fusion2Enabled      *bool               `json:"fusion2Enabled,omitempty"`
 	NvnmeStorageEnabled *bool               `json:"nvnmeStorageEnabled,omitempty"`
 	LogGroup            *string             `json:"logGroup,omitempty"`
-	NextflowConfig      *string             `json:"nextflowConfig,omitempty"`
-	FusionSnapshots     *bool               `json:"fusionSnapshots,omitempty"`
-	Forge               *ForgeConfig        `json:"forge,omitempty"`
-	ForgedResources     []map[string]any    `json:"forgedResources,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
+	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
+	Forge           *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (o *AWSBatchConfiguration) GetStorageType() *string {

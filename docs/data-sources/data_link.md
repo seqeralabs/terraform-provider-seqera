@@ -34,15 +34,15 @@ data "seqera_data_link" "my_datalink" {
 
 ### Read-Only
 
-- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--credentials))
-- `description` (String)
+- `credentials` (Attributes List) Array of credentials required to access the data link (see [below for nested schema](#nestedatt--credentials))
+- `description` (String) Description of the data link's purpose and contents
 - `hidden` (Boolean)
 - `message` (String)
-- `name` (String)
+- `name` (String) Display name for the data link connection
 - `provider_type` (String)
 - `public_accessible` (Boolean)
-- `region` (String)
-- `resource_ref` (String)
+- `region` (String) Geographic region where the data link is hosted
+- `resource_ref` (String) Reference identifier for the external resource
 - `status` (String)
 - `type` (String)
 

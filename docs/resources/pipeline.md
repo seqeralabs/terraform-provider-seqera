@@ -87,12 +87,12 @@ resource "seqera_pipeline" "my_pipeline" {
 - `optimization_targets` (String)
 - `org_id` (Number)
 - `org_name` (String)
-- `pipeline_id` (Number) Pipeline numeric identifier
-- `repository` (String)
-- `user_first_name` (String)
-- `user_id` (Number)
+- `pipeline_id` (Number) Unique numeric identifier for the pipeline
+- `repository` (String) Git repository URL containing the pipeline source code
+- `user_first_name` (String) First name of the user who created the pipeline
+- `user_id` (Number) Numeric identifier of the user who created the pipeline
 - `user_last_name` (String)
-- `user_name` (String)
+- `user_name` (String) Username of the pipeline creator
 - `visibility` (String)
 - `workspace_name` (String)
 
@@ -146,12 +146,12 @@ Read-Only:
 
 Read-Only:
 
-- `date_created` (String)
-- `id` (Number)
-- `is_default` (Boolean)
-- `name` (String)
-- `resource` (Boolean)
-- `value` (String)
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label
 
 ## Import
 

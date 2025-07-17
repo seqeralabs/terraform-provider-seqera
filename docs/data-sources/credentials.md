@@ -38,15 +38,15 @@ Read-Only:
 
 - `base_url` (String)
 - `category` (String)
-- `credentials_id` (String)
-- `date_created` (String)
-- `deleted` (Boolean)
-- `description` (String)
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `date_created` (String) Timestamp when the credential was created
+- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
+- `description` (String) Optional description explaining the purpose of the credential
 - `keys` (Attributes) (see [below for nested schema](#nestedatt--credentials--keys))
 - `last_updated` (String)
-- `last_used` (String)
-- `name` (String)
-- `provider_type` (String)
+- `last_used` (String) Timestamp when the credential was last used
+- `name` (String) Display name for the credential (max 100 characters)
+- `provider_type` (String) Cloud or service provider type (e.g., aws, azure, gcp)
 
 <a id="nestedatt--credentials--keys"></a>
 ### Nested Schema for `credentials.keys`

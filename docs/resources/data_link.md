@@ -41,11 +41,11 @@ resource "seqera_data_link" "my_datalink" {
 
 ### Read-Only
 
-- `credentials` (Attributes List) (see [below for nested schema](#nestedatt--credentials))
-- `data_link_id` (String) Data-link string identifier
+- `credentials` (Attributes List) Array of credentials required to access the data link (see [below for nested schema](#nestedatt--credentials))
+- `data_link_id` (String) Unique identifier for the data link
 - `hidden` (Boolean)
 - `message` (String)
-- `region` (String)
+- `region` (String) Geographic region where the data link is hosted
 - `status` (String) must be one of ["VALID", "INVALID"]
 
 <a id="nestedatt--credentials"></a>

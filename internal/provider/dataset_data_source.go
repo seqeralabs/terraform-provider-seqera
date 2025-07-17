@@ -52,22 +52,27 @@ func (r *DatasetDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						Computed: true,
 					},
 					"deleted": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Read-only flag indicating if the dataset has been deleted`,
 					},
 					"description": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Detailed description of the dataset contents and purpose (max 1000 characters)`,
 					},
 					"id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Unique identifier for the dataset (max 22 characters)`,
 					},
 					"last_updated": schema.StringAttribute{
 						Computed: true,
 					},
 					"media_type": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `MIME type or media type of the dataset content (max 80 characters)`,
 					},
 					"name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Dataset name following naming conventions (1-100 characters)`,
 					},
 				},
 				MarkdownDescription: `Represents a dataset in the Seqera Platform.` + "\n" +

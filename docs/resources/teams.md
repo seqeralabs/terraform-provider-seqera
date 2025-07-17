@@ -36,9 +36,9 @@ resource "seqera_teams" "my_teams" {
 
 ### Read-Only
 
-- `avatar_url` (String)
-- `members_count` (Number)
-- `team_id` (Number) Team numeric identifier
+- `avatar_url` (String) URL to the team's avatar or profile image
+- `members_count` (Number) Total number of members in the team
+- `team_id` (Number) Unique numeric identifier for the team
 
 ## Import
 

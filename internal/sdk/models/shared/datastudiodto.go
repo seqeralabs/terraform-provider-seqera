@@ -11,29 +11,34 @@ import (
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
 type DataStudioDto struct {
-	SessionID              *string                        `json:"sessionId,omitempty"`
-	WorkspaceID            *int64                         `json:"workspaceId,omitempty"`
-	ParentCheckpoint       *DataStudioDtoParentCheckpoint `json:"parentCheckpoint,omitempty"`
-	User                   *StudioUser                    `json:"user,omitempty"`
-	Name                   *string                        `json:"name,omitempty"`
-	Description            *string                        `json:"description,omitempty"`
-	StudioURL              *string                        `json:"studioUrl,omitempty"`
-	ComputeEnv             *DataStudioComputeEnvDto       `json:"computeEnv,omitempty"`
-	Template               *DataStudioTemplate            `json:"template,omitempty"`
-	Configuration          *DataStudioConfiguration       `json:"configuration,omitempty"`
-	DateCreated            *time.Time                     `json:"dateCreated,omitempty"`
-	LastUpdated            *time.Time                     `json:"lastUpdated,omitempty"`
-	LastStarted            *time.Time                     `json:"lastStarted,omitempty"`
-	EffectiveLifespanHours *int                           `json:"effectiveLifespanHours,omitempty"`
-	ActiveConnections      []ActiveConnection             `json:"activeConnections,omitempty"`
-	StatusInfo             *DataStudioStatusInfo          `json:"statusInfo,omitempty"`
-	WaveBuildURL           *string                        `json:"waveBuildUrl,omitempty"`
-	BaseImage              *string                        `json:"baseImage,omitempty"`
-	CustomImage            *bool                          `json:"customImage,omitempty"`
-	IsPrivate              *bool                          `json:"isPrivate,omitempty"`
-	MountedDataLinks       []DataLinkDto                  `json:"mountedDataLinks,omitempty"`
-	Progress               []DataStudioProgressStep       `json:"progress,omitempty"`
-	Labels                 []LabelDbDto                   `json:"labels,omitempty"`
+	// Unique identifier for the Studio session
+	SessionID *string `json:"sessionId,omitempty"`
+	// Numeric identifier of the workspace containing the Studio
+	WorkspaceID      *int64                         `json:"workspaceId,omitempty"`
+	ParentCheckpoint *DataStudioDtoParentCheckpoint `json:"parentCheckpoint,omitempty"`
+	User             *StudioUser                    `json:"user,omitempty"`
+	// Display name for the Studio session
+	Name *string `json:"name,omitempty"`
+	// Description of the Studio session's purpose
+	Description *string `json:"description,omitempty"`
+	// URL to access the running Studio instance
+	StudioURL              *string                  `json:"studioUrl,omitempty"`
+	ComputeEnv             *DataStudioComputeEnvDto `json:"computeEnv,omitempty"`
+	Template               *DataStudioTemplate      `json:"template,omitempty"`
+	Configuration          *DataStudioConfiguration `json:"configuration,omitempty"`
+	DateCreated            *time.Time               `json:"dateCreated,omitempty"`
+	LastUpdated            *time.Time               `json:"lastUpdated,omitempty"`
+	LastStarted            *time.Time               `json:"lastStarted,omitempty"`
+	EffectiveLifespanHours *int                     `json:"effectiveLifespanHours,omitempty"`
+	ActiveConnections      []ActiveConnection       `json:"activeConnections,omitempty"`
+	StatusInfo             *DataStudioStatusInfo    `json:"statusInfo,omitempty"`
+	WaveBuildURL           *string                  `json:"waveBuildUrl,omitempty"`
+	BaseImage              *string                  `json:"baseImage,omitempty"`
+	CustomImage            *bool                    `json:"customImage,omitempty"`
+	IsPrivate              *bool                    `json:"isPrivate,omitempty"`
+	MountedDataLinks       []DataLinkDto            `json:"mountedDataLinks,omitempty"`
+	Progress               []DataStudioProgressStep `json:"progress,omitempty"`
+	Labels                 []LabelDbDto             `json:"labels,omitempty"`
 }
 
 func (d DataStudioDto) MarshalJSON() ([]byte, error) {

@@ -11,11 +11,17 @@ import (
 // Provides metadata tagging capabilities for pipelines, workflows,
 // and other platform resources.
 type LabelDbDto struct {
-	ID          *int64     `json:"id,omitempty"`
-	Name        *string    `json:"name,omitempty"`
-	Value       *string    `json:"value,omitempty"`
-	Resource    *bool      `json:"resource,omitempty"`
-	IsDefault   *bool      `json:"isDefault,omitempty"`
+	// Unique numeric identifier for the label
+	ID *int64 `json:"id,omitempty"`
+	// Name or key of the label
+	Name *string `json:"name,omitempty"`
+	// Value associated with the label
+	Value *string `json:"value,omitempty"`
+	// Flag indicating if this is a resource-level label
+	Resource *bool `json:"resource,omitempty"`
+	// Flag indicating if this is a default system label
+	IsDefault *bool `json:"isDefault,omitempty"`
+	// Timestamp when the label was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 }
 

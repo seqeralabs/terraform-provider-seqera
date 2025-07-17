@@ -86,13 +86,14 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 					},
 				},
+				Description: `Array of credentials required to access the data link`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Required: true,
 			},
 			"data_link_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Data-link string identifier`,
+				Description: `Unique identifier for the data link`,
 			},
 			"description": schema.StringAttribute{
 				Required: true,
@@ -132,7 +133,8 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Requires replacement if changed.`,
 			},
 			"region": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Geographic region where the data link is hosted`,
 			},
 			"resource_ref": schema.StringAttribute{
 				Required: true,

@@ -37,8 +37,8 @@ resource "seqera_credential" "my_credential" {
 ### Required
 
 - `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `name` (String)
-- `provider_type` (String) must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
+- `name` (String) Display name for the credential (max 100 characters)
+- `provider_type` (String) Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
@@ -46,15 +46,15 @@ resource "seqera_credential" "my_credential" {
 - `base_url` (String)
 - `category` (String)
 - `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
-- `credentials_id` (String) Credentials string identifier
-- `description` (String)
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `description` (String) Optional description explaining the purpose of the credential
 
 ### Read-Only
 
-- `date_created` (String)
-- `deleted` (Boolean)
+- `date_created` (String) Timestamp when the credential was created
+- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
 - `last_updated` (String)
-- `last_used` (String)
+- `last_used` (String) Timestamp when the credential was last used
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

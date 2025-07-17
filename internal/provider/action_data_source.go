@@ -123,35 +123,44 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						},
 					},
 					"hook_id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Identifier for the webhook associated with this action`,
 					},
 					"hook_url": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `URL endpoint for the webhook that triggers this action`,
 					},
 					"id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Unique identifier for the action`,
 					},
 					"labels": schema.ListNestedAttribute{
 						Computed: true,
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
 								"date_created": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Timestamp when the label was created`,
 								},
 								"id": schema.Int64Attribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Unique numeric identifier for the label`,
 								},
 								"is_default": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Flag indicating if this is a default system label`,
 								},
 								"name": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Name or key of the label`,
 								},
 								"resource": schema.BoolAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Flag indicating if this is a resource-level label`,
 								},
 								"value": schema.StringAttribute{
-									Computed: true,
+									Computed:    true,
+									Description: `Value associated with the label`,
 								},
 							},
 						},
@@ -182,7 +191,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -202,6 +211,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"head_job_options": schema.StringAttribute{
 														Computed: true,
@@ -219,18 +229,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"port": schema.Int32Attribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"propagate_head_job_options": schema.BoolAttribute{
 														Computed: true,
@@ -239,7 +250,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -257,7 +269,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"dragen_instance_type": schema.StringAttribute{
 														Computed: true,
@@ -283,6 +295,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"execution_role": schema.StringAttribute{
 														Computed: true,
@@ -412,18 +425,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"nvnme_storage_enabled": schema.BoolAttribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"region": schema.StringAttribute{
 														Computed: true,
@@ -440,7 +454,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -456,7 +471,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"ebs_boot_size": schema.Int32Attribute{
 														Computed: true,
@@ -482,6 +497,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"fusion2_enabled": schema.BoolAttribute{
 														Computed: true,
@@ -502,15 +518,16 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"region": schema.StringAttribute{
 														Computed: true,
@@ -526,7 +543,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -545,7 +563,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -565,6 +583,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"forge": schema.SingleNestedAttribute{
 														Computed: true,
@@ -597,15 +616,16 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"region": schema.StringAttribute{
 														Computed: true,
@@ -617,7 +637,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -633,7 +654,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -653,6 +674,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"fusion2_enabled": schema.BoolAttribute{
 														Computed: true,
@@ -673,18 +695,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"pod_cleanup": schema.StringAttribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"region": schema.StringAttribute{
 														Computed:    true,
@@ -709,7 +732,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -725,7 +749,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -745,6 +769,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"fusion2_enabled": schema.BoolAttribute{
 														Computed: true,
@@ -765,18 +790,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"pod_cleanup": schema.StringAttribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"region": schema.StringAttribute{
 														Computed:    true,
@@ -801,7 +827,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -825,7 +852,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -845,6 +872,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"fusion2_enabled": schema.BoolAttribute{
 														Computed: true,
@@ -872,7 +900,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"nfs_mount": schema.StringAttribute{
 														Computed: true,
@@ -882,11 +911,11 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"project_id": schema.StringAttribute{
 														Computed: true,
@@ -913,7 +942,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -931,7 +961,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -951,6 +981,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"head_job_cpus": schema.Int32Attribute{
 														Computed: true,
@@ -966,7 +997,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"nfs_mount": schema.StringAttribute{
 														Computed: true,
@@ -976,11 +1008,11 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"preemptible": schema.BoolAttribute{
 														Computed: true,
@@ -1001,7 +1033,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 													"zones": schema.ListAttribute{
 														Computed:    true,
@@ -1017,7 +1050,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -1037,6 +1070,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"head_job_cpus": schema.Int32Attribute{
 														Computed: true,
@@ -1054,18 +1088,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"pod_cleanup": schema.StringAttribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"server": schema.StringAttribute{
 														Computed: true,
@@ -1083,7 +1118,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -1095,7 +1131,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -1115,6 +1151,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"head_job_options": schema.StringAttribute{
 														Computed: true,
@@ -1132,7 +1169,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"per_job_mem_limit": schema.BoolAttribute{
 														Computed: true,
@@ -1145,11 +1183,11 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"propagate_head_job_options": schema.BoolAttribute{
 														Computed: true,
@@ -1161,7 +1199,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -1173,7 +1212,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -1193,6 +1232,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"head_job_options": schema.StringAttribute{
 														Computed: true,
@@ -1210,18 +1250,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"port": schema.Int32Attribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"propagate_head_job_options": schema.BoolAttribute{
 														Computed: true,
@@ -1230,7 +1271,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -1248,7 +1290,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"dragen_instance_type": schema.StringAttribute{
 														Computed: true,
@@ -1274,6 +1316,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"execution_role": schema.StringAttribute{
 														Computed: true,
@@ -1403,18 +1446,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"nvnme_storage_enabled": schema.BoolAttribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"region": schema.StringAttribute{
 														Computed: true,
@@ -1431,7 +1475,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -1443,7 +1488,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -1463,6 +1508,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"head_job_options": schema.StringAttribute{
 														Computed: true,
@@ -1480,18 +1526,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"port": schema.Int32Attribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"propagate_head_job_options": schema.BoolAttribute{
 														Computed: true,
@@ -1500,7 +1547,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -1512,7 +1560,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													},
 													"discriminator": schema.StringAttribute{
 														Computed:    true,
-														Description: `property to select the compute config platform`,
+														Description: `Read-only property identifying the compute platform type`,
 													},
 													"environment": schema.ListNestedAttribute{
 														Computed: true,
@@ -1532,6 +1580,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 																},
 															},
 														},
+														Description: `Array of environment variables for the compute environment`,
 													},
 													"head_job_options": schema.StringAttribute{
 														Computed: true,
@@ -1549,18 +1598,19 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"nextflow_config": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Nextflow configuration settings and parameters`,
 													},
 													"port": schema.Int32Attribute{
 														Computed: true,
 													},
 													"post_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute after workflow completes`,
 													},
 													"pre_run_script": schema.StringAttribute{
 														Computed:    true,
-														Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+														Description: `Shell script to execute before workflow starts`,
 													},
 													"propagate_head_job_options": schema.BoolAttribute{
 														Computed: true,
@@ -1569,7 +1619,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 														Computed: true,
 													},
 													"work_dir": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `Working directory path for workflow execution`,
 													},
 												},
 											},
@@ -1710,10 +1761,12 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						},
 					},
 					"message": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Status or informational message about the action`,
 					},
 					"name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Human-readable name for the action`,
 					},
 					"source": schema.StringAttribute{
 						Computed: true,
