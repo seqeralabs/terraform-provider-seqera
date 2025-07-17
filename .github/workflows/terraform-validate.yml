@@ -46,11 +46,11 @@ jobs:
         EOF
 
     - name: Terraform Format Check
-      working-directory: ./examples/tests/hello-world-examples
+      working-directory: ./examples/hello-world-examples
       run: terraform fmt -check
 
     - name: Terraform Validate
-      working-directory: ./examples/tests/hello-world-examples
+      working-directory: ./examples/hello-world-examples
       run: terraform validate
 
     #
@@ -60,7 +60,7 @@ jobs:
     #     echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > service-account-key.json
 
     - name: Terraform Plan
-      working-directory: ./examples/tests/hello-world-examples
+      working-directory: ./examples/hello-world-examples
       run: terraform plan
       env:
         TF_VAR_seqera_server_url: ${{ vars.SEQERA_SERVER_URL || 'https://api.cloud.seqera.io' }}
