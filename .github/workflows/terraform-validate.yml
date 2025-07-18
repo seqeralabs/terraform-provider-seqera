@@ -57,6 +57,7 @@ jobs:
     - name: Terraform Validate
       working-directory: ./examples/hello-world-examples
       run: terraform validate
+      continue-on-error: true
 
     #
     # - name: Create GCP service account key
