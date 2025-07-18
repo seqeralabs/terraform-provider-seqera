@@ -30,6 +30,7 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	speakeasy_int32validators "github.com/speakeasy/terraform-provider-seqera/internal/validators/int32validators"
 	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -275,7 +276,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -674,7 +678,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"security_groups": schema.ListAttribute{
 												Computed: true,
@@ -703,8 +710,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
+												Description: `Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													speakeasy_stringvalidators.NotNull(),
 													stringvalidator.OneOf(
 														"SPOT",
 														"EC2",
@@ -721,7 +729,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,
@@ -839,7 +850,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_type": schema.StringAttribute{
 										Computed: true,
@@ -1097,7 +1111,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"security_groups": schema.ListAttribute{
 										Computed: true,
@@ -1307,7 +1324,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"vm_type": schema.StringAttribute{
 												Computed: true,
@@ -1319,7 +1339,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
 									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1382,7 +1405,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"token_duration": schema.StringAttribute{
 										Computed: true,
@@ -1446,7 +1472,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The AWS EKS cluster name. Requires replacement if changed.`,
+										Description: `The AWS EKS cluster name. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"compute_service_account": schema.StringAttribute{
 										Computed: true,
@@ -1565,7 +1594,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"namespace": schema.StringAttribute{
 										Computed: true,
@@ -1574,7 +1606,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -1626,7 +1661,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `AWS region. Requires replacement if changed.`,
+										Description: `AWS region. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"server": schema.StringAttribute{
 										Computed: true,
@@ -1635,7 +1673,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"service_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -1653,7 +1694,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_claim_name": schema.StringAttribute{
 										Computed: true,
@@ -1662,7 +1706,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_mount_path": schema.StringAttribute{
 										Computed: true,
@@ -1726,7 +1773,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The GKE cluster name. Requires replacement if changed.`,
+										Description: `The GKE cluster name. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"compute_service_account": schema.StringAttribute{
 										Computed: true,
@@ -1845,7 +1895,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"namespace": schema.StringAttribute{
 										Computed: true,
@@ -1854,7 +1907,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -1906,7 +1962,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The GKE cluster region - or - zone. Requires replacement if changed.`,
+										Description: `The GKE cluster region - or - zone. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"server": schema.StringAttribute{
 										Computed: true,
@@ -1915,7 +1974,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"service_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -1933,7 +1995,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_claim_name": schema.StringAttribute{
 										Computed: true,
@@ -1942,7 +2007,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_mount_path": schema.StringAttribute{
 										Computed: true,
@@ -2719,7 +2787,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"namespace": schema.StringAttribute{
 										Computed: true,
@@ -2728,7 +2799,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -2780,7 +2854,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"service_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -2798,7 +2875,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_claim_name": schema.StringAttribute{
 										Computed: true,
@@ -2807,7 +2887,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_mount_path": schema.StringAttribute{
 										Computed: true,
@@ -3062,7 +3145,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -3272,7 +3358,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -3671,7 +3760,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"security_groups": schema.ListAttribute{
 												Computed: true,
@@ -3700,8 +3792,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
+												Description: `Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													speakeasy_stringvalidators.NotNull(),
 													stringvalidator.OneOf(
 														"SPOT",
 														"EC2",
@@ -3718,7 +3811,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,
@@ -3836,7 +3932,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_type": schema.StringAttribute{
 										Computed: true,
@@ -4084,7 +4183,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -4294,7 +4396,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,

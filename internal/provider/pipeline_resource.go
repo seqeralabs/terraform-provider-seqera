@@ -34,29 +34,29 @@ type PipelineResource struct {
 
 // PipelineResourceModel describes the resource data model.
 type PipelineResourceModel struct {
-	ComputeEnv          *tfTypes.ComputeEnvDbDto       `tfsdk:"compute_env"`
-	Deleted             types.Bool                     `tfsdk:"deleted"`
-	Description         types.String                   `tfsdk:"description"`
-	Icon                types.String                   `tfsdk:"icon"`
-	LabelIds            []types.Int64                  `tfsdk:"label_ids"`
-	Labels              []tfTypes.LabelDbDto           `tfsdk:"labels"`
-	LastUpdated         types.String                   `tfsdk:"last_updated"`
-	Launch              *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
-	Name                types.String                   `tfsdk:"name"`
-	OptimizationID      types.String                   `tfsdk:"optimization_id"`
-	OptimizationStatus  types.String                   `tfsdk:"optimization_status"`
-	OptimizationTargets types.String                   `tfsdk:"optimization_targets"`
-	OrgID               types.Int64                    `tfsdk:"org_id"`
-	OrgName             types.String                   `tfsdk:"org_name"`
-	PipelineID          types.Int64                    `tfsdk:"pipeline_id"`
-	Repository          types.String                   `tfsdk:"repository"`
-	UserFirstName       types.String                   `tfsdk:"user_first_name"`
-	UserID              types.Int64                    `tfsdk:"user_id"`
-	UserLastName        types.String                   `tfsdk:"user_last_name"`
-	UserName            types.String                   `tfsdk:"user_name"`
-	Visibility          types.String                   `tfsdk:"visibility"`
-	WorkspaceID         types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceName       types.String                   `tfsdk:"workspace_name"`
+	ComputeEnv          *tfTypes.ComputeEnvDbDto      `tfsdk:"compute_env"`
+	Deleted             types.Bool                    `tfsdk:"deleted"`
+	Description         types.String                  `tfsdk:"description"`
+	Icon                types.String                  `tfsdk:"icon"`
+	LabelIds            []types.Int64                 `tfsdk:"label_ids"`
+	Labels              []tfTypes.LabelDbDto          `tfsdk:"labels"`
+	LastUpdated         types.String                  `tfsdk:"last_updated"`
+	Launch              tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
+	Name                types.String                  `tfsdk:"name"`
+	OptimizationID      types.String                  `tfsdk:"optimization_id"`
+	OptimizationStatus  types.String                  `tfsdk:"optimization_status"`
+	OptimizationTargets types.String                  `tfsdk:"optimization_targets"`
+	OrgID               types.Int64                   `tfsdk:"org_id"`
+	OrgName             types.String                  `tfsdk:"org_name"`
+	PipelineID          types.Int64                   `tfsdk:"pipeline_id"`
+	Repository          types.String                  `tfsdk:"repository"`
+	UserFirstName       types.String                  `tfsdk:"user_first_name"`
+	UserID              types.Int64                   `tfsdk:"user_id"`
+	UserLastName        types.String                  `tfsdk:"user_last_name"`
+	UserName            types.String                  `tfsdk:"user_name"`
+	Visibility          types.String                  `tfsdk:"visibility"`
+	WorkspaceID         types.Int64                   `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceName       types.String                  `tfsdk:"workspace_name"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -140,7 +140,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"launch": schema.SingleNestedAttribute{
-				Optional: true,
+				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"compute_env_id": schema.StringAttribute{
 						Optional: true,
@@ -187,7 +187,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"post_run_script": schema.StringAttribute{
 						Optional:    true,

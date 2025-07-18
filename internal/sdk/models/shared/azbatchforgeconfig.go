@@ -4,7 +4,7 @@ package shared
 
 type AzBatchForgeConfig struct {
 	VMType            *string  `json:"vmType,omitempty"`
-	VMCount           *int     `json:"vmCount,omitempty"`
+	VMCount           int      `json:"vmCount"`
 	AutoScale         *bool    `json:"autoScale,omitempty"`
 	DisposeOnDeletion *bool    `json:"disposeOnDeletion,omitempty"`
 	ContainerRegIds   []string `json:"containerRegIds,omitempty"`
@@ -17,9 +17,9 @@ func (o *AzBatchForgeConfig) GetVMType() *string {
 	return o.VMType
 }
 
-func (o *AzBatchForgeConfig) GetVMCount() *int {
+func (o *AzBatchForgeConfig) GetVMCount() int {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.VMCount
 }

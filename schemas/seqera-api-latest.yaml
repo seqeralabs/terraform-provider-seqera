@@ -1048,8 +1048,8 @@ paths:
       x-speakeasy-entity-operation: Credential#delete
   /data-links:
     get:
-      summary: List data-links 
-      description: Retrieves all available data-links in a user context. Append `?workspaceId={your-workspace-id}` to retrieve data-links in a workspace context. 
+      summary: List data-links
+      description: Retrieves all available data-links in a user context. Append `?workspaceId={your-workspace-id}` to retrieve data-links in a workspace context.
       tags:
       - data-links
       operationId: ListDataLinks
@@ -1119,7 +1119,7 @@ paths:
       security:
       - BearerAuth: []
     post:
-      summary: Create data-link 
+      summary: Create data-link
       description: Creates a new data-link in a user context. Append `?workspaceId=` to create the data-link in a workspace context.
       tags:
       - data-links
@@ -1289,7 +1289,7 @@ paths:
       security:
       - BearerAuth: []
     delete:
-      summary: Delete data-link 
+      summary: Delete data-link
       description: Deletes the data-link associated with the given `dataLinkId`.
       tags:
       - data-links
@@ -1332,7 +1332,7 @@ paths:
   /data-links/{dataLinkId}/browse:
     get:
       summary: Explore data-link
-      description: Retrieves the content of the data-link associated with the given `dataLinkId`. 
+      description: Retrieves the content of the data-link associated with the given `dataLinkId`.
       tags:
       - data-links
       operationId: ExploreDataLink
@@ -1454,7 +1454,7 @@ paths:
   /data-links/{dataLinkId}/browse/{path}:
     get:
       summary: Explore data-link path
-      description: Retrieves the content of the data-link associated with the given `dataLinkId`, at the given `path`. 
+      description: Retrieves the content of the data-link associated with the given `dataLinkId`, at the given `path`.
       tags:
       - data-links
       operationId: ExploreDataLink_1
@@ -1527,7 +1527,7 @@ paths:
       tags:
       - data-links
       summary: Delete data-link content
-      description: Deletes the content of the data-link associated with the given `dataLinkId`. The data-link itself is preserved. 
+      description: Deletes the content of the data-link associated with the given `dataLinkId`. The data-link itself is preserved.
       operationId: DeleteDataLinkItem
       parameters:
       - name: dataLinkId
@@ -1698,8 +1698,8 @@ paths:
       tags:
       - data-links
       summary: Generate download script
-      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`.\ 
-        \ Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link." 
+      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`.\
+        \ Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
       operationId: GenerateDownloadScript
       parameters:
       - name: dataLinkId
@@ -4592,7 +4592,7 @@ paths:
         description: "Additional attribute values to include in the response (`labels`,\
           \ `optimized` status, `computeEnv`). Returns an empty value (`labels: null`,\
           \ etc.) if omitted."
-          
+
         explode: false
         schema:
           type: array
@@ -4922,7 +4922,7 @@ paths:
         description: "Additional attribute values to include in the response (`labels`,\
           \ `optimized` status, `computeEnv`). Returns an empty value (`labels: null`,\
           \ etc.) if omitted."
-          
+
         explode: false
         schema:
           type: array
@@ -5131,7 +5131,7 @@ paths:
         description: "Additional attribute values to include in the response: `schema` returns\
           \ the pipeline schema, `params` returns the pipeline config. Returns all\
           \ if `attributes` is omitted."
-          
+
         explode: false
         schema:
           type: array
@@ -6442,7 +6442,7 @@ paths:
         in: query
         description: "Additional attribute values to include in the response (`labels`,\
           \ `optimized` status). Returns an empty value (`labels: null`) if omitted."
-          
+
         explode: false
         schema:
           type: array
@@ -6744,7 +6744,7 @@ paths:
         in: query
         description: "Comma-separated list of attributes to retrieve. Returns an empty
           value for each attribute not specified."
-          
+
         explode: false
         schema:
           type: array
@@ -8079,7 +8079,7 @@ components:
           type: string
         preRunScript:
           type: string
-          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."      
+          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
@@ -8286,7 +8286,7 @@ components:
           type: string
         preRunScript:
           type: string
-          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."       
+          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
@@ -8437,11 +8437,11 @@ components:
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-                  
+
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         environment:
           type: array
           items:
@@ -10062,11 +10062,11 @@ components:
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-                  
+
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         headJobCpus:
           type: integer
           format: int32
@@ -10140,11 +10140,11 @@ components:
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         headJobCpus:
           type: integer
           format: int32
@@ -10285,11 +10285,11 @@ components:
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         server:
           type: string
         sslCert:
@@ -10394,11 +10394,11 @@ components:
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         mainScript:
           maxLength: 200
           type: string
@@ -12620,11 +12620,11 @@ components:
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         mainScript:
           type: string
         entryName:
@@ -12696,11 +12696,11 @@ components:
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-          
+
         mainScript:
           type: string
         entryName:

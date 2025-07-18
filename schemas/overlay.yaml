@@ -1005,3 +1005,113 @@ actions:
   - target: $.components.schemas.WorkspaceDbDto.properties.visibility
     update:
       description: Visibility level of the workspace (public, private, etc.)
+  - target: $.components.schemas.CreateComputeEnvRequest
+    update:
+      required:
+          - name
+          - credentialsId
+          - platform
+          - config
+
+    # Compute config platform-specific schemas
+  - target: $.components.schemas.AwsBatchConfig
+    update:
+      required:
+          - region
+          - forge
+
+  - target: $.components.schemas.ForgeConfig
+    update:
+      required:
+        - type
+        - minCpus
+        - MaxCpus
+
+  - target: $.components.schemas.AwsCloudConfig
+    update:
+      required:
+        - region
+
+  - target: $.components.schemas.AzBatchConfig
+    update:
+      required:
+        - region
+        - forge
+
+  - target: $.components.schemas.AzBatchForgeConfig
+    update:
+      required:
+        - vmCount
+
+  - target: $.components.schemas.GoogleBatchComputeConfig
+    update:
+      required:
+        - location
+
+  - target: $.components.schemas.K8sComputeConfig
+    update:
+      required:
+        - server
+        - namespace
+        - sslCert
+        - headServiceAccount
+        - storageClaimName
+
+  - target: $.components.schemas.EksComputeConfig
+    update:
+      required:
+        - region
+        - clusterName
+
+  - target: $.components.schemas.GkeComputeConfig
+    update:
+      required:
+        - region
+        - clusterName
+
+  - target: $.components.schemas.UnivaComputeConfig
+    update:
+      required:
+        - workDir
+
+  - target: $.components.schemas.SlurmComputeConfig
+    update:
+      required:
+        - workDir
+
+  - target: $.components.schemas.LsfComputeConfig
+    update:
+      required:
+        - workDir
+
+  - target: $.components.schemas.AltairPbsComputeConfig
+    update:
+      required:
+        - workDir
+
+  - target: $.components.schemas.MoabComputeConfig
+    update:
+      required:
+        - workDir
+
+  - target: $.components.schemas.LocalComputeConfig
+    update:
+      required:
+        - workDir
+
+  - target: $.components.schemas.SeqeraComputeConfig
+    update:
+      required:
+        - region
+
+    # Pipeline requests
+  - target: $.components.schemas.CreatePipelineRequest
+    update:
+      required:
+        - name
+        - launch
+
+  - target: $.components.schemas.WorkflowLaunchRequest
+    update:
+      required:
+        - pipeline

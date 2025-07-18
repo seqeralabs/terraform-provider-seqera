@@ -45,6 +45,11 @@ jobs:
         }
         EOF
 
+    - name: Terraform Init
+      working-directory: ./examples/hello-world-examples
+      run: terraform init
+      continue-on-error: true # We continue on a failure since tf init will fail since its a local provider.\
+
     - name: Terraform Format Check
       working-directory: ./examples/hello-world-examples
       run: terraform fmt -check

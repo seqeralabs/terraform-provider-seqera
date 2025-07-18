@@ -143,7 +143,7 @@ Optional:
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--altair_platform--environment"></a>
 ### Nested Schema for `compute_env.config.altair_platform.environment`
@@ -170,7 +170,7 @@ Optional:
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
 - `execution_role` (String) Requires replacement if changed.
-- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
+- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -183,7 +183,7 @@ Optional:
 - `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Requires replacement if changed.
+- `region` (String) Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
@@ -230,10 +230,10 @@ Optional:
 - `image_id` (String) Requires replacement if changed.
 - `instance_types` (List of String) Requires replacement if changed.
 - `max_cpus` (Number) Requires replacement if changed.
-- `min_cpus` (Number) Requires replacement if changed.
+- `min_cpus` (Number) Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
 - `subnets` (List of String) Requires replacement if changed.
-- `type` (String) must be one of ["SPOT", "EC2"]; Requires replacement if changed.
+- `type` (String) Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
 - `vpc_id` (String) Requires replacement if changed.
 
 
@@ -258,7 +258,7 @@ Optional:
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Requires replacement if changed.
+- `region` (String) Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
 - `subnet_id` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
@@ -286,14 +286,14 @@ Optional:
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
-- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
+- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
 - `managed_identity_client_id` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Requires replacement if changed.
+- `region` (String) Not Null; Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
@@ -317,7 +317,7 @@ Optional:
 - `auto_scale` (Boolean) Requires replacement if changed.
 - `container_reg_ids` (List of String) Requires replacement if changed.
 - `dispose_on_deletion` (Boolean) Requires replacement if changed.
-- `vm_count` (Number) Requires replacement if changed.
+- `vm_count` (Number) Not Null; Requires replacement if changed.
 - `vm_type` (String) Requires replacement if changed.
 
 
@@ -327,7 +327,7 @@ Optional:
 
 Optional:
 
-- `cluster_name` (String) The AWS EKS cluster name. Requires replacement if changed.
+- `cluster_name` (String) The AWS EKS cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
 - `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
@@ -335,17 +335,17 @@ Optional:
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
-- `head_service_account` (String) Requires replacement if changed.
-- `namespace` (String) Requires replacement if changed.
+- `head_service_account` (String) Not Null; Requires replacement if changed.
+- `namespace` (String) Not Null; Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) AWS region. Requires replacement if changed.
-- `server` (String) Requires replacement if changed.
+- `region` (String) AWS region. Not Null; Requires replacement if changed.
+- `server` (String) Not Null; Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
-- `ssl_cert` (String) Requires replacement if changed.
-- `storage_claim_name` (String) Requires replacement if changed.
+- `ssl_cert` (String) Not Null; Requires replacement if changed.
+- `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
@@ -367,7 +367,7 @@ Optional:
 
 Optional:
 
-- `cluster_name` (String) The GKE cluster name. Requires replacement if changed.
+- `cluster_name` (String) The GKE cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
 - `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
@@ -375,17 +375,17 @@ Optional:
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
-- `head_service_account` (String) Requires replacement if changed.
-- `namespace` (String) Requires replacement if changed.
+- `head_service_account` (String) Not Null; Requires replacement if changed.
+- `namespace` (String) Not Null; Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) The GKE cluster region - or - zone. Requires replacement if changed.
-- `server` (String) Requires replacement if changed.
+- `region` (String) The GKE cluster region - or - zone. Not Null; Requires replacement if changed.
+- `server` (String) Not Null; Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
-- `ssl_cert` (String) Requires replacement if changed.
-- `storage_claim_name` (String) Requires replacement if changed.
+- `ssl_cert` (String) Not Null; Requires replacement if changed.
+- `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
@@ -500,16 +500,16 @@ Optional:
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
-- `head_service_account` (String) Requires replacement if changed.
-- `namespace` (String) Requires replacement if changed.
+- `head_service_account` (String) Not Null; Requires replacement if changed.
+- `namespace` (String) Not Null; Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `server` (String) Requires replacement if changed.
+- `server` (String) Not Null; Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
-- `ssl_cert` (String) Requires replacement if changed.
-- `storage_claim_name` (String) Requires replacement if changed.
+- `ssl_cert` (String) Not Null; Requires replacement if changed.
+- `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
@@ -547,7 +547,7 @@ Optional:
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `unit_for_limits` (String) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--lsf_platform--environment"></a>
 ### Nested Schema for `compute_env.config.lsf_platform.environment`
@@ -580,7 +580,7 @@ Optional:
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--moab_platform--environment"></a>
 ### Nested Schema for `compute_env.config.moab_platform.environment`
@@ -607,7 +607,7 @@ Optional:
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
 - `execution_role` (String) Requires replacement if changed.
-- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
+- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -620,7 +620,7 @@ Optional:
 - `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Requires replacement if changed.
+- `region` (String) Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
@@ -667,10 +667,10 @@ Optional:
 - `image_id` (String) Requires replacement if changed.
 - `instance_types` (List of String) Requires replacement if changed.
 - `max_cpus` (Number) Requires replacement if changed.
-- `min_cpus` (Number) Requires replacement if changed.
+- `min_cpus` (Number) Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
 - `subnets` (List of String) Requires replacement if changed.
-- `type` (String) must be one of ["SPOT", "EC2"]; Requires replacement if changed.
+- `type` (String) Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
 - `vpc_id` (String) Requires replacement if changed.
 
 
@@ -694,7 +694,7 @@ Optional:
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--slurm_platform--environment"></a>
 ### Nested Schema for `compute_env.config.slurm_platform.environment`
@@ -727,7 +727,7 @@ Optional:
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `propagate_head_job_options` (Boolean) Requires replacement if changed.
 - `user_name` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--uge_platform--environment"></a>
 ### Nested Schema for `compute_env.config.uge_platform.environment`

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 2fabf428b7e5164c1cd825b58580a5cb
+  docChecksum: 736dea322897f93bca21ad08ddc2e432
   docVersion: 1.45.0
   speakeasyVersion: 1.582.0
   generationVersion: 2.657.1
@@ -1247,7 +1247,7 @@ examples:
         query:
           workspaceId: 631977
       requestBody:
-        application/json: {"name": "<value>"}
+        application/json: {"name": "terraform-dataset"}
       responses:
         "200":
           application/json: {}
@@ -1346,7 +1346,7 @@ examples:
         path:
           workspaceId: 751126
       requestBody:
-        application/json: {"name": "<value>"}
+        application/json: {"name": "terraform-dataset"}
       responses:
         "200":
           application/json: {}
@@ -1881,7 +1881,7 @@ examples:
   CreatePipelineSecret:
     speakeasy-default-create-pipeline-secret:
       requestBody:
-        application/json: {"name": "<value>", "value": "<value>"}
+        application/json: {"name": "test_terraform_secret", "value": "SECRET_VALUE"}
       responses:
         "200":
           application/json: {}
@@ -1930,7 +1930,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {}
+        application/json: {"name": "terraform-hello-world", "launch": {"pipeline": "https://github.com/nextflow-io/hello"}}
       responses:
         "200":
           application/json: {}

@@ -11,7 +11,7 @@ import (
 
 type MoabConfiguration struct {
 	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
+	WorkDir string `json:"workDir"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
@@ -33,9 +33,9 @@ type MoabConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
-func (o *MoabConfiguration) GetWorkDir() *string {
+func (o *MoabConfiguration) GetWorkDir() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.WorkDir
 }
@@ -140,7 +140,7 @@ func (o *MoabConfiguration) GetEnvironment() []ConfigEnvVariable {
 
 type AltairPBSConfiguration struct {
 	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
+	WorkDir string `json:"workDir"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
@@ -162,9 +162,9 @@ type AltairPBSConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
-func (o *AltairPBSConfiguration) GetWorkDir() *string {
+func (o *AltairPBSConfiguration) GetWorkDir() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.WorkDir
 }
@@ -269,7 +269,7 @@ func (o *AltairPBSConfiguration) GetEnvironment() []ConfigEnvVariable {
 
 type UnivaGridEngineConfiguration struct {
 	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
+	WorkDir string `json:"workDir"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
@@ -291,9 +291,9 @@ type UnivaGridEngineConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
-func (o *UnivaGridEngineConfiguration) GetWorkDir() *string {
+func (o *UnivaGridEngineConfiguration) GetWorkDir() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.WorkDir
 }
@@ -405,12 +405,12 @@ type GoogleGKEClusterConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript         *string           `json:"postRunScript,omitempty"`
-	Server                *string           `json:"server,omitempty"`
-	SslCert               *string           `json:"sslCert,omitempty"`
-	Namespace             *string           `json:"namespace,omitempty"`
+	Server                string            `json:"server"`
+	SslCert               string            `json:"sslCert"`
+	Namespace             string            `json:"namespace"`
 	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
-	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
+	HeadServiceAccount    string            `json:"headServiceAccount"`
+	StorageClaimName      string            `json:"storageClaimName"`
 	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
 	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
@@ -422,11 +422,11 @@ type GoogleGKEClusterConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// The GKE cluster region - or - zone
-	Region *string `json:"region,omitempty"`
+	Region string `json:"region"`
 	// The GKE cluster name
-	ClusterName    *string `json:"clusterName,omitempty"`
-	Fusion2Enabled *bool   `json:"fusion2Enabled,omitempty"`
-	WaveEnabled    *bool   `json:"waveEnabled,omitempty"`
+	ClusterName    string `json:"clusterName"`
+	Fusion2Enabled *bool  `json:"fusion2Enabled,omitempty"`
+	WaveEnabled    *bool  `json:"waveEnabled,omitempty"`
 }
 
 func (o *GoogleGKEClusterConfiguration) GetDiscriminator() *string {
@@ -457,23 +457,23 @@ func (o *GoogleGKEClusterConfiguration) GetPostRunScript() *string {
 	return o.PostRunScript
 }
 
-func (o *GoogleGKEClusterConfiguration) GetServer() *string {
+func (o *GoogleGKEClusterConfiguration) GetServer() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Server
 }
 
-func (o *GoogleGKEClusterConfiguration) GetSslCert() *string {
+func (o *GoogleGKEClusterConfiguration) GetSslCert() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.SslCert
 }
 
-func (o *GoogleGKEClusterConfiguration) GetNamespace() *string {
+func (o *GoogleGKEClusterConfiguration) GetNamespace() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Namespace
 }
@@ -485,16 +485,16 @@ func (o *GoogleGKEClusterConfiguration) GetComputeServiceAccount() *string {
 	return o.ComputeServiceAccount
 }
 
-func (o *GoogleGKEClusterConfiguration) GetHeadServiceAccount() *string {
+func (o *GoogleGKEClusterConfiguration) GetHeadServiceAccount() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.HeadServiceAccount
 }
 
-func (o *GoogleGKEClusterConfiguration) GetStorageClaimName() *string {
+func (o *GoogleGKEClusterConfiguration) GetStorageClaimName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.StorageClaimName
 }
@@ -555,16 +555,16 @@ func (o *GoogleGKEClusterConfiguration) GetNextflowConfig() *string {
 	return o.NextflowConfig
 }
 
-func (o *GoogleGKEClusterConfiguration) GetRegion() *string {
+func (o *GoogleGKEClusterConfiguration) GetRegion() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Region
 }
 
-func (o *GoogleGKEClusterConfiguration) GetClusterName() *string {
+func (o *GoogleGKEClusterConfiguration) GetClusterName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.ClusterName
 }
@@ -592,12 +592,12 @@ type AmazonEKSClusterConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript         *string           `json:"postRunScript,omitempty"`
-	Server                *string           `json:"server,omitempty"`
-	SslCert               *string           `json:"sslCert,omitempty"`
-	Namespace             *string           `json:"namespace,omitempty"`
+	Server                string            `json:"server"`
+	SslCert               string            `json:"sslCert"`
+	Namespace             string            `json:"namespace"`
 	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
-	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
+	HeadServiceAccount    string            `json:"headServiceAccount"`
+	StorageClaimName      string            `json:"storageClaimName"`
 	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
 	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
@@ -609,11 +609,11 @@ type AmazonEKSClusterConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// AWS region
-	Region *string `json:"region,omitempty"`
+	Region string `json:"region"`
 	// The AWS EKS cluster name
-	ClusterName    *string `json:"clusterName,omitempty"`
-	WaveEnabled    *bool   `json:"waveEnabled,omitempty"`
-	Fusion2Enabled *bool   `json:"fusion2Enabled,omitempty"`
+	ClusterName    string `json:"clusterName"`
+	WaveEnabled    *bool  `json:"waveEnabled,omitempty"`
+	Fusion2Enabled *bool  `json:"fusion2Enabled,omitempty"`
 }
 
 func (o *AmazonEKSClusterConfiguration) GetDiscriminator() *string {
@@ -644,23 +644,23 @@ func (o *AmazonEKSClusterConfiguration) GetPostRunScript() *string {
 	return o.PostRunScript
 }
 
-func (o *AmazonEKSClusterConfiguration) GetServer() *string {
+func (o *AmazonEKSClusterConfiguration) GetServer() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Server
 }
 
-func (o *AmazonEKSClusterConfiguration) GetSslCert() *string {
+func (o *AmazonEKSClusterConfiguration) GetSslCert() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.SslCert
 }
 
-func (o *AmazonEKSClusterConfiguration) GetNamespace() *string {
+func (o *AmazonEKSClusterConfiguration) GetNamespace() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Namespace
 }
@@ -672,16 +672,16 @@ func (o *AmazonEKSClusterConfiguration) GetComputeServiceAccount() *string {
 	return o.ComputeServiceAccount
 }
 
-func (o *AmazonEKSClusterConfiguration) GetHeadServiceAccount() *string {
+func (o *AmazonEKSClusterConfiguration) GetHeadServiceAccount() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.HeadServiceAccount
 }
 
-func (o *AmazonEKSClusterConfiguration) GetStorageClaimName() *string {
+func (o *AmazonEKSClusterConfiguration) GetStorageClaimName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.StorageClaimName
 }
@@ -742,16 +742,16 @@ func (o *AmazonEKSClusterConfiguration) GetNextflowConfig() *string {
 	return o.NextflowConfig
 }
 
-func (o *AmazonEKSClusterConfiguration) GetRegion() *string {
+func (o *AmazonEKSClusterConfiguration) GetRegion() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Region
 }
 
-func (o *AmazonEKSClusterConfiguration) GetClusterName() *string {
+func (o *AmazonEKSClusterConfiguration) GetClusterName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.ClusterName
 }
@@ -779,12 +779,12 @@ type KubernetesComputeConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript         *string           `json:"postRunScript,omitempty"`
-	Server                *string           `json:"server,omitempty"`
-	SslCert               *string           `json:"sslCert,omitempty"`
-	Namespace             *string           `json:"namespace,omitempty"`
+	Server                string            `json:"server"`
+	SslCert               string            `json:"sslCert"`
+	Namespace             string            `json:"namespace"`
 	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
-	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
+	HeadServiceAccount    string            `json:"headServiceAccount"`
+	StorageClaimName      string            `json:"storageClaimName"`
 	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
 	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
@@ -825,23 +825,23 @@ func (o *KubernetesComputeConfiguration) GetPostRunScript() *string {
 	return o.PostRunScript
 }
 
-func (o *KubernetesComputeConfiguration) GetServer() *string {
+func (o *KubernetesComputeConfiguration) GetServer() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Server
 }
 
-func (o *KubernetesComputeConfiguration) GetSslCert() *string {
+func (o *KubernetesComputeConfiguration) GetSslCert() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.SslCert
 }
 
-func (o *KubernetesComputeConfiguration) GetNamespace() *string {
+func (o *KubernetesComputeConfiguration) GetNamespace() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Namespace
 }
@@ -853,16 +853,16 @@ func (o *KubernetesComputeConfiguration) GetComputeServiceAccount() *string {
 	return o.ComputeServiceAccount
 }
 
-func (o *KubernetesComputeConfiguration) GetHeadServiceAccount() *string {
+func (o *KubernetesComputeConfiguration) GetHeadServiceAccount() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.HeadServiceAccount
 }
 
-func (o *KubernetesComputeConfiguration) GetStorageClaimName() *string {
+func (o *KubernetesComputeConfiguration) GetStorageClaimName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.StorageClaimName
 }
@@ -925,7 +925,7 @@ func (o *KubernetesComputeConfiguration) GetNextflowConfig() *string {
 
 type SlurmConfiguration struct {
 	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
+	WorkDir string `json:"workDir"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
@@ -947,9 +947,9 @@ type SlurmConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
-func (o *SlurmConfiguration) GetWorkDir() *string {
+func (o *SlurmConfiguration) GetWorkDir() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.WorkDir
 }
@@ -1054,7 +1054,7 @@ func (o *SlurmConfiguration) GetEnvironment() []ConfigEnvVariable {
 
 type IBMLSFConfiguration struct {
 	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
+	WorkDir string `json:"workDir"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
@@ -1079,9 +1079,9 @@ type IBMLSFConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
-func (o *IBMLSFConfiguration) GetWorkDir() *string {
+func (o *IBMLSFConfiguration) GetWorkDir() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.WorkDir
 }
@@ -1214,14 +1214,14 @@ type AzureBatchConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
-	Region        *string `json:"region,omitempty"`
+	Region        string  `json:"region"`
 	HeadPool      *string `json:"headPool,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AutoPoolMode            *bool               `json:"autoPoolMode,omitempty"`
-	Forge                   *AzBatchForgeConfig `json:"forge,omitempty"`
-	TokenDuration           *string             `json:"tokenDuration,omitempty"`
-	DeleteJobsOnCompletion  *JobCleanupPolicy   `json:"deleteJobsOnCompletion,omitempty"`
-	DeletePoolsOnCompletion *bool               `json:"deletePoolsOnCompletion,omitempty"`
+	AutoPoolMode            *bool              `json:"autoPoolMode,omitempty"`
+	Forge                   AzBatchForgeConfig `json:"forge"`
+	TokenDuration           *string            `json:"tokenDuration,omitempty"`
+	DeleteJobsOnCompletion  *JobCleanupPolicy  `json:"deleteJobsOnCompletion,omitempty"`
+	DeletePoolsOnCompletion *bool              `json:"deletePoolsOnCompletion,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	WaveEnabled    *bool               `json:"waveEnabled,omitempty"`
@@ -1259,9 +1259,9 @@ func (o *AzureBatchConfiguration) GetPostRunScript() *string {
 	return o.PostRunScript
 }
 
-func (o *AzureBatchConfiguration) GetRegion() *string {
+func (o *AzureBatchConfiguration) GetRegion() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Region
 }
@@ -1280,9 +1280,9 @@ func (o *AzureBatchConfiguration) GetAutoPoolMode() *bool {
 	return o.AutoPoolMode
 }
 
-func (o *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
+func (o *AzureBatchConfiguration) GetForge() AzBatchForgeConfig {
 	if o == nil {
-		return nil
+		return AzBatchForgeConfig{}
 	}
 	return o.Forge
 }
@@ -1777,7 +1777,7 @@ type SeqeraComputeConfiguration struct {
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator      *string `json:"discriminator,omitempty"`
-	Region             *string `json:"region,omitempty"`
+	Region             string  `json:"region"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
@@ -1803,7 +1803,7 @@ type SeqeraComputeConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           *ForgeConfig     `json:"forge,omitempty"`
+	Forge           ForgeConfig      `json:"forge"`
 	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
@@ -1835,9 +1835,9 @@ func (o *SeqeraComputeConfiguration) GetDiscriminator() *string {
 	return o.Discriminator
 }
 
-func (o *SeqeraComputeConfiguration) GetRegion() *string {
+func (o *SeqeraComputeConfiguration) GetRegion() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Region
 }
@@ -1982,9 +1982,9 @@ func (o *SeqeraComputeConfiguration) GetFusionSnapshots() *bool {
 	return o.FusionSnapshots
 }
 
-func (o *SeqeraComputeConfiguration) GetForge() *ForgeConfig {
+func (o *SeqeraComputeConfiguration) GetForge() ForgeConfig {
 	if o == nil {
-		return nil
+		return ForgeConfig{}
 	}
 	return o.Forge
 }
@@ -2000,7 +2000,7 @@ type AWSCloudConfiguration struct {
 	// Read-only property identifying the compute platform type
 	Discriminator *string  `json:"discriminator,omitempty"`
 	AllowBuckets  []string `json:"allowBuckets,omitempty"`
-	Region        *string  `json:"region,omitempty"`
+	Region        string   `json:"region"`
 	InstanceType  *string  `json:"instanceType,omitempty"`
 	ImageID       *string  `json:"imageId,omitempty"`
 	// Working directory path for workflow execution
@@ -2040,9 +2040,9 @@ func (o *AWSCloudConfiguration) GetAllowBuckets() []string {
 	return o.AllowBuckets
 }
 
-func (o *AWSCloudConfiguration) GetRegion() *string {
+func (o *AWSCloudConfiguration) GetRegion() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Region
 }
@@ -2181,7 +2181,7 @@ type AWSBatchConfiguration struct {
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
 	Discriminator      *string `json:"discriminator,omitempty"`
-	Region             *string `json:"region,omitempty"`
+	Region             string  `json:"region"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
@@ -2207,7 +2207,7 @@ type AWSBatchConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           *ForgeConfig     `json:"forge,omitempty"`
+	Forge           ForgeConfig      `json:"forge"`
 	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
@@ -2239,9 +2239,9 @@ func (o *AWSBatchConfiguration) GetDiscriminator() *string {
 	return o.Discriminator
 }
 
-func (o *AWSBatchConfiguration) GetRegion() *string {
+func (o *AWSBatchConfiguration) GetRegion() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Region
 }
@@ -2386,9 +2386,9 @@ func (o *AWSBatchConfiguration) GetFusionSnapshots() *bool {
 	return o.FusionSnapshots
 }
 
-func (o *AWSBatchConfiguration) GetForge() *ForgeConfig {
+func (o *AWSBatchConfiguration) GetForge() ForgeConfig {
 	if o == nil {
-		return nil
+		return ForgeConfig{}
 	}
 	return o.Forge
 }

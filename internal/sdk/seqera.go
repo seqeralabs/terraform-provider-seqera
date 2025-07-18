@@ -19,7 +19,6 @@ import (
 // ServerList contains the list of servers available to the SDK
 var ServerList = []string{
 	"https://api.cloud.seqera.io",
-	"https://api.cloud.seqera.io",
 }
 
 // HTTPClient provides an interface for supplying the SDK with a custom HTTP client

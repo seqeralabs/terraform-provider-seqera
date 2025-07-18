@@ -402,12 +402,9 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		runName = nil
 	}
-	pipeline := new(string)
-	if !r.Pipeline.IsUnknown() && !r.Pipeline.IsNull() {
-		*pipeline = r.Pipeline.ValueString()
-	} else {
-		pipeline = nil
-	}
+	var pipeline string
+	pipeline = r.Pipeline.ValueString()
+
 	workDir := new(string)
 	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
 		*workDir = r.WorkDir.ValueString()

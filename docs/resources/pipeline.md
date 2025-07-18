@@ -66,6 +66,7 @@ resource "seqera_pipeline" "my_pipeline" {
 
 ### Required
 
+- `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `name` (String)
 
 ### Optional
@@ -73,7 +74,6 @@ resource "seqera_pipeline" "my_pipeline" {
 - `description` (String)
 - `icon` (String)
 - `label_ids` (List of Number)
-- `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
@@ -99,6 +99,10 @@ resource "seqera_pipeline" "my_pipeline" {
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`
 
+Required:
+
+- `pipeline` (String)
+
 Optional:
 
 - `compute_env_id` (String)
@@ -114,7 +118,6 @@ Optional:
 - `optimization_id` (String)
 - `optimization_targets` (String)
 - `params_text` (String)
-- `pipeline` (String)
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pull_latest` (Boolean)

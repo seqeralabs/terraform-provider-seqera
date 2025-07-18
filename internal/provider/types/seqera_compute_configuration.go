@@ -15,7 +15,7 @@ type SeqeraComputeConfiguration struct {
 	DragenQueue         types.String        `tfsdk:"dragen_queue"`
 	Environment         []ConfigEnvVariable `tfsdk:"environment"`
 	ExecutionRole       types.String        `tfsdk:"execution_role"`
-	Forge               *ForgeConfig        `tfsdk:"forge"`
+	Forge               ForgeConfig         `tfsdk:"forge"`
 	Fusion2Enabled      types.Bool          `tfsdk:"fusion2_enabled"`
 	FusionSnapshots     types.Bool          `tfsdk:"fusion_snapshots"`
 	HeadJobCpus         types.Int32         `tfsdk:"head_job_cpus"`

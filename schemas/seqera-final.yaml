@@ -1665,7 +1665,7 @@ paths:
       tags:
         - data-links
       summary: Generate download script
-      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`.   Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
+      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
       operationId: GenerateDownloadScript
       parameters:
         - name: dataLinkId
@@ -7919,6 +7919,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     Analytics:
       type: object
       properties:
@@ -8050,6 +8052,9 @@ components:
             type: object
             additionalProperties: true
           x-speakeasy-terraform-ignore: true
+      required:
+        - region
+        - forge
     AwsBatchPlatformMetainfo:
       type: object
       properties:
@@ -8162,6 +8167,8 @@ components:
             type: object
             additionalProperties: true
           x-speakeasy-terraform-ignore: true
+      required:
+        - region
     AwsCloudPlatformMetainfo:
       type: object
       properties:
@@ -8254,6 +8261,9 @@ components:
         managedIdentityClientId:
           type: string
           nullable: true
+      required:
+        - region
+        - forge
     AzBatchForgeConfig:
       type: object
       properties:
@@ -8270,6 +8280,8 @@ components:
           type: array
           items:
             type: string
+      required:
+        - vmCount
     AzBatchPlatformMetainfo:
       type: object
       properties:
@@ -8702,6 +8714,12 @@ components:
             type: integer
             format: int64
       x-speakeasy-entity: ComputeEnv
+      required:
+        - name
+        - credentialsId
+        - platform
+        - config
+        # Compute config platform-specific schemas
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -8789,6 +8807,9 @@ components:
           items:
             type: integer
             format: int64
+      required:
+        - name
+        - launch
     CreatePipelineResponse:
       type: object
       properties:
@@ -9802,6 +9823,9 @@ components:
               type: boolean
             fusion2Enabled:
               type: boolean
+      required:
+        - region
+        - clusterName
     EksPlatformMetaInfo:
       type: object
       properties:
@@ -9920,6 +9944,10 @@ components:
           type: boolean
         dragenInstanceType:
           type: string
+      required:
+        - type
+        - minCpus
+        - MaxCpus
     FsxFileSystem:
       type: object
       properties:
@@ -10034,6 +10062,9 @@ components:
               type: boolean
             waveEnabled:
               type: boolean
+      required:
+        - region
+        - clusterName
     GkePlatformMetaInfo:
       type: object
       properties:
@@ -10339,6 +10370,12 @@ components:
           format: int32
         nextflowConfig:
           type: string
+      required:
+        - server
+        - namespace
+        - sslCert
+        - headServiceAccount
+        - storageClaimName
     K8sPlatformMetaInfo:
       type: object
       properties:
@@ -10824,6 +10861,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     MemberDbDto:
       type: object
       properties:
@@ -10858,6 +10897,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     MultiRequestFileSchema:
       type: object
       properties:
@@ -11568,6 +11609,9 @@ components:
           description: property to select the compute config platform
       allOf:
         - $ref: "#/components/schemas/AwsBatchConfig"
+      required:
+        - region
+        # Pipeline requests
     SeqeraComputeSecurityKeys:
       type: object
       allOf:
@@ -11658,6 +11702,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     State:
       type: string
       enum:
@@ -12134,6 +12180,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     UpdateActionRequest:
       type: object
       properties:
@@ -12751,6 +12799,8 @@ components:
           type: string
           format: date-time
       x-speakeasy-entity: Workflows
+      required:
+        - pipeline
     WorkflowLaunchResponse:
       type: object
       properties:

@@ -2279,7 +2279,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 					},
 					"pipeline": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"post_run_script": schema.StringAttribute{
 						Optional:    true,
