@@ -83,10 +83,16 @@ jobs:
       if: github.event_name == 'pull_request'
       working-directory: ./examples/hello-world-examples
       run: |
-        echo "## Terraform Plan" > plan_output.md
-        echo "\`\`\`" >> plan_output.md
+        echo "## Terraform Plan:" > plan_output.md
+        echo "" >> plan_output.md
+        echo "<details>" >> plan_output.md
+        echo "<summary>Click to expand terraform plan</summary>" >> plan_output.md
+        echo "" >> plan_output.md
+        echo "\`\`\`hcl" >> plan_output.md
         terraform show -no-color plan.tfplan >> plan_output.md
         echo "\`\`\`" >> plan_output.md
+        echo "" >> plan_output.md
+        echo "</details>" >> plan_output.md
         echo "" >> plan_output.md
         echo "Plan generated at: $(date)" >> plan_output.md
 
