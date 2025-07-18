@@ -30,7 +30,7 @@ jobs:
     - name: Generate Provider Code (Dry Run)
       run: speakeasy run --skip-versioning
       env:
-        speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+        SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
 
     - name: Check for uncommitted changes
       run: |
