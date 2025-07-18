@@ -37,7 +37,7 @@ jobs:
       if: github.event_name == 'pull_request'
       run: |
         # Extract the summary line from lint output
-        SUMMARY=$(tail -1 lint_output.txt | grep -o '[0-9]\+ errors\?, [0-9]\+ warnings\?, [0-9]\+ hints' || echo "Summary not found")
+        SUMMARY=$(grep -o '[0-9]\+ errors\?, [0-9]\+ warnings\?, [0-9]\+ hints' lint_output.txt || echo "Summary not found")
 
         echo "## Speakeasy Lint Results: $SUMMARY" > lint_comment.md
         echo "" >> lint_comment.md
