@@ -3,8 +3,12 @@
 package shared
 
 type CreateAccessTokenResponse struct {
-	AccessKey *string      `json:"accessKey,omitempty"`
-	Token     *AccessToken `json:"token,omitempty"`
+	AccessKey *string `json:"accessKey,omitempty"`
+	// Represents an API access token for authentication.
+	// Contains token metadata, permissions, and expiration information
+	// for secure API access to platform resources.
+	//
+	Token *AccessToken `json:"token,omitempty"`
 }
 
 func (o *CreateAccessTokenResponse) GetAccessKey() *string {

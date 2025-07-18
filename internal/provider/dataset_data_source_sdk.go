@@ -12,26 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *DatasetDataSourceModel) ToOperationsDescribeDatasetV2Request(ctx context.Context) (*operations.DescribeDatasetV2Request, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	var datasetID string
-	datasetID = r.DatasetID.ValueString()
-
-	out := operations.DescribeDatasetV2Request{
-		WorkspaceID: workspaceID,
-		DatasetID:   datasetID,
-	}
-
-	return &out, diags
-}
-
 func (r *DatasetDataSourceModel) RefreshFromSharedDescribeDatasetResponse(ctx context.Context, resp *shared.DescribeDatasetResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -51,4 +31,24 @@ func (r *DatasetDataSourceModel) RefreshFromSharedDescribeDatasetResponse(ctx co
 	}
 
 	return diags
+}
+
+func (r *DatasetDataSourceModel) ToOperationsDescribeDatasetV2Request(ctx context.Context) (*operations.DescribeDatasetV2Request, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	var datasetID string
+	datasetID = r.DatasetID.ValueString()
+
+	out := operations.DescribeDatasetV2Request{
+		WorkspaceID: workspaceID,
+		DatasetID:   datasetID,
+	}
+
+	return &out, diags
 }

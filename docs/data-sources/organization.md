@@ -27,22 +27,24 @@ data "seqera_organization" "my_organization" {
 
 ### Read-Only
 
-- `organization` (Attributes) (see [below for nested schema](#nestedatt--organization))
+- `organization` (Attributes) Represents an organization in the Seqera Platform.
+Contains organizational metadata, settings, and member management
+information for multi-tenant environments. (see [below for nested schema](#nestedatt--organization))
 
 <a id="nestedatt--organization"></a>
 ### Nested Schema for `organization`
 
 Read-Only:
 
-- `description` (String)
-- `full_name` (String)
-- `location` (String)
-- `logo_id` (String)
+- `description` (String) Detailed description of the organization's purpose and activities
+- `full_name` (String) Complete formal name of the organization
+- `location` (String) Geographic location or address of the organization
+- `logo_id` (String) Identifier for the organization's logo image
 - `logo_url` (String)
 - `member_id` (Number)
 - `member_role` (String)
-- `name` (String)
-- `org_id` (Number)
-- `paying` (Boolean, Deprecated)
+- `name` (String) Short name or handle for the organization
+- `org_id` (Number) Unique numeric identifier for the organization
+- `paying` (Boolean, Deprecated) Deprecated flag indicating if organization has paid subscription
 - `type` (String)
-- `website` (String)
+- `website` (String) Official website URL for the organization

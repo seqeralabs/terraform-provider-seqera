@@ -43,6 +43,6 @@ resource "seqera_orgs" "my_orgs" {
 - `logo_url` (String)
 - `member_id` (Number)
 - `member_role` (String) must be one of ["owner", "member", "collaborator"]
-- `org_id` (Number) Organization numeric identifier
-- `paying` (Boolean, Deprecated)
+- `org_id` (Number) Unique numeric identifier for the organization
+- `paying` (Boolean, Deprecated) Deprecated flag indicating if organization has paid subscription
 - `type` (String) must be one of ["academic", "evaluating", "pro", "basic", "internal"]

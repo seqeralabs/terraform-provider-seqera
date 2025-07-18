@@ -12,7 +12,7 @@ type AzureBatchConfiguration struct {
 	DeletePoolsOnCompletion types.Bool          `tfsdk:"delete_pools_on_completion"`
 	Discriminator           types.String        `tfsdk:"discriminator"`
 	Environment             []ConfigEnvVariable `tfsdk:"environment"`
-	Forge                   *AzBatchForgeConfig `tfsdk:"forge"`
+	Forge                   AzBatchForgeConfig  `tfsdk:"forge"`
 	Fusion2Enabled          types.Bool          `tfsdk:"fusion2_enabled"`
 	HeadPool                types.String        `tfsdk:"head_pool"`
 	ManagedIdentityClientID types.String        `tfsdk:"managed_identity_client_id"`

@@ -101,11 +101,12 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"org_id": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Organization numeric identifier`,
+				Description: `Unique numeric identifier for the organization`,
 			},
 			"paying": schema.BoolAttribute{
 				Computed:           true,
 				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+				Description:        `Deprecated flag indicating if organization has paid subscription`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,

@@ -2,12 +2,20 @@
 
 package shared
 
+// TeamDbDto - Represents a team within an organization.
+// Contains team membership, permissions, and access controls
+// for collaborative workspace management.
 type TeamDbDto struct {
-	TeamID       *int64  `json:"teamId,omitempty"`
-	Name         *string `json:"name,omitempty"`
-	Description  *string `json:"description,omitempty"`
-	AvatarURL    *string `json:"avatarUrl,omitempty"`
-	MembersCount *int64  `json:"membersCount,omitempty"`
+	// Unique numeric identifier for the team
+	TeamID *int64 `json:"teamId,omitempty"`
+	// Display name for the team
+	Name *string `json:"name,omitempty"`
+	// Description of the team's purpose and responsibilities
+	Description *string `json:"description,omitempty"`
+	// URL to the team's avatar or profile image
+	AvatarURL *string `json:"avatarUrl,omitempty"`
+	// Total number of members in the team
+	MembersCount *int64 `json:"membersCount,omitempty"`
 }
 
 func (o *TeamDbDto) GetTeamID() *int64 {

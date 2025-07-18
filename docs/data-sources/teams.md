@@ -29,7 +29,7 @@ data "seqera_teams" "my_teams" {
 
 ### Read-Only
 
-- `avatar_url` (String)
-- `description` (String)
-- `members_count` (Number)
-- `name` (String)
+- `avatar_url` (String) URL to the team's avatar or profile image
+- `description` (String) Description of the team's purpose and responsibilities
+- `members_count` (Number) Total number of members in the team
+- `name` (String) Display name for the team

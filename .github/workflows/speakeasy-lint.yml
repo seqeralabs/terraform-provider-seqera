@@ -9,6 +9,10 @@ on:
       - 'schemas/**'
       - '.speakeasy/**'
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   speakeasy-lint:
     runs-on: ubuntu-latest
@@ -25,10 +29,40 @@ jobs:
       run: speakeasy --version
 
     - name: Lint OpenAPI Schema
-      run: speakeasy lint openapi -s schemas/seqera-final.yaml
+      run: |
+        speakeasy lint openapi -s schemas/seqera-final.yaml > lint_output.txt 2>&1 || true
+        cat lint_output.txt
+
+    - name: Generate Speakeasy Lint Comment
+      if: github.event_name == 'pull_request'
+      run: |
+        # Extract the summary line from lint output
+        SUMMARY=$(grep -o '[0-9]\+ errors\?, [0-9]\+ warnings\?, [0-9]\+ hints' lint_output.txt || echo "Summary not found")
+
+        echo "## Speakeasy Lint Results: $SUMMARY" > lint_comment.md
+        echo "" >> lint_comment.md
+        echo "<details>" >> lint_comment.md
+        echo "<summary>Click to expand lint output</summary>" >> lint_comment.md
+        echo "" >> lint_comment.md
+        echo "\`\`\`" >> lint_comment.md
+        cat lint_output.txt >> lint_comment.md
+        echo "\`\`\`" >> lint_comment.md
+        echo "" >> lint_comment.md
+        echo "</details>" >> lint_comment.md
+        echo "" >> lint_comment.md
+        echo "Lint completed at: $(date)" >> lint_comment.md
+
+    - name: Comment PR with Speakeasy Lint Results
+      if: github.event_name == 'pull_request'
+      uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+      with:
+        message-path: lint_comment.md
+        message-id: speakeasy-lint
 
     - name: Generate Provider Code (Dry Run)
       run: speakeasy run --skip-versioning
+      env:
+        SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
 
     - name: Check for uncommitted changes
       run: |

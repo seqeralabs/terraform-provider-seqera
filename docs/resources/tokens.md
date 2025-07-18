@@ -30,19 +30,21 @@ resource "seqera_tokens" "my_tokens" {
 ### Read-Only
 
 - `access_key` (String)
-- `basic_auth` (String, Deprecated)
-- `date_created` (String)
-- `id` (Number) The ID of this resource.
-- `last_used` (String)
-- `token` (Attributes) (see [below for nested schema](#nestedatt--token))
+- `basic_auth` (String, Deprecated) Deprecated basic authentication string
+- `date_created` (String) Timestamp when the token was created
+- `id` (Number) Unique numeric identifier for the access token (nullable)
+- `last_used` (String) Timestamp when the token was last used for authentication
+- `token` (Attributes) Represents an API access token for authentication.
+Contains token metadata, permissions, and expiration information
+for secure API access to platform resources. (see [below for nested schema](#nestedatt--token))
 
 <a id="nestedatt--token"></a>
 ### Nested Schema for `token`
 
 Read-Only:
 
-- `basic_auth` (String, Deprecated)
-- `date_created` (String)
-- `id` (Number)
-- `last_used` (String)
-- `name` (String)
+- `basic_auth` (String, Deprecated) Deprecated basic authentication string
+- `date_created` (String) Timestamp when the token was created
+- `id` (Number) Unique numeric identifier for the access token (nullable)
+- `last_used` (String) Timestamp when the token was last used for authentication
+- `name` (String) Display name for the token (1-50 characters)

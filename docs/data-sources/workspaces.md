@@ -34,8 +34,8 @@ data "seqera_workspaces" "my_workspaces" {
 
 Read-Only:
 
-- `description` (String)
-- `full_name` (String)
-- `id` (Number)
-- `name` (String)
+- `description` (String) Detailed description of the workspace's purpose
+- `full_name` (String) Complete display name for the workspace
+- `id` (Number) Unique numeric identifier for the workspace
+- `name` (String) Short name or handle for the workspace
 - `visibility` (String)

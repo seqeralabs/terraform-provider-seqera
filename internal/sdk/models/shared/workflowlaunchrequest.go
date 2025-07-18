@@ -10,7 +10,7 @@ import (
 type WorkflowLaunchRequest struct {
 	ComputeEnvID     *string  `json:"computeEnvId,omitempty"`
 	RunName          *string  `json:"runName,omitempty"`
-	Pipeline         *string  `json:"pipeline,omitempty"`
+	Pipeline         string   `json:"pipeline"`
 	WorkDir          *string  `json:"workDir,omitempty"`
 	Revision         *string  `json:"revision,omitempty"`
 	SessionID        *string  `json:"sessionId,omitempty"`
@@ -64,9 +64,9 @@ func (o *WorkflowLaunchRequest) GetRunName() *string {
 	return o.RunName
 }
 
-func (o *WorkflowLaunchRequest) GetPipeline() *string {
+func (o *WorkflowLaunchRequest) GetPipeline() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Pipeline
 }

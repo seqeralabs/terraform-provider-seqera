@@ -7720,22 +7720,31 @@ components:
         basicAuth:
           type: string
           deprecated: true
+          description: Deprecated basic authentication string
         id:
           type: integer
           format: int64
           nullable: true
           x-speakeasy-param-optional: true
+          description: Unique numeric identifier for the access token (nullable)
         name:
           maxLength: 50
           minLength: 1
           type: string
+          description: Display name for the token (1-50 characters)
         lastUsed:
           type: string
           format: date-time
+          description: Timestamp when the token was last used for authentication
         dateCreated:
           type: string
           format: date-time
+          description: Timestamp when the token was created
       x-speakeasy-entity: Tokens
+      description: |
+        Represents an API access token for authentication.
+        Contains token metadata, permissions, and expiration information
+        for secure API access to platform resources.
     Action.ConfigType:
       type: object
       properties:
@@ -7801,22 +7810,31 @@ components:
       properties:
         id:
           type: string
+          description: Unique identifier for the action
         launch:
           $ref: "#/components/schemas/Launch"
+          description: Launch configuration and parameters for the action
         name:
           type: string
+          description: Human-readable name for the action
         hookId:
           type: string
+          description: Identifier for the webhook associated with this action
         hookUrl:
           type: string
+          description: URL endpoint for the webhook that triggers this action
         message:
           type: string
+          description: Status or informational message about the action
         source:
           $ref: "#/components/schemas/Action.Source"
+          description: Source system or trigger that initiated the action
         status:
           $ref: "#/components/schemas/Action.Status"
+          description: Current execution status of the action
         config:
           $ref: "#/components/schemas/Action.ConfigType"
+          description: Configuration type and settings for the action
         event:
           $ref: "#/components/schemas/Action.EventType"
         lastSeen:
@@ -7832,6 +7850,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
+      description: |
+        Represents a pipeline action in the Seqera Platform.
+        Contains action configuration, triggers, and execution settings
+        for automated pipeline workflows.
     ActiveConnection:
       type: object
       allOf:
@@ -7897,6 +7919,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     Analytics:
       type: object
       properties:
@@ -8028,6 +8052,9 @@ components:
             type: object
             additionalProperties: true
           x-speakeasy-terraform-ignore: true
+      required:
+        - region
+        - forge
     AwsBatchPlatformMetainfo:
       type: object
       properties:
@@ -8140,6 +8167,8 @@ components:
             type: object
             additionalProperties: true
           x-speakeasy-terraform-ignore: true
+      required:
+        - region
     AwsCloudPlatformMetainfo:
       type: object
       properties:
@@ -8232,6 +8261,9 @@ components:
         managedIdentityClientId:
           type: string
           nullable: true
+      required:
+        - region
+        - forge
     AzBatchForgeConfig:
       type: object
       properties:
@@ -8248,6 +8280,8 @@ components:
           type: array
           items:
             type: string
+      required:
+        - vmCount
     AzBatchPlatformMetainfo:
       type: object
       properties:
@@ -8343,21 +8377,24 @@ components:
       properties:
         workDir:
           type: string
+          description: Working directory path for workflow execution
         preRunScript:
           type: string
-          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          description: "Shell script to execute before workflow starts"
         postRunScript:
           type: string
-          description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          description: "Shell script to execute after workflow completes"
         environment:
           type: array
           items:
             $ref: "#/components/schemas/ConfigEnvVariable"
+          description: Array of environment variables for the compute environment
         nextflowConfig:
           type: string
+          description: Nextflow configuration settings and parameters
         discriminator:
           type: string
-          description: property to select the compute config platform
+          description: Read-only property identifying the compute platform type
       discriminator:
         propertyName: discriminator
         mapping:
@@ -8390,6 +8427,9 @@ components:
         - $ref: "#/components/schemas/UnivaComputeConfig"
         - $ref: "#/components/schemas/AltairPbsComputeConfig"
         - $ref: "#/components/schemas/MoabComputeConfig"
+      description: |
+        Configuration settings for compute environments including work directories,
+        pre/post run scripts, and environment-specific parameters.
     ComputeEnv.Status:
       type: string
       readOnly: true
@@ -8674,6 +8714,12 @@ components:
             type: integer
             format: int64
       x-speakeasy-entity: ComputeEnv
+      required:
+        - name
+        - credentialsId
+        - platform
+        - config
+        # Compute config platform-specific schemas
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -8761,6 +8807,9 @@ components:
           items:
             type: integer
             format: int64
+      required:
+        - name
+        - launch
     CreatePipelineResponse:
       type: object
       properties:
@@ -8827,12 +8876,15 @@ components:
           type: string
           x-speakeasy-name-override: credentialsId
           x-speakeasy-param-suppress-computed-diff: true
+          description: Unique identifier for the credential (max 22 characters)
         name:
           maxLength: 100
           type: string
+          description: Display name for the credential (max 100 characters)
         description:
           type: string
           x-speakeasy-param-computed: false
+          description: Optional description explaining the purpose of the credential
         provider:
           maxLength: 16
           type: string
@@ -8871,6 +8923,7 @@ components:
             #     azure_entra: "#/components/schemas/AzureEntraKeys"
           x-speakeasy-name-override: providerType
           x-speakeasy-plan-validators: CredentialsConfigValidator
+          description: Cloud or service provider type (e.g., aws, azure, gcp)
         baseUrl:
           maxLength: 200
           pattern: ""
@@ -8884,16 +8937,19 @@ components:
           type: boolean
           readOnly: true
           x-speakeasy-param-suppress-computed-diff: true
+          description: Flag indicating if the credential has been soft-deleted
         lastUsed:
           type: string
           format: date-time
           readOnly: true
           x-speakeasy-param-suppress-computed-diff: true
+          description: Timestamp when the credential was last used
         dateCreated:
           type: string
           format: date-time
           readOnly: true
           x-speakeasy-param-suppress-computed-diff: true
+          description: Timestamp when the credential was created
         lastUpdated:
           type: string
           format: date-time
@@ -8902,6 +8958,10 @@ components:
         keys:
           $ref: "#/components/schemas/SecurityKeys"
       x-speakeasy-entity: Credential
+      description: |
+        Represents credentials used for authentication with various platforms and services.
+        Contains authentication information for accessing cloud providers, Git repositories,
+        and other external services within the Seqera Platform.
     DataLink.Status:
       type: string
       readOnly: true
@@ -9000,22 +9060,30 @@ components:
         id:
           type: string
           x-speakeasy-name-override: dataLinkId
+          description: Unique identifier for the data link
         name:
           type: string
+          description: Display name for the data link connection
         description:
           type: string
+          description: Description of the data link's purpose and contents
         resourceRef:
           type: string
+          description: Reference identifier for the external resource
         type:
           $ref: "#/components/schemas/DataLinkType"
+          description: Type of data link (e.g., S3, Azure Blob, etc.)
         provider:
           $ref: "#/components/schemas/DataLinkProvider"
+          description: Cloud provider hosting the data link
         region:
           type: string
+          description: Geographic region where the data link is hosted
         credentials:
           type: array
           items:
             $ref: "#/components/schemas/DataLinkCredentials"
+          description: Array of credentials required to access the data link
         publicAccessible:
           type: boolean
         hidden:
@@ -9027,6 +9095,10 @@ components:
               readOnly: true
         message:
           type: string
+      description: |
+        Represents a data link connection to external storage systems.
+        Provides access to cloud storage, file systems, and data repositories
+        for pipeline input/output operations.
     DataLinkFinishMultiPartUploadRequest:
       type: object
       properties:
@@ -9251,21 +9323,29 @@ components:
           x-speakeasy-param-optional: true
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
+          description: Unique identifier for the Studio session
         workspaceId:
           type: integer
           format: int64
+          description: Numeric identifier of the workspace containing the Studio
         parentCheckpoint:
           $ref: "#/components/schemas/DataStudioDto.ParentCheckpoint"
+          description: Reference to the parent checkpoint for session restoration
         user:
           $ref: "#/components/schemas/StudioUser"
+          description: User information for the Studio session owner
         name:
           type: string
+          description: Display name for the Studio session
         description:
           type: string
+          description: Description of the Studio session's purpose
         studioUrl:
           type: string
+          description: URL to access the running Studio instance
         computeEnv:
           $ref: "#/components/schemas/DataStudioComputeEnvDto"
+          description: Compute environment configuration for the Studio
         template:
           $ref: "#/components/schemas/DataStudioTemplate"
         configuration:
@@ -9310,6 +9390,10 @@ components:
           items:
             $ref: "#/components/schemas/LabelDbDto"
       x-speakeasy-entity: Studios
+      description: |
+        Represents a Studio session for interactive data analysis.
+        Contains configuration and runtime information for Jupyter-based
+        computational environments.
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -9497,19 +9581,24 @@ components:
         id:
           maxLength: 22
           type: string
+          description: Unique identifier for the dataset (max 22 characters)
         name:
           maxLength: 100
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,98}$"
           type: string
+          description: Dataset name following naming conventions (1-100 characters)
         description:
           maxLength: 1000
           type: string
+          description: Detailed description of the dataset contents and purpose (max 1000 characters)
         mediaType:
           maxLength: 80
           type: string
+          description: MIME type or media type of the dataset content (max 80 characters)
         deleted:
           type: boolean
           readOnly: true
+          description: Read-only flag indicating if the dataset has been deleted
         dateCreated:
           type: string
           format: date-time
@@ -9518,6 +9607,10 @@ components:
           type: string
           format: date-time
           readOnly: true
+      description: |
+        Represents a dataset in the Seqera Platform.
+        Contains dataset metadata, versioning information, and access
+        controls for data management and sharing.
     DatasetVersionDbDto:
       type: object
       properties:
@@ -9730,6 +9823,9 @@ components:
               type: boolean
             fusion2Enabled:
               type: boolean
+      required:
+        - region
+        - clusterName
     EksPlatformMetaInfo:
       type: object
       properties:
@@ -9848,6 +9944,10 @@ components:
           type: boolean
         dragenInstanceType:
           type: string
+      required:
+        - type
+        - minCpus
+        - MaxCpus
     FsxFileSystem:
       type: object
       properties:
@@ -9962,6 +10062,9 @@ components:
               type: boolean
             waveEnabled:
               type: boolean
+      required:
+        - region
+        - clusterName
     GkePlatformMetaInfo:
       type: object
       properties:
@@ -10267,6 +10370,12 @@ components:
           format: int32
         nextflowConfig:
           type: string
+      required:
+        - server
+        - namespace
+        - sslCert
+        - headServiceAccount
+        - storageClaimName
     K8sPlatformMetaInfo:
       type: object
       properties:
@@ -10291,17 +10400,27 @@ components:
         id:
           type: integer
           format: int64
+          description: Unique numeric identifier for the label
         name:
           type: string
+          description: Name or key of the label
         value:
           type: string
+          description: Value associated with the label
         resource:
           type: boolean
+          description: Flag indicating if this is a resource-level label
         isDefault:
           type: boolean
+          description: Flag indicating if this is a default system label
         dateCreated:
           type: string
           format: date-time
+          description: Timestamp when the label was created
+      description: |
+        Represents a label for organizing and categorizing resources.
+        Provides metadata tagging capabilities for pipelines, workflows,
+        and other platform resources.
     LabelType:
       type: string
       enum:
@@ -10742,6 +10861,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     MemberDbDto:
       type: object
       properties:
@@ -10776,6 +10897,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     MultiRequestFileSchema:
       type: object
       properties:
@@ -10879,22 +11002,30 @@ components:
         paying:
           type: boolean
           deprecated: true
+          description: Deprecated flag indicating if organization has paid subscription
         orgId:
           type: integer
           format: int64
+          description: Unique numeric identifier for the organization
         name:
           type: string
+          description: Short name or handle for the organization
         fullName:
           type: string
+          description: Complete formal name of the organization
         description:
           type: string
+          description: Detailed description of the organization's purpose and activities
         location:
           type: string
+          description: Geographic location or address of the organization
         website:
           type: string
+          description: Official website URL for the organization
         logoId:
           type: string
           x-speakeasy-param-optional: true
+          description: Identifier for the organization's logo image
         logoUrl:
           type: string
           x-speakeasy-param-optional: true
@@ -10906,6 +11037,10 @@ components:
         type:
           $ref: "#/components/schemas/OrgType"
       x-speakeasy-entity: Orgs
+      description: |
+        Represents an organization in the Seqera Platform.
+        Contains organizational metadata, settings, and member management
+        information for multi-tenant environments.
     OrganizationQuotas:
       type: object
       properties:
@@ -10993,21 +11128,29 @@ components:
         pipelineId:
           type: integer
           format: int64
+          description: Unique numeric identifier for the pipeline
         name:
           type: string
+          description: Display name for the pipeline
         description:
           type: string
+          description: Detailed description of the pipeline's purpose and functionality
         icon:
           type: string
+          description: Icon identifier or URL for visual representation
         repository:
           type: string
+          description: Git repository URL containing the pipeline source code
         userId:
           type: integer
           format: int64
+          description: Numeric identifier of the user who created the pipeline
         userName:
           type: string
+          description: Username of the pipeline creator
         userFirstName:
           type: string
+          description: First name of the user who created the pipeline
         userLastName:
           type: string
         orgId:
@@ -11041,6 +11184,11 @@ components:
           $ref: "#/components/schemas/ComputeEnvDbDto"
       x-speakeasy-entity: Pipeline
       ## Users
+
+      description: |
+        Represents a pipeline configuration in the Seqera Platform.
+        Contains pipeline metadata, configuration settings, and execution parameters
+        for Nextflow workflows.
     PipelineInfo:
       type: object
       properties:
@@ -11112,23 +11260,31 @@ components:
           type: integer
           format: int64
           nullable: true
+          description: Unique numeric identifier for the secret (nullable)
         name:
           maxLength: 100
           pattern: "^[a-zA-Z_](?:[0-9A-Za-z]+|(_)(?!\\1)){1,49}$"
           type: string
+          description: Secret name following naming conventions (max 100 characters)
         lastUsed:
           type: string
           format: date-time
           readOnly: true
+          description: Read-only timestamp when the secret was last accessed
         dateCreated:
           type: string
           format: date-time
           readOnly: true
+          description: Read-only timestamp when the secret was created
         lastUpdated:
           type: string
           format: date-time
           readOnly: true
       x-speakeasy-entity: PipelineSecret
+      description: |
+        Represents a secure secret for pipeline execution.
+        Contains encrypted sensitive data such as API keys, passwords,
+        and configuration values used in workflows.
     PlatformMetainfo:
       type: object
       discriminator:
@@ -11453,6 +11609,9 @@ components:
           description: property to select the compute config platform
       allOf:
         - $ref: "#/components/schemas/AwsBatchConfig"
+      required:
+        - region
+        # Pipeline requests
     SeqeraComputeSecurityKeys:
       type: object
       allOf:
@@ -11543,6 +11702,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     State:
       type: string
       enum:
@@ -11777,16 +11938,25 @@ components:
           format: int64
           x-speakeasy-param-optional: true
           x-speakeasy-name-override: teamId
+          description: Unique numeric identifier for the team
         name:
           type: string
+          description: Display name for the team
         description:
           type: string
+          description: Description of the team's purpose and responsibilities
         avatarUrl:
           type: string
+          description: URL to the team's avatar or profile image
         membersCount:
           type: integer
           format: int64
+          description: Total number of members in the team
       x-speakeasy-entity: Teams
+      description: |
+        Represents a team within an organization.
+        Contains team membership, permissions, and access controls
+        for collaborative workspace management.
     TraceBeginRequest:
       type: object
       properties:
@@ -11801,6 +11971,10 @@ components:
             type: string
         towerLaunch:
           type: boolean
+      description: |
+        Represents workflow execution trace information.
+        Contains metadata and progress tracking data for monitoring
+        pipeline execution and performance metrics.
     TraceBeginResponse:
       type: object
       properties:
@@ -12006,6 +12180,8 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/ConfigEnvVariable"
+      required:
+        - workDir
     UpdateActionRequest:
       type: object
       properties:
@@ -12195,8 +12371,6 @@ components:
         deleted:
           type: boolean
       x-speakeasy-entity:
-        - CurrentUser
-        - User
         - CurrentUser
         - User
     Visibility:
@@ -12450,20 +12624,26 @@ components:
           type: array
           items:
             type: string
+          description: Array of status messages and logs from workflow execution
         id:
           type: string
+          description: Unique identifier for the workflow execution
         ownerId:
           type: integer
           format: int64
+          description: Numeric identifier of the user who owns this workflow
         submit:
           type: string
           format: date-time
+          description: Timestamp when the workflow was submitted for execution
         start:
           type: string
           format: date-time
+          description: Timestamp when the workflow execution actually started
         complete:
           type: string
           format: date-time
+          description: Timestamp when the workflow execution completed
         dateCreated:
           type: string
           format: date-time
@@ -12543,6 +12723,10 @@ components:
           type: boolean
         success:
           type: boolean
+      description: |
+        Represents a workflow execution record.
+        Contains execution status, metadata, and results from pipeline
+        runs including logs and performance metrics.
     WorkflowLaunchRequest:
       type: object
       properties:
@@ -12615,6 +12799,8 @@ components:
           type: string
           format: date-time
       x-speakeasy-entity: Workflows
+      required:
+        - pipeline
     WorkflowLaunchResponse:
       type: object
       properties:
@@ -12888,14 +13074,23 @@ components:
         id:
           type: integer
           format: int64
+          description: Unique numeric identifier for the workspace
         name:
           type: string
+          description: Short name or handle for the workspace
         fullName:
           type: string
+          description: Complete display name for the workspace
         description:
           type: string
+          description: Detailed description of the workspace's purpose
         visibility:
           $ref: "#/components/schemas/Visibility"
+          description: Visibility level of the workspace (public, private, etc.)
+      description: |
+        Represents a workspace in the Seqera Platform.
+        Contains workspace configuration, member permissions, and resource
+        isolation settings for project organization.
     WspRole:
       type: string
       enum:
@@ -12954,5 +13149,4 @@ tags:
   - name: workspaces
     description: Workspaces in an organization context
 servers:
-  - url: https://api.cloud.seqera.io
   - url: https://api.cloud.seqera.io

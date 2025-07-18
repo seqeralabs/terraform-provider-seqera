@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.45.0 and generator version 2.656.5
+// Generated from OpenAPI doc version 1.45.0 and generator version 2.657.1
 
 import (
 	"context"
@@ -18,7 +18,6 @@ import (
 
 // ServerList contains the list of servers available to the SDK
 var ServerList = []string{
-	"https://api.cloud.seqera.io",
 	"https://api.cloud.seqera.io",
 }
 
@@ -171,7 +170,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.0.3",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.0.3 2.656.5 1.45.0 github.com/speakeasy/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.0.3 2.657.1 1.45.0 github.com/speakeasy/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

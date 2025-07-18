@@ -71,6 +71,7 @@ func (r *DataLinkDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						},
 					},
 				},
+				Description: `Array of credentials required to access the data link`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Optional:    true,
@@ -81,7 +82,8 @@ func (r *DataLinkDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Description: `Data-link string identifier`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Description of the data link's purpose and contents`,
 			},
 			"hidden": schema.BoolAttribute{
 				Computed: true,
@@ -90,7 +92,8 @@ func (r *DataLinkDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed: true,
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Display name for the data link connection`,
 			},
 			"provider_type": schema.StringAttribute{
 				Computed: true,
@@ -99,10 +102,12 @@ func (r *DataLinkDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed: true,
 			},
 			"region": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Geographic region where the data link is hosted`,
 			},
 			"resource_ref": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Reference identifier for the external resource`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

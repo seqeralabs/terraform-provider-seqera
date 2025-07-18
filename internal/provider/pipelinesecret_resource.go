@@ -55,13 +55,15 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 		MarkdownDescription: "PipelineSecret Resource",
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Read-only timestamp when the secret was created`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"id": schema.Int64Attribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Unique numeric identifier for the secret (nullable)`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
@@ -70,7 +72,8 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"last_used": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Read-only timestamp when the secret was last accessed`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},

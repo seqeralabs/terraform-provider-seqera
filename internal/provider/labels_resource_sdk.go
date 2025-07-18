@@ -12,123 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *LabelsResourceModel) ToSharedUpdateLabelRequest(ctx context.Context) (*shared.UpdateLabelRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	value := new(string)
-	if !r.Value.IsUnknown() && !r.Value.IsNull() {
-		*value = r.Value.ValueString()
-	} else {
-		value = nil
-	}
-	isDefault := new(bool)
-	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
-		*isDefault = r.IsDefault.ValueBool()
-	} else {
-		isDefault = nil
-	}
-	out := shared.UpdateLabelRequest{
-		Name:      name,
-		Value:     value,
-		IsDefault: isDefault,
-	}
-
-	return &out, diags
-}
-
-func (r *LabelsResourceModel) ToOperationsUpdateLabelRequest(ctx context.Context) (*operations.UpdateLabelRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var labelID int64
-	labelID = r.LabelID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	updateLabelRequest, updateLabelRequestDiags := r.ToSharedUpdateLabelRequest(ctx)
-	diags.Append(updateLabelRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateLabelRequest{
-		LabelID:            labelID,
-		WorkspaceID:        workspaceID,
-		UpdateLabelRequest: *updateLabelRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *LabelsResourceModel) ToOperationsCreateLabelRequest(ctx context.Context) (*operations.CreateLabelRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.CreateLabelRequest{
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
-func (r *LabelsResourceModel) ToOperationsListLabelsRequest(ctx context.Context) (*operations.ListLabelsRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	isDefault := new(bool)
-	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
-		*isDefault = r.IsDefault.ValueBool()
-	} else {
-		isDefault = nil
-	}
-	out := operations.ListLabelsRequest{
-		WorkspaceID: workspaceID,
-		IsDefault:   isDefault,
-	}
-
-	return &out, diags
-}
-
-func (r *LabelsResourceModel) ToOperationsDeleteLabelRequest(ctx context.Context) (*operations.DeleteLabelRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var labelID int64
-	labelID = r.LabelID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DeleteLabelRequest{
-		LabelID:     labelID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
 func (r *LabelsResourceModel) RefreshFromSharedListLabelsResponse(ctx context.Context, resp *shared.ListLabelsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -187,4 +70,121 @@ func (r *LabelsResourceModel) RefreshFromSharedUpdateLabelResponse(ctx context.C
 	}
 
 	return diags
+}
+
+func (r *LabelsResourceModel) ToOperationsCreateLabelRequest(ctx context.Context) (*operations.CreateLabelRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.CreateLabelRequest{
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *LabelsResourceModel) ToOperationsDeleteLabelRequest(ctx context.Context) (*operations.DeleteLabelRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var labelID int64
+	labelID = r.LabelID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DeleteLabelRequest{
+		LabelID:     labelID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *LabelsResourceModel) ToOperationsListLabelsRequest(ctx context.Context) (*operations.ListLabelsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	isDefault := new(bool)
+	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
+		*isDefault = r.IsDefault.ValueBool()
+	} else {
+		isDefault = nil
+	}
+	out := operations.ListLabelsRequest{
+		WorkspaceID: workspaceID,
+		IsDefault:   isDefault,
+	}
+
+	return &out, diags
+}
+
+func (r *LabelsResourceModel) ToOperationsUpdateLabelRequest(ctx context.Context) (*operations.UpdateLabelRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var labelID int64
+	labelID = r.LabelID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	updateLabelRequest, updateLabelRequestDiags := r.ToSharedUpdateLabelRequest(ctx)
+	diags.Append(updateLabelRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateLabelRequest{
+		LabelID:            labelID,
+		WorkspaceID:        workspaceID,
+		UpdateLabelRequest: *updateLabelRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *LabelsResourceModel) ToSharedUpdateLabelRequest(ctx context.Context) (*shared.UpdateLabelRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	value := new(string)
+	if !r.Value.IsUnknown() && !r.Value.IsNull() {
+		*value = r.Value.ValueString()
+	} else {
+		value = nil
+	}
+	isDefault := new(bool)
+	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
+		*isDefault = r.IsDefault.ValueBool()
+	} else {
+		isDefault = nil
+	}
+	out := shared.UpdateLabelRequest{
+		Name:      name,
+		Value:     value,
+		IsDefault: isDefault,
+	}
+
+	return &out, diags
 }

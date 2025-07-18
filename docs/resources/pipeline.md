@@ -66,6 +66,7 @@ resource "seqera_pipeline" "my_pipeline" {
 
 ### Required
 
+- `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `name` (String)
 
 ### Optional
@@ -73,7 +74,6 @@ resource "seqera_pipeline" "my_pipeline" {
 - `description` (String)
 - `icon` (String)
 - `label_ids` (List of Number)
-- `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
@@ -87,17 +87,21 @@ resource "seqera_pipeline" "my_pipeline" {
 - `optimization_targets` (String)
 - `org_id` (Number)
 - `org_name` (String)
-- `pipeline_id` (Number) Pipeline numeric identifier
-- `repository` (String)
-- `user_first_name` (String)
-- `user_id` (Number)
+- `pipeline_id` (Number) Unique numeric identifier for the pipeline
+- `repository` (String) Git repository URL containing the pipeline source code
+- `user_first_name` (String) First name of the user who created the pipeline
+- `user_id` (Number) Numeric identifier of the user who created the pipeline
 - `user_last_name` (String)
-- `user_name` (String)
+- `user_name` (String) Username of the pipeline creator
 - `visibility` (String)
 - `workspace_name` (String)
 
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`
+
+Required:
+
+- `pipeline` (String)
 
 Optional:
 
@@ -114,7 +118,6 @@ Optional:
 - `optimization_id` (String)
 - `optimization_targets` (String)
 - `params_text` (String)
-- `pipeline` (String)
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pull_latest` (Boolean)
@@ -146,12 +149,12 @@ Read-Only:
 
 Read-Only:
 
-- `date_created` (String)
-- `id` (Number)
-- `is_default` (Boolean)
-- `name` (String)
-- `resource` (Boolean)
-- `value` (String)
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label
 
 ## Import
 

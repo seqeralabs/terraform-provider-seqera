@@ -12,29 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *CredentialsDataSourceModel) ToOperationsListCredentialsRequest(ctx context.Context) (*operations.ListCredentialsRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	platformID := new(string)
-	if !r.PlatformID.IsUnknown() && !r.PlatformID.IsNull() {
-		*platformID = r.PlatformID.ValueString()
-	} else {
-		platformID = nil
-	}
-	out := operations.ListCredentialsRequest{
-		WorkspaceID: workspaceID,
-		PlatformID:  platformID,
-	}
-
-	return &out, diags
-}
-
 func (r *CredentialsDataSourceModel) RefreshFromSharedListCredentialsResponse(ctx context.Context, resp *shared.ListCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -156,4 +133,27 @@ func (r *CredentialsDataSourceModel) RefreshFromSharedListCredentialsResponse(ct
 	}
 
 	return diags
+}
+
+func (r *CredentialsDataSourceModel) ToOperationsListCredentialsRequest(ctx context.Context) (*operations.ListCredentialsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	platformID := new(string)
+	if !r.PlatformID.IsUnknown() && !r.PlatformID.IsNull() {
+		*platformID = r.PlatformID.ValueString()
+	} else {
+		platformID = nil
+	}
+	out := operations.ListCredentialsRequest{
+		WorkspaceID: workspaceID,
+		PlatformID:  platformID,
+	}
+
+	return &out, diags
 }

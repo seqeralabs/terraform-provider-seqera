@@ -69,11 +69,17 @@ resource "seqera_action" "my_action" {
 
 ### Read-Only
 
-- `action` (Attributes) (see [below for nested schema](#nestedatt--action))
+- `action` (Attributes) Represents a pipeline action in the Seqera Platform.
+Contains action configuration, triggers, and execution settings
+for automated pipeline workflows. (see [below for nested schema](#nestedatt--action))
 - `action_id` (String) Action string identifier
 
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`
+
+Required:
+
+- `pipeline` (String)
 
 Optional:
 
@@ -90,7 +96,6 @@ Optional:
 - `optimization_id` (String)
 - `optimization_targets` (String)
 - `params_text` (String)
-- `pipeline` (String)
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pull_latest` (Boolean)
@@ -114,15 +119,15 @@ Read-Only:
 - `config` (Attributes) (see [below for nested schema](#nestedatt--action--config))
 - `date_created` (String)
 - `event` (Attributes) (see [below for nested schema](#nestedatt--action--event))
-- `hook_id` (String)
-- `hook_url` (String)
-- `id` (String)
+- `hook_id` (String) Identifier for the webhook associated with this action
+- `hook_url` (String) URL endpoint for the webhook that triggers this action
+- `id` (String) Unique identifier for the action
 - `labels` (Attributes List) (see [below for nested schema](#nestedatt--action--labels))
 - `last_seen` (String)
 - `last_updated` (String)
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--action--launch))
-- `message` (String)
-- `name` (String)
+- `message` (String) Status or informational message about the action
+- `name` (String) Human-readable name for the action
 - `source` (String) must be one of ["github", "tower"]
 - `status` (String) must be one of ["CREATING", "ACTIVE", "ERROR", "PAUSED"]
 
@@ -190,12 +195,12 @@ Read-Only:
 
 Read-Only:
 
-- `date_created` (String)
-- `id` (Number)
-- `is_default` (Boolean)
-- `name` (String)
-- `resource` (Boolean)
-- `value` (String)
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label
 
 
 <a id="nestedatt--action--launch"></a>
@@ -239,7 +244,8 @@ Read-Only:
 Read-Only:
 
 - `compute_env_id` (String)
-- `config` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config))
+- `config` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters. (see [below for nested schema](#nestedatt--action--launch--compute_env--config))
 - `credentials_id` (String)
 - `date_created` (String)
 - `deleted` (Boolean)
@@ -280,20 +286,20 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--altair_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--altair_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
 - `launch_dir` (String)
 - `max_queue_size` (Number)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `port` (Number)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `propagate_head_job_options` (Boolean)
 - `user_name` (String)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--altair_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.altair_platform.environment`
@@ -315,10 +321,10 @@ Read-Only:
 - `cli_path` (String)
 - `compute_job_role` (String)
 - `compute_queue` (String)
-- `discriminator` (String) property to select the compute config platform
+- `discriminator` (String) Read-only property identifying the compute platform type
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_batch--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_batch--environment))
 - `execution_role` (String)
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_batch--forge))
 - `fusion2_enabled` (Boolean)
@@ -329,15 +335,15 @@ Read-Only:
 - `head_queue` (String)
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nvnme_storage_enabled` (Boolean)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String)
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
 - `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--aws_batch--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.aws_batch.environment`
@@ -395,24 +401,24 @@ Read-Only:
 
 - `allow_buckets` (List of String)
 - `arm64_enabled` (Boolean)
-- `discriminator` (String) property to select the compute config platform
+- `discriminator` (String) Read-only property identifying the compute platform type
 - `ebs_boot_size` (Number)
 - `ec2_key_pair` (String)
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_cloud--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_cloud--environment))
 - `fusion2_enabled` (Boolean)
 - `gpu_enabled` (Boolean)
 - `image_id` (String)
 - `instance_profile_arn` (String)
 - `instance_type` (String)
 - `log_group` (String)
-- `nextflow_config` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String)
 - `security_groups` (List of String)
 - `subnet_id` (String)
 - `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--aws_cloud--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.aws_cloud.environment`
@@ -434,19 +440,19 @@ Read-Only:
 - `auto_pool_mode` (Boolean, Deprecated)
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]
 - `delete_pools_on_completion` (Boolean)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--azure_batch--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean)
 - `head_pool` (String)
 - `managed_identity_client_id` (String)
-- `nextflow_config` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String)
 - `token_duration` (String)
 - `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--azure_batch--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.azure_batch.environment`
@@ -479,18 +485,18 @@ Read-Only:
 
 - `cluster_name` (String) The AWS EKS cluster name
 - `compute_service_account` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--eks_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--eks_platform--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `head_pod_spec` (String)
 - `head_service_account` (String)
 - `namespace` (String)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String) AWS region
 - `server` (String)
 - `service_pod_spec` (String)
@@ -498,7 +504,7 @@ Read-Only:
 - `storage_claim_name` (String)
 - `storage_mount_path` (String)
 - `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--eks_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.eks_platform.environment`
@@ -519,18 +525,18 @@ Read-Only:
 
 - `cluster_name` (String) The GKE cluster name
 - `compute_service_account` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--gke_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--gke_platform--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `head_pod_spec` (String)
 - `head_service_account` (String)
 - `namespace` (String)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String) The GKE cluster region - or - zone
 - `server` (String)
 - `service_pod_spec` (String)
@@ -538,7 +544,7 @@ Read-Only:
 - `storage_claim_name` (String)
 - `storage_mount_path` (String)
 - `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--gke_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.gke_platform.environment`
@@ -562,8 +568,8 @@ Read-Only:
 - `copy_image` (String)
 - `cpu_platform` (String)
 - `debug_mode` (Number)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_batch--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_batch--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_instance_template` (String)
@@ -572,11 +578,11 @@ Read-Only:
 - `location` (String)
 - `machine_type` (String)
 - `network` (String)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nfs_mount` (String)
 - `nfs_target` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `project_id` (String)
 - `service_account` (String)
 - `spot` (Boolean)
@@ -585,7 +591,7 @@ Read-Only:
 - `subnetwork` (String)
 - `use_private_address` (Boolean)
 - `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--google_batch--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.google_batch.environment`
@@ -607,24 +613,24 @@ Read-Only:
 - `boot_disk_size_gb` (Number)
 - `copy_image` (String)
 - `debug_mode` (Number)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_lifesciences--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_lifesciences--environment))
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `labels` (Map of String)
 - `location` (String)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nfs_mount` (String)
 - `nfs_target` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `preemptible` (Boolean)
 - `project_id` (String)
 - `region` (String)
 - `ssh_daemon` (Boolean)
 - `ssh_image` (String)
 - `use_private_address` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 - `zones` (List of String)
 
 <a id="nestedatt--action--launch--compute_env--config--google_lifesciences--environment"></a>
@@ -645,23 +651,23 @@ Read-Only:
 Read-Only:
 
 - `compute_service_account` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--k8s_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--k8s_platform--environment))
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `head_pod_spec` (String)
 - `head_service_account` (String)
 - `namespace` (String)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `server` (String)
 - `service_pod_spec` (String)
 - `ssl_cert` (String)
 - `storage_claim_name` (String)
 - `storage_mount_path` (String)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--k8s_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.k8s_platform.environment`
@@ -681,23 +687,23 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--lsf_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--lsf_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
 - `launch_dir` (String)
 - `max_queue_size` (Number)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `per_job_mem_limit` (Boolean)
 - `per_task_reserve` (Boolean)
 - `port` (Number)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `propagate_head_job_options` (Boolean)
 - `unit_for_limits` (String)
 - `user_name` (String)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--lsf_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.lsf_platform.environment`
@@ -717,20 +723,20 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--moab_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--moab_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
 - `launch_dir` (String)
 - `max_queue_size` (Number)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `port` (Number)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `propagate_head_job_options` (Boolean)
 - `user_name` (String)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--moab_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.moab_platform.environment`
@@ -752,10 +758,10 @@ Read-Only:
 - `cli_path` (String)
 - `compute_job_role` (String)
 - `compute_queue` (String)
-- `discriminator` (String) property to select the compute config platform
+- `discriminator` (String) Read-only property identifying the compute platform type
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--seqeracompute_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--seqeracompute_platform--environment))
 - `execution_role` (String)
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--seqeracompute_platform--forge))
 - `fusion2_enabled` (Boolean)
@@ -766,15 +772,15 @@ Read-Only:
 - `head_queue` (String)
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nvnme_storage_enabled` (Boolean)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String)
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
 - `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--seqeracompute_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.seqeracompute_platform.environment`
@@ -831,20 +837,20 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--slurm_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--slurm_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
 - `launch_dir` (String)
 - `max_queue_size` (Number)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `port` (Number)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `propagate_head_job_options` (Boolean)
 - `user_name` (String)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--slurm_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.slurm_platform.environment`
@@ -864,20 +870,20 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) property to select the compute config platform
-- `environment` (Attributes List) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--uge_platform--environment))
+- `discriminator` (String) Read-only property identifying the compute platform type
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--uge_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
 - `launch_dir` (String)
 - `max_queue_size` (Number)
-- `nextflow_config` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
 - `port` (Number)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
 - `propagate_head_job_options` (Boolean)
 - `user_name` (String)
-- `work_dir` (String)
+- `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--action--launch--compute_env--config--uge_platform--environment"></a>
 ### Nested Schema for `action.launch.compute_env.config.uge_platform.environment`

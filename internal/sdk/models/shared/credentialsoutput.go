@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// CredentialsProviderType - Cloud or service provider type (e.g., aws, azure, gcp)
 type CredentialsProviderType string
 
 const (
@@ -71,18 +72,28 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// CredentialsOutput - Represents credentials used for authentication with various platforms and services.
+// Contains authentication information for accessing cloud providers, Git repositories,
+// and other external services within the Seqera Platform.
 type CredentialsOutput struct {
-	CredentialsID *string                 `json:"id,omitempty"`
-	Name          string                  `json:"name"`
-	Description   *string                 `json:"description,omitempty"`
-	ProviderType  CredentialsProviderType `json:"provider"`
-	BaseURL       *string                 `json:"baseUrl,omitempty"`
-	Category      *string                 `json:"category,omitempty"`
-	Deleted       *bool                   `json:"deleted,omitempty"`
-	LastUsed      *time.Time              `json:"lastUsed,omitempty"`
-	DateCreated   *time.Time              `json:"dateCreated,omitempty"`
-	LastUpdated   *time.Time              `json:"lastUpdated,omitempty"`
-	Keys          SecurityKeysOutput      `json:"keys"`
+	// Unique identifier for the credential (max 22 characters)
+	CredentialsID *string `json:"id,omitempty"`
+	// Display name for the credential (max 100 characters)
+	Name string `json:"name"`
+	// Optional description explaining the purpose of the credential
+	Description *string `json:"description,omitempty"`
+	// Cloud or service provider type (e.g., aws, azure, gcp)
+	ProviderType CredentialsProviderType `json:"provider"`
+	BaseURL      *string                 `json:"baseUrl,omitempty"`
+	Category     *string                 `json:"category,omitempty"`
+	// Flag indicating if the credential has been soft-deleted
+	Deleted *bool `json:"deleted,omitempty"`
+	// Timestamp when the credential was last used
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Timestamp when the credential was created
+	DateCreated *time.Time         `json:"dateCreated,omitempty"`
+	LastUpdated *time.Time         `json:"lastUpdated,omitempty"`
+	Keys        SecurityKeysOutput `json:"keys"`
 }
 
 func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -233,14 +244,21 @@ func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
 	return o.GetKeys().AzureSecurityKeysOutput
 }
 
+// CredentialsInput - Represents credentials used for authentication with various platforms and services.
+// Contains authentication information for accessing cloud providers, Git repositories,
+// and other external services within the Seqera Platform.
 type CredentialsInput struct {
-	CredentialsID *string                 `json:"id,omitempty"`
-	Name          string                  `json:"name"`
-	Description   *string                 `json:"description,omitempty"`
-	ProviderType  CredentialsProviderType `json:"provider"`
-	BaseURL       *string                 `json:"baseUrl,omitempty"`
-	Category      *string                 `json:"category,omitempty"`
-	Keys          SecurityKeys            `json:"keys"`
+	// Unique identifier for the credential (max 22 characters)
+	CredentialsID *string `json:"id,omitempty"`
+	// Display name for the credential (max 100 characters)
+	Name string `json:"name"`
+	// Optional description explaining the purpose of the credential
+	Description *string `json:"description,omitempty"`
+	// Cloud or service provider type (e.g., aws, azure, gcp)
+	ProviderType CredentialsProviderType `json:"provider"`
+	BaseURL      *string                 `json:"baseUrl,omitempty"`
+	Category     *string                 `json:"category,omitempty"`
+	Keys         SecurityKeys            `json:"keys"`
 }
 
 func (o *CredentialsInput) GetCredentialsID() *string {

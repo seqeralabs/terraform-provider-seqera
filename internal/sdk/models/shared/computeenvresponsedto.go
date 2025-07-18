@@ -69,23 +69,26 @@ func (e *ComputeEnvResponseDtoPlatform) UnmarshalJSON(data []byte) error {
 }
 
 type ComputeEnvResponseDto struct {
-	ComputeEnvID      *string                        `json:"id,omitempty"`
-	Name              *string                        `json:"name,omitempty"`
-	Description       *string                        `json:"description,omitempty"`
-	Platform          *ComputeEnvResponseDtoPlatform `json:"platform,omitempty"`
-	Config            *ComputeConfig                 `json:"config,omitempty"`
-	DateCreated       *time.Time                     `json:"dateCreated,omitempty"`
-	LastUpdated       *time.Time                     `json:"lastUpdated,omitempty"`
-	LastUsed          *time.Time                     `json:"lastUsed,omitempty"`
-	Deleted           *bool                          `json:"deleted,omitempty"`
-	Status            *ComputeEnvStatus              `json:"status,omitempty"`
-	Message           *string                        `json:"message,omitempty"`
-	Primary           *bool                          `json:"primary,omitempty"`
-	CredentialsID     *string                        `json:"credentialsId,omitempty"`
-	ManagedIdentityID *string                        `json:"managedIdentityId,omitempty"`
-	OrgID             *int64                         `json:"orgId,omitempty"`
-	WorkspaceID       *int64                         `json:"workspaceId,omitempty"`
-	Labels            []LabelDbDto                   `json:"labels,omitempty"`
+	ComputeEnvID *string                        `json:"id,omitempty"`
+	Name         *string                        `json:"name,omitempty"`
+	Description  *string                        `json:"description,omitempty"`
+	Platform     *ComputeEnvResponseDtoPlatform `json:"platform,omitempty"`
+	// Configuration settings for compute environments including work directories,
+	// pre/post run scripts, and environment-specific parameters.
+	//
+	Config            *ComputeConfig    `json:"config,omitempty"`
+	DateCreated       *time.Time        `json:"dateCreated,omitempty"`
+	LastUpdated       *time.Time        `json:"lastUpdated,omitempty"`
+	LastUsed          *time.Time        `json:"lastUsed,omitempty"`
+	Deleted           *bool             `json:"deleted,omitempty"`
+	Status            *ComputeEnvStatus `json:"status,omitempty"`
+	Message           *string           `json:"message,omitempty"`
+	Primary           *bool             `json:"primary,omitempty"`
+	CredentialsID     *string           `json:"credentialsId,omitempty"`
+	ManagedIdentityID *string           `json:"managedIdentityId,omitempty"`
+	OrgID             *int64            `json:"orgId,omitempty"`
+	WorkspaceID       *int64            `json:"workspaceId,omitempty"`
+	Labels            []LabelDbDto      `json:"labels,omitempty"`
 }
 
 func (c ComputeEnvResponseDto) MarshalJSON() ([]byte, error) {

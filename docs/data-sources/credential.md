@@ -34,14 +34,14 @@ data "seqera_credential" "my_credential" {
 
 - `base_url` (String)
 - `category` (String)
-- `date_created` (String)
-- `deleted` (Boolean)
-- `description` (String)
+- `date_created` (String) Timestamp when the credential was created
+- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
+- `description` (String) Optional description explaining the purpose of the credential
 - `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `last_updated` (String)
-- `last_used` (String)
-- `name` (String)
-- `provider_type` (String)
+- `last_used` (String) Timestamp when the credential was last used
+- `name` (String) Display name for the credential (max 100 characters)
+- `provider_type` (String) Cloud or service provider type (e.g., aws, azure, gcp)
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

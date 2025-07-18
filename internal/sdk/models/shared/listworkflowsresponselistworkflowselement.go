@@ -3,6 +3,10 @@
 package shared
 
 type ListWorkflowsResponseListWorkflowsElement struct {
+	// Represents a workflow execution record.
+	// Contains execution status, metadata, and results from pipeline
+	// runs including logs and performance metrics.
+	//
 	Workflow      *WorkflowDbDto `json:"workflow,omitempty"`
 	Progress      *ProgressData  `json:"progress,omitempty"`
 	OrgID         *int64         `json:"orgId,omitempty"`

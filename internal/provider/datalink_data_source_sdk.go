@@ -11,33 +11,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *DataLinkDataSourceModel) ToOperationsDescribeDataLinkRequest(ctx context.Context) (*operations.DescribeDataLinkRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var dataLinkID string
-	dataLinkID = r.DataLinkID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	credentialsID := new(string)
-	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
-		*credentialsID = r.CredentialsID.ValueString()
-	} else {
-		credentialsID = nil
-	}
-	out := operations.DescribeDataLinkRequest{
-		DataLinkID:    dataLinkID,
-		WorkspaceID:   workspaceID,
-		CredentialsID: credentialsID,
-	}
-
-	return &out, diags
-}
-
 func (r *DataLinkDataSourceModel) RefreshFromSharedDataLinkDto(ctx context.Context, resp *shared.DataLinkDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -85,4 +58,31 @@ func (r *DataLinkDataSourceModel) RefreshFromSharedDataLinkDto(ctx context.Conte
 	}
 
 	return diags
+}
+
+func (r *DataLinkDataSourceModel) ToOperationsDescribeDataLinkRequest(ctx context.Context) (*operations.DescribeDataLinkRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var dataLinkID string
+	dataLinkID = r.DataLinkID.ValueString()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	out := operations.DescribeDataLinkRequest{
+		DataLinkID:    dataLinkID,
+		WorkspaceID:   workspaceID,
+		CredentialsID: credentialsID,
+	}
+
+	return &out, diags
 }

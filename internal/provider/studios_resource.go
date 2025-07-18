@@ -285,25 +285,31 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"date_created": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Timestamp when the label was created`,
 							Validators: []validator.String{
 								validators.IsRFC3339(),
 							},
 						},
 						"id": schema.Int64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unique numeric identifier for the label`,
 						},
 						"is_default": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Flag indicating if this is a default system label`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Name or key of the label`,
 						},
 						"resource": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Flag indicating if this is a resource-level label`,
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Value associated with the label`,
 						},
 					},
 				},
@@ -349,12 +355,15 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 									},
 								},
 							},
+							Description: `Array of credentials required to access the data link`,
 						},
 						"data_link_id": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unique identifier for the data link`,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Description of the data link's purpose and contents`,
 						},
 						"hidden": schema.BoolAttribute{
 							Computed: true,
@@ -363,7 +372,8 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							Computed: true,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Display name for the data link connection`,
 						},
 						"provider_type": schema.StringAttribute{
 							Computed:    true,
@@ -382,10 +392,12 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							Computed: true,
 						},
 						"region": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Geographic region where the data link is hosted`,
 						},
 						"resource_ref": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Reference identifier for the external resource`,
 						},
 						"status": schema.StringAttribute{
 							Computed:    true,
@@ -463,7 +475,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Studio session numeric identifier`,
+				Description: `Unique identifier for the Studio session`,
 			},
 			"spot": schema.BoolAttribute{
 				Optional: true,
@@ -502,7 +514,8 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"studio_url": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `URL to access the running Studio instance`,
 			},
 			"template": schema.SingleNestedAttribute{
 				Computed: true,

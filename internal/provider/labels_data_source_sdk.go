@@ -12,6 +12,39 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *LabelsDataSourceModel) RefreshFromSharedListLabelsResponse(ctx context.Context, resp *shared.ListLabelsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.Labels = []tfTypes.LabelDbDto{}
+		if len(r.Labels) > len(resp.Labels) {
+			r.Labels = r.Labels[:len(resp.Labels)]
+		}
+		for labelsCount, labelsItem := range resp.Labels {
+			var labels tfTypes.LabelDbDto
+			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+			labels.ID = types.Int64PointerValue(labelsItem.ID)
+			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+			labels.Name = types.StringPointerValue(labelsItem.Name)
+			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+			labels.Value = types.StringPointerValue(labelsItem.Value)
+			if labelsCount+1 > len(r.Labels) {
+				r.Labels = append(r.Labels, labels)
+			} else {
+				r.Labels[labelsCount].DateCreated = labels.DateCreated
+				r.Labels[labelsCount].ID = labels.ID
+				r.Labels[labelsCount].IsDefault = labels.IsDefault
+				r.Labels[labelsCount].Name = labels.Name
+				r.Labels[labelsCount].Resource = labels.Resource
+				r.Labels[labelsCount].Value = labels.Value
+			}
+		}
+		r.TotalSize = types.Int64PointerValue(resp.TotalSize)
+	}
+
+	return diags
+}
+
 func (r *LabelsDataSourceModel) ToOperationsListLabelsRequest(ctx context.Context) (*operations.ListLabelsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -61,37 +94,4 @@ func (r *LabelsDataSourceModel) ToOperationsListLabelsRequest(ctx context.Contex
 	}
 
 	return &out, diags
-}
-
-func (r *LabelsDataSourceModel) RefreshFromSharedListLabelsResponse(ctx context.Context, resp *shared.ListLabelsResponse) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.Labels = []tfTypes.LabelDbDto{}
-		if len(r.Labels) > len(resp.Labels) {
-			r.Labels = r.Labels[:len(resp.Labels)]
-		}
-		for labelsCount, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-			if labelsCount+1 > len(r.Labels) {
-				r.Labels = append(r.Labels, labels)
-			} else {
-				r.Labels[labelsCount].DateCreated = labels.DateCreated
-				r.Labels[labelsCount].ID = labels.ID
-				r.Labels[labelsCount].IsDefault = labels.IsDefault
-				r.Labels[labelsCount].Name = labels.Name
-				r.Labels[labelsCount].Resource = labels.Resource
-				r.Labels[labelsCount].Value = labels.Value
-			}
-		}
-		r.TotalSize = types.Int64PointerValue(resp.TotalSize)
-	}
-
-	return diags
 }

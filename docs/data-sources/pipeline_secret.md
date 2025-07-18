@@ -32,8 +32,8 @@ data "seqera_pipeline_secret" "my_pipelinesecret" {
 
 ### Read-Only
 
-- `date_created` (String)
-- `id` (Number) The ID of this resource.
+- `date_created` (String) Read-only timestamp when the secret was created
+- `id` (Number) Unique numeric identifier for the secret (nullable)
 - `last_updated` (String)
-- `last_used` (String)
-- `name` (String)
+- `last_used` (String) Read-only timestamp when the secret was last accessed
+- `name` (String) Secret name following naming conventions (max 100 characters)

@@ -10,21 +10,95 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *TeamsResourceModel) ToSharedTeam(ctx context.Context) (*shared.Team, diag.Diagnostics) {
+func (r *TeamsResourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, resp *shared.TeamDbDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	var name string
-	name = r.Name.ValueString()
-
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
+	if resp != nil {
+		r.AvatarURL = types.StringPointerValue(resp.AvatarURL)
+		r.Description = types.StringPointerValue(resp.Description)
+		r.MembersCount = types.Int64PointerValue(resp.MembersCount)
+		r.Name = types.StringPointerValue(resp.Name)
+		r.TeamID = types.Int64PointerValue(resp.TeamID)
 	}
-	out := shared.Team{
-		Name:        name,
-		Description: description,
+
+	return diags
+}
+
+func (r *TeamsResourceModel) ToOperationsCreateOrganizationTeamRequest(ctx context.Context) (*operations.CreateOrganizationTeamRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	createTeamRequest, createTeamRequestDiags := r.ToSharedCreateTeamRequest(ctx)
+	diags.Append(createTeamRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreateOrganizationTeamRequest{
+		OrgID:             orgID,
+		CreateTeamRequest: *createTeamRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *TeamsResourceModel) ToOperationsDeleteOrganizationTeamRequest(ctx context.Context) (*operations.DeleteOrganizationTeamRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	var teamID int64
+	teamID = r.TeamID.ValueInt64()
+
+	out := operations.DeleteOrganizationTeamRequest{
+		OrgID:  orgID,
+		TeamID: teamID,
+	}
+
+	return &out, diags
+}
+
+func (r *TeamsResourceModel) ToOperationsDescribeOrganizationTeamRequest(ctx context.Context) (*operations.DescribeOrganizationTeamRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	var teamID int64
+	teamID = r.TeamID.ValueInt64()
+
+	out := operations.DescribeOrganizationTeamRequest{
+		OrgID:  orgID,
+		TeamID: teamID,
+	}
+
+	return &out, diags
+}
+
+func (r *TeamsResourceModel) ToOperationsUpdateOrganizationTeamRequest(ctx context.Context) (*operations.UpdateOrganizationTeamRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	var teamID int64
+	teamID = r.TeamID.ValueInt64()
+
+	updateTeamRequest, updateTeamRequestDiags := r.ToSharedUpdateTeamRequest(ctx)
+	diags.Append(updateTeamRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdateOrganizationTeamRequest{
+		OrgID:             orgID,
+		TeamID:            teamID,
+		UpdateTeamRequest: *updateTeamRequest,
 	}
 
 	return &out, diags
@@ -54,22 +128,21 @@ func (r *TeamsResourceModel) ToSharedCreateTeamRequest(ctx context.Context) (*sh
 	return &out, diags
 }
 
-func (r *TeamsResourceModel) ToOperationsCreateOrganizationTeamRequest(ctx context.Context) (*operations.CreateOrganizationTeamRequest, diag.Diagnostics) {
+func (r *TeamsResourceModel) ToSharedTeam(ctx context.Context) (*shared.Team, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
+	var name string
+	name = r.Name.ValueString()
 
-	createTeamRequest, createTeamRequestDiags := r.ToSharedCreateTeamRequest(ctx)
-	diags.Append(createTeamRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
 	}
-
-	out := operations.CreateOrganizationTeamRequest{
-		OrgID:             orgID,
-		CreateTeamRequest: *createTeamRequest,
+	out := shared.Team{
+		Name:        name,
+		Description: description,
 	}
 
 	return &out, diags
@@ -103,77 +176,4 @@ func (r *TeamsResourceModel) ToSharedUpdateTeamRequest(ctx context.Context) (*sh
 	}
 
 	return &out, diags
-}
-
-func (r *TeamsResourceModel) ToOperationsUpdateOrganizationTeamRequest(ctx context.Context) (*operations.UpdateOrganizationTeamRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	var teamID int64
-	teamID = r.TeamID.ValueInt64()
-
-	updateTeamRequest, updateTeamRequestDiags := r.ToSharedUpdateTeamRequest(ctx)
-	diags.Append(updateTeamRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateOrganizationTeamRequest{
-		OrgID:             orgID,
-		TeamID:            teamID,
-		UpdateTeamRequest: *updateTeamRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *TeamsResourceModel) ToOperationsDescribeOrganizationTeamRequest(ctx context.Context) (*operations.DescribeOrganizationTeamRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	var teamID int64
-	teamID = r.TeamID.ValueInt64()
-
-	out := operations.DescribeOrganizationTeamRequest{
-		OrgID:  orgID,
-		TeamID: teamID,
-	}
-
-	return &out, diags
-}
-
-func (r *TeamsResourceModel) ToOperationsDeleteOrganizationTeamRequest(ctx context.Context) (*operations.DeleteOrganizationTeamRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var orgID int64
-	orgID = r.OrgID.ValueInt64()
-
-	var teamID int64
-	teamID = r.TeamID.ValueInt64()
-
-	out := operations.DeleteOrganizationTeamRequest{
-		OrgID:  orgID,
-		TeamID: teamID,
-	}
-
-	return &out, diags
-}
-
-func (r *TeamsResourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, resp *shared.TeamDbDto) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.AvatarURL = types.StringPointerValue(resp.AvatarURL)
-		r.Description = types.StringPointerValue(resp.Description)
-		r.MembersCount = types.Int64PointerValue(resp.MembersCount)
-		r.Name = types.StringPointerValue(resp.Name)
-		r.TeamID = types.Int64PointerValue(resp.TeamID)
-	}
-
-	return diags
 }

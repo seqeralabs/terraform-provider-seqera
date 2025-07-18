@@ -13,542 +13,6 @@ import (
 	"time"
 )
 
-func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Context) (*shared.CreatePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	icon := new(string)
-	if !r.Icon.IsUnknown() && !r.Icon.IsNull() {
-		*icon = r.Icon.ValueString()
-	} else {
-		icon = nil
-	}
-	var launch *shared.WorkflowLaunchRequest
-	if r.Launch != nil {
-		computeEnvID := new(string)
-		if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-			*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-		} else {
-			computeEnvID = nil
-		}
-		runName := new(string)
-		if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
-			*runName = r.Launch.RunName.ValueString()
-		} else {
-			runName = nil
-		}
-		pipeline := new(string)
-		if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
-			*pipeline = r.Launch.Pipeline.ValueString()
-		} else {
-			pipeline = nil
-		}
-		workDir := new(string)
-		if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-			*workDir = r.Launch.WorkDir.ValueString()
-		} else {
-			workDir = nil
-		}
-		revision := new(string)
-		if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
-			*revision = r.Launch.Revision.ValueString()
-		} else {
-			revision = nil
-		}
-		sessionID := new(string)
-		if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
-			*sessionID = r.Launch.SessionID.ValueString()
-		} else {
-			sessionID = nil
-		}
-		configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-		for _, configProfilesItem := range r.Launch.ConfigProfiles {
-			configProfiles = append(configProfiles, configProfilesItem.ValueString())
-		}
-		userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-		for _, userSecretsItem := range r.Launch.UserSecrets {
-			userSecrets = append(userSecrets, userSecretsItem.ValueString())
-		}
-		workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-		for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
-			workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
-		}
-		configText := new(string)
-		if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
-			*configText = r.Launch.ConfigText.ValueString()
-		} else {
-			configText = nil
-		}
-		towerConfig := new(string)
-		if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
-			*towerConfig = r.Launch.TowerConfig.ValueString()
-		} else {
-			towerConfig = nil
-		}
-		paramsText := new(string)
-		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
-			*paramsText = r.Launch.ParamsText.ValueString()
-		} else {
-			paramsText = nil
-		}
-		preRunScript := new(string)
-		if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
-			*preRunScript = r.Launch.PreRunScript.ValueString()
-		} else {
-			preRunScript = nil
-		}
-		postRunScript := new(string)
-		if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
-			*postRunScript = r.Launch.PostRunScript.ValueString()
-		} else {
-			postRunScript = nil
-		}
-		mainScript := new(string)
-		if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
-			*mainScript = r.Launch.MainScript.ValueString()
-		} else {
-			mainScript = nil
-		}
-		entryName := new(string)
-		if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
-			*entryName = r.Launch.EntryName.ValueString()
-		} else {
-			entryName = nil
-		}
-		schemaName := new(string)
-		if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-			*schemaName = r.Launch.SchemaName.ValueString()
-		} else {
-			schemaName = nil
-		}
-		resume := new(bool)
-		if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
-			*resume = r.Launch.Resume.ValueBool()
-		} else {
-			resume = nil
-		}
-		pullLatest := new(bool)
-		if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
-			*pullLatest = r.Launch.PullLatest.ValueBool()
-		} else {
-			pullLatest = nil
-		}
-		stubRun := new(bool)
-		if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
-			*stubRun = r.Launch.StubRun.ValueBool()
-		} else {
-			stubRun = nil
-		}
-		optimizationID := new(string)
-		if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
-			*optimizationID = r.Launch.OptimizationID.ValueString()
-		} else {
-			optimizationID = nil
-		}
-		optimizationTargets := new(string)
-		if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
-			*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
-		} else {
-			optimizationTargets = nil
-		}
-		labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-		for _, labelIdsItem := range r.Launch.LabelIds {
-			labelIds = append(labelIds, labelIdsItem.ValueInt64())
-		}
-		headJobCpus := new(int)
-		if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
-			*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
-		} else {
-			headJobCpus = nil
-		}
-		headJobMemoryMb := new(int)
-		if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
-		} else {
-			headJobMemoryMb = nil
-		}
-		launchContainer := new(string)
-		if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
-			*launchContainer = r.Launch.LaunchContainer.ValueString()
-		} else {
-			launchContainer = nil
-		}
-		dateCreated := new(time.Time)
-		if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
-			*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
-		} else {
-			dateCreated = nil
-		}
-		launch = &shared.WorkflowLaunchRequest{
-			ComputeEnvID:        computeEnvID,
-			RunName:             runName,
-			Pipeline:            pipeline,
-			WorkDir:             workDir,
-			Revision:            revision,
-			SessionID:           sessionID,
-			ConfigProfiles:      configProfiles,
-			UserSecrets:         userSecrets,
-			WorkspaceSecrets:    workspaceSecrets,
-			ConfigText:          configText,
-			TowerConfig:         towerConfig,
-			ParamsText:          paramsText,
-			PreRunScript:        preRunScript,
-			PostRunScript:       postRunScript,
-			MainScript:          mainScript,
-			EntryName:           entryName,
-			SchemaName:          schemaName,
-			Resume:              resume,
-			PullLatest:          pullLatest,
-			StubRun:             stubRun,
-			OptimizationID:      optimizationID,
-			OptimizationTargets: optimizationTargets,
-			LabelIds:            labelIds,
-			HeadJobCpus:         headJobCpus,
-			HeadJobMemoryMb:     headJobMemoryMb,
-			LaunchContainer:     launchContainer,
-			DateCreated:         dateCreated,
-		}
-	}
-	labelIds1 := make([]int64, 0, len(r.LabelIds))
-	for _, labelIdsItem1 := range r.LabelIds {
-		labelIds1 = append(labelIds1, labelIdsItem1.ValueInt64())
-	}
-	out := shared.CreatePipelineRequest{
-		Name:        name,
-		Description: description,
-		Icon:        icon,
-		Launch:      launch,
-		LabelIds:    labelIds1,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsCreatePipelineRequest(ctx context.Context) (*operations.CreatePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	createPipelineRequest, createPipelineRequestDiags := r.ToSharedCreatePipelineRequest(ctx)
-	diags.Append(createPipelineRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.CreatePipelineRequest{
-		WorkspaceID:           workspaceID,
-		CreatePipelineRequest: *createPipelineRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Context) (*shared.UpdatePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	icon := new(string)
-	if !r.Icon.IsUnknown() && !r.Icon.IsNull() {
-		*icon = r.Icon.ValueString()
-	} else {
-		icon = nil
-	}
-	var launch *shared.WorkflowLaunchRequest
-	if r.Launch != nil {
-		computeEnvID := new(string)
-		if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-			*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-		} else {
-			computeEnvID = nil
-		}
-		runName := new(string)
-		if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
-			*runName = r.Launch.RunName.ValueString()
-		} else {
-			runName = nil
-		}
-		pipeline := new(string)
-		if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
-			*pipeline = r.Launch.Pipeline.ValueString()
-		} else {
-			pipeline = nil
-		}
-		workDir := new(string)
-		if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-			*workDir = r.Launch.WorkDir.ValueString()
-		} else {
-			workDir = nil
-		}
-		revision := new(string)
-		if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
-			*revision = r.Launch.Revision.ValueString()
-		} else {
-			revision = nil
-		}
-		sessionID := new(string)
-		if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
-			*sessionID = r.Launch.SessionID.ValueString()
-		} else {
-			sessionID = nil
-		}
-		configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-		for _, configProfilesItem := range r.Launch.ConfigProfiles {
-			configProfiles = append(configProfiles, configProfilesItem.ValueString())
-		}
-		userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-		for _, userSecretsItem := range r.Launch.UserSecrets {
-			userSecrets = append(userSecrets, userSecretsItem.ValueString())
-		}
-		workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-		for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
-			workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
-		}
-		configText := new(string)
-		if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
-			*configText = r.Launch.ConfigText.ValueString()
-		} else {
-			configText = nil
-		}
-		towerConfig := new(string)
-		if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
-			*towerConfig = r.Launch.TowerConfig.ValueString()
-		} else {
-			towerConfig = nil
-		}
-		paramsText := new(string)
-		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
-			*paramsText = r.Launch.ParamsText.ValueString()
-		} else {
-			paramsText = nil
-		}
-		preRunScript := new(string)
-		if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
-			*preRunScript = r.Launch.PreRunScript.ValueString()
-		} else {
-			preRunScript = nil
-		}
-		postRunScript := new(string)
-		if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
-			*postRunScript = r.Launch.PostRunScript.ValueString()
-		} else {
-			postRunScript = nil
-		}
-		mainScript := new(string)
-		if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
-			*mainScript = r.Launch.MainScript.ValueString()
-		} else {
-			mainScript = nil
-		}
-		entryName := new(string)
-		if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
-			*entryName = r.Launch.EntryName.ValueString()
-		} else {
-			entryName = nil
-		}
-		schemaName := new(string)
-		if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-			*schemaName = r.Launch.SchemaName.ValueString()
-		} else {
-			schemaName = nil
-		}
-		resume := new(bool)
-		if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
-			*resume = r.Launch.Resume.ValueBool()
-		} else {
-			resume = nil
-		}
-		pullLatest := new(bool)
-		if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
-			*pullLatest = r.Launch.PullLatest.ValueBool()
-		} else {
-			pullLatest = nil
-		}
-		stubRun := new(bool)
-		if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
-			*stubRun = r.Launch.StubRun.ValueBool()
-		} else {
-			stubRun = nil
-		}
-		optimizationID := new(string)
-		if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
-			*optimizationID = r.Launch.OptimizationID.ValueString()
-		} else {
-			optimizationID = nil
-		}
-		optimizationTargets := new(string)
-		if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
-			*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
-		} else {
-			optimizationTargets = nil
-		}
-		labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-		for _, labelIdsItem := range r.Launch.LabelIds {
-			labelIds = append(labelIds, labelIdsItem.ValueInt64())
-		}
-		headJobCpus := new(int)
-		if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
-			*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
-		} else {
-			headJobCpus = nil
-		}
-		headJobMemoryMb := new(int)
-		if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
-		} else {
-			headJobMemoryMb = nil
-		}
-		launchContainer := new(string)
-		if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
-			*launchContainer = r.Launch.LaunchContainer.ValueString()
-		} else {
-			launchContainer = nil
-		}
-		dateCreated := new(time.Time)
-		if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
-			*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
-		} else {
-			dateCreated = nil
-		}
-		launch = &shared.WorkflowLaunchRequest{
-			ComputeEnvID:        computeEnvID,
-			RunName:             runName,
-			Pipeline:            pipeline,
-			WorkDir:             workDir,
-			Revision:            revision,
-			SessionID:           sessionID,
-			ConfigProfiles:      configProfiles,
-			UserSecrets:         userSecrets,
-			WorkspaceSecrets:    workspaceSecrets,
-			ConfigText:          configText,
-			TowerConfig:         towerConfig,
-			ParamsText:          paramsText,
-			PreRunScript:        preRunScript,
-			PostRunScript:       postRunScript,
-			MainScript:          mainScript,
-			EntryName:           entryName,
-			SchemaName:          schemaName,
-			Resume:              resume,
-			PullLatest:          pullLatest,
-			StubRun:             stubRun,
-			OptimizationID:      optimizationID,
-			OptimizationTargets: optimizationTargets,
-			LabelIds:            labelIds,
-			HeadJobCpus:         headJobCpus,
-			HeadJobMemoryMb:     headJobMemoryMb,
-			LaunchContainer:     launchContainer,
-			DateCreated:         dateCreated,
-		}
-	}
-	labelIds1 := make([]int64, 0, len(r.LabelIds))
-	for _, labelIdsItem1 := range r.LabelIds {
-		labelIds1 = append(labelIds1, labelIdsItem1.ValueInt64())
-	}
-	out := shared.UpdatePipelineRequest{
-		Name:        name,
-		Description: description,
-		Icon:        icon,
-		Launch:      launch,
-		LabelIds:    labelIds1,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsUpdatePipelineRequest(ctx context.Context) (*operations.UpdatePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pipelineID int64
-	pipelineID = r.PipelineID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	updatePipelineRequest, updatePipelineRequestDiags := r.ToSharedUpdatePipelineRequest(ctx)
-	diags.Append(updatePipelineRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdatePipelineRequest{
-		PipelineID:            pipelineID,
-		WorkspaceID:           workspaceID,
-		UpdatePipelineRequest: *updatePipelineRequest,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsDescribePipelineRequest(ctx context.Context) (*operations.DescribePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pipelineID int64
-	pipelineID = r.PipelineID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DescribePipelineRequest{
-		PipelineID:  pipelineID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
-func (r *PipelineResourceModel) ToOperationsDeletePipelineRequest(ctx context.Context) (*operations.DeletePipelineRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var pipelineID int64
-	pipelineID = r.PipelineID.ValueInt64()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DeletePipelineRequest{
-		PipelineID:  pipelineID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
 func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Context, resp *shared.PipelineDbDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -611,4 +75,526 @@ func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Conte
 	}
 
 	return diags
+}
+
+func (r *PipelineResourceModel) ToOperationsCreatePipelineRequest(ctx context.Context) (*operations.CreatePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	createPipelineRequest, createPipelineRequestDiags := r.ToSharedCreatePipelineRequest(ctx)
+	diags.Append(createPipelineRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.CreatePipelineRequest{
+		WorkspaceID:           workspaceID,
+		CreatePipelineRequest: *createPipelineRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToOperationsDeletePipelineRequest(ctx context.Context) (*operations.DeletePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pipelineID int64
+	pipelineID = r.PipelineID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DeletePipelineRequest{
+		PipelineID:  pipelineID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToOperationsDescribePipelineRequest(ctx context.Context) (*operations.DescribePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pipelineID int64
+	pipelineID = r.PipelineID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DescribePipelineRequest{
+		PipelineID:  pipelineID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToOperationsUpdatePipelineRequest(ctx context.Context) (*operations.UpdatePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var pipelineID int64
+	pipelineID = r.PipelineID.ValueInt64()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	updatePipelineRequest, updatePipelineRequestDiags := r.ToSharedUpdatePipelineRequest(ctx)
+	diags.Append(updatePipelineRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := operations.UpdatePipelineRequest{
+		PipelineID:            pipelineID,
+		WorkspaceID:           workspaceID,
+		UpdatePipelineRequest: *updatePipelineRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Context) (*shared.CreatePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var name string
+	name = r.Name.ValueString()
+
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	icon := new(string)
+	if !r.Icon.IsUnknown() && !r.Icon.IsNull() {
+		*icon = r.Icon.ValueString()
+	} else {
+		icon = nil
+	}
+	computeEnvID := new(string)
+	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
+	runName := new(string)
+	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
+		*runName = r.Launch.RunName.ValueString()
+	} else {
+		runName = nil
+	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
+	revision := new(string)
+	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
+		*revision = r.Launch.Revision.ValueString()
+	} else {
+		revision = nil
+	}
+	sessionID := new(string)
+	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
+		*sessionID = r.Launch.SessionID.ValueString()
+	} else {
+		sessionID = nil
+	}
+	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
+	for _, configProfilesItem := range r.Launch.ConfigProfiles {
+		configProfiles = append(configProfiles, configProfilesItem.ValueString())
+	}
+	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
+	for _, userSecretsItem := range r.Launch.UserSecrets {
+		userSecrets = append(userSecrets, userSecretsItem.ValueString())
+	}
+	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
+	for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
+	}
+	configText := new(string)
+	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
+		*configText = r.Launch.ConfigText.ValueString()
+	} else {
+		configText = nil
+	}
+	towerConfig := new(string)
+	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
+		*towerConfig = r.Launch.TowerConfig.ValueString()
+	} else {
+		towerConfig = nil
+	}
+	paramsText := new(string)
+	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
+		*paramsText = r.Launch.ParamsText.ValueString()
+	} else {
+		paramsText = nil
+	}
+	preRunScript := new(string)
+	if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
+		*preRunScript = r.Launch.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	postRunScript := new(string)
+	if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
+		*postRunScript = r.Launch.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	mainScript := new(string)
+	if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
+		*mainScript = r.Launch.MainScript.ValueString()
+	} else {
+		mainScript = nil
+	}
+	entryName := new(string)
+	if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
+		*entryName = r.Launch.EntryName.ValueString()
+	} else {
+		entryName = nil
+	}
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
+	resume := new(bool)
+	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
+		*resume = r.Launch.Resume.ValueBool()
+	} else {
+		resume = nil
+	}
+	pullLatest := new(bool)
+	if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
+		*pullLatest = r.Launch.PullLatest.ValueBool()
+	} else {
+		pullLatest = nil
+	}
+	stubRun := new(bool)
+	if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
+		*stubRun = r.Launch.StubRun.ValueBool()
+	} else {
+		stubRun = nil
+	}
+	optimizationID := new(string)
+	if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
+		*optimizationID = r.Launch.OptimizationID.ValueString()
+	} else {
+		optimizationID = nil
+	}
+	optimizationTargets := new(string)
+	if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
+		*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
+	} else {
+		optimizationTargets = nil
+	}
+	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
+	for _, labelIdsItem := range r.Launch.LabelIds {
+		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	}
+	headJobCpus := new(int)
+	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
+		*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
+	} else {
+		headJobCpus = nil
+	}
+	headJobMemoryMb := new(int)
+	if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
+		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
+	} else {
+		headJobMemoryMb = nil
+	}
+	launchContainer := new(string)
+	if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
+		*launchContainer = r.Launch.LaunchContainer.ValueString()
+	} else {
+		launchContainer = nil
+	}
+	dateCreated := new(time.Time)
+	if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
+	} else {
+		dateCreated = nil
+	}
+	launch := shared.WorkflowLaunchRequest{
+		ComputeEnvID:        computeEnvID,
+		RunName:             runName,
+		Pipeline:            pipeline,
+		WorkDir:             workDir,
+		Revision:            revision,
+		SessionID:           sessionID,
+		ConfigProfiles:      configProfiles,
+		UserSecrets:         userSecrets,
+		WorkspaceSecrets:    workspaceSecrets,
+		ConfigText:          configText,
+		TowerConfig:         towerConfig,
+		ParamsText:          paramsText,
+		PreRunScript:        preRunScript,
+		PostRunScript:       postRunScript,
+		MainScript:          mainScript,
+		EntryName:           entryName,
+		SchemaName:          schemaName,
+		Resume:              resume,
+		PullLatest:          pullLatest,
+		StubRun:             stubRun,
+		OptimizationID:      optimizationID,
+		OptimizationTargets: optimizationTargets,
+		LabelIds:            labelIds,
+		HeadJobCpus:         headJobCpus,
+		HeadJobMemoryMb:     headJobMemoryMb,
+		LaunchContainer:     launchContainer,
+		DateCreated:         dateCreated,
+	}
+	labelIds1 := make([]int64, 0, len(r.LabelIds))
+	for _, labelIdsItem1 := range r.LabelIds {
+		labelIds1 = append(labelIds1, labelIdsItem1.ValueInt64())
+	}
+	out := shared.CreatePipelineRequest{
+		Name:        name,
+		Description: description,
+		Icon:        icon,
+		Launch:      launch,
+		LabelIds:    labelIds1,
+	}
+
+	return &out, diags
+}
+
+func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Context) (*shared.UpdatePipelineRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	icon := new(string)
+	if !r.Icon.IsUnknown() && !r.Icon.IsNull() {
+		*icon = r.Icon.ValueString()
+	} else {
+		icon = nil
+	}
+	var launch *shared.WorkflowLaunchRequest
+	computeEnvID := new(string)
+	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
+	runName := new(string)
+	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
+		*runName = r.Launch.RunName.ValueString()
+	} else {
+		runName = nil
+	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
+	revision := new(string)
+	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
+		*revision = r.Launch.Revision.ValueString()
+	} else {
+		revision = nil
+	}
+	sessionID := new(string)
+	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
+		*sessionID = r.Launch.SessionID.ValueString()
+	} else {
+		sessionID = nil
+	}
+	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
+	for _, configProfilesItem := range r.Launch.ConfigProfiles {
+		configProfiles = append(configProfiles, configProfilesItem.ValueString())
+	}
+	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
+	for _, userSecretsItem := range r.Launch.UserSecrets {
+		userSecrets = append(userSecrets, userSecretsItem.ValueString())
+	}
+	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
+	for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
+	}
+	configText := new(string)
+	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
+		*configText = r.Launch.ConfigText.ValueString()
+	} else {
+		configText = nil
+	}
+	towerConfig := new(string)
+	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
+		*towerConfig = r.Launch.TowerConfig.ValueString()
+	} else {
+		towerConfig = nil
+	}
+	paramsText := new(string)
+	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
+		*paramsText = r.Launch.ParamsText.ValueString()
+	} else {
+		paramsText = nil
+	}
+	preRunScript := new(string)
+	if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
+		*preRunScript = r.Launch.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	postRunScript := new(string)
+	if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
+		*postRunScript = r.Launch.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	mainScript := new(string)
+	if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
+		*mainScript = r.Launch.MainScript.ValueString()
+	} else {
+		mainScript = nil
+	}
+	entryName := new(string)
+	if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
+		*entryName = r.Launch.EntryName.ValueString()
+	} else {
+		entryName = nil
+	}
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
+	resume := new(bool)
+	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
+		*resume = r.Launch.Resume.ValueBool()
+	} else {
+		resume = nil
+	}
+	pullLatest := new(bool)
+	if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
+		*pullLatest = r.Launch.PullLatest.ValueBool()
+	} else {
+		pullLatest = nil
+	}
+	stubRun := new(bool)
+	if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
+		*stubRun = r.Launch.StubRun.ValueBool()
+	} else {
+		stubRun = nil
+	}
+	optimizationID := new(string)
+	if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
+		*optimizationID = r.Launch.OptimizationID.ValueString()
+	} else {
+		optimizationID = nil
+	}
+	optimizationTargets := new(string)
+	if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
+		*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
+	} else {
+		optimizationTargets = nil
+	}
+	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
+	for _, labelIdsItem := range r.Launch.LabelIds {
+		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	}
+	headJobCpus := new(int)
+	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
+		*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
+	} else {
+		headJobCpus = nil
+	}
+	headJobMemoryMb := new(int)
+	if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
+		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
+	} else {
+		headJobMemoryMb = nil
+	}
+	launchContainer := new(string)
+	if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
+		*launchContainer = r.Launch.LaunchContainer.ValueString()
+	} else {
+		launchContainer = nil
+	}
+	dateCreated := new(time.Time)
+	if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
+	} else {
+		dateCreated = nil
+	}
+	launch = &shared.WorkflowLaunchRequest{
+		ComputeEnvID:        computeEnvID,
+		RunName:             runName,
+		Pipeline:            pipeline,
+		WorkDir:             workDir,
+		Revision:            revision,
+		SessionID:           sessionID,
+		ConfigProfiles:      configProfiles,
+		UserSecrets:         userSecrets,
+		WorkspaceSecrets:    workspaceSecrets,
+		ConfigText:          configText,
+		TowerConfig:         towerConfig,
+		ParamsText:          paramsText,
+		PreRunScript:        preRunScript,
+		PostRunScript:       postRunScript,
+		MainScript:          mainScript,
+		EntryName:           entryName,
+		SchemaName:          schemaName,
+		Resume:              resume,
+		PullLatest:          pullLatest,
+		StubRun:             stubRun,
+		OptimizationID:      optimizationID,
+		OptimizationTargets: optimizationTargets,
+		LabelIds:            labelIds,
+		HeadJobCpus:         headJobCpus,
+		HeadJobMemoryMb:     headJobMemoryMb,
+		LaunchContainer:     launchContainer,
+		DateCreated:         dateCreated,
+	}
+	labelIds1 := make([]int64, 0, len(r.LabelIds))
+	for _, labelIdsItem1 := range r.LabelIds {
+		labelIds1 = append(labelIds1, labelIdsItem1.ValueInt64())
+	}
+	out := shared.UpdatePipelineRequest{
+		Name:        name,
+		Description: description,
+		Icon:        icon,
+		Launch:      launch,
+		LabelIds:    labelIds1,
+	}
+
+	return &out, diags
 }

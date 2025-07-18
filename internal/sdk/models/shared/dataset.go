@@ -7,11 +7,19 @@ import (
 	"time"
 )
 
+// Dataset - Represents a dataset in the Seqera Platform.
+// Contains dataset metadata, versioning information, and access
+// controls for data management and sharing.
 type Dataset struct {
-	ID          *string    `json:"id,omitempty"`
-	Name        string     `json:"name"`
-	Description *string    `json:"description,omitempty"`
-	MediaType   *string    `json:"mediaType,omitempty"`
+	// Unique identifier for the dataset (max 22 characters)
+	ID *string `json:"id,omitempty"`
+	// Dataset name following naming conventions (1-100 characters)
+	Name string `json:"name"`
+	// Detailed description of the dataset contents and purpose (max 1000 characters)
+	Description *string `json:"description,omitempty"`
+	// MIME type or media type of the dataset content (max 80 characters)
+	MediaType *string `json:"mediaType,omitempty"`
+	// Read-only flag indicating if the dataset has been deleted
 	Deleted     *bool      `json:"deleted,omitempty"`
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`

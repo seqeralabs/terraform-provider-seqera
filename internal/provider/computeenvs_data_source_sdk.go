@@ -12,29 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *ComputeEnvsDataSourceModel) ToOperationsListComputeEnvsRequest(ctx context.Context) (*operations.ListComputeEnvsRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	status := new(string)
-	if !r.Status.IsUnknown() && !r.Status.IsNull() {
-		*status = r.Status.ValueString()
-	} else {
-		status = nil
-	}
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.ListComputeEnvsRequest{
-		Status:      status,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
 func (r *ComputeEnvsDataSourceModel) RefreshFromSharedListComputeEnvsResponse(ctx context.Context, resp *shared.ListComputeEnvsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -81,4 +58,27 @@ func (r *ComputeEnvsDataSourceModel) RefreshFromSharedListComputeEnvsResponse(ct
 	}
 
 	return diags
+}
+
+func (r *ComputeEnvsDataSourceModel) ToOperationsListComputeEnvsRequest(ctx context.Context) (*operations.ListComputeEnvsRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	status := new(string)
+	if !r.Status.IsUnknown() && !r.Status.IsNull() {
+		*status = r.Status.ValueString()
+	} else {
+		status = nil
+	}
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.ListComputeEnvsRequest{
+		Status:      status,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
 }

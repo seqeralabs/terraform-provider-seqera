@@ -3,6 +3,10 @@
 package shared
 
 type DescribeActionResponse struct {
+	// Represents a pipeline action in the Seqera Platform.
+	// Contains action configuration, triggers, and execution settings
+	// for automated pipeline workflows.
+	//
 	Action *ActionResponseDto `json:"action,omitempty"`
 }
 

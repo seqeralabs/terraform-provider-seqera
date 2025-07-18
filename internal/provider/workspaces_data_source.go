@@ -53,16 +53,20 @@ func (r *WorkspacesDataSource) Schema(ctx context.Context, req datasource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"description": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Detailed description of the workspace's purpose`,
 						},
 						"full_name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Complete display name for the workspace`,
 						},
 						"id": schema.Int64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unique numeric identifier for the workspace`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Short name or handle for the workspace`,
 						},
 						"visibility": schema.StringAttribute{
 							Computed: true,

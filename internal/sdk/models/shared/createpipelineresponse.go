@@ -3,6 +3,10 @@
 package shared
 
 type CreatePipelineResponse struct {
+	// Represents a pipeline configuration in the Seqera Platform.
+	// Contains pipeline metadata, configuration settings, and execution parameters
+	// for Nextflow workflows.
+	//
 	Pipeline *PipelineDbDto `json:"pipeline,omitempty"`
 }
 

@@ -56,16 +56,20 @@ func (r *CredentialsDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed: true,
 						},
 						"credentials_id": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unique identifier for the credential (max 22 characters)`,
 						},
 						"date_created": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Timestamp when the credential was created`,
 						},
 						"deleted": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Flag indicating if the credential has been soft-deleted`,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Optional description explaining the purpose of the credential`,
 						},
 						"keys": schema.SingleNestedAttribute{
 							Computed: true,
@@ -262,13 +266,16 @@ func (r *CredentialsDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed: true,
 						},
 						"last_used": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Timestamp when the credential was last used`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Display name for the credential (max 100 characters)`,
 						},
 						"provider_type": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Cloud or service provider type (e.g., aws, azure, gcp)`,
 						},
 					},
 				},

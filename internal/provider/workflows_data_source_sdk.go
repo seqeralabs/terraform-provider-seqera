@@ -13,31 +13,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *WorkflowsDataSourceModel) ToOperationsDescribeWorkflowRequest(ctx context.Context) (*operations.DescribeWorkflowRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var workflowID string
-	workflowID = r.WorkflowID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	attributes := make([]shared.WorkflowQueryAttribute, 0, len(r.Attributes))
-	for _, attributesItem := range r.Attributes {
-		attributes = append(attributes, shared.WorkflowQueryAttribute(attributesItem.ValueString()))
-	}
-	out := operations.DescribeWorkflowRequest{
-		WorkflowID:  workflowID,
-		WorkspaceID: workspaceID,
-		Attributes:  attributes,
-	}
-
-	return &out, diags
-}
-
 func (r *WorkflowsDataSourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx context.Context, resp *shared.DescribeWorkflowResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -304,4 +279,29 @@ func (r *WorkflowsDataSourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx
 	}
 
 	return diags
+}
+
+func (r *WorkflowsDataSourceModel) ToOperationsDescribeWorkflowRequest(ctx context.Context) (*operations.DescribeWorkflowRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var workflowID string
+	workflowID = r.WorkflowID.ValueString()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	attributes := make([]shared.WorkflowQueryAttribute, 0, len(r.Attributes))
+	for _, attributesItem := range r.Attributes {
+		attributes = append(attributes, shared.WorkflowQueryAttribute(attributesItem.ValueString()))
+	}
+	out := operations.DescribeWorkflowRequest{
+		WorkflowID:  workflowID,
+		WorkspaceID: workspaceID,
+		Attributes:  attributes,
+	}
+
+	return &out, diags
 }

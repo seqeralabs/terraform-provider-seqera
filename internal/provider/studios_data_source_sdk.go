@@ -12,26 +12,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *StudiosDataSourceModel) ToOperationsDescribeDataStudioRequest(ctx context.Context) (*operations.DescribeDataStudioRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var sessionID string
-	sessionID = r.SessionID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	out := operations.DescribeDataStudioRequest{
-		SessionID:   sessionID,
-		WorkspaceID: workspaceID,
-	}
-
-	return &out, diags
-}
-
 func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Context, resp *shared.DataStudioDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -250,4 +230,24 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 	}
 
 	return diags
+}
+
+func (r *StudiosDataSourceModel) ToOperationsDescribeDataStudioRequest(ctx context.Context) (*operations.DescribeDataStudioRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var sessionID string
+	sessionID = r.SessionID.ValueString()
+
+	workspaceID := new(int64)
+	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
+		*workspaceID = r.WorkspaceID.ValueInt64()
+	} else {
+		workspaceID = nil
+	}
+	out := operations.DescribeDataStudioRequest{
+		SessionID:   sessionID,
+		WorkspaceID: workspaceID,
+	}
+
+	return &out, diags
 }

@@ -22,8 +22,8 @@ data "seqera_tokens" "my_tokens" {
 
 ### Read-Only
 
-- `basic_auth` (String, Deprecated)
-- `date_created` (String)
-- `id` (Number) The ID of this resource.
-- `last_used` (String)
-- `name` (String)
+- `basic_auth` (String, Deprecated) Deprecated basic authentication string
+- `date_created` (String) Timestamp when the token was created
+- `id` (Number) Unique numeric identifier for the access token (nullable)
+- `last_used` (String) Timestamp when the token was last used for authentication
+- `name` (String) Display name for the token (1-50 characters)

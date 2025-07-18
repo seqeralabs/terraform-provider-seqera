@@ -7,14 +7,25 @@ import (
 	"time"
 )
 
+// PipelineDbDto - Represents a pipeline configuration in the Seqera Platform.
+// Contains pipeline metadata, configuration settings, and execution parameters
+// for Nextflow workflows.
 type PipelineDbDto struct {
-	PipelineID          *int64                      `json:"pipelineId,omitempty"`
-	Name                *string                     `json:"name,omitempty"`
-	Description         *string                     `json:"description,omitempty"`
-	Icon                *string                     `json:"icon,omitempty"`
-	Repository          *string                     `json:"repository,omitempty"`
-	UserID              *int64                      `json:"userId,omitempty"`
-	UserName            *string                     `json:"userName,omitempty"`
+	// Unique numeric identifier for the pipeline
+	PipelineID *int64 `json:"pipelineId,omitempty"`
+	// Display name for the pipeline
+	Name *string `json:"name,omitempty"`
+	// Detailed description of the pipeline's purpose and functionality
+	Description *string `json:"description,omitempty"`
+	// Icon identifier or URL for visual representation
+	Icon *string `json:"icon,omitempty"`
+	// Git repository URL containing the pipeline source code
+	Repository *string `json:"repository,omitempty"`
+	// Numeric identifier of the user who created the pipeline
+	UserID *int64 `json:"userId,omitempty"`
+	// Username of the pipeline creator
+	UserName *string `json:"userName,omitempty"`
+	// First name of the user who created the pipeline
 	UserFirstName       *string                     `json:"userFirstName,omitempty"`
 	UserLastName        *string                     `json:"userLastName,omitempty"`
 	OrgID               *int64                      `json:"orgId,omitempty"`

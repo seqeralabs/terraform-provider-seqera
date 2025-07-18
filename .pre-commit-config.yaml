@@ -23,8 +23,6 @@ repos:
           - "--args=--only=terraform_map_duplicate_keys"
           - "--args=--only=terraform_module_pinned_source"
           - "--args=--only=terraform_module_version"
-          - "--args=--only=terraform_required_providers"
-          - "--args=--only=terraform_required_version"
           - "--args=--only=terraform_typed_variables"
           - "--args=--only=terraform_unused_declarations"
           - "--args=--only=terraform_unused_required_providers"

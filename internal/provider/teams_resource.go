@@ -54,7 +54,8 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 			},
 			"avatar_url": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `URL to the team's avatar or profile image`,
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
@@ -64,7 +65,8 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"members_count": schema.Int64Attribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Total number of members in the team`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -78,7 +80,7 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"team_id": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Team numeric identifier`,
+				Description: `Unique numeric identifier for the team`,
 			},
 		},
 	}

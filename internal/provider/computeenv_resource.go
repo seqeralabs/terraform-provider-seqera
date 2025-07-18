@@ -30,6 +30,7 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	speakeasy_int32validators "github.com/speakeasy/terraform-provider-seqera/internal/validators/int32validators"
 	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -111,7 +112,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -167,7 +168,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"head_job_options": schema.StringAttribute{
 										Computed: true,
@@ -221,7 +222,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"port": schema.Int32Attribute{
 										Computed: true,
@@ -239,7 +240,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -248,7 +249,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -275,7 +276,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -339,7 +343,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -413,7 +417,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"execution_role": schema.StringAttribute{
 										Computed: true,
@@ -674,7 +678,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"security_groups": schema.ListAttribute{
 												Computed: true,
@@ -703,8 +710,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
+												Description: `Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													speakeasy_stringvalidators.NotNull(),
 													stringvalidator.OneOf(
 														"SPOT",
 														"EC2",
@@ -721,7 +729,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,
@@ -803,7 +814,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"nvnme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -821,7 +832,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -830,7 +841,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -839,7 +850,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_type": schema.StringAttribute{
 										Computed: true,
@@ -877,7 +891,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -933,7 +947,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"ebs_boot_size": schema.Int32Attribute{
 										Computed: true,
@@ -1007,7 +1021,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1070,7 +1084,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1079,7 +1093,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1088,7 +1102,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -1097,7 +1111,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"security_groups": schema.ListAttribute{
 										Computed: true,
@@ -1134,7 +1151,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -1206,7 +1223,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -1262,7 +1279,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"forge": schema.SingleNestedAttribute{
 										Computed: true,
@@ -1307,7 +1324,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"vm_type": schema.StringAttribute{
 												Computed: true,
@@ -1319,7 +1339,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
 									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1355,7 +1378,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1364,7 +1387,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1373,7 +1396,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -1382,7 +1405,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"token_duration": schema.StringAttribute{
 										Computed: true,
@@ -1409,7 +1435,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -1446,7 +1472,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The AWS EKS cluster name. Requires replacement if changed.`,
+										Description: `The AWS EKS cluster name. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"compute_service_account": schema.StringAttribute{
 										Computed: true,
@@ -1464,7 +1493,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -1520,7 +1549,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1565,7 +1594,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"namespace": schema.StringAttribute{
 										Computed: true,
@@ -1574,7 +1606,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -1583,7 +1618,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"pod_cleanup": schema.StringAttribute{
 										Computed: true,
@@ -1608,7 +1643,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1617,7 +1652,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -1626,7 +1661,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `AWS region. Requires replacement if changed.`,
+										Description: `AWS region. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"server": schema.StringAttribute{
 										Computed: true,
@@ -1635,7 +1673,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"service_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -1653,7 +1694,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_claim_name": schema.StringAttribute{
 										Computed: true,
@@ -1662,7 +1706,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_mount_path": schema.StringAttribute{
 										Computed: true,
@@ -1689,7 +1736,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -1726,7 +1773,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The GKE cluster name. Requires replacement if changed.`,
+										Description: `The GKE cluster name. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"compute_service_account": schema.StringAttribute{
 										Computed: true,
@@ -1744,7 +1794,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -1800,7 +1850,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1845,7 +1895,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"namespace": schema.StringAttribute{
 										Computed: true,
@@ -1854,7 +1907,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -1863,7 +1919,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"pod_cleanup": schema.StringAttribute{
 										Computed: true,
@@ -1888,7 +1944,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1897,7 +1953,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -1906,7 +1962,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The GKE cluster region - or - zone. Requires replacement if changed.`,
+										Description: `The GKE cluster region - or - zone. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"server": schema.StringAttribute{
 										Computed: true,
@@ -1915,7 +1974,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"service_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -1933,7 +1995,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_claim_name": schema.StringAttribute{
 										Computed: true,
@@ -1942,7 +2007,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_mount_path": schema.StringAttribute{
 										Computed: true,
@@ -1969,7 +2037,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -2051,7 +2119,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2107,7 +2175,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -2189,7 +2257,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"nfs_mount": schema.StringAttribute{
 										Computed: true,
@@ -2216,7 +2284,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2225,7 +2293,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"project_id": schema.StringAttribute{
 										Computed: true,
@@ -2306,7 +2374,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -2370,7 +2438,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2426,7 +2494,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -2472,7 +2540,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"nfs_mount": schema.StringAttribute{
 										Computed: true,
@@ -2499,7 +2567,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2508,7 +2576,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"preemptible": schema.BoolAttribute{
 										Computed: true,
@@ -2571,7 +2639,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 									"zones": schema.ListAttribute{
 										Computed: true,
@@ -2627,7 +2695,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2683,7 +2751,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -2719,7 +2787,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"namespace": schema.StringAttribute{
 										Computed: true,
@@ -2728,7 +2799,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -2737,7 +2811,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"pod_cleanup": schema.StringAttribute{
 										Computed: true,
@@ -2762,7 +2836,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2771,7 +2845,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"server": schema.StringAttribute{
 										Computed: true,
@@ -2780,7 +2854,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"service_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -2798,7 +2875,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_claim_name": schema.StringAttribute{
 										Computed: true,
@@ -2807,7 +2887,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_mount_path": schema.StringAttribute{
 										Computed: true,
@@ -2825,7 +2908,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -2871,7 +2954,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2927,7 +3010,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"head_job_options": schema.StringAttribute{
 										Computed: true,
@@ -2981,7 +3064,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"per_job_mem_limit": schema.BoolAttribute{
 										Computed: true,
@@ -3017,7 +3100,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3026,7 +3109,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -3062,7 +3145,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -3108,7 +3194,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -3164,7 +3250,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"head_job_options": schema.StringAttribute{
 										Computed: true,
@@ -3218,7 +3304,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"port": schema.Int32Attribute{
 										Computed: true,
@@ -3236,7 +3322,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3245,7 +3331,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -3272,7 +3358,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -3336,7 +3425,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -3410,7 +3499,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"execution_role": schema.StringAttribute{
 										Computed: true,
@@ -3671,7 +3760,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"security_groups": schema.ListAttribute{
 												Computed: true,
@@ -3700,8 +3792,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
+												Description: `Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 												Validators: []validator.String{
+													speakeasy_stringvalidators.NotNull(),
 													stringvalidator.OneOf(
 														"SPOT",
 														"EC2",
@@ -3718,7 +3811,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.Object{
+											speakeasy_objectvalidators.NotNull(),
+										},
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,
@@ -3800,7 +3896,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"nvnme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -3818,7 +3914,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3827,7 +3923,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -3836,7 +3932,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"storage_type": schema.StringAttribute{
 										Computed: true,
@@ -3874,7 +3973,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -3920,7 +4019,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -3976,7 +4075,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"head_job_options": schema.StringAttribute{
 										Computed: true,
@@ -4030,7 +4129,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"port": schema.Int32Attribute{
 										Computed: true,
@@ -4048,7 +4147,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4057,7 +4156,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -4084,7 +4183,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -4130,7 +4232,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `property to select the compute config platform. Requires replacement if changed.`,
+										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -4186,7 +4288,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												},
 											},
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 									},
 									"head_job_options": schema.StringAttribute{
 										Computed: true,
@@ -4240,7 +4342,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
 									"port": schema.Int32Attribute{
 										Computed: true,
@@ -4258,7 +4360,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
 									"pre_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4267,7 +4369,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
 									"propagate_head_job_options": schema.BoolAttribute{
 										Computed: true,
@@ -4294,7 +4396,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -4317,7 +4422,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 						},
-						Description: `Not Null; Requires replacement if changed.`,
+						MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+							`pre/post run scripts, and environment-specific parameters.` + "\n" +
+							`Not Null; Requires replacement if changed.`,
 						Validators: []validator.Object{
 							speakeasy_objectvalidators.NotNull(),
 						},
@@ -4373,6 +4480,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									PlanModifiers: []planmodifier.String{
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
+									Description: `Timestamp when the label was created`,
 									Validators: []validator.String{
 										validators.IsRFC3339(),
 									},
@@ -4382,30 +4490,35 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 									PlanModifiers: []planmodifier.Int64{
 										speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
 									},
+									Description: `Unique numeric identifier for the label`,
 								},
 								"is_default": schema.BoolAttribute{
 									Computed: true,
 									PlanModifiers: []planmodifier.Bool{
 										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 									},
+									Description: `Flag indicating if this is a default system label`,
 								},
 								"name": schema.StringAttribute{
 									Computed: true,
 									PlanModifiers: []planmodifier.String{
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
+									Description: `Name or key of the label`,
 								},
 								"resource": schema.BoolAttribute{
 									Computed: true,
 									PlanModifiers: []planmodifier.Bool{
 										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 									},
+									Description: `Flag indicating if this is a resource-level label`,
 								},
 								"value": schema.StringAttribute{
 									Computed: true,
 									PlanModifiers: []planmodifier.String{
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
+									Description: `Value associated with the label`,
 								},
 							},
 						},

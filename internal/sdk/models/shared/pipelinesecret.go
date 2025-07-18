@@ -7,10 +7,17 @@ import (
 	"time"
 )
 
+// PipelineSecret - Represents a secure secret for pipeline execution.
+// Contains encrypted sensitive data such as API keys, passwords,
+// and configuration values used in workflows.
 type PipelineSecret struct {
-	ID          *int64     `json:"id,omitempty"`
-	Name        string     `json:"name"`
-	LastUsed    *time.Time `json:"lastUsed,omitempty"`
+	// Unique numeric identifier for the secret (nullable)
+	ID *int64 `json:"id,omitempty"`
+	// Secret name following naming conventions (max 100 characters)
+	Name string `json:"name"`
+	// Read-only timestamp when the secret was last accessed
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Read-only timestamp when the secret was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 }

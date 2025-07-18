@@ -3,16 +3,16 @@
 package shared
 
 type CreatePipelineRequest struct {
-	Name        *string                `json:"name,omitempty"`
-	Description *string                `json:"description,omitempty"`
-	Icon        *string                `json:"icon,omitempty"`
-	Launch      *WorkflowLaunchRequest `json:"launch,omitempty"`
-	LabelIds    []int64                `json:"labelIds,omitempty"`
+	Name        string                `json:"name"`
+	Description *string               `json:"description,omitempty"`
+	Icon        *string               `json:"icon,omitempty"`
+	Launch      WorkflowLaunchRequest `json:"launch"`
+	LabelIds    []int64               `json:"labelIds,omitempty"`
 }
 
-func (o *CreatePipelineRequest) GetName() *string {
+func (o *CreatePipelineRequest) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
@@ -31,9 +31,9 @@ func (o *CreatePipelineRequest) GetIcon() *string {
 	return o.Icon
 }
 
-func (o *CreatePipelineRequest) GetLaunch() *WorkflowLaunchRequest {
+func (o *CreatePipelineRequest) GetLaunch() WorkflowLaunchRequest {
 	if o == nil {
-		return nil
+		return WorkflowLaunchRequest{}
 	}
 	return o.Launch
 }

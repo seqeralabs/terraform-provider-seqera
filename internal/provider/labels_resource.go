@@ -69,25 +69,31 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"date_created": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Timestamp when the label was created`,
 							Validators: []validator.String{
 								validators.IsRFC3339(),
 							},
 						},
 						"id": schema.Int64Attribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Unique numeric identifier for the label`,
 						},
 						"is_default": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Flag indicating if this is a default system label`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Name or key of the label`,
 						},
 						"resource": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Flag indicating if this is a resource-level label`,
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Value associated with the label`,
 						},
 					},
 				},
