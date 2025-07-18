@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ master, main ]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   terraform-validate:
     runs-on: ubuntu-latest
@@ -57,7 +61,6 @@ jobs:
     - name: Terraform Validate
       working-directory: ./examples/hello-world-examples
       run: terraform validate
-      continue-on-error: true
 
     #
     # - name: Create GCP service account key
@@ -67,7 +70,7 @@ jobs:
 
     - name: Terraform Plan
       working-directory: ./examples/hello-world-examples
-      run: terraform plan
+      run: terraform plan -no-color -out=plan.tfplan
       env:
         TF_VAR_seqera_server_url: ${{ vars.SEQERA_SERVER_URL || 'https://api.cloud.seqera.io' }}
         TF_VAR_seqera_bearer_auth: ${{ secrets.SEQERA_BEARER_AUTH }}
@@ -75,3 +78,21 @@ jobs:
         TF_VAR_secret_key: ${{ secrets.AWS_SECRET_KEY }}
         TF_VAR_azure_batch_key: ${{ secrets.AZURE_BATCH_KEY }}
         TF_VAR_azure_storage_key: ${{ secrets.AZURE_STORAGE_KEY }}
+
+    - name: Generate Terraform Plan for PR Comment
+      if: github.event_name == 'pull_request'
+      working-directory: ./examples/hello-world-examples
+      run: |
+        echo "## Terraform Plan" > plan_output.md
+        echo "\`\`\`" >> plan_output.md
+        terraform show -no-color plan.tfplan >> plan_output.md
+        echo "\`\`\`" >> plan_output.md
+        echo "" >> plan_output.md
+        echo "Plan generated at: $(date)" >> plan_output.md
+
+    - name: Comment PR with Terraform Plan
+      if: github.event_name == 'pull_request'
+      uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
+      with:
+        message-path: ./examples/hello-world-examples/plan_output.md
+        message-id: terraform-plan
