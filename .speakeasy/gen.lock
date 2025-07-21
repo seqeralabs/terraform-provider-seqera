@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 7b1c58778637928ab7be60dbedc1c0be
+  docChecksum: 54af987445419f9f36da888545bc18f2
   docVersion: 1.45.0
-  speakeasyVersion: 1.583.1
-  generationVersion: 2.658.3
+  speakeasyVersion: 1.584.0
+  generationVersion: 2.660.0
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
@@ -798,7 +798,7 @@ examples:
   CreateAction:
     speakeasy-default-create-action:
       requestBody:
-        application/json: {}
+        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
       responses:
         "200":
           application/json: {}
@@ -959,7 +959,7 @@ examples:
         query:
           workspaceId: 692724
       requestBody:
-        application/json: {}
+        application/json: {"computeEnv": {"name": "<value>", "platform": "lsf-platform", "config": {"discriminator": "aws-cloud", "region": "<value>"}}}
       responses:
         "200":
           application/json: {}
@@ -1930,7 +1930,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "terraform-hello-world", "launch": {"pipeline": "https://github.com/nextflow-io/hello"}}
+        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "<id>", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "<value>"}}
       responses:
         "200":
           application/json: {}
@@ -2300,7 +2300,7 @@ examples:
   CreateWorkflowLaunch:
     speakeasy-default-create-workflow-launch:
       requestBody:
-        application/json: {}
+        application/json: {"launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
       responses:
         "200":
           application/json: {}

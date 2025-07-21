@@ -464,9 +464,6 @@ actions:
   - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
     update:
       x-speakeasy-entity: Action
-  - target: $["components"]["schemas"]["ListComputeEnvsResponse"]
-    update:
-      x-speakeasy-entity: ComputeEnvs
       ## Compute Config Schemas
   - target: $["components"]["schemas"]["ListCredentialsResponse"]
     update:

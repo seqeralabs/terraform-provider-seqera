@@ -8691,6 +8691,11 @@ components:
           $ref: "#/components/schemas/Action.Source"
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
+      required:
+        - name
+        - source
+        - launch
+        - workspaceId
     CreateActionResponse:
       type: object
       properties:
@@ -8715,11 +8720,12 @@ components:
             format: int64
       x-speakeasy-entity: ComputeEnv
       required:
-        - name
+        - computeEnv
+        - workspaceId
         - credentialsId
-        - platform
         - config
-        # Compute config platform-specific schemas
+        - name
+        - platform
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -8810,6 +8816,7 @@ components:
       required:
         - name
         - launch
+        - workspace_id
     CreatePipelineResponse:
       type: object
       properties:
@@ -8826,6 +8833,7 @@ components:
       required:
         - name
         - value
+        - workspace_id
     CreatePipelineSecretResponse:
       type: object
       properties:
@@ -9949,7 +9957,7 @@ components:
       required:
         - type
         - minCpus
-        - MaxCpus
+        - maxCpus
     FsxFileSystem:
       type: object
       properties:
@@ -10574,6 +10582,7 @@ components:
         usageCmd:
           type: string
       x-speakeasy-entity: Action
+      ## Compute Config Schemas
     ListComputeEnvsResponse:
       type: object
       properties:
@@ -10581,8 +10590,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ListComputeEnvsResponse.Entry"
-      x-speakeasy-entity: ComputeEnvs
-      ## Compute Config Schemas
     ListComputeEnvsResponse.Entry:
       type: object
       properties:
@@ -11741,6 +11748,8 @@ components:
       properties:
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
+      required:
+        - launch
     SubmitWorkflowLaunchResponse:
       type: object
       properties:
@@ -12803,6 +12812,13 @@ components:
       x-speakeasy-entity: Workflows
       required:
         - pipeline
+        - computeEnvId
+        - workDir
+        # - target: $.components.schemas.ComputeEnv_ComputeConfig_
+        #   update:
+        #     required:
+        #     - workspaceId
+        #     - credentialsId
     WorkflowLaunchResponse:
       type: object
       properties:

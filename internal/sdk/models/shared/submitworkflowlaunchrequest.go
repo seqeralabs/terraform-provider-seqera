@@ -3,12 +3,12 @@
 package shared
 
 type SubmitWorkflowLaunchRequest struct {
-	Launch *WorkflowLaunchRequest `json:"launch,omitempty"`
+	Launch WorkflowLaunchRequest `json:"launch"`
 }
 
-func (o *SubmitWorkflowLaunchRequest) GetLaunch() *WorkflowLaunchRequest {
+func (o *SubmitWorkflowLaunchRequest) GetLaunch() WorkflowLaunchRequest {
 	if o == nil {
-		return nil
+		return WorkflowLaunchRequest{}
 	}
 	return o.Launch
 }

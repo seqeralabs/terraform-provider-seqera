@@ -93,7 +93,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 		MarkdownDescription: "Workflows Resource",
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -571,7 +571,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Requires replacement if changed.`,
 			},
 			"work_dir": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},

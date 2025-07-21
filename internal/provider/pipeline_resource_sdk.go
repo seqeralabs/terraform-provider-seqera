@@ -187,12 +187,9 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		icon = nil
 	}
-	computeEnvID := new(string)
-	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-	} else {
-		computeEnvID = nil
-	}
+	var computeEnvID string
+	computeEnvID = r.Launch.ComputeEnvID.ValueString()
+
 	runName := new(string)
 	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
 		*runName = r.Launch.RunName.ValueString()
@@ -202,12 +199,9 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	var pipeline string
 	pipeline = r.Launch.Pipeline.ValueString()
 
-	workDir := new(string)
-	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-		*workDir = r.Launch.WorkDir.ValueString()
-	} else {
-		workDir = nil
-	}
+	var workDir string
+	workDir = r.Launch.WorkDir.ValueString()
+
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
 		*revision = r.Launch.Revision.ValueString()
@@ -404,12 +398,9 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		icon = nil
 	}
 	var launch *shared.WorkflowLaunchRequest
-	computeEnvID := new(string)
-	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-	} else {
-		computeEnvID = nil
-	}
+	var computeEnvID string
+	computeEnvID = r.Launch.ComputeEnvID.ValueString()
+
 	runName := new(string)
 	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
 		*runName = r.Launch.RunName.ValueString()
@@ -419,12 +410,9 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	var pipeline string
 	pipeline = r.Launch.Pipeline.ValueString()
 
-	workDir := new(string)
-	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-		*workDir = r.Launch.WorkDir.ValueString()
-	} else {
-		workDir = nil
-	}
+	var workDir string
+	workDir = r.Launch.WorkDir.ValueString()
+
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
 		*revision = r.Launch.Revision.ValueString()

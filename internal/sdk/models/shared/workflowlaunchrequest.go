@@ -8,10 +8,10 @@ import (
 )
 
 type WorkflowLaunchRequest struct {
-	ComputeEnvID     *string  `json:"computeEnvId,omitempty"`
+	ComputeEnvID     string   `json:"computeEnvId"`
 	RunName          *string  `json:"runName,omitempty"`
 	Pipeline         string   `json:"pipeline"`
-	WorkDir          *string  `json:"workDir,omitempty"`
+	WorkDir          string   `json:"workDir"`
 	Revision         *string  `json:"revision,omitempty"`
 	SessionID        *string  `json:"sessionId,omitempty"`
 	ConfigProfiles   []string `json:"configProfiles,omitempty"`
@@ -50,9 +50,9 @@ func (w *WorkflowLaunchRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *WorkflowLaunchRequest) GetComputeEnvID() *string {
+func (o *WorkflowLaunchRequest) GetComputeEnvID() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.ComputeEnvID
 }
@@ -71,9 +71,9 @@ func (o *WorkflowLaunchRequest) GetPipeline() string {
 	return o.Pipeline
 }
 
-func (o *WorkflowLaunchRequest) GetWorkDir() *string {
+func (o *WorkflowLaunchRequest) GetWorkDir() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.WorkDir
 }

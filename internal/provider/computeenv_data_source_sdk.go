@@ -168,7 +168,7 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
 						r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
 					}
-					r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
+					r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
 					r.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
 					r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
 					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
@@ -629,7 +629,7 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
 						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
 					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
+					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
 					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
 					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
 					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
