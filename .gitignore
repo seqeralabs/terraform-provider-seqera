@@ -6,4 +6,5 @@
 **/.speakeasy/logs/
 ./examples/tests/terraform.tf
 /examples/hello-world-examples/service-account-key.json
-terraform-provider-seqera # We should not include the provider binary in the repository
+terraform-provider-seqera
+terraform-provider-* # We should not include the provider binary in the repository
