@@ -40,7 +40,6 @@ func (v ObjectGoogleKeysCrdentialValidatorValidator) ValidateObject(ctx context.
 			)
 		}
 	}
-
 }
 
 func GoogleKeysCrdentialValidator() validator.Object {
