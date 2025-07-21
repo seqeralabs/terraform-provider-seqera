@@ -1665,7 +1665,7 @@ paths:
       tags:
         - data-links
       summary: Generate download script
-      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`.   Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
+      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
       operationId: GenerateDownloadScript
       parameters:
         - name: dataLinkId
@@ -8866,6 +8866,8 @@ components:
           $ref: "#/components/schemas/Workspace"
     Credentials:
       required:
+        - name
+        - provider
         - name
         - provider
         - keys
