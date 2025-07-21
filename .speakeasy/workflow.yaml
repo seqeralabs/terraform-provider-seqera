@@ -5,7 +5,7 @@ sources:
         inputs:
             - location: schemas/seqera-api-latest.yaml
         overlays:
-            - location: schemas/overlay.yaml
+            - location: schemas/speakeasy-overlays.yaml
             - location: schemas/required-overlays.yaml
             - location: schemas/schema-descriptions-overlay.yaml
             - location: schemas/schema-field-descriptions-overlays.yaml
