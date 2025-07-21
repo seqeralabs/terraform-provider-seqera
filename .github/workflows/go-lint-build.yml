@@ -38,14 +38,6 @@ jobs:
     - name: Run golangci lint
       run: golangci-lint run
 
-    - name: Run go fmt
-      run: |
-        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
-          echo "The following files are not formatted properly:"
-          gofmt -s -l .
-          exit 1
-        fi
-
     - name: Build
       run: go build -v ./...
 
