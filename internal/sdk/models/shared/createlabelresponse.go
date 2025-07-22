@@ -3,18 +3,18 @@
 package shared
 
 type CreateLabelResponse struct {
-	ID        *int64  `json:"id,omitempty"`
+	LabelID   *int64  `json:"id,omitempty"`
 	Name      *string `json:"name,omitempty"`
 	Value     *string `json:"value,omitempty"`
 	Resource  *bool   `json:"resource,omitempty"`
 	IsDefault *bool   `json:"isDefault,omitempty"`
 }
 
-func (o *CreateLabelResponse) GetID() *int64 {
+func (o *CreateLabelResponse) GetLabelID() *int64 {
 	if o == nil {
 		return nil
 	}
-	return o.ID
+	return o.LabelID
 }
 
 func (o *CreateLabelResponse) GetName() *string {

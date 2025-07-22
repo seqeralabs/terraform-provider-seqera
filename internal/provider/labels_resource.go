@@ -34,7 +34,6 @@ type LabelsResource struct {
 
 // LabelsResourceModel describes the resource data model.
 type LabelsResourceModel struct {
-	ID          types.Int64          `tfsdk:"id"`
 	IsDefault   types.Bool           `tfsdk:"is_default"`
 	LabelID     types.Int64          `tfsdk:"label_id"`
 	Labels      []tfTypes.LabelDbDto `tfsdk:"labels"`
@@ -53,15 +52,12 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Labels Resource",
 		Attributes: map[string]schema.Attribute{
-			"id": schema.Int64Attribute{
-				Computed: true,
-			},
 			"is_default": schema.BoolAttribute{
 				Computed: true,
 				Optional: true,
 			},
 			"label_id": schema.Int64Attribute{
-				Required:    true,
+				Computed:    true,
 				Description: `Label numeric identifier`,
 			},
 			"labels": schema.ListNestedAttribute{
@@ -184,6 +180,52 @@ func (r *LabelsResource) Create(ctx context.Context, req resource.CreateRequest,
 	}
 	if res.StatusCode != 200 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+	if !(res.CreateLabelResponse != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateLabelResponse(ctx, res.CreateLabelResponse)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsListLabelsRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Labels.ListLabels(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.ListLabelsResponse != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedListLabelsResponse(ctx, res1.ListLabelsResponse)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 

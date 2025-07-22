@@ -187,3 +187,12 @@ resource "seqera_studios" "my_datastudios" {
   data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
   depends_on           = [seqera_compute_env.aws_batch_compute_env]
 }
+
+
+resource "seqera_labels" "my_labels" {
+  is_default   = false
+  name         = "terraform-test-label"
+  resource     = true
+  value        = "terraform-label-value"
+  workspace_id = var.workspace_id
+}

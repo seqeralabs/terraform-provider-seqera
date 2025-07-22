@@ -2638,6 +2638,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-readonly: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -2683,6 +2684,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-readonly: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -8770,13 +8772,14 @@ components:
           type: boolean
         isDefault:
           type: boolean
-      x-speakeasy-entity: Label
+      x-speakeasy-entity: Labels
     CreateLabelResponse:
       type: object
       properties:
         id:
           type: integer
           format: int64
+          x-speakeasy-name-override: labelId
         name:
           type: string
         value:
@@ -8785,7 +8788,7 @@ components:
           type: boolean
         isDefault:
           type: boolean
-      x-speakeasy-entity: Label
+      x-speakeasy-entity: Labels
     CreateOrganizationRequest:
       type: object
       properties:
@@ -10412,6 +10415,7 @@ components:
         id:
           type: integer
           format: int64
+          x-speakeasy-param-readonly: true
           description: Unique numeric identifier for the label
         name:
           type: string
