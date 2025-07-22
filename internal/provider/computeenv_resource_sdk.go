@@ -885,12 +885,9 @@ func (r *ComputeEnvResourceModel) ToOperationsUpdateComputeEnvRequest(ctx contex
 func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Context) (*shared.CreateComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentialsID := new(string)
-	if !r.ComputeEnv.CredentialsID.IsUnknown() && !r.ComputeEnv.CredentialsID.IsNull() {
-		*credentialsID = r.ComputeEnv.CredentialsID.ValueString()
-	} else {
-		credentialsID = nil
-	}
+	var credentialsID string
+	credentialsID = r.ComputeEnv.CredentialsID.ValueString()
+
 	var name string
 	name = r.ComputeEnv.Name.ValueString()
 

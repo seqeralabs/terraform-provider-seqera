@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 994bc9f6a2953be1b8737883df8c9cb7
+  docChecksum: 4ad3597091de056b19b62ea6f6b9a223
   docVersion: 1.45.0
   speakeasyVersion: 1.586.0
   generationVersion: 2.661.4
@@ -962,7 +962,7 @@ examples:
         query:
           workspaceId: 692724
       requestBody:
-        application/json: {"computeEnv": {"name": "<value>", "platform": "lsf-platform", "config": {"discriminator": "aws-cloud", "region": "<value>"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "lsf-platform", "config": {"discriminator": "aws-cloud", "region": "<value>"}}}
       responses:
         "200":
           application/json: {}

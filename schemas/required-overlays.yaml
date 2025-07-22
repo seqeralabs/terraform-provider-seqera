@@ -14,13 +14,17 @@ actions:
           - name
           - platform
 
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_
+    update:
+      required:
+        - credentialsId
 
   - target: $.components.schemas.CreateActionRequest
     update:
       required:
-          - name
-          - source
-          - launch
+        - name
+        - source
+        - launch
 
   - target: $.components.schemas.SubmitWorkflowLaunchRequest
     update:

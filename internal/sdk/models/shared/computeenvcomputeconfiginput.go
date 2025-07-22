@@ -107,7 +107,7 @@ func (e *ComputeEnvComputeConfigStatus) UnmarshalJSON(data []byte) error {
 }
 
 type ComputeEnvComputeConfigInput struct {
-	CredentialsID *string                         `json:"credentialsId,omitempty"`
+	CredentialsID string                          `json:"credentialsId"`
 	Name          string                          `json:"name"`
 	Description   *string                         `json:"description,omitempty"`
 	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
@@ -119,9 +119,9 @@ type ComputeEnvComputeConfigInput struct {
 	Message *string                        `json:"message,omitempty"`
 }
 
-func (o *ComputeEnvComputeConfigInput) GetCredentialsID() *string {
+func (o *ComputeEnvComputeConfigInput) GetCredentialsID() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.CredentialsID
 }
@@ -225,7 +225,7 @@ func (o *ComputeEnvComputeConfigInput) GetMessage() *string {
 }
 
 type ComputeEnvComputeConfig struct {
-	CredentialsID *string                         `json:"credentialsId,omitempty"`
+	CredentialsID string                          `json:"credentialsId"`
 	OrgID         *int64                          `json:"orgId,omitempty"`
 	WorkspaceID   *int64                          `json:"workspaceId,omitempty"`
 	ComputeEnvID  *string                         `json:"id,omitempty"`
@@ -256,9 +256,9 @@ func (c *ComputeEnvComputeConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ComputeEnvComputeConfig) GetCredentialsID() *string {
+func (o *ComputeEnvComputeConfig) GetCredentialsID() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.CredentialsID
 }

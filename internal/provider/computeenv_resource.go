@@ -4431,8 +4431,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 							`Requires replacement if changed.`,
 					},
 					"credentials_id": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

@@ -107,7 +107,7 @@ func (e *LaunchStatus) UnmarshalJSON(data []byte) error {
 }
 
 type ComputeEnv struct {
-	CredentialsID *string        `json:"credentialsId,omitempty"`
+	CredentialsID string         `json:"credentialsId"`
 	OrgID         *int64         `json:"orgId,omitempty"`
 	WorkspaceID   *int64         `json:"workspaceId,omitempty"`
 	ComputeEnvID  *string        `json:"id,omitempty"`
@@ -138,9 +138,9 @@ func (c *ComputeEnv) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ComputeEnv) GetCredentialsID() *string {
+func (o *ComputeEnv) GetCredentialsID() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.CredentialsID
 }

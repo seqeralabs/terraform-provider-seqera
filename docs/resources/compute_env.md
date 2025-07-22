@@ -87,12 +87,12 @@ Required:
 - `config` (Attributes) Configuration settings for compute environments including work directories,
 pre/post run scripts, and environment-specific parameters.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config))
+- `credentials_id` (String) Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `platform` (String) must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "azure-batch", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "local-platform", "seqeracompute-platform"]; Requires replacement if changed.
 
 Optional:
 
-- `credentials_id` (String) Requires replacement if changed.
 - `description` (String) Requires replacement if changed.
 - `message` (String) Requires replacement if changed.
 

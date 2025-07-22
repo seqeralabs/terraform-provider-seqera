@@ -803,7 +803,7 @@ func (r *ActionDataSourceModel) RefreshFromSharedDescribeActionResponse(ctx cont
 						r.Action.Launch.ComputeEnv.Config.UgePlatform.UserName = types.StringPointerValue(resp.Action.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.UserName)
 						r.Action.Launch.ComputeEnv.Config.UgePlatform.WorkDir = types.StringValue(resp.Action.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.WorkDir)
 					}
-					r.Action.Launch.ComputeEnv.CredentialsID = types.StringPointerValue(resp.Action.Launch.ComputeEnv.CredentialsID)
+					r.Action.Launch.ComputeEnv.CredentialsID = types.StringValue(resp.Action.Launch.ComputeEnv.CredentialsID)
 					r.Action.Launch.ComputeEnv.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Action.Launch.ComputeEnv.DateCreated))
 					r.Action.Launch.ComputeEnv.Deleted = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Deleted)
 					r.Action.Launch.ComputeEnv.Description = types.StringPointerValue(resp.Action.Launch.ComputeEnv.Description)

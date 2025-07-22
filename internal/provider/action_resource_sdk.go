@@ -41,7 +41,7 @@ func (r *ActionResourceModel) RefreshFromSharedDescribeActionResponse(ctx contex
 					r.Action.Launch.ComputeEnv = nil
 				} else {
 					r.Action.Launch.ComputeEnv = &tfTypes.ComputeEnv{}
-					r.Action.Launch.ComputeEnv.CredentialsID = types.StringPointerValue(resp.Action.Launch.ComputeEnv.CredentialsID)
+					r.Action.Launch.ComputeEnv.CredentialsID = types.StringValue(resp.Action.Launch.ComputeEnv.CredentialsID)
 					r.Action.Launch.ComputeEnv.OrgID = types.Int64PointerValue(resp.Action.Launch.ComputeEnv.OrgID)
 					r.Action.Launch.ComputeEnv.WorkspaceID = types.Int64PointerValue(resp.Action.Launch.ComputeEnv.WorkspaceID)
 					r.Action.Launch.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.Action.Launch.ComputeEnv.ComputeEnvID)
