@@ -63,6 +63,7 @@ resource "seqera_workflows" "my_workflows" {
 - `compute_env_id` (String) Requires replacement if changed.
 - `pipeline` (String) Requires replacement if changed.
 - `work_dir` (String) Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -91,7 +92,6 @@ resource "seqera_workflows" "my_workflows" {
 - `stub_run` (Boolean) Requires replacement if changed.
 - `tower_config` (String) Requires replacement if changed.
 - `user_secrets` (List of String) Requires replacement if changed.
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 - `workspace_secrets` (List of String) Requires replacement if changed.
 
 ### Read-Only

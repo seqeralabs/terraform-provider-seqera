@@ -9,14 +9,14 @@ import (
 
 type CreateComputeEnvRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Compute environment create request
 	CreateComputeEnvRequest shared.CreateComputeEnvRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateComputeEnvRequest) GetWorkspaceID() *int64 {
+func (o *CreateComputeEnvRequest) GetWorkspaceID() int64 {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.WorkspaceID
 }

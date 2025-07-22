@@ -796,12 +796,9 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 func (r *ComputeEnvResourceModel) ToOperationsCreateComputeEnvRequest(ctx context.Context) (*operations.CreateComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createComputeEnvRequest, createComputeEnvRequestDiags := r.ToSharedCreateComputeEnvRequest(ctx)
 	diags.Append(createComputeEnvRequestDiags...)
 

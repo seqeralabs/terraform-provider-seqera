@@ -65,9 +65,6 @@ resource "seqera_action" "my_action" {
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `name` (String)
 - `source` (String) must be one of ["github", "tower"]; Requires replacement if changed.
-
-### Optional
-
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only

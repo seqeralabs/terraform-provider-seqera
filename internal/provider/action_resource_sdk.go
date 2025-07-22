@@ -891,12 +891,9 @@ func (r *ActionResourceModel) RefreshFromSharedDescribeActionResponse(ctx contex
 func (r *ActionResourceModel) ToOperationsCreateActionRequest(ctx context.Context) (*operations.CreateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createActionRequest, createActionRequestDiags := r.ToSharedCreateActionRequest(ctx)
 	diags.Append(createActionRequestDiags...)
 

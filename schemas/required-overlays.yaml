@@ -9,7 +9,6 @@ actions:
     update:
       required:
           - computeEnv
-          - workspaceId
           - credentialsId
           - config
           - name
@@ -22,7 +21,6 @@ actions:
           - name
           - source
           - launch
-          - workspaceId
 
   - target: $.components.schemas.SubmitWorkflowLaunchRequest
     update:
@@ -173,3 +171,16 @@ actions:
         - publicAccessible
         - resourceRef
         - type
+
+  # Make workspaceId query parameter required for resource operations
+  - target: $.paths["/actions"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
+  - target: $.paths["/compute-envs"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
+  - target: $.paths["/workflow/launch"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true

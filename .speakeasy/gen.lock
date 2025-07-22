@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 54af987445419f9f36da888545bc18f2
+  docChecksum: 994bc9f6a2953be1b8737883df8c9cb7
   docVersion: 1.45.0
-  speakeasyVersion: 1.584.0
-  generationVersion: 2.660.0
+  speakeasyVersion: 1.586.0
+  generationVersion: 2.661.4
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
@@ -797,6 +797,9 @@ examples:
           application/json: {"message": "<value>"}
   CreateAction:
     speakeasy-default-create-action:
+      parameters:
+        query:
+          workspaceId: 547784
       requestBody:
         application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
       responses:
@@ -2299,6 +2302,9 @@ examples:
           application/json: {"message": "<value>"}
   CreateWorkflowLaunch:
     speakeasy-default-create-workflow-launch:
+      parameters:
+        query:
+          workspaceId: 714137
       requestBody:
         application/json: {"launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
       responses:

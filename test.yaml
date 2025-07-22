@@ -59,7 +59,6 @@ paths:
           schema:
             type: integer
             format: int64
-          required: true
       requestBody:
         description: Action create request
         content:
@@ -557,7 +556,6 @@ paths:
           schema:
             type: integer
             format: int64
-          required: true
       requestBody:
         description: Compute environment create request
         content:
@@ -839,7 +837,6 @@ paths:
           schema:
             type: integer
             format: int64
-          required: true
       requestBody:
         description: Credentials create request
         content:
@@ -1108,7 +1105,6 @@ paths:
           schema:
             type: integer
             format: int64
-          required: true
       requestBody:
         description: Data-link creation request
         content:
@@ -1139,7 +1135,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#create
   /data-links/cache/refresh:
     get:
       summary: Refresh data-link cache
@@ -1214,7 +1209,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#read
     put:
       summary: Update data-link
       description: Update the data-link associated with the given `dataLinkId`.
@@ -1264,7 +1258,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#update
     delete:
       summary: Delete data-link
       description: Deletes the data-link associated with the given `dataLinkId`.
@@ -1305,7 +1298,6 @@ paths:
           description: DeleteCustomDataLink 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#delete
   /data-links/{dataLinkId}/browse:
     get:
       summary: Explore data-link
@@ -2001,6 +1993,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Datasets#read
     post:
       summary: Create dataset
       description: Creates a new dataset in the user context. Include the dataset file and details in your request body. Append `?workspaceId` to create the dataset in a workspace context.
@@ -2014,7 +2007,6 @@ paths:
           schema:
             type: integer
             format: int64
-          required: true
       requestBody:
         description: Dataset create request
         content:
@@ -2045,7 +2037,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Datasets#create
   /datasets/versions:
     get:
       summary: List latest dataset versions
@@ -2129,7 +2120,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Dataset#update
     delete:
       summary: Delete dataset
       description: Deletes the dataset identified by the given `datasetId`.
@@ -2162,7 +2152,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Dataset#delete
   /datasets/{datasetId}/metadata:
     get:
       summary: Describe dataset
@@ -2200,7 +2189,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Dataset#read
   /datasets/{datasetId}/upload:
     post:
       summary: Upload new dataset version
@@ -2584,7 +2572,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#read
     post:
       summary: Create label
       description: "Creates a new label or returns an existing label based on name/value. By default the operation works in a user context, append `?workspaceId` to create/retrieve a label in a workspace context. Resource labels include `resource: true` and a `value`."
@@ -2622,7 +2609,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#create
   /labels/{labelId}:
     put:
       summary: Update label
@@ -2668,7 +2654,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#update
     delete:
       summary: Delete label
       description: Deletes the label identified by the given `labelId`.
@@ -2702,7 +2687,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#delete
   /launch/{launchId}:
     get:
       summary: Describe Launch record
@@ -2837,7 +2821,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#create
   /orgs/validate:
     get:
       summary: Validate organization name
@@ -2885,8 +2868,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
-          # x-speakeasy-match: orgId
       responses:
         "200":
           description: OK
@@ -2904,7 +2885,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Organization#read
     put:
       summary: Update organization
       description: Updates the details of the organization identified by the given `orgId`.
@@ -2919,7 +2899,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Organization update request
         content:
@@ -2950,7 +2929,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#update
     delete:
       summary: Delete organization
       description: Deletes the organization identified by the given `orgId`.
@@ -2965,7 +2943,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -2979,7 +2956,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#delete
   /orgs/{orgId}/collaborators:
     get:
       summary: List organization collaborators
@@ -3282,7 +3258,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3331,7 +3306,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: false
       requestBody:
         description: Team create request
         content:
@@ -3362,7 +3336,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#create
   /orgs/{orgId}/teams/validate:
     get:
       summary: Validate team name
@@ -3411,7 +3384,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3419,7 +3391,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "200":
           description: OK
@@ -3437,7 +3408,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#read
     put:
       summary: Update team
       description: Updates the details of the team identified by the given `teamId`.
@@ -3452,7 +3422,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3460,7 +3429,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team update request
         content:
@@ -3489,7 +3457,6 @@ paths:
           description: UpdateOrganizationTeam 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#update
     delete:
       summary: Delete team
       description: Deletes the team identified by the given `teamId`.
@@ -3504,7 +3471,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3512,7 +3478,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -3526,7 +3491,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#delete
   /orgs/{orgId}/teams/{teamId}/members:
     get:
       summary: List team members
@@ -3542,7 +3506,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3550,7 +3513,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: max
           in: query
           description: Pagination max results
@@ -3599,7 +3561,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3607,7 +3568,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       requestBody:
         description: Team create request
         content:
@@ -3647,7 +3607,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3655,7 +3614,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: memberId
           in: path
           description: Member numeric identifier
@@ -3691,7 +3649,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: teamId
           in: path
           description: Team numeric identifier
@@ -3754,7 +3711,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "200":
           description: OK
@@ -3772,7 +3728,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspaces#read
     post:
       summary: Create workspace
       description: Creates a new organization workspace.
@@ -3787,7 +3742,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: false
       requestBody:
         description: Workspace create request
         content:
@@ -3818,7 +3772,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#create
   /orgs/{orgId}/workspaces/validate:
     get:
       summary: Validate workspace name
@@ -3834,7 +3787,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: name
           in: query
           description: Workspace name to validate
@@ -3874,7 +3826,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -3882,7 +3833,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-name-override: id
       responses:
         "200":
           description: OK
@@ -3900,7 +3850,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#read
     put:
       summary: Update workspace
       description: Updates the details of the workspace identified by the given `workspaceId`.
@@ -3915,7 +3864,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -3923,7 +3871,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-name-override: id
       requestBody:
         description: Workspace update request
         content:
@@ -3954,7 +3901,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#update
     delete:
       summary: Delete workspace
       description: Deletes the workspace identified by the given `workspaceId`.
@@ -3969,7 +3915,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -3977,7 +3922,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-name-override: id
       responses:
         "204":
           description: OK - No content
@@ -3991,7 +3935,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#delete
   /orgs/{orgId}/workspaces/{workspaceId}/participants:
     get:
       summary: List workspace participants
@@ -4007,7 +3950,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4063,7 +4005,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4099,7 +4040,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4152,7 +4092,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4195,7 +4134,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4245,7 +4183,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4296,7 +4233,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: path
           description: Optional workspace numeric identifier
@@ -4404,7 +4340,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#create
   /pipeline-secrets/validate:
     get:
       summary: Validate secret name
@@ -4481,7 +4416,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#read
     put:
       summary: Update secret
       description: Updates the pipeline secret identified by the given `secretId`.
@@ -4522,7 +4456,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#update
     delete:
       summary: Delete secret
       description: Deletes the pipeline secret identified by the given `secretId`.
@@ -4556,7 +4489,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#delete
   /pipelines:
     get:
       summary: List pipelines
@@ -5368,7 +5300,6 @@ paths:
                 $ref: "#/components/schemas/DataStudioCreateResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#create
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -5503,7 +5434,6 @@ paths:
           required: true
           schema:
             type: string
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -5533,7 +5463,6 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#read
     delete:
       summary: Delete Studio
       description: "Deletes the Studio associated with the given Studio session ID."
@@ -5547,7 +5476,6 @@ paths:
           required: true
           schema:
             type: string
-          x-speakeasy-param-optional: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -5567,7 +5495,6 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#delete
   /studios/{sessionId}/checkpoints:
     get:
       summary: List Studio checkpoints
@@ -5886,7 +5813,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Tokens#read
     post:
       summary: Create token
       description: "Creates an API access token with the details in the given request body."
@@ -5923,7 +5849,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Tokens#create
   /tokens/delete-all:
     delete:
       summary: Delete all user tokens
@@ -5959,7 +5884,6 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
       responses:
         "204":
           description: OK - No content
@@ -5973,7 +5897,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Tokens#delete
   /trace/create:
     post:
       summary: Create workflow execution trace
@@ -6597,7 +6520,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#create
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -6697,7 +6619,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#read
     delete:
       summary: Delete the Workflow entity with the given ID
       tags:
@@ -6734,7 +6655,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#delete
   /workflow/{workflowId}/cancel:
     post:
       summary: Cancel workflow
@@ -7107,7 +7027,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-speakeasy-group: WorkflowStar
     post:
       summary: Star workflow
       description: Adds the workflow identified by the given `workflowId` to your list of starred workflows.
@@ -7148,7 +7067,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-speakeasy-group: WorkflowStar
     delete:
       summary: Unstar workflow
       description: Removes the workflow identified by the given `workflowId` from your list of starred workflows.
@@ -7183,7 +7101,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-      x-speakeasy-group: WorkflowStar
   /workflow/{workflowId}/task/{taskId}:
     get:
       summary: Describe a task entity with the given ID
@@ -7723,36 +7640,26 @@ components:
         basicAuth:
           type: string
           deprecated: true
-          description: Deprecated basic authentication string
         id:
           type: integer
           format: int64
           nullable: true
-          x-speakeasy-param-optional: true
-          description: Unique numeric identifier for the access token (nullable)
         name:
           maxLength: 50
           minLength: 1
           type: string
-          description: Display name for the token (1-50 characters)
         lastUsed:
           type: string
           format: date-time
-          description: Timestamp when the token was last used for authentication
         dateCreated:
           type: string
           format: date-time
-          description: Timestamp when the token was created
-      x-speakeasy-entity: Tokens
-      description: |
-        Represents an API access token for authentication.
-        Contains token metadata, permissions, and expiration information
-        for secure API access to platform resources.
     Action.ConfigType:
       type: object
       properties:
         discriminator:
           type: string
+          readOnly: true
       discriminator:
         propertyName: discriminator
         mapping:
@@ -7766,6 +7673,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         timestamp:
           type: string
           format: date-time
@@ -7794,11 +7702,13 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
     Action.TowerActionEvent:
       type: object
       properties:
         discriminator:
           type: string
+          readOnly: true
         timestamp:
           type: string
           format: date-time
@@ -7813,31 +7723,22 @@ components:
       properties:
         id:
           type: string
-          description: Unique identifier for the action
         launch:
           $ref: "#/components/schemas/Launch"
-          description: Launch configuration and parameters for the action
         name:
           type: string
-          description: Human-readable name for the action
         hookId:
           type: string
-          description: Identifier for the webhook associated with this action
         hookUrl:
           type: string
-          description: URL endpoint for the webhook that triggers this action
         message:
           type: string
-          description: Status or informational message about the action
         source:
           $ref: "#/components/schemas/Action.Source"
-          description: Source system or trigger that initiated the action
         status:
           $ref: "#/components/schemas/Action.Status"
-          description: Current execution status of the action
         config:
           $ref: "#/components/schemas/Action.ConfigType"
-          description: Configuration type and settings for the action
         event:
           $ref: "#/components/schemas/Action.EventType"
         lastSeen:
@@ -7853,10 +7754,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      description: |
-        Represents a pipeline action in the Seqera Platform.
-        Contains action configuration, triggers, and execution settings
-        for automated pipeline workflows.
     ActiveConnection:
       type: object
       allOf:
@@ -7903,6 +7800,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         connectionId:
           type: string
         workDir:
@@ -7918,6 +7816,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              readOnly: true
             environment:
               type: array
               items:
@@ -7999,6 +7898,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          readOnly: true
         region:
           type: string
         computeQueue:
@@ -8169,7 +8069,6 @@ components:
           items:
             type: object
             additionalProperties: true
-          x-speakeasy-terraform-ignore: true
       required:
         - region
     AwsCloudPlatformMetainfo:
@@ -8214,6 +8113,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         accessKey:
           type: string
         secretKey:
@@ -8228,6 +8128,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          readOnly: true
         workDir:
           type: string
         preRunScript:
@@ -8313,6 +8214,7 @@ components:
         - properties:
             discriminator:
               type: string
+              readOnly: true
             tenantId:
               type: string
             clientId:
@@ -8325,6 +8227,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         username:
           type: string
         password:
@@ -8335,6 +8238,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         batchName:
           type: string
         storageName:
@@ -8350,6 +8254,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         username:
           type: string
         password:
@@ -8370,6 +8275,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         username:
           type: string
         password:
@@ -8380,24 +8286,22 @@ components:
       properties:
         workDir:
           type: string
-          description: Working directory path for workflow execution
         preRunScript:
           type: string
-          description: "Shell script to execute before workflow starts"
+          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
         postRunScript:
           type: string
-          description: "Shell script to execute after workflow completes"
+          description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
         environment:
           type: array
           items:
             $ref: "#/components/schemas/ConfigEnvVariable"
-          description: Array of environment variables for the compute environment
         nextflowConfig:
           type: string
-          description: Nextflow configuration settings and parameters
         discriminator:
           type: string
-          description: Read-only property identifying the compute platform type
+          description: property to select the compute config platform
+          readOnly: true
       discriminator:
         propertyName: discriminator
         mapping:
@@ -8430,9 +8334,6 @@ components:
         - $ref: "#/components/schemas/UnivaComputeConfig"
         - $ref: "#/components/schemas/AltairPbsComputeConfig"
         - $ref: "#/components/schemas/MoabComputeConfig"
-      description: |
-        Configuration settings for compute environments including work directories,
-        pre/post run scripts, and environment-specific parameters.
     ComputeEnv.Status:
       type: string
       readOnly: true
@@ -8566,8 +8467,6 @@ components:
             - moab-platform
             - local-platform
             - seqeracompute-platform
-          x-speakeasy-plan-validators: ComputeConfigValidator
-          x-speakeasy-param-optional: false
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -8665,6 +8564,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         userName:
           type: string
         password:
@@ -8684,7 +8584,6 @@ components:
           type: string
         token:
           $ref: "#/components/schemas/AccessToken"
-      x-speakeasy-entity: Tokens
     CreateActionRequest:
       type: object
       properties:
@@ -8698,6 +8597,7 @@ components:
         - name
         - source
         - launch
+        - workspaceId
     CreateActionResponse:
       type: object
       properties:
@@ -8723,6 +8623,7 @@ components:
       x-speakeasy-entity: ComputeEnv
       required:
         - computeEnv
+        - workspaceId
         - credentialsId
         - config
         - name
@@ -8769,7 +8670,6 @@ components:
           type: boolean
         isDefault:
           type: boolean
-      x-speakeasy-entity: Label
     CreateLabelResponse:
       type: object
       properties:
@@ -8784,7 +8684,6 @@ components:
           type: boolean
         isDefault:
           type: boolean
-      x-speakeasy-entity: Label
     CreateOrganizationRequest:
       type: object
       properties:
@@ -8802,7 +8701,6 @@ components:
       properties:
         name:
           type: string
-          x-speakeasy-param-optional: false
         description:
           type: string
         icon:
@@ -8823,7 +8721,6 @@ components:
       properties:
         pipeline:
           $ref: "#/components/schemas/PipelineDbDto"
-      x-speakeasy-entity: Pipelines
     CreatePipelineSecretRequest:
       type: object
       properties:
@@ -8887,21 +8784,19 @@ components:
           type: string
           x-speakeasy-name-override: credentialsId
           x-speakeasy-param-suppress-computed-diff: true
-          description: Unique identifier for the credential (max 22 characters)
         name:
           maxLength: 100
           type: string
-          description: Display name for the credential (max 100 characters)
         description:
           type: string
           x-speakeasy-param-computed: false
-          description: Optional description explaining the purpose of the credential
         provider:
           maxLength: 16
           type: string
           enum:
             - aws
             - azure
+            - azure_entra
             - google
             - github
             - gitlab
@@ -8914,27 +8809,6 @@ components:
             - gitea
             - azurerepos
             - seqeracompute
-            # discriminator:
-            #   propertyName: discriminator
-            #   mapping:
-            #     aws: "#/components/schemas/AwsSecurityKeys"
-            #     azure: "#/components/schemas/AzureSecurityKeys"
-            #     google: "#/components/schemas/GoogleSecurityKeys"
-            #     github: "#/components/schemas/GitHubSecurityKeys"
-            #     gitlab: "#/components/schemas/GitLabSecurityKeys"
-            #     bitbucket: "#/components/schemas/BitBucketSecurityKeys"
-            #     ssh: "#/components/schemas/SSHSecurityKeys"
-            #     k8s: "#/components/schemas/K8sSecurityKeys"
-            #     container-reg: "#/components/schemas/ContainerRegistryKeys"
-            #     tw-agent: "#/components/schemas/AgentSecurityKeys"
-            #     codecommit: "#/components/schemas/CodeCommitSecurityKeys"
-            #     gitea: "#/components/schemas/GiteaSecurityKeys"
-            #     azurerepos: "#/components/schemas/AzureReposSecurityKeys"
-            #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
-            #     azure_entra: "#/components/schemas/AzureEntraKeys"
-          x-speakeasy-name-override: providerType
-          x-speakeasy-plan-validators: CredentialsConfigValidator
-          description: Cloud or service provider type (e.g., aws, azure, gcp)
         baseUrl:
           maxLength: 200
           pattern: ""
@@ -8948,31 +8822,22 @@ components:
           type: boolean
           readOnly: true
           x-speakeasy-param-suppress-computed-diff: true
-          description: Flag indicating if the credential has been soft-deleted
         lastUsed:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
-          description: Timestamp when the credential was last used
         dateCreated:
           type: string
           format: date-time
           readOnly: true
           x-speakeasy-param-suppress-computed-diff: true
-          description: Timestamp when the credential was created
         lastUpdated:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
       x-speakeasy-entity: Credential
-      description: |
-        Represents credentials used for authentication with various platforms and services.
-        Contains authentication information for accessing cloud providers, Git repositories,
-        and other external services within the Seqera Platform.
     DataLink.Status:
       type: string
       readOnly: true
@@ -9070,31 +8935,22 @@ components:
       properties:
         id:
           type: string
-          x-speakeasy-name-override: dataLinkId
-          description: Unique identifier for the data link
         name:
           type: string
-          description: Display name for the data link connection
         description:
           type: string
-          description: Description of the data link's purpose and contents
         resourceRef:
           type: string
-          description: Reference identifier for the external resource
         type:
           $ref: "#/components/schemas/DataLinkType"
-          description: Type of data link (e.g., S3, Azure Blob, etc.)
         provider:
           $ref: "#/components/schemas/DataLinkProvider"
-          description: Cloud provider hosting the data link
         region:
           type: string
-          description: Geographic region where the data link is hosted
         credentials:
           type: array
           items:
             $ref: "#/components/schemas/DataLinkCredentials"
-          description: Array of credentials required to access the data link
         publicAccessible:
           type: boolean
         hidden:
@@ -9106,10 +8962,6 @@ components:
               readOnly: true
         message:
           type: string
-      description: |
-        Represents a data link connection to external storage systems.
-        Provides access to cloud storage, file systems, and data repositories
-        for pipeline input/output operations.
     DataLinkFinishMultiPartUploadRequest:
       type: object
       properties:
@@ -9177,7 +9029,6 @@ components:
         - azure
         - azure_entra
         - seqeracompute
-      x-speakeasy-name-override: providerType
     DataLinkResponse:
       type: object
       properties:
@@ -9256,7 +9107,6 @@ components:
               type: string
             workDir:
               type: string
-      x-speakeasy-entity: Studios
     DataStudioConfiguration:
       type: object
       properties:
@@ -9283,7 +9133,6 @@ components:
           minimum: 0
           type: integer
           format: int32
-      x-speakeasy-entity: Studios
     DataStudioCreateRequest:
       required:
         - computeEnvId
@@ -9320,7 +9169,6 @@ components:
         spot:
           type: boolean
           nullable: true
-      x-speakeasy-entity: Studios
     DataStudioCreateResponse:
       type: object
       properties:
@@ -9332,31 +9180,21 @@ components:
         sessionId:
           type: string
           x-speakeasy-param-optional: true
-          x-speakeasy-param-readonly: true
-          x-speakeasy-name-override: sessionId
-          description: Unique identifier for the Studio session
         workspaceId:
           type: integer
           format: int64
-          description: Numeric identifier of the workspace containing the Studio
         parentCheckpoint:
           $ref: "#/components/schemas/DataStudioDto.ParentCheckpoint"
-          description: Reference to the parent checkpoint for session restoration
         user:
           $ref: "#/components/schemas/StudioUser"
-          description: User information for the Studio session owner
         name:
           type: string
-          description: Display name for the Studio session
         description:
           type: string
-          description: Description of the Studio session's purpose
         studioUrl:
           type: string
-          description: URL to access the running Studio instance
         computeEnv:
           $ref: "#/components/schemas/DataStudioComputeEnvDto"
-          description: Compute environment configuration for the Studio
         template:
           $ref: "#/components/schemas/DataStudioTemplate"
         configuration:
@@ -9400,11 +9238,6 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: Studios
-      description: |
-        Represents a Studio session for interactive data analysis.
-        Contains configuration and runtime information for Jupyter-based
-        computational environments.
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -9592,24 +9425,19 @@ components:
         id:
           maxLength: 22
           type: string
-          description: Unique identifier for the dataset (max 22 characters)
         name:
           maxLength: 100
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,98}$"
           type: string
-          description: Dataset name following naming conventions (1-100 characters)
         description:
           maxLength: 1000
           type: string
-          description: Detailed description of the dataset contents and purpose (max 1000 characters)
         mediaType:
           maxLength: 80
           type: string
-          description: MIME type or media type of the dataset content (max 80 characters)
         deleted:
           type: boolean
           readOnly: true
-          description: Read-only flag indicating if the dataset has been deleted
         dateCreated:
           type: string
           format: date-time
@@ -9618,10 +9446,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-      description: |
-        Represents a dataset in the Seqera Platform.
-        Contains dataset metadata, versioning information, and access
-        controls for data management and sharing.
     DatasetVersionDbDto:
       type: object
       properties:
@@ -9689,8 +9513,6 @@ components:
       properties:
         computeEnv:
           $ref: "#/components/schemas/ComputeEnvResponseDto"
-          x-speakeasy-entity: ComputeEnv
-      x-speakeasy-entity: ComputeEnv
     DescribeCredentialsResponse:
       type: object
       properties:
@@ -9792,7 +9614,6 @@ components:
           type: array
           items:
             type: string
-      x-speakeasy-entity: Workflows
     DescribeWorkspaceResponse:
       type: object
       properties:
@@ -9812,6 +9633,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              readOnly: true
             workDir:
               type: string
             preRunScript:
@@ -9985,18 +9807,18 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         username:
           type: string
         password:
           type: string
           writeOnly: true
-          x-speakeasy-param-sensitive: true
-          x-speakeasy-param-suppress-computed-diff: true
     GitLabSecurityKeys:
       type: object
       properties:
         discriminator:
           type: string
+          readOnly: true
         username:
           type: string
         password:
@@ -10010,6 +9832,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         username:
           type: string
         password:
@@ -10020,6 +9843,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         events:
           type: array
           items:
@@ -10029,6 +9853,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         ref:
           type: string
         commitId:
@@ -10051,6 +9876,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              readOnly: true
             workDir:
               type: string
             preRunScript:
@@ -10096,6 +9922,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          readOnly: true
         location:
           type: string
         workDir:
@@ -10169,6 +9996,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          readOnly: true
         region:
           type: string
         zones:
@@ -10267,10 +10095,10 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         data:
           type: string
           writeOnly: true
-      x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
     GridPlatformMetainfo:
       type: object
       properties:
@@ -10341,6 +10169,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          readOnly: true
         workDir:
           type: string
         preRunScript:
@@ -10397,6 +10226,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         certificate:
           type: string
         privateKey:
@@ -10411,27 +10241,17 @@ components:
         id:
           type: integer
           format: int64
-          description: Unique numeric identifier for the label
         name:
           type: string
-          description: Name or key of the label
         value:
           type: string
-          description: Value associated with the label
         resource:
           type: boolean
-          description: Flag indicating if this is a resource-level label
         isDefault:
           type: boolean
-          description: Flag indicating if this is a default system label
         dateCreated:
           type: string
           format: date-time
-          description: Timestamp when the label was created
-      description: |
-        Represents a label for organizing and categorizing resources.
-        Provides metadata tagging capabilities for pipelines, workflows,
-        and other platform resources.
     LabelType:
       type: string
       enum:
@@ -10447,7 +10267,6 @@ components:
         id:
           maxLength: 22
           type: string
-          x-speakeasy-param-readonly: true
         computeEnv:
           nullable: true
           allOf:
@@ -10582,8 +10401,6 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         usageCmd:
           type: string
-      x-speakeasy-entity: Action
-      ## Compute Config Schemas
     ListComputeEnvsResponse:
       type: object
       properties:
@@ -10626,8 +10443,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Credentials"
-      x-speakeasy-entity: Credentials
-      ## Security Keys Schemas
     ListDatasetVersionsResponse:
       type: object
       properties:
@@ -10861,6 +10676,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              readOnly: true
             unitForLimits:
               type: string
             perJobMemLimit:
@@ -10903,6 +10719,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              readOnly: true
             environment:
               type: array
               items:
@@ -10979,7 +10796,6 @@ components:
           format: int64
           nullable: true
           readOnly: true
-          x-speakeasy-param-optional: true
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11004,41 +10820,29 @@ components:
           type: string
           format: date-time
           readOnly: true
-      x-speakeasy-entity: Orgs
-      #x-speakeasy-name-override: orgId
     OrganizationDbDto:
       type: object
       properties:
         paying:
           type: boolean
           deprecated: true
-          description: Deprecated flag indicating if organization has paid subscription
         orgId:
           type: integer
           format: int64
-          description: Unique numeric identifier for the organization
         name:
           type: string
-          description: Short name or handle for the organization
         fullName:
           type: string
-          description: Complete formal name of the organization
         description:
           type: string
-          description: Detailed description of the organization's purpose and activities
         location:
           type: string
-          description: Geographic location or address of the organization
         website:
           type: string
-          description: Official website URL for the organization
         logoId:
           type: string
-          x-speakeasy-param-optional: true
-          description: Identifier for the organization's logo image
         logoUrl:
           type: string
-          x-speakeasy-param-optional: true
         memberId:
           type: integer
           format: int64
@@ -11046,11 +10850,6 @@ components:
           $ref: "#/components/schemas/OrgRole"
         type:
           $ref: "#/components/schemas/OrgType"
-      x-speakeasy-entity: Orgs
-      description: |
-        Represents an organization in the Seqera Platform.
-        Contains organizational metadata, settings, and member management
-        information for multi-tenant environments.
     OrganizationQuotas:
       type: object
       properties:
@@ -11138,29 +10937,21 @@ components:
         pipelineId:
           type: integer
           format: int64
-          description: Unique numeric identifier for the pipeline
         name:
           type: string
-          description: Display name for the pipeline
         description:
           type: string
-          description: Detailed description of the pipeline's purpose and functionality
         icon:
           type: string
-          description: Icon identifier or URL for visual representation
         repository:
           type: string
-          description: Git repository URL containing the pipeline source code
         userId:
           type: integer
           format: int64
-          description: Numeric identifier of the user who created the pipeline
         userName:
           type: string
-          description: Username of the pipeline creator
         userFirstName:
           type: string
-          description: First name of the user who created the pipeline
         userLastName:
           type: string
         orgId:
@@ -11192,13 +10983,6 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         computeEnv:
           $ref: "#/components/schemas/ComputeEnvDbDto"
-      x-speakeasy-entity: Pipeline
-      ## Users
-
-      description: |
-        Represents a pipeline configuration in the Seqera Platform.
-        Contains pipeline metadata, configuration settings, and execution parameters
-        for Nextflow workflows.
     PipelineInfo:
       type: object
       properties:
@@ -11212,7 +10996,6 @@ components:
           type: string
         provider:
           type: string
-          x-speakeasy-name-override: repositoryProvider
         configFiles:
           type: array
           items:
@@ -11270,31 +11053,22 @@ components:
           type: integer
           format: int64
           nullable: true
-          description: Unique numeric identifier for the secret (nullable)
         name:
           maxLength: 100
           pattern: "^[a-zA-Z_](?:[0-9A-Za-z]+|(_)(?!\\1)){1,49}$"
           type: string
-          description: Secret name following naming conventions (max 100 characters)
         lastUsed:
           type: string
           format: date-time
           readOnly: true
-          description: Read-only timestamp when the secret was last accessed
         dateCreated:
           type: string
           format: date-time
           readOnly: true
-          description: Read-only timestamp when the secret was created
         lastUpdated:
           type: string
           format: date-time
           readOnly: true
-      x-speakeasy-entity: PipelineSecret
-      description: |
-        Represents a secure secret for pipeline execution.
-        Contains encrypted sensitive data such as API keys, passwords,
-        and configuration values used in workflows.
     PlatformMetainfo:
       type: object
       discriminator:
@@ -11555,6 +11329,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         privateKey:
           type: string
           writeOnly: true
@@ -11575,6 +11350,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
       discriminator:
         propertyName: discriminator
         mapping:
@@ -11609,7 +11385,6 @@ components:
         - $ref: "#/components/schemas/CodeCommitSecurityKeys"
         - $ref: "#/components/schemas/AzureEntraKeys"
         - $ref: "#/components/schemas/SeqeraComputeSecurityKeys"
-      x-speakeasy-param-computed: false
     SeqeraComputeConfig:
       title: Seqera Compute configuration
       type: object
@@ -11617,6 +11392,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          readOnly: true
       allOf:
         - $ref: "#/components/schemas/AwsBatchConfig"
       required:
@@ -11629,6 +11405,7 @@ components:
         - properties:
             discriminator:
               type: string
+              readOnly: true
     ServiceInfo:
       type: object
       properties:
@@ -11708,6 +11485,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              readOnly: true
             environment:
               type: array
               items:
@@ -11749,8 +11527,13 @@ components:
       properties:
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
+        workspaceId:
+          type: integer
+          format: int64
+          description: "Workspace numeric identifier"
       required:
         - launch
+        - workspaceId
     SubmitWorkflowLaunchResponse:
       type: object
       properties:
@@ -11924,8 +11707,6 @@ components:
           format: int64
           nullable: true
           readOnly: true
-          x-speakeasy-param-optional: true
-          x-speakeasy-name-override: teamId
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
@@ -11948,27 +11729,16 @@ components:
         teamId:
           type: integer
           format: int64
-          x-speakeasy-param-optional: true
-          x-speakeasy-name-override: teamId
-          description: Unique numeric identifier for the team
         name:
           type: string
-          description: Display name for the team
         description:
           type: string
-          description: Description of the team's purpose and responsibilities
         avatarUrl:
           type: string
-          description: URL to the team's avatar or profile image
         membersCount:
           type: integer
           format: int64
-          description: Total number of members in the team
       x-speakeasy-entity: Teams
-      description: |
-        Represents a team within an organization.
-        Contains team membership, permissions, and access controls
-        for collaborative workspace management.
     TraceBeginRequest:
       type: object
       properties:
@@ -11983,10 +11753,6 @@ components:
             type: string
         towerLaunch:
           type: boolean
-      description: |
-        Represents workflow execution trace information.
-        Contains metadata and progress tracking data for monitoring
-        pipeline execution and performance metrics.
     TraceBeginResponse:
       type: object
       properties:
@@ -12188,6 +11954,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              readOnly: true
             environment:
               type: array
               items:
@@ -12382,15 +12149,11 @@ components:
           format: date-time
         deleted:
           type: boolean
-      x-speakeasy-entity:
-        - CurrentUser
-        - User
     Visibility:
       type: string
       enum:
         - PRIVATE
         - SHARED
-      x-speakeasy-param-optional: false
     Vpc:
       type: object
       properties:
@@ -12636,26 +12399,20 @@ components:
           type: array
           items:
             type: string
-          description: Array of status messages and logs from workflow execution
         id:
           type: string
-          description: Unique identifier for the workflow execution
         ownerId:
           type: integer
           format: int64
-          description: Numeric identifier of the user who owns this workflow
         submit:
           type: string
           format: date-time
-          description: Timestamp when the workflow was submitted for execution
         start:
           type: string
           format: date-time
-          description: Timestamp when the workflow execution actually started
         complete:
           type: string
           format: date-time
-          description: Timestamp when the workflow execution completed
         dateCreated:
           type: string
           format: date-time
@@ -12735,13 +12492,11 @@ components:
           type: boolean
         success:
           type: boolean
-      description: |
-        Represents a workflow execution record.
-        Contains execution status, metadata, and results from pipeline
-        runs including logs and performance metrics.
     WorkflowLaunchRequest:
       type: object
       properties:
+        id:
+          type: string
         computeEnvId:
           type: string
         runName:
@@ -12810,7 +12565,6 @@ components:
         dateCreated:
           type: string
           format: date-time
-      x-speakeasy-entity: Workflows
       required:
         - pipeline
         - computeEnvId
@@ -13063,53 +12817,38 @@ components:
           type: integer
           format: int64
           nullable: true
-          x-speakeasy-param-optional: true
         name:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
-          x-speakeasy-param-readonly: false
         fullName:
           maxLength: 100
           type: string
-          x-speakeasy-param-readonly: false
         description:
           maxLength: 1000
           type: string
-          x-speakeasy-param-readonly: false
         visibility:
           $ref: "#/components/schemas/Visibility"
-          x-speakeasy-param-readonly: false
         dateCreated:
           type: string
           format: date-time
         lastUpdated:
           type: string
           format: date-time
-      x-speakeasy-entity: Workspace
     WorkspaceDbDto:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: Unique numeric identifier for the workspace
         name:
           type: string
-          description: Short name or handle for the workspace
         fullName:
           type: string
-          description: Complete display name for the workspace
         description:
           type: string
-          description: Detailed description of the workspace's purpose
         visibility:
           $ref: "#/components/schemas/Visibility"
-          description: Visibility level of the workspace (public, private, etc.)
-      description: |
-        Represents a workspace in the Seqera Platform.
-        Contains workspace configuration, member permissions, and resource
-        isolation settings for project organization.
     WspRole:
       type: string
       enum:
@@ -13167,5 +12906,3 @@ tags:
     description: Workflow executions
   - name: workspaces
     description: Workspaces in an organization context
-servers:
-  - url: https://api.cloud.seqera.io
