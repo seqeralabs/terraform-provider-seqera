@@ -41,7 +41,7 @@ func (r *ActionResourceModel) RefreshFromSharedDescribeActionResponse(ctx contex
 					r.Action.Launch.ComputeEnv = nil
 				} else {
 					r.Action.Launch.ComputeEnv = &tfTypes.ComputeEnv{}
-					r.Action.Launch.ComputeEnv.CredentialsID = types.StringPointerValue(resp.Action.Launch.ComputeEnv.CredentialsID)
+					r.Action.Launch.ComputeEnv.CredentialsID = types.StringValue(resp.Action.Launch.ComputeEnv.CredentialsID)
 					r.Action.Launch.ComputeEnv.OrgID = types.Int64PointerValue(resp.Action.Launch.ComputeEnv.OrgID)
 					r.Action.Launch.ComputeEnv.WorkspaceID = types.Int64PointerValue(resp.Action.Launch.ComputeEnv.WorkspaceID)
 					r.Action.Launch.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.Action.Launch.ComputeEnv.ComputeEnvID)
@@ -98,7 +98,7 @@ func (r *ActionResourceModel) RefreshFromSharedDescribeActionResponse(ctx contex
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
-						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
+						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
@@ -240,7 +240,7 @@ func (r *ActionResourceModel) RefreshFromSharedDescribeActionResponse(ctx contex
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.FusionSnapshots)
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
-						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
+						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
@@ -891,12 +891,9 @@ func (r *ActionResourceModel) RefreshFromSharedDescribeActionResponse(ctx contex
 func (r *ActionResourceModel) ToOperationsCreateActionRequest(ctx context.Context) (*operations.CreateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	createActionRequest, createActionRequestDiags := r.ToSharedCreateActionRequest(ctx)
 	diags.Append(createActionRequestDiags...)
 
@@ -983,200 +980,183 @@ func (r *ActionResourceModel) ToOperationsUpdateActionRequest(ctx context.Contex
 func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (*shared.CreateActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	name := new(string)
-	if !r.Name.IsUnknown() && !r.Name.IsNull() {
-		*name = r.Name.ValueString()
-	} else {
-		name = nil
-	}
-	source := new(shared.ActionSource)
-	if !r.Source.IsUnknown() && !r.Source.IsNull() {
-		*source = shared.ActionSource(r.Source.ValueString())
-	} else {
-		source = nil
-	}
-	var launch *shared.WorkflowLaunchRequest
-	if r.Launch != nil {
-		computeEnvID := new(string)
-		if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-			*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-		} else {
-			computeEnvID = nil
-		}
-		runName := new(string)
-		if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
-			*runName = r.Launch.RunName.ValueString()
-		} else {
-			runName = nil
-		}
-		var pipeline string
-		pipeline = r.Launch.Pipeline.ValueString()
+	var name string
+	name = r.Name.ValueString()
 
-		workDir := new(string)
-		if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-			*workDir = r.Launch.WorkDir.ValueString()
-		} else {
-			workDir = nil
-		}
-		revision := new(string)
-		if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
-			*revision = r.Launch.Revision.ValueString()
-		} else {
-			revision = nil
-		}
-		sessionID := new(string)
-		if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
-			*sessionID = r.Launch.SessionID.ValueString()
-		} else {
-			sessionID = nil
-		}
-		configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-		for _, configProfilesItem := range r.Launch.ConfigProfiles {
-			configProfiles = append(configProfiles, configProfilesItem.ValueString())
-		}
-		userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-		for _, userSecretsItem := range r.Launch.UserSecrets {
-			userSecrets = append(userSecrets, userSecretsItem.ValueString())
-		}
-		workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-		for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
-			workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
-		}
-		configText := new(string)
-		if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
-			*configText = r.Launch.ConfigText.ValueString()
-		} else {
-			configText = nil
-		}
-		towerConfig := new(string)
-		if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
-			*towerConfig = r.Launch.TowerConfig.ValueString()
-		} else {
-			towerConfig = nil
-		}
-		paramsText := new(string)
-		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
-			*paramsText = r.Launch.ParamsText.ValueString()
-		} else {
-			paramsText = nil
-		}
-		preRunScript := new(string)
-		if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
-			*preRunScript = r.Launch.PreRunScript.ValueString()
-		} else {
-			preRunScript = nil
-		}
-		postRunScript := new(string)
-		if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
-			*postRunScript = r.Launch.PostRunScript.ValueString()
-		} else {
-			postRunScript = nil
-		}
-		mainScript := new(string)
-		if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
-			*mainScript = r.Launch.MainScript.ValueString()
-		} else {
-			mainScript = nil
-		}
-		entryName := new(string)
-		if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
-			*entryName = r.Launch.EntryName.ValueString()
-		} else {
-			entryName = nil
-		}
-		schemaName := new(string)
-		if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-			*schemaName = r.Launch.SchemaName.ValueString()
-		} else {
-			schemaName = nil
-		}
-		resume := new(bool)
-		if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
-			*resume = r.Launch.Resume.ValueBool()
-		} else {
-			resume = nil
-		}
-		pullLatest := new(bool)
-		if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
-			*pullLatest = r.Launch.PullLatest.ValueBool()
-		} else {
-			pullLatest = nil
-		}
-		stubRun := new(bool)
-		if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
-			*stubRun = r.Launch.StubRun.ValueBool()
-		} else {
-			stubRun = nil
-		}
-		optimizationID := new(string)
-		if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
-			*optimizationID = r.Launch.OptimizationID.ValueString()
-		} else {
-			optimizationID = nil
-		}
-		optimizationTargets := new(string)
-		if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
-			*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
-		} else {
-			optimizationTargets = nil
-		}
-		labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-		for _, labelIdsItem := range r.Launch.LabelIds {
-			labelIds = append(labelIds, labelIdsItem.ValueInt64())
-		}
-		headJobCpus := new(int)
-		if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
-			*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
-		} else {
-			headJobCpus = nil
-		}
-		headJobMemoryMb := new(int)
-		if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
-		} else {
-			headJobMemoryMb = nil
-		}
-		launchContainer := new(string)
-		if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
-			*launchContainer = r.Launch.LaunchContainer.ValueString()
-		} else {
-			launchContainer = nil
-		}
-		dateCreated := new(time.Time)
-		if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
-			*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
-		} else {
-			dateCreated = nil
-		}
-		launch = &shared.WorkflowLaunchRequest{
-			ComputeEnvID:        computeEnvID,
-			RunName:             runName,
-			Pipeline:            pipeline,
-			WorkDir:             workDir,
-			Revision:            revision,
-			SessionID:           sessionID,
-			ConfigProfiles:      configProfiles,
-			UserSecrets:         userSecrets,
-			WorkspaceSecrets:    workspaceSecrets,
-			ConfigText:          configText,
-			TowerConfig:         towerConfig,
-			ParamsText:          paramsText,
-			PreRunScript:        preRunScript,
-			PostRunScript:       postRunScript,
-			MainScript:          mainScript,
-			EntryName:           entryName,
-			SchemaName:          schemaName,
-			Resume:              resume,
-			PullLatest:          pullLatest,
-			StubRun:             stubRun,
-			OptimizationID:      optimizationID,
-			OptimizationTargets: optimizationTargets,
-			LabelIds:            labelIds,
-			HeadJobCpus:         headJobCpus,
-			HeadJobMemoryMb:     headJobMemoryMb,
-			LaunchContainer:     launchContainer,
-			DateCreated:         dateCreated,
-		}
+	source := shared.ActionSource(r.Source.ValueString())
+	var computeEnvID string
+	computeEnvID = r.Launch.ComputeEnvID.ValueString()
+
+	runName := new(string)
+	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
+		*runName = r.Launch.RunName.ValueString()
+	} else {
+		runName = nil
+	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
+	var workDir string
+	workDir = r.Launch.WorkDir.ValueString()
+
+	revision := new(string)
+	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
+		*revision = r.Launch.Revision.ValueString()
+	} else {
+		revision = nil
+	}
+	sessionID := new(string)
+	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
+		*sessionID = r.Launch.SessionID.ValueString()
+	} else {
+		sessionID = nil
+	}
+	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
+	for _, configProfilesItem := range r.Launch.ConfigProfiles {
+		configProfiles = append(configProfiles, configProfilesItem.ValueString())
+	}
+	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
+	for _, userSecretsItem := range r.Launch.UserSecrets {
+		userSecrets = append(userSecrets, userSecretsItem.ValueString())
+	}
+	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
+	for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
+	}
+	configText := new(string)
+	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
+		*configText = r.Launch.ConfigText.ValueString()
+	} else {
+		configText = nil
+	}
+	towerConfig := new(string)
+	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
+		*towerConfig = r.Launch.TowerConfig.ValueString()
+	} else {
+		towerConfig = nil
+	}
+	paramsText := new(string)
+	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
+		*paramsText = r.Launch.ParamsText.ValueString()
+	} else {
+		paramsText = nil
+	}
+	preRunScript := new(string)
+	if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
+		*preRunScript = r.Launch.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	postRunScript := new(string)
+	if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
+		*postRunScript = r.Launch.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	mainScript := new(string)
+	if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
+		*mainScript = r.Launch.MainScript.ValueString()
+	} else {
+		mainScript = nil
+	}
+	entryName := new(string)
+	if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
+		*entryName = r.Launch.EntryName.ValueString()
+	} else {
+		entryName = nil
+	}
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
+	resume := new(bool)
+	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
+		*resume = r.Launch.Resume.ValueBool()
+	} else {
+		resume = nil
+	}
+	pullLatest := new(bool)
+	if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
+		*pullLatest = r.Launch.PullLatest.ValueBool()
+	} else {
+		pullLatest = nil
+	}
+	stubRun := new(bool)
+	if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
+		*stubRun = r.Launch.StubRun.ValueBool()
+	} else {
+		stubRun = nil
+	}
+	optimizationID := new(string)
+	if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
+		*optimizationID = r.Launch.OptimizationID.ValueString()
+	} else {
+		optimizationID = nil
+	}
+	optimizationTargets := new(string)
+	if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
+		*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
+	} else {
+		optimizationTargets = nil
+	}
+	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
+	for _, labelIdsItem := range r.Launch.LabelIds {
+		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	}
+	headJobCpus := new(int)
+	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
+		*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
+	} else {
+		headJobCpus = nil
+	}
+	headJobMemoryMb := new(int)
+	if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
+		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
+	} else {
+		headJobMemoryMb = nil
+	}
+	launchContainer := new(string)
+	if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
+		*launchContainer = r.Launch.LaunchContainer.ValueString()
+	} else {
+		launchContainer = nil
+	}
+	dateCreated := new(time.Time)
+	if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
+	} else {
+		dateCreated = nil
+	}
+	launch := shared.WorkflowLaunchRequest{
+		ComputeEnvID:        computeEnvID,
+		RunName:             runName,
+		Pipeline:            pipeline,
+		WorkDir:             workDir,
+		Revision:            revision,
+		SessionID:           sessionID,
+		ConfigProfiles:      configProfiles,
+		UserSecrets:         userSecrets,
+		WorkspaceSecrets:    workspaceSecrets,
+		ConfigText:          configText,
+		TowerConfig:         towerConfig,
+		ParamsText:          paramsText,
+		PreRunScript:        preRunScript,
+		PostRunScript:       postRunScript,
+		MainScript:          mainScript,
+		EntryName:           entryName,
+		SchemaName:          schemaName,
+		Resume:              resume,
+		PullLatest:          pullLatest,
+		StubRun:             stubRun,
+		OptimizationID:      optimizationID,
+		OptimizationTargets: optimizationTargets,
+		LabelIds:            labelIds,
+		HeadJobCpus:         headJobCpus,
+		HeadJobMemoryMb:     headJobMemoryMb,
+		LaunchContainer:     launchContainer,
+		DateCreated:         dateCreated,
 	}
 	out := shared.CreateActionRequest{
 		Name:   name,
@@ -1197,187 +1177,179 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		name = nil
 	}
 	var launch *shared.WorkflowLaunchRequest
-	if r.Launch != nil {
-		computeEnvID := new(string)
-		if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
-			*computeEnvID = r.Launch.ComputeEnvID.ValueString()
-		} else {
-			computeEnvID = nil
-		}
-		runName := new(string)
-		if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
-			*runName = r.Launch.RunName.ValueString()
-		} else {
-			runName = nil
-		}
-		var pipeline string
-		pipeline = r.Launch.Pipeline.ValueString()
+	var computeEnvID string
+	computeEnvID = r.Launch.ComputeEnvID.ValueString()
 
-		workDir := new(string)
-		if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
-			*workDir = r.Launch.WorkDir.ValueString()
-		} else {
-			workDir = nil
-		}
-		revision := new(string)
-		if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
-			*revision = r.Launch.Revision.ValueString()
-		} else {
-			revision = nil
-		}
-		sessionID := new(string)
-		if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
-			*sessionID = r.Launch.SessionID.ValueString()
-		} else {
-			sessionID = nil
-		}
-		configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-		for _, configProfilesItem := range r.Launch.ConfigProfiles {
-			configProfiles = append(configProfiles, configProfilesItem.ValueString())
-		}
-		userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-		for _, userSecretsItem := range r.Launch.UserSecrets {
-			userSecrets = append(userSecrets, userSecretsItem.ValueString())
-		}
-		workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-		for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
-			workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
-		}
-		configText := new(string)
-		if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
-			*configText = r.Launch.ConfigText.ValueString()
-		} else {
-			configText = nil
-		}
-		towerConfig := new(string)
-		if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
-			*towerConfig = r.Launch.TowerConfig.ValueString()
-		} else {
-			towerConfig = nil
-		}
-		paramsText := new(string)
-		if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
-			*paramsText = r.Launch.ParamsText.ValueString()
-		} else {
-			paramsText = nil
-		}
-		preRunScript := new(string)
-		if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
-			*preRunScript = r.Launch.PreRunScript.ValueString()
-		} else {
-			preRunScript = nil
-		}
-		postRunScript := new(string)
-		if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
-			*postRunScript = r.Launch.PostRunScript.ValueString()
-		} else {
-			postRunScript = nil
-		}
-		mainScript := new(string)
-		if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
-			*mainScript = r.Launch.MainScript.ValueString()
-		} else {
-			mainScript = nil
-		}
-		entryName := new(string)
-		if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
-			*entryName = r.Launch.EntryName.ValueString()
-		} else {
-			entryName = nil
-		}
-		schemaName := new(string)
-		if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-			*schemaName = r.Launch.SchemaName.ValueString()
-		} else {
-			schemaName = nil
-		}
-		resume := new(bool)
-		if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
-			*resume = r.Launch.Resume.ValueBool()
-		} else {
-			resume = nil
-		}
-		pullLatest := new(bool)
-		if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
-			*pullLatest = r.Launch.PullLatest.ValueBool()
-		} else {
-			pullLatest = nil
-		}
-		stubRun := new(bool)
-		if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
-			*stubRun = r.Launch.StubRun.ValueBool()
-		} else {
-			stubRun = nil
-		}
-		optimizationID := new(string)
-		if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
-			*optimizationID = r.Launch.OptimizationID.ValueString()
-		} else {
-			optimizationID = nil
-		}
-		optimizationTargets := new(string)
-		if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
-			*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
-		} else {
-			optimizationTargets = nil
-		}
-		labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-		for _, labelIdsItem := range r.Launch.LabelIds {
-			labelIds = append(labelIds, labelIdsItem.ValueInt64())
-		}
-		headJobCpus := new(int)
-		if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
-			*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
-		} else {
-			headJobCpus = nil
-		}
-		headJobMemoryMb := new(int)
-		if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
-		} else {
-			headJobMemoryMb = nil
-		}
-		launchContainer := new(string)
-		if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
-			*launchContainer = r.Launch.LaunchContainer.ValueString()
-		} else {
-			launchContainer = nil
-		}
-		dateCreated := new(time.Time)
-		if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
-			*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
-		} else {
-			dateCreated = nil
-		}
-		launch = &shared.WorkflowLaunchRequest{
-			ComputeEnvID:        computeEnvID,
-			RunName:             runName,
-			Pipeline:            pipeline,
-			WorkDir:             workDir,
-			Revision:            revision,
-			SessionID:           sessionID,
-			ConfigProfiles:      configProfiles,
-			UserSecrets:         userSecrets,
-			WorkspaceSecrets:    workspaceSecrets,
-			ConfigText:          configText,
-			TowerConfig:         towerConfig,
-			ParamsText:          paramsText,
-			PreRunScript:        preRunScript,
-			PostRunScript:       postRunScript,
-			MainScript:          mainScript,
-			EntryName:           entryName,
-			SchemaName:          schemaName,
-			Resume:              resume,
-			PullLatest:          pullLatest,
-			StubRun:             stubRun,
-			OptimizationID:      optimizationID,
-			OptimizationTargets: optimizationTargets,
-			LabelIds:            labelIds,
-			HeadJobCpus:         headJobCpus,
-			HeadJobMemoryMb:     headJobMemoryMb,
-			LaunchContainer:     launchContainer,
-			DateCreated:         dateCreated,
-		}
+	runName := new(string)
+	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
+		*runName = r.Launch.RunName.ValueString()
+	} else {
+		runName = nil
+	}
+	var pipeline string
+	pipeline = r.Launch.Pipeline.ValueString()
+
+	var workDir string
+	workDir = r.Launch.WorkDir.ValueString()
+
+	revision := new(string)
+	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
+		*revision = r.Launch.Revision.ValueString()
+	} else {
+		revision = nil
+	}
+	sessionID := new(string)
+	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
+		*sessionID = r.Launch.SessionID.ValueString()
+	} else {
+		sessionID = nil
+	}
+	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
+	for _, configProfilesItem := range r.Launch.ConfigProfiles {
+		configProfiles = append(configProfiles, configProfilesItem.ValueString())
+	}
+	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
+	for _, userSecretsItem := range r.Launch.UserSecrets {
+		userSecrets = append(userSecrets, userSecretsItem.ValueString())
+	}
+	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
+	for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
+	}
+	configText := new(string)
+	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
+		*configText = r.Launch.ConfigText.ValueString()
+	} else {
+		configText = nil
+	}
+	towerConfig := new(string)
+	if !r.Launch.TowerConfig.IsUnknown() && !r.Launch.TowerConfig.IsNull() {
+		*towerConfig = r.Launch.TowerConfig.ValueString()
+	} else {
+		towerConfig = nil
+	}
+	paramsText := new(string)
+	if !r.Launch.ParamsText.IsUnknown() && !r.Launch.ParamsText.IsNull() {
+		*paramsText = r.Launch.ParamsText.ValueString()
+	} else {
+		paramsText = nil
+	}
+	preRunScript := new(string)
+	if !r.Launch.PreRunScript.IsUnknown() && !r.Launch.PreRunScript.IsNull() {
+		*preRunScript = r.Launch.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	postRunScript := new(string)
+	if !r.Launch.PostRunScript.IsUnknown() && !r.Launch.PostRunScript.IsNull() {
+		*postRunScript = r.Launch.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	mainScript := new(string)
+	if !r.Launch.MainScript.IsUnknown() && !r.Launch.MainScript.IsNull() {
+		*mainScript = r.Launch.MainScript.ValueString()
+	} else {
+		mainScript = nil
+	}
+	entryName := new(string)
+	if !r.Launch.EntryName.IsUnknown() && !r.Launch.EntryName.IsNull() {
+		*entryName = r.Launch.EntryName.ValueString()
+	} else {
+		entryName = nil
+	}
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
+	resume := new(bool)
+	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
+		*resume = r.Launch.Resume.ValueBool()
+	} else {
+		resume = nil
+	}
+	pullLatest := new(bool)
+	if !r.Launch.PullLatest.IsUnknown() && !r.Launch.PullLatest.IsNull() {
+		*pullLatest = r.Launch.PullLatest.ValueBool()
+	} else {
+		pullLatest = nil
+	}
+	stubRun := new(bool)
+	if !r.Launch.StubRun.IsUnknown() && !r.Launch.StubRun.IsNull() {
+		*stubRun = r.Launch.StubRun.ValueBool()
+	} else {
+		stubRun = nil
+	}
+	optimizationID := new(string)
+	if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
+		*optimizationID = r.Launch.OptimizationID.ValueString()
+	} else {
+		optimizationID = nil
+	}
+	optimizationTargets := new(string)
+	if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
+		*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
+	} else {
+		optimizationTargets = nil
+	}
+	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
+	for _, labelIdsItem := range r.Launch.LabelIds {
+		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	}
+	headJobCpus := new(int)
+	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
+		*headJobCpus = int(r.Launch.HeadJobCpus.ValueInt32())
+	} else {
+		headJobCpus = nil
+	}
+	headJobMemoryMb := new(int)
+	if !r.Launch.HeadJobMemoryMb.IsUnknown() && !r.Launch.HeadJobMemoryMb.IsNull() {
+		*headJobMemoryMb = int(r.Launch.HeadJobMemoryMb.ValueInt32())
+	} else {
+		headJobMemoryMb = nil
+	}
+	launchContainer := new(string)
+	if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
+		*launchContainer = r.Launch.LaunchContainer.ValueString()
+	} else {
+		launchContainer = nil
+	}
+	dateCreated := new(time.Time)
+	if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
+	} else {
+		dateCreated = nil
+	}
+	launch = &shared.WorkflowLaunchRequest{
+		ComputeEnvID:        computeEnvID,
+		RunName:             runName,
+		Pipeline:            pipeline,
+		WorkDir:             workDir,
+		Revision:            revision,
+		SessionID:           sessionID,
+		ConfigProfiles:      configProfiles,
+		UserSecrets:         userSecrets,
+		WorkspaceSecrets:    workspaceSecrets,
+		ConfigText:          configText,
+		TowerConfig:         towerConfig,
+		ParamsText:          paramsText,
+		PreRunScript:        preRunScript,
+		PostRunScript:       postRunScript,
+		MainScript:          mainScript,
+		EntryName:           entryName,
+		SchemaName:          schemaName,
+		Resume:              resume,
+		PullLatest:          pullLatest,
+		StubRun:             stubRun,
+		OptimizationID:      optimizationID,
+		OptimizationTargets: optimizationTargets,
+		LabelIds:            labelIds,
+		HeadJobCpus:         headJobCpus,
+		HeadJobMemoryMb:     headJobMemoryMb,
+		LaunchContainer:     launchContainer,
+		DateCreated:         dateCreated,
 	}
 	out := shared.UpdateActionRequest{
 		Name:   name,

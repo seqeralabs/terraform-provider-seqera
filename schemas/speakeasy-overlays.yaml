@@ -39,6 +39,8 @@ actions:
   - target: $["paths"]["/labels/{labelId}"]["put"]
     update:
       x-speakeasy-entity-operation: Labels#update
+  - target: $["paths"]["/labels/{labelId}"]["post"]["parameters"][0]["required"]
+    remove: true
   - target: $["paths"]["/labels/{labelId}"]["delete"]
     update:
       x-speakeasy-entity-operation: Labels#delete
@@ -311,10 +313,13 @@ actions:
       required: true
   - target: $["components"]["schemas"]["CreateLabelRequest"]
     update:
-      x-speakeasy-entity: Label
+      x-speakeasy-entity: Labels
   - target: $["components"]["schemas"]["CreateLabelResponse"]
     update:
-      x-speakeasy-entity: Label
+      x-speakeasy-entity: Labels
+  - target: $["components"]["schemas"]["CreateLabelResponse"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: labelId
   - target: $["components"]["schemas"]["CreatePipelineRequest"]["properties"]["name"]
     update:
       x-speakeasy-param-optional: false
@@ -464,9 +469,6 @@ actions:
   - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
     update:
       x-speakeasy-entity: Action
-  - target: $["components"]["schemas"]["ListComputeEnvsResponse"]
-    update:
-      x-speakeasy-entity: ComputeEnvs
       ## Compute Config Schemas
   - target: $["components"]["schemas"]["ListCredentialsResponse"]
     update:
@@ -563,6 +565,18 @@ actions:
   - target: $["components"]["schemas"]["Workspace"]
     update:
       x-speakeasy-entity: Workspace
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["id"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["paths"]["/labels/{labelId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["paths"]["/labels/{labelId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["paths"]["/labels/{labelId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-readonly: true
   - target: $
     update:
       servers:

@@ -3,13 +3,13 @@
 package shared
 
 type CreateComputeEnvRequest struct {
-	ComputeEnv *ComputeEnvComputeConfigInput `json:"computeEnv,omitempty"`
-	LabelIds   []int64                       `json:"labelIds,omitempty"`
+	ComputeEnv ComputeEnvComputeConfigInput `json:"computeEnv"`
+	LabelIds   []int64                      `json:"labelIds,omitempty"`
 }
 
-func (o *CreateComputeEnvRequest) GetComputeEnv() *ComputeEnvComputeConfigInput {
+func (o *CreateComputeEnvRequest) GetComputeEnv() ComputeEnvComputeConfigInput {
 	if o == nil {
-		return nil
+		return ComputeEnvComputeConfigInput{}
 	}
 	return o.ComputeEnv
 }

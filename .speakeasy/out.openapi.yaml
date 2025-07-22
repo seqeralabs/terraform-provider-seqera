@@ -59,6 +59,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Action create request
         content:
@@ -556,6 +557,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Compute environment create request
         content:
@@ -2636,6 +2638,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-readonly: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -2681,6 +2684,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-readonly: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -6563,6 +6567,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: sourceWorkspaceId
           in: query
           description: Source Optional workspace numeric identifier
@@ -8520,6 +8525,7 @@ components:
         - config
         - name
         - platform
+        - credentialsId
       type: object
       properties:
         credentialsId:
@@ -8691,6 +8697,10 @@ components:
           $ref: "#/components/schemas/Action.Source"
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
+      required:
+        - name
+        - source
+        - launch
     CreateActionResponse:
       type: object
       properties:
@@ -8715,11 +8725,11 @@ components:
             format: int64
       x-speakeasy-entity: ComputeEnv
       required:
-        - name
+        - computeEnv
         - credentialsId
-        - platform
         - config
-        # Compute config platform-specific schemas
+        - name
+        - platform
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -8762,13 +8772,14 @@ components:
           type: boolean
         isDefault:
           type: boolean
-      x-speakeasy-entity: Label
+      x-speakeasy-entity: Labels
     CreateLabelResponse:
       type: object
       properties:
         id:
           type: integer
           format: int64
+          x-speakeasy-name-override: labelId
         name:
           type: string
         value:
@@ -8777,7 +8788,7 @@ components:
           type: boolean
         isDefault:
           type: boolean
-      x-speakeasy-entity: Label
+      x-speakeasy-entity: Labels
     CreateOrganizationRequest:
       type: object
       properties:
@@ -8810,6 +8821,7 @@ components:
       required:
         - name
         - launch
+        - workspace_id
     CreatePipelineResponse:
       type: object
       properties:
@@ -8826,6 +8838,7 @@ components:
       required:
         - name
         - value
+        - workspace_id
     CreatePipelineSecretResponse:
       type: object
       properties:
@@ -9949,7 +9962,7 @@ components:
       required:
         - type
         - minCpus
-        - MaxCpus
+        - maxCpus
     FsxFileSystem:
       type: object
       properties:
@@ -10402,6 +10415,7 @@ components:
         id:
           type: integer
           format: int64
+          x-speakeasy-param-readonly: true
           description: Unique numeric identifier for the label
         name:
           type: string
@@ -10574,6 +10588,7 @@ components:
         usageCmd:
           type: string
       x-speakeasy-entity: Action
+      ## Compute Config Schemas
     ListComputeEnvsResponse:
       type: object
       properties:
@@ -10581,8 +10596,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ListComputeEnvsResponse.Entry"
-      x-speakeasy-entity: ComputeEnvs
-      ## Compute Config Schemas
     ListComputeEnvsResponse.Entry:
       type: object
       properties:
@@ -11741,6 +11754,8 @@ components:
       properties:
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
+      required:
+        - launch
     SubmitWorkflowLaunchResponse:
       type: object
       properties:
@@ -12803,6 +12818,13 @@ components:
       x-speakeasy-entity: Workflows
       required:
         - pipeline
+        - computeEnvId
+        - workDir
+        # - target: $.components.schemas.ComputeEnv_ComputeConfig_
+        #   update:
+        #     required:
+        #     - workspaceId
+        #     - credentialsId
     WorkflowLaunchResponse:
       type: object
       properties:

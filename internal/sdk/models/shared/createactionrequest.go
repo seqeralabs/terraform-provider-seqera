@@ -3,28 +3,28 @@
 package shared
 
 type CreateActionRequest struct {
-	Name   *string                `json:"name,omitempty"`
-	Source *ActionSource          `json:"source,omitempty"`
-	Launch *WorkflowLaunchRequest `json:"launch,omitempty"`
+	Name   string                `json:"name"`
+	Source ActionSource          `json:"source"`
+	Launch WorkflowLaunchRequest `json:"launch"`
 }
 
-func (o *CreateActionRequest) GetName() *string {
+func (o *CreateActionRequest) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *CreateActionRequest) GetSource() *ActionSource {
+func (o *CreateActionRequest) GetSource() ActionSource {
 	if o == nil {
-		return nil
+		return ActionSource("")
 	}
 	return o.Source
 }
 
-func (o *CreateActionRequest) GetLaunch() *WorkflowLaunchRequest {
+func (o *CreateActionRequest) GetLaunch() WorkflowLaunchRequest {
 	if o == nil {
-		return nil
+		return WorkflowLaunchRequest{}
 	}
 	return o.Launch
 }

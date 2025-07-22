@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 7b1c58778637928ab7be60dbedc1c0be
+  docChecksum: 55e76ce0c2a1c961a4ee699dff0192e5
   docVersion: 1.45.0
-  speakeasyVersion: 1.583.1
-  generationVersion: 2.658.3
+  speakeasyVersion: 1.586.0
+  generationVersion: 2.661.4
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
@@ -797,8 +797,11 @@ examples:
           application/json: {"message": "<value>"}
   CreateAction:
     speakeasy-default-create-action:
+      parameters:
+        query:
+          workspaceId: 547784
       requestBody:
-        application/json: {}
+        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
       responses:
         "200":
           application/json: {}
@@ -959,7 +962,7 @@ examples:
         query:
           workspaceId: 692724
       requestBody:
-        application/json: {}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "lsf-platform", "config": {"discriminator": "aws-cloud", "region": "<value>"}}}
       responses:
         "200":
           application/json: {}
@@ -1930,7 +1933,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "terraform-hello-world", "launch": {"pipeline": "https://github.com/nextflow-io/hello"}}
+        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "<id>", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "<value>"}}
       responses:
         "200":
           application/json: {}
@@ -2299,8 +2302,11 @@ examples:
           application/json: {"message": "<value>"}
   CreateWorkflowLaunch:
     speakeasy-default-create-workflow-launch:
+      parameters:
+        query:
+          workspaceId: 714137
       requestBody:
-        application/json: {}
+        application/json: {"launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
       responses:
         "200":
           application/json: {}

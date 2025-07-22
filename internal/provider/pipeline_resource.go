@@ -143,7 +143,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"compute_env_id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"config_profiles": schema.ListAttribute{
 						Optional:    true,
@@ -226,7 +226,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						ElementType: types.StringType,
 					},
 					"work_dir": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"workspace_secrets": schema.ListAttribute{
 						Optional:    true,

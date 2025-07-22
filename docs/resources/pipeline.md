@@ -101,11 +101,12 @@ resource "seqera_pipeline" "my_pipeline" {
 
 Required:
 
+- `compute_env_id` (String)
 - `pipeline` (String)
+- `work_dir` (String)
 
 Optional:
 
-- `compute_env_id` (String)
 - `config_profiles` (List of String)
 - `config_text` (String)
 - `date_created` (String)
@@ -129,7 +130,6 @@ Optional:
 - `stub_run` (Boolean)
 - `tower_config` (String)
 - `user_secrets` (List of String)
-- `work_dir` (String)
 - `workspace_secrets` (List of String)
 
 

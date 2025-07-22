@@ -12,14 +12,24 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *LabelsResourceModel) RefreshFromSharedCreateLabelResponse(ctx context.Context, resp *shared.CreateLabelResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.IsDefault = types.BoolPointerValue(resp.IsDefault)
+		r.LabelID = types.Int64PointerValue(resp.LabelID)
+		r.Name = types.StringPointerValue(resp.Name)
+		r.Resource = types.BoolPointerValue(resp.Resource)
+		r.Value = types.StringPointerValue(resp.Value)
+	}
+
+	return diags
+}
+
 func (r *LabelsResourceModel) RefreshFromSharedListLabelsResponse(ctx context.Context, resp *shared.ListLabelsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.ID = rPriorData.ID
-		r.IsDefault = rPriorData.IsDefault
-		r.LabelID = rPriorData.LabelID
 		r.Labels = []tfTypes.LabelDbDto{}
 		if len(r.Labels) > len(resp.Labels) {
 			r.Labels = r.Labels[:len(resp.Labels)]
@@ -43,11 +53,7 @@ func (r *LabelsResourceModel) RefreshFromSharedListLabelsResponse(ctx context.Co
 				r.Labels[labelsCount].DateCreated = labels.DateCreated
 			}
 		}
-		r.Name = rPriorData.Name
-		r.Resource = rPriorData.Resource
 		r.TotalSize = types.Int64PointerValue(resp.TotalSize)
-		r.Value = rPriorData.Value
-		r.WorkspaceID = rPriorData.WorkspaceID
 	}
 
 	return diags
@@ -57,16 +63,9 @@ func (r *LabelsResourceModel) RefreshFromSharedUpdateLabelResponse(ctx context.C
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		rPriorData := r
-		r.ID = types.Int64PointerValue(resp.ID)
 		r.IsDefault = types.BoolPointerValue(resp.IsDefault)
-		r.LabelID = rPriorData.LabelID
-		r.Labels = rPriorData.Labels
 		r.Name = types.StringPointerValue(resp.Name)
-		r.Resource = rPriorData.Resource
-		r.TotalSize = rPriorData.TotalSize
 		r.Value = types.StringPointerValue(resp.Value)
-		r.WorkspaceID = rPriorData.WorkspaceID
 	}
 
 	return diags
@@ -81,8 +80,16 @@ func (r *LabelsResourceModel) ToOperationsCreateLabelRequest(ctx context.Context
 	} else {
 		workspaceID = nil
 	}
+	createLabelRequest, createLabelRequestDiags := r.ToSharedCreateLabelRequest(ctx)
+	diags.Append(createLabelRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := operations.CreateLabelRequest{
-		WorkspaceID: workspaceID,
+		WorkspaceID:        workspaceID,
+		CreateLabelRequest: *createLabelRequest,
 	}
 
 	return &out, diags
@@ -154,6 +161,43 @@ func (r *LabelsResourceModel) ToOperationsUpdateLabelRequest(ctx context.Context
 		LabelID:            labelID,
 		WorkspaceID:        workspaceID,
 		UpdateLabelRequest: *updateLabelRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *LabelsResourceModel) ToSharedCreateLabelRequest(ctx context.Context) (*shared.CreateLabelRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	value := new(string)
+	if !r.Value.IsUnknown() && !r.Value.IsNull() {
+		*value = r.Value.ValueString()
+	} else {
+		value = nil
+	}
+	resource := new(bool)
+	if !r.Resource.IsUnknown() && !r.Resource.IsNull() {
+		*resource = r.Resource.ValueBool()
+	} else {
+		resource = nil
+	}
+	isDefault := new(bool)
+	if !r.IsDefault.IsUnknown() && !r.IsDefault.IsNull() {
+		*isDefault = r.IsDefault.ValueBool()
+	} else {
+		isDefault = nil
+	}
+	out := shared.CreateLabelRequest{
+		Name:      name,
+		Value:     value,
+		Resource:  resource,
+		IsDefault: isDefault,
 	}
 
 	return &out, diags

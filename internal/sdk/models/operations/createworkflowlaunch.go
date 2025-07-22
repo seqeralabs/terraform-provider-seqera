@@ -9,16 +9,16 @@ import (
 
 type CreateWorkflowLaunchRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Source Optional workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 	// Workflow launch request
 	SubmitWorkflowLaunchRequest shared.SubmitWorkflowLaunchRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateWorkflowLaunchRequest) GetWorkspaceID() *int64 {
+func (o *CreateWorkflowLaunchRequest) GetWorkspaceID() int64 {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.WorkspaceID
 }

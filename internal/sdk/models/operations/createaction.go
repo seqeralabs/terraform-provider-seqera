@@ -9,14 +9,14 @@ import (
 
 type CreateActionRequest struct {
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Action create request
 	CreateActionRequest shared.CreateActionRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateActionRequest) GetWorkspaceID() *int64 {
+func (o *CreateActionRequest) GetWorkspaceID() int64 {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.WorkspaceID
 }

@@ -52,10 +52,10 @@ type ComputeEnvResource struct {
 
 // ComputeEnvResourceModel describes the resource data model.
 type ComputeEnvResourceModel struct {
-	ComputeEnv   *tfTypes.ComputeEnvComputeConfig `tfsdk:"compute_env"`
-	ComputeEnvID types.String                     `tfsdk:"compute_env_id"`
-	LabelIds     []types.Int64                    `tfsdk:"label_ids"`
-	WorkspaceID  types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnv   tfTypes.ComputeEnvComputeConfig `tfsdk:"compute_env"`
+	ComputeEnvID types.String                    `tfsdk:"compute_env_id"`
+	LabelIds     []types.Int64                   `tfsdk:"label_ids"`
+	WorkspaceID  types.Int64                     `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -67,8 +67,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 		MarkdownDescription: "ComputeEnv Resource",
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Object{
 					objectplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
@@ -81,8 +80,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"config": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						PlanModifiers: []planmodifier.Object{
 							objectplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
@@ -669,7 +667,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"min_cpus": schema.Int32Attribute{
 												Computed: true,
@@ -3751,7 +3752,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Not Null; Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													speakeasy_int32validators.NotNull(),
+												},
 											},
 											"min_cpus": schema.Int32Attribute{
 												Computed: true,
@@ -4424,14 +4428,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
 							`pre/post run scripts, and environment-specific parameters.` + "\n" +
-							`Not Null; Requires replacement if changed.`,
-						Validators: []validator.Object{
-							speakeasy_objectvalidators.NotNull(),
-						},
+							`Requires replacement if changed.`,
 					},
 					"credentials_id": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -4560,15 +4560,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"name": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Not Null; Requires replacement if changed.`,
+						Description: `Requires replacement if changed.`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.UTF8LengthAtMost(100),
 						},
 					},
@@ -4579,15 +4577,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 					"platform": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Not Null; must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "azure-batch", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "local-platform", "seqeracompute-platform"]; Requires replacement if changed.`,
+						Description: `must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "azure-batch", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "local-platform", "seqeracompute-platform"]; Requires replacement if changed.`,
 						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
 							stringvalidator.OneOf(
 								"aws-batch",
 								"aws-cloud",
@@ -4651,7 +4647,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Requires replacement if changed.`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 		},

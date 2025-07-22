@@ -68,7 +68,7 @@ func (e *AllocStrategy) UnmarshalJSON(data []byte) error {
 type ForgeConfig struct {
 	Type               ForgeConfigType `json:"type"`
 	MinCpus            int             `json:"minCpus"`
-	MaxCpus            *int            `json:"maxCpus,omitempty"`
+	MaxCpus            int             `json:"maxCpus"`
 	GpuEnabled         *bool           `json:"gpuEnabled,omitempty"`
 	EbsAutoScale       *bool           `json:"ebsAutoScale,omitempty"`
 	InstanceTypes      []string        `json:"instanceTypes,omitempty"`
@@ -112,9 +112,9 @@ func (o *ForgeConfig) GetMinCpus() int {
 	return o.MinCpus
 }
 
-func (o *ForgeConfig) GetMaxCpus() *int {
+func (o *ForgeConfig) GetMaxCpus() int {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.MaxCpus
 }

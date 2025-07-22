@@ -4,13 +4,45 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
+
   - target: $.components.schemas.CreateComputeEnvRequest
     update:
       required:
-          - name
+          - computeEnv
           - credentialsId
-          - platform
           - config
+          - name
+          - platform
+
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_
+    update:
+      required:
+        - credentialsId
+
+  - target: $.components.schemas.CreateActionRequest
+    update:
+      required:
+        - name
+        - source
+        - launch
+
+  - target: $.components.schemas.SubmitWorkflowLaunchRequest
+    update:
+      required:
+          - launch
+
+  - target: $.components.schemas.WorkflowLaunchRequest
+    update:
+      required:
+          - pipeline
+          - computeEnvId
+          - workDir
+
+  # - target: $.components.schemas.ComputeEnv_ComputeConfig_
+  #   update:
+  #     required:
+  #     - workspaceId
+  #     - credentialsId
 
     # Compute config platform-specific schemas
   - target: $.components.schemas.AwsBatchConfig
@@ -24,7 +56,7 @@ actions:
       required:
         - type
         - minCpus
-        - MaxCpus
+        - maxCpus
 
   - target: $.components.schemas.AwsCloudConfig
     update:
@@ -109,11 +141,9 @@ actions:
       required:
         - name
         - launch
+        - workspace_id
 
-  - target: $.components.schemas.WorkflowLaunchRequest
-    update:
-      required:
-        - pipeline
+
   - target: $["components"]["schemas"]["CreateDatasetRequest"]
     update:
       x-speakeasy-entity: Datasets
@@ -124,13 +154,17 @@ actions:
       required:
         - name
         - value
+        - workspace_id
+
   - target: $["components"]["schemas"]["Credentials"]["required"]
     update:
       - name
       - provider
       - keys
+
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]["required"][*]
     remove: true
+
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]
     update:
       required:
@@ -141,3 +175,16 @@ actions:
         - publicAccessible
         - resourceRef
         - type
+
+  # Make workspaceId query parameter required for resource operations
+  - target: $.paths["/actions"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
+  - target: $.paths["/compute-envs"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true
+
+  - target: $.paths["/workflow/launch"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      required: true

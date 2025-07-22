@@ -237,7 +237,7 @@ func (r *ActionDataSourceModel) RefreshFromSharedDescribeActionResponse(ctx cont
 						for _, v := range resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
 							r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
 						}
-						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
+						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
 						r.Action.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
 						for _, v := range resp.Action.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
@@ -698,7 +698,7 @@ func (r *ActionDataSourceModel) RefreshFromSharedDescribeActionResponse(ctx cont
 						for _, v := range resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
 							r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
 						}
-						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
+						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
 						r.Action.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
 						for _, v := range resp.Action.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
@@ -803,7 +803,7 @@ func (r *ActionDataSourceModel) RefreshFromSharedDescribeActionResponse(ctx cont
 						r.Action.Launch.ComputeEnv.Config.UgePlatform.UserName = types.StringPointerValue(resp.Action.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.UserName)
 						r.Action.Launch.ComputeEnv.Config.UgePlatform.WorkDir = types.StringValue(resp.Action.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.WorkDir)
 					}
-					r.Action.Launch.ComputeEnv.CredentialsID = types.StringPointerValue(resp.Action.Launch.ComputeEnv.CredentialsID)
+					r.Action.Launch.ComputeEnv.CredentialsID = types.StringValue(resp.Action.Launch.ComputeEnv.CredentialsID)
 					r.Action.Launch.ComputeEnv.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Action.Launch.ComputeEnv.DateCreated))
 					r.Action.Launch.ComputeEnv.Deleted = types.BoolPointerValue(resp.Action.Launch.ComputeEnv.Deleted)
 					r.Action.Launch.ComputeEnv.Description = types.StringPointerValue(resp.Action.Launch.ComputeEnv.Description)

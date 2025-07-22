@@ -36,12 +36,12 @@ type ActionResource struct {
 
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
-	Action      *tfTypes.ActionResponseDto     `tfsdk:"action"`
-	ActionID    types.String                   `tfsdk:"action_id"`
-	Launch      *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
-	Name        types.String                   `tfsdk:"name"`
-	Source      types.String                   `tfsdk:"source"`
-	WorkspaceID types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Action      *tfTypes.ActionResponseDto    `tfsdk:"action"`
+	ActionID    types.String                  `tfsdk:"action_id"`
+	Launch      tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
+	Name        types.String                  `tfsdk:"name"`
+	Source      types.String                  `tfsdk:"source"`
+	WorkspaceID types.Int64                   `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -2232,10 +2232,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Action string identifier`,
 			},
 			"launch": schema.SingleNestedAttribute{
-				Optional: true,
+				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"compute_env_id": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"config_profiles": schema.ListAttribute{
 						Optional:    true,
@@ -2318,7 +2318,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						ElementType: types.StringType,
 					},
 					"work_dir": schema.StringAttribute{
-						Optional: true,
+						Required: true,
 					},
 					"workspace_secrets": schema.ListAttribute{
 						Optional:    true,
@@ -2327,10 +2327,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"name": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 			},
 			"source": schema.StringAttribute{
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -2343,7 +2343,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 		},
