@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 7be97372f158bc06a2dc263f1555e6d4
+  docChecksum: 2df21b2ac444812b993c3b8ee1acb1a9
   docVersion: 1.45.0
   speakeasyVersion: 1.587.0
   generationVersion: 2.662.0
@@ -1632,7 +1632,7 @@ examples:
         path:
           orgId: 543550
       requestBody:
-        application/json: {}
+        application/json: {"team": {"name": "bioinformatics-team", "description": "Team responsible for bioinformatics analysis and pipeline development"}, "avatarId": "avatar-123456"}
       responses:
         "200":
           application/json: {}
@@ -1738,10 +1738,10 @@ examples:
         path:
           orgId: 726719
       requestBody:
-        application/json: {}
+        application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
         "400":
           application/json: {"message": "<value>"}
   WorkspaceValidate:
@@ -1760,7 +1760,7 @@ examples:
           workspaceId: 29089
       responses:
         "200":
-          application/json: {}
+          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "PRIVATE"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateWorkspace:
@@ -1773,7 +1773,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {}
+          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
         "400":
           application/json: {"message": "<value>"}
   DeleteWorkspace:
@@ -1884,7 +1884,7 @@ examples:
   CreatePipelineSecret:
     speakeasy-default-create-pipeline-secret:
       requestBody:
-        application/json: {"name": "test_terraform_secret", "value": "SECRET_VALUE"}
+        application/json: {"name": "database_password", "value": "super-secret-password-123"}
       responses:
         "200":
           application/json: {}
@@ -2055,7 +2055,7 @@ examples:
   CreateDataStudio:
     speakeasy-default-create-data-studio:
       requestBody:
-        application/json: {"name": "<value>", "dataStudioToolUrl": "https://uneven-wallaby.com/", "computeEnvId": "<id>"}
+        application/json: {"name": "my-jupyter-studio", "description": "Jupyter studio for data analysis and visualization", "dataStudioToolUrl": "https://jupyter.org/try-jupyter/hub/lab", "computeEnvId": "ce-123456789"}
       responses:
         "200":
           application/json: {}
@@ -2168,7 +2168,7 @@ examples:
   CreateToken:
     speakeasy-default-create-token:
       requestBody:
-        application/json: {}
+        application/json: {"name": "ci-cd-pipeline-token"}
       responses:
         "200":
           application/json: {}

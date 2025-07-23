@@ -8687,6 +8687,7 @@ components:
       properties:
         name:
           type: string
+          example: "ci-cd-pipeline-token"
     CreateAccessTokenResponse:
       type: object
       properties:
@@ -8847,8 +8848,10 @@ components:
       properties:
         name:
           type: string
+          example: "database_password"
         value:
           type: string
+          example: "super-secret-password-123"
       required:
         - name
         - value
@@ -8871,6 +8874,7 @@ components:
           $ref: "#/components/schemas/Team"
         avatarId:
           type: string
+          example: "avatar-123456"
     CreateTeamResponse:
       type: object
       properties:
@@ -9325,15 +9329,19 @@ components:
           maxLength: 80
           minLength: 1
           type: string
+          example: "my-jupyter-studio"
         description:
           maxLength: 2048
           type: string
+          example: "Jupyter studio for data analysis and visualization"
         dataStudioToolUrl:
           minLength: 1
           type: string
+          example: "https://jupyter.org/try-jupyter/hub/lab"
         computeEnvId:
           minLength: 1
           type: string
+          example: "ce-123456789"
         initialCheckpointId:
           type: integer
           format: int64
@@ -11977,9 +11985,11 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
+          example: "bioinformatics-team"
         description:
           maxLength: 250
           type: string
+          example: "Team responsible for bioinformatics analysis and pipeline development"
         dateCreated:
           type: string
           format: date-time
@@ -13161,17 +13171,21 @@ components:
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
           x-speakeasy-param-readonly: false
+          example: "genomics-research"
         fullName:
           maxLength: 100
           type: string
           x-speakeasy-param-readonly: false
+          example: "Genomics Research Workspace"
         description:
           maxLength: 1000
           type: string
           x-speakeasy-param-readonly: false
+          example: "Workspace for genomics research projects and computational biology workflows"
         visibility:
           $ref: "#/components/schemas/Visibility"
           x-speakeasy-param-readonly: false
+          example: "PRIVATE"
         dateCreated:
           type: string
           format: date-time

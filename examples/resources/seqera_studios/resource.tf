@@ -1,6 +1,6 @@
 resource "seqera_studios" "my_studios" {
   auto_start     = false
-  compute_env_id = "...my_compute_env_id..."
+  compute_env_id = "ce-123456789"
   configuration = {
     conda_environment = "...my_conda_environment..."
     cpu               = 2
@@ -11,14 +11,14 @@ resource "seqera_studios" "my_studios" {
       "..."
     ]
   }
-  data_studio_tool_url  = "...my_data_studio_tool_url..."
-  description           = "...my_description..."
+  data_studio_tool_url  = "https://jupyter.org/try-jupyter/hub/lab"
+  description           = "Jupyter studio for data analysis and visualization"
   initial_checkpoint_id = 9
   is_private            = true
   label_ids = [
     7
   ]
-  name         = "...my_name..."
+  name         = "my-jupyter-studio"
   spot         = true
   workspace_id = 9
 }
