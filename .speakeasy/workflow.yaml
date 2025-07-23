@@ -10,6 +10,7 @@ sources:
             - location: schemas/schema-descriptions-overlay.yaml
             - location: schemas/schema-field-descriptions-overlays.yaml
             - location: schemas/examples-overlays.yaml
+            - location: schemas/validators-overlays.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

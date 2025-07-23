@@ -8776,10 +8776,20 @@ components:
       properties:
         name:
           type: string
-          example: "environment"
+          example: "my-label"
+          minLength: 2
+          maxLength: 39
+          title: "Label Name"
+          description: "Label name must contain a minimum of 2 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
           example: "production"
+          minLength: 1
+          maxLength: 39
+          title: "Label Value"
+          description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          x-speakeasy-plan-validators: LabelValueValidator
         resource:
           type: boolean
           example: true
@@ -12282,8 +12292,20 @@ components:
       properties:
         name:
           type: string
+          minLength: 1
+          maxLength: 39
+          title: "Label Name"
+          description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          example: "my-label"
+          x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
+          minLength: 1
+          maxLength: 39
+          title: "Label Value"
+          description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          example: "production"
+          x-speakeasy-plan-validators: LabelValueValidator
         isDefault:
           type: boolean
     UpdateLabelResponse:

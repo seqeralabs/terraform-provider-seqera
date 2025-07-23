@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: e30172e0a86f6c560d4e8841344bc3bd
+  docChecksum: a48e7945a3f1304d04461e7f4c945d79
   docVersion: 1.45.0
-  speakeasyVersion: 1.587.0
+  speakeasyVersion: 1.587.1
   generationVersion: 2.662.0
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
@@ -889,7 +889,7 @@ examples:
   CreateLabel:
     speakeasy-default-create-label:
       requestBody:
-        application/json: {"name": "environment", "value": "production", "resource": true, "isDefault": false}
+        application/json: {"name": "my-label", "value": "production", "resource": true, "isDefault": false}
       responses:
         "200":
           application/json: {}
@@ -901,7 +901,7 @@ examples:
         path:
           labelId: 478484
       requestBody:
-        application/json: {}
+        application/json: {"name": "my-label", "value": "production"}
       responses:
         "200":
           application/json: {}

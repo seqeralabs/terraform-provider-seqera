@@ -1,0 +1,54 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Custom validators overlays for Seqera API
+  version: 0.0.0
+actions:
+  ####################################################################
+  ####                  Label Name Validation                    ####
+  ####################################################################
+  # Add custom validator for label names
+  # Label name must contain a minimum of 2 and a maximum of 39 alphanumeric
+  # characters separated by dashes or underscores
+  - target: $.components.schemas.CreateLabelRequest.properties.name
+    update:
+      minLength: 2
+      maxLength: 39
+      title: "Label Name"
+      description: "Label name must contain a minimum of 2 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "my-label"
+      x-speakeasy-plan-validators: LabelNameValidator
+
+  ####################################################################
+  ####                  Label Value Validation                   ####
+  ####################################################################
+  # Add custom validator for label values
+  # Label value must contain a minimum of 1 and a maximum of 39 alphanumeric
+  # characters separated by dashes or underscores
+  - target: $.components.schemas.CreateLabelRequest.properties.value
+    update:
+      minLength: 1
+      maxLength: 39
+      title: "Label Value"
+      description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "production"
+      x-speakeasy-plan-validators: LabelValueValidator
+
+  # Add validators to UpdateLabelRequest as well
+  - target: $.components.schemas.UpdateLabelRequest.properties.name
+    update:
+      minLength: 1
+      maxLength: 39
+      title: "Label Name"
+      description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "my-label"
+      x-speakeasy-plan-validators: LabelNameValidator
+
+  - target: $.components.schemas.UpdateLabelRequest.properties.value
+    update:
+      minLength: 1
+      maxLength: 39
+      title: "Label Value"
+      description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "production"
+      x-speakeasy-plan-validators: LabelValueValidator

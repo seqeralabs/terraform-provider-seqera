@@ -191,7 +191,7 @@ resource "seqera_studios" "my_datastudios" {
 
 resource "seqera_labels" "my_labels" {
   is_default   = false
-  name         = "terraform-test-label"
+  name         = "$#terraform-"
   resource     = true
   value        = "terraform-label-value"
   workspace_id = var.workspace_id

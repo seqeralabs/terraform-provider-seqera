@@ -3,7 +3,9 @@
 package shared
 
 type CreateLabelRequest struct {
-	Name      *string `json:"name,omitempty"`
+	// Label name must contain a minimum of 2 and a maximum of 39 alphanumeric characters separated by dashes or underscores
+	Name *string `json:"name,omitempty"`
+	// Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
 	Value     *string `json:"value,omitempty"`
 	Resource  *bool   `json:"resource,omitempty"`
 	IsDefault *bool   `json:"isDefault,omitempty"`
