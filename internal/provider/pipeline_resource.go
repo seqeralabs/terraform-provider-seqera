@@ -15,6 +15,7 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 	"strconv"
 )
 
@@ -236,6 +237,9 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"name": schema.StringAttribute{
 				Required: true,
+				Validators: []validator.String{
+					custom_stringvalidators.PipelineNameValidator(),
+				},
 			},
 			"optimization_id": schema.StringAttribute{
 				Computed: true,

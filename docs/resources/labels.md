@@ -28,7 +28,7 @@ resource "seqera_labels" "my_labels" {
 ### Optional
 
 - `is_default` (Boolean)
-- `name` (String) Label name must contain a minimum of 2 and a maximum of 39 alphanumeric characters separated by dashes or underscores
+- `name` (String) Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
 - `resource` (Boolean) Requires replacement if changed.
 - `value` (String) Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
 - `workspace_id` (Number) Workspace numeric identifier

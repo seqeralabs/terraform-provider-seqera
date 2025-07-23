@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: a48e7945a3f1304d04461e7f4c945d79
+  docChecksum: 68728fcfd74b2b2423a192aa801e46e6
   docVersion: 1.45.0
   speakeasyVersion: 1.587.1
   generationVersion: 2.662.0
@@ -1974,7 +1974,7 @@ examples:
         path:
           pipelineId: 936263
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "my-pipeline", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}

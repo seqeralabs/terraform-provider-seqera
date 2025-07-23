@@ -99,9 +99,9 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Label name must contain a minimum of 2 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
+				Description: `Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(2, 39),
+					stringvalidator.UTF8LengthBetween(1, 39),
 					custom_stringvalidators.LabelNameValidator(),
 				},
 			},
