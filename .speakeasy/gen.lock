@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 55e76ce0c2a1c961a4ee699dff0192e5
+  docChecksum: 8d3bfb51f9f91cc090a2c9308c585a77
   docVersion: 1.45.0
-  speakeasyVersion: 1.586.0
-  generationVersion: 2.661.4
+  speakeasyVersion: 1.587.0
+  generationVersion: 2.662.0
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
   terraform:
     additionalDependencies: 0.1.0
-    core: 3.41.16
+    core: 3.42.0
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
@@ -801,7 +801,7 @@ examples:
         query:
           workspaceId: 547784
       requestBody:
-        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
+        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "ce_67890fghij", "runName": "my-workflow-run-2024", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "towerConfig": "tower {\n  accessToken = '$TOWER_ACCESS_TOKEN'\n  workspaceId = 'my-workspace'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n  \"max_cpus\": 16\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "MAIN", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": false, "stubRun": false, "optimizationId": "opt_98765zyxwv", "optimizationTargets": "cost,time", "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "launchContainer": "quay.io/seqeralabs/nf-launcher:latest", "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -835,7 +835,7 @@ examples:
         path:
           actionId: "<id>"
       requestBody:
-        application/json: {}
+        application/json: {"launch": {"computeEnvId": "ce_67890fghij", "runName": "my-workflow-run-2024", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "towerConfig": "tower {\n  accessToken = '$TOWER_ACCESS_TOKEN'\n  workspaceId = 'my-workspace'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n  \"max_cpus\": 16\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "MAIN", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": false, "stubRun": false, "optimizationId": "opt_98765zyxwv", "optimizationTargets": "cost,time", "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "launchContainer": "quay.io/seqeralabs/nf-launcher:latest", "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -1013,7 +1013,7 @@ examples:
     speakeasy-default-list-credentials:
       responses:
         "200":
-          application/json: {}
+          application/json: {"credentials": [{"name": "my-cloud-credentials", "description": "Cloud credentials for production workloads", "provider": "aws", "baseUrl": "https://example.com", "category": "cloud", "keys": {"discriminator": "gitlab"}}]}
         "400":
           application/json: {"message": "<value>"}
   CreateCredentials:
@@ -1022,7 +1022,7 @@ examples:
         query:
           workspaceId: 555782
       requestBody:
-        application/json: {}
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws", "accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
       responses:
         "200":
           application/json: {}
@@ -1040,7 +1040,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws", "accessKey": "AKIAIOSFODNN7EXAMPLE", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateCredentials:
@@ -1049,7 +1049,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {}
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws", "accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -1076,7 +1076,7 @@ examples:
         query:
           workspaceId: 601301
       requestBody:
-        application/json: {"name": "<value>", "description": "insidious cap phooey coolly", "type": "bucket", "provider": "google", "resourceRef": "<value>", "publicAccessible": true, "credentialsId": "<id>"}
+        application/json: {"name": "my-s3-datalink", "description": "S3 bucket for production data storage", "type": "bucket", "provider": "google", "resourceRef": "s3://my-production-bucket", "publicAccessible": false, "credentialsId": "aws-cred-12345"}
       responses:
         "200":
           application/json: {}
@@ -1250,7 +1250,7 @@ examples:
         query:
           workspaceId: 631977
       requestBody:
-        application/json: {"name": "terraform-dataset"}
+        application/json: {"name": "my-research-dataset", "description": "Research dataset containing sample genomic data"}
       responses:
         "200":
           application/json: {}
@@ -1349,7 +1349,7 @@ examples:
         path:
           workspaceId: 751126
       requestBody:
-        application/json: {"name": "terraform-dataset"}
+        application/json: {"name": "my-research-dataset", "description": "Research dataset containing sample genomic data"}
       responses:
         "200":
           application/json: {}
@@ -1933,7 +1933,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "<id>", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "<value>"}}
+        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "ce_67890fghij", "runName": "my-workflow-run-2024", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "towerConfig": "tower {\n  accessToken = '$TOWER_ACCESS_TOKEN'\n  workspaceId = 'my-workspace'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n  \"max_cpus\": 16\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "MAIN", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": false, "stubRun": false, "optimizationId": "opt_98765zyxwv", "optimizationTargets": "cost,time", "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "launchContainer": "quay.io/seqeralabs/nf-launcher:latest", "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -1974,7 +1974,7 @@ examples:
         path:
           pipelineId: 936263
       requestBody:
-        application/json: {}
+        application/json: {"launch": {"computeEnvId": "ce_67890fghij", "runName": "my-workflow-run-2024", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "towerConfig": "tower {\n  accessToken = '$TOWER_ACCESS_TOKEN'\n  workspaceId = 'my-workspace'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n  \"max_cpus\": 16\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "MAIN", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": false, "stubRun": false, "optimizationId": "opt_98765zyxwv", "optimizationTargets": "cost,time", "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "launchContainer": "quay.io/seqeralabs/nf-launcher:latest", "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -2306,7 +2306,7 @@ examples:
         query:
           workspaceId: 714137
       requestBody:
-        application/json: {"launch": {"computeEnvId": "<id>", "pipeline": "<value>", "workDir": "<value>"}}
+        application/json: {"launch": {"computeEnvId": "ce_67890fghij", "runName": "my-workflow-run-2024", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "towerConfig": "tower {\n  accessToken = '$TOWER_ACCESS_TOKEN'\n  workspaceId = 'my-workspace'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n  \"max_cpus\": 16\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "MAIN", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": false, "stubRun": false, "optimizationId": "opt_98765zyxwv", "optimizationTargets": "cost,time", "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "launchContainer": "quay.io/seqeralabs/nf-launcher:latest", "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}

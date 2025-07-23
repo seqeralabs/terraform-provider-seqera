@@ -1,0 +1,227 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Overlay seqera-api-latest.yml => seqera-final.yaml
+  version: 0.0.0
+actions:
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.pipeline
+    update:
+      example: https://github.com/nextflow-io/hello
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.id
+    update:
+      example: "wf_12345abcde"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.computeEnvId
+    update:
+      example: "ce_67890fghij"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.runName
+    update:
+      example: "my-workflow-run-2024"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.pipeline
+    update:
+      example: "https://github.com/nextflow-io/hello"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.workDir
+    update:
+      example: "s3://my-bucket/work"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.revision
+    update:
+      example: "main"
+
+  # - target: $.components.schemas.WorkflowLaunchRequest.properties.sessionId
+  #   update:
+  #     example: "sess_klmnop12345"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.configProfiles
+    update:
+      example: ["docker", "aws"]
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.userSecrets
+    update:
+      example: ["MY_API_KEY", "DATABASE_PASSWORD"]
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.workspaceSecrets
+    update:
+      example: ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.configText
+    update:
+      example: |
+        process {
+          executor = 'awsbatch'
+          queue = 'my-queue'
+        }
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.towerConfig
+    update:
+      example: |
+        tower {
+          accessToken = '$TOWER_ACCESS_TOKEN'
+          workspaceId = 'my-workspace'
+        }
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.paramsText
+    update:
+      example: |
+        {
+          "input": "s3://my-bucket/input.csv",
+          "output_dir": "s3://my-bucket/results",
+          "max_cpus": 16
+        }
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.preRunScript
+    update:
+      example: |
+        #!/bin/bash
+        echo "Starting workflow execution"
+        aws s3 sync s3://my-bucket/data ./data
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.postRunScript
+    update:
+      example: |
+        #!/bin/bash
+        echo "Workflow completed"
+        aws s3 sync ./results s3://my-bucket/results
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.mainScript
+    update:
+      example: "main.nf"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.entryName
+    update:
+      example: "MAIN"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.schemaName
+    update:
+      example: "nextflow_schema.json"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.resume
+    update:
+      example: true
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.pullLatest
+    update:
+      example: false
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.stubRun
+    update:
+      example: false
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.optimizationId
+    update:
+      example: "opt_98765zyxwv"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.optimizationTargets
+    update:
+      example: "cost,time"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.labelIds
+    update:
+      example: [1001, 1002, 1003]
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.headJobCpus
+    update:
+      example: 2
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.headJobMemoryMb
+    update:
+      example: 4096
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.launchContainer
+    update:
+      example: "quay.io/seqeralabs/nf-launcher:latest"
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.dateCreated
+    update:
+      example: "2024-07-23T10:30:00Z"
+
+  # Credentials Examples (GCP to match the generated keys structure)
+  - target: $.components.schemas.Credentials.properties.name
+    update:
+      example: "my-gcp-credentials"
+  - target: $.components.schemas.Credentials.properties.description
+    update:
+      example: "Google Cloud credentials for production workloads"
+  - target: $.components.schemas.Credentials.properties.provider
+    update:
+      example: "google"
+  - target: $.components.schemas.Credentials.properties.baseUrl
+    update:
+      example: "https://www.googleapis.com"
+  - target: $.components.schemas.Credentials.properties.category
+    update:
+      example: "cloud"
+
+  # AWS Security Keys Examples
+  - target: $.components.schemas.AwsSecurityKeys.properties.accessKey
+    update:
+      example: "AKIAIOSFODNN7EXAMPLE"
+  - target: $.components.schemas.AwsSecurityKeys.properties.secretKey
+    update:
+      example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  - target: $.components.schemas.AwsSecurityKeys.properties.assumeRoleArn
+    update:
+      example: "arn:aws:iam::123456789012:role/SeqeraRole"
+
+  # Azure Security Keys Examples
+  - target: $.components.schemas.AzureSecurityKeys.properties.batchName
+    update:
+      example: "myazurebatch"
+  - target: $.components.schemas.AzureSecurityKeys.properties.storageName
+    update:
+      example: "myazurestorage"
+  - target: $.components.schemas.AzureSecurityKeys.properties.batchKey
+    update:
+      example: "YourAzureBatchAccountKeyHere=="
+  - target: $.components.schemas.AzureSecurityKeys.properties.storageKey
+    update:
+      example: "YourAzureStorageAccountKeyHere=="
+
+  # Google Security Keys Examples
+  - target: $.components.schemas.GoogleSecurityKeys.properties.data
+    update:
+      example: |
+        {
+          "type": "service_account",
+          "project_id": "my-project",
+          "private_key_id": "key-id",
+          "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+          "client_email": "service-account@my-project.iam.gserviceaccount.com",
+          "client_id": "123456789",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token"
+        }
+
+  # DataLink Examples
+  - target: $.components.schemas.DataLinkCreateRequest.properties.name
+    update:
+      example: "my-s3-datalink"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.description
+    update:
+      example: "S3 bucket for production data storage"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.credentialsId
+    update:
+      example: "aws-cred-12345"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.type
+    update:
+      example: "bucket"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.provider
+    update:
+      example: "aws"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.resourceRef
+    update:
+      example: "s3://my-production-bucket"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.publicAccessible
+    update:
+      example: false
+
+  # Dataset Examples
+  - target: $.components.schemas.CreateDatasetRequest.properties.name
+    update:
+      example: "my-research-dataset"
+  - target: $.components.schemas.CreateDatasetRequest.properties.description
+    update:
+      example: "Research dataset containing sample genomic data"
