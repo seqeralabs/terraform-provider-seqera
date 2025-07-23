@@ -583,6 +583,15 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: ComputeEnv#create
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 500 # 500 milliseconds
+          maxInterval: 60000 # 60 seconds
+          maxElapsedTime: 3600000 # 1 hour
+          exponent: 1.5
+        statusCodes:
+          - 5XX
   /compute-envs/validate:
     get:
       summary: Validate compute environment name
@@ -5371,6 +5380,15 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Studios#create
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 400
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -6600,6 +6618,15 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Workflows#create
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 400
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -8781,16 +8808,12 @@ components:
         name:
           type: string
           example: "my-label"
-          minLength: 1
-          maxLength: 39
           title: "Label Name"
           description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
           x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
           example: "production"
-          minLength: 1
-          maxLength: 39
           title: "Label Value"
           description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
           x-speakeasy-plan-validators: LabelValueValidator
@@ -12296,16 +12319,12 @@ components:
       properties:
         name:
           type: string
-          minLength: 1
-          maxLength: 39
           title: "Label Name"
           description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
           example: "my-label"
           x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
-          minLength: 1
-          maxLength: 39
           title: "Label Value"
           description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
           example: "production"

@@ -12,8 +12,6 @@ actions:
   # characters separated by dashes or underscores
   - target: $.components.schemas.CreateLabelRequest.properties.name
     update:
-      minLength: 1
-      maxLength: 39
       title: "Label Name"
       description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
       example: "my-label"
@@ -27,8 +25,6 @@ actions:
   # characters separated by dashes or underscores
   - target: $.components.schemas.CreateLabelRequest.properties.value
     update:
-      minLength: 1
-      maxLength: 39
       title: "Label Value"
       description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
       example: "production"
@@ -37,8 +33,6 @@ actions:
   # Add validators to UpdateLabelRequest as well
   - target: $.components.schemas.UpdateLabelRequest.properties.name
     update:
-      minLength: 1
-      maxLength: 39
       title: "Label Name"
       description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
       example: "my-label"
@@ -46,8 +40,6 @@ actions:
 
   - target: $.components.schemas.UpdateLabelRequest.properties.value
     update:
-      minLength: 1
-      maxLength: 39
       title: "Label Value"
       description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
       example: "production"

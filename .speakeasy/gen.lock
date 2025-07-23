@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 68728fcfd74b2b2423a192aa801e46e6
+  docChecksum: 412cbf3a75cf6fbf6e99b692046b1425
   docVersion: 1.45.0
   speakeasyVersion: 1.587.1
   generationVersion: 2.662.0
@@ -20,6 +20,7 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     nullables: 0.0.0
+    retries: 2.81.3
     unions: 2.81.17
 generatedFiles:
   - .gitattributes
@@ -275,6 +276,7 @@ generatedFiles:
   - internal/sdk/credentials.go
   - internal/sdk/datalinks.go
   - internal/sdk/datasets.go
+  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/ga4gh.go
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/hooks/hooks.go

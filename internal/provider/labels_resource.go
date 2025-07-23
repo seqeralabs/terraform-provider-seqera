@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
@@ -101,7 +100,6 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional:    true,
 				Description: `Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(1, 39),
 					custom_stringvalidators.LabelNameValidator(),
 				},
 			},
@@ -122,7 +120,6 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional:    true,
 				Description: `Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(1, 39),
 					custom_stringvalidators.LabelValueValidator(),
 				},
 			},
