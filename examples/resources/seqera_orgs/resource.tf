@@ -1,8 +1,8 @@
 resource "seqera_orgs" "my_orgs" {
-  description = "...my_description..."
-  full_name   = "...my_full_name..."
-  location    = "...my_location..."
-  logo_id     = "...my_logo_id..."
-  name        = "...my_name..."
-  website     = "...my_website..."
+  description = "A research organization focused on genomics and computational biology"
+  full_name   = "My Biotech Organization"
+  location    = "San Francisco, CA"
+  logo_id     = "logo_abc123def456"
+  name        = "my-biotech-org"
+  website     = "https://www.mybiotech.com"
 }

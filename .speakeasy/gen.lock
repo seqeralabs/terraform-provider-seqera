@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 8d3bfb51f9f91cc090a2c9308c585a77
+  docChecksum: 7be97372f158bc06a2dc263f1555e6d4
   docVersion: 1.45.0
   speakeasyVersion: 1.587.0
   generationVersion: 2.662.0
@@ -889,7 +889,7 @@ examples:
   CreateLabel:
     speakeasy-default-create-label:
       requestBody:
-        application/json: {}
+        application/json: {"name": "environment", "value": "production", "resource": true, "isDefault": false}
       responses:
         "200":
           application/json: {}
@@ -1507,7 +1507,7 @@ examples:
   CreateOrganization:
     speakeasy-default-create-organization:
       requestBody:
-        application/json: {}
+        application/json: {"organization": {"name": "my-biotech-org", "fullName": "My Biotech Organization", "description": "A research organization focused on genomics and computational biology", "location": "San Francisco, CA", "website": "https://www.mybiotech.com"}, "logoId": "logo_abc123def456"}
       responses:
         "200":
           application/json: {}

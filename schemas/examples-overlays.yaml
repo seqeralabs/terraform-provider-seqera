@@ -225,3 +225,37 @@ actions:
   - target: $.components.schemas.CreateDatasetRequest.properties.description
     update:
       example: "Research dataset containing sample genomic data"
+
+  # Labels Examples
+  - target: $.components.schemas.CreateLabelRequest.properties.name
+    update:
+      example: "environment"
+  - target: $.components.schemas.CreateLabelRequest.properties.value
+    update:
+      example: "production"
+  - target: $.components.schemas.CreateLabelRequest.properties.resource
+    update:
+      example: true
+  - target: $.components.schemas.CreateLabelRequest.properties.isDefault
+    update:
+      example: false
+
+  # Organization Examples
+  - target: $.components.schemas.Organization.properties.name
+    update:
+      example: "my-biotech-org"
+  - target: $.components.schemas.Organization.properties.fullName
+    update:
+      example: "My Biotech Organization"
+  - target: $.components.schemas.Organization.properties.description
+    update:
+      example: "A research organization focused on genomics and computational biology"
+  - target: $.components.schemas.Organization.properties.location
+    update:
+      example: "San Francisco, CA"
+  - target: $.components.schemas.Organization.properties.website
+    update:
+      example: "https://www.mybiotech.com"
+  - target: $.components.schemas.CreateOrganizationRequest.properties.logoId
+    update:
+      example: "logo_abc123def456"

@@ -8775,12 +8775,16 @@ components:
       properties:
         name:
           type: string
+          example: "environment"
         value:
           type: string
+          example: "production"
         resource:
           type: boolean
+          example: true
         isDefault:
           type: boolean
+          example: false
       x-speakeasy-entity: Labels
     CreateLabelResponse:
       type: object
@@ -8805,6 +8809,7 @@ components:
           $ref: "#/components/schemas/Organization"
         logoId:
           type: string
+          example: "logo_abc123def456"
     CreateOrganizationResponse:
       type: object
       properties:
@@ -11021,18 +11026,23 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
+          example: "my-biotech-org"
         fullName:
           maxLength: 100
           type: string
+          example: "My Biotech Organization"
         description:
           maxLength: 1000
           type: string
+          example: "A research organization focused on genomics and computational biology"
         location:
           maxLength: 100
           type: string
+          example: "San Francisco, CA"
         website:
           pattern: ""
           type: string
+          example: "https://www.mybiotech.com"
         dateCreated:
           type: string
           format: date-time
