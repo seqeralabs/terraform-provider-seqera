@@ -8759,10 +8759,10 @@ components:
       properties:
         name:
           type: string
-          example: "my-research-dataset"
+          example: "my-dataset"
         description:
           type: string
-          example: "Research dataset containing sample genomic data"
+          example: "Dataset containing sample genomic data"
       x-speakeasy-entity: Datasets
       required:
         - name
@@ -8810,7 +8810,7 @@ components:
           $ref: "#/components/schemas/Organization"
         logoId:
           type: string
-          example: "logo_abc123def456"
+          example: "logo"
     CreateOrganizationResponse:
       type: object
       properties:
@@ -9043,13 +9043,13 @@ components:
           example: "aws"
         resourceRef:
           type: string
-          example: "s3://my-production-bucket"
+          example: "s3://my-bucket"
         publicAccessible:
           type: boolean
           example: false
         credentialsId:
           type: string
-          example: "aws-cred-12345"
+          example: "aws-credentials-id"
       required:
         - credentialsId
         - description
@@ -9337,11 +9337,11 @@ components:
         dataStudioToolUrl:
           minLength: 1
           type: string
-          example: "https://jupyter.org/try-jupyter/hub/lab"
+          example: "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
         computeEnvId:
           minLength: 1
           type: string
-          example: "ce-123456789"
+          example: "compute-env-id"
         initialCheckpointId:
           type: integer
           format: int64
@@ -11034,19 +11034,19 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
-          example: "my-biotech-org"
+          example: "my-org"
         fullName:
           maxLength: 100
           type: string
-          example: "My Biotech Organization"
+          example: "My Organization"
         description:
           maxLength: 1000
           type: string
-          example: "A research organization focused on genomics and computational biology"
+          example: "Put your organization description here"
         location:
           maxLength: 100
           type: string
-          example: "San Francisco, CA"
+          example: "Toronto, CA"
         website:
           pattern: ""
           type: string
@@ -12801,10 +12801,10 @@ components:
       properties:
         computeEnvId:
           type: string
-          example: "ce_67890fghij"
+          example: "4g09tT4pW4JFUvXTHdB6zP"
         runName:
           type: string
-          example: "my-workflow-run-2024"
+          example: "nextflow-hello"
         pipeline:
           type: string
           example: https://github.com/nextflow-io/hello
@@ -12840,18 +12840,12 @@ components:
             }
         towerConfig:
           type: string
-          example: |
-            tower {
-              accessToken = '$TOWER_ACCESS_TOKEN'
-              workspaceId = 'my-workspace'
-            }
         paramsText:
           type: string
           example: |
             {
               "input": "s3://my-bucket/input.csv",
               "output_dir": "s3://my-bucket/results",
-              "max_cpus": 16
             }
         preRunScript:
           type: string
@@ -12872,7 +12866,7 @@ components:
           example: "main.nf"
         entryName:
           type: string
-          example: "MAIN"
+          example: "main.nf"
         schemaName:
           type: string
           example: "nextflow_schema.json"
@@ -12881,16 +12875,14 @@ components:
           example: true
         pullLatest:
           type: boolean
-          example: false
+          example: true
         stubRun:
           type: boolean
           example: false
         optimizationId:
           type: string
-          example: "opt_98765zyxwv"
         optimizationTargets:
           type: string
-          example: "cost,time"
         labelIds:
           type: array
           items:
@@ -12907,7 +12899,6 @@ components:
           example: 4096
         launchContainer:
           type: string
-          example: "quay.io/seqeralabs/nf-launcher:latest"
         dateCreated:
           type: string
           format: date-time

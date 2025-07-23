@@ -5,34 +5,34 @@ resource "seqera_pipeline" "my_pipeline" {
     7
   ]
   launch = {
-    compute_env_id = "ce_67890fghij"
+    compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
       "..."
     ]
     config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
     date_created       = "2024-07-23T10:30:00Z"
-    entry_name         = "MAIN"
+    entry_name         = "main.nf"
     head_job_cpus      = 2
     head_job_memory_mb = 4096
     label_ids = [
       3
     ]
-    launch_container     = "quay.io/seqeralabs/nf-launcher:latest"
+    launch_container     = "...my_launch_container..."
     main_script          = "main.nf"
-    optimization_id      = "opt_98765zyxwv"
-    optimization_targets = "cost,time"
-    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n  \"max_cpus\": 16\n}\n"
+    optimization_id      = "...my_optimization_id..."
+    optimization_targets = "...my_optimization_targets..."
+    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n"
     pipeline             = "https://github.com/nextflow-io/hello"
     post_run_script      = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
     pre_run_script       = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-    pull_latest          = false
+    pull_latest          = true
     resume               = true
     revision             = "main"
-    run_name             = "my-workflow-run-2024"
+    run_name             = "nextflow-hello"
     schema_name          = "nextflow_schema.json"
     session_id           = "...my_session_id..."
     stub_run             = false
-    tower_config         = "tower {\n  accessToken = '$TOWER_ACCESS_TOKEN'\n  workspaceId = 'my-workspace'\n}\n"
+    tower_config         = "...my_tower_config..."
     user_secrets = [
       "..."
     ]

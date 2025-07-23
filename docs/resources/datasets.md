@@ -14,8 +14,8 @@ Datasets Resource
 
 ```terraform
 resource "seqera_datasets" "my_datasets" {
-  description  = "Research dataset containing sample genomic data"
-  name         = "my-research-dataset"
+  description  = "Dataset containing sample genomic data"
+  name         = "my-dataset"
   workspace_id = 7
 }
 ```
