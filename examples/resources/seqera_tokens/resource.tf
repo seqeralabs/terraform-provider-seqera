@@ -1,4 +1,4 @@
 resource "seqera_tokens" "my_tokens" {
-  name     = "...my_name..."
+  name     = "ci-cd-pipeline-token"
   token_id = 3
 }

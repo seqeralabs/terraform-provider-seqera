@@ -1,7 +1,7 @@
 data "seqera_workspace" "my_workspace" {
-  description = "...my_description..."
-  full_name   = "...my_full_name..."
+  description = "Workspace for genomics research projects and computational biology workflows"
+  full_name   = "Genomics Research Workspace"
   id          = 1
-  name        = "...my_name..."
+  name        = "genomics-research"
   org_id      = 7
 }

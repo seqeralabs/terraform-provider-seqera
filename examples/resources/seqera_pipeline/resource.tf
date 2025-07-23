@@ -5,38 +5,38 @@ resource "seqera_pipeline" "my_pipeline" {
     7
   ]
   launch = {
-    compute_env_id = "...my_compute_env_id..."
+    compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
       "..."
     ]
-    config_text        = "...my_config_text..."
-    date_created       = "2022-01-03T00:33:46.725Z"
-    entry_name         = "...my_entry_name..."
-    head_job_cpus      = 6
-    head_job_memory_mb = 4
+    config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
+    date_created       = "2024-07-23T10:30:00Z"
+    entry_name         = "main.nf"
+    head_job_cpus      = 2
+    head_job_memory_mb = 4096
     label_ids = [
       3
     ]
     launch_container     = "...my_launch_container..."
-    main_script          = "...my_main_script..."
+    main_script          = "main.nf"
     optimization_id      = "...my_optimization_id..."
     optimization_targets = "...my_optimization_targets..."
-    params_text          = "...my_params_text..."
-    pipeline             = "...my_pipeline..."
-    post_run_script      = "...my_post_run_script..."
-    pre_run_script       = "...my_pre_run_script..."
+    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n"
+    pipeline             = "https://github.com/nextflow-io/hello"
+    post_run_script      = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
+    pre_run_script       = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
     pull_latest          = true
-    resume               = false
-    revision             = "...my_revision..."
-    run_name             = "...my_run_name..."
-    schema_name          = "...my_schema_name..."
+    resume               = true
+    revision             = "main"
+    run_name             = "nextflow-hello"
+    schema_name          = "nextflow_schema.json"
     session_id           = "...my_session_id..."
     stub_run             = false
     tower_config         = "...my_tower_config..."
     user_secrets = [
       "..."
     ]
-    work_dir = "...my_work_dir..."
+    work_dir = "s3://my-bucket/work"
     workspace_secrets = [
       "..."
     ]

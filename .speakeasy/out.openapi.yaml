@@ -8218,11 +8218,14 @@ components:
           type: string
         accessKey:
           type: string
+          example: "AKIAIOSFODNN7EXAMPLE"
         secretKey:
           type: string
           writeOnly: true
+          example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         assumeRoleArn:
           type: string
+          example: "arn:aws:iam::123456789012:role/SeqeraRole"
     AzBatchConfig:
       title: Azure batch configuration
       type: object
@@ -8339,14 +8342,18 @@ components:
           type: string
         batchName:
           type: string
+          example: "myazurebatch"
         storageName:
           type: string
+          example: "myazurestorage"
         batchKey:
           type: string
           writeOnly: true
+          example: "YourAzureBatchAccountKeyHere=="
         storageKey:
           type: string
           writeOnly: true
+          example: "YourAzureStorageAccountKeyHere=="
     BitBucketSecurityKeys:
       type: object
       properties:
@@ -8680,6 +8687,7 @@ components:
       properties:
         name:
           type: string
+          example: "ci-cd-pipeline-token"
     CreateAccessTokenResponse:
       type: object
       properties:
@@ -8751,8 +8759,10 @@ components:
       properties:
         name:
           type: string
+          example: "my-dataset"
         description:
           type: string
+          example: "Dataset containing sample genomic data"
       x-speakeasy-entity: Datasets
       required:
         - name
@@ -8766,12 +8776,16 @@ components:
       properties:
         name:
           type: string
+          example: "environment"
         value:
           type: string
+          example: "production"
         resource:
           type: boolean
+          example: true
         isDefault:
           type: boolean
+          example: false
       x-speakeasy-entity: Labels
     CreateLabelResponse:
       type: object
@@ -8796,6 +8810,7 @@ components:
           $ref: "#/components/schemas/Organization"
         logoId:
           type: string
+          example: "logo"
     CreateOrganizationResponse:
       type: object
       properties:
@@ -8833,8 +8848,10 @@ components:
       properties:
         name:
           type: string
+          example: "database_password"
         value:
           type: string
+          example: "super-secret-password-123"
       required:
         - name
         - value
@@ -8857,6 +8874,7 @@ components:
           $ref: "#/components/schemas/Team"
         avatarId:
           type: string
+          example: "avatar-123456"
     CreateTeamResponse:
       type: object
       properties:
@@ -8896,10 +8914,12 @@ components:
           maxLength: 100
           type: string
           description: Display name for the credential (max 100 characters)
+          example: "my-gcp-credentials"
         description:
           type: string
           x-speakeasy-param-computed: false
           description: Optional description explaining the purpose of the credential
+          example: "Google Cloud credentials for production workloads"
         provider:
           maxLength: 16
           type: string
@@ -8939,15 +8959,18 @@ components:
           x-speakeasy-name-override: providerType
           x-speakeasy-plan-validators: CredentialsConfigValidator
           description: Cloud or service provider type (e.g., aws, azure, gcp)
+          example: "google"
         baseUrl:
           maxLength: 200
           pattern: ""
           type: string
           x-speakeasy-param-computed: false
+          example: "https://www.googleapis.com"
         category:
           maxLength: 20
           type: string
           x-speakeasy-param-computed: false
+          example: "cloud"
         deleted:
           type: boolean
           readOnly: true
@@ -9008,18 +9031,25 @@ components:
       properties:
         name:
           type: string
+          example: "my-s3-datalink"
         description:
           type: string
+          example: "S3 bucket for production data storage"
         type:
           $ref: "#/components/schemas/DataLinkType"
+          example: "bucket"
         provider:
           $ref: "#/components/schemas/DataLinkProvider"
+          example: "aws"
         resourceRef:
           type: string
+          example: "s3://my-bucket"
         publicAccessible:
           type: boolean
+          example: false
         credentialsId:
           type: string
+          example: "aws-credentials-id"
       required:
         - credentialsId
         - description
@@ -9299,15 +9329,19 @@ components:
           maxLength: 80
           minLength: 1
           type: string
+          example: "my-jupyter-studio"
         description:
           maxLength: 2048
           type: string
+          example: "Jupyter studio for data analysis and visualization"
         dataStudioToolUrl:
           minLength: 1
           type: string
+          example: "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
         computeEnvId:
           minLength: 1
           type: string
+          example: "compute-env-id"
         initialCheckpointId:
           type: integer
           format: int64
@@ -10274,6 +10308,17 @@ components:
         data:
           type: string
           writeOnly: true
+          example: |
+            {
+              "type": "service_account",
+              "project_id": "my-project",
+              "private_key_id": "key-id",
+              "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+              "client_email": "service-account@my-project.iam.gserviceaccount.com",
+              "client_id": "123456789",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token"
+            }
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
     GridPlatformMetainfo:
       type: object
@@ -10989,18 +11034,23 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
+          example: "my-org"
         fullName:
           maxLength: 100
           type: string
+          example: "My Organization"
         description:
           maxLength: 1000
           type: string
+          example: "Put your organization description here"
         location:
           maxLength: 100
           type: string
+          example: "Toronto, CA"
         website:
           pattern: ""
           type: string
+          example: "https://www.mybiotech.com"
         dateCreated:
           type: string
           format: date-time
@@ -11935,9 +11985,11 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
+          example: "bioinformatics-team"
         description:
           maxLength: 250
           type: string
+          example: "Team responsible for bioinformatics analysis and pipeline development"
         dateCreated:
           type: string
           format: date-time
@@ -12749,52 +12801,84 @@ components:
       properties:
         computeEnvId:
           type: string
+          example: "4g09tT4pW4JFUvXTHdB6zP"
         runName:
           type: string
+          example: "nextflow-hello"
         pipeline:
           type: string
+          example: https://github.com/nextflow-io/hello
         workDir:
           type: string
+          example: "s3://my-bucket/work"
         revision:
           type: string
+          example: "main"
         sessionId:
           type: string
         configProfiles:
           type: array
           items:
             type: string
+          example: ["docker", "aws"]
         userSecrets:
           type: array
           items:
             type: string
+          example: ["MY_API_KEY", "DATABASE_PASSWORD"]
         workspaceSecrets:
           type: array
           items:
             type: string
+          example: ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"]
         configText:
           type: string
+          example: |
+            process {
+              executor = 'awsbatch'
+              queue = 'my-queue'
+            }
         towerConfig:
           type: string
         paramsText:
           type: string
+          example: |
+            {
+              "input": "s3://my-bucket/input.csv",
+              "output_dir": "s3://my-bucket/results",
+            }
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          example: |
+            #!/bin/bash
+            echo "Starting workflow execution"
+            aws s3 sync s3://my-bucket/data ./data
         postRunScript:
           type: string
           description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          example: |
+            #!/bin/bash
+            echo "Workflow completed"
+            aws s3 sync ./results s3://my-bucket/results
         mainScript:
           type: string
+          example: "main.nf"
         entryName:
           type: string
+          example: "main.nf"
         schemaName:
           type: string
+          example: "nextflow_schema.json"
         resume:
           type: boolean
+          example: true
         pullLatest:
           type: boolean
+          example: true
         stubRun:
           type: boolean
+          example: false
         optimizationId:
           type: string
         optimizationTargets:
@@ -12804,17 +12888,21 @@ components:
           items:
             type: integer
             format: int64
+          example: [1001, 1002, 1003]
         headJobCpus:
           type: integer
           format: int32
+          example: 2
         headJobMemoryMb:
           type: integer
           format: int32
+          example: 4096
         launchContainer:
           type: string
         dateCreated:
           type: string
           format: date-time
+          example: "2024-07-23T10:30:00Z"
       x-speakeasy-entity: Workflows
       required:
         - pipeline
@@ -13074,17 +13162,21 @@ components:
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
           x-speakeasy-param-readonly: false
+          example: "genomics-research"
         fullName:
           maxLength: 100
           type: string
           x-speakeasy-param-readonly: false
+          example: "Genomics Research Workspace"
         description:
           maxLength: 1000
           type: string
           x-speakeasy-param-readonly: false
+          example: "Workspace for genomics research projects and computational biology workflows"
         visibility:
           $ref: "#/components/schemas/Visibility"
           x-speakeasy-param-readonly: false
+          example: "PRIVATE"
         dateCreated:
           type: string
           format: date-time

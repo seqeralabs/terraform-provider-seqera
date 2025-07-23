@@ -1,7 +1,7 @@
 resource "seqera_labels" "my_labels" {
   is_default   = false
-  name         = "...my_name..."
-  resource     = false
-  value        = "...my_value..."
+  name         = "environment"
+  resource     = true
+  value        = "production"
   workspace_id = 1
 }
