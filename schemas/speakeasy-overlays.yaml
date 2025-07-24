@@ -581,3 +581,12 @@ actions:
     update:
       servers:
         - url: https://api.cloud.seqera.io
+
+  ####################################################################
+  ####                Action Force Recreation Configuration        ####
+  ####################################################################
+  # Force action resource recreation when launch configuration changes
+  # This prevents "Launch ID value can't change" errors
+  - target: $.components.schemas.CreateActionRequest.properties.launch
+    update:
+      x-speakeasy-param-force-new: true

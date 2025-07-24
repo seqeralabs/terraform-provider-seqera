@@ -130,7 +130,7 @@ resource "seqera_action" "my_action" {
     #run_name             = "...my_run_name..." this should be auto generated
     work_dir = var.work_dir
   }
-  name         = "terraform-hello-world-action"
+  name         = "terraform-hello-world-action-1"
   workspace_id = var.workspace_id
   source       = "tower"
 }

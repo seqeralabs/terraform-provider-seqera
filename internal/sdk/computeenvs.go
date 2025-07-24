@@ -269,10 +269,10 @@ func (s *ComputeEnvs) CreateComputeEnv(ctx context.Context, request operations.C
 		} else {
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
-					InitialInterval: 500,
-					MaxInterval:     60000,
-					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					InitialInterval: 5000,
+					MaxInterval:     5000,
+					Exponent:        1,
+					MaxElapsedTime:  30000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -284,6 +284,7 @@ func (s *ComputeEnvs) CreateComputeEnv(ctx context.Context, request operations.C
 		httpRes, err = utils.Retry(ctx, utils.Retries{
 			Config: retryConfig,
 			StatusCodes: []string{
+				"4XX",
 				"5XX",
 			},
 		}, func() (*http.Response, error) {
