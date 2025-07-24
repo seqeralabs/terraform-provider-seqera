@@ -1,9 +1,14 @@
-speakeasyVersion: 1.587.0
+speakeasyVersion: 1.589.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
+<<<<<<< HEAD
         sourceRevisionDigest: sha256:1a47d479c521b7710b4e7e01120883117b76208bf68c05ee4be87185062f4f68
         sourceBlobDigest: sha256:36a7d1e0e1876a9f7dbb8c180c067e1d087d359609a177acacab13717e38944f
+=======
+        sourceRevisionDigest: sha256:c493fec43925263884950b02ba67c61685b3aede574411e7f4ce17c584f74163
+        sourceBlobDigest: sha256:cec641e330ecc055f42a405416baeab3f0fcdd39471b67149c9c3c0bb95cdb99
+>>>>>>> feat/regex-validation
         tags:
             - latest
             - 1.45.0
@@ -11,8 +16,13 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
+<<<<<<< HEAD
         sourceRevisionDigest: sha256:1a47d479c521b7710b4e7e01120883117b76208bf68c05ee4be87185062f4f68
         sourceBlobDigest: sha256:36a7d1e0e1876a9f7dbb8c180c067e1d087d359609a177acacab13717e38944f
+=======
+        sourceRevisionDigest: sha256:c493fec43925263884950b02ba67c61685b3aede574411e7f4ce17c584f74163
+        sourceBlobDigest: sha256:cec641e330ecc055f42a405416baeab3f0fcdd39471b67149c9c3c0bb95cdb99
+>>>>>>> feat/regex-validation
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -26,6 +36,8 @@ workflow:
                 - location: schemas/schema-descriptions-overlay.yaml
                 - location: schemas/schema-field-descriptions-overlays.yaml
                 - location: schemas/examples-overlays.yaml
+                - location: schemas/validators-overlays.yaml
+                - location: schemas/retry-overlays.yaml
             output: .speakeasy/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

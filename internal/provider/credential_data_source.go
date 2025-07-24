@@ -5,8 +5,10 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
@@ -64,6 +66,9 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 			"credentials_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Credentials string identifier`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(22),
+				},
 			},
 			"date_created": schema.StringAttribute{
 				Computed:    true,

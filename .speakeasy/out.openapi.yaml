@@ -45,7 +45,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Actions#read
     post:
       summary: Create action
       description: Creates a new pipeline action. Append `?workspaceId` to associate the action with the given workspace.
@@ -322,7 +321,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#update
     delete:
       summary: Delete action
       description: Deletes the pipeline action identified by the given `actionId`.
@@ -543,7 +541,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnvs#read
     post:
       summary: Create compute environment
       description: Creates a new compute environment. Append `?workspaceId` to create the environment in a workspace context.
@@ -583,6 +580,16 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: ComputeEnv#create
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 4XX
+          - 5XX
   /compute-envs/validate:
     get:
       summary: Validate compute environment name
@@ -825,7 +832,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credentials#read
     post:
       summary: Create credentials
       description: Creates new credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -4620,7 +4626,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipelines#read
     post:
       summary: Create pipeline
       description: Creates a new pipeline in a user context. Append `?workspaceId` to create the pipeline in a workspace context.
@@ -5371,6 +5376,15 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Studios#create
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 400
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -6213,7 +6227,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: CurrentUser#read
   /user/{userId}/workspaces:
     get:
       summary: List user workspaces and organizations
@@ -6600,6 +6613,15 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Workflows#create
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 400
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -7855,6 +7877,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
+      x-speakeasy-entity: Action
       description: |
         Represents a pipeline action in the Seqera Platform.
         Contains action configuration, triggers, and execution settings
@@ -8235,6 +8258,10 @@ components:
           description: property to select the compute config platform
         workDir:
           type: string
+          title: "Azure Batch Work Directory"
+          description: "Must be a valid Azure Blob container URL with format az://container-name/path"
+          example: "az://my-container/work"
+          x-speakeasy-plan-validators: AzureBatchWorkDirValidator
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
@@ -8579,6 +8606,7 @@ components:
             - seqeracompute-platform
           x-speakeasy-plan-validators: ComputeConfigValidator
           x-speakeasy-param-optional: false
+          ## Compute Config Schemas
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -8776,10 +8804,16 @@ components:
       properties:
         name:
           type: string
-          example: "environment"
+          example: "my-label"
+          title: "Label Name"
+          description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
           example: "production"
+          title: "Label Value"
+          description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          x-speakeasy-plan-validators: LabelValueValidator
         resource:
           type: boolean
           example: true
@@ -10624,8 +10658,6 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         usageCmd:
           type: string
-      x-speakeasy-entity: Action
-      ## Compute Config Schemas
     ListComputeEnvsResponse:
       type: object
       properties:
@@ -12274,8 +12306,16 @@ components:
       properties:
         name:
           type: string
+          title: "Label Name"
+          description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          example: "my-label"
+          x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
+          title: "Label Value"
+          description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          example: "production"
+          x-speakeasy-plan-validators: LabelValueValidator
         isDefault:
           type: boolean
     UpdateLabelResponse:
@@ -12328,6 +12368,10 @@ components:
       properties:
         name:
           type: string
+          title: "Pipeline Name"
+          description: "Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores"
+          example: "my-pipeline"
+          x-speakeasy-plan-validators: PipelineNameValidator
         description:
           type: string
         icon:

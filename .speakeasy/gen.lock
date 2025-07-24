@@ -1,16 +1,20 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
+<<<<<<< HEAD
   docChecksum: f7b425ea60a71260766988796e7e0505
+=======
+  docChecksum: 87601d4faf39c143b74969cf88644de2
+>>>>>>> feat/regex-validation
   docVersion: 1.45.0
-  speakeasyVersion: 1.587.0
-  generationVersion: 2.662.0
+  speakeasyVersion: 1.589.0
+  generationVersion: 2.664.0
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
   terraform:
     additionalDependencies: 0.1.0
-    core: 3.42.0
+    core: 3.43.0
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
@@ -20,25 +24,21 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     nullables: 0.0.0
+    retries: 2.81.3
     unions: 2.81.17
 generatedFiles:
   - .gitattributes
   - USAGE.md
   - examples/README.md
   - examples/data-sources/seqera_action/data-source.tf
-  - examples/data-sources/seqera_actions/data-source.tf
   - examples/data-sources/seqera_compute_env/data-source.tf
-  - examples/data-sources/seqera_compute_envs/data-source.tf
   - examples/data-sources/seqera_credential/data-source.tf
-  - examples/data-sources/seqera_credentials/data-source.tf
-  - examples/data-sources/seqera_current_user/data-source.tf
   - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
   - examples/data-sources/seqera_organization/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
-  - examples/data-sources/seqera_pipelines/data-source.tf
   - examples/data-sources/seqera_studios/data-source.tf
   - examples/data-sources/seqera_teams/data-source.tf
   - examples/data-sources/seqera_tokens/data-source.tf
@@ -90,22 +90,14 @@ generatedFiles:
   - internal/provider/action_data_source_sdk.go
   - internal/provider/action_resource.go
   - internal/provider/action_resource_sdk.go
-  - internal/provider/actions_data_source.go
-  - internal/provider/actions_data_source_sdk.go
   - internal/provider/computeenv_data_source.go
   - internal/provider/computeenv_data_source_sdk.go
   - internal/provider/computeenv_resource.go
   - internal/provider/computeenv_resource_sdk.go
-  - internal/provider/computeenvs_data_source.go
-  - internal/provider/computeenvs_data_source_sdk.go
   - internal/provider/credential_data_source.go
   - internal/provider/credential_data_source_sdk.go
   - internal/provider/credential_resource.go
   - internal/provider/credential_resource_sdk.go
-  - internal/provider/credentials_data_source.go
-  - internal/provider/credentials_data_source_sdk.go
-  - internal/provider/currentuser_data_source.go
-  - internal/provider/currentuser_data_source_sdk.go
   - internal/provider/datalink_data_source.go
   - internal/provider/datalink_data_source_sdk.go
   - internal/provider/datalink_resource.go
@@ -126,8 +118,6 @@ generatedFiles:
   - internal/provider/pipeline_data_source_sdk.go
   - internal/provider/pipeline_resource.go
   - internal/provider/pipeline_resource_sdk.go
-  - internal/provider/pipelines_data_source.go
-  - internal/provider/pipelines_data_source_sdk.go
   - internal/provider/pipelinesecret_data_source.go
   - internal/provider/pipelinesecret_data_source_sdk.go
   - internal/provider/pipelinesecret_resource.go
@@ -165,7 +155,6 @@ generatedFiles:
   - internal/provider/types/access_token.go
   - internal/provider/types/action_config_type.go
   - internal/provider/types/action_event_type.go
-  - internal/provider/types/action_response_dto.go
   - internal/provider/types/action_tower_action_config.go
   - internal/provider/types/action_tower_action_event.go
   - internal/provider/types/active_connection.go
@@ -197,7 +186,6 @@ generatedFiles:
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
   - internal/provider/types/container_registry_keys1.go
-  - internal/provider/types/credentials.go
   - internal/provider/types/data_link_credentials.go
   - internal/provider/types/data_link_dto.go
   - internal/provider/types/data_studio_compute_env_dto.go
@@ -228,12 +216,9 @@ generatedFiles:
   - internal/provider/types/kubernetes_compute_configuration.go
   - internal/provider/types/label_db_dto.go
   - internal/provider/types/launch.go
-  - internal/provider/types/list_actions_response_action_info.go
-  - internal/provider/types/list_compute_envs_response_entry.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
   - internal/provider/types/organization_db_dto.go
-  - internal/provider/types/pipeline_db_dto.go
   - internal/provider/types/process_load.go
   - internal/provider/types/progress_data.go
   - internal/provider/types/security_keys.go
@@ -251,6 +236,7 @@ generatedFiles:
   - internal/provider/types/wf_stats.go
   - internal/provider/types/workflow.go
   - internal/provider/types/workflow_launch_request.go
+  - internal/provider/types/workflow_launch_request1.go
   - internal/provider/types/workflow_load.go
   - internal/provider/types/workspace_db_dto.go
   - internal/provider/user_data_source.go
@@ -275,6 +261,7 @@ generatedFiles:
   - internal/sdk/credentials.go
   - internal/sdk/datalinks.go
   - internal/sdk/datasets.go
+  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/ga4gh.go
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/hooks/hooks.go
@@ -889,7 +876,7 @@ examples:
   CreateLabel:
     speakeasy-default-create-label:
       requestBody:
-        application/json: {"name": "environment", "value": "production", "resource": true, "isDefault": false}
+        application/json: {"name": "my-label", "value": "production", "resource": true, "isDefault": false}
       responses:
         "200":
           application/json: {}
@@ -901,7 +888,7 @@ examples:
         path:
           labelId: 478484
       requestBody:
-        application/json: {}
+        application/json: {"name": "my-label", "value": "production"}
       responses:
         "200":
           application/json: {}
@@ -1974,7 +1961,7 @@ examples:
         path:
           pipelineId: 936263
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "my-pipeline", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}

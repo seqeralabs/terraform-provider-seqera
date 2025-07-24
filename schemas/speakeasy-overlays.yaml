@@ -466,9 +466,7 @@ actions:
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
     update:
       x-speakeasy-param-optional: false
-  - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
-    update:
-      x-speakeasy-entity: Action
+
       ## Compute Config Schemas
   - target: $["components"]["schemas"]["ListCredentialsResponse"]
     update:
@@ -668,7 +666,6 @@ actions:
   - target: $.paths["/users/{userId}"].get
     update:
       x-speakeasy-entity-operation: User#read
-
   ####################################################################
   ####              Property-Level Annotations                     ####
   ####################################################################

@@ -15,7 +15,7 @@ Labels Resource
 ```terraform
 resource "seqera_labels" "my_labels" {
   is_default   = false
-  name         = "environment"
+  name         = "my-label"
   resource     = true
   value        = "production"
   workspace_id = 1
@@ -28,9 +28,9 @@ resource "seqera_labels" "my_labels" {
 ### Optional
 
 - `is_default` (Boolean)
-- `name` (String)
+- `name` (String) Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
 - `resource` (Boolean) Requires replacement if changed.
-- `value` (String)
+- `value` (String) Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only

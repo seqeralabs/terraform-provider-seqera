@@ -15,6 +15,7 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 	"strconv"
 )
 
@@ -34,29 +35,29 @@ type PipelineResource struct {
 
 // PipelineResourceModel describes the resource data model.
 type PipelineResourceModel struct {
-	ComputeEnv          *tfTypes.ComputeEnvDbDto      `tfsdk:"compute_env"`
-	Deleted             types.Bool                    `tfsdk:"deleted"`
-	Description         types.String                  `tfsdk:"description"`
-	Icon                types.String                  `tfsdk:"icon"`
-	LabelIds            []types.Int64                 `tfsdk:"label_ids"`
-	Labels              []tfTypes.LabelDbDto          `tfsdk:"labels"`
-	LastUpdated         types.String                  `tfsdk:"last_updated"`
-	Launch              tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
-	Name                types.String                  `tfsdk:"name"`
-	OptimizationID      types.String                  `tfsdk:"optimization_id"`
-	OptimizationStatus  types.String                  `tfsdk:"optimization_status"`
-	OptimizationTargets types.String                  `tfsdk:"optimization_targets"`
-	OrgID               types.Int64                   `tfsdk:"org_id"`
-	OrgName             types.String                  `tfsdk:"org_name"`
-	PipelineID          types.Int64                   `tfsdk:"pipeline_id"`
-	Repository          types.String                  `tfsdk:"repository"`
-	UserFirstName       types.String                  `tfsdk:"user_first_name"`
-	UserID              types.Int64                   `tfsdk:"user_id"`
-	UserLastName        types.String                  `tfsdk:"user_last_name"`
-	UserName            types.String                  `tfsdk:"user_name"`
-	Visibility          types.String                  `tfsdk:"visibility"`
-	WorkspaceID         types.Int64                   `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceName       types.String                  `tfsdk:"workspace_name"`
+	ComputeEnv          *tfTypes.ComputeEnvDbDto       `tfsdk:"compute_env"`
+	Deleted             types.Bool                     `tfsdk:"deleted"`
+	Description         types.String                   `tfsdk:"description"`
+	Icon                types.String                   `tfsdk:"icon"`
+	LabelIds            []types.Int64                  `tfsdk:"label_ids"`
+	Labels              []tfTypes.LabelDbDto           `tfsdk:"labels"`
+	LastUpdated         types.String                   `tfsdk:"last_updated"`
+	Launch              tfTypes.WorkflowLaunchRequest1 `tfsdk:"launch"`
+	Name                types.String                   `tfsdk:"name"`
+	OptimizationID      types.String                   `tfsdk:"optimization_id"`
+	OptimizationStatus  types.String                   `tfsdk:"optimization_status"`
+	OptimizationTargets types.String                   `tfsdk:"optimization_targets"`
+	OrgID               types.Int64                    `tfsdk:"org_id"`
+	OrgName             types.String                   `tfsdk:"org_name"`
+	PipelineID          types.Int64                    `tfsdk:"pipeline_id"`
+	Repository          types.String                   `tfsdk:"repository"`
+	UserFirstName       types.String                   `tfsdk:"user_first_name"`
+	UserID              types.Int64                    `tfsdk:"user_id"`
+	UserLastName        types.String                   `tfsdk:"user_last_name"`
+	UserName            types.String                   `tfsdk:"user_name"`
+	Visibility          types.String                   `tfsdk:"visibility"`
+	WorkspaceID         types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceName       types.String                   `tfsdk:"workspace_name"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -236,6 +237,9 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"name": schema.StringAttribute{
 				Required: true,
+				Validators: []validator.String{
+					custom_stringvalidators.PipelineNameValidator(),
+				},
 			},
 			"optimization_id": schema.StringAttribute{
 				Computed: true,
