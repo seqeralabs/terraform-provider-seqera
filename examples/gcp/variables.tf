@@ -45,9 +45,13 @@ variable "gcp_location" {
 }
 
 variable "service_account_key" {
-  description = "File path to the GCP service account key JSON"
+  description = "File path to the GCP service account key JSON file"
   type        = string
 
+  validation {
+    condition     = length(var.service_account_key) > 0
+    error_message = "Service account key file path cannot be empty."
+  }
 }
 
 # Workflow Configuration

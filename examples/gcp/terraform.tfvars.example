@@ -8,7 +8,7 @@ seqera_bearer_auth = "your-bearer-token"
 # GCP Configuration
 gcp_region         = "us-central1"
 gcp_location       = "us-central1"
-service_account_key = "your-service-account-json-key"
+service_account_key = "/path/to/your-service-account-key.json"
 
 # Workflow Configuration
 work_dir = "gs://your-bucket/work"

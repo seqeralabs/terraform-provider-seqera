@@ -1,5 +1,4 @@
 # Seqera Platform Configuration
-
 variable "seqera_server_url" {
   description = "Seqera Platform API server URL"
   type        = string
