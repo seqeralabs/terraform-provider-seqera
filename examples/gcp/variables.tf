@@ -1,14 +1,4 @@
 # Seqera Platform Configuration
-variable "workspace_id" {
-  description = "The ID of the Seqera workspace where resources will be created"
-  type        = string
-
-  validation {
-    condition     = length(var.workspace_id) > 0
-    error_message = "Workspace ID cannot be empty."
-  }
-}
-
 variable "seqera_server_url" {
   description = "Seqera Platform API server URL"
   type        = string
@@ -55,14 +45,9 @@ variable "gcp_location" {
 }
 
 variable "service_account_key" {
-  description = "GCP service account JSON key for authentication"
+  description = "File path to the GCP service account key JSON"
   type        = string
-  sensitive   = true
 
-  validation {
-    condition     = length(var.service_account_key) > 0
-    error_message = "Service account key cannot be empty."
-  }
 }
 
 # Workflow Configuration

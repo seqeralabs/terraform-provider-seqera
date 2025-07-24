@@ -2,7 +2,6 @@
 # Copy this file to terraform.tfvars and fill in your values
 
 # Seqera Platform Configuration
-workspace_id       = "your-workspace-id"
 seqera_bearer_auth = "your-bearer-token"
 # seqera_server_url = "https://api.cloud.seqera.io"  # Default value
 

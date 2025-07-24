@@ -1,14 +1,4 @@
 # Seqera Platform Configuration
-variable "workspace_id" {
-  description = "The ID of the Seqera workspace where resources will be created"
-  type        = string
-
-  validation {
-    condition     = length(var.workspace_id) > 0
-    error_message = "Workspace ID cannot be empty."
-  }
-}
-
 variable "seqera_server_url" {
   description = "Seqera Platform API server URL"
   type        = string

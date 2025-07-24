@@ -5,7 +5,7 @@
 **/.speakeasy/temp/
 **/.speakeasy/logs/
 ./examples/tests/terraform.tf
-/examples/hello-world-examples/service-account-key.json
+**/service-account-key.json
 examples/hello-world-examples/vars.tfvars
 terraform-provider-seqera
 terraform-provider-* # We should not include the provider binary in the repository
