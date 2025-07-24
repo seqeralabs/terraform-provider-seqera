@@ -1,0 +1,15 @@
+# Example terraform.tfvars file
+# Copy this file to terraform.tfvars and fill in your values
+
+# Seqera Platform Configuration
+seqera_bearer_auth = "your-bearer-token"
+# seqera_server_url = "https://api.cloud.seqera.io"  # Default value
+
+# AWS Configuration
+aws_region = "us-east-1"
+access_key = "your-aws-access-key"
+secret_key = "your-aws-secret-key"
+# iam_role = "arn:aws:iam::123456789012:role/SeqeraRole"  # Optional
+
+# Workflow Configuration
+work_dir = "s3://your-bucket/work"

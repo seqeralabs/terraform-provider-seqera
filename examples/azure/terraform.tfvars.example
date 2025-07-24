@@ -1,0 +1,17 @@
+# Example terraform.tfvars file
+# Copy this file to terraform.tfvars and fill in your values
+
+# Seqera Platform Configuration
+workspace_id       = "your-workspace-id"
+seqera_bearer_auth = "your-bearer-token"
+# seqera_server_url = "https://api.cloud.seqera.io"  # Default value
+
+# Azure Configuration
+azure_region   = "eastus"
+batch_name     = "your-batch-account-name"
+batch_key      = "your-batch-account-key"
+storage_name   = "your-storage-account-name"
+storage_key    = "your-storage-account-key"
+
+# Workflow Configuration
+work_dir = "az://your-container/work"
