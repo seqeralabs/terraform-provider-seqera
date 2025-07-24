@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: e8b9b572ad9c8852fb459de91c420443
+  docChecksum: 87601d4faf39c143b74969cf88644de2
   docVersion: 1.45.0
   speakeasyVersion: 1.589.0
   generationVersion: 2.664.0
@@ -28,17 +28,13 @@ generatedFiles:
   - examples/README.md
   - examples/data-sources/seqera_action/data-source.tf
   - examples/data-sources/seqera_compute_env/data-source.tf
-  - examples/data-sources/seqera_compute_envs/data-source.tf
   - examples/data-sources/seqera_credential/data-source.tf
-  - examples/data-sources/seqera_credentials/data-source.tf
-  - examples/data-sources/seqera_current_user/data-source.tf
   - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
   - examples/data-sources/seqera_organization/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
-  - examples/data-sources/seqera_pipelines/data-source.tf
   - examples/data-sources/seqera_studios/data-source.tf
   - examples/data-sources/seqera_teams/data-source.tf
   - examples/data-sources/seqera_tokens/data-source.tf
@@ -94,16 +90,10 @@ generatedFiles:
   - internal/provider/computeenv_data_source_sdk.go
   - internal/provider/computeenv_resource.go
   - internal/provider/computeenv_resource_sdk.go
-  - internal/provider/computeenvs_data_source.go
-  - internal/provider/computeenvs_data_source_sdk.go
   - internal/provider/credential_data_source.go
   - internal/provider/credential_data_source_sdk.go
   - internal/provider/credential_resource.go
   - internal/provider/credential_resource_sdk.go
-  - internal/provider/credentials_data_source.go
-  - internal/provider/credentials_data_source_sdk.go
-  - internal/provider/currentuser_data_source.go
-  - internal/provider/currentuser_data_source_sdk.go
   - internal/provider/datalink_data_source.go
   - internal/provider/datalink_data_source_sdk.go
   - internal/provider/datalink_resource.go
@@ -124,8 +114,6 @@ generatedFiles:
   - internal/provider/pipeline_data_source_sdk.go
   - internal/provider/pipeline_resource.go
   - internal/provider/pipeline_resource_sdk.go
-  - internal/provider/pipelines_data_source.go
-  - internal/provider/pipelines_data_source_sdk.go
   - internal/provider/pipelinesecret_data_source.go
   - internal/provider/pipelinesecret_data_source_sdk.go
   - internal/provider/pipelinesecret_resource.go
@@ -194,7 +182,6 @@ generatedFiles:
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
   - internal/provider/types/container_registry_keys1.go
-  - internal/provider/types/credentials.go
   - internal/provider/types/data_link_credentials.go
   - internal/provider/types/data_link_dto.go
   - internal/provider/types/data_studio_compute_env_dto.go
@@ -225,11 +212,9 @@ generatedFiles:
   - internal/provider/types/kubernetes_compute_configuration.go
   - internal/provider/types/label_db_dto.go
   - internal/provider/types/launch.go
-  - internal/provider/types/list_compute_envs_response_entry.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
   - internal/provider/types/organization_db_dto.go
-  - internal/provider/types/pipeline_db_dto.go
   - internal/provider/types/process_load.go
   - internal/provider/types/progress_data.go
   - internal/provider/types/security_keys.go

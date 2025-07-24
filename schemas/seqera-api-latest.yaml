@@ -549,7 +549,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnvs#read
     post:
       summary: Create compute environment
       description: Creates a new compute environment. Append `?workspaceId` to create
@@ -588,7 +587,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#create
   /compute-envs/validate:
     get:
       summary: Validate compute environment name
@@ -674,7 +672,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#read
     put:
       summary: Update compute environment
       description: Updates the details of the compute environment identified by the
@@ -721,7 +718,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#update
     delete:
       summary: Delete compute environment
       description: Deletes the compute environment identified by the given `computeEnvId`.
@@ -760,7 +756,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#delete
   /compute-envs/{computeEnvId}/primary:
     post:
       summary: Define primary compute environment
@@ -838,7 +833,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credentials#read
     post:
       summary: Create credentials
       description: Creates new credentials in a user context. Append `?workspaceId`
@@ -877,7 +871,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#create
   /credentials/validate:
     get:
       summary: Validate credential name
@@ -954,7 +947,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#read
     put:
       summary: Update credentials
       description: Updates the details of the credentials identified by the given
@@ -995,7 +987,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#update
     delete:
       summary: Delete credentials
       description: Deletes the credentials identified by the given `credentialsId`.
@@ -1040,7 +1031,6 @@ paths:
                 $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#delete
   /data-links:
     get:
       summary: List data-links
@@ -2042,7 +2032,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Datasets#read
     post:
       summary: Create dataset
       description: Creates a new dataset in the user context. Include the dataset
@@ -4638,7 +4627,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipelines#read
     post:
       summary: Create pipeline
       description: Creates a new pipeline in a user context. Append `?workspaceId`
@@ -4683,7 +4671,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#create
   /pipelines/info:
     get:
       summary: Describe remote pipeline repository
@@ -4953,7 +4940,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#read
     put:
       summary: Update pipeline
       description: "Updates the details of the pipeline identified by the given `pipelineId`.\
@@ -5008,7 +4994,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#update
     delete:
       summary: Delete pipeline
       description: Deletes the pipeline identified by the given `pipelineId`.
@@ -5042,7 +5027,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#delete
   /pipelines/{pipelineId}/launch:
     get:
       summary: Describe pipeline launch
@@ -6266,7 +6250,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: CurrentUser#read
   /user/{userId}/workspaces:
     get:
       summary: List user workspaces and organizations
@@ -6300,7 +6283,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: UserWorkspaces#read
   /users/validate:
     get:
       summary: Check that the user name is valid
@@ -6364,7 +6346,6 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: User#read
     post:
       summary: Update an user entity
       tags:

@@ -541,7 +541,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnvs#read
     post:
       summary: Create compute environment
       description: Creates a new compute environment. Append `?workspaceId` to create the environment in a workspace context.
@@ -833,7 +832,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credentials#read
     post:
       summary: Create credentials
       description: Creates new credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -4628,7 +4626,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipelines#read
     post:
       summary: Create pipeline
       description: Creates a new pipeline in a user context. Append `?workspaceId` to create the pipeline in a workspace context.
@@ -6230,7 +6227,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: CurrentUser#read
   /user/{userId}/workspaces:
     get:
       summary: List user workspaces and organizations
