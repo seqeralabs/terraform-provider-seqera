@@ -47,7 +47,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Actions#read
     post:
       summary: Create action
       description: Creates a new pipeline action. Append `?workspaceId` to associate
@@ -86,7 +85,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#create
   /actions/labels/add:
     post:
       summary: Add labels to actions
@@ -289,7 +287,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#read
     put:
       summary: Update action
       description: Updates the details of the action identified by the given `actionId`.
@@ -330,7 +327,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#update
     delete:
       summary: Delete action
       description: Deletes the pipeline action identified by the given `actionId`.
@@ -363,7 +359,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#delete
   /actions/{actionId}/launch:
     post:
       summary: Trigger Tower Launch action

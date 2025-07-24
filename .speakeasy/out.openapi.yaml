@@ -45,7 +45,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Actions#read
     post:
       summary: Create action
       description: Creates a new pipeline action. Append `?workspaceId` to associate the action with the given workspace.
@@ -322,7 +321,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#update
     delete:
       summary: Delete action
       description: Deletes the pipeline action identified by the given `actionId`.
@@ -7883,6 +7881,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
+      x-speakeasy-entity: Action
       description: |
         Represents a pipeline action in the Seqera Platform.
         Contains action configuration, triggers, and execution settings
@@ -8610,6 +8609,7 @@ components:
             - seqeracompute-platform
           x-speakeasy-plan-validators: ComputeConfigValidator
           x-speakeasy-param-optional: false
+          ## Compute Config Schemas
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -8737,7 +8737,6 @@ components:
           $ref: "#/components/schemas/Action.Source"
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
-          x-speakeasy-param-force-new: true
       required:
         - name
         - source
@@ -10671,8 +10670,6 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         usageCmd:
           type: string
-      x-speakeasy-entity: Action
-      ## Compute Config Schemas
     ListComputeEnvsResponse:
       type: object
       properties:

@@ -29,10 +29,23 @@ type ActionDataSource struct {
 
 // ActionDataSourceModel describes the data model.
 type ActionDataSourceModel struct {
-	Action      *tfTypes.ActionResponseDto `tfsdk:"action"`
-	ActionID    types.String               `tfsdk:"action_id"`
-	Attributes  []types.String             `queryParam:"style=form,explode=true,name=attributes" tfsdk:"attributes"`
-	WorkspaceID types.Int64                `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ActionID    types.String              `tfsdk:"action_id"`
+	Attributes  []types.String            `queryParam:"style=form,explode=true,name=attributes" tfsdk:"attributes"`
+	Config      *tfTypes.ActionConfigType `tfsdk:"config"`
+	DateCreated types.String              `tfsdk:"date_created"`
+	Event       *tfTypes.ActionEventType  `tfsdk:"event"`
+	HookID      types.String              `tfsdk:"hook_id"`
+	HookURL     types.String              `tfsdk:"hook_url"`
+	ID          types.String              `tfsdk:"id"`
+	Labels      []tfTypes.LabelDbDto      `tfsdk:"labels"`
+	LastSeen    types.String              `tfsdk:"last_seen"`
+	LastUpdated types.String              `tfsdk:"last_updated"`
+	Launch      *tfTypes.Launch           `tfsdk:"launch"`
+	Message     types.String              `tfsdk:"message"`
+	Name        types.String              `tfsdk:"name"`
+	Source      types.String              `tfsdk:"source"`
+	Status      types.String              `tfsdk:"status"`
+	WorkspaceID types.Int64               `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -46,1739 +59,6 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 		MarkdownDescription: "Action DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"action": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"config": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"github": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-									},
-									"events": schema.ListAttribute{
-										Computed:    true,
-										ElementType: types.StringType,
-									},
-								},
-							},
-							"tower": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-					},
-					"date_created": schema.StringAttribute{
-						Computed: true,
-					},
-					"event": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"github": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"commit_id": schema.StringAttribute{
-										Computed: true,
-									},
-									"commit_message": schema.StringAttribute{
-										Computed: true,
-									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-									},
-									"pusher_email": schema.StringAttribute{
-										Computed: true,
-									},
-									"pusher_name": schema.StringAttribute{
-										Computed: true,
-									},
-									"ref": schema.StringAttribute{
-										Computed: true,
-									},
-									"timestamp": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-							"tower": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-									},
-									"timestamp": schema.StringAttribute{
-										Computed: true,
-									},
-									"workflow_id": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-						},
-					},
-					"hook_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Identifier for the webhook associated with this action`,
-					},
-					"hook_url": schema.StringAttribute{
-						Computed:    true,
-						Description: `URL endpoint for the webhook that triggers this action`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the action`,
-					},
-					"labels": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"date_created": schema.StringAttribute{
-									Computed:    true,
-									Description: `Timestamp when the label was created`,
-								},
-								"id": schema.Int64Attribute{
-									Computed:    true,
-									Description: `Unique numeric identifier for the label`,
-								},
-								"is_default": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Flag indicating if this is a default system label`,
-								},
-								"name": schema.StringAttribute{
-									Computed:    true,
-									Description: `Name or key of the label`,
-								},
-								"resource": schema.BoolAttribute{
-									Computed:    true,
-									Description: `Flag indicating if this is a resource-level label`,
-								},
-								"value": schema.StringAttribute{
-									Computed:    true,
-									Description: `Value associated with the label`,
-								},
-							},
-						},
-					},
-					"last_seen": schema.StringAttribute{
-						Computed: true,
-					},
-					"last_updated": schema.StringAttribute{
-						Computed: true,
-					},
-					"launch": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"compute_env": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"compute_env_id": schema.StringAttribute{
-										Computed: true,
-									},
-									"config": schema.SingleNestedAttribute{
-										Computed: true,
-										Attributes: map[string]schema.Attribute{
-											"altair_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"compute_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"head_job_options": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"host_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"launch_dir": schema.StringAttribute{
-														Computed: true,
-													},
-													"max_queue_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"port": schema.Int32Attribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"propagate_head_job_options": schema.BoolAttribute{
-														Computed: true,
-													},
-													"user_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"aws_batch": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"cli_path": schema.StringAttribute{
-														Computed: true,
-													},
-													"compute_job_role": schema.StringAttribute{
-														Computed: true,
-													},
-													"compute_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"dragen_instance_type": schema.StringAttribute{
-														Computed: true,
-													},
-													"dragen_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"execution_role": schema.StringAttribute{
-														Computed: true,
-													},
-													"forge": schema.SingleNestedAttribute{
-														Computed: true,
-														Attributes: map[string]schema.Attribute{
-															"alloc_strategy": schema.StringAttribute{
-																Computed: true,
-															},
-															"allow_buckets": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"arm64_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"bid_percentage": schema.Int32Attribute{
-																Computed: true,
-															},
-															"dispose_on_deletion": schema.BoolAttribute{
-																Computed: true,
-															},
-															"dragen_ami_id": schema.StringAttribute{
-																Computed: true,
-															},
-															"dragen_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"dragen_instance_type": schema.StringAttribute{
-																Computed: true,
-															},
-															"ebs_auto_scale": schema.BoolAttribute{
-																Computed: true,
-															},
-															"ebs_block_size": schema.Int32Attribute{
-																Computed: true,
-															},
-															"ebs_boot_size": schema.Int32Attribute{
-																Computed: true,
-															},
-															"ec2_key_pair": schema.StringAttribute{
-																Computed: true,
-															},
-															"ecs_config": schema.StringAttribute{
-																Computed: true,
-															},
-															"efs_create": schema.BoolAttribute{
-																Computed: true,
-															},
-															"efs_id": schema.StringAttribute{
-																Computed: true,
-															},
-															"efs_mount": schema.StringAttribute{
-																Computed: true,
-															},
-															"fargate_head_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"fsx_mount": schema.StringAttribute{
-																Computed: true,
-															},
-															"fsx_name": schema.StringAttribute{
-																Computed: true,
-															},
-															"fsx_size": schema.Int32Attribute{
-																Computed: true,
-															},
-															"fusion_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"gpu_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"image_id": schema.StringAttribute{
-																Computed: true,
-															},
-															"instance_types": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"max_cpus": schema.Int32Attribute{
-																Computed: true,
-															},
-															"min_cpus": schema.Int32Attribute{
-																Computed: true,
-															},
-															"security_groups": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"subnets": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"type": schema.StringAttribute{
-																Computed: true,
-															},
-															"vpc_id": schema.StringAttribute{
-																Computed: true,
-															},
-														},
-													},
-													"fusion_snapshots": schema.BoolAttribute{
-														Computed: true,
-													},
-													"fusion2_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"head_job_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_memory_mb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_role": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"log_group": schema.StringAttribute{
-														Computed: true,
-													},
-													"lustre_id": schema.StringAttribute{
-														Computed:           true,
-														DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"nvnme_storage_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"region": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_type": schema.StringAttribute{
-														Computed:           true,
-														DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-													},
-													"volumes": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"wave_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"aws_cloud": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"allow_buckets": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"arm64_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"ebs_boot_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"ec2_key_pair": schema.StringAttribute{
-														Computed: true,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"fusion2_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"gpu_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"image_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"instance_profile_arn": schema.StringAttribute{
-														Computed: true,
-													},
-													"instance_type": schema.StringAttribute{
-														Computed: true,
-													},
-													"log_group": schema.StringAttribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"region": schema.StringAttribute{
-														Computed: true,
-													},
-													"security_groups": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"subnet_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"wave_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"azure_batch": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"auto_pool_mode": schema.BoolAttribute{
-														Computed:           true,
-														DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-													},
-													"delete_jobs_on_completion": schema.StringAttribute{
-														Computed: true,
-													},
-													"delete_pools_on_completion": schema.BoolAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"forge": schema.SingleNestedAttribute{
-														Computed: true,
-														Attributes: map[string]schema.Attribute{
-															"auto_scale": schema.BoolAttribute{
-																Computed: true,
-															},
-															"container_reg_ids": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"dispose_on_deletion": schema.BoolAttribute{
-																Computed: true,
-															},
-															"vm_count": schema.Int32Attribute{
-																Computed: true,
-															},
-															"vm_type": schema.StringAttribute{
-																Computed: true,
-															},
-														},
-													},
-													"fusion2_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"head_pool": schema.StringAttribute{
-														Computed: true,
-													},
-													"managed_identity_client_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"region": schema.StringAttribute{
-														Computed: true,
-													},
-													"token_duration": schema.StringAttribute{
-														Computed: true,
-													},
-													"wave_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"eks_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"cluster_name": schema.StringAttribute{
-														Computed:    true,
-														Description: `The AWS EKS cluster name`,
-													},
-													"compute_service_account": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"fusion2_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"head_job_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_memory_mb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_pod_spec": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_service_account": schema.StringAttribute{
-														Computed: true,
-													},
-													"namespace": schema.StringAttribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"pod_cleanup": schema.StringAttribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"region": schema.StringAttribute{
-														Computed:    true,
-														Description: `AWS region`,
-													},
-													"server": schema.StringAttribute{
-														Computed: true,
-													},
-													"service_pod_spec": schema.StringAttribute{
-														Computed: true,
-													},
-													"ssl_cert": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_claim_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_mount_path": schema.StringAttribute{
-														Computed: true,
-													},
-													"wave_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"gke_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"cluster_name": schema.StringAttribute{
-														Computed:    true,
-														Description: `The GKE cluster name`,
-													},
-													"compute_service_account": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"fusion2_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"head_job_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_memory_mb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_pod_spec": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_service_account": schema.StringAttribute{
-														Computed: true,
-													},
-													"namespace": schema.StringAttribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"pod_cleanup": schema.StringAttribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"region": schema.StringAttribute{
-														Computed:    true,
-														Description: `The GKE cluster region - or - zone`,
-													},
-													"server": schema.StringAttribute{
-														Computed: true,
-													},
-													"service_pod_spec": schema.StringAttribute{
-														Computed: true,
-													},
-													"ssl_cert": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_claim_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_mount_path": schema.StringAttribute{
-														Computed: true,
-													},
-													"wave_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"google_batch": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"boot_disk_size_gb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"compute_jobs_instance_template": schema.StringAttribute{
-														Computed: true,
-													},
-													"copy_image": schema.StringAttribute{
-														Computed: true,
-													},
-													"cpu_platform": schema.StringAttribute{
-														Computed: true,
-													},
-													"debug_mode": schema.Int32Attribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"fusion2_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"head_job_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_instance_template": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_job_memory_mb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"labels": schema.MapAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"location": schema.StringAttribute{
-														Computed: true,
-													},
-													"machine_type": schema.StringAttribute{
-														Computed: true,
-													},
-													"network": schema.StringAttribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"nfs_mount": schema.StringAttribute{
-														Computed: true,
-													},
-													"nfs_target": schema.StringAttribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"project_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"service_account": schema.StringAttribute{
-														Computed: true,
-													},
-													"spot": schema.BoolAttribute{
-														Computed: true,
-													},
-													"ssh_daemon": schema.BoolAttribute{
-														Computed: true,
-													},
-													"ssh_image": schema.StringAttribute{
-														Computed: true,
-													},
-													"subnetwork": schema.StringAttribute{
-														Computed: true,
-													},
-													"use_private_address": schema.BoolAttribute{
-														Computed: true,
-													},
-													"wave_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"google_lifesciences": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"boot_disk_size_gb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"copy_image": schema.StringAttribute{
-														Computed: true,
-													},
-													"debug_mode": schema.Int32Attribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"head_job_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_memory_mb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"labels": schema.MapAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"location": schema.StringAttribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"nfs_mount": schema.StringAttribute{
-														Computed: true,
-													},
-													"nfs_target": schema.StringAttribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"preemptible": schema.BoolAttribute{
-														Computed: true,
-													},
-													"project_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"region": schema.StringAttribute{
-														Computed: true,
-													},
-													"ssh_daemon": schema.BoolAttribute{
-														Computed: true,
-													},
-													"ssh_image": schema.StringAttribute{
-														Computed: true,
-													},
-													"use_private_address": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-													"zones": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-												},
-											},
-											"k8s_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"compute_service_account": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"head_job_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_memory_mb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_pod_spec": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_service_account": schema.StringAttribute{
-														Computed: true,
-													},
-													"namespace": schema.StringAttribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"pod_cleanup": schema.StringAttribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"server": schema.StringAttribute{
-														Computed: true,
-													},
-													"service_pod_spec": schema.StringAttribute{
-														Computed: true,
-													},
-													"ssl_cert": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_claim_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_mount_path": schema.StringAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"lsf_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"compute_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"head_job_options": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"host_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"launch_dir": schema.StringAttribute{
-														Computed: true,
-													},
-													"max_queue_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"per_job_mem_limit": schema.BoolAttribute{
-														Computed: true,
-													},
-													"per_task_reserve": schema.BoolAttribute{
-														Computed: true,
-													},
-													"port": schema.Int32Attribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"propagate_head_job_options": schema.BoolAttribute{
-														Computed: true,
-													},
-													"unit_for_limits": schema.StringAttribute{
-														Computed: true,
-													},
-													"user_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"moab_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"compute_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"head_job_options": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"host_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"launch_dir": schema.StringAttribute{
-														Computed: true,
-													},
-													"max_queue_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"port": schema.Int32Attribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"propagate_head_job_options": schema.BoolAttribute{
-														Computed: true,
-													},
-													"user_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"seqeracompute_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"cli_path": schema.StringAttribute{
-														Computed: true,
-													},
-													"compute_job_role": schema.StringAttribute{
-														Computed: true,
-													},
-													"compute_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"dragen_instance_type": schema.StringAttribute{
-														Computed: true,
-													},
-													"dragen_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"execution_role": schema.StringAttribute{
-														Computed: true,
-													},
-													"forge": schema.SingleNestedAttribute{
-														Computed: true,
-														Attributes: map[string]schema.Attribute{
-															"alloc_strategy": schema.StringAttribute{
-																Computed: true,
-															},
-															"allow_buckets": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"arm64_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"bid_percentage": schema.Int32Attribute{
-																Computed: true,
-															},
-															"dispose_on_deletion": schema.BoolAttribute{
-																Computed: true,
-															},
-															"dragen_ami_id": schema.StringAttribute{
-																Computed: true,
-															},
-															"dragen_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"dragen_instance_type": schema.StringAttribute{
-																Computed: true,
-															},
-															"ebs_auto_scale": schema.BoolAttribute{
-																Computed: true,
-															},
-															"ebs_block_size": schema.Int32Attribute{
-																Computed: true,
-															},
-															"ebs_boot_size": schema.Int32Attribute{
-																Computed: true,
-															},
-															"ec2_key_pair": schema.StringAttribute{
-																Computed: true,
-															},
-															"ecs_config": schema.StringAttribute{
-																Computed: true,
-															},
-															"efs_create": schema.BoolAttribute{
-																Computed: true,
-															},
-															"efs_id": schema.StringAttribute{
-																Computed: true,
-															},
-															"efs_mount": schema.StringAttribute{
-																Computed: true,
-															},
-															"fargate_head_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"fsx_mount": schema.StringAttribute{
-																Computed: true,
-															},
-															"fsx_name": schema.StringAttribute{
-																Computed: true,
-															},
-															"fsx_size": schema.Int32Attribute{
-																Computed: true,
-															},
-															"fusion_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"gpu_enabled": schema.BoolAttribute{
-																Computed: true,
-															},
-															"image_id": schema.StringAttribute{
-																Computed: true,
-															},
-															"instance_types": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"max_cpus": schema.Int32Attribute{
-																Computed: true,
-															},
-															"min_cpus": schema.Int32Attribute{
-																Computed: true,
-															},
-															"security_groups": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"subnets": schema.ListAttribute{
-																Computed:    true,
-																ElementType: types.StringType,
-															},
-															"type": schema.StringAttribute{
-																Computed: true,
-															},
-															"vpc_id": schema.StringAttribute{
-																Computed: true,
-															},
-														},
-													},
-													"fusion_snapshots": schema.BoolAttribute{
-														Computed: true,
-													},
-													"fusion2_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"head_job_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_memory_mb": schema.Int32Attribute{
-														Computed: true,
-													},
-													"head_job_role": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"log_group": schema.StringAttribute{
-														Computed: true,
-													},
-													"lustre_id": schema.StringAttribute{
-														Computed:           true,
-														DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"nvnme_storage_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"region": schema.StringAttribute{
-														Computed: true,
-													},
-													"storage_type": schema.StringAttribute{
-														Computed:           true,
-														DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-													},
-													"volumes": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"wave_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"slurm_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"compute_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"head_job_options": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"host_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"launch_dir": schema.StringAttribute{
-														Computed: true,
-													},
-													"max_queue_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"port": schema.Int32Attribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"propagate_head_job_options": schema.BoolAttribute{
-														Computed: true,
-													},
-													"user_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-											"uge_platform": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"compute_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"discriminator": schema.StringAttribute{
-														Computed:    true,
-														Description: `Read-only property identifying the compute platform type`,
-													},
-													"environment": schema.ListNestedAttribute{
-														Computed: true,
-														NestedObject: schema.NestedAttributeObject{
-															Attributes: map[string]schema.Attribute{
-																"compute": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"head": schema.BoolAttribute{
-																	Computed: true,
-																},
-																"name": schema.StringAttribute{
-																	Computed: true,
-																},
-																"value": schema.StringAttribute{
-																	Computed: true,
-																},
-															},
-														},
-														Description: `Array of environment variables for the compute environment`,
-													},
-													"head_job_options": schema.StringAttribute{
-														Computed: true,
-													},
-													"head_queue": schema.StringAttribute{
-														Computed: true,
-													},
-													"host_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"launch_dir": schema.StringAttribute{
-														Computed: true,
-													},
-													"max_queue_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"nextflow_config": schema.StringAttribute{
-														Computed:    true,
-														Description: `Nextflow configuration settings and parameters`,
-													},
-													"port": schema.Int32Attribute{
-														Computed: true,
-													},
-													"post_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute after workflow completes`,
-													},
-													"pre_run_script": schema.StringAttribute{
-														Computed:    true,
-														Description: `Shell script to execute before workflow starts`,
-													},
-													"propagate_head_job_options": schema.BoolAttribute{
-														Computed: true,
-													},
-													"user_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"work_dir": schema.StringAttribute{
-														Computed:    true,
-														Description: `Working directory path for workflow execution`,
-													},
-												},
-											},
-										},
-										MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
-											`pre/post run scripts, and environment-specific parameters.`,
-									},
-									"credentials_id": schema.StringAttribute{
-										Computed: true,
-									},
-									"date_created": schema.StringAttribute{
-										Computed: true,
-									},
-									"deleted": schema.BoolAttribute{
-										Computed: true,
-									},
-									"description": schema.StringAttribute{
-										Computed: true,
-									},
-									"last_updated": schema.StringAttribute{
-										Computed: true,
-									},
-									"last_used": schema.StringAttribute{
-										Computed: true,
-									},
-									"message": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"org_id": schema.Int64Attribute{
-										Computed: true,
-									},
-									"platform": schema.StringAttribute{
-										Computed: true,
-									},
-									"primary": schema.BoolAttribute{
-										Computed: true,
-									},
-									"status": schema.StringAttribute{
-										Computed: true,
-									},
-									"workspace_id": schema.Int64Attribute{
-										Computed: true,
-									},
-								},
-							},
-							"config_profiles": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-							"config_text": schema.StringAttribute{
-								Computed: true,
-							},
-							"date_created": schema.StringAttribute{
-								Computed: true,
-							},
-							"entry_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"head_job_cpus": schema.Int32Attribute{
-								Computed: true,
-							},
-							"head_job_memory_mb": schema.Int32Attribute{
-								Computed: true,
-							},
-							"id": schema.StringAttribute{
-								Computed: true,
-							},
-							"last_updated": schema.StringAttribute{
-								Computed: true,
-							},
-							"launch_container": schema.StringAttribute{
-								Computed: true,
-							},
-							"main_script": schema.StringAttribute{
-								Computed: true,
-							},
-							"optimization_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"optimization_targets": schema.StringAttribute{
-								Computed: true,
-							},
-							"params_text": schema.StringAttribute{
-								Computed: true,
-							},
-							"pipeline": schema.StringAttribute{
-								Computed: true,
-							},
-							"post_run_script": schema.StringAttribute{
-								Computed:    true,
-								Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
-							},
-							"pre_run_script": schema.StringAttribute{
-								Computed:    true,
-								Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
-							},
-							"pull_latest": schema.BoolAttribute{
-								Computed: true,
-							},
-							"resume": schema.BoolAttribute{
-								Computed: true,
-							},
-							"resume_launch_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"revision": schema.StringAttribute{
-								Computed: true,
-							},
-							"run_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"schema_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"session_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"stub_run": schema.BoolAttribute{
-								Computed: true,
-							},
-							"tower_config": schema.StringAttribute{
-								Computed: true,
-							},
-							"user_secrets": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-							"work_dir": schema.StringAttribute{
-								Computed: true,
-							},
-							"workspace_secrets": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-						},
-					},
-					"message": schema.StringAttribute{
-						Computed:    true,
-						Description: `Status or informational message about the action`,
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Human-readable name for the action`,
-					},
-					"source": schema.StringAttribute{
-						Computed: true,
-					},
-					"status": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-				MarkdownDescription: `Represents a pipeline action in the Seqera Platform.` + "\n" +
-					`Contains action configuration, triggers, and execution settings` + "\n" +
-					`for automated pipeline workflows.`,
-			},
 			"action_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Action string identifier`,
@@ -1787,6 +67,1731 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Optional:    true,
 				ElementType: types.StringType,
 				Description: `Additional attribute values to include in the response (` + "`" + `labels` + "`" + `). Returns an empty value (` + "`" + `labels: null` + "`" + `) if omitted.`,
+			},
+			"config": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"github": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"events": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+							},
+						},
+					},
+					"tower": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+				},
+			},
+			"date_created": schema.StringAttribute{
+				Computed: true,
+			},
+			"event": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"github": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"commit_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"commit_message": schema.StringAttribute{
+								Computed: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"pusher_email": schema.StringAttribute{
+								Computed: true,
+							},
+							"pusher_name": schema.StringAttribute{
+								Computed: true,
+							},
+							"ref": schema.StringAttribute{
+								Computed: true,
+							},
+							"timestamp": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"tower": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+							},
+							"timestamp": schema.StringAttribute{
+								Computed: true,
+							},
+							"workflow_id": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+				},
+			},
+			"hook_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Identifier for the webhook associated with this action`,
+			},
+			"hook_url": schema.StringAttribute{
+				Computed:    true,
+				Description: `URL endpoint for the webhook that triggers this action`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the action`,
+			},
+			"labels": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"date_created": schema.StringAttribute{
+							Computed:    true,
+							Description: `Timestamp when the label was created`,
+						},
+						"id": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Unique numeric identifier for the label`,
+						},
+						"is_default": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if this is a default system label`,
+						},
+						"name": schema.StringAttribute{
+							Computed:    true,
+							Description: `Name or key of the label`,
+						},
+						"resource": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if this is a resource-level label`,
+						},
+						"value": schema.StringAttribute{
+							Computed:    true,
+							Description: `Value associated with the label`,
+						},
+					},
+				},
+			},
+			"last_seen": schema.StringAttribute{
+				Computed: true,
+			},
+			"last_updated": schema.StringAttribute{
+				Computed: true,
+			},
+			"launch": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"compute_env": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"compute_env_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"config": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"altair_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"compute_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"head_job_options": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"host_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"launch_dir": schema.StringAttribute{
+												Computed: true,
+											},
+											"max_queue_size": schema.Int32Attribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"port": schema.Int32Attribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"propagate_head_job_options": schema.BoolAttribute{
+												Computed: true,
+											},
+											"user_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"aws_batch": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"cli_path": schema.StringAttribute{
+												Computed: true,
+											},
+											"compute_job_role": schema.StringAttribute{
+												Computed: true,
+											},
+											"compute_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"dragen_instance_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"dragen_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"execution_role": schema.StringAttribute{
+												Computed: true,
+											},
+											"forge": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"alloc_strategy": schema.StringAttribute{
+														Computed: true,
+													},
+													"allow_buckets": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"arm64_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"bid_percentage": schema.Int32Attribute{
+														Computed: true,
+													},
+													"dispose_on_deletion": schema.BoolAttribute{
+														Computed: true,
+													},
+													"dragen_ami_id": schema.StringAttribute{
+														Computed: true,
+													},
+													"dragen_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"dragen_instance_type": schema.StringAttribute{
+														Computed: true,
+													},
+													"ebs_auto_scale": schema.BoolAttribute{
+														Computed: true,
+													},
+													"ebs_block_size": schema.Int32Attribute{
+														Computed: true,
+													},
+													"ebs_boot_size": schema.Int32Attribute{
+														Computed: true,
+													},
+													"ec2_key_pair": schema.StringAttribute{
+														Computed: true,
+													},
+													"ecs_config": schema.StringAttribute{
+														Computed: true,
+													},
+													"efs_create": schema.BoolAttribute{
+														Computed: true,
+													},
+													"efs_id": schema.StringAttribute{
+														Computed: true,
+													},
+													"efs_mount": schema.StringAttribute{
+														Computed: true,
+													},
+													"fargate_head_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"fsx_mount": schema.StringAttribute{
+														Computed: true,
+													},
+													"fsx_name": schema.StringAttribute{
+														Computed: true,
+													},
+													"fsx_size": schema.Int32Attribute{
+														Computed: true,
+													},
+													"fusion_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"gpu_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"image_id": schema.StringAttribute{
+														Computed: true,
+													},
+													"instance_types": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"max_cpus": schema.Int32Attribute{
+														Computed: true,
+													},
+													"min_cpus": schema.Int32Attribute{
+														Computed: true,
+													},
+													"security_groups": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"subnets": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"type": schema.StringAttribute{
+														Computed: true,
+													},
+													"vpc_id": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"head_job_cpus": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_memory_mb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_role": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_group": schema.StringAttribute{
+												Computed: true,
+											},
+											"lustre_id": schema.StringAttribute{
+												Computed:           true,
+												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"nvnme_storage_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_type": schema.StringAttribute{
+												Computed:           true,
+												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+											},
+											"volumes": schema.ListAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"aws_cloud": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"allow_buckets": schema.ListAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+											"arm64_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"ebs_boot_size": schema.Int32Attribute{
+												Computed: true,
+											},
+											"ec2_key_pair": schema.StringAttribute{
+												Computed: true,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"gpu_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"image_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"instance_profile_arn": schema.StringAttribute{
+												Computed: true,
+											},
+											"instance_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_group": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"security_groups": schema.ListAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+											"subnet_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"azure_batch": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"auto_pool_mode": schema.BoolAttribute{
+												Computed:           true,
+												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+											},
+											"delete_jobs_on_completion": schema.StringAttribute{
+												Computed: true,
+											},
+											"delete_pools_on_completion": schema.BoolAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"forge": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"auto_scale": schema.BoolAttribute{
+														Computed: true,
+													},
+													"container_reg_ids": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"dispose_on_deletion": schema.BoolAttribute{
+														Computed: true,
+													},
+													"vm_count": schema.Int32Attribute{
+														Computed: true,
+													},
+													"vm_type": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"head_pool": schema.StringAttribute{
+												Computed: true,
+											},
+											"managed_identity_client_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"token_duration": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"eks_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"cluster_name": schema.StringAttribute{
+												Computed:    true,
+												Description: `The AWS EKS cluster name`,
+											},
+											"compute_service_account": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"head_job_cpus": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_memory_mb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_pod_spec": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_service_account": schema.StringAttribute{
+												Computed: true,
+											},
+											"namespace": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"pod_cleanup": schema.StringAttribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed:    true,
+												Description: `AWS region`,
+											},
+											"server": schema.StringAttribute{
+												Computed: true,
+											},
+											"service_pod_spec": schema.StringAttribute{
+												Computed: true,
+											},
+											"ssl_cert": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_claim_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_mount_path": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"gke_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"cluster_name": schema.StringAttribute{
+												Computed:    true,
+												Description: `The GKE cluster name`,
+											},
+											"compute_service_account": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"head_job_cpus": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_memory_mb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_pod_spec": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_service_account": schema.StringAttribute{
+												Computed: true,
+											},
+											"namespace": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"pod_cleanup": schema.StringAttribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed:    true,
+												Description: `The GKE cluster region - or - zone`,
+											},
+											"server": schema.StringAttribute{
+												Computed: true,
+											},
+											"service_pod_spec": schema.StringAttribute{
+												Computed: true,
+											},
+											"ssl_cert": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_claim_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_mount_path": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"google_batch": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"boot_disk_size_gb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"compute_jobs_instance_template": schema.StringAttribute{
+												Computed: true,
+											},
+											"copy_image": schema.StringAttribute{
+												Computed: true,
+											},
+											"cpu_platform": schema.StringAttribute{
+												Computed: true,
+											},
+											"debug_mode": schema.Int32Attribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"head_job_cpus": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_instance_template": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_job_memory_mb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"labels": schema.MapAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+											"location": schema.StringAttribute{
+												Computed: true,
+											},
+											"machine_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"network": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"nfs_mount": schema.StringAttribute{
+												Computed: true,
+											},
+											"nfs_target": schema.StringAttribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"project_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"service_account": schema.StringAttribute{
+												Computed: true,
+											},
+											"spot": schema.BoolAttribute{
+												Computed: true,
+											},
+											"ssh_daemon": schema.BoolAttribute{
+												Computed: true,
+											},
+											"ssh_image": schema.StringAttribute{
+												Computed: true,
+											},
+											"subnetwork": schema.StringAttribute{
+												Computed: true,
+											},
+											"use_private_address": schema.BoolAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"google_lifesciences": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"boot_disk_size_gb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"copy_image": schema.StringAttribute{
+												Computed: true,
+											},
+											"debug_mode": schema.Int32Attribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"head_job_cpus": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_memory_mb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"labels": schema.MapAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+											"location": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"nfs_mount": schema.StringAttribute{
+												Computed: true,
+											},
+											"nfs_target": schema.StringAttribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"preemptible": schema.BoolAttribute{
+												Computed: true,
+											},
+											"project_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"ssh_daemon": schema.BoolAttribute{
+												Computed: true,
+											},
+											"ssh_image": schema.StringAttribute{
+												Computed: true,
+											},
+											"use_private_address": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+											"zones": schema.ListAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+										},
+									},
+									"k8s_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"compute_service_account": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"head_job_cpus": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_memory_mb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_pod_spec": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_service_account": schema.StringAttribute{
+												Computed: true,
+											},
+											"namespace": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"pod_cleanup": schema.StringAttribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"server": schema.StringAttribute{
+												Computed: true,
+											},
+											"service_pod_spec": schema.StringAttribute{
+												Computed: true,
+											},
+											"ssl_cert": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_claim_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_mount_path": schema.StringAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"lsf_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"compute_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"head_job_options": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"host_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"launch_dir": schema.StringAttribute{
+												Computed: true,
+											},
+											"max_queue_size": schema.Int32Attribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"per_job_mem_limit": schema.BoolAttribute{
+												Computed: true,
+											},
+											"per_task_reserve": schema.BoolAttribute{
+												Computed: true,
+											},
+											"port": schema.Int32Attribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"propagate_head_job_options": schema.BoolAttribute{
+												Computed: true,
+											},
+											"unit_for_limits": schema.StringAttribute{
+												Computed: true,
+											},
+											"user_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"moab_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"compute_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"head_job_options": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"host_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"launch_dir": schema.StringAttribute{
+												Computed: true,
+											},
+											"max_queue_size": schema.Int32Attribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"port": schema.Int32Attribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"propagate_head_job_options": schema.BoolAttribute{
+												Computed: true,
+											},
+											"user_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"seqeracompute_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"cli_path": schema.StringAttribute{
+												Computed: true,
+											},
+											"compute_job_role": schema.StringAttribute{
+												Computed: true,
+											},
+											"compute_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"dragen_instance_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"dragen_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"execution_role": schema.StringAttribute{
+												Computed: true,
+											},
+											"forge": schema.SingleNestedAttribute{
+												Computed: true,
+												Attributes: map[string]schema.Attribute{
+													"alloc_strategy": schema.StringAttribute{
+														Computed: true,
+													},
+													"allow_buckets": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"arm64_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"bid_percentage": schema.Int32Attribute{
+														Computed: true,
+													},
+													"dispose_on_deletion": schema.BoolAttribute{
+														Computed: true,
+													},
+													"dragen_ami_id": schema.StringAttribute{
+														Computed: true,
+													},
+													"dragen_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"dragen_instance_type": schema.StringAttribute{
+														Computed: true,
+													},
+													"ebs_auto_scale": schema.BoolAttribute{
+														Computed: true,
+													},
+													"ebs_block_size": schema.Int32Attribute{
+														Computed: true,
+													},
+													"ebs_boot_size": schema.Int32Attribute{
+														Computed: true,
+													},
+													"ec2_key_pair": schema.StringAttribute{
+														Computed: true,
+													},
+													"ecs_config": schema.StringAttribute{
+														Computed: true,
+													},
+													"efs_create": schema.BoolAttribute{
+														Computed: true,
+													},
+													"efs_id": schema.StringAttribute{
+														Computed: true,
+													},
+													"efs_mount": schema.StringAttribute{
+														Computed: true,
+													},
+													"fargate_head_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"fsx_mount": schema.StringAttribute{
+														Computed: true,
+													},
+													"fsx_name": schema.StringAttribute{
+														Computed: true,
+													},
+													"fsx_size": schema.Int32Attribute{
+														Computed: true,
+													},
+													"fusion_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"gpu_enabled": schema.BoolAttribute{
+														Computed: true,
+													},
+													"image_id": schema.StringAttribute{
+														Computed: true,
+													},
+													"instance_types": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"max_cpus": schema.Int32Attribute{
+														Computed: true,
+													},
+													"min_cpus": schema.Int32Attribute{
+														Computed: true,
+													},
+													"security_groups": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"subnets": schema.ListAttribute{
+														Computed:    true,
+														ElementType: types.StringType,
+													},
+													"type": schema.StringAttribute{
+														Computed: true,
+													},
+													"vpc_id": schema.StringAttribute{
+														Computed: true,
+													},
+												},
+											},
+											"fusion_snapshots": schema.BoolAttribute{
+												Computed: true,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"head_job_cpus": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_memory_mb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"head_job_role": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_group": schema.StringAttribute{
+												Computed: true,
+											},
+											"lustre_id": schema.StringAttribute{
+												Computed:           true,
+												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"nvnme_storage_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"storage_type": schema.StringAttribute{
+												Computed:           true,
+												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+											},
+											"volumes": schema.ListAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"slurm_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"compute_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"head_job_options": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"host_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"launch_dir": schema.StringAttribute{
+												Computed: true,
+											},
+											"max_queue_size": schema.Int32Attribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"port": schema.Int32Attribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"propagate_head_job_options": schema.BoolAttribute{
+												Computed: true,
+											},
+											"user_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"uge_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"compute_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"discriminator": schema.StringAttribute{
+												Computed:    true,
+												Description: `Read-only property identifying the compute platform type`,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"head_job_options": schema.StringAttribute{
+												Computed: true,
+											},
+											"head_queue": schema.StringAttribute{
+												Computed: true,
+											},
+											"host_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"launch_dir": schema.StringAttribute{
+												Computed: true,
+											},
+											"max_queue_size": schema.Int32Attribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"port": schema.Int32Attribute{
+												Computed: true,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"propagate_head_job_options": schema.BoolAttribute{
+												Computed: true,
+											},
+											"user_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+								},
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.`,
+							},
+							"credentials_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"date_created": schema.StringAttribute{
+								Computed: true,
+							},
+							"deleted": schema.BoolAttribute{
+								Computed: true,
+							},
+							"description": schema.StringAttribute{
+								Computed: true,
+							},
+							"last_updated": schema.StringAttribute{
+								Computed: true,
+							},
+							"last_used": schema.StringAttribute{
+								Computed: true,
+							},
+							"message": schema.StringAttribute{
+								Computed: true,
+							},
+							"name": schema.StringAttribute{
+								Computed: true,
+							},
+							"org_id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"platform": schema.StringAttribute{
+								Computed: true,
+							},
+							"primary": schema.BoolAttribute{
+								Computed: true,
+							},
+							"status": schema.StringAttribute{
+								Computed: true,
+							},
+							"workspace_id": schema.Int64Attribute{
+								Computed: true,
+							},
+						},
+					},
+					"config_profiles": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+					"config_text": schema.StringAttribute{
+						Computed: true,
+					},
+					"date_created": schema.StringAttribute{
+						Computed: true,
+					},
+					"entry_name": schema.StringAttribute{
+						Computed: true,
+					},
+					"head_job_cpus": schema.Int32Attribute{
+						Computed: true,
+					},
+					"head_job_memory_mb": schema.Int32Attribute{
+						Computed: true,
+					},
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"last_updated": schema.StringAttribute{
+						Computed: true,
+					},
+					"launch_container": schema.StringAttribute{
+						Computed: true,
+					},
+					"main_script": schema.StringAttribute{
+						Computed: true,
+					},
+					"optimization_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"optimization_targets": schema.StringAttribute{
+						Computed: true,
+					},
+					"params_text": schema.StringAttribute{
+						Computed: true,
+					},
+					"pipeline": schema.StringAttribute{
+						Computed: true,
+					},
+					"post_run_script": schema.StringAttribute{
+						Computed:    true,
+						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+					},
+					"pre_run_script": schema.StringAttribute{
+						Computed:    true,
+						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+					},
+					"pull_latest": schema.BoolAttribute{
+						Computed: true,
+					},
+					"resume": schema.BoolAttribute{
+						Computed: true,
+					},
+					"resume_launch_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"revision": schema.StringAttribute{
+						Computed: true,
+					},
+					"run_name": schema.StringAttribute{
+						Computed: true,
+					},
+					"schema_name": schema.StringAttribute{
+						Computed: true,
+					},
+					"session_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"stub_run": schema.BoolAttribute{
+						Computed: true,
+					},
+					"tower_config": schema.StringAttribute{
+						Computed: true,
+					},
+					"user_secrets": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+					"work_dir": schema.StringAttribute{
+						Computed: true,
+					},
+					"workspace_secrets": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
+				},
+			},
+			"message": schema.StringAttribute{
+				Computed:    true,
+				Description: `Status or informational message about the action`,
+			},
+			"name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Human-readable name for the action`,
+			},
+			"source": schema.StringAttribute{
+				Computed: true,
+			},
+			"status": schema.StringAttribute{
+				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
@@ -1856,11 +1861,11 @@ func (r *ActionDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeActionResponse != nil) {
+	if !(res.DescribeActionResponse != nil && res.DescribeActionResponse.Action != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeActionResponse(ctx, res.DescribeActionResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedActionResponseDto(ctx, res.DescribeActionResponse.Action)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -71,7 +71,6 @@ provider "seqera" {
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
-* [seqera_actions](docs/data-sources/actions.md)
 * [seqera_compute_env](docs/data-sources/compute_env.md)
 * [seqera_compute_envs](docs/data-sources/compute_envs.md)
 * [seqera_credential](docs/data-sources/credential.md)
@@ -143,6 +142,6 @@ provider_installation {
 ## Contributions
 
 While we value open-source contributions to this terraform provider, this library is generated programmatically. Any manual changes added to internal files will be overwritten on the next generation.
-We look forward to hearing your feedback. Feel free to open a PR or an issue with a proof of concept and we'll do our best to include it in a future release. 
+We look forward to hearing your feedback. Feel free to open a PR or an issue with a proof of concept and we'll do our best to include it in a future release.
 
 ### SDK Created by [Speakeasy](https://www.speakeasy.com/?utm_source=seqera&utm_campaign=terraform)

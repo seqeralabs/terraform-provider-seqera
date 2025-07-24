@@ -62,190 +62,77 @@ resource "seqera_action" "my_action" {
 
 ### Required
 
-- `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
-- `name` (String)
+- `launch` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--launch))
+- `name` (String) Requires replacement if changed.
 - `source` (String) must be one of ["github", "tower"]; Requires replacement if changed.
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
-- `action` (Attributes) Represents a pipeline action in the Seqera Platform.
-Contains action configuration, triggers, and execution settings
-for automated pipeline workflows. (see [below for nested schema](#nestedatt--action))
 - `action_id` (String) Action string identifier
+- `config` (Attributes) (see [below for nested schema](#nestedatt--config))
+- `date_created` (String)
+- `event` (Attributes) (see [below for nested schema](#nestedatt--event))
+- `hook_id` (String) Identifier for the webhook associated with this action
+- `hook_url` (String) URL endpoint for the webhook that triggers this action
+- `id` (String) Unique identifier for the action
+- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
+- `last_seen` (String)
+- `last_updated` (String)
+- `message` (String) Status or informational message about the action
+- `status` (String) must be one of ["CREATING", "ACTIVE", "ERROR", "PAUSED"]
 
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`
 
 Required:
 
-- `compute_env_id` (String)
-- `pipeline` (String)
-- `work_dir` (String)
+- `compute_env_id` (String) Requires replacement if changed.
+- `pipeline` (String) Requires replacement if changed.
+- `work_dir` (String) Requires replacement if changed.
 
 Optional:
 
-- `config_profiles` (List of String)
-- `config_text` (String)
-- `date_created` (String)
-- `entry_name` (String)
-- `head_job_cpus` (Number)
-- `head_job_memory_mb` (Number)
-- `label_ids` (List of Number)
-- `launch_container` (String)
-- `main_script` (String)
-- `optimization_id` (String)
-- `optimization_targets` (String)
-- `params_text` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pull_latest` (Boolean)
-- `resume` (Boolean)
-- `revision` (String)
-- `run_name` (String)
-- `schema_name` (String)
-- `session_id` (String)
-- `stub_run` (Boolean)
-- `tower_config` (String)
-- `user_secrets` (List of String)
-- `workspace_secrets` (List of String)
-
-
-<a id="nestedatt--action"></a>
-### Nested Schema for `action`
+- `config_profiles` (List of String) Requires replacement if changed.
+- `config_text` (String) Requires replacement if changed.
+- `date_created` (String) Requires replacement if changed.
+- `entry_name` (String) Requires replacement if changed.
+- `head_job_cpus` (Number) Requires replacement if changed.
+- `head_job_memory_mb` (Number) Requires replacement if changed.
+- `label_ids` (List of Number) Requires replacement if changed.
+- `launch_container` (String) Requires replacement if changed.
+- `main_script` (String) Requires replacement if changed.
+- `optimization_id` (String) Requires replacement if changed.
+- `optimization_targets` (String) Requires replacement if changed.
+- `params_text` (String) Requires replacement if changed.
+- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `pull_latest` (Boolean) Requires replacement if changed.
+- `resume` (Boolean) Requires replacement if changed.
+- `revision` (String) Requires replacement if changed.
+- `run_name` (String) Requires replacement if changed.
+- `schema_name` (String) Requires replacement if changed.
+- `session_id` (String) Requires replacement if changed.
+- `stub_run` (Boolean) Requires replacement if changed.
+- `tower_config` (String) Requires replacement if changed.
+- `user_secrets` (List of String) Requires replacement if changed.
+- `workspace_secrets` (List of String) Requires replacement if changed.
 
 Read-Only:
 
-- `config` (Attributes) (see [below for nested schema](#nestedatt--action--config))
-- `date_created` (String)
-- `event` (Attributes) (see [below for nested schema](#nestedatt--action--event))
-- `hook_id` (String) Identifier for the webhook associated with this action
-- `hook_url` (String) URL endpoint for the webhook that triggers this action
-- `id` (String) Unique identifier for the action
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--action--labels))
-- `last_seen` (String)
-- `last_updated` (String)
-- `launch` (Attributes) (see [below for nested schema](#nestedatt--action--launch))
-- `message` (String) Status or informational message about the action
-- `name` (String) Human-readable name for the action
-- `source` (String) must be one of ["github", "tower"]
-- `status` (String) must be one of ["CREATING", "ACTIVE", "ERROR", "PAUSED"]
-
-<a id="nestedatt--action--config"></a>
-### Nested Schema for `action.config`
-
-Read-Only:
-
-- `github` (Attributes) (see [below for nested schema](#nestedatt--action--config--github))
-- `tower` (Attributes) (see [below for nested schema](#nestedatt--action--config--tower))
-
-<a id="nestedatt--action--config--github"></a>
-### Nested Schema for `action.config.github`
-
-Read-Only:
-
-- `discriminator` (String)
-- `events` (List of String)
-
-
-<a id="nestedatt--action--config--tower"></a>
-### Nested Schema for `action.config.tower`
-
-Read-Only:
-
-- `discriminator` (String)
-
-
-
-<a id="nestedatt--action--event"></a>
-### Nested Schema for `action.event`
-
-Read-Only:
-
-- `github` (Attributes) (see [below for nested schema](#nestedatt--action--event--github))
-- `tower` (Attributes) (see [below for nested schema](#nestedatt--action--event--tower))
-
-<a id="nestedatt--action--event--github"></a>
-### Nested Schema for `action.event.github`
-
-Read-Only:
-
-- `commit_id` (String)
-- `commit_message` (String)
-- `discriminator` (String)
-- `pusher_email` (String)
-- `pusher_name` (String)
-- `ref` (String)
-- `timestamp` (String)
-
-
-<a id="nestedatt--action--event--tower"></a>
-### Nested Schema for `action.event.tower`
-
-Read-Only:
-
-- `discriminator` (String)
-- `timestamp` (String)
-- `workflow_id` (String)
-
-
-
-<a id="nestedatt--action--labels"></a>
-### Nested Schema for `action.labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label
-
-
-<a id="nestedatt--action--launch"></a>
-### Nested Schema for `action.launch`
-
-Read-Only:
-
-- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env))
-- `config_profiles` (List of String)
-- `config_text` (String)
-- `date_created` (String)
-- `entry_name` (String)
-- `head_job_cpus` (Number)
-- `head_job_memory_mb` (Number)
+- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env))
 - `id` (String)
 - `last_updated` (String)
-- `launch_container` (String)
-- `main_script` (String)
-- `optimization_id` (String)
-- `optimization_targets` (String)
-- `params_text` (String)
-- `pipeline` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pull_latest` (Boolean)
-- `resume` (Boolean)
 - `resume_launch_id` (String)
-- `revision` (String)
-- `run_name` (String)
-- `schema_name` (String)
-- `session_id` (String)
-- `stub_run` (Boolean)
-- `tower_config` (String)
-- `user_secrets` (List of String)
-- `work_dir` (String)
-- `workspace_secrets` (List of String)
 
-<a id="nestedatt--action--launch--compute_env"></a>
-### Nested Schema for `action.launch.compute_env`
+<a id="nestedatt--launch--compute_env"></a>
+### Nested Schema for `launch.compute_env`
 
 Read-Only:
 
 - `compute_env_id` (String)
 - `config` (Attributes) Configuration settings for compute environments including work directories,
-pre/post run scripts, and environment-specific parameters. (see [below for nested schema](#nestedatt--action--launch--compute_env--config))
+pre/post run scripts, and environment-specific parameters. (see [below for nested schema](#nestedatt--launch--compute_env--config))
 - `credentials_id` (String)
 - `date_created` (String)
 - `deleted` (Boolean)
@@ -260,34 +147,34 @@ pre/post run scripts, and environment-specific parameters. (see [below for neste
 - `status` (String) must be one of ["CREATING", "AVAILABLE", "ERRORED", "INVALID"]
 - `workspace_id` (Number)
 
-<a id="nestedatt--action--launch--compute_env--config"></a>
-### Nested Schema for `action.launch.compute_env.config`
+<a id="nestedatt--launch--compute_env--config"></a>
+### Nested Schema for `launch.compute_env.config`
 
 Read-Only:
 
-- `altair_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--altair_platform))
-- `aws_batch` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_batch))
-- `aws_cloud` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_cloud))
-- `azure_batch` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--azure_batch))
-- `eks_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--eks_platform))
-- `gke_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--gke_platform))
-- `google_batch` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_batch))
-- `google_lifesciences` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_lifesciences))
-- `k8s_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--k8s_platform))
-- `lsf_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--lsf_platform))
-- `moab_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--moab_platform))
-- `seqeracompute_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--seqeracompute_platform))
-- `slurm_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--slurm_platform))
-- `uge_platform` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--uge_platform))
+- `altair_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--altair_platform))
+- `aws_batch` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_batch))
+- `aws_cloud` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_cloud))
+- `azure_batch` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_batch))
+- `eks_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--eks_platform))
+- `gke_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--gke_platform))
+- `google_batch` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--google_batch))
+- `google_lifesciences` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--google_lifesciences))
+- `k8s_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--k8s_platform))
+- `lsf_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--lsf_platform))
+- `moab_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--moab_platform))
+- `seqeracompute_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform))
+- `slurm_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--slurm_platform))
+- `uge_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--uge_platform))
 
-<a id="nestedatt--action--launch--compute_env--config--altair_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.altair_platform`
+<a id="nestedatt--launch--compute_env--config--altair_platform"></a>
+### Nested Schema for `launch.compute_env.config.altair_platform`
 
 Read-Only:
 
 - `compute_queue` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--altair_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--altair_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
@@ -301,8 +188,8 @@ Read-Only:
 - `user_name` (String)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--altair_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.altair_platform.environment`
+<a id="nestedatt--launch--compute_env--config--altair_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.altair_platform.environment`
 
 Read-Only:
 
@@ -313,8 +200,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--aws_batch"></a>
-### Nested Schema for `action.launch.compute_env.config.aws_batch`
+<a id="nestedatt--launch--compute_env--config--aws_batch"></a>
+### Nested Schema for `launch.compute_env.config.aws_batch`
 
 Read-Only:
 
@@ -324,9 +211,9 @@ Read-Only:
 - `discriminator` (String) Read-only property identifying the compute platform type
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_batch--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_batch--environment))
 - `execution_role` (String)
-- `forge` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_batch--forge))
+- `forge` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_batch--forge))
 - `fusion2_enabled` (Boolean)
 - `fusion_snapshots` (Boolean)
 - `head_job_cpus` (Number)
@@ -345,8 +232,8 @@ Read-Only:
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--aws_batch--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.aws_batch.environment`
+<a id="nestedatt--launch--compute_env--config--aws_batch--environment"></a>
+### Nested Schema for `launch.compute_env.config.aws_batch.environment`
 
 Read-Only:
 
@@ -356,8 +243,8 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--action--launch--compute_env--config--aws_batch--forge"></a>
-### Nested Schema for `action.launch.compute_env.config.aws_batch.forge`
+<a id="nestedatt--launch--compute_env--config--aws_batch--forge"></a>
+### Nested Schema for `launch.compute_env.config.aws_batch.forge`
 
 Read-Only:
 
@@ -394,8 +281,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--aws_cloud"></a>
-### Nested Schema for `action.launch.compute_env.config.aws_cloud`
+<a id="nestedatt--launch--compute_env--config--aws_cloud"></a>
+### Nested Schema for `launch.compute_env.config.aws_cloud`
 
 Read-Only:
 
@@ -404,7 +291,7 @@ Read-Only:
 - `discriminator` (String) Read-only property identifying the compute platform type
 - `ebs_boot_size` (Number)
 - `ec2_key_pair` (String)
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--aws_cloud--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_cloud--environment))
 - `fusion2_enabled` (Boolean)
 - `gpu_enabled` (Boolean)
 - `image_id` (String)
@@ -420,8 +307,8 @@ Read-Only:
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--aws_cloud--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.aws_cloud.environment`
+<a id="nestedatt--launch--compute_env--config--aws_cloud--environment"></a>
+### Nested Schema for `launch.compute_env.config.aws_cloud.environment`
 
 Read-Only:
 
@@ -432,8 +319,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--azure_batch"></a>
-### Nested Schema for `action.launch.compute_env.config.azure_batch`
+<a id="nestedatt--launch--compute_env--config--azure_batch"></a>
+### Nested Schema for `launch.compute_env.config.azure_batch`
 
 Read-Only:
 
@@ -441,8 +328,8 @@ Read-Only:
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]
 - `delete_pools_on_completion` (Boolean)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--azure_batch--environment))
-- `forge` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--azure_batch--forge))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_batch--environment))
+- `forge` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean)
 - `head_pool` (String)
 - `managed_identity_client_id` (String)
@@ -454,8 +341,8 @@ Read-Only:
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--azure_batch--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.azure_batch.environment`
+<a id="nestedatt--launch--compute_env--config--azure_batch--environment"></a>
+### Nested Schema for `launch.compute_env.config.azure_batch.environment`
 
 Read-Only:
 
@@ -465,8 +352,8 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--action--launch--compute_env--config--azure_batch--forge"></a>
-### Nested Schema for `action.launch.compute_env.config.azure_batch.forge`
+<a id="nestedatt--launch--compute_env--config--azure_batch--forge"></a>
+### Nested Schema for `launch.compute_env.config.azure_batch.forge`
 
 Read-Only:
 
@@ -478,15 +365,15 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--eks_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.eks_platform`
+<a id="nestedatt--launch--compute_env--config--eks_platform"></a>
+### Nested Schema for `launch.compute_env.config.eks_platform`
 
 Read-Only:
 
 - `cluster_name` (String) The AWS EKS cluster name
 - `compute_service_account` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--eks_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--eks_platform--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
@@ -506,8 +393,8 @@ Read-Only:
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--eks_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.eks_platform.environment`
+<a id="nestedatt--launch--compute_env--config--eks_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.eks_platform.environment`
 
 Read-Only:
 
@@ -518,15 +405,15 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--gke_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.gke_platform`
+<a id="nestedatt--launch--compute_env--config--gke_platform"></a>
+### Nested Schema for `launch.compute_env.config.gke_platform`
 
 Read-Only:
 
 - `cluster_name` (String) The GKE cluster name
 - `compute_service_account` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--gke_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--gke_platform--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
@@ -546,8 +433,8 @@ Read-Only:
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--gke_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.gke_platform.environment`
+<a id="nestedatt--launch--compute_env--config--gke_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.gke_platform.environment`
 
 Read-Only:
 
@@ -558,8 +445,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--google_batch"></a>
-### Nested Schema for `action.launch.compute_env.config.google_batch`
+<a id="nestedatt--launch--compute_env--config--google_batch"></a>
+### Nested Schema for `launch.compute_env.config.google_batch`
 
 Read-Only:
 
@@ -569,7 +456,7 @@ Read-Only:
 - `cpu_platform` (String)
 - `debug_mode` (Number)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_batch--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--google_batch--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_instance_template` (String)
@@ -593,8 +480,8 @@ Read-Only:
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--google_batch--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.google_batch.environment`
+<a id="nestedatt--launch--compute_env--config--google_batch--environment"></a>
+### Nested Schema for `launch.compute_env.config.google_batch.environment`
 
 Read-Only:
 
@@ -605,8 +492,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--google_lifesciences"></a>
-### Nested Schema for `action.launch.compute_env.config.google_lifesciences`
+<a id="nestedatt--launch--compute_env--config--google_lifesciences"></a>
+### Nested Schema for `launch.compute_env.config.google_lifesciences`
 
 Read-Only:
 
@@ -614,7 +501,7 @@ Read-Only:
 - `copy_image` (String)
 - `debug_mode` (Number)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--google_lifesciences--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--google_lifesciences--environment))
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `labels` (Map of String)
@@ -633,8 +520,8 @@ Read-Only:
 - `work_dir` (String) Working directory path for workflow execution
 - `zones` (List of String)
 
-<a id="nestedatt--action--launch--compute_env--config--google_lifesciences--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.google_lifesciences.environment`
+<a id="nestedatt--launch--compute_env--config--google_lifesciences--environment"></a>
+### Nested Schema for `launch.compute_env.config.google_lifesciences.environment`
 
 Read-Only:
 
@@ -645,14 +532,14 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--k8s_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.k8s_platform`
+<a id="nestedatt--launch--compute_env--config--k8s_platform"></a>
+### Nested Schema for `launch.compute_env.config.k8s_platform`
 
 Read-Only:
 
 - `compute_service_account` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--k8s_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--k8s_platform--environment))
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `head_pod_spec` (String)
@@ -669,8 +556,8 @@ Read-Only:
 - `storage_mount_path` (String)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--k8s_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.k8s_platform.environment`
+<a id="nestedatt--launch--compute_env--config--k8s_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.k8s_platform.environment`
 
 Read-Only:
 
@@ -681,14 +568,14 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--lsf_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.lsf_platform`
+<a id="nestedatt--launch--compute_env--config--lsf_platform"></a>
+### Nested Schema for `launch.compute_env.config.lsf_platform`
 
 Read-Only:
 
 - `compute_queue` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--lsf_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--lsf_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
@@ -705,8 +592,8 @@ Read-Only:
 - `user_name` (String)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--lsf_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.lsf_platform.environment`
+<a id="nestedatt--launch--compute_env--config--lsf_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.lsf_platform.environment`
 
 Read-Only:
 
@@ -717,14 +604,14 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--moab_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.moab_platform`
+<a id="nestedatt--launch--compute_env--config--moab_platform"></a>
+### Nested Schema for `launch.compute_env.config.moab_platform`
 
 Read-Only:
 
 - `compute_queue` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--moab_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--moab_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
@@ -738,8 +625,8 @@ Read-Only:
 - `user_name` (String)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--moab_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.moab_platform.environment`
+<a id="nestedatt--launch--compute_env--config--moab_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.moab_platform.environment`
 
 Read-Only:
 
@@ -750,8 +637,8 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--seqeracompute_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.seqeracompute_platform`
+<a id="nestedatt--launch--compute_env--config--seqeracompute_platform"></a>
+### Nested Schema for `launch.compute_env.config.seqeracompute_platform`
 
 Read-Only:
 
@@ -761,9 +648,9 @@ Read-Only:
 - `discriminator` (String) Read-only property identifying the compute platform type
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--seqeracompute_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform--environment))
 - `execution_role` (String)
-- `forge` (Attributes) (see [below for nested schema](#nestedatt--action--launch--compute_env--config--seqeracompute_platform--forge))
+- `forge` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform--forge))
 - `fusion2_enabled` (Boolean)
 - `fusion_snapshots` (Boolean)
 - `head_job_cpus` (Number)
@@ -782,8 +669,8 @@ Read-Only:
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--seqeracompute_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.seqeracompute_platform.environment`
+<a id="nestedatt--launch--compute_env--config--seqeracompute_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.seqeracompute_platform.environment`
 
 Read-Only:
 
@@ -793,8 +680,8 @@ Read-Only:
 - `value` (String)
 
 
-<a id="nestedatt--action--launch--compute_env--config--seqeracompute_platform--forge"></a>
-### Nested Schema for `action.launch.compute_env.config.seqeracompute_platform.forge`
+<a id="nestedatt--launch--compute_env--config--seqeracompute_platform--forge"></a>
+### Nested Schema for `launch.compute_env.config.seqeracompute_platform.forge`
 
 Read-Only:
 
@@ -831,14 +718,14 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--slurm_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.slurm_platform`
+<a id="nestedatt--launch--compute_env--config--slurm_platform"></a>
+### Nested Schema for `launch.compute_env.config.slurm_platform`
 
 Read-Only:
 
 - `compute_queue` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--slurm_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--slurm_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
@@ -852,8 +739,8 @@ Read-Only:
 - `user_name` (String)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--slurm_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.slurm_platform.environment`
+<a id="nestedatt--launch--compute_env--config--slurm_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.slurm_platform.environment`
 
 Read-Only:
 
@@ -864,14 +751,14 @@ Read-Only:
 
 
 
-<a id="nestedatt--action--launch--compute_env--config--uge_platform"></a>
-### Nested Schema for `action.launch.compute_env.config.uge_platform`
+<a id="nestedatt--launch--compute_env--config--uge_platform"></a>
+### Nested Schema for `launch.compute_env.config.uge_platform`
 
 Read-Only:
 
 - `compute_queue` (String)
 - `discriminator` (String) Read-only property identifying the compute platform type
-- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--action--launch--compute_env--config--uge_platform--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--uge_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
 - `host_name` (String)
@@ -885,8 +772,8 @@ Read-Only:
 - `user_name` (String)
 - `work_dir` (String) Working directory path for workflow execution
 
-<a id="nestedatt--action--launch--compute_env--config--uge_platform--environment"></a>
-### Nested Schema for `action.launch.compute_env.config.uge_platform.environment`
+<a id="nestedatt--launch--compute_env--config--uge_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.uge_platform.environment`
 
 Read-Only:
 
@@ -894,6 +781,82 @@ Read-Only:
 - `head` (Boolean)
 - `name` (String)
 - `value` (String)
+
+
+
+
+
+
+<a id="nestedatt--config"></a>
+### Nested Schema for `config`
+
+Read-Only:
+
+- `github` (Attributes) (see [below for nested schema](#nestedatt--config--github))
+- `tower` (Attributes) (see [below for nested schema](#nestedatt--config--tower))
+
+<a id="nestedatt--config--github"></a>
+### Nested Schema for `config.github`
+
+Read-Only:
+
+- `discriminator` (String)
+- `events` (List of String)
+
+
+<a id="nestedatt--config--tower"></a>
+### Nested Schema for `config.tower`
+
+Read-Only:
+
+- `discriminator` (String)
+
+
+
+<a id="nestedatt--event"></a>
+### Nested Schema for `event`
+
+Read-Only:
+
+- `github` (Attributes) (see [below for nested schema](#nestedatt--event--github))
+- `tower` (Attributes) (see [below for nested schema](#nestedatt--event--tower))
+
+<a id="nestedatt--event--github"></a>
+### Nested Schema for `event.github`
+
+Read-Only:
+
+- `commit_id` (String)
+- `commit_message` (String)
+- `discriminator` (String)
+- `pusher_email` (String)
+- `pusher_name` (String)
+- `ref` (String)
+- `timestamp` (String)
+
+
+<a id="nestedatt--event--tower"></a>
+### Nested Schema for `event.tower`
+
+Read-Only:
+
+- `discriminator` (String)
+- `timestamp` (String)
+- `workflow_id` (String)
+
+
+
+<a id="nestedatt--labels"></a>
+### Nested Schema for `labels`
+
+Read-Only:
+
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label
 
 ## Import
 

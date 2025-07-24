@@ -5,8 +5,10 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
@@ -55,9 +57,15 @@ func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(1000),
+				},
 			},
 			"full_name": schema.StringAttribute{
 				Required: true,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(100),
+				},
 			},
 			"id": schema.Int64Attribute{
 				Computed:    true,
@@ -69,6 +77,9 @@ func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"name": schema.StringAttribute{
 				Required: true,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(40),
+				},
 			},
 			"org_id": schema.Int64Attribute{
 				Optional:    true,

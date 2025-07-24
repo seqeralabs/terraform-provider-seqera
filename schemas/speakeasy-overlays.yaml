@@ -466,9 +466,7 @@ actions:
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
     update:
       x-speakeasy-param-optional: false
-  - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
-    update:
-      x-speakeasy-entity: Action
+
       ## Compute Config Schemas
   - target: $["components"]["schemas"]["ListCredentialsResponse"]
     update:
@@ -583,10 +581,27 @@ actions:
         - url: https://api.cloud.seqera.io
 
   ####################################################################
-  ####                Action Force Recreation Configuration        ####
+  ####                Action Entity Operations Configuration      ####
   ####################################################################
-  # Force action resource recreation when launch configuration changes
-  # This prevents "Launch ID value can't change" errors
-  - target: $.components.schemas.CreateActionRequest.properties.launch
+  # Add action entity operations that were removed from base API spec
+  # - target: $.paths["/actions"].get
+  #   update:
+  #     x-speakeasy-entity-operation: Actions#read
+  # - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
+  #   update:
+  #     x-speakeasy-entity: Action
+  - target: $.paths["/actions"].post
     update:
-      x-speakeasy-param-force-new: true
+      x-speakeasy-entity-operation: Action#create
+  - target: $.paths["/actions/{actionId}"].get
+    update:
+      x-speakeasy-entity-operation: Action#read
+  # - target: $.paths["/actions/{actionId}"].put
+  #   update:
+  #     x-speakeasy-entity-operation: Action#update
+  - target: $.paths["/actions/{actionId}"].delete
+    update:
+      x-speakeasy-entity-operation: Action#delete
+  - target: $.components.schemas.ActionResponseDto
+    update:
+      x-speakeasy-entity: Action
