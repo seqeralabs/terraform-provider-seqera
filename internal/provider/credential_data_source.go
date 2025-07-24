@@ -35,6 +35,7 @@ type CredentialDataSourceModel struct {
 	DateCreated   types.String               `tfsdk:"date_created"`
 	Deleted       types.Bool                 `tfsdk:"deleted"`
 	Description   types.String               `tfsdk:"description"`
+	ID            types.String               `tfsdk:"id"`
 	Keys          tfTypes.SecurityKeysOutput `tfsdk:"keys"`
 	LastUpdated   types.String               `tfsdk:"last_updated"`
 	LastUsed      types.String               `tfsdk:"last_used"`
@@ -75,6 +76,10 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Optional description explaining the purpose of the credential`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,

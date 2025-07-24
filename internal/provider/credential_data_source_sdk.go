@@ -18,10 +18,10 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.Category = types.StringPointerValue(resp.Category)
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.ID = types.StringPointerValue(resp.ID)
 		if resp.Keys.AgentSecurityKeys != nil {
 			r.Keys.TwAgent = &tfTypes.AgentSecurityKeys{}
 			r.Keys.TwAgent.ConnectionID = types.StringPointerValue(resp.Keys.AgentSecurityKeys.ConnectionID)

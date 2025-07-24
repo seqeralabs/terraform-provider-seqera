@@ -8112,7 +8112,6 @@ components:
           items:
             type: object
             additionalProperties: true
-          x-speakeasy-terraform-ignore: true
     AwsBatchPlatformMetainfo:
       type: object
       properties:
@@ -8512,7 +8511,6 @@ components:
       properties:
         id:
           type: string
-          x-speakeasy-name-override: computeEnvId
         name:
           type: string
         description:
@@ -8538,14 +8536,12 @@ components:
         dateCreated:
           type: string
           format: date-time
-          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
         lastUsed:
           type: string
           format: date-time
-          x-speakeasy-param-readonly: true
         deleted:
           type: boolean
         status:
@@ -8568,7 +8564,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: ComputeEnv
     ComputeEnv_ComputeConfig_:
       required:
       - config
@@ -8590,8 +8585,6 @@ components:
           maxLength: 22
           type: string
           readOnly: true
-          x-speakeasy-name-override: computeEnvId
-          x-speakeasy-param-readonly: true
         name:
           maxLength: 100
           type: string
@@ -8623,17 +8616,14 @@ components:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-readonly: true
         lastUsed:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-readonly: true
         deleted:
           type: boolean
           readOnly: true
@@ -8642,7 +8632,6 @@ components:
             - $ref: "#/components/schemas/ComputeEnv.Status"
             - type: string
               readOnly: true
-          x-speakeasy-param-readonly: true
         message:
           maxLength: 4096
           type: string
@@ -8765,13 +8754,11 @@ components:
           items:
             type: integer
             format: int64
-      x-speakeasy-entity: ComputeEnv
     CreateComputeEnvResponse:
       type: object
       properties:
         computeEnvId:
           type: string
-      x-speakeasy-entity: ComputeEnv
     CreateCredentialsRequest:
       type: object
       properties:
@@ -8906,14 +8893,11 @@ components:
         id:
           maxLength: 22
           type: string
-          x-speakeasy-name-override: credentialsId
-          x-speakeasy-param-suppress-computed-diff: true
         name:
           maxLength: 100
           type: string
         description:
           type: string
-          x-speakeasy-param-computed: false
         provider:
           maxLength: 16
           type: string
@@ -8937,15 +8921,12 @@ components:
           maxLength: 200
           pattern: ""
           type: string
-          x-speakeasy-param-computed: false
         category:
           maxLength: 20
           type: string
-          x-speakeasy-param-computed: false
         deleted:
           type: boolean
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
         lastUsed:
           type: string
           format: date-time
@@ -8954,14 +8935,12 @@ components:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
         lastUpdated:
           type: string
           format: date-time
           readOnly: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
-      x-speakeasy-entity: Credential
     DataLink.Status:
       type: string
       readOnly: true
@@ -9295,7 +9274,6 @@ components:
       properties:
         sessionId:
           type: string
-          x-speakeasy-param-optional: true
         workspaceId:
           type: integer
           format: int64
@@ -11814,7 +11792,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-      x-speakeasy-entity: Teams
     TeamDbDto:
       type: object
       properties:
@@ -11830,7 +11807,6 @@ components:
         membersCount:
           type: integer
           format: int64
-      x-speakeasy-entity: Teams
     TraceBeginRequest:
       type: object
       properties:

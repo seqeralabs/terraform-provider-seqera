@@ -8500,6 +8500,7 @@ components:
         lastUpdated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         lastUsed:
           type: string
           format: date-time
@@ -8598,6 +8599,7 @@ components:
         deleted:
           type: boolean
           readOnly: true
+          x-speakeasy-param-readonly: true
         status:
           allOf:
             - $ref: "#/components/schemas/ComputeEnv.Status"
@@ -8731,7 +8733,6 @@ components:
           items:
             type: integer
             format: int64
-      x-speakeasy-entity: ComputeEnv
       required:
         - computeEnv
         - credentialsId
@@ -8743,7 +8744,6 @@ components:
       properties:
         computeEnvId:
           type: string
-      x-speakeasy-entity: ComputeEnv
     CreateCredentialsRequest:
       type: object
       properties:
@@ -8907,8 +8907,6 @@ components:
         id:
           maxLength: 22
           type: string
-          x-speakeasy-name-override: credentialsId
-          x-speakeasy-param-suppress-computed-diff: true
           description: Unique identifier for the credential (max 22 characters)
         name:
           maxLength: 100
@@ -8917,7 +8915,6 @@ components:
           example: "my-gcp-credentials"
         description:
           type: string
-          x-speakeasy-param-computed: false
           description: Optional description explaining the purpose of the credential
           example: "Google Cloud credentials for production workloads"
         provider:
@@ -8964,17 +8961,14 @@ components:
           maxLength: 200
           pattern: ""
           type: string
-          x-speakeasy-param-computed: false
           example: "https://www.googleapis.com"
         category:
           maxLength: 20
           type: string
-          x-speakeasy-param-computed: false
           example: "cloud"
         deleted:
           type: boolean
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Flag indicating if the credential has been soft-deleted
         lastUsed:
           type: string
@@ -8986,7 +8980,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Timestamp when the credential was created
         lastUpdated:
           type: string
@@ -9369,7 +9362,6 @@ components:
       properties:
         sessionId:
           type: string
-          x-speakeasy-param-optional: true
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
           description: Unique identifier for the Studio session

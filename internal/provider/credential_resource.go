@@ -14,7 +14,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
@@ -46,6 +45,7 @@ type CredentialResourceModel struct {
 	DateCreated   types.String         `tfsdk:"date_created"`
 	Deleted       types.Bool           `tfsdk:"deleted"`
 	Description   types.String         `tfsdk:"description"`
+	ID            types.String         `tfsdk:"id"`
 	Keys          tfTypes.SecurityKeys `tfsdk:"keys"`
 	LastUpdated   types.String         `tfsdk:"last_updated"`
 	LastUsed      types.String         `tfsdk:"last_used"`
@@ -63,12 +63,14 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 		MarkdownDescription: "Credential Resource",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(200),
 				},
 			},
 			"category": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(20),
@@ -79,36 +81,32 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Unique identifier for the credential (max 22 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
+				Computed:    true,
+				Description: `Credentials string identifier`,
 			},
 			"date_created": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Timestamp when the credential was created`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"deleted": schema.BoolAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Flag indicating if the credential has been soft-deleted`,
 			},
 			"description": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Optional description explaining the purpose of the credential`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Optional:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(22),
+				},
 			},
 			"keys": schema.SingleNestedAttribute{
 				Required: true,
