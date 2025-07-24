@@ -1,11 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-<<<<<<< Updated upstream
-  docChecksum: e30172e0a86f6c560d4e8841344bc3bd
-=======
   docChecksum: f7b425ea60a71260766988796e7e0505
->>>>>>> Stashed changes
   docVersion: 1.45.0
   speakeasyVersion: 1.587.0
   generationVersion: 2.662.0
