@@ -50,16 +50,16 @@ jobs:
         EOF
 
     - name: Terraform Init
-      working-directory: ./examples/hello-world-examples
+      working-directory: ./test/hello-world-tests
       run: terraform init
       continue-on-error: true # We continue on a failure since tf init will fail since its a local provider.\
 
     - name: Terraform Format Check
-      working-directory: ./examples/hello-world-examples
+      working-directory: ./test/hello-world-tests
       run: terraform fmt -check
 
     - name: Terraform Validate
-      working-directory: ./examples/hello-world-examples
+      working-directory: ./test/hello-world-tests
       run: terraform validate
 
     #
@@ -69,7 +69,7 @@ jobs:
     #     echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > service-account-key.json
 
     - name: Terraform Plan
-      working-directory: ./examples/hello-world-examples
+      working-directory: ./test/hello-world-tests
       run: terraform plan -no-color -out=plan.tfplan
       env:
         TF_VAR_seqera_server_url: ${{ vars.SEQERA_SERVER_URL || 'https://api.cloud.seqera.io' }}
@@ -81,7 +81,7 @@ jobs:
 
     - name: Generate Terraform Plan for PR Comment
       if: github.event_name == 'pull_request'
-      working-directory: ./examples/hello-world-examples
+      working-directory: ./test/hello-world-tests
       run: |
         echo "## Terraform Plan:" > plan_output.md
         echo "" >> plan_output.md
@@ -100,5 +100,5 @@ jobs:
       if: github.event_name == 'pull_request'
       uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2.8.2
       with:
-        message-path: ./examples/hello-world-examples/plan_output.md
+        message-path: ./test/hello-world-tests/plan_output.md
         message-id: terraform-plan
