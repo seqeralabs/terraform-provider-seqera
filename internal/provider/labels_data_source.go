@@ -5,8 +5,10 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
@@ -102,7 +104,14 @@ func (r *LabelsDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			},
 			"type": schema.StringAttribute{
 				Optional:    true,
-				Description: `Label type`,
+				Description: `Label type. must be one of ["simple", "resource", "all"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"simple",
+						"resource",
+						"all",
+					),
+				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

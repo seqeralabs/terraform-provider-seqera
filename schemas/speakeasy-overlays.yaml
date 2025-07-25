@@ -466,9 +466,7 @@ actions:
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
     update:
       x-speakeasy-param-optional: false
-  - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
-    update:
-      x-speakeasy-entity: Action
+
       ## Compute Config Schemas
   - target: $["components"]["schemas"]["ListCredentialsResponse"]
     update:
@@ -581,3 +579,228 @@ actions:
     update:
       servers:
         - url: https://api.cloud.seqera.io
+
+  ####################################################################
+  ####                Action Entity Operations Configuration      ####
+  ####################################################################
+  # Add action entity operations that were removed from base API spec
+  # - target: $.paths["/actions"].get
+  #   update:
+  #     x-speakeasy-entity-operation: Actions#read
+  # - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
+  #   update:
+  #     x-speakeasy-entity: Action
+  - target: $.paths["/actions"].post
+    update:
+      x-speakeasy-entity-operation: Action#create
+  - target: $.paths["/actions/{actionId}"].get
+    update:
+      x-speakeasy-entity-operation: Action#read
+  # - target: $.paths["/actions/{actionId}"].put
+  #   update:
+  #     x-speakeasy-entity-operation: Action#update
+  - target: $.paths["/actions/{actionId}"].delete
+    update:
+      x-speakeasy-entity-operation: Action#delete
+  - target: $.components.schemas.ActionResponseDto
+    update:
+      x-speakeasy-entity: Action
+
+  ####################################################################
+  ####              Additional Entity Operations                   ####
+  ####################################################################
+  # ComputeEnv operations
+  - target: $.paths["/compute-envs"].post
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#create
+  - target: $.paths["/compute-envs/{computeEnvId}"].get
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#read
+  - target: $.paths["/compute-envs/{computeEnvId}"].put
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#update
+  - target: $.paths["/compute-envs/{computeEnvId}"].delete
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#delete
+
+  # Credentials operations
+  - target: $.paths["/credentials"].post
+    update:
+      x-speakeasy-entity-operation: Credential#create
+  - target: $.paths["/credentials/{credentialsId}"].get
+    update:
+      x-speakeasy-entity-operation: Credential#read
+  - target: $.paths["/credentials/{credentialsId}"].put
+    update:
+      x-speakeasy-entity-operation: Credential#update
+  - target: $.paths["/credentials/{credentialsId}"].delete
+    update:
+      x-speakeasy-entity-operation: Credential#delete
+
+  # Dataset operations
+  # - target: $.paths["/datasets"].get
+  #   update:
+  #     x-speakeasy-entity-operation: Datasets#read
+
+  # Pipeline operations
+  - target: $.paths["/pipelines"].post
+    update:
+      x-speakeasy-entity-operation: Pipeline#create
+  - target: $.paths["/pipelines/{pipelineId}"].get
+    update:
+      x-speakeasy-entity-operation: Pipeline#read
+  - target: $.paths["/pipelines/{pipelineId}"].put
+    update:
+      x-speakeasy-entity-operation: Pipeline#update
+  - target: $.paths["/pipelines/{pipelineId}"].delete
+    update:
+      x-speakeasy-entity-operation: Pipeline#delete
+
+  # User operations
+  - target: $.paths["/user"].get
+    update:
+      x-speakeasy-entity-operation: CurrentUser#read
+  - target: $.paths["/user/{userId}/workspaces"].get
+    update:
+      x-speakeasy-entity-operation: UserWorkspaces#read
+  - target: $.paths["/users/{userId}"].get
+    update:
+      x-speakeasy-entity-operation: User#read
+
+  ####################################################################
+  ####              Property-Level Annotations                     ####
+  ####################################################################
+  # AWS Batch Config terraform-ignore
+  - target: $.components.schemas.AwsBatchConfig.properties.forgedResources
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  # ComputeEnvResponseDto annotations
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.id
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.dateCreated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.lastUpdated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.lastUsed
+    update:
+      x-speakeasy-param-readonly: true
+
+  # ComputeEnv_ComputeConfig_ annotations
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.id
+    update:
+      x-speakeasy-name-override: computeEnvId
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.dateCreated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.lastUpdated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.lastUsed
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.deleted
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.status
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.orgId
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.workspaceId
+    update:
+      x-speakeasy-param-readonly: true
+
+  # CredentialsDto annotations
+  - target: $.components.schemas.CredentialsDto.properties.id
+    update:
+      x-speakeasy-name-override: credentialsId
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.CredentialsDto.properties.description
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.CredentialsDto.properties.provider
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.CredentialsDto.properties.category
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.CredentialsDto.properties.deleted
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.CredentialsDto.properties.lastUsed
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.CredentialsDto.properties.lastUpdated
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.CredentialsDto.properties.dateCreated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.CredentialsDto.properties.keys
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.CredentialsDto.properties.baseUrl
+    update:
+      x-speakeasy-param-computed: true
+
+  # Entity annotations
+  - target: $.components.schemas.ComputeEnvResponseDto
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $.components.schemas.DescribeComputeEnvResponse
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $.components.schemas.CreateComputeEnvResponse
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $.components.schemas.CredentialsDto
+    update:
+      x-speakeasy-entity: Credential
+
+  # Team entity annotations
+  - target: $.components.schemas.Team
+    update:
+      x-speakeasy-entity: Teams
+  - target: $.components.schemas.TeamDbDto
+    update:
+      x-speakeasy-entity: Teams
+
+  # Team parameter optional annotation
+  - target: $.components.schemas.TeamDbDto.properties.teamId
+    update:
+      x-speakeasy-param-optional: true
+
+  # DataStudioCreateRequest param-optional
+  - target: $.components.schemas.DataStudioCreateRequest.properties.sessionId
+    update:
+      x-speakeasy-param-optional: true
+
+  ####################################################################
+  ####              Custom Error Handling                           ####
+  ####################################################################
+  # Add retry mechanism for studios deletion when studio needs to be stopped first
+  - target: $.paths["/studios/{sessionId}"].delete
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 3000
+          maxInterval: 10000
+          maxElapsedTime: 30000
+          exponent: 1.5
+        statusCodes:
+          - 400
+
+  # Add custom error mapping for better user experience
+  - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
+    update:
+      description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"

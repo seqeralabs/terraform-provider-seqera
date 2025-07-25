@@ -5,9 +5,12 @@ repos:
     rev: v3.2.0
     hooks:
       - id: trailing-whitespace
+        exclude: ^examples/
       - id: end-of-file-fixer
+        exclude: ^examples/
       - id: check-yaml
       - id: check-added-large-files
+        exclude: ^examples/
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.96.1
     hooks:
