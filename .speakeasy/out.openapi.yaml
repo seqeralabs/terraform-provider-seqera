@@ -8443,6 +8443,8 @@ components:
         discriminator:
           type: string
           description: Read-only property identifying the compute platform type
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
       discriminator:
         propertyName: discriminator
         mapping:

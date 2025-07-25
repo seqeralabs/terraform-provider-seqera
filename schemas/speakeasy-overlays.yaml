@@ -804,3 +804,10 @@ actions:
   - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
     update:
       description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
+  
+
+  # ComputeConfig discriminator and state change handling
+  - target: $.components.schemas.ComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true

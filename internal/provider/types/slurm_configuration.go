@@ -8,7 +8,6 @@ import (
 
 type SlurmConfiguration struct {
 	ComputeQueue            types.String        `tfsdk:"compute_queue"`
-	Discriminator           types.String        `tfsdk:"discriminator"`
 	Environment             []ConfigEnvVariable `tfsdk:"environment"`
 	HeadJobOptions          types.String        `tfsdk:"head_job_options"`
 	HeadQueue               types.String        `tfsdk:"head_queue"`

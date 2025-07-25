@@ -20,7 +20,6 @@ resource "seqera_compute_env" "my_computeenv" {
         auto_pool_mode             = false
         delete_jobs_on_completion  = "on_success"
         delete_pools_on_completion = false
-        discriminator              = "...my_discriminator..."
         environment = [
           {
             compute = false
@@ -136,7 +135,6 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--altair_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -171,7 +169,6 @@ Optional:
 - `cli_path` (String) Requires replacement if changed.
 - `compute_job_role` (String) Requires replacement if changed.
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
@@ -251,7 +248,6 @@ Optional:
 
 - `allow_buckets` (List of String) Requires replacement if changed.
 - `arm64_enabled` (Boolean) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `ebs_boot_size` (Number) Requires replacement if changed.
 - `ec2_key_pair` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
@@ -290,7 +286,6 @@ Optional:
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
@@ -335,7 +330,6 @@ Optional:
 
 - `cluster_name` (String) The AWS EKS cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -375,7 +369,6 @@ Optional:
 
 - `cluster_name` (String) The GKE cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -418,7 +411,6 @@ Optional:
 - `copy_image` (String) Requires replacement if changed.
 - `cpu_platform` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -463,7 +455,6 @@ Optional:
 - `boot_disk_size_gb` (Number) Requires replacement if changed.
 - `copy_image` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
@@ -501,7 +492,6 @@ Optional:
 Optional:
 
 - `compute_service_account` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
@@ -537,7 +527,6 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -573,7 +562,6 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--moab_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -608,7 +596,6 @@ Optional:
 - `cli_path` (String) Requires replacement if changed.
 - `compute_job_role` (String) Requires replacement if changed.
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
@@ -687,7 +674,6 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--slurm_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -720,7 +706,6 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
-- `discriminator` (String) Read-only property identifying the compute platform type. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--uge_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.

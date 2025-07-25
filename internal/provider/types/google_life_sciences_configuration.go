@@ -10,7 +10,6 @@ type GoogleLifeSciencesConfiguration struct {
 	BootDiskSizeGb    types.Int32             `tfsdk:"boot_disk_size_gb"`
 	CopyImage         types.String            `tfsdk:"copy_image"`
 	DebugMode         types.Int32             `tfsdk:"debug_mode"`
-	Discriminator     types.String            `tfsdk:"discriminator"`
 	Environment       []ConfigEnvVariable     `tfsdk:"environment"`
 	HeadJobCpus       types.Int32             `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb   types.Int32             `tfsdk:"head_job_memory_mb"`

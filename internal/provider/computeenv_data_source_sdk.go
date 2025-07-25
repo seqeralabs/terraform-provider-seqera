@@ -26,7 +26,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 				if resp.ComputeEnv.Config.AltairPBSConfiguration != nil {
 					r.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
 					r.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.AltairPlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.Discriminator)
 					r.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.AltairPlatform.Environment) > len(resp.ComputeEnv.Config.AltairPBSConfiguration.Environment) {
 						r.ComputeEnv.Config.AltairPlatform.Environment = r.ComputeEnv.Config.AltairPlatform.Environment[:len(resp.ComputeEnv.Config.AltairPBSConfiguration.Environment)]
@@ -63,7 +62,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
 					r.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
 					r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
-					r.ComputeEnv.Config.EksPlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Discriminator)
 					r.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.EksPlatform.Environment) > len(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment) {
 						r.ComputeEnv.Config.EksPlatform.Environment = r.ComputeEnv.Config.EksPlatform.Environment[:len(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment)]
@@ -111,7 +109,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
 					r.ComputeEnv.Config.AwsBatch.ComputeJobRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ComputeJobRole)
 					r.ComputeEnv.Config.AwsBatch.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.AwsBatch.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Discriminator)
 					r.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.DragenInstanceType)
 					r.ComputeEnv.Config.AwsBatch.DragenQueue = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.DragenQueue)
 					r.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
@@ -208,7 +205,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 						r.ComputeEnv.Config.AwsCloud.AllowBuckets = append(r.ComputeEnv.Config.AwsCloud.AllowBuckets, types.StringValue(v))
 					}
 					r.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
-					r.ComputeEnv.Config.AwsCloud.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Discriminator)
 					r.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
 					r.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
 					r.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
@@ -257,7 +253,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 						r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringNull()
 					}
 					r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
-					r.ComputeEnv.Config.AzureBatch.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Discriminator)
 					r.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.AzureBatch.Environment) > len(resp.ComputeEnv.Config.AzureBatchConfiguration.Environment) {
 						r.ComputeEnv.Config.AzureBatch.Environment = r.ComputeEnv.Config.AzureBatch.Environment[:len(resp.ComputeEnv.Config.AzureBatchConfiguration.Environment)]
@@ -303,7 +298,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
 					r.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
 					r.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
-					r.ComputeEnv.Config.GoogleBatch.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Discriminator)
 					r.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.GoogleBatch.Environment) > len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment) {
 						r.ComputeEnv.Config.GoogleBatch.Environment = r.ComputeEnv.Config.GoogleBatch.Environment[:len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment)]
@@ -355,7 +349,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.GkePlatform = &tfTypes.GoogleGKEClusterConfiguration{}
 					r.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ClusterName)
 					r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ComputeServiceAccount)
-					r.ComputeEnv.Config.GkePlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Discriminator)
 					r.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.GkePlatform.Environment) > len(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment) {
 						r.ComputeEnv.Config.GkePlatform.Environment = r.ComputeEnv.Config.GkePlatform.Environment[:len(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment)]
@@ -403,7 +396,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.BootDiskSizeGb))
 					r.ComputeEnv.Config.GoogleLifesciences.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.CopyImage)
 					r.ComputeEnv.Config.GoogleLifesciences.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.DebugMode))
-					r.ComputeEnv.Config.GoogleLifesciences.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Discriminator)
 					r.ComputeEnv.Config.GoogleLifesciences.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.GoogleLifesciences.Environment) > len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment) {
 						r.ComputeEnv.Config.GoogleLifesciences.Environment = r.ComputeEnv.Config.GoogleLifesciences.Environment[:len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment)]
@@ -452,7 +444,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 				if resp.ComputeEnv.Config.IBMLSFConfiguration != nil {
 					r.ComputeEnv.Config.LsfPlatform = &tfTypes.IBMLSFConfiguration{}
 					r.ComputeEnv.Config.LsfPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.LsfPlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.Discriminator)
 					r.ComputeEnv.Config.LsfPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.LsfPlatform.Environment) > len(resp.ComputeEnv.Config.IBMLSFConfiguration.Environment) {
 						r.ComputeEnv.Config.LsfPlatform.Environment = r.ComputeEnv.Config.LsfPlatform.Environment[:len(resp.ComputeEnv.Config.IBMLSFConfiguration.Environment)]
@@ -491,7 +482,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 				if resp.ComputeEnv.Config.KubernetesComputeConfiguration != nil {
 					r.ComputeEnv.Config.K8sPlatform = &tfTypes.KubernetesComputeConfiguration{}
 					r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.ComputeServiceAccount)
-					r.ComputeEnv.Config.K8sPlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Discriminator)
 					r.ComputeEnv.Config.K8sPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.K8sPlatform.Environment) > len(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment) {
 						r.ComputeEnv.Config.K8sPlatform.Environment = r.ComputeEnv.Config.K8sPlatform.Environment[:len(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment)]
@@ -534,7 +524,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 				if resp.ComputeEnv.Config.MoabConfiguration != nil {
 					r.ComputeEnv.Config.MoabPlatform = &tfTypes.MoabConfiguration{}
 					r.ComputeEnv.Config.MoabPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.MoabPlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.Discriminator)
 					r.ComputeEnv.Config.MoabPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.MoabPlatform.Environment) > len(resp.ComputeEnv.Config.MoabConfiguration.Environment) {
 						r.ComputeEnv.Config.MoabPlatform.Environment = r.ComputeEnv.Config.MoabPlatform.Environment[:len(resp.ComputeEnv.Config.MoabConfiguration.Environment)]
@@ -572,7 +561,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.SeqeracomputePlatform.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.CliPath)
 					r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeJobRole)
 					r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Discriminator)
 					r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenInstanceType)
 					r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenQueue)
 					r.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
@@ -665,7 +653,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 				if resp.ComputeEnv.Config.SlurmConfiguration != nil {
 					r.ComputeEnv.Config.SlurmPlatform = &tfTypes.SlurmConfiguration{}
 					r.ComputeEnv.Config.SlurmPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.SlurmPlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.Discriminator)
 					r.ComputeEnv.Config.SlurmPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.SlurmPlatform.Environment) > len(resp.ComputeEnv.Config.SlurmConfiguration.Environment) {
 						r.ComputeEnv.Config.SlurmPlatform.Environment = r.ComputeEnv.Config.SlurmPlatform.Environment[:len(resp.ComputeEnv.Config.SlurmConfiguration.Environment)]
@@ -701,7 +688,6 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 				if resp.ComputeEnv.Config.UnivaGridEngineConfiguration != nil {
 					r.ComputeEnv.Config.UgePlatform = &tfTypes.UnivaGridEngineConfiguration{}
 					r.ComputeEnv.Config.UgePlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.UgePlatform.Discriminator = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Discriminator)
 					r.ComputeEnv.Config.UgePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.ComputeEnv.Config.UgePlatform.Environment) > len(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment) {
 						r.ComputeEnv.Config.UgePlatform.Environment = r.ComputeEnv.Config.UgePlatform.Environment[:len(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment)]

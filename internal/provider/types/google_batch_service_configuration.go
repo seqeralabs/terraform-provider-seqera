@@ -12,7 +12,6 @@ type GoogleBatchServiceConfiguration struct {
 	CopyImage                   types.String            `tfsdk:"copy_image"`
 	CPUPlatform                 types.String            `tfsdk:"cpu_platform"`
 	DebugMode                   types.Int32             `tfsdk:"debug_mode"`
-	Discriminator               types.String            `tfsdk:"discriminator"`
 	Environment                 []ConfigEnvVariable     `tfsdk:"environment"`
 	Fusion2Enabled              types.Bool              `tfsdk:"fusion2_enabled"`
 	HeadJobCpus                 types.Int32             `tfsdk:"head_job_cpus"`

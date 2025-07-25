@@ -8,7 +8,6 @@ import (
 
 type KubernetesComputeConfiguration struct {
 	ComputeServiceAccount types.String        `tfsdk:"compute_service_account"`
-	Discriminator         types.String        `tfsdk:"discriminator"`
 	Environment           []ConfigEnvVariable `tfsdk:"environment"`
 	HeadJobCpus           types.Int32         `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb       types.Int32         `tfsdk:"head_job_memory_mb"`

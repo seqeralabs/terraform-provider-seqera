@@ -91,7 +91,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 				if resp.Launch.ComputeEnv.Config.AltairPBSConfiguration != nil {
 					r.Launch.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
 					r.Launch.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.AltairPlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.AltairPlatform.Environment) > len(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.AltairPlatform.Environment = r.Launch.ComputeEnv.Config.AltairPlatform.Environment[:len(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.Environment)]
@@ -128,7 +127,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 					r.Launch.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
 					r.Launch.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
 					r.Launch.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
-					r.Launch.ComputeEnv.Config.EksPlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.EksPlatform.Environment) > len(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.EksPlatform.Environment = r.Launch.ComputeEnv.Config.EksPlatform.Environment[:len(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment)]
@@ -176,7 +174,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 					r.Launch.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
 					r.Launch.ComputeEnv.Config.AwsBatch.ComputeJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.ComputeJobRole)
 					r.Launch.ComputeEnv.Config.AwsBatch.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.AwsBatch.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.DragenInstanceType)
 					r.Launch.ComputeEnv.Config.AwsBatch.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.DragenQueue)
 					r.Launch.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
@@ -273,7 +270,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 						r.Launch.ComputeEnv.Config.AwsCloud.AllowBuckets = append(r.Launch.ComputeEnv.Config.AwsCloud.AllowBuckets, types.StringValue(v))
 					}
 					r.Launch.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
-					r.Launch.ComputeEnv.Config.AwsCloud.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
 					r.Launch.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
 					r.Launch.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
@@ -322,7 +318,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 						r.Launch.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringNull()
 					}
 					r.Launch.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
-					r.Launch.ComputeEnv.Config.AzureBatch.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.AzureBatch.Environment) > len(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.AzureBatch.Environment = r.Launch.ComputeEnv.Config.AzureBatch.Environment[:len(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Environment)]
@@ -368,7 +363,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 					r.Launch.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
 					r.Launch.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
 					r.Launch.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
-					r.Launch.ComputeEnv.Config.GoogleBatch.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.GoogleBatch.Environment) > len(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.GoogleBatch.Environment = r.Launch.ComputeEnv.Config.GoogleBatch.Environment[:len(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment)]
@@ -420,7 +414,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 					r.Launch.ComputeEnv.Config.GkePlatform = &tfTypes.GoogleGKEClusterConfiguration{}
 					r.Launch.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.ClusterName)
 					r.Launch.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.ComputeServiceAccount)
-					r.Launch.ComputeEnv.Config.GkePlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.GkePlatform.Environment) > len(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.GkePlatform.Environment = r.Launch.ComputeEnv.Config.GkePlatform.Environment[:len(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment)]
@@ -468,7 +461,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 					r.Launch.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.BootDiskSizeGb))
 					r.Launch.ComputeEnv.Config.GoogleLifesciences.CopyImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.CopyImage)
 					r.Launch.ComputeEnv.Config.GoogleLifesciences.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.DebugMode))
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.GoogleLifesciences.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.GoogleLifesciences.Environment) > len(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.GoogleLifesciences.Environment = r.Launch.ComputeEnv.Config.GoogleLifesciences.Environment[:len(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment)]
@@ -517,7 +509,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 				if resp.Launch.ComputeEnv.Config.IBMLSFConfiguration != nil {
 					r.Launch.ComputeEnv.Config.LsfPlatform = &tfTypes.IBMLSFConfiguration{}
 					r.Launch.ComputeEnv.Config.LsfPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.LsfPlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.LsfPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.LsfPlatform.Environment) > len(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.LsfPlatform.Environment = r.Launch.ComputeEnv.Config.LsfPlatform.Environment[:len(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.Environment)]
@@ -556,7 +547,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 				if resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration != nil {
 					r.Launch.ComputeEnv.Config.K8sPlatform = &tfTypes.KubernetesComputeConfiguration{}
 					r.Launch.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.ComputeServiceAccount)
-					r.Launch.ComputeEnv.Config.K8sPlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.K8sPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.K8sPlatform.Environment) > len(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.K8sPlatform.Environment = r.Launch.ComputeEnv.Config.K8sPlatform.Environment[:len(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.Environment)]
@@ -599,7 +589,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 				if resp.Launch.ComputeEnv.Config.MoabConfiguration != nil {
 					r.Launch.ComputeEnv.Config.MoabPlatform = &tfTypes.MoabConfiguration{}
 					r.Launch.ComputeEnv.Config.MoabPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.MoabPlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.MoabPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.MoabPlatform.Environment) > len(resp.Launch.ComputeEnv.Config.MoabConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.MoabPlatform.Environment = r.Launch.ComputeEnv.Config.MoabPlatform.Environment[:len(resp.Launch.ComputeEnv.Config.MoabConfiguration.Environment)]
@@ -637,7 +626,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.CliPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.CliPath)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeJobRole)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.DragenInstanceType)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.DragenQueue)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
@@ -730,7 +718,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 				if resp.Launch.ComputeEnv.Config.SlurmConfiguration != nil {
 					r.Launch.ComputeEnv.Config.SlurmPlatform = &tfTypes.SlurmConfiguration{}
 					r.Launch.ComputeEnv.Config.SlurmPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.SlurmPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.SlurmPlatform.Environment) > len(resp.Launch.ComputeEnv.Config.SlurmConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.SlurmPlatform.Environment = r.Launch.ComputeEnv.Config.SlurmPlatform.Environment[:len(resp.Launch.ComputeEnv.Config.SlurmConfiguration.Environment)]
@@ -766,7 +753,6 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 				if resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration != nil {
 					r.Launch.ComputeEnv.Config.UgePlatform = &tfTypes.UnivaGridEngineConfiguration{}
 					r.Launch.ComputeEnv.Config.UgePlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.UgePlatform.Discriminator = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.Discriminator)
 					r.Launch.ComputeEnv.Config.UgePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 					if len(r.Launch.ComputeEnv.Config.UgePlatform.Environment) > len(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment) {
 						r.Launch.ComputeEnv.Config.UgePlatform.Environment = r.Launch.ComputeEnv.Config.UgePlatform.Environment[:len(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment)]
