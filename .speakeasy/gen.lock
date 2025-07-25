@@ -1,12 +1,8 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-<<<<<<< HEAD
   docChecksum: f7b425ea60a71260766988796e7e0505
-=======
-  docChecksum: 87601d4faf39c143b74969cf88644de2
->>>>>>> feat/regex-validation
-  docVersion: 1.45.0
+  docChecksum: 0b30ffcbbb66dceb5f1792648c1e2a53
   speakeasyVersion: 1.589.0
   generationVersion: 2.664.0
   releaseVersion: 0.0.3

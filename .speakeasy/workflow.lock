@@ -2,13 +2,8 @@ speakeasyVersion: 1.589.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-<<<<<<< HEAD
-        sourceRevisionDigest: sha256:1a47d479c521b7710b4e7e01120883117b76208bf68c05ee4be87185062f4f68
-        sourceBlobDigest: sha256:36a7d1e0e1876a9f7dbb8c180c067e1d087d359609a177acacab13717e38944f
-=======
-        sourceRevisionDigest: sha256:c493fec43925263884950b02ba67c61685b3aede574411e7f4ce17c584f74163
-        sourceBlobDigest: sha256:cec641e330ecc055f42a405416baeab3f0fcdd39471b67149c9c3c0bb95cdb99
->>>>>>> feat/regex-validation
+        sourceRevisionDigest: sha256:74029969ba803d4a518f63197c9b1341fd63c7a50bb719143f143db43f2da3c9
+        sourceBlobDigest: sha256:9613ddde07839fc3ddb75b47c509067f1a4aae12cd2f121586688200d873e1d3
         tags:
             - latest
             - 1.45.0
@@ -16,13 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-<<<<<<< HEAD
-        sourceRevisionDigest: sha256:1a47d479c521b7710b4e7e01120883117b76208bf68c05ee4be87185062f4f68
-        sourceBlobDigest: sha256:36a7d1e0e1876a9f7dbb8c180c067e1d087d359609a177acacab13717e38944f
-=======
-        sourceRevisionDigest: sha256:c493fec43925263884950b02ba67c61685b3aede574411e7f4ce17c584f74163
-        sourceBlobDigest: sha256:cec641e330ecc055f42a405416baeab3f0fcdd39471b67149c9c3c0bb95cdb99
->>>>>>> feat/regex-validation
+        sourceRevisionDigest: sha256:74029969ba803d4a518f63197c9b1341fd63c7a50bb719143f143db43f2da3c9
+        sourceBlobDigest: sha256:9613ddde07839fc3ddb75b47c509067f1a4aae12cd2f121586688200d873e1d3
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
