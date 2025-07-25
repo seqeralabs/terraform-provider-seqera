@@ -97,13 +97,13 @@ The `examples/terraform-examples` directory contains comprehensive Terraform con
 
 ### Cloud Platform Examples
 
-#### AWS Example (`examples/terraform-examples/aws/`)
-#### GCP Example (`examples/terraform-examples/gcp/`)
-#### Azure Example (`examples/terraform-examples/azure/`)
+- **[AWS Example (`examples/terraform-examples/aws/`)](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
+- **[Azure Example (`examples/terraform-examples/azure/`)](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline  
+- **[GCP Example (`examples/terraform-examples/gcp/`)](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
 
 ### Getting Started with Examples
 
-1. **Choose your cloud platform** from `examples/aws/`, `examples/azure/`, or `examples/gcp/`
+1. **Choose your cloud platform** from `examples/terraform-examples/aws/`, `examples/terraform-examples/azure/`, or `examples/terraform-examples/gcp/`
 2. **Copy the example tfvars**: `cp terraform.tfvars.example terraform.tfvars`
 3. **Configure your credentials** and settings in `terraform.tfvars`
 4. **Amend any variable/resource names or values** ,ensure you update your organization name as that has to be unique.  
