@@ -1,0 +1,14 @@
+# Example terraform.tfvars file
+# Copy this file to terraform.tfvars and fill in your values
+
+# Seqera Platform Configuration
+seqera_bearer_auth = "your-bearer-token"
+# seqera_server_url = "https://api.cloud.seqera.io"  # Default value
+
+# GCP Configuration
+gcp_region         = "us-central1"
+gcp_location       = "us-central1"
+service_account_key = "/path/to/your-service-account-key.json"
+
+# Workflow Configuration
+work_dir = "gs://your-bucket/work"
