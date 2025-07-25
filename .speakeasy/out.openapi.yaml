@@ -5584,6 +5584,15 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Studios#delete
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 3000
+          maxInterval: 10000
+          maxElapsedTime: 30000
+          exponent: 1.5
+        statusCodes:
+          - 400
   /studios/{sessionId}/checkpoints:
     get:
       summary: List Studio checkpoints
@@ -8527,6 +8536,7 @@ components:
         lastUpdated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         lastUsed:
           type: string
           format: date-time
@@ -8568,10 +8578,12 @@ components:
           type: integer
           format: int64
           readOnly: true
+          x-speakeasy-param-readonly: true
         workspaceId:
           type: integer
           format: int64
           readOnly: true
+          x-speakeasy-param-readonly: true
         id:
           maxLength: 22
           type: string
@@ -8626,6 +8638,7 @@ components:
         deleted:
           type: boolean
           readOnly: true
+          x-speakeasy-param-readonly: true
         status:
           allOf:
             - $ref: "#/components/schemas/ComputeEnv.Status"
@@ -8638,6 +8651,7 @@ components:
         primary:
           type: boolean
           readOnly: true
+      x-speakeasy-entity: ComputeEnv
     ComputePlatform:
       type: object
       properties:
