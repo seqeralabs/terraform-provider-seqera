@@ -85,7 +85,6 @@ resource "seqera_compute_env" "aws_batch_compute_env" {
 
         }
 
-        # Pre and post-run scripts
         pre_run_script  = file("${path.module}/scripts/pre-run.sh")
         post_run_script = file("${path.module}/scripts/post-run.sh")
       }
@@ -130,7 +129,7 @@ resource "seqera_pipeline" "rnaseq_pipeline" {
   label_ids   = [resource.seqera_labels.my_labels.label_id]
   launch = {
     compute_env_id      = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
-    config_profiles     = ["test_full"]
+    config_profiles     = ["test"]
     pipeline            = "https://github.com/nf-core/rnaseq"
     revision            = "3.19.0"
     work_dir            = var.work_dir
@@ -151,7 +150,7 @@ resource "seqera_workflows" "rnaseq_workflow" {
   revision            = "3.19.0"
   work_dir            = var.work_dir
   workspace_id        = resource.seqera_workspace.my_workspace.id
-  config_profiles     = ["test_full"]
+  config_profiles     = ["test"]
   params_text         = "{\"outdir\": \"${var.work_dir}\"}"
   pull_latest         = false
   stub_run            = false

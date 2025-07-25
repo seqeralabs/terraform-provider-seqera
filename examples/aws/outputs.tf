@@ -1,4 +1,3 @@
-# Organization and Workspace Outputs
 output "org_id" {
   description = "ID of the created organization"
   value       = seqera_orgs.my_org.org_id
@@ -14,7 +13,6 @@ output "team_id" {
   value       = seqera_teams.my_teams.team_id
 }
 
-# Dataset and Secret Outputs
 output "dataset_id" {
   description = "ID of the created dataset"
   value       = seqera_datasets.my_datasets.dataset.id
@@ -25,7 +23,6 @@ output "pipeline_secret_id" {
   value       = seqera_pipeline_secret.my_pipelinesecret.secret_id
 }
 
-# AWS Resource Outputs
 output "credential_id" {
   description = "ID of the created AWS credential"
   value       = seqera_credential.aws_credential.credentials_id
@@ -41,19 +38,18 @@ output "data_link_id" {
   value       = seqera_data_link.my_datalink.data_link_id
 }
 
-# Pipeline and Workflow Outputs
 output "action_id" {
   description = "ID of the created action"
   value       = seqera_action.my_action.action_id
 }
 
 output "pipeline_id" {
-  description = "ID of the created RNA-seq pipeline"
+  description = "ID of the created pipeline"
   value       = seqera_pipeline.rnaseq_pipeline.pipeline_id
 }
 
 output "workflow_id" {
-  description = "ID of the launched RNA-seq workflow"
+  description = "ID of the launched workflow"
   value       = seqera_workflows.rnaseq_workflow.workflow_id
 }
 

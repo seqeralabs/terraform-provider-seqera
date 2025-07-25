@@ -18,7 +18,6 @@ resource "seqera_datasets" "my_datasets" {
   workspace_id = resource.seqera_workspace.my_workspace.id
 }
 
-# Pipeline Secrets
 resource "seqera_pipeline_secret" "my_pipelinesecret" {
   name         = "example_terraform_secret"
   value        = "SECRET_VALUE"
@@ -100,7 +99,6 @@ resource "seqera_workflows" "rnaseq_workflow" {
   depends_on          = [seqera_compute_env.azure_batch_compute_env]
 }
 
-# Resource Labels
 resource "seqera_labels" "my_labels" {
   is_default   = false
   name         = "terraform-example-label"
