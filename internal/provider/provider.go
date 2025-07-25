@@ -122,18 +122,13 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewActionDataSource,
-		NewActionsDataSource,
 		NewComputeEnvDataSource,
-		NewComputeEnvsDataSource,
 		NewCredentialDataSource,
-		NewCredentialsDataSource,
-		NewCurrentUserDataSource,
 		NewDataLinkDataSource,
 		NewDatasetDataSource,
 		NewLabelsDataSource,
 		NewOrganizationDataSource,
 		NewPipelineDataSource,
-		NewPipelinesDataSource,
 		NewPipelineSecretDataSource,
 		NewStudiosDataSource,
 		NewTeamsDataSource,

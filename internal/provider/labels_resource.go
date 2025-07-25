@@ -16,6 +16,7 @@ import (
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -95,8 +96,12 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"name": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
+				Validators: []validator.String{
+					custom_stringvalidators.LabelNameValidator(),
+				},
 			},
 			"resource": schema.BoolAttribute{
 				Computed: true,
@@ -111,8 +116,12 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Computed: true,
 			},
 			"value": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
+				Validators: []validator.String{
+					custom_stringvalidators.LabelValueValidator(),
+				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

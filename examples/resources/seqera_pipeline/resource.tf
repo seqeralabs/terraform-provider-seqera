@@ -41,6 +41,6 @@ resource "seqera_pipeline" "my_pipeline" {
       "..."
     ]
   }
-  name         = "...my_name..."
+  name         = "my-pipeline"
   workspace_id = 3
 }

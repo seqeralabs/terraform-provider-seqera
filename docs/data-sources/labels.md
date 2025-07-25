@@ -32,7 +32,7 @@ data "seqera_labels" "my_labels" {
 - `max` (Number) Pagination max results
 - `offset` (Number) Pagination offset
 - `search` (String) Filter search parameter
-- `type` (String) Label type
+- `type` (String) Label type. must be one of ["simple", "resource", "all"]
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only

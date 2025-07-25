@@ -3,6 +3,7 @@
 package shared
 
 type UpdatePipelineRequest struct {
+	// Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores
 	Name        *string                `json:"name,omitempty"`
 	Description *string                `json:"description,omitempty"`
 	Icon        *string                `json:"icon,omitempty"`
