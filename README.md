@@ -22,6 +22,7 @@ Seqera API: Seqera Platform services API
 * [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
   * [Installation](#installation)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
+  * [Examples](#examples)
   * [Testing the provider locally](#testing-the-provider-locally)
 * [Development](#development)
   * [Contributions](#contributions)
@@ -88,6 +89,20 @@ provider "seqera" {
 * [seqera_workspace](docs/data-sources/workspace.md)
 * [seqera_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
+
+<!-- Start Examples [examples] -->
+## Examples
+
+The `examples/terraform-examples/` directory contains comprehensive Terraform configurations demonstrating how to use the Seqera Platform provider across different cloud platforms. Each example includes a complete setup from organization creation to running nf-core/rnaseq workflows.
+
+### Cloud Platform Examples
+
+- **[AWS Example](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
+- **[Azure Example](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline  
+- **[GCP Example](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
+
+Each example includes detailed setup instructions, prerequisites, and customization options.
+<!-- End Examples [examples] -->
 
 <!-- Start Testing the provider locally [usage] -->
 ## Testing the provider locally
