@@ -7,7 +7,6 @@ import (
 )
 
 type AzureReposSecurityKeys struct {
-	Discriminator types.String `tfsdk:"discriminator"`
-	Password      types.String `tfsdk:"password"`
-	Username      types.String `tfsdk:"username"`
+	Password types.String `tfsdk:"password"`
+	Username types.String `tfsdk:"username"`
 }

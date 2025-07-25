@@ -9,7 +9,6 @@ import (
 type AWSCloudConfiguration struct {
 	AllowBuckets       []types.String      `tfsdk:"allow_buckets"`
 	Arm64Enabled       types.Bool          `tfsdk:"arm64_enabled"`
-	Discriminator      types.String        `tfsdk:"discriminator"`
 	EbsBootSize        types.Int32         `tfsdk:"ebs_boot_size"`
 	Ec2KeyPair         types.String        `tfsdk:"ec2_key_pair"`
 	Environment        []ConfigEnvVariable `tfsdk:"environment"`

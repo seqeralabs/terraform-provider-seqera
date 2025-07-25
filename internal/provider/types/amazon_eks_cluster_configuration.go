@@ -9,7 +9,6 @@ import (
 type AmazonEKSClusterConfiguration struct {
 	ClusterName           types.String        `tfsdk:"cluster_name"`
 	ComputeServiceAccount types.String        `tfsdk:"compute_service_account"`
-	Discriminator         types.String        `tfsdk:"discriminator"`
 	Environment           []ConfigEnvVariable `tfsdk:"environment"`
 	Fusion2Enabled        types.Bool          `tfsdk:"fusion2_enabled"`
 	HeadJobCpus           types.Int32         `tfsdk:"head_job_cpus"`

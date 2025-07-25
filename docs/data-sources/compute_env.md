@@ -88,7 +88,6 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--altair_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
@@ -123,7 +122,6 @@ Read-Only:
 - `cli_path` (String)
 - `compute_job_role` (String)
 - `compute_queue` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
@@ -203,7 +201,6 @@ Read-Only:
 
 - `allow_buckets` (List of String)
 - `arm64_enabled` (Boolean)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `ebs_boot_size` (Number)
 - `ec2_key_pair` (String)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
@@ -242,7 +239,6 @@ Read-Only:
 - `auto_pool_mode` (Boolean, Deprecated)
 - `delete_jobs_on_completion` (String)
 - `delete_pools_on_completion` (Boolean)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean)
@@ -287,7 +283,6 @@ Read-Only:
 
 - `cluster_name` (String) The AWS EKS cluster name
 - `compute_service_account` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
@@ -327,7 +322,6 @@ Read-Only:
 
 - `cluster_name` (String) The GKE cluster name
 - `compute_service_account` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
@@ -370,7 +364,6 @@ Read-Only:
 - `copy_image` (String)
 - `cpu_platform` (String)
 - `debug_mode` (Number)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
 - `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
@@ -415,7 +408,6 @@ Read-Only:
 - `boot_disk_size_gb` (Number)
 - `copy_image` (String)
 - `debug_mode` (Number)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences--environment))
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
@@ -453,7 +445,6 @@ Read-Only:
 Read-Only:
 
 - `compute_service_account` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform--environment))
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
@@ -489,7 +480,6 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
@@ -525,7 +515,6 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--moab_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
@@ -560,7 +549,6 @@ Read-Only:
 - `cli_path` (String)
 - `compute_job_role` (String)
 - `compute_queue` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
@@ -639,7 +627,6 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--slurm_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)
@@ -672,7 +659,6 @@ Read-Only:
 Read-Only:
 
 - `compute_queue` (String)
-- `discriminator` (String) Read-only property identifying the compute platform type
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--uge_platform--environment))
 - `head_job_options` (String)
 - `head_queue` (String)

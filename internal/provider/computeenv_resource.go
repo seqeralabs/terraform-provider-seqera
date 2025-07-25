@@ -103,15 +103,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -333,15 +324,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
-									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -941,15 +923,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"ebs_boot_size": schema.Int32Attribute{
 										Computed: true,
 										Optional: true,
@@ -1217,15 +1190,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -1486,15 +1450,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
-									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -1787,15 +1742,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
-									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2113,15 +2059,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -2432,15 +2369,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -2688,15 +2616,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
-									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2948,15 +2867,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -3188,15 +3098,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -3418,15 +3319,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
-									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -4016,15 +3908,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
-									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -4228,15 +4111,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
-									},
-									"discriminator": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
-										Description: `Read-only property identifying the compute platform type. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,

@@ -7,6 +7,5 @@ import (
 )
 
 type K8sSecurityKeys1 struct {
-	Certificate   types.String `tfsdk:"certificate"`
-	Discriminator types.String `tfsdk:"discriminator"`
+	Certificate types.String `tfsdk:"certificate"`
 }

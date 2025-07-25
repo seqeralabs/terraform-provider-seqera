@@ -10,7 +10,6 @@ type AzureBatchConfiguration struct {
 	AutoPoolMode            types.Bool          `tfsdk:"auto_pool_mode"`
 	DeleteJobsOnCompletion  types.String        `tfsdk:"delete_jobs_on_completion"`
 	DeletePoolsOnCompletion types.Bool          `tfsdk:"delete_pools_on_completion"`
-	Discriminator           types.String        `tfsdk:"discriminator"`
 	Environment             []ConfigEnvVariable `tfsdk:"environment"`
 	Forge                   AzBatchForgeConfig  `tfsdk:"forge"`
 	Fusion2Enabled          types.Bool          `tfsdk:"fusion2_enabled"`

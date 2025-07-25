@@ -7,8 +7,7 @@ import (
 )
 
 type GitLabSecurityKeys struct {
-	Discriminator types.String `tfsdk:"discriminator"`
-	Password      types.String `tfsdk:"password"`
-	Token         types.String `tfsdk:"token"`
-	Username      types.String `tfsdk:"username"`
+	Password types.String `tfsdk:"password"`
+	Token    types.String `tfsdk:"token"`
+	Username types.String `tfsdk:"username"`
 }

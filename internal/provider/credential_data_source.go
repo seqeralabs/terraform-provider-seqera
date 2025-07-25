@@ -93,18 +93,12 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 							"assume_role_arn": schema.StringAttribute{
 								Computed: true,
 							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 						},
 					},
 					"azure": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"batch_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"discriminator": schema.StringAttribute{
 								Computed: true,
 							},
 							"storage_name": schema.StringAttribute{
@@ -121,9 +115,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 							"client_id": schema.StringAttribute{
 								Computed: true,
 							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"storage_name": schema.StringAttribute{
 								Computed: true,
 							},
@@ -135,9 +126,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"azurerepos": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -146,9 +134,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"bitbucket": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -157,9 +142,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"codecommit": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -168,9 +150,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"container_reg": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"registry": schema.StringAttribute{
 								Computed: true,
 							},
@@ -182,9 +161,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"gitea": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -193,9 +169,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"github": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -204,9 +177,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"gitlab": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -214,19 +184,11 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 					"google": schema.SingleNestedAttribute{
 						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-						},
 					},
 					"k8s": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"certificate": schema.StringAttribute{
-								Computed: true,
-							},
-							"discriminator": schema.StringAttribute{
 								Computed: true,
 							},
 						},
@@ -240,26 +202,15 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 							"assume_role_arn": schema.StringAttribute{
 								Computed: true,
 							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
 						},
 					},
 					"ssh": schema.SingleNestedAttribute{
 						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-						},
 					},
 					"tw_agent": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"connection_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"discriminator": schema.StringAttribute{
 								Computed: true,
 							},
 							"shared": schema.BoolAttribute{

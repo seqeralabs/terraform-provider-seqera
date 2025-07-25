@@ -9,6 +9,5 @@ import (
 type SeqeraComputeSecurityKeys struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	AssumeRoleArn types.String `tfsdk:"assume_role_arn"`
-	Discriminator types.String `tfsdk:"discriminator"`
 	SecretKey     types.String `tfsdk:"secret_key"`
 }

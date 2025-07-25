@@ -5,7 +5,6 @@ resource "seqera_compute_env" "my_computeenv" {
         auto_pool_mode             = false
         delete_jobs_on_completion  = "on_success"
         delete_pools_on_completion = false
-        discriminator              = "...my_discriminator..."
         environment = [
           {
             compute = false

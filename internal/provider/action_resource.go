@@ -261,10 +261,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"compute_queue": schema.StringAttribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -355,10 +351,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"compute_queue": schema.StringAttribute{
 												Computed: true,
-											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
 											},
 											"dragen_instance_type": schema.StringAttribute{
 												Computed: true,
@@ -591,10 +583,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"arm64_enabled": schema.BoolAttribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"ebs_boot_size": schema.Int32Attribute{
 												Computed: true,
 											},
@@ -708,10 +696,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"delete_pools_on_completion": schema.BoolAttribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -815,10 +799,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"compute_service_account": schema.StringAttribute{
 												Computed: true,
-											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
 											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
@@ -935,10 +915,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"compute_service_account": schema.StringAttribute{
 												Computed: true,
-											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
 											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
@@ -1064,10 +1040,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"debug_mode": schema.Int32Attribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -1190,10 +1162,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"debug_mode": schema.Int32Attribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -1295,10 +1263,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Attributes: map[string]schema.Attribute{
 											"compute_service_account": schema.StringAttribute{
 												Computed: true,
-											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
 											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
@@ -1402,10 +1366,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"compute_queue": schema.StringAttribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -1500,10 +1460,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"compute_queue": schema.StringAttribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -1594,10 +1550,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"compute_queue": schema.StringAttribute{
 												Computed: true,
-											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
 											},
 											"dragen_instance_type": schema.StringAttribute{
 												Computed: true,
@@ -1826,10 +1778,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											"compute_queue": schema.StringAttribute{
 												Computed: true,
 											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -1914,10 +1862,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Attributes: map[string]schema.Attribute{
 											"compute_queue": schema.StringAttribute{
 												Computed: true,
-											},
-											"discriminator": schema.StringAttribute{
-												Computed:    true,
-												Description: `Read-only property identifying the compute platform type`,
 											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,

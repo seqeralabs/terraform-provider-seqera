@@ -71,7 +71,6 @@ Read-Only:
 
 - `access_key` (String)
 - `assume_role_arn` (String)
-- `discriminator` (String)
 
 
 <a id="nestedatt--keys--azure"></a>
@@ -80,7 +79,6 @@ Read-Only:
 Read-Only:
 
 - `batch_name` (String)
-- `discriminator` (String)
 - `storage_name` (String)
 
 
@@ -91,7 +89,6 @@ Read-Only:
 
 - `batch_name` (String)
 - `client_id` (String)
-- `discriminator` (String)
 - `storage_name` (String)
 - `tenant_id` (String)
 
@@ -101,7 +98,6 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
 - `username` (String)
 
 
@@ -110,7 +106,6 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
 - `username` (String)
 
 
@@ -119,7 +114,6 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
 - `username` (String)
 
 
@@ -128,7 +122,6 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
 - `registry` (String)
 - `user_name` (String)
 
@@ -138,7 +131,6 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
 - `username` (String)
 
 
@@ -147,7 +139,6 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
 - `username` (String)
 
 
@@ -156,16 +147,11 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
 - `username` (String)
 
 
 <a id="nestedatt--keys--google"></a>
 ### Nested Schema for `keys.google`
-
-Read-Only:
-
-- `discriminator` (String)
 
 
 <a id="nestedatt--keys--k8s"></a>
@@ -174,7 +160,6 @@ Read-Only:
 Read-Only:
 
 - `certificate` (String)
-- `discriminator` (String)
 
 
 <a id="nestedatt--keys--seqeracompute"></a>
@@ -184,15 +169,10 @@ Read-Only:
 
 - `access_key` (String)
 - `assume_role_arn` (String)
-- `discriminator` (String)
 
 
 <a id="nestedatt--keys--ssh"></a>
 ### Nested Schema for `keys.ssh`
-
-Read-Only:
-
-- `discriminator` (String)
 
 
 <a id="nestedatt--keys--tw_agent"></a>
@@ -201,6 +181,5 @@ Read-Only:
 Read-Only:
 
 - `connection_id` (String)
-- `discriminator` (String)
 - `shared` (Boolean)
 - `work_dir` (String)

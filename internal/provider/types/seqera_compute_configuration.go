@@ -10,7 +10,6 @@ type SeqeraComputeConfiguration struct {
 	CliPath             types.String        `tfsdk:"cli_path"`
 	ComputeJobRole      types.String        `tfsdk:"compute_job_role"`
 	ComputeQueue        types.String        `tfsdk:"compute_queue"`
-	Discriminator       types.String        `tfsdk:"discriminator"`
 	DragenInstanceType  types.String        `tfsdk:"dragen_instance_type"`
 	DragenQueue         types.String        `tfsdk:"dragen_queue"`
 	Environment         []ConfigEnvVariable `tfsdk:"environment"`

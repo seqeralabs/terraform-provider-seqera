@@ -9,5 +9,4 @@ import (
 type AwsSecurityKeys1 struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	AssumeRoleArn types.String `tfsdk:"assume_role_arn"`
-	Discriminator types.String `tfsdk:"discriminator"`
 }

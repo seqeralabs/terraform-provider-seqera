@@ -804,3 +804,59 @@ actions:
   - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
     update:
       description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
+  
+
+  # ComputeConfig discriminator and state change handling
+  - target: $.components.schemas.ComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+
+
+
+  # Ignore discriminator fields in all security key schemas to prevent state changes
+  - target: $.components.schemas.AgentSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AwsSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AzureReposSecurityKeys.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AzureSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.BitBucketSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.CodeCommitSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.ContainerRegistryKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GitHubSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GitLabSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GiteaSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.K8sSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SSHSecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SecurityKeys.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SeqeraComputeSecurityKeys.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
