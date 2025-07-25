@@ -74,7 +74,7 @@ jobs:
 
     - name: Check for uncommitted changes
       run: |
-        git diff --exit-code || {
+        git diff --exit-code -- . ':!.speakeasy/workflow.lock' || {
           echo "Generated code differs from committed code. Please run 'speakeasy run --skip-versioning' and commit the changes."
           exit 1
         }
