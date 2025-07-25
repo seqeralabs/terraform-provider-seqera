@@ -23,12 +23,22 @@ output "compute_env_id" {
   value       = seqera_compute_env.gcp_batch_compute_env.compute_env_id
 }
 
+output "pipeline_secret_id" {
+  description = "ID of the created pipeline secret"
+  value       = seqera_pipeline_secret.my_pipelinesecret.secret_id
+}
+
 output "pipeline_id" {
-  description = "ID of the created pipeline"
-  value       = seqera_pipeline.hello_world_minimal.pipeline_id
+  description = "ID of the created RNA-seq pipeline"
+  value       = seqera_pipeline.rnaseq_pipeline.pipeline_id
 }
 
 output "workflow_id" {
-  description = "ID of the launched workflow"
-  value       = seqera_workflows.my_workflows.workflow_id
+  description = "ID of the launched RNA-seq workflow"
+  value       = seqera_workflows.rnaseq_workflow.workflow_id
+}
+
+output "label_id" {
+  description = "ID of the created label"
+  value       = seqera_labels.my_labels.label_id
 }

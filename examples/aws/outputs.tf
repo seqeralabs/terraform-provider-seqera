@@ -48,13 +48,13 @@ output "action_id" {
 }
 
 output "pipeline_id" {
-  description = "ID of the created pipeline"
-  value       = seqera_pipeline.hello_world_minimal.pipeline_id
+  description = "ID of the created RNA-seq pipeline"
+  value       = seqera_pipeline.rnaseq_pipeline.pipeline_id
 }
 
 output "workflow_id" {
-  description = "ID of the launched workflow"
-  value       = seqera_workflows.my_workflows.workflow_id
+  description = "ID of the launched RNA-seq workflow"
+  value       = seqera_workflows.rnaseq_workflow.workflow_id
 }
 
 output "data_studio_id" {
