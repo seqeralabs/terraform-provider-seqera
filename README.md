@@ -93,15 +93,25 @@ provider "seqera" {
 <!-- Start Examples [examples] -->
 ## Examples
 
-The `examples/terraform-examples/` directory contains comprehensive Terraform configurations demonstrating how to use the Seqera Platform provider across different cloud platforms. Each example includes a complete setup from organization creation to running nf-core/rnaseq workflows.
+The `examples/terraform-examples` directory contains comprehensive Terraform configurations demonstrating how to use the Seqera Platform provider across different cloud platforms. Each example includes a complete setup from organization to running nf-core/rnaseq. 
 
 ### Cloud Platform Examples
 
-- **[AWS Example](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
-- **[Azure Example](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline  
-- **[GCP Example](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
+#### AWS Example (`examples/terraform-examples/aws/`)
+#### GCP Example (`examples/terraform-examples/gcp/`)
+#### Azure Example (`examples/terraform-examples/azure/`)
 
-Each example includes detailed setup instructions, prerequisites, and customization options.
+### Getting Started with Examples
+
+1. **Choose your cloud platform** from `examples/aws/`, `examples/azure/`, or `examples/gcp/`
+2. **Copy the example tfvars**: `cp terraform.tfvars.example terraform.tfvars`
+3. **Configure your credentials** and settings in `terraform.tfvars`
+4. **Amend any variable/resource names or values** ,ensure you update your organization name as that has to be unique.  
+4. **Initialize Terraform**: `terraform init`
+5. **Review the plan**: `terraform plan`
+6. **Apply when ready**: `terraform apply`
+
+Each example includes detailed variable descriptions and validation rules to help you configure the resources correctly for your environment.
 <!-- End Examples [examples] -->
 
 <!-- Start Testing the provider locally [usage] -->
