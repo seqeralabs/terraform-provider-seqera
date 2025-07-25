@@ -35,7 +35,6 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		if resp.Keys.AgentSecurityKeys != nil {
 			r.Keys.TwAgent = &tfTypes.AgentSecurityKeys{}
 			r.Keys.TwAgent.ConnectionID = types.StringPointerValue(resp.Keys.AgentSecurityKeys.ConnectionID)
-			r.Keys.TwAgent.Discriminator = types.StringPointerValue(resp.Keys.AgentSecurityKeys.Discriminator)
 			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.AgentSecurityKeys.Shared)
 			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.AgentSecurityKeys.WorkDir)
 		}
@@ -44,7 +43,6 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			awsPriorData := r.Keys.Aws
 			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AccessKey)
 			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
-			r.Keys.Aws.Discriminator = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.Discriminator)
 			r.Keys.Aws.SecretKey = awsPriorData.SecretKey
 		}
 		if resp.Keys.AzureEntraKeysOutput != nil {
@@ -54,7 +52,6 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.BatchName)
 			r.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.ClientID)
 			r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
-			r.Keys.AzureEntra.Discriminator = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.Discriminator)
 			r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
 			r.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.StorageName)
 			r.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.TenantID)
@@ -62,7 +59,6 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		if resp.Keys.AzureReposSecurityKeysOutput != nil {
 			r.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys{}
 			azurereposPriorData := r.Keys.Azurerepos
-			r.Keys.Azurerepos.Discriminator = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Discriminator)
 			r.Keys.Azurerepos.Password = azurereposPriorData.Password
 			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
 		}
@@ -71,28 +67,24 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			azurePriorData := r.Keys.Azure
 			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
 			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.BatchName)
-			r.Keys.Azure.Discriminator = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.Discriminator)
 			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
 			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.StorageName)
 		}
 		if resp.Keys.BitBucketSecurityKeysOutput != nil {
 			r.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys{}
 			bitbucketPriorData := r.Keys.Bitbucket
-			r.Keys.Bitbucket.Discriminator = types.StringPointerValue(resp.Keys.BitBucketSecurityKeysOutput.Discriminator)
 			r.Keys.Bitbucket.Password = bitbucketPriorData.Password
 			r.Keys.Bitbucket.Username = types.StringPointerValue(resp.Keys.BitBucketSecurityKeysOutput.Username)
 		}
 		if resp.Keys.CodeCommitSecurityKeysOutput != nil {
 			r.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys{}
 			codecommitPriorData := r.Keys.Codecommit
-			r.Keys.Codecommit.Discriminator = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Discriminator)
 			r.Keys.Codecommit.Password = codecommitPriorData.Password
 			r.Keys.Codecommit.Username = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Username)
 		}
 		if resp.Keys.ContainerRegistryKeysOutput != nil {
 			r.Keys.ContainerReg = &tfTypes.ContainerRegistryKeys{}
 			containerRegPriorData := r.Keys.ContainerReg
-			r.Keys.ContainerReg.Discriminator = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.Discriminator)
 			r.Keys.ContainerReg.Password = containerRegPriorData.Password
 			r.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.Registry)
 			r.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.UserName)
@@ -100,21 +92,18 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		if resp.Keys.GiteaSecurityKeysOutput != nil {
 			r.Keys.Gitea = &tfTypes.GiteaSecurityKeys{}
 			giteaPriorData := r.Keys.Gitea
-			r.Keys.Gitea.Discriminator = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Discriminator)
 			r.Keys.Gitea.Password = giteaPriorData.Password
 			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Username)
 		}
 		if resp.Keys.GitHubSecurityKeysOutput != nil {
 			r.Keys.Github = &tfTypes.GitHubSecurityKeys{}
 			githubPriorData := r.Keys.Github
-			r.Keys.Github.Discriminator = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Discriminator)
 			r.Keys.Github.Password = githubPriorData.Password
 			r.Keys.Github.Username = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Username)
 		}
 		if resp.Keys.GitLabSecurityKeysOutput != nil {
 			r.Keys.Gitlab = &tfTypes.GitLabSecurityKeys{}
 			gitlabPriorData := r.Keys.Gitlab
-			r.Keys.Gitlab.Discriminator = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Discriminator)
 			r.Keys.Gitlab.Password = gitlabPriorData.Password
 			r.Keys.Gitlab.Token = gitlabPriorData.Token
 			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
@@ -123,13 +112,11 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.Google = &tfTypes.GoogleSecurityKeys{}
 			googlePriorData := r.Keys.Google
 			r.Keys.Google.Data = googlePriorData.Data
-			r.Keys.Google.Discriminator = types.StringPointerValue(resp.Keys.GoogleSecurityKeysOutput.Discriminator)
 		}
 		if resp.Keys.K8sSecurityKeysOutput != nil {
 			r.Keys.K8s = &tfTypes.K8sSecurityKeys{}
 			k8sPriorData := r.Keys.K8s
 			r.Keys.K8s.Certificate = types.StringPointerValue(resp.Keys.K8sSecurityKeysOutput.Certificate)
-			r.Keys.K8s.Discriminator = types.StringPointerValue(resp.Keys.K8sSecurityKeysOutput.Discriminator)
 			r.Keys.K8s.PrivateKey = k8sPriorData.PrivateKey
 			r.Keys.K8s.Token = k8sPriorData.Token
 		}
@@ -138,13 +125,11 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			seqeracomputePriorData := r.Keys.Seqeracompute
 			r.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.AccessKey)
 			r.Keys.Seqeracompute.AssumeRoleArn = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.AssumeRoleArn)
-			r.Keys.Seqeracompute.Discriminator = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.Discriminator)
 			r.Keys.Seqeracompute.SecretKey = seqeracomputePriorData.SecretKey
 		}
 		if resp.Keys.SSHSecurityKeysOutput != nil {
 			r.Keys.SSH = &tfTypes.SSHSecurityKeys{}
 			sshPriorData := r.Keys.SSH
-			r.Keys.SSH.Discriminator = types.StringPointerValue(resp.Keys.SSHSecurityKeysOutput.Discriminator)
 			r.Keys.SSH.Passphrase = sshPriorData.Passphrase
 			r.Keys.SSH.PrivateKey = sshPriorData.PrivateKey
 		}
@@ -304,12 +289,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	var keys shared.SecurityKeys
 	var awsSecurityKeys *shared.AwsSecurityKeys
 	if r.Keys.Aws != nil {
-		discriminator := new(string)
-		if !r.Keys.Aws.Discriminator.IsUnknown() && !r.Keys.Aws.Discriminator.IsNull() {
-			*discriminator = r.Keys.Aws.Discriminator.ValueString()
-		} else {
-			discriminator = nil
-		}
 		accessKey := new(string)
 		if !r.Keys.Aws.AccessKey.IsUnknown() && !r.Keys.Aws.AccessKey.IsNull() {
 			*accessKey = r.Keys.Aws.AccessKey.ValueString()
@@ -329,7 +308,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			assumeRoleArn = nil
 		}
 		awsSecurityKeys = &shared.AwsSecurityKeys{
-			Discriminator: discriminator,
 			AccessKey:     accessKey,
 			SecretKey:     secretKey,
 			AssumeRoleArn: assumeRoleArn,
@@ -342,12 +320,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var googleSecurityKeys *shared.GoogleSecurityKeys
 	if r.Keys.Google != nil {
-		discriminator1 := new(string)
-		if !r.Keys.Google.Discriminator.IsUnknown() && !r.Keys.Google.Discriminator.IsNull() {
-			*discriminator1 = r.Keys.Google.Discriminator.ValueString()
-		} else {
-			discriminator1 = nil
-		}
 		data := new(string)
 		if !r.Keys.Google.Data.IsUnknown() && !r.Keys.Google.Data.IsNull() {
 			*data = r.Keys.Google.Data.ValueString()
@@ -355,8 +327,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			data = nil
 		}
 		googleSecurityKeys = &shared.GoogleSecurityKeys{
-			Discriminator: discriminator1,
-			Data:          data,
+			Data: data,
 		}
 	}
 	if googleSecurityKeys != nil {
@@ -366,12 +337,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var gitHubSecurityKeys *shared.GitHubSecurityKeys
 	if r.Keys.Github != nil {
-		discriminator2 := new(string)
-		if !r.Keys.Github.Discriminator.IsUnknown() && !r.Keys.Github.Discriminator.IsNull() {
-			*discriminator2 = r.Keys.Github.Discriminator.ValueString()
-		} else {
-			discriminator2 = nil
-		}
 		username := new(string)
 		if !r.Keys.Github.Username.IsUnknown() && !r.Keys.Github.Username.IsNull() {
 			*username = r.Keys.Github.Username.ValueString()
@@ -385,9 +350,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password = nil
 		}
 		gitHubSecurityKeys = &shared.GitHubSecurityKeys{
-			Discriminator: discriminator2,
-			Username:      username,
-			Password:      password,
+			Username: username,
+			Password: password,
 		}
 	}
 	if gitHubSecurityKeys != nil {
@@ -397,12 +361,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var gitLabSecurityKeys *shared.GitLabSecurityKeys
 	if r.Keys.Gitlab != nil {
-		discriminator3 := new(string)
-		if !r.Keys.Gitlab.Discriminator.IsUnknown() && !r.Keys.Gitlab.Discriminator.IsNull() {
-			*discriminator3 = r.Keys.Gitlab.Discriminator.ValueString()
-		} else {
-			discriminator3 = nil
-		}
 		username1 := new(string)
 		if !r.Keys.Gitlab.Username.IsUnknown() && !r.Keys.Gitlab.Username.IsNull() {
 			*username1 = r.Keys.Gitlab.Username.ValueString()
@@ -422,10 +380,9 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			token = nil
 		}
 		gitLabSecurityKeys = &shared.GitLabSecurityKeys{
-			Discriminator: discriminator3,
-			Username:      username1,
-			Password:      password1,
-			Token:         token,
+			Username: username1,
+			Password: password1,
+			Token:    token,
 		}
 	}
 	if gitLabSecurityKeys != nil {
@@ -435,12 +392,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var bitBucketSecurityKeys *shared.BitBucketSecurityKeys
 	if r.Keys.Bitbucket != nil {
-		discriminator4 := new(string)
-		if !r.Keys.Bitbucket.Discriminator.IsUnknown() && !r.Keys.Bitbucket.Discriminator.IsNull() {
-			*discriminator4 = r.Keys.Bitbucket.Discriminator.ValueString()
-		} else {
-			discriminator4 = nil
-		}
 		username2 := new(string)
 		if !r.Keys.Bitbucket.Username.IsUnknown() && !r.Keys.Bitbucket.Username.IsNull() {
 			*username2 = r.Keys.Bitbucket.Username.ValueString()
@@ -454,9 +405,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password2 = nil
 		}
 		bitBucketSecurityKeys = &shared.BitBucketSecurityKeys{
-			Discriminator: discriminator4,
-			Username:      username2,
-			Password:      password2,
+			Username: username2,
+			Password: password2,
 		}
 	}
 	if bitBucketSecurityKeys != nil {
@@ -466,12 +416,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var giteaSecurityKeys *shared.GiteaSecurityKeys
 	if r.Keys.Gitea != nil {
-		discriminator5 := new(string)
-		if !r.Keys.Gitea.Discriminator.IsUnknown() && !r.Keys.Gitea.Discriminator.IsNull() {
-			*discriminator5 = r.Keys.Gitea.Discriminator.ValueString()
-		} else {
-			discriminator5 = nil
-		}
 		username3 := new(string)
 		if !r.Keys.Gitea.Username.IsUnknown() && !r.Keys.Gitea.Username.IsNull() {
 			*username3 = r.Keys.Gitea.Username.ValueString()
@@ -485,9 +429,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password3 = nil
 		}
 		giteaSecurityKeys = &shared.GiteaSecurityKeys{
-			Discriminator: discriminator5,
-			Username:      username3,
-			Password:      password3,
+			Username: username3,
+			Password: password3,
 		}
 	}
 	if giteaSecurityKeys != nil {
@@ -497,12 +440,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var sshSecurityKeys *shared.SSHSecurityKeys
 	if r.Keys.SSH != nil {
-		discriminator6 := new(string)
-		if !r.Keys.SSH.Discriminator.IsUnknown() && !r.Keys.SSH.Discriminator.IsNull() {
-			*discriminator6 = r.Keys.SSH.Discriminator.ValueString()
-		} else {
-			discriminator6 = nil
-		}
 		privateKey := new(string)
 		if !r.Keys.SSH.PrivateKey.IsUnknown() && !r.Keys.SSH.PrivateKey.IsNull() {
 			*privateKey = r.Keys.SSH.PrivateKey.ValueString()
@@ -516,9 +453,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			passphrase = nil
 		}
 		sshSecurityKeys = &shared.SSHSecurityKeys{
-			Discriminator: discriminator6,
-			PrivateKey:    privateKey,
-			Passphrase:    passphrase,
+			PrivateKey: privateKey,
+			Passphrase: passphrase,
 		}
 	}
 	if sshSecurityKeys != nil {
@@ -528,12 +464,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var k8sSecurityKeys *shared.K8sSecurityKeys
 	if r.Keys.K8s != nil {
-		discriminator7 := new(string)
-		if !r.Keys.K8s.Discriminator.IsUnknown() && !r.Keys.K8s.Discriminator.IsNull() {
-			*discriminator7 = r.Keys.K8s.Discriminator.ValueString()
-		} else {
-			discriminator7 = nil
-		}
 		certificate := new(string)
 		if !r.Keys.K8s.Certificate.IsUnknown() && !r.Keys.K8s.Certificate.IsNull() {
 			*certificate = r.Keys.K8s.Certificate.ValueString()
@@ -553,10 +483,9 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			token1 = nil
 		}
 		k8sSecurityKeys = &shared.K8sSecurityKeys{
-			Discriminator: discriminator7,
-			Certificate:   certificate,
-			PrivateKey:    privateKey1,
-			Token:         token1,
+			Certificate: certificate,
+			PrivateKey:  privateKey1,
+			Token:       token1,
 		}
 	}
 	if k8sSecurityKeys != nil {
@@ -566,12 +495,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var azureSecurityKeys *shared.AzureSecurityKeys
 	if r.Keys.Azure != nil {
-		discriminator8 := new(string)
-		if !r.Keys.Azure.Discriminator.IsUnknown() && !r.Keys.Azure.Discriminator.IsNull() {
-			*discriminator8 = r.Keys.Azure.Discriminator.ValueString()
-		} else {
-			discriminator8 = nil
-		}
 		batchName := new(string)
 		if !r.Keys.Azure.BatchName.IsUnknown() && !r.Keys.Azure.BatchName.IsNull() {
 			*batchName = r.Keys.Azure.BatchName.ValueString()
@@ -597,11 +520,10 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			storageKey = nil
 		}
 		azureSecurityKeys = &shared.AzureSecurityKeys{
-			Discriminator: discriminator8,
-			BatchName:     batchName,
-			StorageName:   storageName,
-			BatchKey:      batchKey,
-			StorageKey:    storageKey,
+			BatchName:   batchName,
+			StorageName: storageName,
+			BatchKey:    batchKey,
+			StorageKey:  storageKey,
 		}
 	}
 	if azureSecurityKeys != nil {
@@ -611,12 +533,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var azureReposSecurityKeys *shared.AzureReposSecurityKeys
 	if r.Keys.Azurerepos != nil {
-		discriminator9 := new(string)
-		if !r.Keys.Azurerepos.Discriminator.IsUnknown() && !r.Keys.Azurerepos.Discriminator.IsNull() {
-			*discriminator9 = r.Keys.Azurerepos.Discriminator.ValueString()
-		} else {
-			discriminator9 = nil
-		}
 		username4 := new(string)
 		if !r.Keys.Azurerepos.Username.IsUnknown() && !r.Keys.Azurerepos.Username.IsNull() {
 			*username4 = r.Keys.Azurerepos.Username.ValueString()
@@ -630,9 +546,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password4 = nil
 		}
 		azureReposSecurityKeys = &shared.AzureReposSecurityKeys{
-			Discriminator: discriminator9,
-			Username:      username4,
-			Password:      password4,
+			Username: username4,
+			Password: password4,
 		}
 	}
 	if azureReposSecurityKeys != nil {
@@ -642,12 +557,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var containerRegistryKeys *shared.ContainerRegistryKeys
 	if r.Keys.ContainerReg != nil {
-		discriminator10 := new(string)
-		if !r.Keys.ContainerReg.Discriminator.IsUnknown() && !r.Keys.ContainerReg.Discriminator.IsNull() {
-			*discriminator10 = r.Keys.ContainerReg.Discriminator.ValueString()
-		} else {
-			discriminator10 = nil
-		}
 		userName := new(string)
 		if !r.Keys.ContainerReg.UserName.IsUnknown() && !r.Keys.ContainerReg.UserName.IsNull() {
 			*userName = r.Keys.ContainerReg.UserName.ValueString()
@@ -667,10 +576,9 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			registry = nil
 		}
 		containerRegistryKeys = &shared.ContainerRegistryKeys{
-			Discriminator: discriminator10,
-			UserName:      userName,
-			Password:      password5,
-			Registry:      registry,
+			UserName: userName,
+			Password: password5,
+			Registry: registry,
 		}
 	}
 	if containerRegistryKeys != nil {
@@ -680,12 +588,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var agentSecurityKeys *shared.AgentSecurityKeys
 	if r.Keys.TwAgent != nil {
-		discriminator11 := new(string)
-		if !r.Keys.TwAgent.Discriminator.IsUnknown() && !r.Keys.TwAgent.Discriminator.IsNull() {
-			*discriminator11 = r.Keys.TwAgent.Discriminator.ValueString()
-		} else {
-			discriminator11 = nil
-		}
 		connectionID := new(string)
 		if !r.Keys.TwAgent.ConnectionID.IsUnknown() && !r.Keys.TwAgent.ConnectionID.IsNull() {
 			*connectionID = r.Keys.TwAgent.ConnectionID.ValueString()
@@ -705,10 +607,9 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			sharedVar = nil
 		}
 		agentSecurityKeys = &shared.AgentSecurityKeys{
-			Discriminator: discriminator11,
-			ConnectionID:  connectionID,
-			WorkDir:       workDir,
-			Shared:        sharedVar,
+			ConnectionID: connectionID,
+			WorkDir:      workDir,
+			Shared:       sharedVar,
 		}
 	}
 	if agentSecurityKeys != nil {
@@ -718,12 +619,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var codeCommitSecurityKeys *shared.CodeCommitSecurityKeys
 	if r.Keys.Codecommit != nil {
-		discriminator12 := new(string)
-		if !r.Keys.Codecommit.Discriminator.IsUnknown() && !r.Keys.Codecommit.Discriminator.IsNull() {
-			*discriminator12 = r.Keys.Codecommit.Discriminator.ValueString()
-		} else {
-			discriminator12 = nil
-		}
 		username5 := new(string)
 		if !r.Keys.Codecommit.Username.IsUnknown() && !r.Keys.Codecommit.Username.IsNull() {
 			*username5 = r.Keys.Codecommit.Username.ValueString()
@@ -737,9 +632,8 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password6 = nil
 		}
 		codeCommitSecurityKeys = &shared.CodeCommitSecurityKeys{
-			Discriminator: discriminator12,
-			Username:      username5,
-			Password:      password6,
+			Username: username5,
+			Password: password6,
 		}
 	}
 	if codeCommitSecurityKeys != nil {
@@ -749,12 +643,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var azureEntraKeys *shared.AzureEntraKeys
 	if r.Keys.AzureEntra != nil {
-		discriminator13 := new(string)
-		if !r.Keys.AzureEntra.Discriminator.IsUnknown() && !r.Keys.AzureEntra.Discriminator.IsNull() {
-			*discriminator13 = r.Keys.AzureEntra.Discriminator.ValueString()
-		} else {
-			discriminator13 = nil
-		}
 		batchName1 := new(string)
 		if !r.Keys.AzureEntra.BatchName.IsUnknown() && !r.Keys.AzureEntra.BatchName.IsNull() {
 			*batchName1 = r.Keys.AzureEntra.BatchName.ValueString()
@@ -798,14 +686,13 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			clientSecret = nil
 		}
 		azureEntraKeys = &shared.AzureEntraKeys{
-			Discriminator: discriminator13,
-			BatchName:     batchName1,
-			StorageName:   storageName1,
-			BatchKey:      batchKey1,
-			StorageKey:    storageKey1,
-			TenantID:      tenantID,
-			ClientID:      clientID,
-			ClientSecret:  clientSecret,
+			BatchName:    batchName1,
+			StorageName:  storageName1,
+			BatchKey:     batchKey1,
+			StorageKey:   storageKey1,
+			TenantID:     tenantID,
+			ClientID:     clientID,
+			ClientSecret: clientSecret,
 		}
 	}
 	if azureEntraKeys != nil {
@@ -815,12 +702,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var seqeraComputeSecurityKeys *shared.SeqeraComputeSecurityKeys
 	if r.Keys.Seqeracompute != nil {
-		discriminator14 := new(string)
-		if !r.Keys.Seqeracompute.Discriminator.IsUnknown() && !r.Keys.Seqeracompute.Discriminator.IsNull() {
-			*discriminator14 = r.Keys.Seqeracompute.Discriminator.ValueString()
-		} else {
-			discriminator14 = nil
-		}
 		accessKey1 := new(string)
 		if !r.Keys.Seqeracompute.AccessKey.IsUnknown() && !r.Keys.Seqeracompute.AccessKey.IsNull() {
 			*accessKey1 = r.Keys.Seqeracompute.AccessKey.ValueString()
@@ -840,7 +721,6 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			assumeRoleArn1 = nil
 		}
 		seqeraComputeSecurityKeys = &shared.SeqeraComputeSecurityKeys{
-			Discriminator: discriminator14,
 			AccessKey:     accessKey1,
 			SecretKey:     secretKey1,
 			AssumeRoleArn: assumeRoleArn1,

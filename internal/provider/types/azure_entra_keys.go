@@ -7,12 +7,11 @@ import (
 )
 
 type AzureEntraKeys struct {
-	BatchKey      types.String `tfsdk:"batch_key"`
-	BatchName     types.String `tfsdk:"batch_name"`
-	ClientID      types.String `tfsdk:"client_id"`
-	ClientSecret  types.String `tfsdk:"client_secret"`
-	Discriminator types.String `tfsdk:"discriminator"`
-	StorageKey    types.String `tfsdk:"storage_key"`
-	StorageName   types.String `tfsdk:"storage_name"`
-	TenantID      types.String `tfsdk:"tenant_id"`
+	BatchKey     types.String `tfsdk:"batch_key"`
+	BatchName    types.String `tfsdk:"batch_name"`
+	ClientID     types.String `tfsdk:"client_id"`
+	ClientSecret types.String `tfsdk:"client_secret"`
+	StorageKey   types.String `tfsdk:"storage_key"`
+	StorageName  types.String `tfsdk:"storage_name"`
+	TenantID     types.String `tfsdk:"tenant_id"`
 }

@@ -7,6 +7,5 @@ import (
 )
 
 type GoogleSecurityKeys struct {
-	Data          types.String `tfsdk:"data"`
-	Discriminator types.String `tfsdk:"discriminator"`
+	Data types.String `tfsdk:"data"`
 }

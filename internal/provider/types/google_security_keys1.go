@@ -2,10 +2,5 @@
 
 package types
 
-import (
-	"github.com/hashicorp/terraform-plugin-framework/types"
-)
-
 type GoogleSecurityKeys1 struct {
-	Discriminator types.String `tfsdk:"discriminator"`
 }

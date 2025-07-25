@@ -7,7 +7,6 @@ import (
 )
 
 type AzureSecurityKeys1 struct {
-	BatchName     types.String `tfsdk:"batch_name"`
-	Discriminator types.String `tfsdk:"discriminator"`
-	StorageName   types.String `tfsdk:"storage_name"`
+	BatchName   types.String `tfsdk:"batch_name"`
+	StorageName types.String `tfsdk:"storage_name"`
 }

@@ -7,6 +7,5 @@ import (
 )
 
 type CodeCommitSecurityKeys1 struct {
-	Discriminator types.String `tfsdk:"discriminator"`
-	Username      types.String `tfsdk:"username"`
+	Username types.String `tfsdk:"username"`
 }

@@ -21,8 +21,7 @@ resource "seqera_credential" "my_credential" {
   description    = "Google Cloud credentials for production workloads"
   keys = {
     google = {
-      data          = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
-      discriminator = "...my_discriminator..."
+      data = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
     }
   }
   name          = "my-gcp-credentials"
@@ -84,7 +83,6 @@ Optional:
 
 - `access_key` (String)
 - `assume_role_arn` (String)
-- `discriminator` (String)
 - `secret_key` (String)
 
 
@@ -95,7 +93,6 @@ Optional:
 
 - `batch_key` (String)
 - `batch_name` (String)
-- `discriminator` (String)
 - `storage_key` (String)
 - `storage_name` (String)
 
@@ -109,7 +106,6 @@ Optional:
 - `batch_name` (String)
 - `client_id` (String)
 - `client_secret` (String)
-- `discriminator` (String)
 - `storage_key` (String)
 - `storage_name` (String)
 - `tenant_id` (String)
@@ -120,7 +116,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `password` (String)
 - `username` (String)
 
@@ -130,7 +125,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `password` (String)
 - `username` (String)
 
@@ -140,7 +134,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `password` (String)
 - `username` (String)
 
@@ -150,7 +143,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `password` (String)
 - `registry` (String)
 - `user_name` (String)
@@ -161,7 +153,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `password` (String)
 - `username` (String)
 
@@ -171,7 +162,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `password` (String, Sensitive)
 - `username` (String)
 
@@ -181,7 +171,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `password` (String)
 - `token` (String)
 - `username` (String)
@@ -193,7 +182,6 @@ Optional:
 Optional:
 
 - `data` (String)
-- `discriminator` (String)
 
 
 <a id="nestedatt--keys--k8s"></a>
@@ -202,7 +190,6 @@ Optional:
 Optional:
 
 - `certificate` (String)
-- `discriminator` (String)
 - `private_key` (String)
 - `token` (String)
 
@@ -214,7 +201,6 @@ Optional:
 
 - `access_key` (String)
 - `assume_role_arn` (String)
-- `discriminator` (String)
 - `secret_key` (String)
 
 
@@ -223,7 +209,6 @@ Optional:
 
 Optional:
 
-- `discriminator` (String)
 - `passphrase` (String)
 - `private_key` (String)
 
@@ -234,7 +219,6 @@ Optional:
 Optional:
 
 - `connection_id` (String)
-- `discriminator` (String)
 - `shared` (Boolean)
 - `work_dir` (String)
 

@@ -7937,6 +7937,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         connectionId:
           type: string
         workDir:
@@ -8248,6 +8249,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         accessKey:
           type: string
           example: "AKIAIOSFODNN7EXAMPLE"
@@ -8376,6 +8378,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         batchName:
           type: string
           example: "myazurebatch"
@@ -8395,6 +8398,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         username:
           type: string
         password:
@@ -8415,6 +8419,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         username:
           type: string
         password:
@@ -8719,6 +8724,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         userName:
           type: string
         password:
@@ -10073,6 +10079,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         username:
           type: string
         password:
@@ -10085,6 +10092,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         username:
           type: string
         password:
@@ -10098,6 +10106,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         username:
           type: string
         password:
@@ -10355,6 +10364,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         data:
           type: string
           writeOnly: true
@@ -10496,6 +10506,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         certificate:
           type: string
         privateKey:
@@ -11658,6 +11669,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
         privateKey:
           type: string
           writeOnly: true
@@ -11678,6 +11690,7 @@ components:
       properties:
         discriminator:
           type: string
+          x-speakeasy-terraform-ignore: true
       discriminator:
         propertyName: discriminator
         mapping:
@@ -11732,6 +11745,7 @@ components:
         - properties:
             discriminator:
               type: string
+              x-speakeasy-terraform-ignore: true
     ServiceInfo:
       type: object
       properties:

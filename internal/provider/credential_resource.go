@@ -124,10 +124,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								Optional: true,
 							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"secret_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -158,10 +154,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"batch_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"discriminator": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
 							},
@@ -209,10 +201,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"client_secret": schema.StringAttribute{
 								Optional: true,
 							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"storage_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -247,10 +235,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"azurerepos": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -281,10 +265,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"bitbucket": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -315,10 +295,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"codecommit": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -349,10 +325,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"container_reg": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -387,10 +359,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"gitea": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -421,10 +389,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"github": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"password": schema.StringAttribute{
 								Optional:  true,
 								Sensitive: true,
@@ -456,10 +420,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"gitlab": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -496,10 +456,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"data": schema.StringAttribute{
 								Optional: true,
 							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 						},
 						Validators: []validator.Object{
 							objectvalidator.ConflictsWith(path.Expressions{
@@ -525,10 +481,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"certificate": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"discriminator": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
 							},
@@ -569,10 +521,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								Optional: true,
 							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"secret_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -599,10 +547,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"ssh": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
 							"passphrase": schema.StringAttribute{
 								Optional: true,
 							},
@@ -633,10 +577,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"connection_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"discriminator": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
 							},
