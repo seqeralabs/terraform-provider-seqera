@@ -3,7 +3,7 @@ speakeasyVersion: latest
 sources:
     Seqera API:
         inputs:
-            - location: specs/seqera-api-1.45.0.yaml
+            - location: specs/seqera-api-cloud.yaml
         overlays:
             - location: overlays/speakeasy.yaml
             - location: overlays/required.yaml
