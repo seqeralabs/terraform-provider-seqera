@@ -8,16 +8,18 @@ import (
 )
 
 type ProcessLoad struct {
-	Pending          int64    `json:"pending"`
-	Submitted        int64    `json:"submitted"`
-	Running          int64    `json:"running"`
-	Succeeded        int64    `json:"succeeded"`
-	Failed           int64    `json:"failed"`
-	Cached           int64    `json:"cached"`
-	Aborted          int64    `json:"aborted"`
-	MemoryEfficiency *float32 `json:"memoryEfficiency,omitempty"`
-	CPUEfficiency    *float32 `json:"cpuEfficiency,omitempty"`
-	Process          string   `json:"process"`
+	Pending          int64      `json:"pending"`
+	Submitted        int64      `json:"submitted"`
+	Running          int64      `json:"running"`
+	Succeeded        int64      `json:"succeeded"`
+	Failed           int64      `json:"failed"`
+	Cached           int64      `json:"cached"`
+	Aborted          int64      `json:"aborted"`
+	MemoryEfficiency *float32   `json:"memoryEfficiency,omitempty"`
+	CPUEfficiency    *float32   `json:"cpuEfficiency,omitempty"`
+	DateCreated      *time.Time `json:"dateCreated,omitempty"`
+	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
+	Process          string     `json:"process"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	Cpus int64 `json:"cpus"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
@@ -37,14 +39,12 @@ type ProcessLoad struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	InvCtxSwitch int64 `json:"invCtxSwitch"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LoadTasks   int64      `json:"loadTasks"`
-	LoadCpus    int64      `json:"loadCpus"`
-	LoadMemory  int64      `json:"loadMemory"`
-	PeakCpus    int64      `json:"peakCpus"`
-	PeakTasks   int64      `json:"peakTasks"`
-	PeakMemory  int64      `json:"peakMemory"`
-	DateCreated *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	LoadTasks  int64 `json:"loadTasks"`
+	LoadCpus   int64 `json:"loadCpus"`
+	LoadMemory int64 `json:"loadMemory"`
+	PeakCpus   int64 `json:"peakCpus"`
+	PeakTasks  int64 `json:"peakTasks"`
+	PeakMemory int64 `json:"peakMemory"`
 }
 
 func (p ProcessLoad) MarshalJSON() ([]byte, error) {
@@ -119,6 +119,20 @@ func (o *ProcessLoad) GetCPUEfficiency() *float32 {
 		return nil
 	}
 	return o.CPUEfficiency
+}
+
+func (o *ProcessLoad) GetDateCreated() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.DateCreated
+}
+
+func (o *ProcessLoad) GetLastUpdated() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.LastUpdated
 }
 
 func (o *ProcessLoad) GetProcess() string {
@@ -231,18 +245,4 @@ func (o *ProcessLoad) GetPeakMemory() int64 {
 		return 0
 	}
 	return o.PeakMemory
-}
-
-func (o *ProcessLoad) GetDateCreated() *time.Time {
-	if o == nil {
-		return nil
-	}
-	return o.DateCreated
-}
-
-func (o *ProcessLoad) GetLastUpdated() *time.Time {
-	if o == nil {
-		return nil
-	}
-	return o.LastUpdated
 }

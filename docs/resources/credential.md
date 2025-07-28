@@ -37,7 +37,7 @@ resource "seqera_credential" "my_credential" {
 
 - `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `name` (String) Display name for the credential (max 100 characters)
-- `provider_type` (String) Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
+- `provider_type` (String) Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "azure_entra", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional

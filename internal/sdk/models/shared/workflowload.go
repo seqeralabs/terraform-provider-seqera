@@ -17,6 +17,9 @@ type WorkflowLoad struct {
 	Aborted          int64      `json:"aborted"`
 	MemoryEfficiency *float32   `json:"memoryEfficiency,omitempty"`
 	CPUEfficiency    *float32   `json:"cpuEfficiency,omitempty"`
+	DateCreated      *time.Time `json:"dateCreated,omitempty"`
+	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
+	Executors        []string   `json:"executors,omitempty"`
 	Cpus             int64      `json:"cpus"`
 	CPUTime          int64      `json:"cpuTime"`
 	CPULoad          int64      `json:"cpuLoad"`
@@ -26,16 +29,13 @@ type WorkflowLoad struct {
 	WriteBytes       int64      `json:"writeBytes"`
 	VolCtxSwitch     int64      `json:"volCtxSwitch"`
 	InvCtxSwitch     int64      `json:"invCtxSwitch"`
-	Cost             *float64   `json:"cost,omitempty"`
 	LoadTasks        int64      `json:"loadTasks"`
 	LoadCpus         int64      `json:"loadCpus"`
 	LoadMemory       int64      `json:"loadMemory"`
 	PeakCpus         int64      `json:"peakCpus"`
 	PeakTasks        int64      `json:"peakTasks"`
 	PeakMemory       int64      `json:"peakMemory"`
-	Executors        []string   `json:"executors,omitempty"`
-	DateCreated      *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
+	Cost             *float64   `json:"cost,omitempty"`
 }
 
 func (w WorkflowLoad) MarshalJSON() ([]byte, error) {
@@ -112,6 +112,27 @@ func (o *WorkflowLoad) GetCPUEfficiency() *float32 {
 	return o.CPUEfficiency
 }
 
+func (o *WorkflowLoad) GetDateCreated() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.DateCreated
+}
+
+func (o *WorkflowLoad) GetLastUpdated() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.LastUpdated
+}
+
+func (o *WorkflowLoad) GetExecutors() []string {
+	if o == nil {
+		return nil
+	}
+	return o.Executors
+}
+
 func (o *WorkflowLoad) GetCpus() int64 {
 	if o == nil {
 		return 0
@@ -175,13 +196,6 @@ func (o *WorkflowLoad) GetInvCtxSwitch() int64 {
 	return o.InvCtxSwitch
 }
 
-func (o *WorkflowLoad) GetCost() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.Cost
-}
-
 func (o *WorkflowLoad) GetLoadTasks() int64 {
 	if o == nil {
 		return 0
@@ -224,23 +238,9 @@ func (o *WorkflowLoad) GetPeakMemory() int64 {
 	return o.PeakMemory
 }
 
-func (o *WorkflowLoad) GetExecutors() []string {
+func (o *WorkflowLoad) GetCost() *float64 {
 	if o == nil {
 		return nil
 	}
-	return o.Executors
-}
-
-func (o *WorkflowLoad) GetDateCreated() *time.Time {
-	if o == nil {
-		return nil
-	}
-	return o.DateCreated
-}
-
-func (o *WorkflowLoad) GetLastUpdated() *time.Time {
-	if o == nil {
-		return nil
-	}
-	return o.LastUpdated
+	return o.Cost
 }
