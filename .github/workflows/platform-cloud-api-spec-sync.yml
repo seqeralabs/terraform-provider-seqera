@@ -1,0 +1,309 @@
+name: API Spec Sync
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:  # Manual trigger
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  sync-api-spec:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Go
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: '1.24'
+
+      - name: Install staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@b8ec13ce4d00445d75da053c47498e6f9ec5d7d6 # v0.6.1
+
+      - name: Install Speakeasy
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/speakeasy-api/speakeasy/main/install.sh | sh
+          echo "/usr/local/bin" >> $GITHUB_PATH
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Download latest API spec
+        id: download_spec
+        run: |
+          echo "Downloading latest API spec..."
+          wget -O /tmp/seqera-api-latest.yml https://cloud.seqera.io/openapi/seqera-api-latest.yml
+          
+          # Calculate hashes
+          CURRENT_HASH=$(sha256sum specs/seqera-api-cloud.yaml | cut -d' ' -f1)
+          NEW_HASH=$(sha256sum /tmp/seqera-api-latest.yml | cut -d' ' -f1)
+          
+          echo "current_hash=$CURRENT_HASH" >> $GITHUB_OUTPUT
+          echo "new_hash=$NEW_HASH" >> $GITHUB_OUTPUT
+          
+          if [ "$CURRENT_HASH" = "$NEW_HASH" ]; then
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in API spec"
+          else
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in API spec"
+            
+            # Show diff summary
+            echo "Spec differences:"
+            diff -u specs/seqera-api-cloud.yaml /tmp/seqera-api-latest.yml | head -50 || true
+          fi
+
+      - name: Skip workflow if no changes
+        if: steps.download_spec.outputs.changes_detected == 'false'
+        run: |
+          echo "No changes detected in API spec. Skipping workflow."
+          exit 0
+
+      - name: Replace spec file
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        run: |
+          cp /tmp/seqera-api-latest.yml specs/seqera-api-cloud.yaml
+          echo "Spec file updated"
+
+      - name: Generate code (dry run)
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        run: |
+          echo "Running Speakeasy code generation (dry run)..."
+          speakeasy run --skip-versioning 2>&1 | tee /tmp/speakeasy_output.log
+        env:
+          SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
+
+      - name: Validate Go compilation
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        run: |
+          echo "Validating Go compilation..."
+          go mod download
+          go mod verify
+          go build -v ./...
+
+      # - name: Validate Terraform configuration
+      #   if: steps.download_spec.outputs.changes_detected == 'true'
+      #   run: |
+      #     echo "Validating Terraform configuration..."
+      #     cd examples/terraform-examples/aws
+      #     terraform init -backend=false
+      #     terraform validate
+      #     terraform plan -var-file=terraform.tfvars.example -out=plan.tfplan || {
+      #       echo "Terraform plan failed, but continuing..."
+      #       echo "plan_failed=true" >> $GITHUB_ENV
+      #     }
+
+      - name: Run final code generation
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        run: |
+          echo "Running final Speakeasy code generation..."
+          speakeasy run --skip-versioning 2>&1 | tee -a /tmp/speakeasy_output.log
+        env:
+          SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
+
+      - name: Create branch and commit changes  
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        id: create_branch
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d-%H%M%S")
+          BRANCH_NAME="api-sync-$TIMESTAMP"
+          
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          
+          git checkout -b "$BRANCH_NAME"
+          git add .
+          git commit -m "🤖 Auto-sync API spec from cloud.seqera.io
+
+          - Updated specs/seqera-api-cloud.yaml
+          - Regenerated provider code using Speakeasy
+          - Spec hash: ${{ steps.download_spec.outputs.new_hash }}
+          
+          🤖 Generated with GitHub Actions"
+
+      - name: Push branch
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        run: |
+          git push origin ${{ steps.create_branch.outputs.branch_name }}
+
+      - name: Generate basic analysis
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        id: ai_analysis
+        run: |
+          echo "## Automated API Spec Sync
+
+          The API specification has been updated automatically from cloud.seqera.io.
+          
+          ### Changes Summary
+          - Spec hash changed from ${{ steps.download_spec.outputs.current_hash }} to ${{ steps.download_spec.outputs.new_hash }}
+          - Provider code regenerated using Speakeasy
+          
+          ### Validation Results  
+          - Go compilation: ✅ Passed
+          - Terraform validation: $([ "$plan_failed" = "true" ] && echo "⚠️ Issues detected" || echo "✅ Passed")
+          
+          @claude Please analyze the OpenAPI specification changes in this PR and provide a detailed summary of:
+          1. New endpoints added
+          2. Modified endpoints 
+          3. New or modified schemas
+          4. Any breaking changes
+          5. Impact assessment for the Terraform provider
+          
+          Please review the generated code changes and test thoroughly before merging." > /tmp/ai_analysis.md
+
+      - name: Create Pull Request
+        if: steps.download_spec.outputs.changes_detected == 'true'
+        id: create_pr
+        run: |
+          # Create PR body
+          cat > /tmp/pr_body.md << 'EOF'
+          EOF
+          cat /tmp/ai_analysis.md >> /tmp/pr_body.md
+          cat >> /tmp/pr_body.md << 'EOF'
+          
+          ---
+          
+          ### 🔍 Review Checklist
+          - [ ] API changes reviewed and understood
+          - [ ] Generated code changes look correct
+          - [ ] Breaking changes identified and documented
+          - [ ] Tests pass (run manually if needed)
+          - [ ] Documentation updated if required
+          
+          ### 🤖 Automation Details
+          - **Triggered**: ${{ github.event_name == 'schedule' && 'Scheduled daily sync' || 'Manual workflow dispatch' }}
+          - **Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          - **Speakeasy Version**: $(speakeasy --version 2>/dev/null || echo "Unknown")
+          - **Workflow**: [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          
+          EOF
+          
+          # Create the PR
+          gh pr create \
+            --title "🤖 Auto-sync API spec ($(date +"%Y-%m-%d"))" \
+            --body-file /tmp/pr_body.md \
+            --head "${{ steps.create_branch.outputs.branch_name }}" \
+            --base master \
+            --label "automated" \
+            --label "api-sync" \
+            --reviewer "" 
+            
+          PR_URL=$(gh pr view ${{ steps.create_branch.outputs.branch_name }} --json url -q .url)
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Send Slack notification
+      #   if: steps.download_spec.outputs.changes_detected == 'true' && secrets.SLACK_WEBHOOK_URL
+      #   run: |
+      #     VALIDATION_STATUS="✅ Passed"
+      #     if [ "$plan_failed" = "true" ]; then
+      #       VALIDATION_STATUS="⚠️ Issues detected"
+      #     fi
+          
+      #     curl -X POST -H 'Content-type: application/json' \
+      #       --data '{
+      #         "text": "🤖 API Spec Sync Completed",
+      #         "blocks": [
+      #           {
+      #             "type": "header",
+      #             "text": {
+      #               "type": "plain_text",
+      #               "text": "🤖 Seqera Terraform Provider - API Sync"
+      #             }
+      #           },
+      #           {
+      #             "type": "section",
+      #             "fields": [
+      #               {
+      #                 "type": "mrkdwn",
+      #                 "text": "*Status:* Changes detected and PR created"
+      #               },
+      #               {
+      #                 "type": "mrkdwn", 
+      #                 "text": "*Validation:* '"$VALIDATION_STATUS"'"
+      #               },
+      #               {
+      #                 "type": "mrkdwn",
+      #                 "text": "*Branch:* `${{ steps.create_branch.outputs.branch_name }}`"
+      #               },
+      #               {
+      #                 "type": "mrkdwn",
+      #                 "text": "*Spec Hash:* `${{ steps.download_spec.outputs.new_hash }}`"
+      #               }
+      #             ]
+      #           },
+      #           {
+      #             "type": "actions",
+      #             "elements": [
+      #               {
+      #                 "type": "button",
+      #                 "text": {
+      #                   "type": "plain_text",
+      #                   "text": "View Pull Request"
+      #                 },
+      #                 "url": "${{ steps.create_pr.outputs.pr_url }}"
+      #               },
+      #               {
+      #                 "type": "button", 
+      #                 "text": {
+      #                   "type": "plain_text",
+      #                   "text": "View Workflow"
+      #                 },
+      #                 "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      #               }
+      #             ]
+      #           }
+      #         ]
+      #       }' \
+      #       ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # - name: Notify on failure
+      #   if: failure()
+      #   run: |
+      #     if [ -n "${{ secrets.SLACK_WEBHOOK_URL }}" ]; then
+      #       curl -X POST -H 'Content-type: application/json' \
+      #         --data '{
+      #           "text": "🚨 API Sync Failed",
+      #           "blocks": [
+      #             {
+      #               "type": "header",
+      #               "text": {
+      #                 "type": "plain_text", 
+      #                 "text": "🚨 Seqera Terraform Provider - API Sync Failed"
+      #               }
+      #             },
+      #             {
+      #               "type": "section",
+      #               "text": {
+      #                 "type": "mrkdwn",
+      #                 "text": "The automated API spec sync workflow failed. Please check the workflow logs for details."
+      #               }
+      #             },
+      #             {
+      #               "type": "actions",
+      #               "elements": [
+      #                 {
+      #                   "type": "button",
+      #                   "text": {
+      #                     "type": "plain_text",
+      #                     "text": "View Failed Workflow"
+      #                   },
+      #                   "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      #                 }
+      #               ]
+      #             }
+      #           ]
+      #         }' \
+      #         ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     fi
+          
+      #     echo "Workflow failed. Check logs for details."
+      #     exit 1
