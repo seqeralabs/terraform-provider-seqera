@@ -52,6 +52,19 @@ func (r *OrgsResourceModel) ToOperationsDeleteOrganizationRequest(ctx context.Co
 	return &out, diags
 }
 
+func (r *OrgsResourceModel) ToOperationsDescribeOrganizationRequest(ctx context.Context) (*operations.DescribeOrganizationRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var orgID int64
+	orgID = r.OrgID.ValueInt64()
+
+	out := operations.DescribeOrganizationRequest{
+		OrgID: orgID,
+	}
+
+	return &out, diags
+}
+
 func (r *OrgsResourceModel) ToOperationsUpdateOrganizationRequest(ctx context.Context) (*operations.UpdateOrganizationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

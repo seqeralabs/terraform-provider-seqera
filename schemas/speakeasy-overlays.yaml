@@ -53,7 +53,7 @@ actions:
       # x-speakeasy-match: orgId
   - target: $["paths"]["/orgs/{orgId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Organization#read
+      x-speakeasy-entity-operation: Orgs#read
   - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
@@ -468,9 +468,6 @@ actions:
       x-speakeasy-param-optional: false
 
       ## Compute Config Schemas
-  - target: $["components"]["schemas"]["ListCredentialsResponse"]
-    update:
-      x-speakeasy-entity: Credentials
       ## Security Keys Schemas
   # - target: $["components"]["schemas"]["ListWorkspacesAndOrgResponse"]
   #   update:
@@ -804,7 +801,7 @@ actions:
   - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
     update:
       description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
-  
+
 
   # ComputeConfig discriminator and state change handling
   - target: $.components.schemas.ComputeConfig.properties.discriminator
