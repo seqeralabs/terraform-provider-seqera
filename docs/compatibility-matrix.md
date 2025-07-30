@@ -13,12 +13,6 @@ This document shows the compatibility between Seqera platform versions, Seqera p
 
 ## Support Information
 
-- **Terraform Provider v1.0+**: Supports all listed platform versions through their respective API specifications
-- **API Specifications**: Each platform version uses its own OpenAPI specification file located in the `specs/` directory
-- **Backward Compatibility**: The Terraform provider is designed to work with multiple API versions simultaneously through specification-driven generation
-
-## Configuration Notes
-
 When using the Terraform provider:
 
 1. Ensure your Seqera platform version matches one of the supported configurations above
