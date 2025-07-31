@@ -4,11 +4,11 @@ This document shows the compatibility between Seqera platform versions, Seqera p
 
 ## Version Compatibility
 
-| Platform Type | Platform Version | API Version | Terraform Provider Version | Notes |
-|---------------|------------------|-------------|----------------------------|-------|
-| **Seqera Platform** | Latest | 1.56.0 | 0.25.0  | Current cloud deployment and Latest enterprise release |
-| **Seqera Platform** | v23.4 | 1.56.0 | 0.23.0 | Enterprise release |
-| **Seqera Platform** | v24.2 | 1.45.0 | 0.24.0  | Enterprise release |
+| Platform Type | Platform Version | API Version | Terraform Provider Version |
+|---------------|------------------|-------------|----------------------------|
+| **Seqera Platform** | Latest | 1.56.0 | 0.25.0  | 
+| **Seqera Platform** | v23.4 | 1.56.0 | 0.23.0 | 
+| **Seqera Platform** | v24.2 | 1.45.0 | 0.24.0  | 
 
 ## Additional Information
 
