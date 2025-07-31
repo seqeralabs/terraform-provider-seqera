@@ -26,184 +26,106 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.ComputeEnv != nil {
+		if resp.ComputeEnv == nil {
+			r.ComputeEnv = nil
+		} else {
+			r.ComputeEnv = &tfTypes.ComputeEnvResponseDto{}
 			r.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.ComputeEnv.ComputeEnvID)
+			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
+			r.ComputeEnv.Description = types.StringPointerValue(resp.ComputeEnv.Description)
+			if resp.ComputeEnv.Platform != nil {
+				r.ComputeEnv.Platform = types.StringValue(string(*resp.ComputeEnv.Platform))
+			} else {
+				r.ComputeEnv.Platform = types.StringNull()
+			}
 			if resp.ComputeEnv.Config != nil {
-				r.ComputeEnv.Config = tfTypes.ComputeConfig{}
-				if resp.ComputeEnv.Config.AltairPBSConfiguration != nil {
-					r.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
-					r.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AltairPlatform.Environment) > len(resp.ComputeEnv.Config.AltairPBSConfiguration.Environment) {
-						r.ComputeEnv.Config.AltairPlatform.Environment = r.ComputeEnv.Config.AltairPlatform.Environment[:len(resp.ComputeEnv.Config.AltairPBSConfiguration.Environment)]
-					}
-					for environmentCount, environmentItem := range resp.ComputeEnv.Config.AltairPBSConfiguration.Environment {
-						var environment tfTypes.ConfigEnvVariable
-						environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-						environment.Head = types.BoolPointerValue(environmentItem.Head)
-						environment.Name = types.StringPointerValue(environmentItem.Name)
-						environment.Value = types.StringPointerValue(environmentItem.Value)
-						if environmentCount+1 > len(r.ComputeEnv.Config.AltairPlatform.Environment) {
-							r.ComputeEnv.Config.AltairPlatform.Environment = append(r.ComputeEnv.Config.AltairPlatform.Environment, environment)
-						} else {
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Compute = environment.Compute
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Head = environment.Head
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Name = environment.Name
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Value = environment.Value
-						}
-					}
-					r.ComputeEnv.Config.AltairPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadJobOptions)
-					r.ComputeEnv.Config.AltairPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadQueue)
-					r.ComputeEnv.Config.AltairPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HostName)
-					r.ComputeEnv.Config.AltairPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.LaunchDir)
-					r.ComputeEnv.Config.AltairPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.MaxQueueSize))
-					r.ComputeEnv.Config.AltairPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.AltairPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.Port))
-					r.ComputeEnv.Config.AltairPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PostRunScript)
-					r.ComputeEnv.Config.AltairPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PreRunScript)
-					r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PropagateHeadJobOptions)
-					r.ComputeEnv.Config.AltairPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.UserName)
-					r.ComputeEnv.Config.AltairPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.AltairPBSConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration != nil {
-					r.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
-					r.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
-					r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
-					r.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.EksPlatform.Environment) > len(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment) {
-						r.ComputeEnv.Config.EksPlatform.Environment = r.ComputeEnv.Config.EksPlatform.Environment[:len(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment)]
-					}
-					for environmentCount1, environmentItem1 := range resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
-						var environment1 tfTypes.ConfigEnvVariable
-						environment1.Compute = types.BoolPointerValue(environmentItem1.Compute)
-						environment1.Head = types.BoolPointerValue(environmentItem1.Head)
-						environment1.Name = types.StringPointerValue(environmentItem1.Name)
-						environment1.Value = types.StringPointerValue(environmentItem1.Value)
-						if environmentCount1+1 > len(r.ComputeEnv.Config.EksPlatform.Environment) {
-							r.ComputeEnv.Config.EksPlatform.Environment = append(r.ComputeEnv.Config.EksPlatform.Environment, environment1)
-						} else {
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Compute = environment1.Compute
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Head = environment1.Head
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Name = environment1.Name
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Value = environment1.Value
-						}
-					}
-					r.ComputeEnv.Config.EksPlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobMemoryMb))
-					r.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadPodSpec)
-					r.ComputeEnv.Config.EksPlatform.HeadServiceAccount = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadServiceAccount)
-					r.ComputeEnv.Config.EksPlatform.Namespace = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Namespace)
-					r.ComputeEnv.Config.EksPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.NextflowConfig)
-					if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup != nil {
-						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup))
-					} else {
-						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringNull()
-					}
-					r.ComputeEnv.Config.EksPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PostRunScript)
-					r.ComputeEnv.Config.EksPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PreRunScript)
-					r.ComputeEnv.Config.EksPlatform.Region = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Region)
-					r.ComputeEnv.Config.EksPlatform.Server = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Server)
-					r.ComputeEnv.Config.EksPlatform.ServicePodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ServicePodSpec)
-					r.ComputeEnv.Config.EksPlatform.SslCert = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.SslCert)
-					r.ComputeEnv.Config.EksPlatform.StorageClaimName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageClaimName)
-					r.ComputeEnv.Config.EksPlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageMountPath)
-					r.ComputeEnv.Config.EksPlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.WaveEnabled)
-					r.ComputeEnv.Config.EksPlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.WorkDir)
-				}
+				r.ComputeEnv.Config = &tfTypes.ComputeConfig{}
 				if resp.ComputeEnv.Config.AWSBatchConfiguration != nil {
 					r.ComputeEnv.Config.AwsBatch = &tfTypes.AWSBatchConfiguration{}
-					r.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
-					r.ComputeEnv.Config.AwsBatch.ComputeJobRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ComputeJobRole)
+					r.ComputeEnv.Config.AwsBatch.StorageType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.StorageType)
+					r.ComputeEnv.Config.AwsBatch.LustreID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.LustreID)
+					r.ComputeEnv.Config.AwsBatch.Volumes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Volumes))
+					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Volumes {
+						r.ComputeEnv.Config.AwsBatch.Volumes = append(r.ComputeEnv.Config.AwsBatch.Volumes, types.StringValue(v))
+					}
+					r.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Region)
 					r.ComputeEnv.Config.AwsBatch.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.DragenInstanceType)
 					r.ComputeEnv.Config.AwsBatch.DragenQueue = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.DragenQueue)
-					r.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AwsBatch.Environment) > len(resp.ComputeEnv.Config.AWSBatchConfiguration.Environment) {
-						r.ComputeEnv.Config.AwsBatch.Environment = r.ComputeEnv.Config.AwsBatch.Environment[:len(resp.ComputeEnv.Config.AWSBatchConfiguration.Environment)]
-					}
-					for environmentCount2, environmentItem2 := range resp.ComputeEnv.Config.AWSBatchConfiguration.Environment {
-						var environment2 tfTypes.ConfigEnvVariable
-						environment2.Compute = types.BoolPointerValue(environmentItem2.Compute)
-						environment2.Head = types.BoolPointerValue(environmentItem2.Head)
-						environment2.Name = types.StringPointerValue(environmentItem2.Name)
-						environment2.Value = types.StringPointerValue(environmentItem2.Value)
-						if environmentCount2+1 > len(r.ComputeEnv.Config.AwsBatch.Environment) {
-							r.ComputeEnv.Config.AwsBatch.Environment = append(r.ComputeEnv.Config.AwsBatch.Environment, environment2)
-						} else {
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Compute = environment2.Compute
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Head = environment2.Head
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Name = environment2.Name
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Value = environment2.Value
-						}
-					}
+					r.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.DragenInstanceType)
+					r.ComputeEnv.Config.AwsBatch.ComputeJobRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ComputeJobRole)
 					r.ComputeEnv.Config.AwsBatch.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ExecutionRole)
+					r.ComputeEnv.Config.AwsBatch.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadQueue)
+					r.ComputeEnv.Config.AwsBatch.HeadJobRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobRole)
+					r.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
+					r.ComputeEnv.Config.AwsBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.WorkDir)
+					r.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PreRunScript)
+					r.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PostRunScript)
+					r.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobMemoryMb))
+					r.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem := range resp.ComputeEnv.Config.AWSBatchConfiguration.Environment {
+						var environment tfTypes.ConfigEnvVariable
+
+						environment.Name = types.StringPointerValue(environmentItem.Name)
+						environment.Value = types.StringPointerValue(environmentItem.Value)
+						environment.Head = types.BoolPointerValue(environmentItem.Head)
+						environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+
+						r.ComputeEnv.Config.AwsBatch.Environment = append(r.ComputeEnv.Config.AwsBatch.Environment, environment)
+					}
+					r.ComputeEnv.Config.AwsBatch.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.WaveEnabled)
+					r.ComputeEnv.Config.AwsBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Fusion2Enabled)
+					r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NvnmeStorageEnabled)
+					r.ComputeEnv.Config.AwsBatch.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.LogGroup)
+					r.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
+					r.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
+					r.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
+					r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
+					r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
+					r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
+					r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
+					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
+						r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
+					}
 					if resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy != nil {
 						r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringValue(string(*resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy))
 					} else {
 						r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringNull()
 					}
-					r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
-						r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
-					r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
-					r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenAmiID)
-					r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenEnabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenInstanceType)
-					r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
-					r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBlockSize))
-					r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBootSize))
-					r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Ec2KeyPair)
-					r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EcsConfig)
-					r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsCreate)
-					r.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsID)
-					r.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsMount)
-					r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FargateHeadEnabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
-					r.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
-					r.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
-					r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
 					r.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
-					r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
-						r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
-					r.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
-					r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
-						r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
-					}
+					r.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
 					r.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets))
 					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets {
 						r.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
 					}
-					r.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
-					r.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
-					r.ComputeEnv.Config.AwsBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
-					r.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobMemoryMb))
-					r.ComputeEnv.Config.AwsBatch.HeadJobRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobRole)
-					r.ComputeEnv.Config.AwsBatch.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadQueue)
-					r.ComputeEnv.Config.AwsBatch.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.LogGroup)
-					r.ComputeEnv.Config.AwsBatch.LustreID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.LustreID)
-					r.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NvnmeStorageEnabled)
-					r.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PostRunScript)
-					r.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PreRunScript)
-					r.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Region)
-					r.ComputeEnv.Config.AwsBatch.StorageType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.StorageType)
-					r.ComputeEnv.Config.AwsBatch.Volumes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Volumes))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Volumes {
-						r.ComputeEnv.Config.AwsBatch.Volumes = append(r.ComputeEnv.Config.AwsBatch.Volumes, types.StringValue(v))
+					r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
+					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
+						r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
 					}
-					r.ComputeEnv.Config.AwsBatch.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.WaveEnabled)
-					r.ComputeEnv.Config.AwsBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.WorkDir)
+					r.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
+					r.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
+					r.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
+					r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
+					r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Ec2KeyPair)
+					r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
+					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
+						r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
+					}
+					r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBlockSize))
+					r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
+					r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
+					r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsCreate)
+					r.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsID)
+					r.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsMount)
+					r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenEnabled)
+					r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenAmiID)
+					r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBootSize))
+					r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EcsConfig)
+					r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FargateHeadEnabled)
+					r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
+					r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenInstanceType)
 				}
 				if resp.ComputeEnv.Config.AWSCloudConfiguration != nil {
 					r.ComputeEnv.Config.AwsCloud = &tfTypes.AWSCloudConfiguration{}
@@ -211,49 +133,166 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					for _, v := range resp.ComputeEnv.Config.AWSCloudConfiguration.AllowBuckets {
 						r.ComputeEnv.Config.AwsCloud.AllowBuckets = append(r.ComputeEnv.Config.AwsCloud.AllowBuckets, types.StringValue(v))
 					}
-					r.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
-					r.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
-					r.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
-					r.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AwsCloud.Environment) > len(resp.ComputeEnv.Config.AWSCloudConfiguration.Environment) {
-						r.ComputeEnv.Config.AwsCloud.Environment = r.ComputeEnv.Config.AwsCloud.Environment[:len(resp.ComputeEnv.Config.AWSCloudConfiguration.Environment)]
-					}
-					for environmentCount3, environmentItem3 := range resp.ComputeEnv.Config.AWSCloudConfiguration.Environment {
-						var environment3 tfTypes.ConfigEnvVariable
-						environment3.Compute = types.BoolPointerValue(environmentItem3.Compute)
-						environment3.Head = types.BoolPointerValue(environmentItem3.Head)
-						environment3.Name = types.StringPointerValue(environmentItem3.Name)
-						environment3.Value = types.StringPointerValue(environmentItem3.Value)
-						if environmentCount3+1 > len(r.ComputeEnv.Config.AwsCloud.Environment) {
-							r.ComputeEnv.Config.AwsCloud.Environment = append(r.ComputeEnv.Config.AwsCloud.Environment, environment3)
-						} else {
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Compute = environment3.Compute
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Head = environment3.Head
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Name = environment3.Name
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Value = environment3.Value
-						}
-					}
-					r.ComputeEnv.Config.AwsCloud.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
-					r.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
-					r.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceProfileArn)
-					r.ComputeEnv.Config.AwsCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceType)
-					r.ComputeEnv.Config.AwsCloud.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.LogGroup)
-					r.ComputeEnv.Config.AwsCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PostRunScript)
-					r.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsCloud.Region = types.StringValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Region)
+					r.ComputeEnv.Config.AwsCloud.InstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceType)
+					r.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
+					r.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.WorkDir)
+					r.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PreRunScript)
+					r.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.PostRunScript)
+					r.ComputeEnv.Config.AwsCloud.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem1 := range resp.ComputeEnv.Config.AWSCloudConfiguration.Environment {
+						var environment1 tfTypes.ConfigEnvVariable
+
+						environment1.Name = types.StringPointerValue(environmentItem1.Name)
+						environment1.Value = types.StringPointerValue(environmentItem1.Value)
+						environment1.Head = types.BoolPointerValue(environmentItem1.Head)
+						environment1.Compute = types.BoolPointerValue(environmentItem1.Compute)
+
+						r.ComputeEnv.Config.AwsCloud.Environment = append(r.ComputeEnv.Config.AwsCloud.Environment, environment1)
+					}
+					r.ComputeEnv.Config.AwsCloud.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.WaveEnabled)
+					r.ComputeEnv.Config.AwsCloud.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Fusion2Enabled)
+					r.ComputeEnv.Config.AwsCloud.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.LogGroup)
+					r.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
+					r.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
+					r.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
+					r.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
+					r.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.InstanceProfileArn)
+					r.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SubnetID)
 					r.ComputeEnv.Config.AwsCloud.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups))
 					for _, v := range resp.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups {
 						r.ComputeEnv.Config.AwsCloud.SecurityGroups = append(r.ComputeEnv.Config.AwsCloud.SecurityGroups, types.StringValue(v))
 					}
-					r.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SubnetID)
-					r.ComputeEnv.Config.AwsCloud.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.WaveEnabled)
-					r.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.WorkDir)
+				}
+				if resp.ComputeEnv.Config.SeqeraComputeConfiguration != nil {
+					r.ComputeEnv.Config.SeqeracomputePlatform = &tfTypes.SeqeraComputeConfiguration{}
+					r.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Region)
+					r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.WorkDir)
+					r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PreRunScript)
+					r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PostRunScript)
+					r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem2 := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment {
+						var environment2 tfTypes.ConfigEnvVariable
+
+						environment2.Name = types.StringPointerValue(environmentItem2.Name)
+						environment2.Value = types.StringPointerValue(environmentItem2.Value)
+						environment2.Head = types.BoolPointerValue(environmentItem2.Head)
+						environment2.Compute = types.BoolPointerValue(environmentItem2.Compute)
+
+						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = append(r.ComputeEnv.Config.SeqeracomputePlatform.Environment, environment2)
+					}
+				}
+				if resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration != nil {
+					r.ComputeEnv.Config.GoogleLifesciences = &tfTypes.GoogleLifeSciencesConfiguration{}
+					r.ComputeEnv.Config.GoogleLifesciences.Region = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Region)
+					r.ComputeEnv.Config.GoogleLifesciences.Zones = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Zones))
+					for _, v := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Zones {
+						r.ComputeEnv.Config.GoogleLifesciences.Zones = append(r.ComputeEnv.Config.GoogleLifesciences.Zones, types.StringValue(v))
+					}
+					r.ComputeEnv.Config.GoogleLifesciences.Location = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Location)
+					r.ComputeEnv.Config.GoogleLifesciences.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.WorkDir)
+					r.ComputeEnv.Config.GoogleLifesciences.Preemptible = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Preemptible)
+					r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.BootDiskSizeGb))
+					r.ComputeEnv.Config.GoogleLifesciences.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.ProjectID)
+					r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.SSHDaemon)
+					r.ComputeEnv.Config.GoogleLifesciences.SSHImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.SSHImage)
+					r.ComputeEnv.Config.GoogleLifesciences.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.DebugMode))
+					r.ComputeEnv.Config.GoogleLifesciences.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.CopyImage)
+					r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.UsePrivateAddress)
+					if len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels) > 0 {
+						r.ComputeEnv.Config.GoogleLifesciences.Labels = make(map[string]types.String, len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels))
+						for key, value := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels {
+							r.ComputeEnv.Config.GoogleLifesciences.Labels[key] = types.StringValue(value)
+						}
+					}
+					r.ComputeEnv.Config.GoogleLifesciences.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.PreRunScript)
+					r.ComputeEnv.Config.GoogleLifesciences.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.PostRunScript)
+					r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobMemoryMb))
+					r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.GoogleLifesciences.NfsTarget = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NfsTarget)
+					r.ComputeEnv.Config.GoogleLifesciences.NfsMount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NfsMount)
+					r.ComputeEnv.Config.GoogleLifesciences.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem3 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment {
+						var environment3 tfTypes.ConfigEnvVariable
+
+						environment3.Name = types.StringPointerValue(environmentItem3.Name)
+						environment3.Value = types.StringPointerValue(environmentItem3.Value)
+						environment3.Head = types.BoolPointerValue(environmentItem3.Head)
+						environment3.Compute = types.BoolPointerValue(environmentItem3.Compute)
+
+						r.ComputeEnv.Config.GoogleLifesciences.Environment = append(r.ComputeEnv.Config.GoogleLifesciences.Environment, environment3)
+					}
+				}
+				if resp.ComputeEnv.Config.GoogleBatchServiceConfiguration != nil {
+					r.ComputeEnv.Config.GoogleBatch = &tfTypes.GoogleBatchServiceConfiguration{}
+					r.ComputeEnv.Config.GoogleBatch.Location = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Location)
+					r.ComputeEnv.Config.GoogleBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.WorkDir)
+					r.ComputeEnv.Config.GoogleBatch.Spot = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Spot)
+					r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskSizeGb))
+					r.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
+					r.ComputeEnv.Config.GoogleBatch.MachineType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.MachineType)
+					r.ComputeEnv.Config.GoogleBatch.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ProjectID)
+					r.ComputeEnv.Config.GoogleBatch.SSHDaemon = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHDaemon)
+					r.ComputeEnv.Config.GoogleBatch.SSHImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHImage)
+					r.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
+					r.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
+					r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.UsePrivateAddress)
+					if len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels) > 0 {
+						r.ComputeEnv.Config.GoogleBatch.Labels = make(map[string]types.String, len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels))
+						for key1, value1 := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels {
+							r.ComputeEnv.Config.GoogleBatch.Labels[key1] = types.StringValue(value1)
+						}
+					}
+					r.ComputeEnv.Config.GoogleBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PreRunScript)
+					r.ComputeEnv.Config.GoogleBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PostRunScript)
+					r.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobMemoryMb))
+					r.ComputeEnv.Config.GoogleBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.GoogleBatch.NfsTarget = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsTarget)
+					r.ComputeEnv.Config.GoogleBatch.NfsMount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsMount)
+					r.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem4 := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment {
+						var environment4 tfTypes.ConfigEnvVariable
+
+						environment4.Name = types.StringPointerValue(environmentItem4.Name)
+						environment4.Value = types.StringPointerValue(environmentItem4.Value)
+						environment4.Head = types.BoolPointerValue(environmentItem4.Head)
+						environment4.Compute = types.BoolPointerValue(environmentItem4.Compute)
+
+						r.ComputeEnv.Config.GoogleBatch.Environment = append(r.ComputeEnv.Config.GoogleBatch.Environment, environment4)
+					}
+					r.ComputeEnv.Config.GoogleBatch.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.WaveEnabled)
+					r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Fusion2Enabled)
+					r.ComputeEnv.Config.GoogleBatch.ServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ServiceAccount)
+					r.ComputeEnv.Config.GoogleBatch.Network = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Network)
+					r.ComputeEnv.Config.GoogleBatch.Subnetwork = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Subnetwork)
+					r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
+					r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsInstanceTemplate)
 				}
 				if resp.ComputeEnv.Config.AzureBatchConfiguration != nil {
 					r.ComputeEnv.Config.AzureBatch = &tfTypes.AzureBatchConfiguration{}
+					r.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
+					r.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
+					r.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PostRunScript)
+					r.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Region)
+					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
 					r.ComputeEnv.Config.AzureBatch.AutoPoolMode = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.AutoPoolMode)
+					r.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
+					r.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
+					r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
+					r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
+					r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
+					for _, v := range resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
+						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+					}
+					r.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
 					if resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion != nil {
 						r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringValue(string(*resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion))
 					} else {
@@ -261,518 +300,310 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					}
 					r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
 					r.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AzureBatch.Environment) > len(resp.ComputeEnv.Config.AzureBatchConfiguration.Environment) {
-						r.ComputeEnv.Config.AzureBatch.Environment = r.ComputeEnv.Config.AzureBatch.Environment[:len(resp.ComputeEnv.Config.AzureBatchConfiguration.Environment)]
-					}
-					for environmentCount4, environmentItem4 := range resp.ComputeEnv.Config.AzureBatchConfiguration.Environment {
-						var environment4 tfTypes.ConfigEnvVariable
-						environment4.Compute = types.BoolPointerValue(environmentItem4.Compute)
-						environment4.Head = types.BoolPointerValue(environmentItem4.Head)
-						environment4.Name = types.StringPointerValue(environmentItem4.Name)
-						environment4.Value = types.StringPointerValue(environmentItem4.Value)
-						if environmentCount4+1 > len(r.ComputeEnv.Config.AzureBatch.Environment) {
-							r.ComputeEnv.Config.AzureBatch.Environment = append(r.ComputeEnv.Config.AzureBatch.Environment, environment4)
-						} else {
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Compute = environment4.Compute
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Head = environment4.Head
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Name = environment4.Name
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Value = environment4.Value
-						}
-					}
-					r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
-					r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
-					for _, v := range resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
-						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
-					r.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
-					r.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
-					r.ComputeEnv.Config.AzureBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
-					r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
-					r.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PostRunScript)
-					r.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
-					r.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Region)
-					r.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
-					r.ComputeEnv.Config.AzureBatch.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WaveEnabled)
-					r.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.GoogleBatchServiceConfiguration != nil {
-					r.ComputeEnv.Config.GoogleBatch = &tfTypes.GoogleBatchServiceConfiguration{}
-					r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskSizeGb))
-					r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsInstanceTemplate)
-					r.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
-					r.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
-					r.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
-					r.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.GoogleBatch.Environment) > len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment) {
-						r.ComputeEnv.Config.GoogleBatch.Environment = r.ComputeEnv.Config.GoogleBatch.Environment[:len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment)]
-					}
-					for environmentCount5, environmentItem5 := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment {
+
+					for _, environmentItem5 := range resp.ComputeEnv.Config.AzureBatchConfiguration.Environment {
 						var environment5 tfTypes.ConfigEnvVariable
-						environment5.Compute = types.BoolPointerValue(environmentItem5.Compute)
-						environment5.Head = types.BoolPointerValue(environmentItem5.Head)
+
 						environment5.Name = types.StringPointerValue(environmentItem5.Name)
 						environment5.Value = types.StringPointerValue(environmentItem5.Value)
-						if environmentCount5+1 > len(r.ComputeEnv.Config.GoogleBatch.Environment) {
-							r.ComputeEnv.Config.GoogleBatch.Environment = append(r.ComputeEnv.Config.GoogleBatch.Environment, environment5)
-						} else {
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Compute = environment5.Compute
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Head = environment5.Head
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Name = environment5.Name
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Value = environment5.Value
-						}
+						environment5.Head = types.BoolPointerValue(environmentItem5.Head)
+						environment5.Compute = types.BoolPointerValue(environmentItem5.Compute)
+
+						r.ComputeEnv.Config.AzureBatch.Environment = append(r.ComputeEnv.Config.AzureBatch.Environment, environment5)
 					}
-					r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
-					r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobMemoryMb))
-					if len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels) > 0 {
-						r.ComputeEnv.Config.GoogleBatch.Labels = make(map[string]types.String, len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels))
-						for key, value := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels {
-							r.ComputeEnv.Config.GoogleBatch.Labels[key] = types.StringValue(value)
-						}
-					}
-					r.ComputeEnv.Config.GoogleBatch.Location = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Location)
-					r.ComputeEnv.Config.GoogleBatch.MachineType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.MachineType)
-					r.ComputeEnv.Config.GoogleBatch.Network = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Network)
-					r.ComputeEnv.Config.GoogleBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.GoogleBatch.NfsMount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsMount)
-					r.ComputeEnv.Config.GoogleBatch.NfsTarget = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsTarget)
-					r.ComputeEnv.Config.GoogleBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PostRunScript)
-					r.ComputeEnv.Config.GoogleBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PreRunScript)
-					r.ComputeEnv.Config.GoogleBatch.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ProjectID)
-					r.ComputeEnv.Config.GoogleBatch.ServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ServiceAccount)
-					r.ComputeEnv.Config.GoogleBatch.Spot = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Spot)
-					r.ComputeEnv.Config.GoogleBatch.SSHDaemon = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHDaemon)
-					r.ComputeEnv.Config.GoogleBatch.SSHImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHImage)
-					r.ComputeEnv.Config.GoogleBatch.Subnetwork = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Subnetwork)
-					r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.UsePrivateAddress)
-					r.ComputeEnv.Config.GoogleBatch.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.WaveEnabled)
-					r.ComputeEnv.Config.GoogleBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.GoogleGKEClusterConfiguration != nil {
-					r.ComputeEnv.Config.GkePlatform = &tfTypes.GoogleGKEClusterConfiguration{}
-					r.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ClusterName)
-					r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ComputeServiceAccount)
-					r.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.GkePlatform.Environment) > len(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment) {
-						r.ComputeEnv.Config.GkePlatform.Environment = r.ComputeEnv.Config.GkePlatform.Environment[:len(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment)]
-					}
-					for environmentCount6, environmentItem6 := range resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment {
-						var environment6 tfTypes.ConfigEnvVariable
-						environment6.Compute = types.BoolPointerValue(environmentItem6.Compute)
-						environment6.Head = types.BoolPointerValue(environmentItem6.Head)
-						environment6.Name = types.StringPointerValue(environmentItem6.Name)
-						environment6.Value = types.StringPointerValue(environmentItem6.Value)
-						if environmentCount6+1 > len(r.ComputeEnv.Config.GkePlatform.Environment) {
-							r.ComputeEnv.Config.GkePlatform.Environment = append(r.ComputeEnv.Config.GkePlatform.Environment, environment6)
-						} else {
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Compute = environment6.Compute
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Head = environment6.Head
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Name = environment6.Name
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Value = environment6.Value
-						}
-					}
-					r.ComputeEnv.Config.GkePlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.GkePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobMemoryMb))
-					r.ComputeEnv.Config.GkePlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadPodSpec)
-					r.ComputeEnv.Config.GkePlatform.HeadServiceAccount = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadServiceAccount)
-					r.ComputeEnv.Config.GkePlatform.Namespace = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Namespace)
-					r.ComputeEnv.Config.GkePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.NextflowConfig)
-					if resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup != nil {
-						r.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup))
-					} else {
-						r.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringNull()
-					}
-					r.ComputeEnv.Config.GkePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PostRunScript)
-					r.ComputeEnv.Config.GkePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PreRunScript)
-					r.ComputeEnv.Config.GkePlatform.Region = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Region)
-					r.ComputeEnv.Config.GkePlatform.Server = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Server)
-					r.ComputeEnv.Config.GkePlatform.ServicePodSpec = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ServicePodSpec)
-					r.ComputeEnv.Config.GkePlatform.SslCert = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.SslCert)
-					r.ComputeEnv.Config.GkePlatform.StorageClaimName = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageClaimName)
-					r.ComputeEnv.Config.GkePlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageMountPath)
-					r.ComputeEnv.Config.GkePlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.WaveEnabled)
-					r.ComputeEnv.Config.GkePlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration != nil {
-					r.ComputeEnv.Config.GoogleLifesciences = &tfTypes.GoogleLifeSciencesConfiguration{}
-					r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.BootDiskSizeGb))
-					r.ComputeEnv.Config.GoogleLifesciences.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.CopyImage)
-					r.ComputeEnv.Config.GoogleLifesciences.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.DebugMode))
-					r.ComputeEnv.Config.GoogleLifesciences.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.GoogleLifesciences.Environment) > len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment) {
-						r.ComputeEnv.Config.GoogleLifesciences.Environment = r.ComputeEnv.Config.GoogleLifesciences.Environment[:len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment)]
-					}
-					for environmentCount7, environmentItem7 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment {
-						var environment7 tfTypes.ConfigEnvVariable
-						environment7.Compute = types.BoolPointerValue(environmentItem7.Compute)
-						environment7.Head = types.BoolPointerValue(environmentItem7.Head)
-						environment7.Name = types.StringPointerValue(environmentItem7.Name)
-						environment7.Value = types.StringPointerValue(environmentItem7.Value)
-						if environmentCount7+1 > len(r.ComputeEnv.Config.GoogleLifesciences.Environment) {
-							r.ComputeEnv.Config.GoogleLifesciences.Environment = append(r.ComputeEnv.Config.GoogleLifesciences.Environment, environment7)
-						} else {
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Compute = environment7.Compute
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Head = environment7.Head
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Name = environment7.Name
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Value = environment7.Value
-						}
-					}
-					r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobMemoryMb))
-					if len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels) > 0 {
-						r.ComputeEnv.Config.GoogleLifesciences.Labels = make(map[string]types.String, len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels))
-						for key1, value1 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels {
-							r.ComputeEnv.Config.GoogleLifesciences.Labels[key1] = types.StringValue(value1)
-						}
-					}
-					r.ComputeEnv.Config.GoogleLifesciences.Location = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Location)
-					r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.GoogleLifesciences.NfsMount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NfsMount)
-					r.ComputeEnv.Config.GoogleLifesciences.NfsTarget = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NfsTarget)
-					r.ComputeEnv.Config.GoogleLifesciences.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.PostRunScript)
-					r.ComputeEnv.Config.GoogleLifesciences.Preemptible = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Preemptible)
-					r.ComputeEnv.Config.GoogleLifesciences.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.PreRunScript)
-					r.ComputeEnv.Config.GoogleLifesciences.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.ProjectID)
-					r.ComputeEnv.Config.GoogleLifesciences.Region = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Region)
-					r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.SSHDaemon)
-					r.ComputeEnv.Config.GoogleLifesciences.SSHImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.SSHImage)
-					r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.UsePrivateAddress)
-					r.ComputeEnv.Config.GoogleLifesciences.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.WorkDir)
-					r.ComputeEnv.Config.GoogleLifesciences.Zones = make([]types.String, 0, len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Zones))
-					for _, v := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Zones {
-						r.ComputeEnv.Config.GoogleLifesciences.Zones = append(r.ComputeEnv.Config.GoogleLifesciences.Zones, types.StringValue(v))
-					}
+					r.ComputeEnv.Config.AzureBatch.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WaveEnabled)
+					r.ComputeEnv.Config.AzureBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Fusion2Enabled)
+					r.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
 				}
 				if resp.ComputeEnv.Config.IBMLSFConfiguration != nil {
 					r.ComputeEnv.Config.LsfPlatform = &tfTypes.IBMLSFConfiguration{}
-					r.ComputeEnv.Config.LsfPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.LsfPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.LsfPlatform.Environment) > len(resp.ComputeEnv.Config.IBMLSFConfiguration.Environment) {
-						r.ComputeEnv.Config.LsfPlatform.Environment = r.ComputeEnv.Config.LsfPlatform.Environment[:len(resp.ComputeEnv.Config.IBMLSFConfiguration.Environment)]
-					}
-					for environmentCount8, environmentItem8 := range resp.ComputeEnv.Config.IBMLSFConfiguration.Environment {
-						var environment8 tfTypes.ConfigEnvVariable
-						environment8.Compute = types.BoolPointerValue(environmentItem8.Compute)
-						environment8.Head = types.BoolPointerValue(environmentItem8.Head)
-						environment8.Name = types.StringPointerValue(environmentItem8.Name)
-						environment8.Value = types.StringPointerValue(environmentItem8.Value)
-						if environmentCount8+1 > len(r.ComputeEnv.Config.LsfPlatform.Environment) {
-							r.ComputeEnv.Config.LsfPlatform.Environment = append(r.ComputeEnv.Config.LsfPlatform.Environment, environment8)
-						} else {
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Compute = environment8.Compute
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Head = environment8.Head
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Name = environment8.Name
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Value = environment8.Value
-						}
-					}
-					r.ComputeEnv.Config.LsfPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HeadJobOptions)
-					r.ComputeEnv.Config.LsfPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HeadQueue)
-					r.ComputeEnv.Config.LsfPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HostName)
-					r.ComputeEnv.Config.LsfPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.LaunchDir)
-					r.ComputeEnv.Config.LsfPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.IBMLSFConfiguration.MaxQueueSize))
-					r.ComputeEnv.Config.LsfPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit = types.BoolPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PerJobMemLimit)
-					r.ComputeEnv.Config.LsfPlatform.PerTaskReserve = types.BoolPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PerTaskReserve)
-					r.ComputeEnv.Config.LsfPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.IBMLSFConfiguration.Port))
-					r.ComputeEnv.Config.LsfPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PostRunScript)
+					r.ComputeEnv.Config.LsfPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.IBMLSFConfiguration.WorkDir)
 					r.ComputeEnv.Config.LsfPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PreRunScript)
+					r.ComputeEnv.Config.LsfPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PostRunScript)
+					r.ComputeEnv.Config.LsfPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.LsfPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.LaunchDir)
+					r.ComputeEnv.Config.LsfPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.UserName)
+					r.ComputeEnv.Config.LsfPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HostName)
+					r.ComputeEnv.Config.LsfPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.IBMLSFConfiguration.Port))
+					r.ComputeEnv.Config.LsfPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HeadQueue)
+					r.ComputeEnv.Config.LsfPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.ComputeQueue)
+					r.ComputeEnv.Config.LsfPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.IBMLSFConfiguration.MaxQueueSize))
+					r.ComputeEnv.Config.LsfPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HeadJobOptions)
 					r.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PropagateHeadJobOptions)
 					r.ComputeEnv.Config.LsfPlatform.UnitForLimits = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.UnitForLimits)
-					r.ComputeEnv.Config.LsfPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.UserName)
-					r.ComputeEnv.Config.LsfPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.IBMLSFConfiguration.WorkDir)
+					r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit = types.BoolPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PerJobMemLimit)
+					r.ComputeEnv.Config.LsfPlatform.PerTaskReserve = types.BoolPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.PerTaskReserve)
+					r.ComputeEnv.Config.LsfPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem6 := range resp.ComputeEnv.Config.IBMLSFConfiguration.Environment {
+						var environment6 tfTypes.ConfigEnvVariable
+
+						environment6.Name = types.StringPointerValue(environmentItem6.Name)
+						environment6.Value = types.StringPointerValue(environmentItem6.Value)
+						environment6.Head = types.BoolPointerValue(environmentItem6.Head)
+						environment6.Compute = types.BoolPointerValue(environmentItem6.Compute)
+
+						r.ComputeEnv.Config.LsfPlatform.Environment = append(r.ComputeEnv.Config.LsfPlatform.Environment, environment6)
+					}
+				}
+				if resp.ComputeEnv.Config.SlurmConfiguration != nil {
+					r.ComputeEnv.Config.SlurmPlatform = &tfTypes.SlurmConfiguration{}
+					r.ComputeEnv.Config.SlurmPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.SlurmConfiguration.WorkDir)
+					r.ComputeEnv.Config.SlurmPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.PreRunScript)
+					r.ComputeEnv.Config.SlurmPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.PostRunScript)
+					r.ComputeEnv.Config.SlurmPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.SlurmPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.LaunchDir)
+					r.ComputeEnv.Config.SlurmPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.UserName)
+					r.ComputeEnv.Config.SlurmPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HostName)
+					r.ComputeEnv.Config.SlurmPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SlurmConfiguration.Port))
+					r.ComputeEnv.Config.SlurmPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HeadQueue)
+					r.ComputeEnv.Config.SlurmPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.ComputeQueue)
+					r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SlurmConfiguration.MaxQueueSize))
+					r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HeadJobOptions)
+					r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.PropagateHeadJobOptions)
+					r.ComputeEnv.Config.SlurmPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem7 := range resp.ComputeEnv.Config.SlurmConfiguration.Environment {
+						var environment7 tfTypes.ConfigEnvVariable
+
+						environment7.Name = types.StringPointerValue(environmentItem7.Name)
+						environment7.Value = types.StringPointerValue(environmentItem7.Value)
+						environment7.Head = types.BoolPointerValue(environmentItem7.Head)
+						environment7.Compute = types.BoolPointerValue(environmentItem7.Compute)
+
+						r.ComputeEnv.Config.SlurmPlatform.Environment = append(r.ComputeEnv.Config.SlurmPlatform.Environment, environment7)
+					}
 				}
 				if resp.ComputeEnv.Config.KubernetesComputeConfiguration != nil {
 					r.ComputeEnv.Config.K8sPlatform = &tfTypes.KubernetesComputeConfiguration{}
-					r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.ComputeServiceAccount)
-					r.ComputeEnv.Config.K8sPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.K8sPlatform.Environment) > len(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment) {
-						r.ComputeEnv.Config.K8sPlatform.Environment = r.ComputeEnv.Config.K8sPlatform.Environment[:len(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment)]
-					}
-					for environmentCount9, environmentItem9 := range resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment {
-						var environment9 tfTypes.ConfigEnvVariable
-						environment9.Compute = types.BoolPointerValue(environmentItem9.Compute)
-						environment9.Head = types.BoolPointerValue(environmentItem9.Head)
-						environment9.Name = types.StringPointerValue(environmentItem9.Name)
-						environment9.Value = types.StringPointerValue(environmentItem9.Value)
-						if environmentCount9+1 > len(r.ComputeEnv.Config.K8sPlatform.Environment) {
-							r.ComputeEnv.Config.K8sPlatform.Environment = append(r.ComputeEnv.Config.K8sPlatform.Environment, environment9)
-						} else {
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Compute = environment9.Compute
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Head = environment9.Head
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Name = environment9.Name
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Value = environment9.Value
-						}
-					}
-					r.ComputeEnv.Config.K8sPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobMemoryMb))
-					r.ComputeEnv.Config.K8sPlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadPodSpec)
-					r.ComputeEnv.Config.K8sPlatform.HeadServiceAccount = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadServiceAccount)
+					r.ComputeEnv.Config.K8sPlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.WorkDir)
+					r.ComputeEnv.Config.K8sPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.PreRunScript)
+					r.ComputeEnv.Config.K8sPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.PostRunScript)
+					r.ComputeEnv.Config.K8sPlatform.Server = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Server)
+					r.ComputeEnv.Config.K8sPlatform.SslCert = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.SslCert)
 					r.ComputeEnv.Config.K8sPlatform.Namespace = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Namespace)
-					r.ComputeEnv.Config.K8sPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.ComputeServiceAccount)
+					r.ComputeEnv.Config.K8sPlatform.HeadServiceAccount = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadServiceAccount)
+					r.ComputeEnv.Config.K8sPlatform.StorageClaimName = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.StorageClaimName)
+					r.ComputeEnv.Config.K8sPlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.StorageMountPath)
 					if resp.ComputeEnv.Config.KubernetesComputeConfiguration.PodCleanup != nil {
 						r.ComputeEnv.Config.K8sPlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.KubernetesComputeConfiguration.PodCleanup))
 					} else {
 						r.ComputeEnv.Config.K8sPlatform.PodCleanup = types.StringNull()
 					}
-					r.ComputeEnv.Config.K8sPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.PostRunScript)
-					r.ComputeEnv.Config.K8sPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.PreRunScript)
-					r.ComputeEnv.Config.K8sPlatform.Server = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Server)
+					r.ComputeEnv.Config.K8sPlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadPodSpec)
 					r.ComputeEnv.Config.K8sPlatform.ServicePodSpec = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.ServicePodSpec)
-					r.ComputeEnv.Config.K8sPlatform.SslCert = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.SslCert)
-					r.ComputeEnv.Config.K8sPlatform.StorageClaimName = types.StringValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.StorageClaimName)
-					r.ComputeEnv.Config.K8sPlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.StorageMountPath)
-					r.ComputeEnv.Config.K8sPlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.MoabConfiguration != nil {
-					r.ComputeEnv.Config.MoabPlatform = &tfTypes.MoabConfiguration{}
-					r.ComputeEnv.Config.MoabPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.MoabPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.MoabPlatform.Environment) > len(resp.ComputeEnv.Config.MoabConfiguration.Environment) {
-						r.ComputeEnv.Config.MoabPlatform.Environment = r.ComputeEnv.Config.MoabPlatform.Environment[:len(resp.ComputeEnv.Config.MoabConfiguration.Environment)]
+					r.ComputeEnv.Config.K8sPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem8 := range resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment {
+						var environment8 tfTypes.ConfigEnvVariable
+
+						environment8.Name = types.StringPointerValue(environmentItem8.Name)
+						environment8.Value = types.StringPointerValue(environmentItem8.Value)
+						environment8.Head = types.BoolPointerValue(environmentItem8.Head)
+						environment8.Compute = types.BoolPointerValue(environmentItem8.Compute)
+
+						r.ComputeEnv.Config.K8sPlatform.Environment = append(r.ComputeEnv.Config.K8sPlatform.Environment, environment8)
 					}
-					for environmentCount10, environmentItem10 := range resp.ComputeEnv.Config.MoabConfiguration.Environment {
+					r.ComputeEnv.Config.K8sPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobMemoryMb))
+					r.ComputeEnv.Config.K8sPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.NextflowConfig)
+				}
+				if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration != nil {
+					r.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
+					r.ComputeEnv.Config.EksPlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.WorkDir)
+					r.ComputeEnv.Config.EksPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PreRunScript)
+					r.ComputeEnv.Config.EksPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PostRunScript)
+					r.ComputeEnv.Config.EksPlatform.Server = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Server)
+					r.ComputeEnv.Config.EksPlatform.SslCert = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.SslCert)
+					r.ComputeEnv.Config.EksPlatform.Namespace = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Namespace)
+					r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
+					r.ComputeEnv.Config.EksPlatform.HeadServiceAccount = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadServiceAccount)
+					r.ComputeEnv.Config.EksPlatform.StorageClaimName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageClaimName)
+					r.ComputeEnv.Config.EksPlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageMountPath)
+					if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup != nil {
+						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup))
+					} else {
+						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringNull()
+					}
+					r.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadPodSpec)
+					r.ComputeEnv.Config.EksPlatform.ServicePodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ServicePodSpec)
+					r.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem9 := range resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
+						var environment9 tfTypes.ConfigEnvVariable
+
+						environment9.Name = types.StringPointerValue(environmentItem9.Name)
+						environment9.Value = types.StringPointerValue(environmentItem9.Value)
+						environment9.Head = types.BoolPointerValue(environmentItem9.Head)
+						environment9.Compute = types.BoolPointerValue(environmentItem9.Compute)
+
+						r.ComputeEnv.Config.EksPlatform.Environment = append(r.ComputeEnv.Config.EksPlatform.Environment, environment9)
+					}
+					r.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobMemoryMb))
+					r.ComputeEnv.Config.EksPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.EksPlatform.Region = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Region)
+					r.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
+					r.ComputeEnv.Config.EksPlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.WaveEnabled)
+					r.ComputeEnv.Config.EksPlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Fusion2Enabled)
+				}
+				if resp.ComputeEnv.Config.GoogleGKEClusterConfiguration != nil {
+					r.ComputeEnv.Config.GkePlatform = &tfTypes.GoogleGKEClusterConfiguration{}
+					r.ComputeEnv.Config.GkePlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.WorkDir)
+					r.ComputeEnv.Config.GkePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PreRunScript)
+					r.ComputeEnv.Config.GkePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PostRunScript)
+					r.ComputeEnv.Config.GkePlatform.Server = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Server)
+					r.ComputeEnv.Config.GkePlatform.SslCert = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.SslCert)
+					r.ComputeEnv.Config.GkePlatform.Namespace = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Namespace)
+					r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ComputeServiceAccount)
+					r.ComputeEnv.Config.GkePlatform.HeadServiceAccount = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadServiceAccount)
+					r.ComputeEnv.Config.GkePlatform.StorageClaimName = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageClaimName)
+					r.ComputeEnv.Config.GkePlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageMountPath)
+					if resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup != nil {
+						r.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup))
+					} else {
+						r.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringNull()
+					}
+					r.ComputeEnv.Config.GkePlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadPodSpec)
+					r.ComputeEnv.Config.GkePlatform.ServicePodSpec = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ServicePodSpec)
+					r.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem10 := range resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment {
 						var environment10 tfTypes.ConfigEnvVariable
-						environment10.Compute = types.BoolPointerValue(environmentItem10.Compute)
-						environment10.Head = types.BoolPointerValue(environmentItem10.Head)
+
 						environment10.Name = types.StringPointerValue(environmentItem10.Name)
 						environment10.Value = types.StringPointerValue(environmentItem10.Value)
-						if environmentCount10+1 > len(r.ComputeEnv.Config.MoabPlatform.Environment) {
-							r.ComputeEnv.Config.MoabPlatform.Environment = append(r.ComputeEnv.Config.MoabPlatform.Environment, environment10)
-						} else {
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Compute = environment10.Compute
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Head = environment10.Head
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Name = environment10.Name
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Value = environment10.Value
-						}
+						environment10.Head = types.BoolPointerValue(environmentItem10.Head)
+						environment10.Compute = types.BoolPointerValue(environmentItem10.Compute)
+
+						r.ComputeEnv.Config.GkePlatform.Environment = append(r.ComputeEnv.Config.GkePlatform.Environment, environment10)
 					}
-					r.ComputeEnv.Config.MoabPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HeadJobOptions)
-					r.ComputeEnv.Config.MoabPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HeadQueue)
-					r.ComputeEnv.Config.MoabPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HostName)
-					r.ComputeEnv.Config.MoabPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.LaunchDir)
-					r.ComputeEnv.Config.MoabPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.MoabConfiguration.MaxQueueSize))
-					r.ComputeEnv.Config.MoabPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.MoabPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.MoabConfiguration.Port))
-					r.ComputeEnv.Config.MoabPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.PostRunScript)
-					r.ComputeEnv.Config.MoabPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.PreRunScript)
-					r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.MoabConfiguration.PropagateHeadJobOptions)
-					r.ComputeEnv.Config.MoabPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.UserName)
-					r.ComputeEnv.Config.MoabPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.MoabConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.SeqeraComputeConfiguration != nil {
-					r.ComputeEnv.Config.SeqeracomputePlatform = &tfTypes.SeqeraComputeConfiguration{}
-					r.ComputeEnv.Config.SeqeracomputePlatform.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.CliPath)
-					r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeJobRole)
-					r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenInstanceType)
-					r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenQueue)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.SeqeracomputePlatform.Environment) > len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment) {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = r.ComputeEnv.Config.SeqeracomputePlatform.Environment[:len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment)]
-					}
-					for environmentCount11, environmentItem11 := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment {
-						var environment11 tfTypes.ConfigEnvVariable
-						environment11.Compute = types.BoolPointerValue(environmentItem11.Compute)
-						environment11.Head = types.BoolPointerValue(environmentItem11.Head)
-						environment11.Name = types.StringPointerValue(environmentItem11.Name)
-						environment11.Value = types.StringPointerValue(environmentItem11.Value)
-						if environmentCount11+1 > len(r.ComputeEnv.Config.SeqeracomputePlatform.Environment) {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment = append(r.ComputeEnv.Config.SeqeracomputePlatform.Environment, environment11)
-						} else {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Compute = environment11.Compute
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Head = environment11.Head
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Name = environment11.Name
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Value = environment11.Value
-						}
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ExecutionRole)
-					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy))
-					} else {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringNull()
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Arm64Enabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.BidPercentage))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DisposeOnDeletion)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenAmiID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenInstanceType)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBlockSize))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBootSize))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Ec2KeyPair)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EcsConfig)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsCreate)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsMount)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FargateHeadEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FusionEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Fusion2Enabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.FusionSnapshots)
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobMemoryMb))
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobRole)
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadQueue)
-					r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.LogGroup)
-					r.ComputeEnv.Config.SeqeracomputePlatform.LustreID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.LustreID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NvnmeStorageEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PostRunScript)
-					r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PreRunScript)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Region)
-					r.ComputeEnv.Config.SeqeracomputePlatform.StorageType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.StorageType)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Volumes = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Volumes))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Volumes {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Volumes = append(r.ComputeEnv.Config.SeqeracomputePlatform.Volumes, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.WaveEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.SlurmConfiguration != nil {
-					r.ComputeEnv.Config.SlurmPlatform = &tfTypes.SlurmConfiguration{}
-					r.ComputeEnv.Config.SlurmPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.SlurmPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.SlurmPlatform.Environment) > len(resp.ComputeEnv.Config.SlurmConfiguration.Environment) {
-						r.ComputeEnv.Config.SlurmPlatform.Environment = r.ComputeEnv.Config.SlurmPlatform.Environment[:len(resp.ComputeEnv.Config.SlurmConfiguration.Environment)]
-					}
-					for environmentCount12, environmentItem12 := range resp.ComputeEnv.Config.SlurmConfiguration.Environment {
-						var environment12 tfTypes.ConfigEnvVariable
-						environment12.Compute = types.BoolPointerValue(environmentItem12.Compute)
-						environment12.Head = types.BoolPointerValue(environmentItem12.Head)
-						environment12.Name = types.StringPointerValue(environmentItem12.Name)
-						environment12.Value = types.StringPointerValue(environmentItem12.Value)
-						if environmentCount12+1 > len(r.ComputeEnv.Config.SlurmPlatform.Environment) {
-							r.ComputeEnv.Config.SlurmPlatform.Environment = append(r.ComputeEnv.Config.SlurmPlatform.Environment, environment12)
-						} else {
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Compute = environment12.Compute
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Head = environment12.Head
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Name = environment12.Name
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Value = environment12.Value
-						}
-					}
-					r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HeadJobOptions)
-					r.ComputeEnv.Config.SlurmPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HeadQueue)
-					r.ComputeEnv.Config.SlurmPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HostName)
-					r.ComputeEnv.Config.SlurmPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.LaunchDir)
-					r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SlurmConfiguration.MaxQueueSize))
-					r.ComputeEnv.Config.SlurmPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.SlurmPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SlurmConfiguration.Port))
-					r.ComputeEnv.Config.SlurmPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.PostRunScript)
-					r.ComputeEnv.Config.SlurmPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.PreRunScript)
-					r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.PropagateHeadJobOptions)
-					r.ComputeEnv.Config.SlurmPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.UserName)
-					r.ComputeEnv.Config.SlurmPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.SlurmConfiguration.WorkDir)
+					r.ComputeEnv.Config.GkePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobMemoryMb))
+					r.ComputeEnv.Config.GkePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.GkePlatform.Region = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Region)
+					r.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ClusterName)
+					r.ComputeEnv.Config.GkePlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Fusion2Enabled)
+					r.ComputeEnv.Config.GkePlatform.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.WaveEnabled)
 				}
 				if resp.ComputeEnv.Config.UnivaGridEngineConfiguration != nil {
 					r.ComputeEnv.Config.UgePlatform = &tfTypes.UnivaGridEngineConfiguration{}
+					r.ComputeEnv.Config.UgePlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.WorkDir)
+					r.ComputeEnv.Config.UgePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.PreRunScript)
+					r.ComputeEnv.Config.UgePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.PostRunScript)
+					r.ComputeEnv.Config.UgePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.UgePlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.LaunchDir)
+					r.ComputeEnv.Config.UgePlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.UserName)
+					r.ComputeEnv.Config.UgePlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HostName)
+					r.ComputeEnv.Config.UgePlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Port))
+					r.ComputeEnv.Config.UgePlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadQueue)
 					r.ComputeEnv.Config.UgePlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.ComputeQueue)
+					r.ComputeEnv.Config.UgePlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.MaxQueueSize))
+					r.ComputeEnv.Config.UgePlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadJobOptions)
+					r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.PropagateHeadJobOptions)
 					r.ComputeEnv.Config.UgePlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.UgePlatform.Environment) > len(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment) {
-						r.ComputeEnv.Config.UgePlatform.Environment = r.ComputeEnv.Config.UgePlatform.Environment[:len(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment)]
+
+					for _, environmentItem11 := range resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment {
+						var environment11 tfTypes.ConfigEnvVariable
+
+						environment11.Name = types.StringPointerValue(environmentItem11.Name)
+						environment11.Value = types.StringPointerValue(environmentItem11.Value)
+						environment11.Head = types.BoolPointerValue(environmentItem11.Head)
+						environment11.Compute = types.BoolPointerValue(environmentItem11.Compute)
+
+						r.ComputeEnv.Config.UgePlatform.Environment = append(r.ComputeEnv.Config.UgePlatform.Environment, environment11)
 					}
-					for environmentCount13, environmentItem13 := range resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment {
+				}
+				if resp.ComputeEnv.Config.AltairPBSConfiguration != nil {
+					r.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
+					r.ComputeEnv.Config.AltairPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.AltairPBSConfiguration.WorkDir)
+					r.ComputeEnv.Config.AltairPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PreRunScript)
+					r.ComputeEnv.Config.AltairPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PostRunScript)
+					r.ComputeEnv.Config.AltairPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AltairPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.LaunchDir)
+					r.ComputeEnv.Config.AltairPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.UserName)
+					r.ComputeEnv.Config.AltairPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HostName)
+					r.ComputeEnv.Config.AltairPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.Port))
+					r.ComputeEnv.Config.AltairPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadQueue)
+					r.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
+					r.ComputeEnv.Config.AltairPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.MaxQueueSize))
+					r.ComputeEnv.Config.AltairPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadJobOptions)
+					r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PropagateHeadJobOptions)
+					r.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem12 := range resp.ComputeEnv.Config.AltairPBSConfiguration.Environment {
+						var environment12 tfTypes.ConfigEnvVariable
+
+						environment12.Name = types.StringPointerValue(environmentItem12.Name)
+						environment12.Value = types.StringPointerValue(environmentItem12.Value)
+						environment12.Head = types.BoolPointerValue(environmentItem12.Head)
+						environment12.Compute = types.BoolPointerValue(environmentItem12.Compute)
+
+						r.ComputeEnv.Config.AltairPlatform.Environment = append(r.ComputeEnv.Config.AltairPlatform.Environment, environment12)
+					}
+				}
+				if resp.ComputeEnv.Config.MoabConfiguration != nil {
+					r.ComputeEnv.Config.MoabPlatform = &tfTypes.MoabConfiguration{}
+					r.ComputeEnv.Config.MoabPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.MoabConfiguration.WorkDir)
+					r.ComputeEnv.Config.MoabPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.PreRunScript)
+					r.ComputeEnv.Config.MoabPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.PostRunScript)
+					r.ComputeEnv.Config.MoabPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.MoabPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.LaunchDir)
+					r.ComputeEnv.Config.MoabPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.UserName)
+					r.ComputeEnv.Config.MoabPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HostName)
+					r.ComputeEnv.Config.MoabPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.MoabConfiguration.Port))
+					r.ComputeEnv.Config.MoabPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HeadQueue)
+					r.ComputeEnv.Config.MoabPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.ComputeQueue)
+					r.ComputeEnv.Config.MoabPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.MoabConfiguration.MaxQueueSize))
+					r.ComputeEnv.Config.MoabPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HeadJobOptions)
+					r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.MoabConfiguration.PropagateHeadJobOptions)
+					r.ComputeEnv.Config.MoabPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem13 := range resp.ComputeEnv.Config.MoabConfiguration.Environment {
 						var environment13 tfTypes.ConfigEnvVariable
-						environment13.Compute = types.BoolPointerValue(environmentItem13.Compute)
-						environment13.Head = types.BoolPointerValue(environmentItem13.Head)
+
 						environment13.Name = types.StringPointerValue(environmentItem13.Name)
 						environment13.Value = types.StringPointerValue(environmentItem13.Value)
-						if environmentCount13+1 > len(r.ComputeEnv.Config.UgePlatform.Environment) {
-							r.ComputeEnv.Config.UgePlatform.Environment = append(r.ComputeEnv.Config.UgePlatform.Environment, environment13)
-						} else {
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Compute = environment13.Compute
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Head = environment13.Head
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Name = environment13.Name
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Value = environment13.Value
-						}
+						environment13.Head = types.BoolPointerValue(environmentItem13.Head)
+						environment13.Compute = types.BoolPointerValue(environmentItem13.Compute)
+
+						r.ComputeEnv.Config.MoabPlatform.Environment = append(r.ComputeEnv.Config.MoabPlatform.Environment, environment13)
 					}
-					r.ComputeEnv.Config.UgePlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadJobOptions)
-					r.ComputeEnv.Config.UgePlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadQueue)
-					r.ComputeEnv.Config.UgePlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HostName)
-					r.ComputeEnv.Config.UgePlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.LaunchDir)
-					r.ComputeEnv.Config.UgePlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.MaxQueueSize))
-					r.ComputeEnv.Config.UgePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.UgePlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Port))
-					r.ComputeEnv.Config.UgePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.PostRunScript)
-					r.ComputeEnv.Config.UgePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.PreRunScript)
-					r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.PropagateHeadJobOptions)
-					r.ComputeEnv.Config.UgePlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.UserName)
-					r.ComputeEnv.Config.UgePlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.WorkDir)
 				}
 			}
-			r.ComputeEnv.CredentialsID = types.StringPointerValue(resp.ComputeEnv.CredentialsID)
 			r.ComputeEnv.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ComputeEnv.DateCreated))
-			r.ComputeEnv.Deleted = types.BoolPointerValue(resp.ComputeEnv.Deleted)
-			r.ComputeEnv.Description = types.StringPointerValue(resp.ComputeEnv.Description)
-			r.ComputeEnv.Labels = []tfTypes.LabelDbDto{}
-			if len(r.ComputeEnv.Labels) > len(resp.ComputeEnv.Labels) {
-				r.ComputeEnv.Labels = r.ComputeEnv.Labels[:len(resp.ComputeEnv.Labels)]
-			}
-			for labelsCount, labelsItem := range resp.ComputeEnv.Labels {
-				var labels tfTypes.LabelDbDto
-				labels.ID = types.Int64PointerValue(labelsItem.ID)
-				labels.Name = types.StringPointerValue(labelsItem.Name)
-				labels.Value = types.StringPointerValue(labelsItem.Value)
-				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-				if labelsCount+1 > len(r.ComputeEnv.Labels) {
-					r.ComputeEnv.Labels = append(r.ComputeEnv.Labels, labels)
-				} else {
-					r.ComputeEnv.Labels[labelsCount].ID = labels.ID
-					r.ComputeEnv.Labels[labelsCount].Name = labels.Name
-					r.ComputeEnv.Labels[labelsCount].Value = labels.Value
-					r.ComputeEnv.Labels[labelsCount].Resource = labels.Resource
-					r.ComputeEnv.Labels[labelsCount].IsDefault = labels.IsDefault
-					r.ComputeEnv.Labels[labelsCount].DateCreated = labels.DateCreated
-				}
-			}
 			r.ComputeEnv.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ComputeEnv.LastUpdated))
 			r.ComputeEnv.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ComputeEnv.LastUsed))
-			r.ComputeEnv.ManagedIdentityID = types.StringPointerValue(resp.ComputeEnv.ManagedIdentityID)
-			r.ComputeEnv.Message = types.StringPointerValue(resp.ComputeEnv.Message)
-			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
-			r.ComputeEnv.OrgID = types.Int64PointerValue(resp.ComputeEnv.OrgID)
-			if resp.ComputeEnv.Platform != nil {
-				r.ComputeEnv.Platform = types.StringValue(string(*resp.ComputeEnv.Platform))
-			} else {
-				r.ComputeEnv.Platform = types.StringNull()
-			}
-			r.ComputeEnv.Primary = types.BoolPointerValue(resp.ComputeEnv.Primary)
+			r.ComputeEnv.Deleted = types.BoolPointerValue(resp.ComputeEnv.Deleted)
 			if resp.ComputeEnv.Status != nil {
 				r.ComputeEnv.Status = types.StringValue(string(*resp.ComputeEnv.Status))
 			} else {
 				r.ComputeEnv.Status = types.StringNull()
 			}
+			r.ComputeEnv.Message = types.StringPointerValue(resp.ComputeEnv.Message)
+			r.ComputeEnv.Primary = types.BoolPointerValue(resp.ComputeEnv.Primary)
+			r.ComputeEnv.CredentialsID = types.StringPointerValue(resp.ComputeEnv.CredentialsID)
+			r.ComputeEnv.ManagedIdentityID = types.StringPointerValue(resp.ComputeEnv.ManagedIdentityID)
+			r.ComputeEnv.OrgID = types.Int64PointerValue(resp.ComputeEnv.OrgID)
 			r.ComputeEnv.WorkspaceID = types.Int64PointerValue(resp.ComputeEnv.WorkspaceID)
+			r.ComputeEnv.Labels = []tfTypes.LabelDbDto{}
+
+			for _, labelsItem := range resp.ComputeEnv.Labels {
+				var labels tfTypes.LabelDbDto
+
+				labels.ID = types.Int64PointerValue(labelsItem.ID)
+				labels.Name = types.StringPointerValue(labelsItem.Name)
+				labels.Value = types.StringPointerValue(labelsItem.Value)
+				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+				labels.IsDynamic = types.BoolPointerValue(labelsItem.IsDynamic)
+				labels.IsInterpolated = types.BoolPointerValue(labelsItem.IsInterpolated)
+				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+
+				r.ComputeEnv.Labels = append(r.ComputeEnv.Labels, labels)
+			}
 		}
 	}
 
@@ -868,124 +699,124 @@ func (r *ComputeEnvResourceModel) ToOperationsUpdateComputeEnvRequest(ctx contex
 	return &out, diags
 }
 
-func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Context) (*shared.CreateComputeEnvRequest, diag.Diagnostics) {
+func (r *ComputeEnvResourceModel) ToSharedComputeEnvComputeConfigInput(ctx context.Context) (*shared.ComputeEnvComputeConfigInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.ComputeEnv.CredentialsID.ValueString()
+	credentialsID = r.CredentialsID.ValueString()
 
 	var name string
-	name = r.ComputeEnv.Name.ValueString()
+	name = r.Name.ValueString()
 
 	description := new(string)
-	if !r.ComputeEnv.Description.IsUnknown() && !r.ComputeEnv.Description.IsNull() {
-		*description = r.ComputeEnv.Description.ValueString()
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
-	platform := shared.ComputeEnvComputeConfigPlatform(r.ComputeEnv.Platform.ValueString())
+	platform := shared.ComputeEnvComputeConfigPlatform(r.Platform.ValueString())
 	var config shared.ComputeConfig
 	var awsBatchConfiguration *shared.AWSBatchConfiguration
-	if r.ComputeEnv.Config.AwsBatch != nil {
+	if r.Config.AwsBatch != nil {
 		storageType := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.StorageType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.StorageType.IsNull() {
-			*storageType = r.ComputeEnv.Config.AwsBatch.StorageType.ValueString()
+		if !r.Config.AwsBatch.StorageType.IsUnknown() && !r.Config.AwsBatch.StorageType.IsNull() {
+			*storageType = r.Config.AwsBatch.StorageType.ValueString()
 		} else {
 			storageType = nil
 		}
 		lustreID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.LustreID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.LustreID.IsNull() {
-			*lustreID = r.ComputeEnv.Config.AwsBatch.LustreID.ValueString()
+		if !r.Config.AwsBatch.LustreID.IsUnknown() && !r.Config.AwsBatch.LustreID.IsNull() {
+			*lustreID = r.Config.AwsBatch.LustreID.ValueString()
 		} else {
 			lustreID = nil
 		}
-		volumes := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Volumes))
-		for _, volumesItem := range r.ComputeEnv.Config.AwsBatch.Volumes {
+		volumes := make([]string, 0, len(r.Config.AwsBatch.Volumes))
+		for _, volumesItem := range r.Config.AwsBatch.Volumes {
 			volumes = append(volumes, volumesItem.ValueString())
 		}
 		var region string
-		region = r.ComputeEnv.Config.AwsBatch.Region.ValueString()
+		region = r.Config.AwsBatch.Region.ValueString()
 
 		computeQueue := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.ComputeQueue.IsNull() {
-			*computeQueue = r.ComputeEnv.Config.AwsBatch.ComputeQueue.ValueString()
+		if !r.Config.AwsBatch.ComputeQueue.IsUnknown() && !r.Config.AwsBatch.ComputeQueue.IsNull() {
+			*computeQueue = r.Config.AwsBatch.ComputeQueue.ValueString()
 		} else {
 			computeQueue = nil
 		}
 		dragenQueue := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.DragenQueue.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.DragenQueue.IsNull() {
-			*dragenQueue = r.ComputeEnv.Config.AwsBatch.DragenQueue.ValueString()
+		if !r.Config.AwsBatch.DragenQueue.IsUnknown() && !r.Config.AwsBatch.DragenQueue.IsNull() {
+			*dragenQueue = r.Config.AwsBatch.DragenQueue.ValueString()
 		} else {
 			dragenQueue = nil
 		}
 		dragenInstanceType := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.DragenInstanceType.IsNull() {
-			*dragenInstanceType = r.ComputeEnv.Config.AwsBatch.DragenInstanceType.ValueString()
+		if !r.Config.AwsBatch.DragenInstanceType.IsUnknown() && !r.Config.AwsBatch.DragenInstanceType.IsNull() {
+			*dragenInstanceType = r.Config.AwsBatch.DragenInstanceType.ValueString()
 		} else {
 			dragenInstanceType = nil
 		}
 		computeJobRole := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.ComputeJobRole.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.ComputeJobRole.IsNull() {
-			*computeJobRole = r.ComputeEnv.Config.AwsBatch.ComputeJobRole.ValueString()
+		if !r.Config.AwsBatch.ComputeJobRole.IsUnknown() && !r.Config.AwsBatch.ComputeJobRole.IsNull() {
+			*computeJobRole = r.Config.AwsBatch.ComputeJobRole.ValueString()
 		} else {
 			computeJobRole = nil
 		}
 		executionRole := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.ExecutionRole.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.ExecutionRole.IsNull() {
-			*executionRole = r.ComputeEnv.Config.AwsBatch.ExecutionRole.ValueString()
+		if !r.Config.AwsBatch.ExecutionRole.IsUnknown() && !r.Config.AwsBatch.ExecutionRole.IsNull() {
+			*executionRole = r.Config.AwsBatch.ExecutionRole.ValueString()
 		} else {
 			executionRole = nil
 		}
 		headQueue := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadQueue.IsNull() {
-			*headQueue = r.ComputeEnv.Config.AwsBatch.HeadQueue.ValueString()
+		if !r.Config.AwsBatch.HeadQueue.IsUnknown() && !r.Config.AwsBatch.HeadQueue.IsNull() {
+			*headQueue = r.Config.AwsBatch.HeadQueue.ValueString()
 		} else {
 			headQueue = nil
 		}
 		headJobRole := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.HeadJobRole.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobRole.IsNull() {
-			*headJobRole = r.ComputeEnv.Config.AwsBatch.HeadJobRole.ValueString()
+		if !r.Config.AwsBatch.HeadJobRole.IsUnknown() && !r.Config.AwsBatch.HeadJobRole.IsNull() {
+			*headJobRole = r.Config.AwsBatch.HeadJobRole.ValueString()
 		} else {
 			headJobRole = nil
 		}
 		cliPath := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.CliPath.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.CliPath.IsNull() {
-			*cliPath = r.ComputeEnv.Config.AwsBatch.CliPath.ValueString()
+		if !r.Config.AwsBatch.CliPath.IsUnknown() && !r.Config.AwsBatch.CliPath.IsNull() {
+			*cliPath = r.Config.AwsBatch.CliPath.ValueString()
 		} else {
 			cliPath = nil
 		}
 		workDir := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.WorkDir.IsNull() {
-			*workDir = r.ComputeEnv.Config.AwsBatch.WorkDir.ValueString()
+		if !r.Config.AwsBatch.WorkDir.IsUnknown() && !r.Config.AwsBatch.WorkDir.IsNull() {
+			*workDir = r.Config.AwsBatch.WorkDir.ValueString()
 		} else {
 			workDir = nil
 		}
 		preRunScript := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.PreRunScript.IsNull() {
-			*preRunScript = r.ComputeEnv.Config.AwsBatch.PreRunScript.ValueString()
+		if !r.Config.AwsBatch.PreRunScript.IsUnknown() && !r.Config.AwsBatch.PreRunScript.IsNull() {
+			*preRunScript = r.Config.AwsBatch.PreRunScript.ValueString()
 		} else {
 			preRunScript = nil
 		}
 		postRunScript := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.PostRunScript.IsNull() {
-			*postRunScript = r.ComputeEnv.Config.AwsBatch.PostRunScript.ValueString()
+		if !r.Config.AwsBatch.PostRunScript.IsUnknown() && !r.Config.AwsBatch.PostRunScript.IsNull() {
+			*postRunScript = r.Config.AwsBatch.PostRunScript.ValueString()
 		} else {
 			postRunScript = nil
 		}
 		headJobCpus := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsNull() {
-			*headJobCpus = int(r.ComputeEnv.Config.AwsBatch.HeadJobCpus.ValueInt32())
+		if !r.Config.AwsBatch.HeadJobCpus.IsUnknown() && !r.Config.AwsBatch.HeadJobCpus.IsNull() {
+			*headJobCpus = int(r.Config.AwsBatch.HeadJobCpus.ValueInt32())
 		} else {
 			headJobCpus = nil
 		}
 		headJobMemoryMb := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb = int(r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb.ValueInt32())
+		if !r.Config.AwsBatch.HeadJobMemoryMb.IsUnknown() && !r.Config.AwsBatch.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb = int(r.Config.AwsBatch.HeadJobMemoryMb.ValueInt32())
 		} else {
 			headJobMemoryMb = nil
 		}
-		environment := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AwsBatch.Environment))
-		for _, environmentItem := range r.ComputeEnv.Config.AwsBatch.Environment {
+		environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.AwsBatch.Environment))
+		for _, environmentItem := range r.Config.AwsBatch.Environment {
 			name1 := new(string)
 			if !environmentItem.Name.IsUnknown() && !environmentItem.Name.IsNull() {
 				*name1 = environmentItem.Name.ValueString()
@@ -1018,199 +849,199 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			})
 		}
 		waveEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.WaveEnabled.IsNull() {
-			*waveEnabled = r.ComputeEnv.Config.AwsBatch.WaveEnabled.ValueBool()
+		if !r.Config.AwsBatch.WaveEnabled.IsUnknown() && !r.Config.AwsBatch.WaveEnabled.IsNull() {
+			*waveEnabled = r.Config.AwsBatch.WaveEnabled.ValueBool()
 		} else {
 			waveEnabled = nil
 		}
 		fusion2Enabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Fusion2Enabled.IsNull() {
-			*fusion2Enabled = r.ComputeEnv.Config.AwsBatch.Fusion2Enabled.ValueBool()
+		if !r.Config.AwsBatch.Fusion2Enabled.IsUnknown() && !r.Config.AwsBatch.Fusion2Enabled.IsNull() {
+			*fusion2Enabled = r.Config.AwsBatch.Fusion2Enabled.ValueBool()
 		} else {
 			fusion2Enabled = nil
 		}
 		nvnmeStorageEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.IsNull() {
-			*nvnmeStorageEnabled = r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.ValueBool()
+		if !r.Config.AwsBatch.NvnmeStorageEnabled.IsUnknown() && !r.Config.AwsBatch.NvnmeStorageEnabled.IsNull() {
+			*nvnmeStorageEnabled = r.Config.AwsBatch.NvnmeStorageEnabled.ValueBool()
 		} else {
 			nvnmeStorageEnabled = nil
 		}
 		logGroup := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.LogGroup.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.LogGroup.IsNull() {
-			*logGroup = r.ComputeEnv.Config.AwsBatch.LogGroup.ValueString()
+		if !r.Config.AwsBatch.LogGroup.IsUnknown() && !r.Config.AwsBatch.LogGroup.IsNull() {
+			*logGroup = r.Config.AwsBatch.LogGroup.ValueString()
 		} else {
 			logGroup = nil
 		}
 		nextflowConfig := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.NextflowConfig.IsNull() {
-			*nextflowConfig = r.ComputeEnv.Config.AwsBatch.NextflowConfig.ValueString()
+		if !r.Config.AwsBatch.NextflowConfig.IsUnknown() && !r.Config.AwsBatch.NextflowConfig.IsNull() {
+			*nextflowConfig = r.Config.AwsBatch.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig = nil
 		}
 		fusionSnapshots := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.FusionSnapshots.IsNull() {
-			*fusionSnapshots = r.ComputeEnv.Config.AwsBatch.FusionSnapshots.ValueBool()
+		if !r.Config.AwsBatch.FusionSnapshots.IsUnknown() && !r.Config.AwsBatch.FusionSnapshots.IsNull() {
+			*fusionSnapshots = r.Config.AwsBatch.FusionSnapshots.ValueBool()
 		} else {
 			fusionSnapshots = nil
 		}
-		typeVar := shared.ForgeConfigType(r.ComputeEnv.Config.AwsBatch.Forge.Type.ValueString())
+		typeVar := shared.ForgeConfigType(r.Config.AwsBatch.Forge.Type.ValueString())
 		var minCpus int
-		minCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MinCpus.ValueInt32())
+		minCpus = int(r.Config.AwsBatch.Forge.MinCpus.ValueInt32())
 
 		var maxCpus int
-		maxCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus.ValueInt32())
+		maxCpus = int(r.Config.AwsBatch.Forge.MaxCpus.ValueInt32())
 
 		gpuEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsNull() {
-			*gpuEnabled = r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.ValueBool()
+		if !r.Config.AwsBatch.Forge.GpuEnabled.IsUnknown() && !r.Config.AwsBatch.Forge.GpuEnabled.IsNull() {
+			*gpuEnabled = r.Config.AwsBatch.Forge.GpuEnabled.ValueBool()
 		} else {
 			gpuEnabled = nil
 		}
 		ebsAutoScale := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsNull() {
-			*ebsAutoScale = r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.ValueBool()
+		if !r.Config.AwsBatch.Forge.EbsAutoScale.IsUnknown() && !r.Config.AwsBatch.Forge.EbsAutoScale.IsNull() {
+			*ebsAutoScale = r.Config.AwsBatch.Forge.EbsAutoScale.ValueBool()
 		} else {
 			ebsAutoScale = nil
 		}
-		instanceTypes := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes))
-		for _, instanceTypesItem := range r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes {
+		instanceTypes := make([]string, 0, len(r.Config.AwsBatch.Forge.InstanceTypes))
+		for _, instanceTypesItem := range r.Config.AwsBatch.Forge.InstanceTypes {
 			instanceTypes = append(instanceTypes, instanceTypesItem.ValueString())
 		}
 		allocStrategy := new(shared.AllocStrategy)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsNull() {
-			*allocStrategy = shared.AllocStrategy(r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.ValueString())
+		if !r.Config.AwsBatch.Forge.AllocStrategy.IsUnknown() && !r.Config.AwsBatch.Forge.AllocStrategy.IsNull() {
+			*allocStrategy = shared.AllocStrategy(r.Config.AwsBatch.Forge.AllocStrategy.ValueString())
 		} else {
 			allocStrategy = nil
 		}
 		imageID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsNull() {
-			*imageID = r.ComputeEnv.Config.AwsBatch.Forge.ImageID.ValueString()
+		if !r.Config.AwsBatch.Forge.ImageID.IsUnknown() && !r.Config.AwsBatch.Forge.ImageID.IsNull() {
+			*imageID = r.Config.AwsBatch.Forge.ImageID.ValueString()
 		} else {
 			imageID = nil
 		}
 		vpcID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsNull() {
-			*vpcID = r.ComputeEnv.Config.AwsBatch.Forge.VpcID.ValueString()
+		if !r.Config.AwsBatch.Forge.VpcID.IsUnknown() && !r.Config.AwsBatch.Forge.VpcID.IsNull() {
+			*vpcID = r.Config.AwsBatch.Forge.VpcID.ValueString()
 		} else {
 			vpcID = nil
 		}
-		subnets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.Subnets))
-		for _, subnetsItem := range r.ComputeEnv.Config.AwsBatch.Forge.Subnets {
+		subnets := make([]string, 0, len(r.Config.AwsBatch.Forge.Subnets))
+		for _, subnetsItem := range r.Config.AwsBatch.Forge.Subnets {
 			subnets = append(subnets, subnetsItem.ValueString())
 		}
-		securityGroups := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups))
-		for _, securityGroupsItem := range r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups {
+		securityGroups := make([]string, 0, len(r.Config.AwsBatch.Forge.SecurityGroups))
+		for _, securityGroupsItem := range r.Config.AwsBatch.Forge.SecurityGroups {
 			securityGroups = append(securityGroups, securityGroupsItem.ValueString())
 		}
 		fsxMount := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsNull() {
-			*fsxMount = r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.ValueString()
+		if !r.Config.AwsBatch.Forge.FsxMount.IsUnknown() && !r.Config.AwsBatch.Forge.FsxMount.IsNull() {
+			*fsxMount = r.Config.AwsBatch.Forge.FsxMount.ValueString()
 		} else {
 			fsxMount = nil
 		}
 		fsxName := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsNull() {
-			*fsxName = r.ComputeEnv.Config.AwsBatch.Forge.FsxName.ValueString()
+		if !r.Config.AwsBatch.Forge.FsxName.IsUnknown() && !r.Config.AwsBatch.Forge.FsxName.IsNull() {
+			*fsxName = r.Config.AwsBatch.Forge.FsxName.ValueString()
 		} else {
 			fsxName = nil
 		}
 		fsxSize := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsNull() {
-			*fsxSize = int(r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.ValueInt32())
+		if !r.Config.AwsBatch.Forge.FsxSize.IsUnknown() && !r.Config.AwsBatch.Forge.FsxSize.IsNull() {
+			*fsxSize = int(r.Config.AwsBatch.Forge.FsxSize.ValueInt32())
 		} else {
 			fsxSize = nil
 		}
 		disposeOnDeletion := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsNull() {
-			*disposeOnDeletion = r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.ValueBool()
+		if !r.Config.AwsBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.Config.AwsBatch.Forge.DisposeOnDeletion.IsNull() {
+			*disposeOnDeletion = r.Config.AwsBatch.Forge.DisposeOnDeletion.ValueBool()
 		} else {
 			disposeOnDeletion = nil
 		}
 		ec2KeyPair := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsNull() {
-			*ec2KeyPair = r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.ValueString()
+		if !r.Config.AwsBatch.Forge.Ec2KeyPair.IsUnknown() && !r.Config.AwsBatch.Forge.Ec2KeyPair.IsNull() {
+			*ec2KeyPair = r.Config.AwsBatch.Forge.Ec2KeyPair.ValueString()
 		} else {
 			ec2KeyPair = nil
 		}
-		allowBuckets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets))
-		for _, allowBucketsItem := range r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets {
+		allowBuckets := make([]string, 0, len(r.Config.AwsBatch.Forge.AllowBuckets))
+		for _, allowBucketsItem := range r.Config.AwsBatch.Forge.AllowBuckets {
 			allowBuckets = append(allowBuckets, allowBucketsItem.ValueString())
 		}
 		ebsBlockSize := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsNull() {
-			*ebsBlockSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.ValueInt32())
+		if !r.Config.AwsBatch.Forge.EbsBlockSize.IsUnknown() && !r.Config.AwsBatch.Forge.EbsBlockSize.IsNull() {
+			*ebsBlockSize = int(r.Config.AwsBatch.Forge.EbsBlockSize.ValueInt32())
 		} else {
 			ebsBlockSize = nil
 		}
 		fusionEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsNull() {
-			*fusionEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.ValueBool()
+		if !r.Config.AwsBatch.Forge.FusionEnabled.IsUnknown() && !r.Config.AwsBatch.Forge.FusionEnabled.IsNull() {
+			*fusionEnabled = r.Config.AwsBatch.Forge.FusionEnabled.ValueBool()
 		} else {
 			fusionEnabled = nil
 		}
 		bidPercentage := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsNull() {
-			*bidPercentage = int(r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.ValueInt32())
+		if !r.Config.AwsBatch.Forge.BidPercentage.IsUnknown() && !r.Config.AwsBatch.Forge.BidPercentage.IsNull() {
+			*bidPercentage = int(r.Config.AwsBatch.Forge.BidPercentage.ValueInt32())
 		} else {
 			bidPercentage = nil
 		}
 		efsCreate := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsNull() {
-			*efsCreate = r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.ValueBool()
+		if !r.Config.AwsBatch.Forge.EfsCreate.IsUnknown() && !r.Config.AwsBatch.Forge.EfsCreate.IsNull() {
+			*efsCreate = r.Config.AwsBatch.Forge.EfsCreate.ValueBool()
 		} else {
 			efsCreate = nil
 		}
 		efsID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsNull() {
-			*efsID = r.ComputeEnv.Config.AwsBatch.Forge.EfsID.ValueString()
+		if !r.Config.AwsBatch.Forge.EfsID.IsUnknown() && !r.Config.AwsBatch.Forge.EfsID.IsNull() {
+			*efsID = r.Config.AwsBatch.Forge.EfsID.ValueString()
 		} else {
 			efsID = nil
 		}
 		efsMount := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsNull() {
-			*efsMount = r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.ValueString()
+		if !r.Config.AwsBatch.Forge.EfsMount.IsUnknown() && !r.Config.AwsBatch.Forge.EfsMount.IsNull() {
+			*efsMount = r.Config.AwsBatch.Forge.EfsMount.ValueString()
 		} else {
 			efsMount = nil
 		}
 		dragenEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsNull() {
-			*dragenEnabled = r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.ValueBool()
+		if !r.Config.AwsBatch.Forge.DragenEnabled.IsUnknown() && !r.Config.AwsBatch.Forge.DragenEnabled.IsNull() {
+			*dragenEnabled = r.Config.AwsBatch.Forge.DragenEnabled.ValueBool()
 		} else {
 			dragenEnabled = nil
 		}
 		dragenAmiID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsNull() {
-			*dragenAmiID = r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.ValueString()
+		if !r.Config.AwsBatch.Forge.DragenAmiID.IsUnknown() && !r.Config.AwsBatch.Forge.DragenAmiID.IsNull() {
+			*dragenAmiID = r.Config.AwsBatch.Forge.DragenAmiID.ValueString()
 		} else {
 			dragenAmiID = nil
 		}
 		ebsBootSize := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsNull() {
-			*ebsBootSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.ValueInt32())
+		if !r.Config.AwsBatch.Forge.EbsBootSize.IsUnknown() && !r.Config.AwsBatch.Forge.EbsBootSize.IsNull() {
+			*ebsBootSize = int(r.Config.AwsBatch.Forge.EbsBootSize.ValueInt32())
 		} else {
 			ebsBootSize = nil
 		}
 		ecsConfig := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsNull() {
-			*ecsConfig = r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.ValueString()
+		if !r.Config.AwsBatch.Forge.EcsConfig.IsUnknown() && !r.Config.AwsBatch.Forge.EcsConfig.IsNull() {
+			*ecsConfig = r.Config.AwsBatch.Forge.EcsConfig.ValueString()
 		} else {
 			ecsConfig = nil
 		}
 		fargateHeadEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsNull() {
-			*fargateHeadEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.ValueBool()
+		if !r.Config.AwsBatch.Forge.FargateHeadEnabled.IsUnknown() && !r.Config.AwsBatch.Forge.FargateHeadEnabled.IsNull() {
+			*fargateHeadEnabled = r.Config.AwsBatch.Forge.FargateHeadEnabled.ValueBool()
 		} else {
 			fargateHeadEnabled = nil
 		}
 		arm64Enabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsNull() {
-			*arm64Enabled = r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.ValueBool()
+		if !r.Config.AwsBatch.Forge.Arm64Enabled.IsUnknown() && !r.Config.AwsBatch.Forge.Arm64Enabled.IsNull() {
+			*arm64Enabled = r.Config.AwsBatch.Forge.Arm64Enabled.ValueBool()
 		} else {
 			arm64Enabled = nil
 		}
 		dragenInstanceType1 := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsNull() {
-			*dragenInstanceType1 = r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.ValueString()
+		if !r.Config.AwsBatch.Forge.DragenInstanceType.IsUnknown() && !r.Config.AwsBatch.Forge.DragenInstanceType.IsNull() {
+			*dragenInstanceType1 = r.Config.AwsBatch.Forge.DragenInstanceType.ValueString()
 		} else {
 			dragenInstanceType1 = nil
 		}
@@ -1280,52 +1111,52 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var awsCloudConfiguration *shared.AWSCloudConfiguration
-	if r.ComputeEnv.Config.AwsCloud != nil {
-		allowBuckets1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.AllowBuckets))
-		for _, allowBucketsItem1 := range r.ComputeEnv.Config.AwsCloud.AllowBuckets {
+	if r.Config.AwsCloud != nil {
+		allowBuckets1 := make([]string, 0, len(r.Config.AwsCloud.AllowBuckets))
+		for _, allowBucketsItem1 := range r.Config.AwsCloud.AllowBuckets {
 			allowBuckets1 = append(allowBuckets1, allowBucketsItem1.ValueString())
 		}
 		var region1 string
-		region1 = r.ComputeEnv.Config.AwsCloud.Region.ValueString()
+		region1 = r.Config.AwsCloud.Region.ValueString()
 
 		instanceType := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.InstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.InstanceType.IsNull() {
-			*instanceType = r.ComputeEnv.Config.AwsCloud.InstanceType.ValueString()
+		if !r.Config.AwsCloud.InstanceType.IsUnknown() && !r.Config.AwsCloud.InstanceType.IsNull() {
+			*instanceType = r.Config.AwsCloud.InstanceType.ValueString()
 		} else {
 			instanceType = nil
 		}
 		imageId1 := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.ImageID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.ImageID.IsNull() {
-			*imageId1 = r.ComputeEnv.Config.AwsCloud.ImageID.ValueString()
+		if !r.Config.AwsCloud.ImageID.IsUnknown() && !r.Config.AwsCloud.ImageID.IsNull() {
+			*imageId1 = r.Config.AwsCloud.ImageID.ValueString()
 		} else {
 			imageId1 = nil
 		}
 		workDir1 := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.WorkDir.IsNull() {
-			*workDir1 = r.ComputeEnv.Config.AwsCloud.WorkDir.ValueString()
+		if !r.Config.AwsCloud.WorkDir.IsUnknown() && !r.Config.AwsCloud.WorkDir.IsNull() {
+			*workDir1 = r.Config.AwsCloud.WorkDir.ValueString()
 		} else {
 			workDir1 = nil
 		}
 		preRunScript1 := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.PreRunScript.IsNull() {
-			*preRunScript1 = r.ComputeEnv.Config.AwsCloud.PreRunScript.ValueString()
+		if !r.Config.AwsCloud.PreRunScript.IsUnknown() && !r.Config.AwsCloud.PreRunScript.IsNull() {
+			*preRunScript1 = r.Config.AwsCloud.PreRunScript.ValueString()
 		} else {
 			preRunScript1 = nil
 		}
 		postRunScript1 := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.PostRunScript.IsNull() {
-			*postRunScript1 = r.ComputeEnv.Config.AwsCloud.PostRunScript.ValueString()
+		if !r.Config.AwsCloud.PostRunScript.IsUnknown() && !r.Config.AwsCloud.PostRunScript.IsNull() {
+			*postRunScript1 = r.Config.AwsCloud.PostRunScript.ValueString()
 		} else {
 			postRunScript1 = nil
 		}
 		nextflowConfig1 := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.NextflowConfig.IsNull() {
-			*nextflowConfig1 = r.ComputeEnv.Config.AwsCloud.NextflowConfig.ValueString()
+		if !r.Config.AwsCloud.NextflowConfig.IsUnknown() && !r.Config.AwsCloud.NextflowConfig.IsNull() {
+			*nextflowConfig1 = r.Config.AwsCloud.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig1 = nil
 		}
-		environment1 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AwsCloud.Environment))
-		for _, environmentItem1 := range r.ComputeEnv.Config.AwsCloud.Environment {
+		environment1 := make([]shared.ConfigEnvVariable, 0, len(r.Config.AwsCloud.Environment))
+		for _, environmentItem1 := range r.Config.AwsCloud.Environment {
 			name2 := new(string)
 			if !environmentItem1.Name.IsUnknown() && !environmentItem1.Name.IsNull() {
 				*name2 = environmentItem1.Name.ValueString()
@@ -1358,61 +1189,61 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			})
 		}
 		waveEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.AwsCloud.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.WaveEnabled.IsNull() {
-			*waveEnabled1 = r.ComputeEnv.Config.AwsCloud.WaveEnabled.ValueBool()
+		if !r.Config.AwsCloud.WaveEnabled.IsUnknown() && !r.Config.AwsCloud.WaveEnabled.IsNull() {
+			*waveEnabled1 = r.Config.AwsCloud.WaveEnabled.ValueBool()
 		} else {
 			waveEnabled1 = nil
 		}
 		fusion2Enabled1 := new(bool)
-		if !r.ComputeEnv.Config.AwsCloud.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Fusion2Enabled.IsNull() {
-			*fusion2Enabled1 = r.ComputeEnv.Config.AwsCloud.Fusion2Enabled.ValueBool()
+		if !r.Config.AwsCloud.Fusion2Enabled.IsUnknown() && !r.Config.AwsCloud.Fusion2Enabled.IsNull() {
+			*fusion2Enabled1 = r.Config.AwsCloud.Fusion2Enabled.ValueBool()
 		} else {
 			fusion2Enabled1 = nil
 		}
 		logGroup1 := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.LogGroup.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.LogGroup.IsNull() {
-			*logGroup1 = r.ComputeEnv.Config.AwsCloud.LogGroup.ValueString()
+		if !r.Config.AwsCloud.LogGroup.IsUnknown() && !r.Config.AwsCloud.LogGroup.IsNull() {
+			*logGroup1 = r.Config.AwsCloud.LogGroup.ValueString()
 		} else {
 			logGroup1 = nil
 		}
 		arm64Enabled1 := new(bool)
-		if !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsNull() {
-			*arm64Enabled1 = r.ComputeEnv.Config.AwsCloud.Arm64Enabled.ValueBool()
+		if !r.Config.AwsCloud.Arm64Enabled.IsUnknown() && !r.Config.AwsCloud.Arm64Enabled.IsNull() {
+			*arm64Enabled1 = r.Config.AwsCloud.Arm64Enabled.ValueBool()
 		} else {
 			arm64Enabled1 = nil
 		}
 		gpuEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsNull() {
-			*gpuEnabled1 = r.ComputeEnv.Config.AwsCloud.GpuEnabled.ValueBool()
+		if !r.Config.AwsCloud.GpuEnabled.IsUnknown() && !r.Config.AwsCloud.GpuEnabled.IsNull() {
+			*gpuEnabled1 = r.Config.AwsCloud.GpuEnabled.ValueBool()
 		} else {
 			gpuEnabled1 = nil
 		}
 		ec2KeyPair1 := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.IsNull() {
-			*ec2KeyPair1 = r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.ValueString()
+		if !r.Config.AwsCloud.Ec2KeyPair.IsUnknown() && !r.Config.AwsCloud.Ec2KeyPair.IsNull() {
+			*ec2KeyPair1 = r.Config.AwsCloud.Ec2KeyPair.ValueString()
 		} else {
 			ec2KeyPair1 = nil
 		}
 		ebsBootSize1 := new(int)
-		if !r.ComputeEnv.Config.AwsCloud.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.EbsBootSize.IsNull() {
-			*ebsBootSize1 = int(r.ComputeEnv.Config.AwsCloud.EbsBootSize.ValueInt32())
+		if !r.Config.AwsCloud.EbsBootSize.IsUnknown() && !r.Config.AwsCloud.EbsBootSize.IsNull() {
+			*ebsBootSize1 = int(r.Config.AwsCloud.EbsBootSize.ValueInt32())
 		} else {
 			ebsBootSize1 = nil
 		}
 		instanceProfileArn := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.InstanceProfileArn.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.InstanceProfileArn.IsNull() {
-			*instanceProfileArn = r.ComputeEnv.Config.AwsCloud.InstanceProfileArn.ValueString()
+		if !r.Config.AwsCloud.InstanceProfileArn.IsUnknown() && !r.Config.AwsCloud.InstanceProfileArn.IsNull() {
+			*instanceProfileArn = r.Config.AwsCloud.InstanceProfileArn.ValueString()
 		} else {
 			instanceProfileArn = nil
 		}
 		subnetID := new(string)
-		if !r.ComputeEnv.Config.AwsCloud.SubnetID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SubnetID.IsNull() {
-			*subnetID = r.ComputeEnv.Config.AwsCloud.SubnetID.ValueString()
+		if !r.Config.AwsCloud.SubnetID.IsUnknown() && !r.Config.AwsCloud.SubnetID.IsNull() {
+			*subnetID = r.Config.AwsCloud.SubnetID.ValueString()
 		} else {
 			subnetID = nil
 		}
-		securityGroups1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.SecurityGroups))
-		for _, securityGroupsItem1 := range r.ComputeEnv.Config.AwsCloud.SecurityGroups {
+		securityGroups1 := make([]string, 0, len(r.Config.AwsCloud.SecurityGroups))
+		for _, securityGroupsItem1 := range r.Config.AwsCloud.SecurityGroups {
 			securityGroups1 = append(securityGroups1, securityGroupsItem1.ValueString())
 		}
 		awsCloudConfiguration = &shared.AWSCloudConfiguration{
@@ -1443,106 +1274,36 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var seqeraComputeConfiguration *shared.SeqeraComputeConfiguration
-	if r.ComputeEnv.Config.SeqeracomputePlatform != nil {
-		storageType1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.StorageType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.StorageType.IsNull() {
-			*storageType1 = r.ComputeEnv.Config.SeqeracomputePlatform.StorageType.ValueString()
-		} else {
-			storageType1 = nil
-		}
-		lustreId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.LustreID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.LustreID.IsNull() {
-			*lustreId1 = r.ComputeEnv.Config.SeqeracomputePlatform.LustreID.ValueString()
-		} else {
-			lustreId1 = nil
-		}
-		volumes1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Volumes))
-		for _, volumesItem1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Volumes {
-			volumes1 = append(volumes1, volumesItem1.ValueString())
-		}
+	if r.Config.SeqeracomputePlatform != nil {
 		var region2 string
-		region2 = r.ComputeEnv.Config.SeqeracomputePlatform.Region.ValueString()
+		region2 = r.Config.SeqeracomputePlatform.Region.ValueString()
 
-		computeQueue1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue.IsNull() {
-			*computeQueue1 = r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue.ValueString()
-		} else {
-			computeQueue1 = nil
-		}
-		dragenQueue1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue.IsNull() {
-			*dragenQueue1 = r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue.ValueString()
-		} else {
-			dragenQueue1 = nil
-		}
-		dragenInstanceType2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType.IsNull() {
-			*dragenInstanceType2 = r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType.ValueString()
-		} else {
-			dragenInstanceType2 = nil
-		}
-		computeJobRole1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole.IsNull() {
-			*computeJobRole1 = r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole.ValueString()
-		} else {
-			computeJobRole1 = nil
-		}
-		executionRole1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole.IsNull() {
-			*executionRole1 = r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole.ValueString()
-		} else {
-			executionRole1 = nil
-		}
-		headQueue1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue.IsNull() {
-			*headQueue1 = r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue.ValueString()
-		} else {
-			headQueue1 = nil
-		}
-		headJobRole1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole.IsNull() {
-			*headJobRole1 = r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole.ValueString()
-		} else {
-			headJobRole1 = nil
-		}
-		cliPath1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.CliPath.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.CliPath.IsNull() {
-			*cliPath1 = r.ComputeEnv.Config.SeqeracomputePlatform.CliPath.ValueString()
-		} else {
-			cliPath1 = nil
-		}
 		workDir2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir.IsNull() {
-			*workDir2 = r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir.ValueString()
+		if !r.Config.SeqeracomputePlatform.WorkDir.IsUnknown() && !r.Config.SeqeracomputePlatform.WorkDir.IsNull() {
+			*workDir2 = r.Config.SeqeracomputePlatform.WorkDir.ValueString()
 		} else {
 			workDir2 = nil
 		}
 		preRunScript2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript.IsNull() {
-			*preRunScript2 = r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript.ValueString()
+		if !r.Config.SeqeracomputePlatform.PreRunScript.IsUnknown() && !r.Config.SeqeracomputePlatform.PreRunScript.IsNull() {
+			*preRunScript2 = r.Config.SeqeracomputePlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript2 = nil
 		}
 		postRunScript2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.IsNull() {
-			*postRunScript2 = r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.ValueString()
+		if !r.Config.SeqeracomputePlatform.PostRunScript.IsUnknown() && !r.Config.SeqeracomputePlatform.PostRunScript.IsNull() {
+			*postRunScript2 = r.Config.SeqeracomputePlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript2 = nil
 		}
-		headJobCpus1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus.IsNull() {
-			*headJobCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus.ValueInt32())
+		nextflowConfig2 := new(string)
+		if !r.Config.SeqeracomputePlatform.NextflowConfig.IsUnknown() && !r.Config.SeqeracomputePlatform.NextflowConfig.IsNull() {
+			*nextflowConfig2 = r.Config.SeqeracomputePlatform.NextflowConfig.ValueString()
 		} else {
-			headJobCpus1 = nil
+			nextflowConfig2 = nil
 		}
-		headJobMemoryMb1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb.ValueInt32())
-		} else {
-			headJobMemoryMb1 = nil
-		}
-		environment2 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Environment))
-		for _, environmentItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Environment {
+		environment2 := make([]shared.ConfigEnvVariable, 0, len(r.Config.SeqeracomputePlatform.Environment))
+		for _, environmentItem2 := range r.Config.SeqeracomputePlatform.Environment {
 			name3 := new(string)
 			if !environmentItem2.Name.IsUnknown() && !environmentItem2.Name.IsNull() {
 				*name3 = environmentItem2.Name.ValueString()
@@ -1574,261 +1335,13 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Compute: compute2,
 			})
 		}
-		waveEnabled2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.WaveEnabled.IsNull() {
-			*waveEnabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.WaveEnabled.ValueBool()
-		} else {
-			waveEnabled2 = nil
-		}
-		fusion2Enabled2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled.IsNull() {
-			*fusion2Enabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled.ValueBool()
-		} else {
-			fusion2Enabled2 = nil
-		}
-		nvnmeStorageEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled.IsNull() {
-			*nvnmeStorageEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled.ValueBool()
-		} else {
-			nvnmeStorageEnabled1 = nil
-		}
-		logGroup2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.IsNull() {
-			*logGroup2 = r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.ValueString()
-		} else {
-			logGroup2 = nil
-		}
-		nextflowConfig2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig.IsNull() {
-			*nextflowConfig2 = r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig.ValueString()
-		} else {
-			nextflowConfig2 = nil
-		}
-		fusionSnapshots1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots.IsNull() {
-			*fusionSnapshots1 = r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots.ValueBool()
-		} else {
-			fusionSnapshots1 = nil
-		}
-		typeVar1 := shared.ForgeConfigType(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type.ValueString())
-		var minCpus1 int
-		minCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus.ValueInt32())
-
-		var maxCpus1 int
-		maxCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus.ValueInt32())
-
-		gpuEnabled2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsNull() {
-			*gpuEnabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.ValueBool()
-		} else {
-			gpuEnabled2 = nil
-		}
-		ebsAutoScale1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsNull() {
-			*ebsAutoScale1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.ValueBool()
-		} else {
-			ebsAutoScale1 = nil
-		}
-		instanceTypes1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes))
-		for _, instanceTypesItem1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes {
-			instanceTypes1 = append(instanceTypes1, instanceTypesItem1.ValueString())
-		}
-		allocStrategy1 := new(shared.AllocStrategy)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsNull() {
-			*allocStrategy1 = shared.AllocStrategy(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.ValueString())
-		} else {
-			allocStrategy1 = nil
-		}
-		imageId2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsNull() {
-			*imageId2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.ValueString()
-		} else {
-			imageId2 = nil
-		}
-		vpcId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsNull() {
-			*vpcId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.ValueString()
-		} else {
-			vpcId1 = nil
-		}
-		subnets1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets))
-		for _, subnetsItem1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets {
-			subnets1 = append(subnets1, subnetsItem1.ValueString())
-		}
-		securityGroups2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups))
-		for _, securityGroupsItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups {
-			securityGroups2 = append(securityGroups2, securityGroupsItem2.ValueString())
-		}
-		fsxMount1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsNull() {
-			*fsxMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.ValueString()
-		} else {
-			fsxMount1 = nil
-		}
-		fsxName1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsNull() {
-			*fsxName1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.ValueString()
-		} else {
-			fsxName1 = nil
-		}
-		fsxSize1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsNull() {
-			*fsxSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.ValueInt32())
-		} else {
-			fsxSize1 = nil
-		}
-		disposeOnDeletion1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsNull() {
-			*disposeOnDeletion1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.ValueBool()
-		} else {
-			disposeOnDeletion1 = nil
-		}
-		ec2KeyPair2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsNull() {
-			*ec2KeyPair2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.ValueString()
-		} else {
-			ec2KeyPair2 = nil
-		}
-		allowBuckets2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets))
-		for _, allowBucketsItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets {
-			allowBuckets2 = append(allowBuckets2, allowBucketsItem2.ValueString())
-		}
-		ebsBlockSize1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsNull() {
-			*ebsBlockSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.ValueInt32())
-		} else {
-			ebsBlockSize1 = nil
-		}
-		fusionEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.IsNull() {
-			*fusionEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.ValueBool()
-		} else {
-			fusionEnabled1 = nil
-		}
-		bidPercentage1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsNull() {
-			*bidPercentage1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.ValueInt32())
-		} else {
-			bidPercentage1 = nil
-		}
-		efsCreate1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsNull() {
-			*efsCreate1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.ValueBool()
-		} else {
-			efsCreate1 = nil
-		}
-		efsId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsNull() {
-			*efsId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.ValueString()
-		} else {
-			efsId1 = nil
-		}
-		efsMount1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsNull() {
-			*efsMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.ValueString()
-		} else {
-			efsMount1 = nil
-		}
-		dragenEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsNull() {
-			*dragenEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.ValueBool()
-		} else {
-			dragenEnabled1 = nil
-		}
-		dragenAmiId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsNull() {
-			*dragenAmiId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.ValueString()
-		} else {
-			dragenAmiId1 = nil
-		}
-		ebsBootSize2 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsNull() {
-			*ebsBootSize2 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.ValueInt32())
-		} else {
-			ebsBootSize2 = nil
-		}
-		ecsConfig1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsNull() {
-			*ecsConfig1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.ValueString()
-		} else {
-			ecsConfig1 = nil
-		}
-		fargateHeadEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsNull() {
-			*fargateHeadEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.ValueBool()
-		} else {
-			fargateHeadEnabled1 = nil
-		}
-		arm64Enabled2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsNull() {
-			*arm64Enabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.ValueBool()
-		} else {
-			arm64Enabled2 = nil
-		}
-		dragenInstanceType3 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsNull() {
-			*dragenInstanceType3 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.ValueString()
-		} else {
-			dragenInstanceType3 = nil
-		}
-		forge1 := shared.ForgeConfig{
-			Type:               typeVar1,
-			MinCpus:            minCpus1,
-			MaxCpus:            maxCpus1,
-			GpuEnabled:         gpuEnabled2,
-			EbsAutoScale:       ebsAutoScale1,
-			InstanceTypes:      instanceTypes1,
-			AllocStrategy:      allocStrategy1,
-			ImageID:            imageId2,
-			VpcID:              vpcId1,
-			Subnets:            subnets1,
-			SecurityGroups:     securityGroups2,
-			FsxMount:           fsxMount1,
-			FsxName:            fsxName1,
-			FsxSize:            fsxSize1,
-			DisposeOnDeletion:  disposeOnDeletion1,
-			Ec2KeyPair:         ec2KeyPair2,
-			AllowBuckets:       allowBuckets2,
-			EbsBlockSize:       ebsBlockSize1,
-			FusionEnabled:      fusionEnabled1,
-			BidPercentage:      bidPercentage1,
-			EfsCreate:          efsCreate1,
-			EfsID:              efsId1,
-			EfsMount:           efsMount1,
-			DragenEnabled:      dragenEnabled1,
-			DragenAmiID:        dragenAmiId1,
-			EbsBootSize:        ebsBootSize2,
-			EcsConfig:          ecsConfig1,
-			FargateHeadEnabled: fargateHeadEnabled1,
-			Arm64Enabled:       arm64Enabled2,
-			DragenInstanceType: dragenInstanceType3,
-		}
 		seqeraComputeConfiguration = &shared.SeqeraComputeConfiguration{
-			StorageType:         storageType1,
-			LustreID:            lustreId1,
-			Volumes:             volumes1,
-			Region:              region2,
-			ComputeQueue:        computeQueue1,
-			DragenQueue:         dragenQueue1,
-			DragenInstanceType:  dragenInstanceType2,
-			ComputeJobRole:      computeJobRole1,
-			ExecutionRole:       executionRole1,
-			HeadQueue:           headQueue1,
-			HeadJobRole:         headJobRole1,
-			CliPath:             cliPath1,
-			WorkDir:             workDir2,
-			PreRunScript:        preRunScript2,
-			PostRunScript:       postRunScript2,
-			HeadJobCpus:         headJobCpus1,
-			HeadJobMemoryMb:     headJobMemoryMb1,
-			Environment:         environment2,
-			WaveEnabled:         waveEnabled2,
-			Fusion2Enabled:      fusion2Enabled2,
-			NvnmeStorageEnabled: nvnmeStorageEnabled1,
-			LogGroup:            logGroup2,
-			NextflowConfig:      nextflowConfig2,
-			FusionSnapshots:     fusionSnapshots1,
-			Forge:               forge1,
+			Region:         region2,
+			WorkDir:        workDir2,
+			PreRunScript:   preRunScript2,
+			PostRunScript:  postRunScript2,
+			NextflowConfig: nextflowConfig2,
+			Environment:    environment2,
 		}
 	}
 	if seqeraComputeConfiguration != nil {
@@ -1837,128 +1350,128 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var googleLifeSciencesConfiguration *shared.GoogleLifeSciencesConfiguration
-	if r.ComputeEnv.Config.GoogleLifesciences != nil {
+	if r.Config.GoogleLifesciences != nil {
 		region3 := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.Region.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.Region.IsNull() {
-			*region3 = r.ComputeEnv.Config.GoogleLifesciences.Region.ValueString()
+		if !r.Config.GoogleLifesciences.Region.IsUnknown() && !r.Config.GoogleLifesciences.Region.IsNull() {
+			*region3 = r.Config.GoogleLifesciences.Region.ValueString()
 		} else {
 			region3 = nil
 		}
-		zones := make([]string, 0, len(r.ComputeEnv.Config.GoogleLifesciences.Zones))
-		for _, zonesItem := range r.ComputeEnv.Config.GoogleLifesciences.Zones {
+		zones := make([]string, 0, len(r.Config.GoogleLifesciences.Zones))
+		for _, zonesItem := range r.Config.GoogleLifesciences.Zones {
 			zones = append(zones, zonesItem.ValueString())
 		}
 		location := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.Location.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.Location.IsNull() {
-			*location = r.ComputeEnv.Config.GoogleLifesciences.Location.ValueString()
+		if !r.Config.GoogleLifesciences.Location.IsUnknown() && !r.Config.GoogleLifesciences.Location.IsNull() {
+			*location = r.Config.GoogleLifesciences.Location.ValueString()
 		} else {
 			location = nil
 		}
 		workDir3 := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsNull() {
-			*workDir3 = r.ComputeEnv.Config.GoogleLifesciences.WorkDir.ValueString()
+		if !r.Config.GoogleLifesciences.WorkDir.IsUnknown() && !r.Config.GoogleLifesciences.WorkDir.IsNull() {
+			*workDir3 = r.Config.GoogleLifesciences.WorkDir.ValueString()
 		} else {
 			workDir3 = nil
 		}
 		preemptible := new(bool)
-		if !r.ComputeEnv.Config.GoogleLifesciences.Preemptible.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.Preemptible.IsNull() {
-			*preemptible = r.ComputeEnv.Config.GoogleLifesciences.Preemptible.ValueBool()
+		if !r.Config.GoogleLifesciences.Preemptible.IsUnknown() && !r.Config.GoogleLifesciences.Preemptible.IsNull() {
+			*preemptible = r.Config.GoogleLifesciences.Preemptible.ValueBool()
 		} else {
 			preemptible = nil
 		}
 		bootDiskSizeGb := new(int)
-		if !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsNull() {
-			*bootDiskSizeGb = int(r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.ValueInt32())
+		if !r.Config.GoogleLifesciences.BootDiskSizeGb.IsUnknown() && !r.Config.GoogleLifesciences.BootDiskSizeGb.IsNull() {
+			*bootDiskSizeGb = int(r.Config.GoogleLifesciences.BootDiskSizeGb.ValueInt32())
 		} else {
 			bootDiskSizeGb = nil
 		}
 		projectID := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.ProjectID.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.ProjectID.IsNull() {
-			*projectID = r.ComputeEnv.Config.GoogleLifesciences.ProjectID.ValueString()
+		if !r.Config.GoogleLifesciences.ProjectID.IsUnknown() && !r.Config.GoogleLifesciences.ProjectID.IsNull() {
+			*projectID = r.Config.GoogleLifesciences.ProjectID.ValueString()
 		} else {
 			projectID = nil
 		}
 		sshDaemon := new(bool)
-		if !r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon.IsNull() {
-			*sshDaemon = r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon.ValueBool()
+		if !r.Config.GoogleLifesciences.SSHDaemon.IsUnknown() && !r.Config.GoogleLifesciences.SSHDaemon.IsNull() {
+			*sshDaemon = r.Config.GoogleLifesciences.SSHDaemon.ValueBool()
 		} else {
 			sshDaemon = nil
 		}
 		sshImage := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.SSHImage.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.SSHImage.IsNull() {
-			*sshImage = r.ComputeEnv.Config.GoogleLifesciences.SSHImage.ValueString()
+		if !r.Config.GoogleLifesciences.SSHImage.IsUnknown() && !r.Config.GoogleLifesciences.SSHImage.IsNull() {
+			*sshImage = r.Config.GoogleLifesciences.SSHImage.ValueString()
 		} else {
 			sshImage = nil
 		}
 		debugMode := new(int)
-		if !r.ComputeEnv.Config.GoogleLifesciences.DebugMode.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.DebugMode.IsNull() {
-			*debugMode = int(r.ComputeEnv.Config.GoogleLifesciences.DebugMode.ValueInt32())
+		if !r.Config.GoogleLifesciences.DebugMode.IsUnknown() && !r.Config.GoogleLifesciences.DebugMode.IsNull() {
+			*debugMode = int(r.Config.GoogleLifesciences.DebugMode.ValueInt32())
 		} else {
 			debugMode = nil
 		}
 		copyImage := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsNull() {
-			*copyImage = r.ComputeEnv.Config.GoogleLifesciences.CopyImage.ValueString()
+		if !r.Config.GoogleLifesciences.CopyImage.IsUnknown() && !r.Config.GoogleLifesciences.CopyImage.IsNull() {
+			*copyImage = r.Config.GoogleLifesciences.CopyImage.ValueString()
 		} else {
 			copyImage = nil
 		}
 		usePrivateAddress := new(bool)
-		if !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsNull() {
-			*usePrivateAddress = r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.ValueBool()
+		if !r.Config.GoogleLifesciences.UsePrivateAddress.IsUnknown() && !r.Config.GoogleLifesciences.UsePrivateAddress.IsNull() {
+			*usePrivateAddress = r.Config.GoogleLifesciences.UsePrivateAddress.ValueBool()
 		} else {
 			usePrivateAddress = nil
 		}
 		labels := make(map[string]string)
-		for labelsKey, labelsValue := range r.ComputeEnv.Config.GoogleLifesciences.Labels {
+		for labelsKey, labelsValue := range r.Config.GoogleLifesciences.Labels {
 			var labelsInst string
 			labelsInst = labelsValue.ValueString()
 
 			labels[labelsKey] = labelsInst
 		}
 		preRunScript3 := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.PreRunScript.IsNull() {
-			*preRunScript3 = r.ComputeEnv.Config.GoogleLifesciences.PreRunScript.ValueString()
+		if !r.Config.GoogleLifesciences.PreRunScript.IsUnknown() && !r.Config.GoogleLifesciences.PreRunScript.IsNull() {
+			*preRunScript3 = r.Config.GoogleLifesciences.PreRunScript.ValueString()
 		} else {
 			preRunScript3 = nil
 		}
 		postRunScript3 := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.PostRunScript.IsNull() {
-			*postRunScript3 = r.ComputeEnv.Config.GoogleLifesciences.PostRunScript.ValueString()
+		if !r.Config.GoogleLifesciences.PostRunScript.IsUnknown() && !r.Config.GoogleLifesciences.PostRunScript.IsNull() {
+			*postRunScript3 = r.Config.GoogleLifesciences.PostRunScript.ValueString()
 		} else {
 			postRunScript3 = nil
 		}
-		headJobCpus2 := new(int)
-		if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsNull() {
-			*headJobCpus2 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.ValueInt32())
+		headJobCpus1 := new(int)
+		if !r.Config.GoogleLifesciences.HeadJobCpus.IsUnknown() && !r.Config.GoogleLifesciences.HeadJobCpus.IsNull() {
+			*headJobCpus1 = int(r.Config.GoogleLifesciences.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus2 = nil
+			headJobCpus1 = nil
 		}
-		headJobMemoryMb2 := new(int)
-		if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb2 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.ValueInt32())
+		headJobMemoryMb1 := new(int)
+		if !r.Config.GoogleLifesciences.HeadJobMemoryMb.IsUnknown() && !r.Config.GoogleLifesciences.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb1 = int(r.Config.GoogleLifesciences.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb2 = nil
+			headJobMemoryMb1 = nil
 		}
 		nextflowConfig3 := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig.IsNull() {
-			*nextflowConfig3 = r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig.ValueString()
+		if !r.Config.GoogleLifesciences.NextflowConfig.IsUnknown() && !r.Config.GoogleLifesciences.NextflowConfig.IsNull() {
+			*nextflowConfig3 = r.Config.GoogleLifesciences.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig3 = nil
 		}
 		nfsTarget := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.IsNull() {
-			*nfsTarget = r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.ValueString()
+		if !r.Config.GoogleLifesciences.NfsTarget.IsUnknown() && !r.Config.GoogleLifesciences.NfsTarget.IsNull() {
+			*nfsTarget = r.Config.GoogleLifesciences.NfsTarget.ValueString()
 		} else {
 			nfsTarget = nil
 		}
 		nfsMount := new(string)
-		if !r.ComputeEnv.Config.GoogleLifesciences.NfsMount.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.NfsMount.IsNull() {
-			*nfsMount = r.ComputeEnv.Config.GoogleLifesciences.NfsMount.ValueString()
+		if !r.Config.GoogleLifesciences.NfsMount.IsUnknown() && !r.Config.GoogleLifesciences.NfsMount.IsNull() {
+			*nfsMount = r.Config.GoogleLifesciences.NfsMount.ValueString()
 		} else {
 			nfsMount = nil
 		}
-		environment3 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.GoogleLifesciences.Environment))
-		for _, environmentItem3 := range r.ComputeEnv.Config.GoogleLifesciences.Environment {
+		environment3 := make([]shared.ConfigEnvVariable, 0, len(r.Config.GoogleLifesciences.Environment))
+		for _, environmentItem3 := range r.Config.GoogleLifesciences.Environment {
 			name4 := new(string)
 			if !environmentItem3.Name.IsUnknown() && !environmentItem3.Name.IsNull() {
 				*name4 = environmentItem3.Name.ValueString()
@@ -2006,8 +1519,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Labels:            labels,
 			PreRunScript:      preRunScript3,
 			PostRunScript:     postRunScript3,
-			HeadJobCpus:       headJobCpus2,
-			HeadJobMemoryMb:   headJobMemoryMb2,
+			HeadJobCpus:       headJobCpus1,
+			HeadJobMemoryMb:   headJobMemoryMb1,
 			NextflowConfig:    nextflowConfig3,
 			NfsTarget:         nfsTarget,
 			NfsMount:          nfsMount,
@@ -2020,130 +1533,130 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var googleBatchServiceConfiguration *shared.GoogleBatchServiceConfiguration
-	if r.ComputeEnv.Config.GoogleBatch != nil {
+	if r.Config.GoogleBatch != nil {
 		location1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.Location.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Location.IsNull() {
-			*location1 = r.ComputeEnv.Config.GoogleBatch.Location.ValueString()
+		if !r.Config.GoogleBatch.Location.IsUnknown() && !r.Config.GoogleBatch.Location.IsNull() {
+			*location1 = r.Config.GoogleBatch.Location.ValueString()
 		} else {
 			location1 = nil
 		}
 		workDir4 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.WorkDir.IsNull() {
-			*workDir4 = r.ComputeEnv.Config.GoogleBatch.WorkDir.ValueString()
+		if !r.Config.GoogleBatch.WorkDir.IsUnknown() && !r.Config.GoogleBatch.WorkDir.IsNull() {
+			*workDir4 = r.Config.GoogleBatch.WorkDir.ValueString()
 		} else {
 			workDir4 = nil
 		}
 		spot := new(bool)
-		if !r.ComputeEnv.Config.GoogleBatch.Spot.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Spot.IsNull() {
-			*spot = r.ComputeEnv.Config.GoogleBatch.Spot.ValueBool()
+		if !r.Config.GoogleBatch.Spot.IsUnknown() && !r.Config.GoogleBatch.Spot.IsNull() {
+			*spot = r.Config.GoogleBatch.Spot.ValueBool()
 		} else {
 			spot = nil
 		}
 		bootDiskSizeGb1 := new(int)
-		if !r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb.IsNull() {
-			*bootDiskSizeGb1 = int(r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb.ValueInt32())
+		if !r.Config.GoogleBatch.BootDiskSizeGb.IsUnknown() && !r.Config.GoogleBatch.BootDiskSizeGb.IsNull() {
+			*bootDiskSizeGb1 = int(r.Config.GoogleBatch.BootDiskSizeGb.ValueInt32())
 		} else {
 			bootDiskSizeGb1 = nil
 		}
 		cpuPlatform := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.CPUPlatform.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CPUPlatform.IsNull() {
-			*cpuPlatform = r.ComputeEnv.Config.GoogleBatch.CPUPlatform.ValueString()
+		if !r.Config.GoogleBatch.CPUPlatform.IsUnknown() && !r.Config.GoogleBatch.CPUPlatform.IsNull() {
+			*cpuPlatform = r.Config.GoogleBatch.CPUPlatform.ValueString()
 		} else {
 			cpuPlatform = nil
 		}
 		machineType := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.MachineType.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.MachineType.IsNull() {
-			*machineType = r.ComputeEnv.Config.GoogleBatch.MachineType.ValueString()
+		if !r.Config.GoogleBatch.MachineType.IsUnknown() && !r.Config.GoogleBatch.MachineType.IsNull() {
+			*machineType = r.Config.GoogleBatch.MachineType.ValueString()
 		} else {
 			machineType = nil
 		}
 		projectId1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.ProjectID.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ProjectID.IsNull() {
-			*projectId1 = r.ComputeEnv.Config.GoogleBatch.ProjectID.ValueString()
+		if !r.Config.GoogleBatch.ProjectID.IsUnknown() && !r.Config.GoogleBatch.ProjectID.IsNull() {
+			*projectId1 = r.Config.GoogleBatch.ProjectID.ValueString()
 		} else {
 			projectId1 = nil
 		}
 		sshDaemon1 := new(bool)
-		if !r.ComputeEnv.Config.GoogleBatch.SSHDaemon.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.SSHDaemon.IsNull() {
-			*sshDaemon1 = r.ComputeEnv.Config.GoogleBatch.SSHDaemon.ValueBool()
+		if !r.Config.GoogleBatch.SSHDaemon.IsUnknown() && !r.Config.GoogleBatch.SSHDaemon.IsNull() {
+			*sshDaemon1 = r.Config.GoogleBatch.SSHDaemon.ValueBool()
 		} else {
 			sshDaemon1 = nil
 		}
 		sshImage1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.SSHImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.SSHImage.IsNull() {
-			*sshImage1 = r.ComputeEnv.Config.GoogleBatch.SSHImage.ValueString()
+		if !r.Config.GoogleBatch.SSHImage.IsUnknown() && !r.Config.GoogleBatch.SSHImage.IsNull() {
+			*sshImage1 = r.Config.GoogleBatch.SSHImage.ValueString()
 		} else {
 			sshImage1 = nil
 		}
 		debugMode1 := new(int)
-		if !r.ComputeEnv.Config.GoogleBatch.DebugMode.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.DebugMode.IsNull() {
-			*debugMode1 = int(r.ComputeEnv.Config.GoogleBatch.DebugMode.ValueInt32())
+		if !r.Config.GoogleBatch.DebugMode.IsUnknown() && !r.Config.GoogleBatch.DebugMode.IsNull() {
+			*debugMode1 = int(r.Config.GoogleBatch.DebugMode.ValueInt32())
 		} else {
 			debugMode1 = nil
 		}
 		copyImage1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsNull() {
-			*copyImage1 = r.ComputeEnv.Config.GoogleBatch.CopyImage.ValueString()
+		if !r.Config.GoogleBatch.CopyImage.IsUnknown() && !r.Config.GoogleBatch.CopyImage.IsNull() {
+			*copyImage1 = r.Config.GoogleBatch.CopyImage.ValueString()
 		} else {
 			copyImage1 = nil
 		}
 		usePrivateAddress1 := new(bool)
-		if !r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.IsNull() {
-			*usePrivateAddress1 = r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.ValueBool()
+		if !r.Config.GoogleBatch.UsePrivateAddress.IsUnknown() && !r.Config.GoogleBatch.UsePrivateAddress.IsNull() {
+			*usePrivateAddress1 = r.Config.GoogleBatch.UsePrivateAddress.ValueBool()
 		} else {
 			usePrivateAddress1 = nil
 		}
 		labels1 := make(map[string]string)
-		for labelsKey1, labelsValue1 := range r.ComputeEnv.Config.GoogleBatch.Labels {
+		for labelsKey1, labelsValue1 := range r.Config.GoogleBatch.Labels {
 			var labelsInst1 string
 			labelsInst1 = labelsValue1.ValueString()
 
 			labels1[labelsKey1] = labelsInst1
 		}
 		preRunScript4 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.PreRunScript.IsNull() {
-			*preRunScript4 = r.ComputeEnv.Config.GoogleBatch.PreRunScript.ValueString()
+		if !r.Config.GoogleBatch.PreRunScript.IsUnknown() && !r.Config.GoogleBatch.PreRunScript.IsNull() {
+			*preRunScript4 = r.Config.GoogleBatch.PreRunScript.ValueString()
 		} else {
 			preRunScript4 = nil
 		}
 		postRunScript4 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.PostRunScript.IsNull() {
-			*postRunScript4 = r.ComputeEnv.Config.GoogleBatch.PostRunScript.ValueString()
+		if !r.Config.GoogleBatch.PostRunScript.IsUnknown() && !r.Config.GoogleBatch.PostRunScript.IsNull() {
+			*postRunScript4 = r.Config.GoogleBatch.PostRunScript.ValueString()
 		} else {
 			postRunScript4 = nil
 		}
-		headJobCpus3 := new(int)
-		if !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsNull() {
-			*headJobCpus3 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.ValueInt32())
+		headJobCpus2 := new(int)
+		if !r.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.Config.GoogleBatch.HeadJobCpus.IsNull() {
+			*headJobCpus2 = int(r.Config.GoogleBatch.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus3 = nil
+			headJobCpus2 = nil
 		}
-		headJobMemoryMb3 := new(int)
-		if !r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb3 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.ValueInt32())
+		headJobMemoryMb2 := new(int)
+		if !r.Config.GoogleBatch.HeadJobMemoryMb.IsUnknown() && !r.Config.GoogleBatch.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb2 = int(r.Config.GoogleBatch.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb3 = nil
+			headJobMemoryMb2 = nil
 		}
 		nextflowConfig4 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NextflowConfig.IsNull() {
-			*nextflowConfig4 = r.ComputeEnv.Config.GoogleBatch.NextflowConfig.ValueString()
+		if !r.Config.GoogleBatch.NextflowConfig.IsUnknown() && !r.Config.GoogleBatch.NextflowConfig.IsNull() {
+			*nextflowConfig4 = r.Config.GoogleBatch.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig4 = nil
 		}
 		nfsTarget1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsNull() {
-			*nfsTarget1 = r.ComputeEnv.Config.GoogleBatch.NfsTarget.ValueString()
+		if !r.Config.GoogleBatch.NfsTarget.IsUnknown() && !r.Config.GoogleBatch.NfsTarget.IsNull() {
+			*nfsTarget1 = r.Config.GoogleBatch.NfsTarget.ValueString()
 		} else {
 			nfsTarget1 = nil
 		}
 		nfsMount1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.NfsMount.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NfsMount.IsNull() {
-			*nfsMount1 = r.ComputeEnv.Config.GoogleBatch.NfsMount.ValueString()
+		if !r.Config.GoogleBatch.NfsMount.IsUnknown() && !r.Config.GoogleBatch.NfsMount.IsNull() {
+			*nfsMount1 = r.Config.GoogleBatch.NfsMount.ValueString()
 		} else {
 			nfsMount1 = nil
 		}
-		environment4 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.GoogleBatch.Environment))
-		for _, environmentItem4 := range r.ComputeEnv.Config.GoogleBatch.Environment {
+		environment4 := make([]shared.ConfigEnvVariable, 0, len(r.Config.GoogleBatch.Environment))
+		for _, environmentItem4 := range r.Config.GoogleBatch.Environment {
 			name5 := new(string)
 			if !environmentItem4.Name.IsUnknown() && !environmentItem4.Name.IsNull() {
 				*name5 = environmentItem4.Name.ValueString()
@@ -2175,45 +1688,45 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Compute: compute4,
 			})
 		}
-		waveEnabled3 := new(bool)
-		if !r.ComputeEnv.Config.GoogleBatch.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.WaveEnabled.IsNull() {
-			*waveEnabled3 = r.ComputeEnv.Config.GoogleBatch.WaveEnabled.ValueBool()
+		waveEnabled2 := new(bool)
+		if !r.Config.GoogleBatch.WaveEnabled.IsUnknown() && !r.Config.GoogleBatch.WaveEnabled.IsNull() {
+			*waveEnabled2 = r.Config.GoogleBatch.WaveEnabled.ValueBool()
 		} else {
-			waveEnabled3 = nil
+			waveEnabled2 = nil
 		}
-		fusion2Enabled3 := new(bool)
-		if !r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled.IsNull() {
-			*fusion2Enabled3 = r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled.ValueBool()
+		fusion2Enabled2 := new(bool)
+		if !r.Config.GoogleBatch.Fusion2Enabled.IsUnknown() && !r.Config.GoogleBatch.Fusion2Enabled.IsNull() {
+			*fusion2Enabled2 = r.Config.GoogleBatch.Fusion2Enabled.ValueBool()
 		} else {
-			fusion2Enabled3 = nil
+			fusion2Enabled2 = nil
 		}
 		serviceAccount := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.ServiceAccount.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ServiceAccount.IsNull() {
-			*serviceAccount = r.ComputeEnv.Config.GoogleBatch.ServiceAccount.ValueString()
+		if !r.Config.GoogleBatch.ServiceAccount.IsUnknown() && !r.Config.GoogleBatch.ServiceAccount.IsNull() {
+			*serviceAccount = r.Config.GoogleBatch.ServiceAccount.ValueString()
 		} else {
 			serviceAccount = nil
 		}
 		network := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.Network.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Network.IsNull() {
-			*network = r.ComputeEnv.Config.GoogleBatch.Network.ValueString()
+		if !r.Config.GoogleBatch.Network.IsUnknown() && !r.Config.GoogleBatch.Network.IsNull() {
+			*network = r.Config.GoogleBatch.Network.ValueString()
 		} else {
 			network = nil
 		}
 		subnetwork := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.Subnetwork.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Subnetwork.IsNull() {
-			*subnetwork = r.ComputeEnv.Config.GoogleBatch.Subnetwork.ValueString()
+		if !r.Config.GoogleBatch.Subnetwork.IsUnknown() && !r.Config.GoogleBatch.Subnetwork.IsNull() {
+			*subnetwork = r.Config.GoogleBatch.Subnetwork.ValueString()
 		} else {
 			subnetwork = nil
 		}
 		headJobInstanceTemplate := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate.IsNull() {
-			*headJobInstanceTemplate = r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate.ValueString()
+		if !r.Config.GoogleBatch.HeadJobInstanceTemplate.IsUnknown() && !r.Config.GoogleBatch.HeadJobInstanceTemplate.IsNull() {
+			*headJobInstanceTemplate = r.Config.GoogleBatch.HeadJobInstanceTemplate.ValueString()
 		} else {
 			headJobInstanceTemplate = nil
 		}
 		computeJobsInstanceTemplate := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate.IsNull() {
-			*computeJobsInstanceTemplate = r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate.ValueString()
+		if !r.Config.GoogleBatch.ComputeJobsInstanceTemplate.IsUnknown() && !r.Config.GoogleBatch.ComputeJobsInstanceTemplate.IsNull() {
+			*computeJobsInstanceTemplate = r.Config.GoogleBatch.ComputeJobsInstanceTemplate.ValueString()
 		} else {
 			computeJobsInstanceTemplate = nil
 		}
@@ -2233,14 +1746,14 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Labels:                      labels1,
 			PreRunScript:                preRunScript4,
 			PostRunScript:               postRunScript4,
-			HeadJobCpus:                 headJobCpus3,
-			HeadJobMemoryMb:             headJobMemoryMb3,
+			HeadJobCpus:                 headJobCpus2,
+			HeadJobMemoryMb:             headJobMemoryMb2,
 			NextflowConfig:              nextflowConfig4,
 			NfsTarget:                   nfsTarget1,
 			NfsMount:                    nfsMount1,
 			Environment:                 environment4,
-			WaveEnabled:                 waveEnabled3,
-			Fusion2Enabled:              fusion2Enabled3,
+			WaveEnabled:                 waveEnabled2,
+			Fusion2Enabled:              fusion2Enabled2,
 			ServiceAccount:              serviceAccount,
 			Network:                     network,
 			Subnetwork:                  subnetwork,
@@ -2254,92 +1767,92 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var azureBatchConfiguration *shared.AzureBatchConfiguration
-	if r.ComputeEnv.Config.AzureBatch != nil {
+	if r.Config.AzureBatch != nil {
 		workDir5 := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.WorkDir.IsNull() {
-			*workDir5 = r.ComputeEnv.Config.AzureBatch.WorkDir.ValueString()
+		if !r.Config.AzureBatch.WorkDir.IsUnknown() && !r.Config.AzureBatch.WorkDir.IsNull() {
+			*workDir5 = r.Config.AzureBatch.WorkDir.ValueString()
 		} else {
 			workDir5 = nil
 		}
 		preRunScript5 := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.PreRunScript.IsNull() {
-			*preRunScript5 = r.ComputeEnv.Config.AzureBatch.PreRunScript.ValueString()
+		if !r.Config.AzureBatch.PreRunScript.IsUnknown() && !r.Config.AzureBatch.PreRunScript.IsNull() {
+			*preRunScript5 = r.Config.AzureBatch.PreRunScript.ValueString()
 		} else {
 			preRunScript5 = nil
 		}
 		postRunScript5 := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.PostRunScript.IsNull() {
-			*postRunScript5 = r.ComputeEnv.Config.AzureBatch.PostRunScript.ValueString()
+		if !r.Config.AzureBatch.PostRunScript.IsUnknown() && !r.Config.AzureBatch.PostRunScript.IsNull() {
+			*postRunScript5 = r.Config.AzureBatch.PostRunScript.ValueString()
 		} else {
 			postRunScript5 = nil
 		}
 		var region4 string
-		region4 = r.ComputeEnv.Config.AzureBatch.Region.ValueString()
+		region4 = r.Config.AzureBatch.Region.ValueString()
 
 		headPool := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.HeadPool.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadPool.IsNull() {
-			*headPool = r.ComputeEnv.Config.AzureBatch.HeadPool.ValueString()
+		if !r.Config.AzureBatch.HeadPool.IsUnknown() && !r.Config.AzureBatch.HeadPool.IsNull() {
+			*headPool = r.Config.AzureBatch.HeadPool.ValueString()
 		} else {
 			headPool = nil
 		}
 		autoPoolMode := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsNull() {
-			*autoPoolMode = r.ComputeEnv.Config.AzureBatch.AutoPoolMode.ValueBool()
+		if !r.Config.AzureBatch.AutoPoolMode.IsUnknown() && !r.Config.AzureBatch.AutoPoolMode.IsNull() {
+			*autoPoolMode = r.Config.AzureBatch.AutoPoolMode.ValueBool()
 		} else {
 			autoPoolMode = nil
 		}
 		vmType := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsNull() {
-			*vmType = r.ComputeEnv.Config.AzureBatch.Forge.VMType.ValueString()
+		if !r.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.Config.AzureBatch.Forge.VMType.IsNull() {
+			*vmType = r.Config.AzureBatch.Forge.VMType.ValueString()
 		} else {
 			vmType = nil
 		}
 		var vmCount int
-		vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.VMCount.ValueInt32())
+		vmCount = int(r.Config.AzureBatch.Forge.VMCount.ValueInt32())
 
 		autoScale := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsNull() {
-			*autoScale = r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.ValueBool()
+		if !r.Config.AzureBatch.Forge.AutoScale.IsUnknown() && !r.Config.AzureBatch.Forge.AutoScale.IsNull() {
+			*autoScale = r.Config.AzureBatch.Forge.AutoScale.ValueBool()
 		} else {
 			autoScale = nil
 		}
-		disposeOnDeletion2 := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsNull() {
-			*disposeOnDeletion2 = r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.ValueBool()
+		disposeOnDeletion1 := new(bool)
+		if !r.Config.AzureBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.Config.AzureBatch.Forge.DisposeOnDeletion.IsNull() {
+			*disposeOnDeletion1 = r.Config.AzureBatch.Forge.DisposeOnDeletion.ValueBool()
 		} else {
-			disposeOnDeletion2 = nil
+			disposeOnDeletion1 = nil
 		}
-		containerRegIds := make([]string, 0, len(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds))
-		for _, containerRegIdsItem := range r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds {
+		containerRegIds := make([]string, 0, len(r.Config.AzureBatch.Forge.ContainerRegIds))
+		for _, containerRegIdsItem := range r.Config.AzureBatch.Forge.ContainerRegIds {
 			containerRegIds = append(containerRegIds, containerRegIdsItem.ValueString())
 		}
-		forge2 := shared.AzBatchForgeConfig{
+		forge1 := shared.AzBatchForgeConfig{
 			VMType:            vmType,
 			VMCount:           vmCount,
 			AutoScale:         autoScale,
-			DisposeOnDeletion: disposeOnDeletion2,
+			DisposeOnDeletion: disposeOnDeletion1,
 			ContainerRegIds:   containerRegIds,
 		}
 		tokenDuration := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsNull() {
-			*tokenDuration = r.ComputeEnv.Config.AzureBatch.TokenDuration.ValueString()
+		if !r.Config.AzureBatch.TokenDuration.IsUnknown() && !r.Config.AzureBatch.TokenDuration.IsNull() {
+			*tokenDuration = r.Config.AzureBatch.TokenDuration.ValueString()
 		} else {
 			tokenDuration = nil
 		}
 		deleteJobsOnCompletion := new(shared.JobCleanupPolicy)
-		if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsNull() {
-			*deleteJobsOnCompletion = shared.JobCleanupPolicy(r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.ValueString())
+		if !r.Config.AzureBatch.DeleteJobsOnCompletion.IsUnknown() && !r.Config.AzureBatch.DeleteJobsOnCompletion.IsNull() {
+			*deleteJobsOnCompletion = shared.JobCleanupPolicy(r.Config.AzureBatch.DeleteJobsOnCompletion.ValueString())
 		} else {
 			deleteJobsOnCompletion = nil
 		}
 		deletePoolsOnCompletion := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.IsNull() {
-			*deletePoolsOnCompletion = r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.ValueBool()
+		if !r.Config.AzureBatch.DeletePoolsOnCompletion.IsUnknown() && !r.Config.AzureBatch.DeletePoolsOnCompletion.IsNull() {
+			*deletePoolsOnCompletion = r.Config.AzureBatch.DeletePoolsOnCompletion.ValueBool()
 		} else {
 			deletePoolsOnCompletion = nil
 		}
-		environment5 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AzureBatch.Environment))
-		for _, environmentItem5 := range r.ComputeEnv.Config.AzureBatch.Environment {
+		environment5 := make([]shared.ConfigEnvVariable, 0, len(r.Config.AzureBatch.Environment))
+		for _, environmentItem5 := range r.Config.AzureBatch.Environment {
 			name6 := new(string)
 			if !environmentItem5.Name.IsUnknown() && !environmentItem5.Name.IsNull() {
 				*name6 = environmentItem5.Name.ValueString()
@@ -2371,27 +1884,27 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Compute: compute5,
 			})
 		}
-		waveEnabled4 := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.WaveEnabled.IsNull() {
-			*waveEnabled4 = r.ComputeEnv.Config.AzureBatch.WaveEnabled.ValueBool()
+		waveEnabled3 := new(bool)
+		if !r.Config.AzureBatch.WaveEnabled.IsUnknown() && !r.Config.AzureBatch.WaveEnabled.IsNull() {
+			*waveEnabled3 = r.Config.AzureBatch.WaveEnabled.ValueBool()
 		} else {
-			waveEnabled4 = nil
+			waveEnabled3 = nil
 		}
-		fusion2Enabled4 := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Fusion2Enabled.IsNull() {
-			*fusion2Enabled4 = r.ComputeEnv.Config.AzureBatch.Fusion2Enabled.ValueBool()
+		fusion2Enabled3 := new(bool)
+		if !r.Config.AzureBatch.Fusion2Enabled.IsUnknown() && !r.Config.AzureBatch.Fusion2Enabled.IsNull() {
+			*fusion2Enabled3 = r.Config.AzureBatch.Fusion2Enabled.ValueBool()
 		} else {
-			fusion2Enabled4 = nil
+			fusion2Enabled3 = nil
 		}
 		nextflowConfig5 := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.NextflowConfig.IsNull() {
-			*nextflowConfig5 = r.ComputeEnv.Config.AzureBatch.NextflowConfig.ValueString()
+		if !r.Config.AzureBatch.NextflowConfig.IsUnknown() && !r.Config.AzureBatch.NextflowConfig.IsNull() {
+			*nextflowConfig5 = r.Config.AzureBatch.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig5 = nil
 		}
 		managedIdentityClientID := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsNull() {
-			*managedIdentityClientID = r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.ValueString()
+		if !r.Config.AzureBatch.ManagedIdentityClientID.IsUnknown() && !r.Config.AzureBatch.ManagedIdentityClientID.IsNull() {
+			*managedIdentityClientID = r.Config.AzureBatch.ManagedIdentityClientID.ValueString()
 		} else {
 			managedIdentityClientID = nil
 		}
@@ -2402,13 +1915,13 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Region:                  region4,
 			HeadPool:                headPool,
 			AutoPoolMode:            autoPoolMode,
-			Forge:                   forge2,
+			Forge:                   forge1,
 			TokenDuration:           tokenDuration,
 			DeleteJobsOnCompletion:  deleteJobsOnCompletion,
 			DeletePoolsOnCompletion: deletePoolsOnCompletion,
 			Environment:             environment5,
-			WaveEnabled:             waveEnabled4,
-			Fusion2Enabled:          fusion2Enabled4,
+			WaveEnabled:             waveEnabled3,
+			Fusion2Enabled:          fusion2Enabled3,
 			NextflowConfig:          nextflowConfig5,
 			ManagedIdentityClientID: managedIdentityClientID,
 		}
@@ -2419,102 +1932,102 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var ibmLSFConfiguration *shared.IBMLSFConfiguration
-	if r.ComputeEnv.Config.LsfPlatform != nil {
+	if r.Config.LsfPlatform != nil {
 		var workDir6 string
-		workDir6 = r.ComputeEnv.Config.LsfPlatform.WorkDir.ValueString()
+		workDir6 = r.Config.LsfPlatform.WorkDir.ValueString()
 
 		preRunScript6 := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PreRunScript.IsNull() {
-			*preRunScript6 = r.ComputeEnv.Config.LsfPlatform.PreRunScript.ValueString()
+		if !r.Config.LsfPlatform.PreRunScript.IsUnknown() && !r.Config.LsfPlatform.PreRunScript.IsNull() {
+			*preRunScript6 = r.Config.LsfPlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript6 = nil
 		}
 		postRunScript6 := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PostRunScript.IsNull() {
-			*postRunScript6 = r.ComputeEnv.Config.LsfPlatform.PostRunScript.ValueString()
+		if !r.Config.LsfPlatform.PostRunScript.IsUnknown() && !r.Config.LsfPlatform.PostRunScript.IsNull() {
+			*postRunScript6 = r.Config.LsfPlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript6 = nil
 		}
 		nextflowConfig6 := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.NextflowConfig.IsNull() {
-			*nextflowConfig6 = r.ComputeEnv.Config.LsfPlatform.NextflowConfig.ValueString()
+		if !r.Config.LsfPlatform.NextflowConfig.IsUnknown() && !r.Config.LsfPlatform.NextflowConfig.IsNull() {
+			*nextflowConfig6 = r.Config.LsfPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig6 = nil
 		}
 		launchDir := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.LaunchDir.IsNull() {
-			*launchDir = r.ComputeEnv.Config.LsfPlatform.LaunchDir.ValueString()
+		if !r.Config.LsfPlatform.LaunchDir.IsUnknown() && !r.Config.LsfPlatform.LaunchDir.IsNull() {
+			*launchDir = r.Config.LsfPlatform.LaunchDir.ValueString()
 		} else {
 			launchDir = nil
 		}
 		userName := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.UserName.IsNull() {
-			*userName = r.ComputeEnv.Config.LsfPlatform.UserName.ValueString()
+		if !r.Config.LsfPlatform.UserName.IsUnknown() && !r.Config.LsfPlatform.UserName.IsNull() {
+			*userName = r.Config.LsfPlatform.UserName.ValueString()
 		} else {
 			userName = nil
 		}
 		hostName := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.HostName.IsNull() {
-			*hostName = r.ComputeEnv.Config.LsfPlatform.HostName.ValueString()
+		if !r.Config.LsfPlatform.HostName.IsUnknown() && !r.Config.LsfPlatform.HostName.IsNull() {
+			*hostName = r.Config.LsfPlatform.HostName.ValueString()
 		} else {
 			hostName = nil
 		}
 		port := new(int)
-		if !r.ComputeEnv.Config.LsfPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.Port.IsNull() {
-			*port = int(r.ComputeEnv.Config.LsfPlatform.Port.ValueInt32())
+		if !r.Config.LsfPlatform.Port.IsUnknown() && !r.Config.LsfPlatform.Port.IsNull() {
+			*port = int(r.Config.LsfPlatform.Port.ValueInt32())
 		} else {
 			port = nil
 		}
-		headQueue2 := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.HeadQueue.IsNull() {
-			*headQueue2 = r.ComputeEnv.Config.LsfPlatform.HeadQueue.ValueString()
+		headQueue1 := new(string)
+		if !r.Config.LsfPlatform.HeadQueue.IsUnknown() && !r.Config.LsfPlatform.HeadQueue.IsNull() {
+			*headQueue1 = r.Config.LsfPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue2 = nil
+			headQueue1 = nil
 		}
-		computeQueue2 := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.ComputeQueue.IsNull() {
-			*computeQueue2 = r.ComputeEnv.Config.LsfPlatform.ComputeQueue.ValueString()
+		computeQueue1 := new(string)
+		if !r.Config.LsfPlatform.ComputeQueue.IsUnknown() && !r.Config.LsfPlatform.ComputeQueue.IsNull() {
+			*computeQueue1 = r.Config.LsfPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue2 = nil
+			computeQueue1 = nil
 		}
 		maxQueueSize := new(int)
-		if !r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.IsNull() {
-			*maxQueueSize = int(r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.ValueInt32())
+		if !r.Config.LsfPlatform.MaxQueueSize.IsUnknown() && !r.Config.LsfPlatform.MaxQueueSize.IsNull() {
+			*maxQueueSize = int(r.Config.LsfPlatform.MaxQueueSize.ValueInt32())
 		} else {
 			maxQueueSize = nil
 		}
 		headJobOptions := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.HeadJobOptions.IsNull() {
-			*headJobOptions = r.ComputeEnv.Config.LsfPlatform.HeadJobOptions.ValueString()
+		if !r.Config.LsfPlatform.HeadJobOptions.IsUnknown() && !r.Config.LsfPlatform.HeadJobOptions.IsNull() {
+			*headJobOptions = r.Config.LsfPlatform.HeadJobOptions.ValueString()
 		} else {
 			headJobOptions = nil
 		}
 		propagateHeadJobOptions := new(bool)
-		if !r.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions.IsNull() {
-			*propagateHeadJobOptions = r.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions.ValueBool()
+		if !r.Config.LsfPlatform.PropagateHeadJobOptions.IsUnknown() && !r.Config.LsfPlatform.PropagateHeadJobOptions.IsNull() {
+			*propagateHeadJobOptions = r.Config.LsfPlatform.PropagateHeadJobOptions.ValueBool()
 		} else {
 			propagateHeadJobOptions = nil
 		}
 		unitForLimits := new(string)
-		if !r.ComputeEnv.Config.LsfPlatform.UnitForLimits.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.UnitForLimits.IsNull() {
-			*unitForLimits = r.ComputeEnv.Config.LsfPlatform.UnitForLimits.ValueString()
+		if !r.Config.LsfPlatform.UnitForLimits.IsUnknown() && !r.Config.LsfPlatform.UnitForLimits.IsNull() {
+			*unitForLimits = r.Config.LsfPlatform.UnitForLimits.ValueString()
 		} else {
 			unitForLimits = nil
 		}
 		perJobMemLimit := new(bool)
-		if !r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit.IsNull() {
-			*perJobMemLimit = r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit.ValueBool()
+		if !r.Config.LsfPlatform.PerJobMemLimit.IsUnknown() && !r.Config.LsfPlatform.PerJobMemLimit.IsNull() {
+			*perJobMemLimit = r.Config.LsfPlatform.PerJobMemLimit.ValueBool()
 		} else {
 			perJobMemLimit = nil
 		}
 		perTaskReserve := new(bool)
-		if !r.ComputeEnv.Config.LsfPlatform.PerTaskReserve.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PerTaskReserve.IsNull() {
-			*perTaskReserve = r.ComputeEnv.Config.LsfPlatform.PerTaskReserve.ValueBool()
+		if !r.Config.LsfPlatform.PerTaskReserve.IsUnknown() && !r.Config.LsfPlatform.PerTaskReserve.IsNull() {
+			*perTaskReserve = r.Config.LsfPlatform.PerTaskReserve.ValueBool()
 		} else {
 			perTaskReserve = nil
 		}
-		environment6 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.LsfPlatform.Environment))
-		for _, environmentItem6 := range r.ComputeEnv.Config.LsfPlatform.Environment {
+		environment6 := make([]shared.ConfigEnvVariable, 0, len(r.Config.LsfPlatform.Environment))
+		for _, environmentItem6 := range r.Config.LsfPlatform.Environment {
 			name7 := new(string)
 			if !environmentItem6.Name.IsUnknown() && !environmentItem6.Name.IsNull() {
 				*name7 = environmentItem6.Name.ValueString()
@@ -2555,8 +2068,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName,
 			HostName:                hostName,
 			Port:                    port,
-			HeadQueue:               headQueue2,
-			ComputeQueue:            computeQueue2,
+			HeadQueue:               headQueue1,
+			ComputeQueue:            computeQueue1,
 			MaxQueueSize:            maxQueueSize,
 			HeadJobOptions:          headJobOptions,
 			PropagateHeadJobOptions: propagateHeadJobOptions,
@@ -2572,84 +2085,84 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var slurmConfiguration *shared.SlurmConfiguration
-	if r.ComputeEnv.Config.SlurmPlatform != nil {
+	if r.Config.SlurmPlatform != nil {
 		var workDir7 string
-		workDir7 = r.ComputeEnv.Config.SlurmPlatform.WorkDir.ValueString()
+		workDir7 = r.Config.SlurmPlatform.WorkDir.ValueString()
 
 		preRunScript7 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.PreRunScript.IsNull() {
-			*preRunScript7 = r.ComputeEnv.Config.SlurmPlatform.PreRunScript.ValueString()
+		if !r.Config.SlurmPlatform.PreRunScript.IsUnknown() && !r.Config.SlurmPlatform.PreRunScript.IsNull() {
+			*preRunScript7 = r.Config.SlurmPlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript7 = nil
 		}
 		postRunScript7 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.PostRunScript.IsNull() {
-			*postRunScript7 = r.ComputeEnv.Config.SlurmPlatform.PostRunScript.ValueString()
+		if !r.Config.SlurmPlatform.PostRunScript.IsUnknown() && !r.Config.SlurmPlatform.PostRunScript.IsNull() {
+			*postRunScript7 = r.Config.SlurmPlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript7 = nil
 		}
 		nextflowConfig7 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.NextflowConfig.IsNull() {
-			*nextflowConfig7 = r.ComputeEnv.Config.SlurmPlatform.NextflowConfig.ValueString()
+		if !r.Config.SlurmPlatform.NextflowConfig.IsUnknown() && !r.Config.SlurmPlatform.NextflowConfig.IsNull() {
+			*nextflowConfig7 = r.Config.SlurmPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig7 = nil
 		}
 		launchDir1 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.LaunchDir.IsNull() {
-			*launchDir1 = r.ComputeEnv.Config.SlurmPlatform.LaunchDir.ValueString()
+		if !r.Config.SlurmPlatform.LaunchDir.IsUnknown() && !r.Config.SlurmPlatform.LaunchDir.IsNull() {
+			*launchDir1 = r.Config.SlurmPlatform.LaunchDir.ValueString()
 		} else {
 			launchDir1 = nil
 		}
 		userName1 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.UserName.IsNull() {
-			*userName1 = r.ComputeEnv.Config.SlurmPlatform.UserName.ValueString()
+		if !r.Config.SlurmPlatform.UserName.IsUnknown() && !r.Config.SlurmPlatform.UserName.IsNull() {
+			*userName1 = r.Config.SlurmPlatform.UserName.ValueString()
 		} else {
 			userName1 = nil
 		}
 		hostName1 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.HostName.IsNull() {
-			*hostName1 = r.ComputeEnv.Config.SlurmPlatform.HostName.ValueString()
+		if !r.Config.SlurmPlatform.HostName.IsUnknown() && !r.Config.SlurmPlatform.HostName.IsNull() {
+			*hostName1 = r.Config.SlurmPlatform.HostName.ValueString()
 		} else {
 			hostName1 = nil
 		}
 		port1 := new(int)
-		if !r.ComputeEnv.Config.SlurmPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.Port.IsNull() {
-			*port1 = int(r.ComputeEnv.Config.SlurmPlatform.Port.ValueInt32())
+		if !r.Config.SlurmPlatform.Port.IsUnknown() && !r.Config.SlurmPlatform.Port.IsNull() {
+			*port1 = int(r.Config.SlurmPlatform.Port.ValueInt32())
 		} else {
 			port1 = nil
 		}
-		headQueue3 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.HeadQueue.IsNull() {
-			*headQueue3 = r.ComputeEnv.Config.SlurmPlatform.HeadQueue.ValueString()
+		headQueue2 := new(string)
+		if !r.Config.SlurmPlatform.HeadQueue.IsUnknown() && !r.Config.SlurmPlatform.HeadQueue.IsNull() {
+			*headQueue2 = r.Config.SlurmPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue3 = nil
+			headQueue2 = nil
 		}
-		computeQueue3 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.IsNull() {
-			*computeQueue3 = r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.ValueString()
+		computeQueue2 := new(string)
+		if !r.Config.SlurmPlatform.ComputeQueue.IsUnknown() && !r.Config.SlurmPlatform.ComputeQueue.IsNull() {
+			*computeQueue2 = r.Config.SlurmPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue3 = nil
+			computeQueue2 = nil
 		}
 		maxQueueSize1 := new(int)
-		if !r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.IsNull() {
-			*maxQueueSize1 = int(r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.ValueInt32())
+		if !r.Config.SlurmPlatform.MaxQueueSize.IsUnknown() && !r.Config.SlurmPlatform.MaxQueueSize.IsNull() {
+			*maxQueueSize1 = int(r.Config.SlurmPlatform.MaxQueueSize.ValueInt32())
 		} else {
 			maxQueueSize1 = nil
 		}
 		headJobOptions1 := new(string)
-		if !r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions.IsNull() {
-			*headJobOptions1 = r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions.ValueString()
+		if !r.Config.SlurmPlatform.HeadJobOptions.IsUnknown() && !r.Config.SlurmPlatform.HeadJobOptions.IsNull() {
+			*headJobOptions1 = r.Config.SlurmPlatform.HeadJobOptions.ValueString()
 		} else {
 			headJobOptions1 = nil
 		}
 		propagateHeadJobOptions1 := new(bool)
-		if !r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions.IsNull() {
-			*propagateHeadJobOptions1 = r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions.ValueBool()
+		if !r.Config.SlurmPlatform.PropagateHeadJobOptions.IsUnknown() && !r.Config.SlurmPlatform.PropagateHeadJobOptions.IsNull() {
+			*propagateHeadJobOptions1 = r.Config.SlurmPlatform.PropagateHeadJobOptions.ValueBool()
 		} else {
 			propagateHeadJobOptions1 = nil
 		}
-		environment7 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.SlurmPlatform.Environment))
-		for _, environmentItem7 := range r.ComputeEnv.Config.SlurmPlatform.Environment {
+		environment7 := make([]shared.ConfigEnvVariable, 0, len(r.Config.SlurmPlatform.Environment))
+		for _, environmentItem7 := range r.Config.SlurmPlatform.Environment {
 			name8 := new(string)
 			if !environmentItem7.Name.IsUnknown() && !environmentItem7.Name.IsNull() {
 				*name8 = environmentItem7.Name.ValueString()
@@ -2690,8 +2203,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName1,
 			HostName:                hostName1,
 			Port:                    port1,
-			HeadQueue:               headQueue3,
-			ComputeQueue:            computeQueue3,
+			HeadQueue:               headQueue2,
+			ComputeQueue:            computeQueue2,
 			MaxQueueSize:            maxQueueSize1,
 			HeadJobOptions:          headJobOptions1,
 			PropagateHeadJobOptions: propagateHeadJobOptions1,
@@ -2704,72 +2217,72 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var kubernetesComputeConfiguration *shared.KubernetesComputeConfiguration
-	if r.ComputeEnv.Config.K8sPlatform != nil {
+	if r.Config.K8sPlatform != nil {
 		workDir8 := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.WorkDir.IsNull() {
-			*workDir8 = r.ComputeEnv.Config.K8sPlatform.WorkDir.ValueString()
+		if !r.Config.K8sPlatform.WorkDir.IsUnknown() && !r.Config.K8sPlatform.WorkDir.IsNull() {
+			*workDir8 = r.Config.K8sPlatform.WorkDir.ValueString()
 		} else {
 			workDir8 = nil
 		}
 		preRunScript8 := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.PreRunScript.IsNull() {
-			*preRunScript8 = r.ComputeEnv.Config.K8sPlatform.PreRunScript.ValueString()
+		if !r.Config.K8sPlatform.PreRunScript.IsUnknown() && !r.Config.K8sPlatform.PreRunScript.IsNull() {
+			*preRunScript8 = r.Config.K8sPlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript8 = nil
 		}
 		postRunScript8 := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.PostRunScript.IsNull() {
-			*postRunScript8 = r.ComputeEnv.Config.K8sPlatform.PostRunScript.ValueString()
+		if !r.Config.K8sPlatform.PostRunScript.IsUnknown() && !r.Config.K8sPlatform.PostRunScript.IsNull() {
+			*postRunScript8 = r.Config.K8sPlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript8 = nil
 		}
 		var server string
-		server = r.ComputeEnv.Config.K8sPlatform.Server.ValueString()
+		server = r.Config.K8sPlatform.Server.ValueString()
 
 		var sslCert string
-		sslCert = r.ComputeEnv.Config.K8sPlatform.SslCert.ValueString()
+		sslCert = r.Config.K8sPlatform.SslCert.ValueString()
 
 		var namespace string
-		namespace = r.ComputeEnv.Config.K8sPlatform.Namespace.ValueString()
+		namespace = r.Config.K8sPlatform.Namespace.ValueString()
 
 		computeServiceAccount := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount.IsNull() {
-			*computeServiceAccount = r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount.ValueString()
+		if !r.Config.K8sPlatform.ComputeServiceAccount.IsUnknown() && !r.Config.K8sPlatform.ComputeServiceAccount.IsNull() {
+			*computeServiceAccount = r.Config.K8sPlatform.ComputeServiceAccount.ValueString()
 		} else {
 			computeServiceAccount = nil
 		}
 		var headServiceAccount string
-		headServiceAccount = r.ComputeEnv.Config.K8sPlatform.HeadServiceAccount.ValueString()
+		headServiceAccount = r.Config.K8sPlatform.HeadServiceAccount.ValueString()
 
 		var storageClaimName string
-		storageClaimName = r.ComputeEnv.Config.K8sPlatform.StorageClaimName.ValueString()
+		storageClaimName = r.Config.K8sPlatform.StorageClaimName.ValueString()
 
 		storageMountPath := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.StorageMountPath.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.StorageMountPath.IsNull() {
-			*storageMountPath = r.ComputeEnv.Config.K8sPlatform.StorageMountPath.ValueString()
+		if !r.Config.K8sPlatform.StorageMountPath.IsUnknown() && !r.Config.K8sPlatform.StorageMountPath.IsNull() {
+			*storageMountPath = r.Config.K8sPlatform.StorageMountPath.ValueString()
 		} else {
 			storageMountPath = nil
 		}
 		podCleanup := new(shared.PodCleanupPolicy)
-		if !r.ComputeEnv.Config.K8sPlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.PodCleanup.IsNull() {
-			*podCleanup = shared.PodCleanupPolicy(r.ComputeEnv.Config.K8sPlatform.PodCleanup.ValueString())
+		if !r.Config.K8sPlatform.PodCleanup.IsUnknown() && !r.Config.K8sPlatform.PodCleanup.IsNull() {
+			*podCleanup = shared.PodCleanupPolicy(r.Config.K8sPlatform.PodCleanup.ValueString())
 		} else {
 			podCleanup = nil
 		}
 		headPodSpec := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.IsNull() {
-			*headPodSpec = r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.ValueString()
+		if !r.Config.K8sPlatform.HeadPodSpec.IsUnknown() && !r.Config.K8sPlatform.HeadPodSpec.IsNull() {
+			*headPodSpec = r.Config.K8sPlatform.HeadPodSpec.ValueString()
 		} else {
 			headPodSpec = nil
 		}
 		servicePodSpec := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.ServicePodSpec.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.ServicePodSpec.IsNull() {
-			*servicePodSpec = r.ComputeEnv.Config.K8sPlatform.ServicePodSpec.ValueString()
+		if !r.Config.K8sPlatform.ServicePodSpec.IsUnknown() && !r.Config.K8sPlatform.ServicePodSpec.IsNull() {
+			*servicePodSpec = r.Config.K8sPlatform.ServicePodSpec.ValueString()
 		} else {
 			servicePodSpec = nil
 		}
-		environment8 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.K8sPlatform.Environment))
-		for _, environmentItem8 := range r.ComputeEnv.Config.K8sPlatform.Environment {
+		environment8 := make([]shared.ConfigEnvVariable, 0, len(r.Config.K8sPlatform.Environment))
+		for _, environmentItem8 := range r.Config.K8sPlatform.Environment {
 			name9 := new(string)
 			if !environmentItem8.Name.IsUnknown() && !environmentItem8.Name.IsNull() {
 				*name9 = environmentItem8.Name.ValueString()
@@ -2801,21 +2314,21 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Compute: compute8,
 			})
 		}
-		headJobCpus4 := new(int)
-		if !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsNull() {
-			*headJobCpus4 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.ValueInt32())
+		headJobCpus3 := new(int)
+		if !r.Config.K8sPlatform.HeadJobCpus.IsUnknown() && !r.Config.K8sPlatform.HeadJobCpus.IsNull() {
+			*headJobCpus3 = int(r.Config.K8sPlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus4 = nil
+			headJobCpus3 = nil
 		}
-		headJobMemoryMb4 := new(int)
-		if !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb4 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.ValueInt32())
+		headJobMemoryMb3 := new(int)
+		if !r.Config.K8sPlatform.HeadJobMemoryMb.IsUnknown() && !r.Config.K8sPlatform.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb3 = int(r.Config.K8sPlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb4 = nil
+			headJobMemoryMb3 = nil
 		}
 		nextflowConfig8 := new(string)
-		if !r.ComputeEnv.Config.K8sPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.NextflowConfig.IsNull() {
-			*nextflowConfig8 = r.ComputeEnv.Config.K8sPlatform.NextflowConfig.ValueString()
+		if !r.Config.K8sPlatform.NextflowConfig.IsUnknown() && !r.Config.K8sPlatform.NextflowConfig.IsNull() {
+			*nextflowConfig8 = r.Config.K8sPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig8 = nil
 		}
@@ -2834,8 +2347,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			HeadPodSpec:           headPodSpec,
 			ServicePodSpec:        servicePodSpec,
 			Environment:           environment8,
-			HeadJobCpus:           headJobCpus4,
-			HeadJobMemoryMb:       headJobMemoryMb4,
+			HeadJobCpus:           headJobCpus3,
+			HeadJobMemoryMb:       headJobMemoryMb3,
 			NextflowConfig:        nextflowConfig8,
 		}
 	}
@@ -2845,72 +2358,72 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var amazonEKSClusterConfiguration *shared.AmazonEKSClusterConfiguration
-	if r.ComputeEnv.Config.EksPlatform != nil {
+	if r.Config.EksPlatform != nil {
 		workDir9 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.WorkDir.IsNull() {
-			*workDir9 = r.ComputeEnv.Config.EksPlatform.WorkDir.ValueString()
+		if !r.Config.EksPlatform.WorkDir.IsUnknown() && !r.Config.EksPlatform.WorkDir.IsNull() {
+			*workDir9 = r.Config.EksPlatform.WorkDir.ValueString()
 		} else {
 			workDir9 = nil
 		}
 		preRunScript9 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.PreRunScript.IsNull() {
-			*preRunScript9 = r.ComputeEnv.Config.EksPlatform.PreRunScript.ValueString()
+		if !r.Config.EksPlatform.PreRunScript.IsUnknown() && !r.Config.EksPlatform.PreRunScript.IsNull() {
+			*preRunScript9 = r.Config.EksPlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript9 = nil
 		}
 		postRunScript9 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.PostRunScript.IsNull() {
-			*postRunScript9 = r.ComputeEnv.Config.EksPlatform.PostRunScript.ValueString()
+		if !r.Config.EksPlatform.PostRunScript.IsUnknown() && !r.Config.EksPlatform.PostRunScript.IsNull() {
+			*postRunScript9 = r.Config.EksPlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript9 = nil
 		}
 		var server1 string
-		server1 = r.ComputeEnv.Config.EksPlatform.Server.ValueString()
+		server1 = r.Config.EksPlatform.Server.ValueString()
 
 		var sslCert1 string
-		sslCert1 = r.ComputeEnv.Config.EksPlatform.SslCert.ValueString()
+		sslCert1 = r.Config.EksPlatform.SslCert.ValueString()
 
 		var namespace1 string
-		namespace1 = r.ComputeEnv.Config.EksPlatform.Namespace.ValueString()
+		namespace1 = r.Config.EksPlatform.Namespace.ValueString()
 
 		computeServiceAccount1 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount.IsNull() {
-			*computeServiceAccount1 = r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount.ValueString()
+		if !r.Config.EksPlatform.ComputeServiceAccount.IsUnknown() && !r.Config.EksPlatform.ComputeServiceAccount.IsNull() {
+			*computeServiceAccount1 = r.Config.EksPlatform.ComputeServiceAccount.ValueString()
 		} else {
 			computeServiceAccount1 = nil
 		}
 		var headServiceAccount1 string
-		headServiceAccount1 = r.ComputeEnv.Config.EksPlatform.HeadServiceAccount.ValueString()
+		headServiceAccount1 = r.Config.EksPlatform.HeadServiceAccount.ValueString()
 
 		var storageClaimName1 string
-		storageClaimName1 = r.ComputeEnv.Config.EksPlatform.StorageClaimName.ValueString()
+		storageClaimName1 = r.Config.EksPlatform.StorageClaimName.ValueString()
 
 		storageMountPath1 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.StorageMountPath.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.StorageMountPath.IsNull() {
-			*storageMountPath1 = r.ComputeEnv.Config.EksPlatform.StorageMountPath.ValueString()
+		if !r.Config.EksPlatform.StorageMountPath.IsUnknown() && !r.Config.EksPlatform.StorageMountPath.IsNull() {
+			*storageMountPath1 = r.Config.EksPlatform.StorageMountPath.ValueString()
 		} else {
 			storageMountPath1 = nil
 		}
 		podCleanup1 := new(shared.PodCleanupPolicy)
-		if !r.ComputeEnv.Config.EksPlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.PodCleanup.IsNull() {
-			*podCleanup1 = shared.PodCleanupPolicy(r.ComputeEnv.Config.EksPlatform.PodCleanup.ValueString())
+		if !r.Config.EksPlatform.PodCleanup.IsUnknown() && !r.Config.EksPlatform.PodCleanup.IsNull() {
+			*podCleanup1 = shared.PodCleanupPolicy(r.Config.EksPlatform.PodCleanup.ValueString())
 		} else {
 			podCleanup1 = nil
 		}
 		headPodSpec1 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadPodSpec.IsNull() {
-			*headPodSpec1 = r.ComputeEnv.Config.EksPlatform.HeadPodSpec.ValueString()
+		if !r.Config.EksPlatform.HeadPodSpec.IsUnknown() && !r.Config.EksPlatform.HeadPodSpec.IsNull() {
+			*headPodSpec1 = r.Config.EksPlatform.HeadPodSpec.ValueString()
 		} else {
 			headPodSpec1 = nil
 		}
 		servicePodSpec1 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.ServicePodSpec.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.ServicePodSpec.IsNull() {
-			*servicePodSpec1 = r.ComputeEnv.Config.EksPlatform.ServicePodSpec.ValueString()
+		if !r.Config.EksPlatform.ServicePodSpec.IsUnknown() && !r.Config.EksPlatform.ServicePodSpec.IsNull() {
+			*servicePodSpec1 = r.Config.EksPlatform.ServicePodSpec.ValueString()
 		} else {
 			servicePodSpec1 = nil
 		}
-		environment9 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.EksPlatform.Environment))
-		for _, environmentItem9 := range r.ComputeEnv.Config.EksPlatform.Environment {
+		environment9 := make([]shared.ConfigEnvVariable, 0, len(r.Config.EksPlatform.Environment))
+		for _, environmentItem9 := range r.Config.EksPlatform.Environment {
 			name10 := new(string)
 			if !environmentItem9.Name.IsUnknown() && !environmentItem9.Name.IsNull() {
 				*name10 = environmentItem9.Name.ValueString()
@@ -2942,41 +2455,41 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Compute: compute9,
 			})
 		}
-		headJobCpus5 := new(int)
-		if !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsNull() {
-			*headJobCpus5 = int(r.ComputeEnv.Config.EksPlatform.HeadJobCpus.ValueInt32())
+		headJobCpus4 := new(int)
+		if !r.Config.EksPlatform.HeadJobCpus.IsUnknown() && !r.Config.EksPlatform.HeadJobCpus.IsNull() {
+			*headJobCpus4 = int(r.Config.EksPlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus5 = nil
+			headJobCpus4 = nil
 		}
-		headJobMemoryMb5 := new(int)
-		if !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb5 = int(r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.ValueInt32())
+		headJobMemoryMb4 := new(int)
+		if !r.Config.EksPlatform.HeadJobMemoryMb.IsUnknown() && !r.Config.EksPlatform.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb4 = int(r.Config.EksPlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb5 = nil
+			headJobMemoryMb4 = nil
 		}
 		nextflowConfig9 := new(string)
-		if !r.ComputeEnv.Config.EksPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.NextflowConfig.IsNull() {
-			*nextflowConfig9 = r.ComputeEnv.Config.EksPlatform.NextflowConfig.ValueString()
+		if !r.Config.EksPlatform.NextflowConfig.IsUnknown() && !r.Config.EksPlatform.NextflowConfig.IsNull() {
+			*nextflowConfig9 = r.Config.EksPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig9 = nil
 		}
 		var region5 string
-		region5 = r.ComputeEnv.Config.EksPlatform.Region.ValueString()
+		region5 = r.Config.EksPlatform.Region.ValueString()
 
 		var clusterName string
-		clusterName = r.ComputeEnv.Config.EksPlatform.ClusterName.ValueString()
+		clusterName = r.Config.EksPlatform.ClusterName.ValueString()
 
-		waveEnabled5 := new(bool)
-		if !r.ComputeEnv.Config.EksPlatform.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.WaveEnabled.IsNull() {
-			*waveEnabled5 = r.ComputeEnv.Config.EksPlatform.WaveEnabled.ValueBool()
+		waveEnabled4 := new(bool)
+		if !r.Config.EksPlatform.WaveEnabled.IsUnknown() && !r.Config.EksPlatform.WaveEnabled.IsNull() {
+			*waveEnabled4 = r.Config.EksPlatform.WaveEnabled.ValueBool()
 		} else {
-			waveEnabled5 = nil
+			waveEnabled4 = nil
 		}
-		fusion2Enabled5 := new(bool)
-		if !r.ComputeEnv.Config.EksPlatform.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.Fusion2Enabled.IsNull() {
-			*fusion2Enabled5 = r.ComputeEnv.Config.EksPlatform.Fusion2Enabled.ValueBool()
+		fusion2Enabled4 := new(bool)
+		if !r.Config.EksPlatform.Fusion2Enabled.IsUnknown() && !r.Config.EksPlatform.Fusion2Enabled.IsNull() {
+			*fusion2Enabled4 = r.Config.EksPlatform.Fusion2Enabled.ValueBool()
 		} else {
-			fusion2Enabled5 = nil
+			fusion2Enabled4 = nil
 		}
 		amazonEKSClusterConfiguration = &shared.AmazonEKSClusterConfiguration{
 			WorkDir:               workDir9,
@@ -2993,13 +2506,13 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			HeadPodSpec:           headPodSpec1,
 			ServicePodSpec:        servicePodSpec1,
 			Environment:           environment9,
-			HeadJobCpus:           headJobCpus5,
-			HeadJobMemoryMb:       headJobMemoryMb5,
+			HeadJobCpus:           headJobCpus4,
+			HeadJobMemoryMb:       headJobMemoryMb4,
 			NextflowConfig:        nextflowConfig9,
 			Region:                region5,
 			ClusterName:           clusterName,
-			WaveEnabled:           waveEnabled5,
-			Fusion2Enabled:        fusion2Enabled5,
+			WaveEnabled:           waveEnabled4,
+			Fusion2Enabled:        fusion2Enabled4,
 		}
 	}
 	if amazonEKSClusterConfiguration != nil {
@@ -3008,72 +2521,72 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var googleGKEClusterConfiguration *shared.GoogleGKEClusterConfiguration
-	if r.ComputeEnv.Config.GkePlatform != nil {
+	if r.Config.GkePlatform != nil {
 		workDir10 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.WorkDir.IsNull() {
-			*workDir10 = r.ComputeEnv.Config.GkePlatform.WorkDir.ValueString()
+		if !r.Config.GkePlatform.WorkDir.IsUnknown() && !r.Config.GkePlatform.WorkDir.IsNull() {
+			*workDir10 = r.Config.GkePlatform.WorkDir.ValueString()
 		} else {
 			workDir10 = nil
 		}
 		preRunScript10 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.PreRunScript.IsNull() {
-			*preRunScript10 = r.ComputeEnv.Config.GkePlatform.PreRunScript.ValueString()
+		if !r.Config.GkePlatform.PreRunScript.IsUnknown() && !r.Config.GkePlatform.PreRunScript.IsNull() {
+			*preRunScript10 = r.Config.GkePlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript10 = nil
 		}
 		postRunScript10 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.PostRunScript.IsNull() {
-			*postRunScript10 = r.ComputeEnv.Config.GkePlatform.PostRunScript.ValueString()
+		if !r.Config.GkePlatform.PostRunScript.IsUnknown() && !r.Config.GkePlatform.PostRunScript.IsNull() {
+			*postRunScript10 = r.Config.GkePlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript10 = nil
 		}
 		var server2 string
-		server2 = r.ComputeEnv.Config.GkePlatform.Server.ValueString()
+		server2 = r.Config.GkePlatform.Server.ValueString()
 
 		var sslCert2 string
-		sslCert2 = r.ComputeEnv.Config.GkePlatform.SslCert.ValueString()
+		sslCert2 = r.Config.GkePlatform.SslCert.ValueString()
 
 		var namespace2 string
-		namespace2 = r.ComputeEnv.Config.GkePlatform.Namespace.ValueString()
+		namespace2 = r.Config.GkePlatform.Namespace.ValueString()
 
 		computeServiceAccount2 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount.IsNull() {
-			*computeServiceAccount2 = r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount.ValueString()
+		if !r.Config.GkePlatform.ComputeServiceAccount.IsUnknown() && !r.Config.GkePlatform.ComputeServiceAccount.IsNull() {
+			*computeServiceAccount2 = r.Config.GkePlatform.ComputeServiceAccount.ValueString()
 		} else {
 			computeServiceAccount2 = nil
 		}
 		var headServiceAccount2 string
-		headServiceAccount2 = r.ComputeEnv.Config.GkePlatform.HeadServiceAccount.ValueString()
+		headServiceAccount2 = r.Config.GkePlatform.HeadServiceAccount.ValueString()
 
 		var storageClaimName2 string
-		storageClaimName2 = r.ComputeEnv.Config.GkePlatform.StorageClaimName.ValueString()
+		storageClaimName2 = r.Config.GkePlatform.StorageClaimName.ValueString()
 
 		storageMountPath2 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.StorageMountPath.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.StorageMountPath.IsNull() {
-			*storageMountPath2 = r.ComputeEnv.Config.GkePlatform.StorageMountPath.ValueString()
+		if !r.Config.GkePlatform.StorageMountPath.IsUnknown() && !r.Config.GkePlatform.StorageMountPath.IsNull() {
+			*storageMountPath2 = r.Config.GkePlatform.StorageMountPath.ValueString()
 		} else {
 			storageMountPath2 = nil
 		}
 		podCleanup2 := new(shared.PodCleanupPolicy)
-		if !r.ComputeEnv.Config.GkePlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.PodCleanup.IsNull() {
-			*podCleanup2 = shared.PodCleanupPolicy(r.ComputeEnv.Config.GkePlatform.PodCleanup.ValueString())
+		if !r.Config.GkePlatform.PodCleanup.IsUnknown() && !r.Config.GkePlatform.PodCleanup.IsNull() {
+			*podCleanup2 = shared.PodCleanupPolicy(r.Config.GkePlatform.PodCleanup.ValueString())
 		} else {
 			podCleanup2 = nil
 		}
 		headPodSpec2 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadPodSpec.IsNull() {
-			*headPodSpec2 = r.ComputeEnv.Config.GkePlatform.HeadPodSpec.ValueString()
+		if !r.Config.GkePlatform.HeadPodSpec.IsUnknown() && !r.Config.GkePlatform.HeadPodSpec.IsNull() {
+			*headPodSpec2 = r.Config.GkePlatform.HeadPodSpec.ValueString()
 		} else {
 			headPodSpec2 = nil
 		}
 		servicePodSpec2 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.ServicePodSpec.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.ServicePodSpec.IsNull() {
-			*servicePodSpec2 = r.ComputeEnv.Config.GkePlatform.ServicePodSpec.ValueString()
+		if !r.Config.GkePlatform.ServicePodSpec.IsUnknown() && !r.Config.GkePlatform.ServicePodSpec.IsNull() {
+			*servicePodSpec2 = r.Config.GkePlatform.ServicePodSpec.ValueString()
 		} else {
 			servicePodSpec2 = nil
 		}
-		environment10 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.GkePlatform.Environment))
-		for _, environmentItem10 := range r.ComputeEnv.Config.GkePlatform.Environment {
+		environment10 := make([]shared.ConfigEnvVariable, 0, len(r.Config.GkePlatform.Environment))
+		for _, environmentItem10 := range r.Config.GkePlatform.Environment {
 			name11 := new(string)
 			if !environmentItem10.Name.IsUnknown() && !environmentItem10.Name.IsNull() {
 				*name11 = environmentItem10.Name.ValueString()
@@ -3105,41 +2618,41 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 				Compute: compute10,
 			})
 		}
-		headJobCpus6 := new(int)
-		if !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsNull() {
-			*headJobCpus6 = int(r.ComputeEnv.Config.GkePlatform.HeadJobCpus.ValueInt32())
+		headJobCpus5 := new(int)
+		if !r.Config.GkePlatform.HeadJobCpus.IsUnknown() && !r.Config.GkePlatform.HeadJobCpus.IsNull() {
+			*headJobCpus5 = int(r.Config.GkePlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus6 = nil
+			headJobCpus5 = nil
 		}
-		headJobMemoryMb6 := new(int)
-		if !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb6 = int(r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.ValueInt32())
+		headJobMemoryMb5 := new(int)
+		if !r.Config.GkePlatform.HeadJobMemoryMb.IsUnknown() && !r.Config.GkePlatform.HeadJobMemoryMb.IsNull() {
+			*headJobMemoryMb5 = int(r.Config.GkePlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb6 = nil
+			headJobMemoryMb5 = nil
 		}
 		nextflowConfig10 := new(string)
-		if !r.ComputeEnv.Config.GkePlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.NextflowConfig.IsNull() {
-			*nextflowConfig10 = r.ComputeEnv.Config.GkePlatform.NextflowConfig.ValueString()
+		if !r.Config.GkePlatform.NextflowConfig.IsUnknown() && !r.Config.GkePlatform.NextflowConfig.IsNull() {
+			*nextflowConfig10 = r.Config.GkePlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig10 = nil
 		}
 		var region6 string
-		region6 = r.ComputeEnv.Config.GkePlatform.Region.ValueString()
+		region6 = r.Config.GkePlatform.Region.ValueString()
 
 		var clusterName1 string
-		clusterName1 = r.ComputeEnv.Config.GkePlatform.ClusterName.ValueString()
+		clusterName1 = r.Config.GkePlatform.ClusterName.ValueString()
 
-		fusion2Enabled6 := new(bool)
-		if !r.ComputeEnv.Config.GkePlatform.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.Fusion2Enabled.IsNull() {
-			*fusion2Enabled6 = r.ComputeEnv.Config.GkePlatform.Fusion2Enabled.ValueBool()
+		fusion2Enabled5 := new(bool)
+		if !r.Config.GkePlatform.Fusion2Enabled.IsUnknown() && !r.Config.GkePlatform.Fusion2Enabled.IsNull() {
+			*fusion2Enabled5 = r.Config.GkePlatform.Fusion2Enabled.ValueBool()
 		} else {
-			fusion2Enabled6 = nil
+			fusion2Enabled5 = nil
 		}
-		waveEnabled6 := new(bool)
-		if !r.ComputeEnv.Config.GkePlatform.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.WaveEnabled.IsNull() {
-			*waveEnabled6 = r.ComputeEnv.Config.GkePlatform.WaveEnabled.ValueBool()
+		waveEnabled5 := new(bool)
+		if !r.Config.GkePlatform.WaveEnabled.IsUnknown() && !r.Config.GkePlatform.WaveEnabled.IsNull() {
+			*waveEnabled5 = r.Config.GkePlatform.WaveEnabled.ValueBool()
 		} else {
-			waveEnabled6 = nil
+			waveEnabled5 = nil
 		}
 		googleGKEClusterConfiguration = &shared.GoogleGKEClusterConfiguration{
 			WorkDir:               workDir10,
@@ -3156,13 +2669,13 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			HeadPodSpec:           headPodSpec2,
 			ServicePodSpec:        servicePodSpec2,
 			Environment:           environment10,
-			HeadJobCpus:           headJobCpus6,
-			HeadJobMemoryMb:       headJobMemoryMb6,
+			HeadJobCpus:           headJobCpus5,
+			HeadJobMemoryMb:       headJobMemoryMb5,
 			NextflowConfig:        nextflowConfig10,
 			Region:                region6,
 			ClusterName:           clusterName1,
-			Fusion2Enabled:        fusion2Enabled6,
-			WaveEnabled:           waveEnabled6,
+			Fusion2Enabled:        fusion2Enabled5,
+			WaveEnabled:           waveEnabled5,
 		}
 	}
 	if googleGKEClusterConfiguration != nil {
@@ -3171,84 +2684,84 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var univaGridEngineConfiguration *shared.UnivaGridEngineConfiguration
-	if r.ComputeEnv.Config.UgePlatform != nil {
+	if r.Config.UgePlatform != nil {
 		var workDir11 string
-		workDir11 = r.ComputeEnv.Config.UgePlatform.WorkDir.ValueString()
+		workDir11 = r.Config.UgePlatform.WorkDir.ValueString()
 
 		preRunScript11 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.PreRunScript.IsNull() {
-			*preRunScript11 = r.ComputeEnv.Config.UgePlatform.PreRunScript.ValueString()
+		if !r.Config.UgePlatform.PreRunScript.IsUnknown() && !r.Config.UgePlatform.PreRunScript.IsNull() {
+			*preRunScript11 = r.Config.UgePlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript11 = nil
 		}
 		postRunScript11 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.PostRunScript.IsNull() {
-			*postRunScript11 = r.ComputeEnv.Config.UgePlatform.PostRunScript.ValueString()
+		if !r.Config.UgePlatform.PostRunScript.IsUnknown() && !r.Config.UgePlatform.PostRunScript.IsNull() {
+			*postRunScript11 = r.Config.UgePlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript11 = nil
 		}
 		nextflowConfig11 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.NextflowConfig.IsNull() {
-			*nextflowConfig11 = r.ComputeEnv.Config.UgePlatform.NextflowConfig.ValueString()
+		if !r.Config.UgePlatform.NextflowConfig.IsUnknown() && !r.Config.UgePlatform.NextflowConfig.IsNull() {
+			*nextflowConfig11 = r.Config.UgePlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig11 = nil
 		}
 		launchDir2 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.LaunchDir.IsNull() {
-			*launchDir2 = r.ComputeEnv.Config.UgePlatform.LaunchDir.ValueString()
+		if !r.Config.UgePlatform.LaunchDir.IsUnknown() && !r.Config.UgePlatform.LaunchDir.IsNull() {
+			*launchDir2 = r.Config.UgePlatform.LaunchDir.ValueString()
 		} else {
 			launchDir2 = nil
 		}
 		userName2 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.UserName.IsNull() {
-			*userName2 = r.ComputeEnv.Config.UgePlatform.UserName.ValueString()
+		if !r.Config.UgePlatform.UserName.IsUnknown() && !r.Config.UgePlatform.UserName.IsNull() {
+			*userName2 = r.Config.UgePlatform.UserName.ValueString()
 		} else {
 			userName2 = nil
 		}
 		hostName2 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.HostName.IsNull() {
-			*hostName2 = r.ComputeEnv.Config.UgePlatform.HostName.ValueString()
+		if !r.Config.UgePlatform.HostName.IsUnknown() && !r.Config.UgePlatform.HostName.IsNull() {
+			*hostName2 = r.Config.UgePlatform.HostName.ValueString()
 		} else {
 			hostName2 = nil
 		}
 		port2 := new(int)
-		if !r.ComputeEnv.Config.UgePlatform.Port.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.Port.IsNull() {
-			*port2 = int(r.ComputeEnv.Config.UgePlatform.Port.ValueInt32())
+		if !r.Config.UgePlatform.Port.IsUnknown() && !r.Config.UgePlatform.Port.IsNull() {
+			*port2 = int(r.Config.UgePlatform.Port.ValueInt32())
 		} else {
 			port2 = nil
 		}
-		headQueue4 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.HeadQueue.IsNull() {
-			*headQueue4 = r.ComputeEnv.Config.UgePlatform.HeadQueue.ValueString()
+		headQueue3 := new(string)
+		if !r.Config.UgePlatform.HeadQueue.IsUnknown() && !r.Config.UgePlatform.HeadQueue.IsNull() {
+			*headQueue3 = r.Config.UgePlatform.HeadQueue.ValueString()
 		} else {
-			headQueue4 = nil
+			headQueue3 = nil
 		}
-		computeQueue4 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.ComputeQueue.IsNull() {
-			*computeQueue4 = r.ComputeEnv.Config.UgePlatform.ComputeQueue.ValueString()
+		computeQueue3 := new(string)
+		if !r.Config.UgePlatform.ComputeQueue.IsUnknown() && !r.Config.UgePlatform.ComputeQueue.IsNull() {
+			*computeQueue3 = r.Config.UgePlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue4 = nil
+			computeQueue3 = nil
 		}
 		maxQueueSize2 := new(int)
-		if !r.ComputeEnv.Config.UgePlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.MaxQueueSize.IsNull() {
-			*maxQueueSize2 = int(r.ComputeEnv.Config.UgePlatform.MaxQueueSize.ValueInt32())
+		if !r.Config.UgePlatform.MaxQueueSize.IsUnknown() && !r.Config.UgePlatform.MaxQueueSize.IsNull() {
+			*maxQueueSize2 = int(r.Config.UgePlatform.MaxQueueSize.ValueInt32())
 		} else {
 			maxQueueSize2 = nil
 		}
 		headJobOptions2 := new(string)
-		if !r.ComputeEnv.Config.UgePlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.HeadJobOptions.IsNull() {
-			*headJobOptions2 = r.ComputeEnv.Config.UgePlatform.HeadJobOptions.ValueString()
+		if !r.Config.UgePlatform.HeadJobOptions.IsUnknown() && !r.Config.UgePlatform.HeadJobOptions.IsNull() {
+			*headJobOptions2 = r.Config.UgePlatform.HeadJobOptions.ValueString()
 		} else {
 			headJobOptions2 = nil
 		}
 		propagateHeadJobOptions2 := new(bool)
-		if !r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions.IsNull() {
-			*propagateHeadJobOptions2 = r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions.ValueBool()
+		if !r.Config.UgePlatform.PropagateHeadJobOptions.IsUnknown() && !r.Config.UgePlatform.PropagateHeadJobOptions.IsNull() {
+			*propagateHeadJobOptions2 = r.Config.UgePlatform.PropagateHeadJobOptions.ValueBool()
 		} else {
 			propagateHeadJobOptions2 = nil
 		}
-		environment11 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.UgePlatform.Environment))
-		for _, environmentItem11 := range r.ComputeEnv.Config.UgePlatform.Environment {
+		environment11 := make([]shared.ConfigEnvVariable, 0, len(r.Config.UgePlatform.Environment))
+		for _, environmentItem11 := range r.Config.UgePlatform.Environment {
 			name12 := new(string)
 			if !environmentItem11.Name.IsUnknown() && !environmentItem11.Name.IsNull() {
 				*name12 = environmentItem11.Name.ValueString()
@@ -3289,8 +2802,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName2,
 			HostName:                hostName2,
 			Port:                    port2,
-			HeadQueue:               headQueue4,
-			ComputeQueue:            computeQueue4,
+			HeadQueue:               headQueue3,
+			ComputeQueue:            computeQueue3,
 			MaxQueueSize:            maxQueueSize2,
 			HeadJobOptions:          headJobOptions2,
 			PropagateHeadJobOptions: propagateHeadJobOptions2,
@@ -3303,84 +2816,84 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var altairPBSConfiguration *shared.AltairPBSConfiguration
-	if r.ComputeEnv.Config.AltairPlatform != nil {
+	if r.Config.AltairPlatform != nil {
 		var workDir12 string
-		workDir12 = r.ComputeEnv.Config.AltairPlatform.WorkDir.ValueString()
+		workDir12 = r.Config.AltairPlatform.WorkDir.ValueString()
 
 		preRunScript12 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.PreRunScript.IsNull() {
-			*preRunScript12 = r.ComputeEnv.Config.AltairPlatform.PreRunScript.ValueString()
+		if !r.Config.AltairPlatform.PreRunScript.IsUnknown() && !r.Config.AltairPlatform.PreRunScript.IsNull() {
+			*preRunScript12 = r.Config.AltairPlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript12 = nil
 		}
 		postRunScript12 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.PostRunScript.IsNull() {
-			*postRunScript12 = r.ComputeEnv.Config.AltairPlatform.PostRunScript.ValueString()
+		if !r.Config.AltairPlatform.PostRunScript.IsUnknown() && !r.Config.AltairPlatform.PostRunScript.IsNull() {
+			*postRunScript12 = r.Config.AltairPlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript12 = nil
 		}
 		nextflowConfig12 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.NextflowConfig.IsNull() {
-			*nextflowConfig12 = r.ComputeEnv.Config.AltairPlatform.NextflowConfig.ValueString()
+		if !r.Config.AltairPlatform.NextflowConfig.IsUnknown() && !r.Config.AltairPlatform.NextflowConfig.IsNull() {
+			*nextflowConfig12 = r.Config.AltairPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig12 = nil
 		}
 		launchDir3 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.LaunchDir.IsNull() {
-			*launchDir3 = r.ComputeEnv.Config.AltairPlatform.LaunchDir.ValueString()
+		if !r.Config.AltairPlatform.LaunchDir.IsUnknown() && !r.Config.AltairPlatform.LaunchDir.IsNull() {
+			*launchDir3 = r.Config.AltairPlatform.LaunchDir.ValueString()
 		} else {
 			launchDir3 = nil
 		}
 		userName3 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.UserName.IsNull() {
-			*userName3 = r.ComputeEnv.Config.AltairPlatform.UserName.ValueString()
+		if !r.Config.AltairPlatform.UserName.IsUnknown() && !r.Config.AltairPlatform.UserName.IsNull() {
+			*userName3 = r.Config.AltairPlatform.UserName.ValueString()
 		} else {
 			userName3 = nil
 		}
 		hostName3 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.HostName.IsNull() {
-			*hostName3 = r.ComputeEnv.Config.AltairPlatform.HostName.ValueString()
+		if !r.Config.AltairPlatform.HostName.IsUnknown() && !r.Config.AltairPlatform.HostName.IsNull() {
+			*hostName3 = r.Config.AltairPlatform.HostName.ValueString()
 		} else {
 			hostName3 = nil
 		}
 		port3 := new(int)
-		if !r.ComputeEnv.Config.AltairPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.Port.IsNull() {
-			*port3 = int(r.ComputeEnv.Config.AltairPlatform.Port.ValueInt32())
+		if !r.Config.AltairPlatform.Port.IsUnknown() && !r.Config.AltairPlatform.Port.IsNull() {
+			*port3 = int(r.Config.AltairPlatform.Port.ValueInt32())
 		} else {
 			port3 = nil
 		}
-		headQueue5 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.HeadQueue.IsNull() {
-			*headQueue5 = r.ComputeEnv.Config.AltairPlatform.HeadQueue.ValueString()
+		headQueue4 := new(string)
+		if !r.Config.AltairPlatform.HeadQueue.IsUnknown() && !r.Config.AltairPlatform.HeadQueue.IsNull() {
+			*headQueue4 = r.Config.AltairPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue5 = nil
+			headQueue4 = nil
 		}
-		computeQueue5 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.ComputeQueue.IsNull() {
-			*computeQueue5 = r.ComputeEnv.Config.AltairPlatform.ComputeQueue.ValueString()
+		computeQueue4 := new(string)
+		if !r.Config.AltairPlatform.ComputeQueue.IsUnknown() && !r.Config.AltairPlatform.ComputeQueue.IsNull() {
+			*computeQueue4 = r.Config.AltairPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue5 = nil
+			computeQueue4 = nil
 		}
 		maxQueueSize3 := new(int)
-		if !r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.IsNull() {
-			*maxQueueSize3 = int(r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.ValueInt32())
+		if !r.Config.AltairPlatform.MaxQueueSize.IsUnknown() && !r.Config.AltairPlatform.MaxQueueSize.IsNull() {
+			*maxQueueSize3 = int(r.Config.AltairPlatform.MaxQueueSize.ValueInt32())
 		} else {
 			maxQueueSize3 = nil
 		}
 		headJobOptions3 := new(string)
-		if !r.ComputeEnv.Config.AltairPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.HeadJobOptions.IsNull() {
-			*headJobOptions3 = r.ComputeEnv.Config.AltairPlatform.HeadJobOptions.ValueString()
+		if !r.Config.AltairPlatform.HeadJobOptions.IsUnknown() && !r.Config.AltairPlatform.HeadJobOptions.IsNull() {
+			*headJobOptions3 = r.Config.AltairPlatform.HeadJobOptions.ValueString()
 		} else {
 			headJobOptions3 = nil
 		}
 		propagateHeadJobOptions3 := new(bool)
-		if !r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions.IsNull() {
-			*propagateHeadJobOptions3 = r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions.ValueBool()
+		if !r.Config.AltairPlatform.PropagateHeadJobOptions.IsUnknown() && !r.Config.AltairPlatform.PropagateHeadJobOptions.IsNull() {
+			*propagateHeadJobOptions3 = r.Config.AltairPlatform.PropagateHeadJobOptions.ValueBool()
 		} else {
 			propagateHeadJobOptions3 = nil
 		}
-		environment12 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AltairPlatform.Environment))
-		for _, environmentItem12 := range r.ComputeEnv.Config.AltairPlatform.Environment {
+		environment12 := make([]shared.ConfigEnvVariable, 0, len(r.Config.AltairPlatform.Environment))
+		for _, environmentItem12 := range r.Config.AltairPlatform.Environment {
 			name13 := new(string)
 			if !environmentItem12.Name.IsUnknown() && !environmentItem12.Name.IsNull() {
 				*name13 = environmentItem12.Name.ValueString()
@@ -3421,8 +2934,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName3,
 			HostName:                hostName3,
 			Port:                    port3,
-			HeadQueue:               headQueue5,
-			ComputeQueue:            computeQueue5,
+			HeadQueue:               headQueue4,
+			ComputeQueue:            computeQueue4,
 			MaxQueueSize:            maxQueueSize3,
 			HeadJobOptions:          headJobOptions3,
 			PropagateHeadJobOptions: propagateHeadJobOptions3,
@@ -3435,84 +2948,84 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		}
 	}
 	var moabConfiguration *shared.MoabConfiguration
-	if r.ComputeEnv.Config.MoabPlatform != nil {
+	if r.Config.MoabPlatform != nil {
 		var workDir13 string
-		workDir13 = r.ComputeEnv.Config.MoabPlatform.WorkDir.ValueString()
+		workDir13 = r.Config.MoabPlatform.WorkDir.ValueString()
 
 		preRunScript13 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.PreRunScript.IsNull() {
-			*preRunScript13 = r.ComputeEnv.Config.MoabPlatform.PreRunScript.ValueString()
+		if !r.Config.MoabPlatform.PreRunScript.IsUnknown() && !r.Config.MoabPlatform.PreRunScript.IsNull() {
+			*preRunScript13 = r.Config.MoabPlatform.PreRunScript.ValueString()
 		} else {
 			preRunScript13 = nil
 		}
 		postRunScript13 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.PostRunScript.IsNull() {
-			*postRunScript13 = r.ComputeEnv.Config.MoabPlatform.PostRunScript.ValueString()
+		if !r.Config.MoabPlatform.PostRunScript.IsUnknown() && !r.Config.MoabPlatform.PostRunScript.IsNull() {
+			*postRunScript13 = r.Config.MoabPlatform.PostRunScript.ValueString()
 		} else {
 			postRunScript13 = nil
 		}
 		nextflowConfig13 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.NextflowConfig.IsNull() {
-			*nextflowConfig13 = r.ComputeEnv.Config.MoabPlatform.NextflowConfig.ValueString()
+		if !r.Config.MoabPlatform.NextflowConfig.IsUnknown() && !r.Config.MoabPlatform.NextflowConfig.IsNull() {
+			*nextflowConfig13 = r.Config.MoabPlatform.NextflowConfig.ValueString()
 		} else {
 			nextflowConfig13 = nil
 		}
 		launchDir4 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.LaunchDir.IsNull() {
-			*launchDir4 = r.ComputeEnv.Config.MoabPlatform.LaunchDir.ValueString()
+		if !r.Config.MoabPlatform.LaunchDir.IsUnknown() && !r.Config.MoabPlatform.LaunchDir.IsNull() {
+			*launchDir4 = r.Config.MoabPlatform.LaunchDir.ValueString()
 		} else {
 			launchDir4 = nil
 		}
 		userName4 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.UserName.IsNull() {
-			*userName4 = r.ComputeEnv.Config.MoabPlatform.UserName.ValueString()
+		if !r.Config.MoabPlatform.UserName.IsUnknown() && !r.Config.MoabPlatform.UserName.IsNull() {
+			*userName4 = r.Config.MoabPlatform.UserName.ValueString()
 		} else {
 			userName4 = nil
 		}
 		hostName4 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.HostName.IsNull() {
-			*hostName4 = r.ComputeEnv.Config.MoabPlatform.HostName.ValueString()
+		if !r.Config.MoabPlatform.HostName.IsUnknown() && !r.Config.MoabPlatform.HostName.IsNull() {
+			*hostName4 = r.Config.MoabPlatform.HostName.ValueString()
 		} else {
 			hostName4 = nil
 		}
 		port4 := new(int)
-		if !r.ComputeEnv.Config.MoabPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.Port.IsNull() {
-			*port4 = int(r.ComputeEnv.Config.MoabPlatform.Port.ValueInt32())
+		if !r.Config.MoabPlatform.Port.IsUnknown() && !r.Config.MoabPlatform.Port.IsNull() {
+			*port4 = int(r.Config.MoabPlatform.Port.ValueInt32())
 		} else {
 			port4 = nil
 		}
-		headQueue6 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.HeadQueue.IsNull() {
-			*headQueue6 = r.ComputeEnv.Config.MoabPlatform.HeadQueue.ValueString()
+		headQueue5 := new(string)
+		if !r.Config.MoabPlatform.HeadQueue.IsUnknown() && !r.Config.MoabPlatform.HeadQueue.IsNull() {
+			*headQueue5 = r.Config.MoabPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue6 = nil
+			headQueue5 = nil
 		}
-		computeQueue6 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.ComputeQueue.IsNull() {
-			*computeQueue6 = r.ComputeEnv.Config.MoabPlatform.ComputeQueue.ValueString()
+		computeQueue5 := new(string)
+		if !r.Config.MoabPlatform.ComputeQueue.IsUnknown() && !r.Config.MoabPlatform.ComputeQueue.IsNull() {
+			*computeQueue5 = r.Config.MoabPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue6 = nil
+			computeQueue5 = nil
 		}
 		maxQueueSize4 := new(int)
-		if !r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.IsNull() {
-			*maxQueueSize4 = int(r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.ValueInt32())
+		if !r.Config.MoabPlatform.MaxQueueSize.IsUnknown() && !r.Config.MoabPlatform.MaxQueueSize.IsNull() {
+			*maxQueueSize4 = int(r.Config.MoabPlatform.MaxQueueSize.ValueInt32())
 		} else {
 			maxQueueSize4 = nil
 		}
 		headJobOptions4 := new(string)
-		if !r.ComputeEnv.Config.MoabPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.HeadJobOptions.IsNull() {
-			*headJobOptions4 = r.ComputeEnv.Config.MoabPlatform.HeadJobOptions.ValueString()
+		if !r.Config.MoabPlatform.HeadJobOptions.IsUnknown() && !r.Config.MoabPlatform.HeadJobOptions.IsNull() {
+			*headJobOptions4 = r.Config.MoabPlatform.HeadJobOptions.ValueString()
 		} else {
 			headJobOptions4 = nil
 		}
 		propagateHeadJobOptions4 := new(bool)
-		if !r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions.IsNull() {
-			*propagateHeadJobOptions4 = r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions.ValueBool()
+		if !r.Config.MoabPlatform.PropagateHeadJobOptions.IsUnknown() && !r.Config.MoabPlatform.PropagateHeadJobOptions.IsNull() {
+			*propagateHeadJobOptions4 = r.Config.MoabPlatform.PropagateHeadJobOptions.ValueBool()
 		} else {
 			propagateHeadJobOptions4 = nil
 		}
-		environment13 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.MoabPlatform.Environment))
-		for _, environmentItem13 := range r.ComputeEnv.Config.MoabPlatform.Environment {
+		environment13 := make([]shared.ConfigEnvVariable, 0, len(r.Config.MoabPlatform.Environment))
+		for _, environmentItem13 := range r.Config.MoabPlatform.Environment {
 			name14 := new(string)
 			if !environmentItem13.Name.IsUnknown() && !environmentItem13.Name.IsNull() {
 				*name14 = environmentItem13.Name.ValueString()
@@ -3553,8 +3066,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName4,
 			HostName:                hostName4,
 			Port:                    port4,
-			HeadQueue:               headQueue6,
-			ComputeQueue:            computeQueue6,
+			HeadQueue:               headQueue5,
+			ComputeQueue:            computeQueue5,
 			MaxQueueSize:            maxQueueSize4,
 			HeadJobOptions:          headJobOptions4,
 			PropagateHeadJobOptions: propagateHeadJobOptions4,
@@ -3564,6 +3077,2413 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	if moabConfiguration != nil {
 		config = shared.ComputeConfig{
 			MoabConfiguration: moabConfiguration,
+		}
+	}
+	status := new(shared.ComputeEnvComputeConfigStatus)
+	if !r.Status.IsUnknown() && !r.Status.IsNull() {
+		*status = shared.ComputeEnvComputeConfigStatus(r.Status.ValueString())
+	} else {
+		status = nil
+	}
+	message := new(string)
+	if !r.Message.IsUnknown() && !r.Message.IsNull() {
+		*message = r.Message.ValueString()
+	} else {
+		message = nil
+	}
+	out := shared.ComputeEnvComputeConfigInput{
+		CredentialsID: credentialsID,
+		Name:          name,
+		Description:   description,
+		Platform:      platform,
+		Config:        config,
+		Status:        status,
+		Message:       message,
+	}
+
+	return &out, diags
+}
+
+func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Context) (*shared.CreateComputeEnvRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var credentialsID string
+	credentialsID = r.ComputeEnv.CredentialsID.ValueString()
+
+	var name string
+	name = r.ComputeEnv.Name.ValueString()
+
+	description := new(string)
+	if !r.ComputeEnv.Description.IsUnknown() && !r.ComputeEnv.Description.IsNull() {
+		*description = r.ComputeEnv.Description.ValueString()
+	} else {
+		description = nil
+	}
+	platform := shared.ComputeEnvComputeConfigPlatform(r.ComputeEnv.Platform.ValueString())
+	var config shared.ComputeConfig
+	if r.ComputeEnv.Config != nil {
+		var awsBatchConfiguration *shared.AWSBatchConfiguration
+		if r.ComputeEnv.Config.AwsBatch != nil {
+			storageType := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.StorageType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.StorageType.IsNull() {
+				*storageType = r.ComputeEnv.Config.AwsBatch.StorageType.ValueString()
+			} else {
+				storageType = nil
+			}
+			lustreID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.LustreID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.LustreID.IsNull() {
+				*lustreID = r.ComputeEnv.Config.AwsBatch.LustreID.ValueString()
+			} else {
+				lustreID = nil
+			}
+			volumes := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Volumes))
+			for _, volumesItem := range r.ComputeEnv.Config.AwsBatch.Volumes {
+				volumes = append(volumes, volumesItem.ValueString())
+			}
+			var region string
+			region = r.ComputeEnv.Config.AwsBatch.Region.ValueString()
+
+			computeQueue := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.ComputeQueue.IsNull() {
+				*computeQueue = r.ComputeEnv.Config.AwsBatch.ComputeQueue.ValueString()
+			} else {
+				computeQueue = nil
+			}
+			dragenQueue := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.DragenQueue.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.DragenQueue.IsNull() {
+				*dragenQueue = r.ComputeEnv.Config.AwsBatch.DragenQueue.ValueString()
+			} else {
+				dragenQueue = nil
+			}
+			dragenInstanceType := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.DragenInstanceType.IsNull() {
+				*dragenInstanceType = r.ComputeEnv.Config.AwsBatch.DragenInstanceType.ValueString()
+			} else {
+				dragenInstanceType = nil
+			}
+			computeJobRole := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.ComputeJobRole.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.ComputeJobRole.IsNull() {
+				*computeJobRole = r.ComputeEnv.Config.AwsBatch.ComputeJobRole.ValueString()
+			} else {
+				computeJobRole = nil
+			}
+			executionRole := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.ExecutionRole.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.ExecutionRole.IsNull() {
+				*executionRole = r.ComputeEnv.Config.AwsBatch.ExecutionRole.ValueString()
+			} else {
+				executionRole = nil
+			}
+			headQueue := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadQueue.IsNull() {
+				*headQueue = r.ComputeEnv.Config.AwsBatch.HeadQueue.ValueString()
+			} else {
+				headQueue = nil
+			}
+			headJobRole := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.HeadJobRole.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobRole.IsNull() {
+				*headJobRole = r.ComputeEnv.Config.AwsBatch.HeadJobRole.ValueString()
+			} else {
+				headJobRole = nil
+			}
+			cliPath := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.CliPath.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.CliPath.IsNull() {
+				*cliPath = r.ComputeEnv.Config.AwsBatch.CliPath.ValueString()
+			} else {
+				cliPath = nil
+			}
+			workDir := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.WorkDir.IsNull() {
+				*workDir = r.ComputeEnv.Config.AwsBatch.WorkDir.ValueString()
+			} else {
+				workDir = nil
+			}
+			preRunScript := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.PreRunScript.IsNull() {
+				*preRunScript = r.ComputeEnv.Config.AwsBatch.PreRunScript.ValueString()
+			} else {
+				preRunScript = nil
+			}
+			postRunScript := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.PostRunScript.IsNull() {
+				*postRunScript = r.ComputeEnv.Config.AwsBatch.PostRunScript.ValueString()
+			} else {
+				postRunScript = nil
+			}
+			headJobCpus := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobCpus.IsNull() {
+				*headJobCpus = int(r.ComputeEnv.Config.AwsBatch.HeadJobCpus.ValueInt32())
+			} else {
+				headJobCpus = nil
+			}
+			headJobMemoryMb := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb.IsNull() {
+				*headJobMemoryMb = int(r.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb.ValueInt32())
+			} else {
+				headJobMemoryMb = nil
+			}
+			environment := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AwsBatch.Environment))
+			for _, environmentItem := range r.ComputeEnv.Config.AwsBatch.Environment {
+				name1 := new(string)
+				if !environmentItem.Name.IsUnknown() && !environmentItem.Name.IsNull() {
+					*name1 = environmentItem.Name.ValueString()
+				} else {
+					name1 = nil
+				}
+				value := new(string)
+				if !environmentItem.Value.IsUnknown() && !environmentItem.Value.IsNull() {
+					*value = environmentItem.Value.ValueString()
+				} else {
+					value = nil
+				}
+				head := new(bool)
+				if !environmentItem.Head.IsUnknown() && !environmentItem.Head.IsNull() {
+					*head = environmentItem.Head.ValueBool()
+				} else {
+					head = nil
+				}
+				compute := new(bool)
+				if !environmentItem.Compute.IsUnknown() && !environmentItem.Compute.IsNull() {
+					*compute = environmentItem.Compute.ValueBool()
+				} else {
+					compute = nil
+				}
+				environment = append(environment, shared.ConfigEnvVariable{
+					Name:    name1,
+					Value:   value,
+					Head:    head,
+					Compute: compute,
+				})
+			}
+			waveEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.WaveEnabled.IsNull() {
+				*waveEnabled = r.ComputeEnv.Config.AwsBatch.WaveEnabled.ValueBool()
+			} else {
+				waveEnabled = nil
+			}
+			fusion2Enabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Fusion2Enabled.IsNull() {
+				*fusion2Enabled = r.ComputeEnv.Config.AwsBatch.Fusion2Enabled.ValueBool()
+			} else {
+				fusion2Enabled = nil
+			}
+			nvnmeStorageEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.IsNull() {
+				*nvnmeStorageEnabled = r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.ValueBool()
+			} else {
+				nvnmeStorageEnabled = nil
+			}
+			logGroup := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.LogGroup.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.LogGroup.IsNull() {
+				*logGroup = r.ComputeEnv.Config.AwsBatch.LogGroup.ValueString()
+			} else {
+				logGroup = nil
+			}
+			nextflowConfig := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.NextflowConfig.IsNull() {
+				*nextflowConfig = r.ComputeEnv.Config.AwsBatch.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig = nil
+			}
+			fusionSnapshots := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.FusionSnapshots.IsNull() {
+				*fusionSnapshots = r.ComputeEnv.Config.AwsBatch.FusionSnapshots.ValueBool()
+			} else {
+				fusionSnapshots = nil
+			}
+			typeVar := shared.ForgeConfigType(r.ComputeEnv.Config.AwsBatch.Forge.Type.ValueString())
+			var minCpus int
+			minCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MinCpus.ValueInt32())
+
+			var maxCpus int
+			maxCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus.ValueInt32())
+
+			gpuEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsNull() {
+				*gpuEnabled = r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.ValueBool()
+			} else {
+				gpuEnabled = nil
+			}
+			ebsAutoScale := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsNull() {
+				*ebsAutoScale = r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.ValueBool()
+			} else {
+				ebsAutoScale = nil
+			}
+			instanceTypes := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes))
+			for _, instanceTypesItem := range r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes {
+				instanceTypes = append(instanceTypes, instanceTypesItem.ValueString())
+			}
+			allocStrategy := new(shared.AllocStrategy)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsNull() {
+				*allocStrategy = shared.AllocStrategy(r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.ValueString())
+			} else {
+				allocStrategy = nil
+			}
+			imageID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsNull() {
+				*imageID = r.ComputeEnv.Config.AwsBatch.Forge.ImageID.ValueString()
+			} else {
+				imageID = nil
+			}
+			vpcID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsNull() {
+				*vpcID = r.ComputeEnv.Config.AwsBatch.Forge.VpcID.ValueString()
+			} else {
+				vpcID = nil
+			}
+			subnets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.Subnets))
+			for _, subnetsItem := range r.ComputeEnv.Config.AwsBatch.Forge.Subnets {
+				subnets = append(subnets, subnetsItem.ValueString())
+			}
+			securityGroups := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups))
+			for _, securityGroupsItem := range r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups {
+				securityGroups = append(securityGroups, securityGroupsItem.ValueString())
+			}
+			fsxMount := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsNull() {
+				*fsxMount = r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.ValueString()
+			} else {
+				fsxMount = nil
+			}
+			fsxName := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsNull() {
+				*fsxName = r.ComputeEnv.Config.AwsBatch.Forge.FsxName.ValueString()
+			} else {
+				fsxName = nil
+			}
+			fsxSize := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsNull() {
+				*fsxSize = int(r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.ValueInt32())
+			} else {
+				fsxSize = nil
+			}
+			disposeOnDeletion := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsNull() {
+				*disposeOnDeletion = r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.ValueBool()
+			} else {
+				disposeOnDeletion = nil
+			}
+			ec2KeyPair := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsNull() {
+				*ec2KeyPair = r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.ValueString()
+			} else {
+				ec2KeyPair = nil
+			}
+			allowBuckets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets))
+			for _, allowBucketsItem := range r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets {
+				allowBuckets = append(allowBuckets, allowBucketsItem.ValueString())
+			}
+			ebsBlockSize := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsNull() {
+				*ebsBlockSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.ValueInt32())
+			} else {
+				ebsBlockSize = nil
+			}
+			fusionEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsNull() {
+				*fusionEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.ValueBool()
+			} else {
+				fusionEnabled = nil
+			}
+			bidPercentage := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsNull() {
+				*bidPercentage = int(r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.ValueInt32())
+			} else {
+				bidPercentage = nil
+			}
+			efsCreate := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsNull() {
+				*efsCreate = r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.ValueBool()
+			} else {
+				efsCreate = nil
+			}
+			efsID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsNull() {
+				*efsID = r.ComputeEnv.Config.AwsBatch.Forge.EfsID.ValueString()
+			} else {
+				efsID = nil
+			}
+			efsMount := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsNull() {
+				*efsMount = r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.ValueString()
+			} else {
+				efsMount = nil
+			}
+			dragenEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsNull() {
+				*dragenEnabled = r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.ValueBool()
+			} else {
+				dragenEnabled = nil
+			}
+			dragenAmiID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsNull() {
+				*dragenAmiID = r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.ValueString()
+			} else {
+				dragenAmiID = nil
+			}
+			ebsBootSize := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsNull() {
+				*ebsBootSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.ValueInt32())
+			} else {
+				ebsBootSize = nil
+			}
+			ecsConfig := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsNull() {
+				*ecsConfig = r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.ValueString()
+			} else {
+				ecsConfig = nil
+			}
+			fargateHeadEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsNull() {
+				*fargateHeadEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.ValueBool()
+			} else {
+				fargateHeadEnabled = nil
+			}
+			arm64Enabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsNull() {
+				*arm64Enabled = r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.ValueBool()
+			} else {
+				arm64Enabled = nil
+			}
+			dragenInstanceType1 := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsNull() {
+				*dragenInstanceType1 = r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.ValueString()
+			} else {
+				dragenInstanceType1 = nil
+			}
+			forge := shared.ForgeConfig{
+				Type:               typeVar,
+				MinCpus:            minCpus,
+				MaxCpus:            maxCpus,
+				GpuEnabled:         gpuEnabled,
+				EbsAutoScale:       ebsAutoScale,
+				InstanceTypes:      instanceTypes,
+				AllocStrategy:      allocStrategy,
+				ImageID:            imageID,
+				VpcID:              vpcID,
+				Subnets:            subnets,
+				SecurityGroups:     securityGroups,
+				FsxMount:           fsxMount,
+				FsxName:            fsxName,
+				FsxSize:            fsxSize,
+				DisposeOnDeletion:  disposeOnDeletion,
+				Ec2KeyPair:         ec2KeyPair,
+				AllowBuckets:       allowBuckets,
+				EbsBlockSize:       ebsBlockSize,
+				FusionEnabled:      fusionEnabled,
+				BidPercentage:      bidPercentage,
+				EfsCreate:          efsCreate,
+				EfsID:              efsID,
+				EfsMount:           efsMount,
+				DragenEnabled:      dragenEnabled,
+				DragenAmiID:        dragenAmiID,
+				EbsBootSize:        ebsBootSize,
+				EcsConfig:          ecsConfig,
+				FargateHeadEnabled: fargateHeadEnabled,
+				Arm64Enabled:       arm64Enabled,
+				DragenInstanceType: dragenInstanceType1,
+			}
+			awsBatchConfiguration = &shared.AWSBatchConfiguration{
+				StorageType:         storageType,
+				LustreID:            lustreID,
+				Volumes:             volumes,
+				Region:              region,
+				ComputeQueue:        computeQueue,
+				DragenQueue:         dragenQueue,
+				DragenInstanceType:  dragenInstanceType,
+				ComputeJobRole:      computeJobRole,
+				ExecutionRole:       executionRole,
+				HeadQueue:           headQueue,
+				HeadJobRole:         headJobRole,
+				CliPath:             cliPath,
+				WorkDir:             workDir,
+				PreRunScript:        preRunScript,
+				PostRunScript:       postRunScript,
+				HeadJobCpus:         headJobCpus,
+				HeadJobMemoryMb:     headJobMemoryMb,
+				Environment:         environment,
+				WaveEnabled:         waveEnabled,
+				Fusion2Enabled:      fusion2Enabled,
+				NvnmeStorageEnabled: nvnmeStorageEnabled,
+				LogGroup:            logGroup,
+				NextflowConfig:      nextflowConfig,
+				FusionSnapshots:     fusionSnapshots,
+				Forge:               forge,
+			}
+		}
+		if awsBatchConfiguration != nil {
+			config = shared.ComputeConfig{
+				AWSBatchConfiguration: awsBatchConfiguration,
+			}
+		}
+		var awsCloudConfiguration *shared.AWSCloudConfiguration
+		if r.ComputeEnv.Config.AwsCloud != nil {
+			allowBuckets1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.AllowBuckets))
+			for _, allowBucketsItem1 := range r.ComputeEnv.Config.AwsCloud.AllowBuckets {
+				allowBuckets1 = append(allowBuckets1, allowBucketsItem1.ValueString())
+			}
+			var region1 string
+			region1 = r.ComputeEnv.Config.AwsCloud.Region.ValueString()
+
+			instanceType := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.InstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.InstanceType.IsNull() {
+				*instanceType = r.ComputeEnv.Config.AwsCloud.InstanceType.ValueString()
+			} else {
+				instanceType = nil
+			}
+			imageId1 := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.ImageID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.ImageID.IsNull() {
+				*imageId1 = r.ComputeEnv.Config.AwsCloud.ImageID.ValueString()
+			} else {
+				imageId1 = nil
+			}
+			workDir1 := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.WorkDir.IsNull() {
+				*workDir1 = r.ComputeEnv.Config.AwsCloud.WorkDir.ValueString()
+			} else {
+				workDir1 = nil
+			}
+			preRunScript1 := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.PreRunScript.IsNull() {
+				*preRunScript1 = r.ComputeEnv.Config.AwsCloud.PreRunScript.ValueString()
+			} else {
+				preRunScript1 = nil
+			}
+			postRunScript1 := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.PostRunScript.IsNull() {
+				*postRunScript1 = r.ComputeEnv.Config.AwsCloud.PostRunScript.ValueString()
+			} else {
+				postRunScript1 = nil
+			}
+			nextflowConfig1 := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.NextflowConfig.IsNull() {
+				*nextflowConfig1 = r.ComputeEnv.Config.AwsCloud.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig1 = nil
+			}
+			environment1 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AwsCloud.Environment))
+			for _, environmentItem1 := range r.ComputeEnv.Config.AwsCloud.Environment {
+				name2 := new(string)
+				if !environmentItem1.Name.IsUnknown() && !environmentItem1.Name.IsNull() {
+					*name2 = environmentItem1.Name.ValueString()
+				} else {
+					name2 = nil
+				}
+				value1 := new(string)
+				if !environmentItem1.Value.IsUnknown() && !environmentItem1.Value.IsNull() {
+					*value1 = environmentItem1.Value.ValueString()
+				} else {
+					value1 = nil
+				}
+				head1 := new(bool)
+				if !environmentItem1.Head.IsUnknown() && !environmentItem1.Head.IsNull() {
+					*head1 = environmentItem1.Head.ValueBool()
+				} else {
+					head1 = nil
+				}
+				compute1 := new(bool)
+				if !environmentItem1.Compute.IsUnknown() && !environmentItem1.Compute.IsNull() {
+					*compute1 = environmentItem1.Compute.ValueBool()
+				} else {
+					compute1 = nil
+				}
+				environment1 = append(environment1, shared.ConfigEnvVariable{
+					Name:    name2,
+					Value:   value1,
+					Head:    head1,
+					Compute: compute1,
+				})
+			}
+			waveEnabled1 := new(bool)
+			if !r.ComputeEnv.Config.AwsCloud.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.WaveEnabled.IsNull() {
+				*waveEnabled1 = r.ComputeEnv.Config.AwsCloud.WaveEnabled.ValueBool()
+			} else {
+				waveEnabled1 = nil
+			}
+			fusion2Enabled1 := new(bool)
+			if !r.ComputeEnv.Config.AwsCloud.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Fusion2Enabled.IsNull() {
+				*fusion2Enabled1 = r.ComputeEnv.Config.AwsCloud.Fusion2Enabled.ValueBool()
+			} else {
+				fusion2Enabled1 = nil
+			}
+			logGroup1 := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.LogGroup.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.LogGroup.IsNull() {
+				*logGroup1 = r.ComputeEnv.Config.AwsCloud.LogGroup.ValueString()
+			} else {
+				logGroup1 = nil
+			}
+			arm64Enabled1 := new(bool)
+			if !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Arm64Enabled.IsNull() {
+				*arm64Enabled1 = r.ComputeEnv.Config.AwsCloud.Arm64Enabled.ValueBool()
+			} else {
+				arm64Enabled1 = nil
+			}
+			gpuEnabled1 := new(bool)
+			if !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.GpuEnabled.IsNull() {
+				*gpuEnabled1 = r.ComputeEnv.Config.AwsCloud.GpuEnabled.ValueBool()
+			} else {
+				gpuEnabled1 = nil
+			}
+			ec2KeyPair1 := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.IsNull() {
+				*ec2KeyPair1 = r.ComputeEnv.Config.AwsCloud.Ec2KeyPair.ValueString()
+			} else {
+				ec2KeyPair1 = nil
+			}
+			ebsBootSize1 := new(int)
+			if !r.ComputeEnv.Config.AwsCloud.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.EbsBootSize.IsNull() {
+				*ebsBootSize1 = int(r.ComputeEnv.Config.AwsCloud.EbsBootSize.ValueInt32())
+			} else {
+				ebsBootSize1 = nil
+			}
+			instanceProfileArn := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.InstanceProfileArn.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.InstanceProfileArn.IsNull() {
+				*instanceProfileArn = r.ComputeEnv.Config.AwsCloud.InstanceProfileArn.ValueString()
+			} else {
+				instanceProfileArn = nil
+			}
+			subnetID := new(string)
+			if !r.ComputeEnv.Config.AwsCloud.SubnetID.IsUnknown() && !r.ComputeEnv.Config.AwsCloud.SubnetID.IsNull() {
+				*subnetID = r.ComputeEnv.Config.AwsCloud.SubnetID.ValueString()
+			} else {
+				subnetID = nil
+			}
+			securityGroups1 := make([]string, 0, len(r.ComputeEnv.Config.AwsCloud.SecurityGroups))
+			for _, securityGroupsItem1 := range r.ComputeEnv.Config.AwsCloud.SecurityGroups {
+				securityGroups1 = append(securityGroups1, securityGroupsItem1.ValueString())
+			}
+			awsCloudConfiguration = &shared.AWSCloudConfiguration{
+				AllowBuckets:       allowBuckets1,
+				Region:             region1,
+				InstanceType:       instanceType,
+				ImageID:            imageId1,
+				WorkDir:            workDir1,
+				PreRunScript:       preRunScript1,
+				PostRunScript:      postRunScript1,
+				NextflowConfig:     nextflowConfig1,
+				Environment:        environment1,
+				WaveEnabled:        waveEnabled1,
+				Fusion2Enabled:     fusion2Enabled1,
+				LogGroup:           logGroup1,
+				Arm64Enabled:       arm64Enabled1,
+				GpuEnabled:         gpuEnabled1,
+				Ec2KeyPair:         ec2KeyPair1,
+				EbsBootSize:        ebsBootSize1,
+				InstanceProfileArn: instanceProfileArn,
+				SubnetID:           subnetID,
+				SecurityGroups:     securityGroups1,
+			}
+		}
+		if awsCloudConfiguration != nil {
+			config = shared.ComputeConfig{
+				AWSCloudConfiguration: awsCloudConfiguration,
+			}
+		}
+		var seqeraComputeConfiguration *shared.SeqeraComputeConfiguration
+		if r.ComputeEnv.Config.SeqeracomputePlatform != nil {
+			var region2 string
+			region2 = r.ComputeEnv.Config.SeqeracomputePlatform.Region.ValueString()
+
+			workDir2 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir.IsNull() {
+				*workDir2 = r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir.ValueString()
+			} else {
+				workDir2 = nil
+			}
+			preRunScript2 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript.IsNull() {
+				*preRunScript2 = r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript2 = nil
+			}
+			postRunScript2 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.IsNull() {
+				*postRunScript2 = r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript2 = nil
+			}
+			nextflowConfig2 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig.IsNull() {
+				*nextflowConfig2 = r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig2 = nil
+			}
+			environment2 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Environment))
+			for _, environmentItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Environment {
+				name3 := new(string)
+				if !environmentItem2.Name.IsUnknown() && !environmentItem2.Name.IsNull() {
+					*name3 = environmentItem2.Name.ValueString()
+				} else {
+					name3 = nil
+				}
+				value2 := new(string)
+				if !environmentItem2.Value.IsUnknown() && !environmentItem2.Value.IsNull() {
+					*value2 = environmentItem2.Value.ValueString()
+				} else {
+					value2 = nil
+				}
+				head2 := new(bool)
+				if !environmentItem2.Head.IsUnknown() && !environmentItem2.Head.IsNull() {
+					*head2 = environmentItem2.Head.ValueBool()
+				} else {
+					head2 = nil
+				}
+				compute2 := new(bool)
+				if !environmentItem2.Compute.IsUnknown() && !environmentItem2.Compute.IsNull() {
+					*compute2 = environmentItem2.Compute.ValueBool()
+				} else {
+					compute2 = nil
+				}
+				environment2 = append(environment2, shared.ConfigEnvVariable{
+					Name:    name3,
+					Value:   value2,
+					Head:    head2,
+					Compute: compute2,
+				})
+			}
+			seqeraComputeConfiguration = &shared.SeqeraComputeConfiguration{
+				Region:         region2,
+				WorkDir:        workDir2,
+				PreRunScript:   preRunScript2,
+				PostRunScript:  postRunScript2,
+				NextflowConfig: nextflowConfig2,
+				Environment:    environment2,
+			}
+		}
+		if seqeraComputeConfiguration != nil {
+			config = shared.ComputeConfig{
+				SeqeraComputeConfiguration: seqeraComputeConfiguration,
+			}
+		}
+		var googleLifeSciencesConfiguration *shared.GoogleLifeSciencesConfiguration
+		if r.ComputeEnv.Config.GoogleLifesciences != nil {
+			region3 := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.Region.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.Region.IsNull() {
+				*region3 = r.ComputeEnv.Config.GoogleLifesciences.Region.ValueString()
+			} else {
+				region3 = nil
+			}
+			zones := make([]string, 0, len(r.ComputeEnv.Config.GoogleLifesciences.Zones))
+			for _, zonesItem := range r.ComputeEnv.Config.GoogleLifesciences.Zones {
+				zones = append(zones, zonesItem.ValueString())
+			}
+			location := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.Location.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.Location.IsNull() {
+				*location = r.ComputeEnv.Config.GoogleLifesciences.Location.ValueString()
+			} else {
+				location = nil
+			}
+			workDir3 := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.WorkDir.IsNull() {
+				*workDir3 = r.ComputeEnv.Config.GoogleLifesciences.WorkDir.ValueString()
+			} else {
+				workDir3 = nil
+			}
+			preemptible := new(bool)
+			if !r.ComputeEnv.Config.GoogleLifesciences.Preemptible.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.Preemptible.IsNull() {
+				*preemptible = r.ComputeEnv.Config.GoogleLifesciences.Preemptible.ValueBool()
+			} else {
+				preemptible = nil
+			}
+			bootDiskSizeGb := new(int)
+			if !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.IsNull() {
+				*bootDiskSizeGb = int(r.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb.ValueInt32())
+			} else {
+				bootDiskSizeGb = nil
+			}
+			projectID := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.ProjectID.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.ProjectID.IsNull() {
+				*projectID = r.ComputeEnv.Config.GoogleLifesciences.ProjectID.ValueString()
+			} else {
+				projectID = nil
+			}
+			sshDaemon := new(bool)
+			if !r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon.IsNull() {
+				*sshDaemon = r.ComputeEnv.Config.GoogleLifesciences.SSHDaemon.ValueBool()
+			} else {
+				sshDaemon = nil
+			}
+			sshImage := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.SSHImage.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.SSHImage.IsNull() {
+				*sshImage = r.ComputeEnv.Config.GoogleLifesciences.SSHImage.ValueString()
+			} else {
+				sshImage = nil
+			}
+			debugMode := new(int)
+			if !r.ComputeEnv.Config.GoogleLifesciences.DebugMode.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.DebugMode.IsNull() {
+				*debugMode = int(r.ComputeEnv.Config.GoogleLifesciences.DebugMode.ValueInt32())
+			} else {
+				debugMode = nil
+			}
+			copyImage := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.CopyImage.IsNull() {
+				*copyImage = r.ComputeEnv.Config.GoogleLifesciences.CopyImage.ValueString()
+			} else {
+				copyImage = nil
+			}
+			usePrivateAddress := new(bool)
+			if !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.IsNull() {
+				*usePrivateAddress = r.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress.ValueBool()
+			} else {
+				usePrivateAddress = nil
+			}
+			labels := make(map[string]string)
+			for labelsKey, labelsValue := range r.ComputeEnv.Config.GoogleLifesciences.Labels {
+				var labelsInst string
+				labelsInst = labelsValue.ValueString()
+
+				labels[labelsKey] = labelsInst
+			}
+			preRunScript3 := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.PreRunScript.IsNull() {
+				*preRunScript3 = r.ComputeEnv.Config.GoogleLifesciences.PreRunScript.ValueString()
+			} else {
+				preRunScript3 = nil
+			}
+			postRunScript3 := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.PostRunScript.IsNull() {
+				*postRunScript3 = r.ComputeEnv.Config.GoogleLifesciences.PostRunScript.ValueString()
+			} else {
+				postRunScript3 = nil
+			}
+			headJobCpus1 := new(int)
+			if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsNull() {
+				*headJobCpus1 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.ValueInt32())
+			} else {
+				headJobCpus1 = nil
+			}
+			headJobMemoryMb1 := new(int)
+			if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsNull() {
+				*headJobMemoryMb1 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.ValueInt32())
+			} else {
+				headJobMemoryMb1 = nil
+			}
+			nextflowConfig3 := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig.IsNull() {
+				*nextflowConfig3 = r.ComputeEnv.Config.GoogleLifesciences.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig3 = nil
+			}
+			nfsTarget := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.IsNull() {
+				*nfsTarget = r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.ValueString()
+			} else {
+				nfsTarget = nil
+			}
+			nfsMount := new(string)
+			if !r.ComputeEnv.Config.GoogleLifesciences.NfsMount.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.NfsMount.IsNull() {
+				*nfsMount = r.ComputeEnv.Config.GoogleLifesciences.NfsMount.ValueString()
+			} else {
+				nfsMount = nil
+			}
+			environment3 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.GoogleLifesciences.Environment))
+			for _, environmentItem3 := range r.ComputeEnv.Config.GoogleLifesciences.Environment {
+				name4 := new(string)
+				if !environmentItem3.Name.IsUnknown() && !environmentItem3.Name.IsNull() {
+					*name4 = environmentItem3.Name.ValueString()
+				} else {
+					name4 = nil
+				}
+				value3 := new(string)
+				if !environmentItem3.Value.IsUnknown() && !environmentItem3.Value.IsNull() {
+					*value3 = environmentItem3.Value.ValueString()
+				} else {
+					value3 = nil
+				}
+				head3 := new(bool)
+				if !environmentItem3.Head.IsUnknown() && !environmentItem3.Head.IsNull() {
+					*head3 = environmentItem3.Head.ValueBool()
+				} else {
+					head3 = nil
+				}
+				compute3 := new(bool)
+				if !environmentItem3.Compute.IsUnknown() && !environmentItem3.Compute.IsNull() {
+					*compute3 = environmentItem3.Compute.ValueBool()
+				} else {
+					compute3 = nil
+				}
+				environment3 = append(environment3, shared.ConfigEnvVariable{
+					Name:    name4,
+					Value:   value3,
+					Head:    head3,
+					Compute: compute3,
+				})
+			}
+			googleLifeSciencesConfiguration = &shared.GoogleLifeSciencesConfiguration{
+				Region:            region3,
+				Zones:             zones,
+				Location:          location,
+				WorkDir:           workDir3,
+				Preemptible:       preemptible,
+				BootDiskSizeGb:    bootDiskSizeGb,
+				ProjectID:         projectID,
+				SSHDaemon:         sshDaemon,
+				SSHImage:          sshImage,
+				DebugMode:         debugMode,
+				CopyImage:         copyImage,
+				UsePrivateAddress: usePrivateAddress,
+				Labels:            labels,
+				PreRunScript:      preRunScript3,
+				PostRunScript:     postRunScript3,
+				HeadJobCpus:       headJobCpus1,
+				HeadJobMemoryMb:   headJobMemoryMb1,
+				NextflowConfig:    nextflowConfig3,
+				NfsTarget:         nfsTarget,
+				NfsMount:          nfsMount,
+				Environment:       environment3,
+			}
+		}
+		if googleLifeSciencesConfiguration != nil {
+			config = shared.ComputeConfig{
+				GoogleLifeSciencesConfiguration: googleLifeSciencesConfiguration,
+			}
+		}
+		var googleBatchServiceConfiguration *shared.GoogleBatchServiceConfiguration
+		if r.ComputeEnv.Config.GoogleBatch != nil {
+			location1 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.Location.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Location.IsNull() {
+				*location1 = r.ComputeEnv.Config.GoogleBatch.Location.ValueString()
+			} else {
+				location1 = nil
+			}
+			workDir4 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.WorkDir.IsNull() {
+				*workDir4 = r.ComputeEnv.Config.GoogleBatch.WorkDir.ValueString()
+			} else {
+				workDir4 = nil
+			}
+			spot := new(bool)
+			if !r.ComputeEnv.Config.GoogleBatch.Spot.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Spot.IsNull() {
+				*spot = r.ComputeEnv.Config.GoogleBatch.Spot.ValueBool()
+			} else {
+				spot = nil
+			}
+			bootDiskSizeGb1 := new(int)
+			if !r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb.IsNull() {
+				*bootDiskSizeGb1 = int(r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb.ValueInt32())
+			} else {
+				bootDiskSizeGb1 = nil
+			}
+			cpuPlatform := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.CPUPlatform.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CPUPlatform.IsNull() {
+				*cpuPlatform = r.ComputeEnv.Config.GoogleBatch.CPUPlatform.ValueString()
+			} else {
+				cpuPlatform = nil
+			}
+			machineType := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.MachineType.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.MachineType.IsNull() {
+				*machineType = r.ComputeEnv.Config.GoogleBatch.MachineType.ValueString()
+			} else {
+				machineType = nil
+			}
+			projectId1 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.ProjectID.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ProjectID.IsNull() {
+				*projectId1 = r.ComputeEnv.Config.GoogleBatch.ProjectID.ValueString()
+			} else {
+				projectId1 = nil
+			}
+			sshDaemon1 := new(bool)
+			if !r.ComputeEnv.Config.GoogleBatch.SSHDaemon.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.SSHDaemon.IsNull() {
+				*sshDaemon1 = r.ComputeEnv.Config.GoogleBatch.SSHDaemon.ValueBool()
+			} else {
+				sshDaemon1 = nil
+			}
+			sshImage1 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.SSHImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.SSHImage.IsNull() {
+				*sshImage1 = r.ComputeEnv.Config.GoogleBatch.SSHImage.ValueString()
+			} else {
+				sshImage1 = nil
+			}
+			debugMode1 := new(int)
+			if !r.ComputeEnv.Config.GoogleBatch.DebugMode.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.DebugMode.IsNull() {
+				*debugMode1 = int(r.ComputeEnv.Config.GoogleBatch.DebugMode.ValueInt32())
+			} else {
+				debugMode1 = nil
+			}
+			copyImage1 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsNull() {
+				*copyImage1 = r.ComputeEnv.Config.GoogleBatch.CopyImage.ValueString()
+			} else {
+				copyImage1 = nil
+			}
+			usePrivateAddress1 := new(bool)
+			if !r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.IsNull() {
+				*usePrivateAddress1 = r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.ValueBool()
+			} else {
+				usePrivateAddress1 = nil
+			}
+			labels1 := make(map[string]string)
+			for labelsKey1, labelsValue1 := range r.ComputeEnv.Config.GoogleBatch.Labels {
+				var labelsInst1 string
+				labelsInst1 = labelsValue1.ValueString()
+
+				labels1[labelsKey1] = labelsInst1
+			}
+			preRunScript4 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.PreRunScript.IsNull() {
+				*preRunScript4 = r.ComputeEnv.Config.GoogleBatch.PreRunScript.ValueString()
+			} else {
+				preRunScript4 = nil
+			}
+			postRunScript4 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.PostRunScript.IsNull() {
+				*postRunScript4 = r.ComputeEnv.Config.GoogleBatch.PostRunScript.ValueString()
+			} else {
+				postRunScript4 = nil
+			}
+			headJobCpus2 := new(int)
+			if !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsNull() {
+				*headJobCpus2 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.ValueInt32())
+			} else {
+				headJobCpus2 = nil
+			}
+			headJobMemoryMb2 := new(int)
+			if !r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.IsNull() {
+				*headJobMemoryMb2 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.ValueInt32())
+			} else {
+				headJobMemoryMb2 = nil
+			}
+			nextflowConfig4 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NextflowConfig.IsNull() {
+				*nextflowConfig4 = r.ComputeEnv.Config.GoogleBatch.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig4 = nil
+			}
+			nfsTarget1 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsNull() {
+				*nfsTarget1 = r.ComputeEnv.Config.GoogleBatch.NfsTarget.ValueString()
+			} else {
+				nfsTarget1 = nil
+			}
+			nfsMount1 := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.NfsMount.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NfsMount.IsNull() {
+				*nfsMount1 = r.ComputeEnv.Config.GoogleBatch.NfsMount.ValueString()
+			} else {
+				nfsMount1 = nil
+			}
+			environment4 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.GoogleBatch.Environment))
+			for _, environmentItem4 := range r.ComputeEnv.Config.GoogleBatch.Environment {
+				name5 := new(string)
+				if !environmentItem4.Name.IsUnknown() && !environmentItem4.Name.IsNull() {
+					*name5 = environmentItem4.Name.ValueString()
+				} else {
+					name5 = nil
+				}
+				value4 := new(string)
+				if !environmentItem4.Value.IsUnknown() && !environmentItem4.Value.IsNull() {
+					*value4 = environmentItem4.Value.ValueString()
+				} else {
+					value4 = nil
+				}
+				head4 := new(bool)
+				if !environmentItem4.Head.IsUnknown() && !environmentItem4.Head.IsNull() {
+					*head4 = environmentItem4.Head.ValueBool()
+				} else {
+					head4 = nil
+				}
+				compute4 := new(bool)
+				if !environmentItem4.Compute.IsUnknown() && !environmentItem4.Compute.IsNull() {
+					*compute4 = environmentItem4.Compute.ValueBool()
+				} else {
+					compute4 = nil
+				}
+				environment4 = append(environment4, shared.ConfigEnvVariable{
+					Name:    name5,
+					Value:   value4,
+					Head:    head4,
+					Compute: compute4,
+				})
+			}
+			waveEnabled2 := new(bool)
+			if !r.ComputeEnv.Config.GoogleBatch.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.WaveEnabled.IsNull() {
+				*waveEnabled2 = r.ComputeEnv.Config.GoogleBatch.WaveEnabled.ValueBool()
+			} else {
+				waveEnabled2 = nil
+			}
+			fusion2Enabled2 := new(bool)
+			if !r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled.IsNull() {
+				*fusion2Enabled2 = r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled.ValueBool()
+			} else {
+				fusion2Enabled2 = nil
+			}
+			serviceAccount := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.ServiceAccount.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ServiceAccount.IsNull() {
+				*serviceAccount = r.ComputeEnv.Config.GoogleBatch.ServiceAccount.ValueString()
+			} else {
+				serviceAccount = nil
+			}
+			network := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.Network.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Network.IsNull() {
+				*network = r.ComputeEnv.Config.GoogleBatch.Network.ValueString()
+			} else {
+				network = nil
+			}
+			subnetwork := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.Subnetwork.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.Subnetwork.IsNull() {
+				*subnetwork = r.ComputeEnv.Config.GoogleBatch.Subnetwork.ValueString()
+			} else {
+				subnetwork = nil
+			}
+			headJobInstanceTemplate := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate.IsNull() {
+				*headJobInstanceTemplate = r.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate.ValueString()
+			} else {
+				headJobInstanceTemplate = nil
+			}
+			computeJobsInstanceTemplate := new(string)
+			if !r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate.IsNull() {
+				*computeJobsInstanceTemplate = r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate.ValueString()
+			} else {
+				computeJobsInstanceTemplate = nil
+			}
+			googleBatchServiceConfiguration = &shared.GoogleBatchServiceConfiguration{
+				Location:                    location1,
+				WorkDir:                     workDir4,
+				Spot:                        spot,
+				BootDiskSizeGb:              bootDiskSizeGb1,
+				CPUPlatform:                 cpuPlatform,
+				MachineType:                 machineType,
+				ProjectID:                   projectId1,
+				SSHDaemon:                   sshDaemon1,
+				SSHImage:                    sshImage1,
+				DebugMode:                   debugMode1,
+				CopyImage:                   copyImage1,
+				UsePrivateAddress:           usePrivateAddress1,
+				Labels:                      labels1,
+				PreRunScript:                preRunScript4,
+				PostRunScript:               postRunScript4,
+				HeadJobCpus:                 headJobCpus2,
+				HeadJobMemoryMb:             headJobMemoryMb2,
+				NextflowConfig:              nextflowConfig4,
+				NfsTarget:                   nfsTarget1,
+				NfsMount:                    nfsMount1,
+				Environment:                 environment4,
+				WaveEnabled:                 waveEnabled2,
+				Fusion2Enabled:              fusion2Enabled2,
+				ServiceAccount:              serviceAccount,
+				Network:                     network,
+				Subnetwork:                  subnetwork,
+				HeadJobInstanceTemplate:     headJobInstanceTemplate,
+				ComputeJobsInstanceTemplate: computeJobsInstanceTemplate,
+			}
+		}
+		if googleBatchServiceConfiguration != nil {
+			config = shared.ComputeConfig{
+				GoogleBatchServiceConfiguration: googleBatchServiceConfiguration,
+			}
+		}
+		var azureBatchConfiguration *shared.AzureBatchConfiguration
+		if r.ComputeEnv.Config.AzureBatch != nil {
+			workDir5 := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.WorkDir.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.WorkDir.IsNull() {
+				*workDir5 = r.ComputeEnv.Config.AzureBatch.WorkDir.ValueString()
+			} else {
+				workDir5 = nil
+			}
+			preRunScript5 := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.PreRunScript.IsNull() {
+				*preRunScript5 = r.ComputeEnv.Config.AzureBatch.PreRunScript.ValueString()
+			} else {
+				preRunScript5 = nil
+			}
+			postRunScript5 := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.PostRunScript.IsNull() {
+				*postRunScript5 = r.ComputeEnv.Config.AzureBatch.PostRunScript.ValueString()
+			} else {
+				postRunScript5 = nil
+			}
+			var region4 string
+			region4 = r.ComputeEnv.Config.AzureBatch.Region.ValueString()
+
+			headPool := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.HeadPool.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.HeadPool.IsNull() {
+				*headPool = r.ComputeEnv.Config.AzureBatch.HeadPool.ValueString()
+			} else {
+				headPool = nil
+			}
+			autoPoolMode := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.AutoPoolMode.IsNull() {
+				*autoPoolMode = r.ComputeEnv.Config.AzureBatch.AutoPoolMode.ValueBool()
+			} else {
+				autoPoolMode = nil
+			}
+			vmType := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsNull() {
+				*vmType = r.ComputeEnv.Config.AzureBatch.Forge.VMType.ValueString()
+			} else {
+				vmType = nil
+			}
+			var vmCount int
+			vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.VMCount.ValueInt32())
+
+			autoScale := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsNull() {
+				*autoScale = r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.ValueBool()
+			} else {
+				autoScale = nil
+			}
+			disposeOnDeletion1 := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsNull() {
+				*disposeOnDeletion1 = r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.ValueBool()
+			} else {
+				disposeOnDeletion1 = nil
+			}
+			containerRegIds := make([]string, 0, len(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds))
+			for _, containerRegIdsItem := range r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds {
+				containerRegIds = append(containerRegIds, containerRegIdsItem.ValueString())
+			}
+			forge1 := shared.AzBatchForgeConfig{
+				VMType:            vmType,
+				VMCount:           vmCount,
+				AutoScale:         autoScale,
+				DisposeOnDeletion: disposeOnDeletion1,
+				ContainerRegIds:   containerRegIds,
+			}
+			tokenDuration := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsNull() {
+				*tokenDuration = r.ComputeEnv.Config.AzureBatch.TokenDuration.ValueString()
+			} else {
+				tokenDuration = nil
+			}
+			deleteJobsOnCompletion := new(shared.JobCleanupPolicy)
+			if !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.IsNull() {
+				*deleteJobsOnCompletion = shared.JobCleanupPolicy(r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion.ValueString())
+			} else {
+				deleteJobsOnCompletion = nil
+			}
+			deletePoolsOnCompletion := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.IsNull() {
+				*deletePoolsOnCompletion = r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion.ValueBool()
+			} else {
+				deletePoolsOnCompletion = nil
+			}
+			environment5 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AzureBatch.Environment))
+			for _, environmentItem5 := range r.ComputeEnv.Config.AzureBatch.Environment {
+				name6 := new(string)
+				if !environmentItem5.Name.IsUnknown() && !environmentItem5.Name.IsNull() {
+					*name6 = environmentItem5.Name.ValueString()
+				} else {
+					name6 = nil
+				}
+				value5 := new(string)
+				if !environmentItem5.Value.IsUnknown() && !environmentItem5.Value.IsNull() {
+					*value5 = environmentItem5.Value.ValueString()
+				} else {
+					value5 = nil
+				}
+				head5 := new(bool)
+				if !environmentItem5.Head.IsUnknown() && !environmentItem5.Head.IsNull() {
+					*head5 = environmentItem5.Head.ValueBool()
+				} else {
+					head5 = nil
+				}
+				compute5 := new(bool)
+				if !environmentItem5.Compute.IsUnknown() && !environmentItem5.Compute.IsNull() {
+					*compute5 = environmentItem5.Compute.ValueBool()
+				} else {
+					compute5 = nil
+				}
+				environment5 = append(environment5, shared.ConfigEnvVariable{
+					Name:    name6,
+					Value:   value5,
+					Head:    head5,
+					Compute: compute5,
+				})
+			}
+			waveEnabled3 := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.WaveEnabled.IsNull() {
+				*waveEnabled3 = r.ComputeEnv.Config.AzureBatch.WaveEnabled.ValueBool()
+			} else {
+				waveEnabled3 = nil
+			}
+			fusion2Enabled3 := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Fusion2Enabled.IsNull() {
+				*fusion2Enabled3 = r.ComputeEnv.Config.AzureBatch.Fusion2Enabled.ValueBool()
+			} else {
+				fusion2Enabled3 = nil
+			}
+			nextflowConfig5 := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.NextflowConfig.IsNull() {
+				*nextflowConfig5 = r.ComputeEnv.Config.AzureBatch.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig5 = nil
+			}
+			managedIdentityClientID := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsNull() {
+				*managedIdentityClientID = r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.ValueString()
+			} else {
+				managedIdentityClientID = nil
+			}
+			azureBatchConfiguration = &shared.AzureBatchConfiguration{
+				WorkDir:                 workDir5,
+				PreRunScript:            preRunScript5,
+				PostRunScript:           postRunScript5,
+				Region:                  region4,
+				HeadPool:                headPool,
+				AutoPoolMode:            autoPoolMode,
+				Forge:                   forge1,
+				TokenDuration:           tokenDuration,
+				DeleteJobsOnCompletion:  deleteJobsOnCompletion,
+				DeletePoolsOnCompletion: deletePoolsOnCompletion,
+				Environment:             environment5,
+				WaveEnabled:             waveEnabled3,
+				Fusion2Enabled:          fusion2Enabled3,
+				NextflowConfig:          nextflowConfig5,
+				ManagedIdentityClientID: managedIdentityClientID,
+			}
+		}
+		if azureBatchConfiguration != nil {
+			config = shared.ComputeConfig{
+				AzureBatchConfiguration: azureBatchConfiguration,
+			}
+		}
+		var ibmLSFConfiguration *shared.IBMLSFConfiguration
+		if r.ComputeEnv.Config.LsfPlatform != nil {
+			var workDir6 string
+			workDir6 = r.ComputeEnv.Config.LsfPlatform.WorkDir.ValueString()
+
+			preRunScript6 := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PreRunScript.IsNull() {
+				*preRunScript6 = r.ComputeEnv.Config.LsfPlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript6 = nil
+			}
+			postRunScript6 := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PostRunScript.IsNull() {
+				*postRunScript6 = r.ComputeEnv.Config.LsfPlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript6 = nil
+			}
+			nextflowConfig6 := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.NextflowConfig.IsNull() {
+				*nextflowConfig6 = r.ComputeEnv.Config.LsfPlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig6 = nil
+			}
+			launchDir := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.LaunchDir.IsNull() {
+				*launchDir = r.ComputeEnv.Config.LsfPlatform.LaunchDir.ValueString()
+			} else {
+				launchDir = nil
+			}
+			userName := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.UserName.IsNull() {
+				*userName = r.ComputeEnv.Config.LsfPlatform.UserName.ValueString()
+			} else {
+				userName = nil
+			}
+			hostName := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.HostName.IsNull() {
+				*hostName = r.ComputeEnv.Config.LsfPlatform.HostName.ValueString()
+			} else {
+				hostName = nil
+			}
+			port := new(int)
+			if !r.ComputeEnv.Config.LsfPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.Port.IsNull() {
+				*port = int(r.ComputeEnv.Config.LsfPlatform.Port.ValueInt32())
+			} else {
+				port = nil
+			}
+			headQueue1 := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.HeadQueue.IsNull() {
+				*headQueue1 = r.ComputeEnv.Config.LsfPlatform.HeadQueue.ValueString()
+			} else {
+				headQueue1 = nil
+			}
+			computeQueue1 := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.ComputeQueue.IsNull() {
+				*computeQueue1 = r.ComputeEnv.Config.LsfPlatform.ComputeQueue.ValueString()
+			} else {
+				computeQueue1 = nil
+			}
+			maxQueueSize := new(int)
+			if !r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.IsNull() {
+				*maxQueueSize = int(r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.ValueInt32())
+			} else {
+				maxQueueSize = nil
+			}
+			headJobOptions := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.HeadJobOptions.IsNull() {
+				*headJobOptions = r.ComputeEnv.Config.LsfPlatform.HeadJobOptions.ValueString()
+			} else {
+				headJobOptions = nil
+			}
+			propagateHeadJobOptions := new(bool)
+			if !r.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions.IsNull() {
+				*propagateHeadJobOptions = r.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions.ValueBool()
+			} else {
+				propagateHeadJobOptions = nil
+			}
+			unitForLimits := new(string)
+			if !r.ComputeEnv.Config.LsfPlatform.UnitForLimits.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.UnitForLimits.IsNull() {
+				*unitForLimits = r.ComputeEnv.Config.LsfPlatform.UnitForLimits.ValueString()
+			} else {
+				unitForLimits = nil
+			}
+			perJobMemLimit := new(bool)
+			if !r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit.IsNull() {
+				*perJobMemLimit = r.ComputeEnv.Config.LsfPlatform.PerJobMemLimit.ValueBool()
+			} else {
+				perJobMemLimit = nil
+			}
+			perTaskReserve := new(bool)
+			if !r.ComputeEnv.Config.LsfPlatform.PerTaskReserve.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.PerTaskReserve.IsNull() {
+				*perTaskReserve = r.ComputeEnv.Config.LsfPlatform.PerTaskReserve.ValueBool()
+			} else {
+				perTaskReserve = nil
+			}
+			environment6 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.LsfPlatform.Environment))
+			for _, environmentItem6 := range r.ComputeEnv.Config.LsfPlatform.Environment {
+				name7 := new(string)
+				if !environmentItem6.Name.IsUnknown() && !environmentItem6.Name.IsNull() {
+					*name7 = environmentItem6.Name.ValueString()
+				} else {
+					name7 = nil
+				}
+				value6 := new(string)
+				if !environmentItem6.Value.IsUnknown() && !environmentItem6.Value.IsNull() {
+					*value6 = environmentItem6.Value.ValueString()
+				} else {
+					value6 = nil
+				}
+				head6 := new(bool)
+				if !environmentItem6.Head.IsUnknown() && !environmentItem6.Head.IsNull() {
+					*head6 = environmentItem6.Head.ValueBool()
+				} else {
+					head6 = nil
+				}
+				compute6 := new(bool)
+				if !environmentItem6.Compute.IsUnknown() && !environmentItem6.Compute.IsNull() {
+					*compute6 = environmentItem6.Compute.ValueBool()
+				} else {
+					compute6 = nil
+				}
+				environment6 = append(environment6, shared.ConfigEnvVariable{
+					Name:    name7,
+					Value:   value6,
+					Head:    head6,
+					Compute: compute6,
+				})
+			}
+			ibmLSFConfiguration = &shared.IBMLSFConfiguration{
+				WorkDir:                 workDir6,
+				PreRunScript:            preRunScript6,
+				PostRunScript:           postRunScript6,
+				NextflowConfig:          nextflowConfig6,
+				LaunchDir:               launchDir,
+				UserName:                userName,
+				HostName:                hostName,
+				Port:                    port,
+				HeadQueue:               headQueue1,
+				ComputeQueue:            computeQueue1,
+				MaxQueueSize:            maxQueueSize,
+				HeadJobOptions:          headJobOptions,
+				PropagateHeadJobOptions: propagateHeadJobOptions,
+				UnitForLimits:           unitForLimits,
+				PerJobMemLimit:          perJobMemLimit,
+				PerTaskReserve:          perTaskReserve,
+				Environment:             environment6,
+			}
+		}
+		if ibmLSFConfiguration != nil {
+			config = shared.ComputeConfig{
+				IBMLSFConfiguration: ibmLSFConfiguration,
+			}
+		}
+		var slurmConfiguration *shared.SlurmConfiguration
+		if r.ComputeEnv.Config.SlurmPlatform != nil {
+			var workDir7 string
+			workDir7 = r.ComputeEnv.Config.SlurmPlatform.WorkDir.ValueString()
+
+			preRunScript7 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.PreRunScript.IsNull() {
+				*preRunScript7 = r.ComputeEnv.Config.SlurmPlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript7 = nil
+			}
+			postRunScript7 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.PostRunScript.IsNull() {
+				*postRunScript7 = r.ComputeEnv.Config.SlurmPlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript7 = nil
+			}
+			nextflowConfig7 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.NextflowConfig.IsNull() {
+				*nextflowConfig7 = r.ComputeEnv.Config.SlurmPlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig7 = nil
+			}
+			launchDir1 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.LaunchDir.IsNull() {
+				*launchDir1 = r.ComputeEnv.Config.SlurmPlatform.LaunchDir.ValueString()
+			} else {
+				launchDir1 = nil
+			}
+			userName1 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.UserName.IsNull() {
+				*userName1 = r.ComputeEnv.Config.SlurmPlatform.UserName.ValueString()
+			} else {
+				userName1 = nil
+			}
+			hostName1 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.HostName.IsNull() {
+				*hostName1 = r.ComputeEnv.Config.SlurmPlatform.HostName.ValueString()
+			} else {
+				hostName1 = nil
+			}
+			port1 := new(int)
+			if !r.ComputeEnv.Config.SlurmPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.Port.IsNull() {
+				*port1 = int(r.ComputeEnv.Config.SlurmPlatform.Port.ValueInt32())
+			} else {
+				port1 = nil
+			}
+			headQueue2 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.HeadQueue.IsNull() {
+				*headQueue2 = r.ComputeEnv.Config.SlurmPlatform.HeadQueue.ValueString()
+			} else {
+				headQueue2 = nil
+			}
+			computeQueue2 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.IsNull() {
+				*computeQueue2 = r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.ValueString()
+			} else {
+				computeQueue2 = nil
+			}
+			maxQueueSize1 := new(int)
+			if !r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.IsNull() {
+				*maxQueueSize1 = int(r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.ValueInt32())
+			} else {
+				maxQueueSize1 = nil
+			}
+			headJobOptions1 := new(string)
+			if !r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions.IsNull() {
+				*headJobOptions1 = r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions.ValueString()
+			} else {
+				headJobOptions1 = nil
+			}
+			propagateHeadJobOptions1 := new(bool)
+			if !r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions.IsNull() {
+				*propagateHeadJobOptions1 = r.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions.ValueBool()
+			} else {
+				propagateHeadJobOptions1 = nil
+			}
+			environment7 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.SlurmPlatform.Environment))
+			for _, environmentItem7 := range r.ComputeEnv.Config.SlurmPlatform.Environment {
+				name8 := new(string)
+				if !environmentItem7.Name.IsUnknown() && !environmentItem7.Name.IsNull() {
+					*name8 = environmentItem7.Name.ValueString()
+				} else {
+					name8 = nil
+				}
+				value7 := new(string)
+				if !environmentItem7.Value.IsUnknown() && !environmentItem7.Value.IsNull() {
+					*value7 = environmentItem7.Value.ValueString()
+				} else {
+					value7 = nil
+				}
+				head7 := new(bool)
+				if !environmentItem7.Head.IsUnknown() && !environmentItem7.Head.IsNull() {
+					*head7 = environmentItem7.Head.ValueBool()
+				} else {
+					head7 = nil
+				}
+				compute7 := new(bool)
+				if !environmentItem7.Compute.IsUnknown() && !environmentItem7.Compute.IsNull() {
+					*compute7 = environmentItem7.Compute.ValueBool()
+				} else {
+					compute7 = nil
+				}
+				environment7 = append(environment7, shared.ConfigEnvVariable{
+					Name:    name8,
+					Value:   value7,
+					Head:    head7,
+					Compute: compute7,
+				})
+			}
+			slurmConfiguration = &shared.SlurmConfiguration{
+				WorkDir:                 workDir7,
+				PreRunScript:            preRunScript7,
+				PostRunScript:           postRunScript7,
+				NextflowConfig:          nextflowConfig7,
+				LaunchDir:               launchDir1,
+				UserName:                userName1,
+				HostName:                hostName1,
+				Port:                    port1,
+				HeadQueue:               headQueue2,
+				ComputeQueue:            computeQueue2,
+				MaxQueueSize:            maxQueueSize1,
+				HeadJobOptions:          headJobOptions1,
+				PropagateHeadJobOptions: propagateHeadJobOptions1,
+				Environment:             environment7,
+			}
+		}
+		if slurmConfiguration != nil {
+			config = shared.ComputeConfig{
+				SlurmConfiguration: slurmConfiguration,
+			}
+		}
+		var kubernetesComputeConfiguration *shared.KubernetesComputeConfiguration
+		if r.ComputeEnv.Config.K8sPlatform != nil {
+			workDir8 := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.WorkDir.IsNull() {
+				*workDir8 = r.ComputeEnv.Config.K8sPlatform.WorkDir.ValueString()
+			} else {
+				workDir8 = nil
+			}
+			preRunScript8 := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.PreRunScript.IsNull() {
+				*preRunScript8 = r.ComputeEnv.Config.K8sPlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript8 = nil
+			}
+			postRunScript8 := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.PostRunScript.IsNull() {
+				*postRunScript8 = r.ComputeEnv.Config.K8sPlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript8 = nil
+			}
+			var server string
+			server = r.ComputeEnv.Config.K8sPlatform.Server.ValueString()
+
+			var sslCert string
+			sslCert = r.ComputeEnv.Config.K8sPlatform.SslCert.ValueString()
+
+			var namespace string
+			namespace = r.ComputeEnv.Config.K8sPlatform.Namespace.ValueString()
+
+			computeServiceAccount := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount.IsNull() {
+				*computeServiceAccount = r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount.ValueString()
+			} else {
+				computeServiceAccount = nil
+			}
+			var headServiceAccount string
+			headServiceAccount = r.ComputeEnv.Config.K8sPlatform.HeadServiceAccount.ValueString()
+
+			var storageClaimName string
+			storageClaimName = r.ComputeEnv.Config.K8sPlatform.StorageClaimName.ValueString()
+
+			storageMountPath := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.StorageMountPath.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.StorageMountPath.IsNull() {
+				*storageMountPath = r.ComputeEnv.Config.K8sPlatform.StorageMountPath.ValueString()
+			} else {
+				storageMountPath = nil
+			}
+			podCleanup := new(shared.PodCleanupPolicy)
+			if !r.ComputeEnv.Config.K8sPlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.PodCleanup.IsNull() {
+				*podCleanup = shared.PodCleanupPolicy(r.ComputeEnv.Config.K8sPlatform.PodCleanup.ValueString())
+			} else {
+				podCleanup = nil
+			}
+			headPodSpec := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.IsNull() {
+				*headPodSpec = r.ComputeEnv.Config.K8sPlatform.HeadPodSpec.ValueString()
+			} else {
+				headPodSpec = nil
+			}
+			servicePodSpec := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.ServicePodSpec.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.ServicePodSpec.IsNull() {
+				*servicePodSpec = r.ComputeEnv.Config.K8sPlatform.ServicePodSpec.ValueString()
+			} else {
+				servicePodSpec = nil
+			}
+			environment8 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.K8sPlatform.Environment))
+			for _, environmentItem8 := range r.ComputeEnv.Config.K8sPlatform.Environment {
+				name9 := new(string)
+				if !environmentItem8.Name.IsUnknown() && !environmentItem8.Name.IsNull() {
+					*name9 = environmentItem8.Name.ValueString()
+				} else {
+					name9 = nil
+				}
+				value8 := new(string)
+				if !environmentItem8.Value.IsUnknown() && !environmentItem8.Value.IsNull() {
+					*value8 = environmentItem8.Value.ValueString()
+				} else {
+					value8 = nil
+				}
+				head8 := new(bool)
+				if !environmentItem8.Head.IsUnknown() && !environmentItem8.Head.IsNull() {
+					*head8 = environmentItem8.Head.ValueBool()
+				} else {
+					head8 = nil
+				}
+				compute8 := new(bool)
+				if !environmentItem8.Compute.IsUnknown() && !environmentItem8.Compute.IsNull() {
+					*compute8 = environmentItem8.Compute.ValueBool()
+				} else {
+					compute8 = nil
+				}
+				environment8 = append(environment8, shared.ConfigEnvVariable{
+					Name:    name9,
+					Value:   value8,
+					Head:    head8,
+					Compute: compute8,
+				})
+			}
+			headJobCpus3 := new(int)
+			if !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsNull() {
+				*headJobCpus3 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.ValueInt32())
+			} else {
+				headJobCpus3 = nil
+			}
+			headJobMemoryMb3 := new(int)
+			if !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsNull() {
+				*headJobMemoryMb3 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.ValueInt32())
+			} else {
+				headJobMemoryMb3 = nil
+			}
+			nextflowConfig8 := new(string)
+			if !r.ComputeEnv.Config.K8sPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.NextflowConfig.IsNull() {
+				*nextflowConfig8 = r.ComputeEnv.Config.K8sPlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig8 = nil
+			}
+			kubernetesComputeConfiguration = &shared.KubernetesComputeConfiguration{
+				WorkDir:               workDir8,
+				PreRunScript:          preRunScript8,
+				PostRunScript:         postRunScript8,
+				Server:                server,
+				SslCert:               sslCert,
+				Namespace:             namespace,
+				ComputeServiceAccount: computeServiceAccount,
+				HeadServiceAccount:    headServiceAccount,
+				StorageClaimName:      storageClaimName,
+				StorageMountPath:      storageMountPath,
+				PodCleanup:            podCleanup,
+				HeadPodSpec:           headPodSpec,
+				ServicePodSpec:        servicePodSpec,
+				Environment:           environment8,
+				HeadJobCpus:           headJobCpus3,
+				HeadJobMemoryMb:       headJobMemoryMb3,
+				NextflowConfig:        nextflowConfig8,
+			}
+		}
+		if kubernetesComputeConfiguration != nil {
+			config = shared.ComputeConfig{
+				KubernetesComputeConfiguration: kubernetesComputeConfiguration,
+			}
+		}
+		var amazonEKSClusterConfiguration *shared.AmazonEKSClusterConfiguration
+		if r.ComputeEnv.Config.EksPlatform != nil {
+			workDir9 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.WorkDir.IsNull() {
+				*workDir9 = r.ComputeEnv.Config.EksPlatform.WorkDir.ValueString()
+			} else {
+				workDir9 = nil
+			}
+			preRunScript9 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.PreRunScript.IsNull() {
+				*preRunScript9 = r.ComputeEnv.Config.EksPlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript9 = nil
+			}
+			postRunScript9 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.PostRunScript.IsNull() {
+				*postRunScript9 = r.ComputeEnv.Config.EksPlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript9 = nil
+			}
+			var server1 string
+			server1 = r.ComputeEnv.Config.EksPlatform.Server.ValueString()
+
+			var sslCert1 string
+			sslCert1 = r.ComputeEnv.Config.EksPlatform.SslCert.ValueString()
+
+			var namespace1 string
+			namespace1 = r.ComputeEnv.Config.EksPlatform.Namespace.ValueString()
+
+			computeServiceAccount1 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount.IsNull() {
+				*computeServiceAccount1 = r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount.ValueString()
+			} else {
+				computeServiceAccount1 = nil
+			}
+			var headServiceAccount1 string
+			headServiceAccount1 = r.ComputeEnv.Config.EksPlatform.HeadServiceAccount.ValueString()
+
+			var storageClaimName1 string
+			storageClaimName1 = r.ComputeEnv.Config.EksPlatform.StorageClaimName.ValueString()
+
+			storageMountPath1 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.StorageMountPath.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.StorageMountPath.IsNull() {
+				*storageMountPath1 = r.ComputeEnv.Config.EksPlatform.StorageMountPath.ValueString()
+			} else {
+				storageMountPath1 = nil
+			}
+			podCleanup1 := new(shared.PodCleanupPolicy)
+			if !r.ComputeEnv.Config.EksPlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.PodCleanup.IsNull() {
+				*podCleanup1 = shared.PodCleanupPolicy(r.ComputeEnv.Config.EksPlatform.PodCleanup.ValueString())
+			} else {
+				podCleanup1 = nil
+			}
+			headPodSpec1 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadPodSpec.IsNull() {
+				*headPodSpec1 = r.ComputeEnv.Config.EksPlatform.HeadPodSpec.ValueString()
+			} else {
+				headPodSpec1 = nil
+			}
+			servicePodSpec1 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.ServicePodSpec.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.ServicePodSpec.IsNull() {
+				*servicePodSpec1 = r.ComputeEnv.Config.EksPlatform.ServicePodSpec.ValueString()
+			} else {
+				servicePodSpec1 = nil
+			}
+			environment9 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.EksPlatform.Environment))
+			for _, environmentItem9 := range r.ComputeEnv.Config.EksPlatform.Environment {
+				name10 := new(string)
+				if !environmentItem9.Name.IsUnknown() && !environmentItem9.Name.IsNull() {
+					*name10 = environmentItem9.Name.ValueString()
+				} else {
+					name10 = nil
+				}
+				value9 := new(string)
+				if !environmentItem9.Value.IsUnknown() && !environmentItem9.Value.IsNull() {
+					*value9 = environmentItem9.Value.ValueString()
+				} else {
+					value9 = nil
+				}
+				head9 := new(bool)
+				if !environmentItem9.Head.IsUnknown() && !environmentItem9.Head.IsNull() {
+					*head9 = environmentItem9.Head.ValueBool()
+				} else {
+					head9 = nil
+				}
+				compute9 := new(bool)
+				if !environmentItem9.Compute.IsUnknown() && !environmentItem9.Compute.IsNull() {
+					*compute9 = environmentItem9.Compute.ValueBool()
+				} else {
+					compute9 = nil
+				}
+				environment9 = append(environment9, shared.ConfigEnvVariable{
+					Name:    name10,
+					Value:   value9,
+					Head:    head9,
+					Compute: compute9,
+				})
+			}
+			headJobCpus4 := new(int)
+			if !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsNull() {
+				*headJobCpus4 = int(r.ComputeEnv.Config.EksPlatform.HeadJobCpus.ValueInt32())
+			} else {
+				headJobCpus4 = nil
+			}
+			headJobMemoryMb4 := new(int)
+			if !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsNull() {
+				*headJobMemoryMb4 = int(r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.ValueInt32())
+			} else {
+				headJobMemoryMb4 = nil
+			}
+			nextflowConfig9 := new(string)
+			if !r.ComputeEnv.Config.EksPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.NextflowConfig.IsNull() {
+				*nextflowConfig9 = r.ComputeEnv.Config.EksPlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig9 = nil
+			}
+			var region5 string
+			region5 = r.ComputeEnv.Config.EksPlatform.Region.ValueString()
+
+			var clusterName string
+			clusterName = r.ComputeEnv.Config.EksPlatform.ClusterName.ValueString()
+
+			waveEnabled4 := new(bool)
+			if !r.ComputeEnv.Config.EksPlatform.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.WaveEnabled.IsNull() {
+				*waveEnabled4 = r.ComputeEnv.Config.EksPlatform.WaveEnabled.ValueBool()
+			} else {
+				waveEnabled4 = nil
+			}
+			fusion2Enabled4 := new(bool)
+			if !r.ComputeEnv.Config.EksPlatform.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.Fusion2Enabled.IsNull() {
+				*fusion2Enabled4 = r.ComputeEnv.Config.EksPlatform.Fusion2Enabled.ValueBool()
+			} else {
+				fusion2Enabled4 = nil
+			}
+			amazonEKSClusterConfiguration = &shared.AmazonEKSClusterConfiguration{
+				WorkDir:               workDir9,
+				PreRunScript:          preRunScript9,
+				PostRunScript:         postRunScript9,
+				Server:                server1,
+				SslCert:               sslCert1,
+				Namespace:             namespace1,
+				ComputeServiceAccount: computeServiceAccount1,
+				HeadServiceAccount:    headServiceAccount1,
+				StorageClaimName:      storageClaimName1,
+				StorageMountPath:      storageMountPath1,
+				PodCleanup:            podCleanup1,
+				HeadPodSpec:           headPodSpec1,
+				ServicePodSpec:        servicePodSpec1,
+				Environment:           environment9,
+				HeadJobCpus:           headJobCpus4,
+				HeadJobMemoryMb:       headJobMemoryMb4,
+				NextflowConfig:        nextflowConfig9,
+				Region:                region5,
+				ClusterName:           clusterName,
+				WaveEnabled:           waveEnabled4,
+				Fusion2Enabled:        fusion2Enabled4,
+			}
+		}
+		if amazonEKSClusterConfiguration != nil {
+			config = shared.ComputeConfig{
+				AmazonEKSClusterConfiguration: amazonEKSClusterConfiguration,
+			}
+		}
+		var googleGKEClusterConfiguration *shared.GoogleGKEClusterConfiguration
+		if r.ComputeEnv.Config.GkePlatform != nil {
+			workDir10 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.WorkDir.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.WorkDir.IsNull() {
+				*workDir10 = r.ComputeEnv.Config.GkePlatform.WorkDir.ValueString()
+			} else {
+				workDir10 = nil
+			}
+			preRunScript10 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.PreRunScript.IsNull() {
+				*preRunScript10 = r.ComputeEnv.Config.GkePlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript10 = nil
+			}
+			postRunScript10 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.PostRunScript.IsNull() {
+				*postRunScript10 = r.ComputeEnv.Config.GkePlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript10 = nil
+			}
+			var server2 string
+			server2 = r.ComputeEnv.Config.GkePlatform.Server.ValueString()
+
+			var sslCert2 string
+			sslCert2 = r.ComputeEnv.Config.GkePlatform.SslCert.ValueString()
+
+			var namespace2 string
+			namespace2 = r.ComputeEnv.Config.GkePlatform.Namespace.ValueString()
+
+			computeServiceAccount2 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount.IsNull() {
+				*computeServiceAccount2 = r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount.ValueString()
+			} else {
+				computeServiceAccount2 = nil
+			}
+			var headServiceAccount2 string
+			headServiceAccount2 = r.ComputeEnv.Config.GkePlatform.HeadServiceAccount.ValueString()
+
+			var storageClaimName2 string
+			storageClaimName2 = r.ComputeEnv.Config.GkePlatform.StorageClaimName.ValueString()
+
+			storageMountPath2 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.StorageMountPath.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.StorageMountPath.IsNull() {
+				*storageMountPath2 = r.ComputeEnv.Config.GkePlatform.StorageMountPath.ValueString()
+			} else {
+				storageMountPath2 = nil
+			}
+			podCleanup2 := new(shared.PodCleanupPolicy)
+			if !r.ComputeEnv.Config.GkePlatform.PodCleanup.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.PodCleanup.IsNull() {
+				*podCleanup2 = shared.PodCleanupPolicy(r.ComputeEnv.Config.GkePlatform.PodCleanup.ValueString())
+			} else {
+				podCleanup2 = nil
+			}
+			headPodSpec2 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.HeadPodSpec.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadPodSpec.IsNull() {
+				*headPodSpec2 = r.ComputeEnv.Config.GkePlatform.HeadPodSpec.ValueString()
+			} else {
+				headPodSpec2 = nil
+			}
+			servicePodSpec2 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.ServicePodSpec.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.ServicePodSpec.IsNull() {
+				*servicePodSpec2 = r.ComputeEnv.Config.GkePlatform.ServicePodSpec.ValueString()
+			} else {
+				servicePodSpec2 = nil
+			}
+			environment10 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.GkePlatform.Environment))
+			for _, environmentItem10 := range r.ComputeEnv.Config.GkePlatform.Environment {
+				name11 := new(string)
+				if !environmentItem10.Name.IsUnknown() && !environmentItem10.Name.IsNull() {
+					*name11 = environmentItem10.Name.ValueString()
+				} else {
+					name11 = nil
+				}
+				value10 := new(string)
+				if !environmentItem10.Value.IsUnknown() && !environmentItem10.Value.IsNull() {
+					*value10 = environmentItem10.Value.ValueString()
+				} else {
+					value10 = nil
+				}
+				head10 := new(bool)
+				if !environmentItem10.Head.IsUnknown() && !environmentItem10.Head.IsNull() {
+					*head10 = environmentItem10.Head.ValueBool()
+				} else {
+					head10 = nil
+				}
+				compute10 := new(bool)
+				if !environmentItem10.Compute.IsUnknown() && !environmentItem10.Compute.IsNull() {
+					*compute10 = environmentItem10.Compute.ValueBool()
+				} else {
+					compute10 = nil
+				}
+				environment10 = append(environment10, shared.ConfigEnvVariable{
+					Name:    name11,
+					Value:   value10,
+					Head:    head10,
+					Compute: compute10,
+				})
+			}
+			headJobCpus5 := new(int)
+			if !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsNull() {
+				*headJobCpus5 = int(r.ComputeEnv.Config.GkePlatform.HeadJobCpus.ValueInt32())
+			} else {
+				headJobCpus5 = nil
+			}
+			headJobMemoryMb5 := new(int)
+			if !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsNull() {
+				*headJobMemoryMb5 = int(r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.ValueInt32())
+			} else {
+				headJobMemoryMb5 = nil
+			}
+			nextflowConfig10 := new(string)
+			if !r.ComputeEnv.Config.GkePlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.NextflowConfig.IsNull() {
+				*nextflowConfig10 = r.ComputeEnv.Config.GkePlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig10 = nil
+			}
+			var region6 string
+			region6 = r.ComputeEnv.Config.GkePlatform.Region.ValueString()
+
+			var clusterName1 string
+			clusterName1 = r.ComputeEnv.Config.GkePlatform.ClusterName.ValueString()
+
+			fusion2Enabled5 := new(bool)
+			if !r.ComputeEnv.Config.GkePlatform.Fusion2Enabled.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.Fusion2Enabled.IsNull() {
+				*fusion2Enabled5 = r.ComputeEnv.Config.GkePlatform.Fusion2Enabled.ValueBool()
+			} else {
+				fusion2Enabled5 = nil
+			}
+			waveEnabled5 := new(bool)
+			if !r.ComputeEnv.Config.GkePlatform.WaveEnabled.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.WaveEnabled.IsNull() {
+				*waveEnabled5 = r.ComputeEnv.Config.GkePlatform.WaveEnabled.ValueBool()
+			} else {
+				waveEnabled5 = nil
+			}
+			googleGKEClusterConfiguration = &shared.GoogleGKEClusterConfiguration{
+				WorkDir:               workDir10,
+				PreRunScript:          preRunScript10,
+				PostRunScript:         postRunScript10,
+				Server:                server2,
+				SslCert:               sslCert2,
+				Namespace:             namespace2,
+				ComputeServiceAccount: computeServiceAccount2,
+				HeadServiceAccount:    headServiceAccount2,
+				StorageClaimName:      storageClaimName2,
+				StorageMountPath:      storageMountPath2,
+				PodCleanup:            podCleanup2,
+				HeadPodSpec:           headPodSpec2,
+				ServicePodSpec:        servicePodSpec2,
+				Environment:           environment10,
+				HeadJobCpus:           headJobCpus5,
+				HeadJobMemoryMb:       headJobMemoryMb5,
+				NextflowConfig:        nextflowConfig10,
+				Region:                region6,
+				ClusterName:           clusterName1,
+				Fusion2Enabled:        fusion2Enabled5,
+				WaveEnabled:           waveEnabled5,
+			}
+		}
+		if googleGKEClusterConfiguration != nil {
+			config = shared.ComputeConfig{
+				GoogleGKEClusterConfiguration: googleGKEClusterConfiguration,
+			}
+		}
+		var univaGridEngineConfiguration *shared.UnivaGridEngineConfiguration
+		if r.ComputeEnv.Config.UgePlatform != nil {
+			var workDir11 string
+			workDir11 = r.ComputeEnv.Config.UgePlatform.WorkDir.ValueString()
+
+			preRunScript11 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.PreRunScript.IsNull() {
+				*preRunScript11 = r.ComputeEnv.Config.UgePlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript11 = nil
+			}
+			postRunScript11 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.PostRunScript.IsNull() {
+				*postRunScript11 = r.ComputeEnv.Config.UgePlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript11 = nil
+			}
+			nextflowConfig11 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.NextflowConfig.IsNull() {
+				*nextflowConfig11 = r.ComputeEnv.Config.UgePlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig11 = nil
+			}
+			launchDir2 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.LaunchDir.IsNull() {
+				*launchDir2 = r.ComputeEnv.Config.UgePlatform.LaunchDir.ValueString()
+			} else {
+				launchDir2 = nil
+			}
+			userName2 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.UserName.IsNull() {
+				*userName2 = r.ComputeEnv.Config.UgePlatform.UserName.ValueString()
+			} else {
+				userName2 = nil
+			}
+			hostName2 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.HostName.IsNull() {
+				*hostName2 = r.ComputeEnv.Config.UgePlatform.HostName.ValueString()
+			} else {
+				hostName2 = nil
+			}
+			port2 := new(int)
+			if !r.ComputeEnv.Config.UgePlatform.Port.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.Port.IsNull() {
+				*port2 = int(r.ComputeEnv.Config.UgePlatform.Port.ValueInt32())
+			} else {
+				port2 = nil
+			}
+			headQueue3 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.HeadQueue.IsNull() {
+				*headQueue3 = r.ComputeEnv.Config.UgePlatform.HeadQueue.ValueString()
+			} else {
+				headQueue3 = nil
+			}
+			computeQueue3 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.ComputeQueue.IsNull() {
+				*computeQueue3 = r.ComputeEnv.Config.UgePlatform.ComputeQueue.ValueString()
+			} else {
+				computeQueue3 = nil
+			}
+			maxQueueSize2 := new(int)
+			if !r.ComputeEnv.Config.UgePlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.MaxQueueSize.IsNull() {
+				*maxQueueSize2 = int(r.ComputeEnv.Config.UgePlatform.MaxQueueSize.ValueInt32())
+			} else {
+				maxQueueSize2 = nil
+			}
+			headJobOptions2 := new(string)
+			if !r.ComputeEnv.Config.UgePlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.HeadJobOptions.IsNull() {
+				*headJobOptions2 = r.ComputeEnv.Config.UgePlatform.HeadJobOptions.ValueString()
+			} else {
+				headJobOptions2 = nil
+			}
+			propagateHeadJobOptions2 := new(bool)
+			if !r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions.IsNull() {
+				*propagateHeadJobOptions2 = r.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions.ValueBool()
+			} else {
+				propagateHeadJobOptions2 = nil
+			}
+			environment11 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.UgePlatform.Environment))
+			for _, environmentItem11 := range r.ComputeEnv.Config.UgePlatform.Environment {
+				name12 := new(string)
+				if !environmentItem11.Name.IsUnknown() && !environmentItem11.Name.IsNull() {
+					*name12 = environmentItem11.Name.ValueString()
+				} else {
+					name12 = nil
+				}
+				value11 := new(string)
+				if !environmentItem11.Value.IsUnknown() && !environmentItem11.Value.IsNull() {
+					*value11 = environmentItem11.Value.ValueString()
+				} else {
+					value11 = nil
+				}
+				head11 := new(bool)
+				if !environmentItem11.Head.IsUnknown() && !environmentItem11.Head.IsNull() {
+					*head11 = environmentItem11.Head.ValueBool()
+				} else {
+					head11 = nil
+				}
+				compute11 := new(bool)
+				if !environmentItem11.Compute.IsUnknown() && !environmentItem11.Compute.IsNull() {
+					*compute11 = environmentItem11.Compute.ValueBool()
+				} else {
+					compute11 = nil
+				}
+				environment11 = append(environment11, shared.ConfigEnvVariable{
+					Name:    name12,
+					Value:   value11,
+					Head:    head11,
+					Compute: compute11,
+				})
+			}
+			univaGridEngineConfiguration = &shared.UnivaGridEngineConfiguration{
+				WorkDir:                 workDir11,
+				PreRunScript:            preRunScript11,
+				PostRunScript:           postRunScript11,
+				NextflowConfig:          nextflowConfig11,
+				LaunchDir:               launchDir2,
+				UserName:                userName2,
+				HostName:                hostName2,
+				Port:                    port2,
+				HeadQueue:               headQueue3,
+				ComputeQueue:            computeQueue3,
+				MaxQueueSize:            maxQueueSize2,
+				HeadJobOptions:          headJobOptions2,
+				PropagateHeadJobOptions: propagateHeadJobOptions2,
+				Environment:             environment11,
+			}
+		}
+		if univaGridEngineConfiguration != nil {
+			config = shared.ComputeConfig{
+				UnivaGridEngineConfiguration: univaGridEngineConfiguration,
+			}
+		}
+		var altairPBSConfiguration *shared.AltairPBSConfiguration
+		if r.ComputeEnv.Config.AltairPlatform != nil {
+			var workDir12 string
+			workDir12 = r.ComputeEnv.Config.AltairPlatform.WorkDir.ValueString()
+
+			preRunScript12 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.PreRunScript.IsNull() {
+				*preRunScript12 = r.ComputeEnv.Config.AltairPlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript12 = nil
+			}
+			postRunScript12 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.PostRunScript.IsNull() {
+				*postRunScript12 = r.ComputeEnv.Config.AltairPlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript12 = nil
+			}
+			nextflowConfig12 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.NextflowConfig.IsNull() {
+				*nextflowConfig12 = r.ComputeEnv.Config.AltairPlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig12 = nil
+			}
+			launchDir3 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.LaunchDir.IsNull() {
+				*launchDir3 = r.ComputeEnv.Config.AltairPlatform.LaunchDir.ValueString()
+			} else {
+				launchDir3 = nil
+			}
+			userName3 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.UserName.IsNull() {
+				*userName3 = r.ComputeEnv.Config.AltairPlatform.UserName.ValueString()
+			} else {
+				userName3 = nil
+			}
+			hostName3 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.HostName.IsNull() {
+				*hostName3 = r.ComputeEnv.Config.AltairPlatform.HostName.ValueString()
+			} else {
+				hostName3 = nil
+			}
+			port3 := new(int)
+			if !r.ComputeEnv.Config.AltairPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.Port.IsNull() {
+				*port3 = int(r.ComputeEnv.Config.AltairPlatform.Port.ValueInt32())
+			} else {
+				port3 = nil
+			}
+			headQueue4 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.HeadQueue.IsNull() {
+				*headQueue4 = r.ComputeEnv.Config.AltairPlatform.HeadQueue.ValueString()
+			} else {
+				headQueue4 = nil
+			}
+			computeQueue4 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.ComputeQueue.IsNull() {
+				*computeQueue4 = r.ComputeEnv.Config.AltairPlatform.ComputeQueue.ValueString()
+			} else {
+				computeQueue4 = nil
+			}
+			maxQueueSize3 := new(int)
+			if !r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.IsNull() {
+				*maxQueueSize3 = int(r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.ValueInt32())
+			} else {
+				maxQueueSize3 = nil
+			}
+			headJobOptions3 := new(string)
+			if !r.ComputeEnv.Config.AltairPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.HeadJobOptions.IsNull() {
+				*headJobOptions3 = r.ComputeEnv.Config.AltairPlatform.HeadJobOptions.ValueString()
+			} else {
+				headJobOptions3 = nil
+			}
+			propagateHeadJobOptions3 := new(bool)
+			if !r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions.IsNull() {
+				*propagateHeadJobOptions3 = r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions.ValueBool()
+			} else {
+				propagateHeadJobOptions3 = nil
+			}
+			environment12 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.AltairPlatform.Environment))
+			for _, environmentItem12 := range r.ComputeEnv.Config.AltairPlatform.Environment {
+				name13 := new(string)
+				if !environmentItem12.Name.IsUnknown() && !environmentItem12.Name.IsNull() {
+					*name13 = environmentItem12.Name.ValueString()
+				} else {
+					name13 = nil
+				}
+				value12 := new(string)
+				if !environmentItem12.Value.IsUnknown() && !environmentItem12.Value.IsNull() {
+					*value12 = environmentItem12.Value.ValueString()
+				} else {
+					value12 = nil
+				}
+				head12 := new(bool)
+				if !environmentItem12.Head.IsUnknown() && !environmentItem12.Head.IsNull() {
+					*head12 = environmentItem12.Head.ValueBool()
+				} else {
+					head12 = nil
+				}
+				compute12 := new(bool)
+				if !environmentItem12.Compute.IsUnknown() && !environmentItem12.Compute.IsNull() {
+					*compute12 = environmentItem12.Compute.ValueBool()
+				} else {
+					compute12 = nil
+				}
+				environment12 = append(environment12, shared.ConfigEnvVariable{
+					Name:    name13,
+					Value:   value12,
+					Head:    head12,
+					Compute: compute12,
+				})
+			}
+			altairPBSConfiguration = &shared.AltairPBSConfiguration{
+				WorkDir:                 workDir12,
+				PreRunScript:            preRunScript12,
+				PostRunScript:           postRunScript12,
+				NextflowConfig:          nextflowConfig12,
+				LaunchDir:               launchDir3,
+				UserName:                userName3,
+				HostName:                hostName3,
+				Port:                    port3,
+				HeadQueue:               headQueue4,
+				ComputeQueue:            computeQueue4,
+				MaxQueueSize:            maxQueueSize3,
+				HeadJobOptions:          headJobOptions3,
+				PropagateHeadJobOptions: propagateHeadJobOptions3,
+				Environment:             environment12,
+			}
+		}
+		if altairPBSConfiguration != nil {
+			config = shared.ComputeConfig{
+				AltairPBSConfiguration: altairPBSConfiguration,
+			}
+		}
+		var moabConfiguration *shared.MoabConfiguration
+		if r.ComputeEnv.Config.MoabPlatform != nil {
+			var workDir13 string
+			workDir13 = r.ComputeEnv.Config.MoabPlatform.WorkDir.ValueString()
+
+			preRunScript13 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.PreRunScript.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.PreRunScript.IsNull() {
+				*preRunScript13 = r.ComputeEnv.Config.MoabPlatform.PreRunScript.ValueString()
+			} else {
+				preRunScript13 = nil
+			}
+			postRunScript13 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.PostRunScript.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.PostRunScript.IsNull() {
+				*postRunScript13 = r.ComputeEnv.Config.MoabPlatform.PostRunScript.ValueString()
+			} else {
+				postRunScript13 = nil
+			}
+			nextflowConfig13 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.NextflowConfig.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.NextflowConfig.IsNull() {
+				*nextflowConfig13 = r.ComputeEnv.Config.MoabPlatform.NextflowConfig.ValueString()
+			} else {
+				nextflowConfig13 = nil
+			}
+			launchDir4 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.LaunchDir.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.LaunchDir.IsNull() {
+				*launchDir4 = r.ComputeEnv.Config.MoabPlatform.LaunchDir.ValueString()
+			} else {
+				launchDir4 = nil
+			}
+			userName4 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.UserName.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.UserName.IsNull() {
+				*userName4 = r.ComputeEnv.Config.MoabPlatform.UserName.ValueString()
+			} else {
+				userName4 = nil
+			}
+			hostName4 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.HostName.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.HostName.IsNull() {
+				*hostName4 = r.ComputeEnv.Config.MoabPlatform.HostName.ValueString()
+			} else {
+				hostName4 = nil
+			}
+			port4 := new(int)
+			if !r.ComputeEnv.Config.MoabPlatform.Port.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.Port.IsNull() {
+				*port4 = int(r.ComputeEnv.Config.MoabPlatform.Port.ValueInt32())
+			} else {
+				port4 = nil
+			}
+			headQueue5 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.HeadQueue.IsNull() {
+				*headQueue5 = r.ComputeEnv.Config.MoabPlatform.HeadQueue.ValueString()
+			} else {
+				headQueue5 = nil
+			}
+			computeQueue5 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.ComputeQueue.IsNull() {
+				*computeQueue5 = r.ComputeEnv.Config.MoabPlatform.ComputeQueue.ValueString()
+			} else {
+				computeQueue5 = nil
+			}
+			maxQueueSize4 := new(int)
+			if !r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.IsNull() {
+				*maxQueueSize4 = int(r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.ValueInt32())
+			} else {
+				maxQueueSize4 = nil
+			}
+			headJobOptions4 := new(string)
+			if !r.ComputeEnv.Config.MoabPlatform.HeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.HeadJobOptions.IsNull() {
+				*headJobOptions4 = r.ComputeEnv.Config.MoabPlatform.HeadJobOptions.ValueString()
+			} else {
+				headJobOptions4 = nil
+			}
+			propagateHeadJobOptions4 := new(bool)
+			if !r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions.IsNull() {
+				*propagateHeadJobOptions4 = r.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions.ValueBool()
+			} else {
+				propagateHeadJobOptions4 = nil
+			}
+			environment13 := make([]shared.ConfigEnvVariable, 0, len(r.ComputeEnv.Config.MoabPlatform.Environment))
+			for _, environmentItem13 := range r.ComputeEnv.Config.MoabPlatform.Environment {
+				name14 := new(string)
+				if !environmentItem13.Name.IsUnknown() && !environmentItem13.Name.IsNull() {
+					*name14 = environmentItem13.Name.ValueString()
+				} else {
+					name14 = nil
+				}
+				value13 := new(string)
+				if !environmentItem13.Value.IsUnknown() && !environmentItem13.Value.IsNull() {
+					*value13 = environmentItem13.Value.ValueString()
+				} else {
+					value13 = nil
+				}
+				head13 := new(bool)
+				if !environmentItem13.Head.IsUnknown() && !environmentItem13.Head.IsNull() {
+					*head13 = environmentItem13.Head.ValueBool()
+				} else {
+					head13 = nil
+				}
+				compute13 := new(bool)
+				if !environmentItem13.Compute.IsUnknown() && !environmentItem13.Compute.IsNull() {
+					*compute13 = environmentItem13.Compute.ValueBool()
+				} else {
+					compute13 = nil
+				}
+				environment13 = append(environment13, shared.ConfigEnvVariable{
+					Name:    name14,
+					Value:   value13,
+					Head:    head13,
+					Compute: compute13,
+				})
+			}
+			moabConfiguration = &shared.MoabConfiguration{
+				WorkDir:                 workDir13,
+				PreRunScript:            preRunScript13,
+				PostRunScript:           postRunScript13,
+				NextflowConfig:          nextflowConfig13,
+				LaunchDir:               launchDir4,
+				UserName:                userName4,
+				HostName:                hostName4,
+				Port:                    port4,
+				HeadQueue:               headQueue5,
+				ComputeQueue:            computeQueue5,
+				MaxQueueSize:            maxQueueSize4,
+				HeadJobOptions:          headJobOptions4,
+				PropagateHeadJobOptions: propagateHeadJobOptions4,
+				Environment:             environment13,
+			}
+		}
+		if moabConfiguration != nil {
+			config = shared.ComputeConfig{
+				MoabConfiguration: moabConfiguration,
+			}
 		}
 	}
 	status := new(shared.ComputeEnvComputeConfigStatus)
@@ -3602,7 +5522,22 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 func (r *ComputeEnvResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	out := shared.UpdateComputeEnvRequest{}
+	name := new(string)
+	if !r.Name.IsUnknown() && !r.Name.IsNull() {
+		*name = r.Name.ValueString()
+	} else {
+		name = nil
+	}
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	out := shared.UpdateComputeEnvRequest{
+		Name:          name,
+		CredentialsID: credentialsID,
+	}
 
 	return &out, diags
 }

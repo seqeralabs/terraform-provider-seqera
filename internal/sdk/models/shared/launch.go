@@ -16,7 +16,9 @@ const (
 	LaunchPlatformAwsCloud              LaunchPlatform = "aws-cloud"
 	LaunchPlatformGoogleLifesciences    LaunchPlatform = "google-lifesciences"
 	LaunchPlatformGoogleBatch           LaunchPlatform = "google-batch"
+	LaunchPlatformGoogleCloud           LaunchPlatform = "google-cloud"
 	LaunchPlatformAzureBatch            LaunchPlatform = "azure-batch"
+	LaunchPlatformAzureCloud            LaunchPlatform = "azure-cloud"
 	LaunchPlatformK8sPlatform           LaunchPlatform = "k8s-platform"
 	LaunchPlatformEksPlatform           LaunchPlatform = "eks-platform"
 	LaunchPlatformGkePlatform           LaunchPlatform = "gke-platform"
@@ -46,7 +48,11 @@ func (e *LaunchPlatform) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "google-batch":
 		fallthrough
+	case "google-cloud":
+		fallthrough
 	case "azure-batch":
+		fallthrough
+	case "azure-cloud":
 		fallthrough
 	case "k8s-platform":
 		fallthrough

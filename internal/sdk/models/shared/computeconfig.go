@@ -1770,62 +1770,19 @@ func (o *GoogleLifeSciencesConfiguration) GetEnvironment() []ConfigEnvVariable {
 }
 
 type SeqeraComputeConfiguration struct {
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	StorageType *string `json:"storageType,omitempty"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LustreID *string  `json:"lustreId,omitempty"`
-	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator      *string `json:"discriminator,omitempty"`
-	Region             string  `json:"region"`
-	ComputeQueue       *string `json:"computeQueue,omitempty"`
-	DragenQueue        *string `json:"dragenQueue,omitempty"`
-	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
-	ComputeJobRole     *string `json:"computeJobRole,omitempty"`
-	ExecutionRole      *string `json:"executionRole,omitempty"`
-	HeadQueue          *string `json:"headQueue,omitempty"`
-	HeadJobRole        *string `json:"headJobRole,omitempty"`
-	CliPath            *string `json:"cliPath,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	Region        string  `json:"region"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
-	PostRunScript   *string `json:"postRunScript,omitempty"`
-	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment         []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled         *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled      *bool               `json:"fusion2Enabled,omitempty"`
-	NvnmeStorageEnabled *bool               `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup            *string             `json:"logGroup,omitempty"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
-	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           ForgeConfig      `json:"forge"`
-	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
-}
-
-func (o *SeqeraComputeConfiguration) GetStorageType() *string {
-	if o == nil {
-		return nil
-	}
-	return o.StorageType
-}
-
-func (o *SeqeraComputeConfiguration) GetLustreID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.LustreID
-}
-
-func (o *SeqeraComputeConfiguration) GetVolumes() []string {
-	if o == nil {
-		return nil
-	}
-	return o.Volumes
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (o *SeqeraComputeConfiguration) GetDiscriminator() *string {
@@ -1840,62 +1797,6 @@ func (o *SeqeraComputeConfiguration) GetRegion() string {
 		return ""
 	}
 	return o.Region
-}
-
-func (o *SeqeraComputeConfiguration) GetComputeQueue() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ComputeQueue
-}
-
-func (o *SeqeraComputeConfiguration) GetDragenQueue() *string {
-	if o == nil {
-		return nil
-	}
-	return o.DragenQueue
-}
-
-func (o *SeqeraComputeConfiguration) GetDragenInstanceType() *string {
-	if o == nil {
-		return nil
-	}
-	return o.DragenInstanceType
-}
-
-func (o *SeqeraComputeConfiguration) GetComputeJobRole() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ComputeJobRole
-}
-
-func (o *SeqeraComputeConfiguration) GetExecutionRole() *string {
-	if o == nil {
-		return nil
-	}
-	return o.ExecutionRole
-}
-
-func (o *SeqeraComputeConfiguration) GetHeadQueue() *string {
-	if o == nil {
-		return nil
-	}
-	return o.HeadQueue
-}
-
-func (o *SeqeraComputeConfiguration) GetHeadJobRole() *string {
-	if o == nil {
-		return nil
-	}
-	return o.HeadJobRole
-}
-
-func (o *SeqeraComputeConfiguration) GetCliPath() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CliPath
 }
 
 func (o *SeqeraComputeConfiguration) GetWorkDir() *string {
@@ -1919,55 +1820,6 @@ func (o *SeqeraComputeConfiguration) GetPostRunScript() *string {
 	return o.PostRunScript
 }
 
-func (o *SeqeraComputeConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
-		return nil
-	}
-	return o.HeadJobCpus
-}
-
-func (o *SeqeraComputeConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
-		return nil
-	}
-	return o.HeadJobMemoryMb
-}
-
-func (o *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
-		return nil
-	}
-	return o.Environment
-}
-
-func (o *SeqeraComputeConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.WaveEnabled
-}
-
-func (o *SeqeraComputeConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Fusion2Enabled
-}
-
-func (o *SeqeraComputeConfiguration) GetNvnmeStorageEnabled() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.NvnmeStorageEnabled
-}
-
-func (o *SeqeraComputeConfiguration) GetLogGroup() *string {
-	if o == nil {
-		return nil
-	}
-	return o.LogGroup
-}
-
 func (o *SeqeraComputeConfiguration) GetNextflowConfig() *string {
 	if o == nil {
 		return nil
@@ -1975,25 +1827,11 @@ func (o *SeqeraComputeConfiguration) GetNextflowConfig() *string {
 	return o.NextflowConfig
 }
 
-func (o *SeqeraComputeConfiguration) GetFusionSnapshots() *bool {
+func (o *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
 	if o == nil {
 		return nil
 	}
-	return o.FusionSnapshots
-}
-
-func (o *SeqeraComputeConfiguration) GetForge() ForgeConfig {
-	if o == nil {
-		return ForgeConfig{}
-	}
-	return o.Forge
-}
-
-func (o *SeqeraComputeConfiguration) GetForgedResources() []map[string]any {
-	if o == nil {
-		return nil
-	}
-	return o.ForgedResources
+	return o.Environment
 }
 
 type AWSCloudConfiguration struct {

@@ -128,6 +128,8 @@ Read-Only:
 - `date_created` (String) Timestamp when the label was created
 - `id` (Number) Unique numeric identifier for the label
 - `is_default` (Boolean) Flag indicating if this is a default system label
+- `is_dynamic` (Boolean) Flag indicating if the label value is dynamically generated
+- `is_interpolated` (Boolean) Flag indicating if the label value supports variable interpolation
 - `name` (String) Name or key of the label
 - `resource` (Boolean) Flag indicating if this is a resource-level label
 - `value` (String) Value associated with the label
@@ -164,6 +166,7 @@ Read-Only:
 - `cpus` (Number, Deprecated)
 - `date_created` (String)
 - `failed` (Number)
+- `ignored` (Number)
 - `inv_ctx_switch` (Number, Deprecated)
 - `last_updated` (String)
 - `load_cpus` (Number)
@@ -178,9 +181,11 @@ Read-Only:
 - `pending` (Number)
 - `process` (String)
 - `read_bytes` (Number, Deprecated)
+- `retries` (Number)
 - `running` (Number)
 - `submitted` (Number)
 - `succeeded` (Number)
+- `version` (Number)
 - `vol_ctx_switch` (Number, Deprecated)
 - `write_bytes` (Number, Deprecated)
 
@@ -200,6 +205,7 @@ Read-Only:
 - `date_created` (String)
 - `executors` (List of String)
 - `failed` (Number)
+- `ignored` (Number)
 - `inv_ctx_switch` (Number)
 - `last_updated` (String)
 - `load_cpus` (Number)
@@ -208,14 +214,27 @@ Read-Only:
 - `memory_efficiency` (Number)
 - `memory_req` (Number)
 - `memory_rss` (Number)
+- `net_cost` (Number)
+- `net_cpu_load` (Number)
+- `net_cpu_time` (Number)
+- `net_cpus` (Number)
+- `net_inv_ctx_switch` (Number)
+- `net_memory_consumption` (Number)
+- `net_memory_req` (Number)
+- `net_memory_rss` (Number)
+- `net_read_bytes` (Number)
+- `net_vol_ctx_switch` (Number)
+- `net_write_bytes` (Number)
 - `peak_cpus` (Number)
 - `peak_memory` (Number)
 - `peak_tasks` (Number)
 - `pending` (Number)
 - `read_bytes` (Number)
+- `retries` (Number)
 - `running` (Number)
 - `submitted` (Number)
 - `succeeded` (Number)
+- `version` (Number)
 - `vol_ctx_switch` (Number)
 - `write_bytes` (Number)
 
@@ -239,6 +258,7 @@ Read-Only:
 - `error_message` (String)
 - `error_report` (String)
 - `exit_status` (Number)
+- `fusion` (Attributes) (see [below for nested schema](#nestedatt--workflow--fusion))
 - `home_dir` (String)
 - `id` (String)
 - `last_updated` (String)
@@ -269,7 +289,17 @@ Read-Only:
 - `submit` (String)
 - `success` (Boolean)
 - `user_name` (String)
+- `wave` (Attributes) (see [below for nested schema](#nestedatt--workflow--wave))
 - `work_dir` (String)
+
+<a id="nestedatt--workflow--fusion"></a>
+### Nested Schema for `workflow.fusion`
+
+Read-Only:
+
+- `enabled` (Boolean)
+- `version` (String)
+
 
 <a id="nestedatt--workflow--manifest"></a>
 ### Nested Schema for `workflow.manifest`
@@ -319,6 +349,14 @@ Read-Only:
 - `succeed_count_fmt` (String)
 - `succeed_duration` (Number)
 - `succeed_pct` (Number)
+
+
+<a id="nestedatt--workflow--wave"></a>
+### Nested Schema for `workflow.wave`
+
+Read-Only:
+
+- `enabled` (Boolean)
 
 ## Import
 

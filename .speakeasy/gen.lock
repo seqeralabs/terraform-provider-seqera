@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: b37a1b85cc9c102ef1fae95ba01aac85
-  docVersion: 1.45.0
-  speakeasyVersion: 1.592.0
-  generationVersion: 2.667.0
+  docChecksum: a4ad03ac069485862232f008cbd6d38c
+  docVersion: 1.56.0
+  speakeasyVersion: 1.594.0
+  generationVersion: 2.670.1
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
@@ -175,13 +175,14 @@ generatedFiles:
   - internal/provider/types/code_commit_security_keys1.go
   - internal/provider/types/compute_config.go
   - internal/provider/types/compute_env.go
-  - internal/provider/types/compute_env_compute_config.go
   - internal/provider/types/compute_env_db_dto.go
   - internal/provider/types/compute_env_response_dto.go
   - internal/provider/types/compute_platform_dto.go
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
   - internal/provider/types/container_registry_keys1.go
+  - internal/provider/types/credentials.go
+  - internal/provider/types/credentials1.go
   - internal/provider/types/data_link_credentials.go
   - internal/provider/types/data_link_dto.go
   - internal/provider/types/data_studio_compute_env_dto.go
@@ -227,9 +228,11 @@ generatedFiles:
   - internal/provider/types/ssh_security_keys1.go
   - internal/provider/types/studio_user.go
   - internal/provider/types/univa_grid_engine_configuration.go
+  - internal/provider/types/wf_fusion_meta.go
   - internal/provider/types/wf_manifest.go
   - internal/provider/types/wf_nextflow.go
   - internal/provider/types/wf_stats.go
+  - internal/provider/types/wf_wave_meta.go
   - internal/provider/types/workflow.go
   - internal/provider/types/workflow_launch_request.go
   - internal/provider/types/workflow_launch_request1.go
@@ -374,6 +377,7 @@ generatedFiles:
   - internal/sdk/models/operations/generatedownloadscript.go
   - internal/sdk/models/operations/generatedownloadurldatalink.go
   - internal/sdk/models/operations/generaterandomworkflowname.go
+  - internal/sdk/models/operations/getalloweddynamiclabels.go
   - internal/sdk/models/operations/getdatastudiocheckpoint.go
   - internal/sdk/models/operations/getworkflowtasklog.go
   - internal/sdk/models/operations/info.go
@@ -472,6 +476,7 @@ generatedFiles:
   - internal/sdk/models/shared/addparticipantrequest.go
   - internal/sdk/models/shared/addparticipantresponse.go
   - internal/sdk/models/shared/addteammemberresponse.go
+  - internal/sdk/models/shared/alloweddynamiclabelsresponse.go
   - internal/sdk/models/shared/analytics.go
   - internal/sdk/models/shared/associateactionlabelsrequest.go
   - internal/sdk/models/shared/associatepipelinelabelsrequest.go
@@ -594,6 +599,10 @@ generatedFiles:
   - internal/sdk/models/shared/getprogressresponse.go
   - internal/sdk/models/shared/getworkflowmetricsresponse.go
   - internal/sdk/models/shared/gkeplatformmetainfo.go
+  - internal/sdk/models/shared/googlebucket.go
+  - internal/sdk/models/shared/googlecloudplatformmetainfo.go
+  - internal/sdk/models/shared/googleimage.go
+  - internal/sdk/models/shared/googleinstancetype.go
   - internal/sdk/models/shared/googleplatformmetainfo.go
   - internal/sdk/models/shared/googleplatformmetainfobucket.go
   - internal/sdk/models/shared/googleplatformmetainfofilestore.go
@@ -672,6 +681,7 @@ generatedFiles:
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/securitygroup.go
   - internal/sdk/models/shared/securitykeysoutput.go
+  - internal/sdk/models/shared/seqeracomputeplatformdescriber.go
   - internal/sdk/models/shared/serviceinfo.go
   - internal/sdk/models/shared/serviceinforesponse.go
   - internal/sdk/models/shared/state.go
@@ -716,9 +726,11 @@ generatedFiles:
   - internal/sdk/models/shared/visibility.go
   - internal/sdk/models/shared/vpc.go
   - internal/sdk/models/shared/weserrorresponse.go
+  - internal/sdk/models/shared/wffusionmeta.go
   - internal/sdk/models/shared/wfmanifest.go
   - internal/sdk/models/shared/wfnextflow.go
   - internal/sdk/models/shared/wfstats.go
+  - internal/sdk/models/shared/wfwavemeta.go
   - internal/sdk/models/shared/workflow.go
   - internal/sdk/models/shared/workflowdbdto.go
   - internal/sdk/models/shared/workflowinput.go
@@ -2449,6 +2461,13 @@ examples:
       parameters:
         path:
           workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  GetAllowedDynamicLabels:
+    speakeasy-default-get-allowed-dynamic-labels:
       responses:
         "200":
           application/json: {}

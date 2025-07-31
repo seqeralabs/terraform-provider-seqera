@@ -73,13 +73,14 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 						"provider_type": schema.StringAttribute{
 							Computed:    true,
-							Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
+							Description: `must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
 									"aws",
 									"google",
 									"azure",
 									"azure_entra",
+									"azure-cloud",
 									"seqeracompute",
 								),
 							},
@@ -113,13 +114,14 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]; Requires replacement if changed.`,
+				Description: `must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]; Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"aws",
 						"google",
 						"azure",
 						"azure_entra",
+						"azure-cloud",
 						"seqeracompute",
 					),
 				},

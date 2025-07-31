@@ -72,6 +72,14 @@ func (r *LabelsDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed:    true,
 							Description: `Flag indicating if this is a default system label`,
 						},
+						"is_dynamic": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value is dynamically generated`,
+						},
+						"is_interpolated": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value supports variable interpolation`,
+						},
 						"name": schema.StringAttribute{
 							Computed:    true,
 							Description: `Name or key of the label`,

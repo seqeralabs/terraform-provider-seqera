@@ -77,7 +77,7 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 // and other external services within the Seqera Platform.
 type CredentialsOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Optional description explaining the purpose of the credential
@@ -107,11 +107,11 @@ func (c *CredentialsOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CredentialsOutput) GetCredentialsID() *string {
+func (o *CredentialsOutput) GetID() *string {
 	if o == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return o.ID
 }
 
 func (o *CredentialsOutput) GetName() string {
@@ -249,7 +249,7 @@ func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
 // and other external services within the Seqera Platform.
 type CredentialsInput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Optional description explaining the purpose of the credential
@@ -261,11 +261,11 @@ type CredentialsInput struct {
 	Keys         SecurityKeys            `json:"keys"`
 }
 
-func (o *CredentialsInput) GetCredentialsID() *string {
+func (o *CredentialsInput) GetID() *string {
 	if o == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return o.ID
 }
 
 func (o *CredentialsInput) GetName() string {

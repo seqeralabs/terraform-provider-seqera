@@ -5,7 +5,7 @@ info:
   contact:
     url: https://seqera.io
     email: info@seqera.io
-  version: 1.45.0
+  version: 1.56.0
 paths:
   /actions:
     get:
@@ -1673,7 +1673,7 @@ paths:
       tags:
         - data-links
       summary: Generate download script
-      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
+      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`.   Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
       operationId: GenerateDownloadScript
       parameters:
         - name: dataLinkId
@@ -2629,6 +2629,26 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Labels#create
+  /labels/dynamic/allowed:
+    get:
+      tags:
+        - labels
+      operationId: GetAllowedDynamicLabels
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllowedDynamicLabelsResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
   /labels/{labelId}:
     put:
       summary: Update label
@@ -7944,6 +7964,13 @@ components:
           type: string
         shared:
           type: boolean
+    AllowedDynamicLabelsResponse:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            type: string
     AltairPbsComputeConfig:
       title: Altair PBS configuration
       type: object
@@ -8349,6 +8376,56 @@ components:
           type: array
           items:
             type: string
+    AzCloudConfig:
+      title: Azure Cloud configuration
+      type: object
+      properties:
+        discriminator:
+          type: string
+          description: property to select the compute config platform
+          readOnly: true
+        workDir:
+          type: string
+        preRunScript:
+          type: string
+        postRunScript:
+          type: string
+        environment:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEnvVariable"
+        waveEnabled:
+          type: boolean
+        fusion2Enabled:
+          type: boolean
+        nextflowConfig:
+          type: string
+        instanceType:
+          type: string
+        region:
+          type: string
+        resourceGroup:
+          type: string
+        networkId:
+          type: string
+        subscriptionId:
+          type: string
+        managedIdentityId:
+          type: string
+        managedIdentityClientId:
+          type: string
+        logWorkspaceId:
+          type: string
+        logTableName:
+          type: string
+        dataCollectionEndpoint:
+          type: string
+        dataCollectionRuleId:
+          type: string
+        forgedResources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Map.Entry_String.String_"
     AzureEntraKeys:
       type: object
       allOf:
@@ -8611,7 +8688,9 @@ components:
             - aws-cloud
             - google-lifesciences
             - google-batch
+            - google-cloud
             - azure-batch
+            - azure-cloud
             - k8s-platform
             - eks-platform
             - gke-platform
@@ -8781,7 +8860,6 @@ components:
           items:
             type: integer
             format: int64
-      x-speakeasy-entity: ComputeEnv
       required:
         - computeEnv
         - credentialsId
@@ -8963,8 +9041,6 @@ components:
         id:
           maxLength: 22
           type: string
-          x-speakeasy-name-override: credentialsId
-          x-speakeasy-param-suppress-computed-diff: true
           description: Unique identifier for the credential (max 22 characters)
         name:
           maxLength: 100
@@ -8973,7 +9049,6 @@ components:
           example: "my-gcp-credentials"
         description:
           type: string
-          x-speakeasy-param-computed: false
           description: Optional description explaining the purpose of the credential
           example: "Google Cloud credentials for production workloads"
         provider:
@@ -9020,17 +9095,14 @@ components:
           maxLength: 200
           pattern: ""
           type: string
-          x-speakeasy-param-computed: false
           example: "https://www.googleapis.com"
         category:
           maxLength: 20
           type: string
-          x-speakeasy-param-computed: false
           example: "cloud"
         deleted:
           type: boolean
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Flag indicating if the credential has been soft-deleted
         lastUsed:
           type: string
@@ -9042,7 +9114,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Timestamp when the credential was created
         lastUpdated:
           type: string
@@ -9051,7 +9122,6 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
-      x-speakeasy-entity: Credential
       description: |
         Represents credentials used for authentication with various platforms and services.
         Contains authentication information for accessing cloud providers, Git repositories,
@@ -9266,6 +9336,7 @@ components:
         - google
         - azure
         - azure_entra
+        - azure-cloud
         - seqeracompute
       x-speakeasy-name-override: providerType
     DataLinkResponse:
@@ -9366,6 +9437,11 @@ components:
           type: array
           items:
             type: string
+        environment:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
         condaEnvironment:
           maxLength: 2048
           type: string
@@ -9425,7 +9501,6 @@ components:
       properties:
         sessionId:
           type: string
-          x-speakeasy-param-optional: true
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
           description: Unique identifier for the Studio session
@@ -10259,6 +10334,102 @@ components:
           type: string
         computeJobsInstanceTemplate:
           type: string
+    GoogleBucket:
+      type: object
+      properties:
+        path:
+          type: string
+    GoogleCloudConfig:
+      title: Google Cloud configuration
+      type: object
+      properties:
+        discriminator:
+          type: string
+          description: property to select the compute config platform
+          readOnly: true
+        preRunScript:
+          type: string
+        postRunScript:
+          type: string
+        workDir:
+          type: string
+        nextflowConfig:
+          type: string
+        environment:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEnvVariable"
+        waveEnabled:
+          type: boolean
+        fusion2Enabled:
+          type: boolean
+        projectId:
+          type: string
+        region:
+          type: string
+        zone:
+          type: string
+        serviceAccountEmail:
+          type: string
+        instanceType:
+          type: string
+        imageId:
+          type: string
+        arm64Enabled:
+          type: boolean
+        gpuEnabled:
+          type: boolean
+        bootDiskSizeGb:
+          type: integer
+          format: int32
+        forgedResources:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    GoogleCloudPlatformMetaInfo:
+      type: object
+      properties:
+        discriminator:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+        zones:
+          type: array
+          items:
+            type: string
+        buckets:
+          type: array
+          items:
+            $ref: "#/components/schemas/GoogleBucket"
+        instanceTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/GoogleInstanceType"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/GoogleImage"
+    GoogleImage:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        arch:
+          type: string
+    GoogleInstanceType:
+      type: object
+      properties:
+        id:
+          type: string
+        arch:
+          type: string
     GoogleLifeSciencesConfig:
       title: Google life sciences configuration
       type: object
@@ -10535,6 +10706,12 @@ components:
         isDefault:
           type: boolean
           description: Flag indicating if this is a default system label
+        isDynamic:
+          type: boolean
+          description: Flag indicating if the label value is dynamically generated
+        isInterpolated:
+          type: boolean
+          description: Flag indicating if the label value supports variable interpolation
         dateCreated:
           type: string
           format: date-time
@@ -10982,6 +11159,13 @@ components:
                 $ref: "#/components/schemas/ConfigEnvVariable"
       required:
         - workDir
+    Map.Entry_String.String_:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
     MemberDbDto:
       type: object
       properties:
@@ -11419,6 +11603,7 @@ components:
           k8s-platform: "#/components/schemas/K8sPlatformMetaInfo"
           grid: "#/components/schemas/GridPlatformMetainfo"
           aws-batch: "#/components/schemas/AwsBatchPlatformMetainfo"
+          google-cloud: "#/components/schemas/GoogleCloudPlatformMetaInfo"
           local-platform: "#/components/schemas/LocalPlatformMetainfo"
           azure-batch: "#/components/schemas/AzBatchPlatformMetainfo"
           eks-platform: "#/components/schemas/EksPlatformMetaInfo"
@@ -11426,11 +11611,13 @@ components:
         - $ref: "#/components/schemas/AwsBatchPlatformMetainfo"
         - $ref: "#/components/schemas/AwsCloudPlatformMetainfo"
         - $ref: "#/components/schemas/GooglePlatformMetainfo"
+        - $ref: "#/components/schemas/GoogleCloudPlatformMetaInfo"
         - $ref: "#/components/schemas/AzBatchPlatformMetainfo"
         - $ref: "#/components/schemas/EksPlatformMetaInfo"
         - $ref: "#/components/schemas/GkePlatformMetaInfo"
         - $ref: "#/components/schemas/K8sPlatformMetaInfo"
         - $ref: "#/components/schemas/GridPlatformMetainfo"
+        - $ref: "#/components/schemas/SeqeraComputePlatformDescriber"
         - $ref: "#/components/schemas/LocalPlatformMetainfo"
     PodCleanupPolicy:
       type: string
@@ -11446,6 +11633,7 @@ components:
         - cpuTime
         - cpus
         - failed
+        - ignored
         - invCtxSwitch
         - loadCpus
         - loadMemory
@@ -11458,6 +11646,7 @@ components:
         - pending
         - process
         - readBytes
+        - retries
         - running
         - submitted
         - succeeded
@@ -11486,12 +11675,27 @@ components:
         aborted:
           type: integer
           format: int64
+        retries:
+          type: integer
+          format: int64
+        ignored:
+          type: integer
+          format: int64
         memoryEfficiency:
           type: number
           format: float
         cpuEfficiency:
           type: number
           format: float
+        dateCreated:
+          type: string
+          format: date-time
+        lastUpdated:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
         process:
           type: string
         cpus:
@@ -11549,12 +11753,6 @@ components:
         peakMemory:
           type: integer
           format: int64
-        dateCreated:
-          type: string
-          format: date-time
-        lastUpdated:
-          type: string
-          format: date-time
     ProgressData:
       type: object
       properties:
@@ -11733,11 +11931,82 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
-      allOf:
-        - $ref: "#/components/schemas/AwsBatchConfig"
+        region:
+          type: string
+        workDir:
+          type: string
+        preRunScript:
+          type: string
+        postRunScript:
+          type: string
+        nextflowConfig:
+          type: string
+        environment:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEnvVariable"
       required:
         - region
         # Pipeline requests
+    SeqeraComputePlatformDescriber:
+      type: object
+    SeqeraComputePlatformMetainfo:
+      type: object
+      properties:
+        warnings:
+          type: array
+          items:
+            type: string
+        jobQueues:
+          type: array
+          items:
+            $ref: "#/components/schemas/JobQueue"
+        buckets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Bucket"
+        fileSystems:
+          type: array
+          items:
+            $ref: "#/components/schemas/FsxFileSystem"
+        efsFileSystems:
+          type: array
+          items:
+            $ref: "#/components/schemas/EfsFileSystem"
+        keyPairs:
+          type: array
+          items:
+            type: string
+        vpcs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Vpc"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/Image"
+        securityGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/SecurityGroup"
+        subnets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subnet"
+        instanceFamilies:
+          type: array
+          items:
+            type: string
+        allocStrategy:
+          type: array
+          items:
+            type: string
+        instanceTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstanceType"
+        discriminator:
+          type: string
     SeqeraComputeSecurityKeys:
       type: object
       allOf:
@@ -12537,6 +12806,14 @@ components:
         status_code:
           type: integer
           format: int32
+    WfFusionMeta:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        version:
+          maxLength: 20
+          type: string
     WfManifest:
       type: object
       properties:
@@ -12629,6 +12906,11 @@ components:
         succeedDuration:
           type: integer
           format: int64
+    WfWaveMeta:
+      type: object
+      properties:
+        enabled:
+          type: boolean
     Workflow:
       required:
         - commandLine
@@ -12722,6 +13004,10 @@ components:
           $ref: "#/components/schemas/WfNextflow"
         stats:
           $ref: "#/components/schemas/WfStats"
+        fusion:
+          $ref: "#/components/schemas/WfFusionMeta"
+        wave:
+          $ref: "#/components/schemas/WfWaveMeta"
         errorMessage:
           type: string
         errorReport:
@@ -13066,6 +13352,7 @@ components:
         - cpuTime
         - cpus
         - failed
+        - ignored
         - invCtxSwitch
         - loadCpus
         - loadMemory
@@ -13077,6 +13364,7 @@ components:
         - peakTasks
         - pending
         - readBytes
+        - retries
         - running
         - submitted
         - succeeded
@@ -13105,12 +13393,31 @@ components:
         aborted:
           type: integer
           format: int64
+        retries:
+          type: integer
+          format: int64
+        ignored:
+          type: integer
+          format: int64
         memoryEfficiency:
           type: number
           format: float
         cpuEfficiency:
           type: number
           format: float
+        dateCreated:
+          type: string
+          format: date-time
+        lastUpdated:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+        executors:
+          type: array
+          items:
+            type: string
         cpus:
           type: integer
           format: int64
@@ -13138,8 +13445,6 @@ components:
         invCtxSwitch:
           type: integer
           format: int64
-        cost:
-          type: number
         loadTasks:
           type: integer
           format: int64
@@ -13158,16 +13463,39 @@ components:
         peakMemory:
           type: integer
           format: int64
-        executors:
-          type: array
-          items:
-            type: string
-        dateCreated:
-          type: string
-          format: date-time
-        lastUpdated:
-          type: string
-          format: date-time
+        cost:
+          type: number
+        netCpus:
+          type: integer
+          format: int64
+        netCpuTime:
+          type: integer
+          format: int64
+        netCpuLoad:
+          type: integer
+          format: int64
+        netMemoryRss:
+          type: integer
+          format: int64
+        netMemoryReq:
+          type: integer
+          format: int64
+        netMemoryConsumption:
+          type: number
+        netReadBytes:
+          type: integer
+          format: int64
+        netWriteBytes:
+          type: integer
+          format: int64
+        netVolCtxSwitch:
+          type: integer
+          format: int64
+        netInvCtxSwitch:
+          type: integer
+          format: int64
+        netCost:
+          type: number
     WorkflowLogResponse:
       type: object
       properties:

@@ -5,10 +5,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
@@ -31,18 +29,9 @@ type CredentialDataSource struct {
 
 // CredentialDataSourceModel describes the data model.
 type CredentialDataSourceModel struct {
-	BaseURL       types.String               `tfsdk:"base_url"`
-	Category      types.String               `tfsdk:"category"`
-	CredentialsID types.String               `tfsdk:"credentials_id"`
-	DateCreated   types.String               `tfsdk:"date_created"`
-	Deleted       types.Bool                 `tfsdk:"deleted"`
-	Description   types.String               `tfsdk:"description"`
-	Keys          tfTypes.SecurityKeysOutput `tfsdk:"keys"`
-	LastUpdated   types.String               `tfsdk:"last_updated"`
-	LastUsed      types.String               `tfsdk:"last_used"`
-	Name          types.String               `tfsdk:"name"`
-	ProviderType  types.String               `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Credentials   *tfTypes.Credentials1 `tfsdk:"credentials"`
+	CredentialsID types.String          `tfsdk:"credentials_id"`
+	WorkspaceID   types.Int64           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -56,187 +45,196 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 		MarkdownDescription: "Credential DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
+			"credentials": schema.SingleNestedAttribute{
 				Computed: true,
-			},
-			"category": schema.StringAttribute{
-				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"base_url": schema.StringAttribute{
+						Computed: true,
+					},
+					"category": schema.StringAttribute{
+						Computed: true,
+					},
+					"date_created": schema.StringAttribute{
+						Computed:    true,
+						Description: `Timestamp when the credential was created`,
+					},
+					"deleted": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Flag indicating if the credential has been soft-deleted`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Description: `Optional description explaining the purpose of the credential`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Description: `Unique identifier for the credential (max 22 characters)`,
+					},
+					"keys": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"aws": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"access_key": schema.StringAttribute{
+										Computed: true,
+									},
+									"assume_role_arn": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"azure": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"batch_name": schema.StringAttribute{
+										Computed: true,
+									},
+									"storage_name": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"azure_entra": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"batch_name": schema.StringAttribute{
+										Computed: true,
+									},
+									"client_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"storage_name": schema.StringAttribute{
+										Computed: true,
+									},
+									"tenant_id": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"azurerepos": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"username": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"bitbucket": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"username": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"codecommit": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"username": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"container_reg": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"registry": schema.StringAttribute{
+										Computed: true,
+									},
+									"user_name": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"gitea": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"username": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"github": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"username": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"gitlab": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"username": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"google": schema.SingleNestedAttribute{
+								Computed: true,
+							},
+							"k8s": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"certificate": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"seqeracompute": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"access_key": schema.StringAttribute{
+										Computed: true,
+									},
+									"assume_role_arn": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+							"ssh": schema.SingleNestedAttribute{
+								Computed: true,
+							},
+							"tw_agent": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"connection_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"shared": schema.BoolAttribute{
+										Computed: true,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
+						},
+					},
+					"last_updated": schema.StringAttribute{
+						Computed: true,
+					},
+					"last_used": schema.StringAttribute{
+						Computed:    true,
+						Description: `Timestamp when the credential was last used`,
+					},
+					"name": schema.StringAttribute{
+						Computed:    true,
+						Description: `Display name for the credential (max 100 characters)`,
+					},
+					"provider_type": schema.StringAttribute{
+						Computed:    true,
+						Description: `Cloud or service provider type (e.g., aws, azure, gcp)`,
+					},
+				},
+				MarkdownDescription: `Represents credentials used for authentication with various platforms and services.` + "\n" +
+					`Contains authentication information for accessing cloud providers, Git repositories,` + "\n" +
+					`and other external services within the Seqera Platform.`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Credentials string identifier`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
-			},
-			"date_created": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was created`,
-			},
-			"deleted": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Flag indicating if the credential has been soft-deleted`,
-			},
-			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optional description explaining the purpose of the credential`,
-			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"aws": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"access_key": schema.StringAttribute{
-								Computed: true,
-							},
-							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"azure": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"batch_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"storage_name": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"azure_entra": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"batch_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"client_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"storage_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"tenant_id": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"azurerepos": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"username": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"bitbucket": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"username": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"codecommit": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"username": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"container_reg": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"registry": schema.StringAttribute{
-								Computed: true,
-							},
-							"user_name": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"gitea": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"username": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"github": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"username": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"gitlab": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"username": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"google": schema.SingleNestedAttribute{
-						Computed: true,
-					},
-					"k8s": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"certificate": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"seqeracompute": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"access_key": schema.StringAttribute{
-								Computed: true,
-							},
-							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"ssh": schema.SingleNestedAttribute{
-						Computed: true,
-					},
-					"tw_agent": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"connection_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"shared": schema.BoolAttribute{
-								Computed: true,
-							},
-							"work_dir": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-			},
-			"last_used": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was last used`,
-			},
-			"name": schema.StringAttribute{
-				Computed:    true,
-				Description: `Display name for the credential (max 100 characters)`,
-			},
-			"provider_type": schema.StringAttribute{
-				Computed:    true,
-				Description: `Cloud or service provider type (e.g., aws, azure, gcp)`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
@@ -306,11 +304,11 @@ func (r *CredentialDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeCredentialsResponse != nil && res.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

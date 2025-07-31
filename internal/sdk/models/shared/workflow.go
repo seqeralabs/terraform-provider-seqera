@@ -36,6 +36,8 @@ type Workflow struct {
 	Manifest          *WfManifest     `json:"manifest,omitempty"`
 	Nextflow          *WfNextflow     `json:"nextflow,omitempty"`
 	Stats             *WfStats        `json:"stats,omitempty"`
+	Fusion            *WfFusionMeta   `json:"fusion,omitempty"`
+	Wave              *WfWaveMeta     `json:"wave,omitempty"`
 	ErrorMessage      *string         `json:"errorMessage,omitempty"`
 	ErrorReport       *string         `json:"errorReport,omitempty"`
 	Deleted           *bool           `json:"deleted,omitempty"`
@@ -259,6 +261,20 @@ func (o *Workflow) GetStats() *WfStats {
 		return nil
 	}
 	return o.Stats
+}
+
+func (o *Workflow) GetFusion() *WfFusionMeta {
+	if o == nil {
+		return nil
+	}
+	return o.Fusion
+}
+
+func (o *Workflow) GetWave() *WfWaveMeta {
+	if o == nil {
+		return nil
+	}
+	return o.Wave
 }
 
 func (o *Workflow) GetErrorMessage() *string {
