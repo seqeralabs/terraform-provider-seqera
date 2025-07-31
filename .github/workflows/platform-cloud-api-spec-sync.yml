@@ -80,7 +80,13 @@ jobs:
         if: steps.download_spec.outputs.changes_detected == 'true'
         run: |
           echo "Running Speakeasy code generation (dry run)..."
-          speakeasy run --skip-versioning 2>&1 | tee /tmp/speakeasy_output.log
+          if ! speakeasy run --skip-versioning 2>&1 | tee /tmp/speakeasy_output.log; then
+            echo "❌ Speakeasy code generation failed!"
+            echo "Generation output:"
+            cat /tmp/speakeasy_output.log
+            exit 1
+          fi
+          echo "✅ Speakeasy code generation completed successfully"
         env:
           SPEAKEASY_API_KEY: ${{ secrets.SPEAKEASY_API_KEY }}
 
