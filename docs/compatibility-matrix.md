@@ -23,11 +23,19 @@ For issues or questions about compatibility, please refer to the [troubleshootin
 
 :::note The API and Terraform provider uses the semantic versioning convention (major.minor.patch). In the event that a breaking change is introduced in future versions, we will publish guidance on the v1 support schedule and steps to mitigate disruption to your production environment. The following do not constitute breaking changes:
 
-Adding new API endpoints, new HTTP methods to existing endpoints, request parameters, or response fields
-Adding new values to existing enums or string constants
-Expanding accepted input formats or value ranges
-Adding new optional headers or query parameters
-Improving error messages or adding new error codes
-Deprecation warnings (without removal)
-Clients should be designed to gracefully handle unknown enum values, ignore unrecognized response fields, and not rely on specific error message text. :::
+* Adding new resources or data sources
+* Adding new optional attributes to existing resources or data sources
+* Adding new values to existing enum attributes or string constants
+* Expanding accepted input formats or value ranges for attributes
+* Adding new optional provider configuration parameters
+* Improving error messages or adding new error codes
+* Adding new computed attributes to existing resources
+* Adding new import capabilities to existing resources
+* Deprecation warnings (without removal)
+* Bug fixes that don't change the resource schema
+* Performance improvements to provider operations
+
+Terraform configurations should be designed to gracefully handle new optional attributes and not rely on specific error message text. Use of `lifecycle` blocks with `ignore_changes` can help manage unexpected attribute additions during upgrades. Always test provider upgrades in non-production environments first.
+
+:::
 
