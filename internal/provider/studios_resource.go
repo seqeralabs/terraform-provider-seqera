@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -23,6 +24,7 @@ import (
 	speakeasy_int32planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
 	speakeasy_int64planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
+	speakeasy_mapplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
@@ -182,6 +184,16 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 						Description: `Requires replacement if changed.`,
 					},
+					"environment": schema.MapAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Map{
+							mapplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Requires replacement if changed.`,
+					},
 					"gpu": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,
@@ -299,6 +311,14 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							Computed:    true,
 							Description: `Flag indicating if this is a default system label`,
 						},
+						"is_dynamic": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value is dynamically generated`,
+						},
+						"is_interpolated": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value supports variable interpolation`,
+						},
 						"name": schema.StringAttribute{
 							Computed:    true,
 							Description: `Name or key of the label`,
@@ -342,13 +362,14 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 									},
 									"provider_type": schema.StringAttribute{
 										Computed:    true,
-										Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
+										Description: `must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"aws",
 												"google",
 												"azure",
 												"azure_entra",
+												"azure-cloud",
 												"seqeracompute",
 											),
 										},
@@ -377,13 +398,14 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 						"provider_type": schema.StringAttribute{
 							Computed:    true,
-							Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
+							Description: `must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
 									"aws",
 									"google",
 									"azure",
 									"azure_entra",
+									"azure-cloud",
 									"seqeracompute",
 								),
 							},

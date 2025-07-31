@@ -15,6 +15,7 @@ type ProcessLoad struct {
 	CPUTime          types.Int64   `tfsdk:"cpu_time"`
 	DateCreated      types.String  `tfsdk:"date_created"`
 	Failed           types.Int64   `tfsdk:"failed"`
+	Ignored          types.Int64   `tfsdk:"ignored"`
 	InvCtxSwitch     types.Int64   `tfsdk:"inv_ctx_switch"`
 	LastUpdated      types.String  `tfsdk:"last_updated"`
 	LoadCpus         types.Int64   `tfsdk:"load_cpus"`
@@ -29,9 +30,11 @@ type ProcessLoad struct {
 	Pending          types.Int64   `tfsdk:"pending"`
 	Process          types.String  `tfsdk:"process"`
 	ReadBytes        types.Int64   `tfsdk:"read_bytes"`
+	Retries          types.Int64   `tfsdk:"retries"`
 	Running          types.Int64   `tfsdk:"running"`
 	Submitted        types.Int64   `tfsdk:"submitted"`
 	Succeeded        types.Int64   `tfsdk:"succeeded"`
+	Version          types.Int64   `tfsdk:"version"`
 	VolCtxSwitch     types.Int64   `tfsdk:"vol_ctx_switch"`
 	WriteBytes       types.Int64   `tfsdk:"write_bytes"`
 }

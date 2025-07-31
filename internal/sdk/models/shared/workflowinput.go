@@ -33,6 +33,8 @@ type WorkflowInput struct {
 	Manifest          *WfManifest     `json:"manifest,omitempty"`
 	Nextflow          *WfNextflow     `json:"nextflow,omitempty"`
 	Stats             *WfStats        `json:"stats,omitempty"`
+	Fusion            *WfFusionMeta   `json:"fusion,omitempty"`
+	Wave              *WfWaveMeta     `json:"wave,omitempty"`
 	ErrorMessage      *string         `json:"errorMessage,omitempty"`
 	ErrorReport       *string         `json:"errorReport,omitempty"`
 	ProjectDir        *string         `json:"projectDir,omitempty"`
@@ -234,6 +236,20 @@ func (o *WorkflowInput) GetStats() *WfStats {
 		return nil
 	}
 	return o.Stats
+}
+
+func (o *WorkflowInput) GetFusion() *WfFusionMeta {
+	if o == nil {
+		return nil
+	}
+	return o.Fusion
+}
+
+func (o *WorkflowInput) GetWave() *WfWaveMeta {
+	if o == nil {
+		return nil
+	}
+	return o.Wave
 }
 
 func (o *WorkflowInput) GetErrorMessage() *string {

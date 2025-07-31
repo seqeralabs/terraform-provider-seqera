@@ -14,13 +14,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
 	custom_objectvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/objectvalidators"
+	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
+	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -39,18 +40,9 @@ type CredentialResource struct {
 
 // CredentialResourceModel describes the resource data model.
 type CredentialResourceModel struct {
-	BaseURL       types.String         `tfsdk:"base_url"`
-	Category      types.String         `tfsdk:"category"`
 	Checked       types.Bool           `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
+	Credentials   *tfTypes.Credentials `tfsdk:"credentials"`
 	CredentialsID types.String         `tfsdk:"credentials_id"`
-	DateCreated   types.String         `tfsdk:"date_created"`
-	Deleted       types.Bool           `tfsdk:"deleted"`
-	Description   types.String         `tfsdk:"description"`
-	Keys          tfTypes.SecurityKeys `tfsdk:"keys"`
-	LastUpdated   types.String         `tfsdk:"last_updated"`
-	LastUsed      types.String         `tfsdk:"last_used"`
-	Name          types.String         `tfsdk:"name"`
-	ProviderType  types.String         `tfsdk:"provider_type"`
 	WorkspaceID   types.Int64          `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
@@ -62,602 +54,640 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Credential Resource",
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(200),
-				},
-			},
-			"category": schema.StringAttribute{
-				Optional: true,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(20),
-				},
-			},
 			"checked": schema.BoolAttribute{
 				Optional:    true,
 				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
 			},
-			"credentials_id": schema.StringAttribute{
+			"credentials": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Unique identifier for the credential (max 22 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
-			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was created`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
-				Description: `Flag indicating if the credential has been soft-deleted`,
-			},
-			"description": schema.StringAttribute{
-				Optional:    true,
-				Description: `Optional description explaining the purpose of the credential`,
-			},
-			"keys": schema.SingleNestedAttribute{
-				Required: true,
 				Attributes: map[string]schema.Attribute{
-					"aws": schema.SingleNestedAttribute{
+					"base_url": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"secret_key": schema.StringAttribute{
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(200),
 						},
 					},
-					"azure": schema.SingleNestedAttribute{
+					"category": schema.StringAttribute{
+						Computed: true,
 						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"batch_key": schema.StringAttribute{
-								Optional: true,
-							},
-							"batch_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"storage_key": schema.StringAttribute{
-								Optional: true,
-							},
-							"storage_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(20),
 						},
 					},
-					"azure_entra": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"batch_key": schema.StringAttribute{
-								Optional: true,
-							},
-							"batch_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"client_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"client_secret": schema.StringAttribute{
-								Optional: true,
-							},
-							"storage_key": schema.StringAttribute{
-								Optional: true,
-							},
-							"storage_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"tenant_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+					"date_created": schema.StringAttribute{
+						Computed:    true,
+						Description: `Timestamp when the credential was created`,
+						Validators: []validator.String{
+							validators.IsRFC3339(),
 						},
 					},
-					"azurerepos": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"password": schema.StringAttribute{
-								Optional: true,
-							},
-							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+					"deleted": schema.BoolAttribute{
+						Computed:    true,
+						Description: `Flag indicating if the credential has been soft-deleted`,
+					},
+					"description": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Optional description explaining the purpose of the credential`,
+					},
+					"id": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Unique identifier for the credential (max 22 characters)`,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(22),
 						},
 					},
-					"bitbucket": schema.SingleNestedAttribute{
+					"keys": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
-							"password": schema.StringAttribute{
+							"aws": schema.SingleNestedAttribute{
 								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"access_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"assume_role_arn": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"secret_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
 							},
-							"username": schema.StringAttribute{
-								Computed: true,
+							"azure": schema.SingleNestedAttribute{
 								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"batch_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"batch_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"storage_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"storage_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"azure_entra": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"batch_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"batch_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"client_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"client_secret": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"storage_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"storage_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"tenant_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"azurerepos": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"password": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"username": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"bitbucket": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"password": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"username": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"codecommit": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"password": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"username": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"container_reg": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"password": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"registry": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"user_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"gitea": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"password": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"username": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"github": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"password": schema.StringAttribute{
+										Computed:  true,
+										Optional:  true,
+										Sensitive: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+									},
+									"username": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"gitlab": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"password": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"token": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"username": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"google": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"data": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+									custom_objectvalidators.GoogleKeysCrdentialValidator(),
+								},
+							},
+							"k8s": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"certificate": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"private_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"token": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"seqeracompute": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"access_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"assume_role_arn": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"secret_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
+							},
+							"ssh": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"passphrase": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"private_key": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("tw_agent"),
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+									}...),
+								},
+							},
+							"tw_agent": schema.SingleNestedAttribute{
+								Optional: true,
+								Attributes: map[string]schema.Attribute{
+									"connection_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"shared": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+									},
+								},
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("aws"),
+										path.MatchRelative().AtParent().AtName("azure_entra"),
+										path.MatchRelative().AtParent().AtName("azurerepos"),
+										path.MatchRelative().AtParent().AtName("azure"),
+										path.MatchRelative().AtParent().AtName("bitbucket"),
+										path.MatchRelative().AtParent().AtName("codecommit"),
+										path.MatchRelative().AtParent().AtName("container_reg"),
+										path.MatchRelative().AtParent().AtName("gitea"),
+										path.MatchRelative().AtParent().AtName("github"),
+										path.MatchRelative().AtParent().AtName("gitlab"),
+										path.MatchRelative().AtParent().AtName("google"),
+										path.MatchRelative().AtParent().AtName("k8s"),
+										path.MatchRelative().AtParent().AtName("seqeracompute"),
+										path.MatchRelative().AtParent().AtName("ssh"),
+									}...),
+								},
 							},
 						},
+						Description: `Not Null`,
 						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+							speakeasy_objectvalidators.NotNull(),
 						},
 					},
-					"codecommit": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"password": schema.StringAttribute{
-								Optional: true,
-							},
-							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
+					"last_updated": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+						Validators: []validator.String{
+							validators.IsRFC3339(),
 						},
 					},
-					"container_reg": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"password": schema.StringAttribute{
-								Optional: true,
-							},
-							"registry": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"user_name": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
+					"last_used": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+						Description: `Timestamp when the credential was last used`,
+						Validators: []validator.String{
+							validators.IsRFC3339(),
 						},
 					},
-					"gitea": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"password": schema.StringAttribute{
-								Optional: true,
-							},
-							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+					"name": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Display name for the credential (max 100 characters). Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+							stringvalidator.UTF8LengthAtMost(100),
 						},
 					},
-					"github": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"password": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
-							},
-							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
-						},
-					},
-					"gitlab": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"password": schema.StringAttribute{
-								Optional: true,
-							},
-							"token": schema.StringAttribute{
-								Optional: true,
-							},
-							"username": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
-						},
-					},
-					"google": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"data": schema.StringAttribute{
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
-							custom_objectvalidators.GoogleKeysCrdentialValidator(),
-						},
-					},
-					"k8s": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"certificate": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"private_key": schema.StringAttribute{
-								Optional: true,
-							},
-							"token": schema.StringAttribute{
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
-						},
-					},
-					"seqeracompute": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"secret_key": schema.StringAttribute{
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
-						},
-					},
-					"ssh": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"passphrase": schema.StringAttribute{
-								Optional: true,
-							},
-							"private_key": schema.StringAttribute{
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tw_agent"),
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-							}...),
-						},
-					},
-					"tw_agent": schema.SingleNestedAttribute{
-						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"connection_id": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"shared": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"work_dir": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("aws"),
-								path.MatchRelative().AtParent().AtName("azure_entra"),
-								path.MatchRelative().AtParent().AtName("azurerepos"),
-								path.MatchRelative().AtParent().AtName("azure"),
-								path.MatchRelative().AtParent().AtName("bitbucket"),
-								path.MatchRelative().AtParent().AtName("codecommit"),
-								path.MatchRelative().AtParent().AtName("container_reg"),
-								path.MatchRelative().AtParent().AtName("gitea"),
-								path.MatchRelative().AtParent().AtName("github"),
-								path.MatchRelative().AtParent().AtName("gitlab"),
-								path.MatchRelative().AtParent().AtName("google"),
-								path.MatchRelative().AtParent().AtName("k8s"),
-								path.MatchRelative().AtParent().AtName("seqeracompute"),
-								path.MatchRelative().AtParent().AtName("ssh"),
-							}...),
+					"provider_type": schema.StringAttribute{
+						Computed:    true,
+						Optional:    true,
+						Description: `Cloud or service provider type (e.g., aws, azure, gcp). Not Null; must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+							stringvalidator.OneOf(
+								"aws",
+								"azure",
+								"google",
+								"github",
+								"gitlab",
+								"bitbucket",
+								"ssh",
+								"k8s",
+								"container-reg",
+								"tw-agent",
+								"codecommit",
+								"gitea",
+								"azurerepos",
+								"seqeracompute",
+							),
+							custom_stringvalidators.CredentialsConfigValidator(),
 						},
 					},
 				},
+				MarkdownDescription: `Represents credentials used for authentication with various platforms and services.` + "\n" +
+					`Contains authentication information for accessing cloud providers, Git repositories,` + "\n" +
+					`and other external services within the Seqera Platform.`,
 			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"last_used": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last used`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"name": schema.StringAttribute{
-				Required:    true,
-				Description: `Display name for the credential (max 100 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-				},
-			},
-			"provider_type": schema.StringAttribute{
-				Required:    true,
-				Description: `Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"aws",
-						"azure",
-						"google",
-						"github",
-						"gitlab",
-						"bitbucket",
-						"ssh",
-						"k8s",
-						"container-reg",
-						"tw-agent",
-						"codecommit",
-						"gitea",
-						"azurerepos",
-						"seqeracompute",
-					),
-					custom_stringvalidators.CredentialsConfigValidator(),
-				},
+			"credentials_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Credentials string identifier`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,
@@ -764,11 +794,11 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeCredentialsResponse != nil && res1.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res1.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res1.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -828,11 +858,11 @@ func (r *CredentialResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeCredentialsResponse != nil && res.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -906,11 +936,11 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeCredentialsResponse != nil && res1.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res1.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res1.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

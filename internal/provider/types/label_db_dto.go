@@ -7,10 +7,12 @@ import (
 )
 
 type LabelDbDto struct {
-	DateCreated types.String `tfsdk:"date_created"`
-	ID          types.Int64  `tfsdk:"id"`
-	IsDefault   types.Bool   `tfsdk:"is_default"`
-	Name        types.String `tfsdk:"name"`
-	Resource    types.Bool   `tfsdk:"resource"`
-	Value       types.String `tfsdk:"value"`
+	DateCreated    types.String `tfsdk:"date_created"`
+	ID             types.Int64  `tfsdk:"id"`
+	IsDefault      types.Bool   `tfsdk:"is_default"`
+	IsDynamic      types.Bool   `tfsdk:"is_dynamic"`
+	IsInterpolated types.Bool   `tfsdk:"is_interpolated"`
+	Name           types.String `tfsdk:"name"`
+	Resource       types.Bool   `tfsdk:"resource"`
+	Value          types.String `tfsdk:"value"`
 }

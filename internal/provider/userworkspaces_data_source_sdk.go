@@ -16,11 +16,10 @@ func (r *UserWorkspacesDataSourceModel) RefreshFromSharedListWorkspacesAndOrgRes
 
 	if resp != nil {
 		r.OrgsAndWorkspaces = []tfTypes.OrgAndWorkspaceDto{}
-		if len(r.OrgsAndWorkspaces) > len(resp.OrgsAndWorkspaces) {
-			r.OrgsAndWorkspaces = r.OrgsAndWorkspaces[:len(resp.OrgsAndWorkspaces)]
-		}
-		for orgsAndWorkspacesCount, orgsAndWorkspacesItem := range resp.OrgsAndWorkspaces {
+
+		for _, orgsAndWorkspacesItem := range resp.OrgsAndWorkspaces {
 			var orgsAndWorkspaces tfTypes.OrgAndWorkspaceDto
+
 			orgsAndWorkspaces.OrgID = types.Int64PointerValue(orgsAndWorkspacesItem.OrgID)
 			orgsAndWorkspaces.OrgLogoURL = types.StringPointerValue(orgsAndWorkspacesItem.OrgLogoURL)
 			orgsAndWorkspaces.OrgName = types.StringPointerValue(orgsAndWorkspacesItem.OrgName)
@@ -41,19 +40,8 @@ func (r *UserWorkspacesDataSourceModel) RefreshFromSharedListWorkspacesAndOrgRes
 			orgsAndWorkspaces.WorkspaceFullName = types.StringPointerValue(orgsAndWorkspacesItem.WorkspaceFullName)
 			orgsAndWorkspaces.WorkspaceID = types.Int64PointerValue(orgsAndWorkspacesItem.WorkspaceID)
 			orgsAndWorkspaces.WorkspaceName = types.StringPointerValue(orgsAndWorkspacesItem.WorkspaceName)
-			if orgsAndWorkspacesCount+1 > len(r.OrgsAndWorkspaces) {
-				r.OrgsAndWorkspaces = append(r.OrgsAndWorkspaces, orgsAndWorkspaces)
-			} else {
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].OrgID = orgsAndWorkspaces.OrgID
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].OrgLogoURL = orgsAndWorkspaces.OrgLogoURL
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].OrgName = orgsAndWorkspaces.OrgName
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].OrgType = orgsAndWorkspaces.OrgType
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].Roles = orgsAndWorkspaces.Roles
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].Visibility = orgsAndWorkspaces.Visibility
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].WorkspaceFullName = orgsAndWorkspaces.WorkspaceFullName
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].WorkspaceID = orgsAndWorkspaces.WorkspaceID
-				r.OrgsAndWorkspaces[orgsAndWorkspacesCount].WorkspaceName = orgsAndWorkspaces.WorkspaceName
-			}
+
+			r.OrgsAndWorkspaces = append(r.OrgsAndWorkspaces, orgsAndWorkspaces)
 		}
 	}
 

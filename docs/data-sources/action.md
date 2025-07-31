@@ -118,6 +118,8 @@ Read-Only:
 - `date_created` (String) Timestamp when the label was created
 - `id` (Number) Unique numeric identifier for the label
 - `is_default` (Boolean) Flag indicating if this is a default system label
+- `is_dynamic` (Boolean) Flag indicating if the label value is dynamically generated
+- `is_interpolated` (Boolean) Flag indicating if the label value supports variable interpolation
 - `name` (String) Name or key of the label
 - `resource` (Boolean) Flag indicating if this is a resource-level label
 - `value` (String) Value associated with the label
@@ -664,30 +666,11 @@ Read-Only:
 
 Read-Only:
 
-- `cli_path` (String)
-- `compute_job_role` (String)
-- `compute_queue` (String)
-- `dragen_instance_type` (String)
-- `dragen_queue` (String)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform--environment))
-- `execution_role` (String)
-- `forge` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform--forge))
-- `fusion2_enabled` (Boolean)
-- `fusion_snapshots` (Boolean)
-- `head_job_cpus` (Number)
-- `head_job_memory_mb` (Number)
-- `head_job_role` (String)
-- `head_queue` (String)
-- `log_group` (String)
-- `lustre_id` (String, Deprecated)
 - `nextflow_config` (String) Nextflow configuration settings and parameters
-- `nvnme_storage_enabled` (Boolean)
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String)
-- `storage_type` (String, Deprecated)
-- `volumes` (List of String)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--seqeracompute_platform--environment"></a>
@@ -699,43 +682,6 @@ Read-Only:
 - `head` (Boolean)
 - `name` (String)
 - `value` (String)
-
-
-<a id="nestedatt--launch--compute_env--config--seqeracompute_platform--forge"></a>
-### Nested Schema for `launch.compute_env.config.seqeracompute_platform.forge`
-
-Read-Only:
-
-- `alloc_strategy` (String)
-- `allow_buckets` (List of String)
-- `arm64_enabled` (Boolean)
-- `bid_percentage` (Number)
-- `dispose_on_deletion` (Boolean)
-- `dragen_ami_id` (String)
-- `dragen_enabled` (Boolean)
-- `dragen_instance_type` (String)
-- `ebs_auto_scale` (Boolean)
-- `ebs_block_size` (Number)
-- `ebs_boot_size` (Number)
-- `ec2_key_pair` (String)
-- `ecs_config` (String)
-- `efs_create` (Boolean)
-- `efs_id` (String)
-- `efs_mount` (String)
-- `fargate_head_enabled` (Boolean)
-- `fsx_mount` (String)
-- `fsx_name` (String)
-- `fsx_size` (Number)
-- `fusion_enabled` (Boolean)
-- `gpu_enabled` (Boolean)
-- `image_id` (String)
-- `instance_types` (List of String)
-- `max_cpus` (Number)
-- `min_cpus` (Number)
-- `security_groups` (List of String)
-- `subnets` (List of String)
-- `type` (String)
-- `vpc_id` (String)
 
 
 

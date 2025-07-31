@@ -20,6 +20,7 @@ type Workflow struct {
 	ErrorMessage      types.String            `tfsdk:"error_message"`
 	ErrorReport       types.String            `tfsdk:"error_report"`
 	ExitStatus        types.Int32             `tfsdk:"exit_status"`
+	Fusion            *WfFusionMeta           `tfsdk:"fusion"`
 	HomeDir           types.String            `tfsdk:"home_dir"`
 	ID                types.String            `tfsdk:"id"`
 	LastUpdated       types.String            `tfsdk:"last_updated"`
@@ -50,5 +51,6 @@ type Workflow struct {
 	Submit            types.String            `tfsdk:"submit"`
 	Success           types.Bool              `tfsdk:"success"`
 	UserName          types.String            `tfsdk:"user_name"`
+	Wave              *WfWaveMeta             `tfsdk:"wave"`
 	WorkDir           types.String            `tfsdk:"work_dir"`
 }

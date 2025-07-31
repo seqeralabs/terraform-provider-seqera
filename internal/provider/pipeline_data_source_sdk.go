@@ -29,27 +29,20 @@ func (r *PipelineDataSourceModel) RefreshFromSharedPipelineDbDto(ctx context.Con
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Icon = types.StringPointerValue(resp.Icon)
 		r.Labels = []tfTypes.LabelDbDto{}
-		if len(r.Labels) > len(resp.Labels) {
-			r.Labels = r.Labels[:len(resp.Labels)]
-		}
-		for labelsCount, labelsItem := range resp.Labels {
+
+		for _, labelsItem := range resp.Labels {
 			var labels tfTypes.LabelDbDto
+
 			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
 			labels.ID = types.Int64PointerValue(labelsItem.ID)
 			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+			labels.IsDynamic = types.BoolPointerValue(labelsItem.IsDynamic)
+			labels.IsInterpolated = types.BoolPointerValue(labelsItem.IsInterpolated)
 			labels.Name = types.StringPointerValue(labelsItem.Name)
 			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
 			labels.Value = types.StringPointerValue(labelsItem.Value)
-			if labelsCount+1 > len(r.Labels) {
-				r.Labels = append(r.Labels, labels)
-			} else {
-				r.Labels[labelsCount].DateCreated = labels.DateCreated
-				r.Labels[labelsCount].ID = labels.ID
-				r.Labels[labelsCount].IsDefault = labels.IsDefault
-				r.Labels[labelsCount].Name = labels.Name
-				r.Labels[labelsCount].Resource = labels.Resource
-				r.Labels[labelsCount].Value = labels.Value
-			}
+
+			r.Labels = append(r.Labels, labels)
 		}
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.Name = types.StringPointerValue(resp.Name)

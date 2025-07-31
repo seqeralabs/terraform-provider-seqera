@@ -19,9 +19,12 @@ resource "seqera_studios" "my_studios" {
   configuration = {
     conda_environment = "...my_conda_environment..."
     cpu               = 2
-    gpu               = 8
-    lifespan_hours    = 2
-    memory            = 3
+    environment = {
+      key = "value"
+    }
+    gpu            = 8
+    lifespan_hours = 2
+    memory         = 3
     mount_data = [
       "..."
     ]
@@ -87,6 +90,7 @@ Optional:
 
 - `conda_environment` (String) Requires replacement if changed.
 - `cpu` (Number) Requires replacement if changed.
+- `environment` (Map of String) Requires replacement if changed.
 - `gpu` (Number) Requires replacement if changed.
 - `lifespan_hours` (Number) Requires replacement if changed.
 - `memory` (Number) Requires replacement if changed.
@@ -126,6 +130,8 @@ Read-Only:
 - `date_created` (String) Timestamp when the label was created
 - `id` (Number) Unique numeric identifier for the label
 - `is_default` (Boolean) Flag indicating if this is a default system label
+- `is_dynamic` (Boolean) Flag indicating if the label value is dynamically generated
+- `is_interpolated` (Boolean) Flag indicating if the label value supports variable interpolation
 - `name` (String) Name or key of the label
 - `resource` (Boolean) Flag indicating if this is a resource-level label
 - `value` (String) Value associated with the label
@@ -142,7 +148,7 @@ Read-Only:
 - `hidden` (Boolean)
 - `message` (String)
 - `name` (String) Display name for the data link connection
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]
 - `public_accessible` (Boolean)
 - `region` (String) Geographic region where the data link is hosted
 - `resource_ref` (String) Reference identifier for the external resource
@@ -156,7 +162,7 @@ Read-Only:
 
 - `id` (String)
 - `name` (String)
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]
 
 
 
