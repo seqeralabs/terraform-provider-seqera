@@ -19,3 +19,15 @@ When using the Terraform provider:
 3. For Seqera cloud users, the cloud deployments are always using the latest API specification and platform version. 
 
 For issues or questions about compatibility, please refer to the [troubleshooting documentation](internal/troubleshooting.md).
+
+
+:::note The API and Terraform provider uses the semantic versioning convention (major.minor.patch). In the event that a breaking change is introduced in future versions, we will publish guidance on the v1 support schedule and steps to mitigate disruption to your production environment. The following do not constitute breaking changes:
+
+Adding new API endpoints, new HTTP methods to existing endpoints, request parameters, or response fields
+Adding new values to existing enums or string constants
+Expanding accepted input formats or value ranges
+Adding new optional headers or query parameters
+Improving error messages or adding new error codes
+Deprecation warnings (without removal)
+Clients should be designed to gracefully handle unknown enum values, ignore unrecognized response fields, and not rely on specific error message text. :::
+
