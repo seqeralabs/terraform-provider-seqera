@@ -857,3 +857,11 @@ actions:
   - target: $.components.schemas.SeqeraComputeSecurityKeys.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
+
+  # Fix discriminator mapping validation errors by removing problematic mappings
+  - target: $.components.schemas.ComputeConfig.discriminator.mapping["google-cloud"]
+    remove: true
+  - target: $.components.schemas.ComputeConfig.discriminator.mapping["azure-cloud"]
+    remove: true
+  - target: $.components.schemas.PlatformMetainfo.discriminator.mapping["seqeracompute"]
+    remove: true
