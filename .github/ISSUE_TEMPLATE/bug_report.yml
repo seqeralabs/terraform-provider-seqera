@@ -1,0 +1,132 @@
+name: Bug Report
+description: File a bug report to help us improve the Terraform provider
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: input
+    id: terraform-version
+    attributes:
+      label: Terraform Version
+      description: What version of Terraform are you running?
+      placeholder: e.g., 1.5.0
+    validations:
+      required: true
+
+  - type: input
+    id: provider-version
+    attributes:
+      label: Provider Version
+      description: What version of the Seqera Terraform provider are you using?
+      placeholder: e.g., 0.25.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform-type
+    attributes:
+      label: Seqera Platform Type
+      description: Which Seqera platform are you using?
+      options:
+        - Seqera Cloud
+        - Seqera Enterprise v23.4
+        - Seqera Enterprise v24.2
+        - Seqera Enterprise v25.1
+        - Other (please specify in description)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: resource-type
+    attributes:
+      label: Affected Resource(s)
+      description: Which resource(s) are affected by this bug?
+      multiple: true
+      options:
+        - seqera_action
+        - seqera_compute_env
+        - seqera_credential
+        - seqera_data_studios
+        - seqera_orgs
+        - seqera_pipeline
+        - seqera_tokens
+        - seqera_workflows
+        - Data sources
+        - Other (please specify in description)
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe the expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: terraform-config
+    attributes:
+      label: Terraform Configuration
+      description: Please provide the relevant Terraform configuration
+      placeholder: |
+        resource "seqera_compute_env" "example" {
+          # Your configuration here
+        }
+      render: terraform
+    validations:
+      required: true
+
+  - type: textarea
+    id: terraform-output
+    attributes:
+      label: Terraform Output/Error
+      description: Please provide the full output from Terraform, including any error messages
+      placeholder: Paste the terraform plan/apply output here
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: debug-logs
+    attributes:
+      label: Debug Logs (Optional)
+      description: |
+        If available, please provide debug logs by running with TF_LOG=DEBUG
+        **Warning: Debug logs may contain sensitive information. Please sanitize before sharing.**
+      placeholder: Paste debug logs here (sanitized)
+      render: shell
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Create resource with configuration...
+        2. Run terraform apply...
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: Any additional information that might be helpful

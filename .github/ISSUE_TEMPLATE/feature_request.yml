@@ -1,0 +1,99 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for the Terraform provider
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a new feature!
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you requesting?
+      options:
+        - New Resource
+        - New Data Source
+        - Resource Enhancement
+        - Data Source Enhancement
+        - Provider Configuration
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: seqera-api
+    attributes:
+      label: Seqera API Endpoint
+      description: If this relates to a specific Seqera API endpoint, please provide it
+      placeholder: e.g., /workflows, /compute-envs, etc.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: Describe the feature you'd like to see implemented
+      placeholder: A clear and concise description of what you want to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe your use case and why this feature would be beneficial
+      placeholder: Explain the problem this feature would solve or the workflow it would enable
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-terraform-config
+    attributes:
+      label: Proposed Terraform Configuration
+      description: If applicable, show what the Terraform configuration might look like
+      placeholder: |
+        resource "seqera_new_resource" "example" {
+          # Your proposed configuration here
+        }
+      render: terraform
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered
+      placeholder: What other approaches have you tried or considered?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to your workflow?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve workflow
+        - High - Blocking current workflow
+        - Critical - Cannot proceed without this
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or examples about the feature request
+      placeholder: Any additional information that might be helpful
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
