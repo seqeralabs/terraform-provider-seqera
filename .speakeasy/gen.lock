@@ -32,7 +32,7 @@ generatedFiles:
   - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
-  - examples/data-sources/seqera_organization/data-source.tf
+  - examples/data-sources/seqera_orgs/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
   - examples/data-sources/seqera_studios/data-source.tf
@@ -54,6 +54,7 @@ generatedFiles:
   - examples/resources/seqera_data_link/resource.tf
   - examples/resources/seqera_datasets/resource.tf
   - examples/resources/seqera_labels/resource.tf
+  - examples/resources/seqera_orgs/import.sh
   - examples/resources/seqera_orgs/resource.tf
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
@@ -106,8 +107,8 @@ generatedFiles:
   - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
   - internal/provider/labels_resource_sdk.go
-  - internal/provider/organization_data_source.go
-  - internal/provider/organization_data_source_sdk.go
+  - internal/provider/orgs_data_source.go
+  - internal/provider/orgs_data_source_sdk.go
   - internal/provider/orgs_resource.go
   - internal/provider/orgs_resource_sdk.go
   - internal/provider/pipeline_data_source.go
@@ -214,7 +215,6 @@ generatedFiles:
   - internal/provider/types/launch.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
-  - internal/provider/types/organization_db_dto.go
   - internal/provider/types/process_load.go
   - internal/provider/types/progress_data.go
   - internal/provider/types/security_keys.go
