@@ -20,7 +20,11 @@ When using the Terraform provider:
 
 For issues or questions about compatibility, please refer to the [troubleshooting documentation](internal/troubleshooting.md).
 
-**Note:** The API and Terraform provider uses the semantic versioning convention (major.minor.patch). In the event that a breaking change is introduced in future versions, we will publish guidance on the v1 support schedule and steps to mitigate disruption to your production environment. The following do not constitute breaking changes:
+## ⚠️ Important: Semantic Versioning and Breaking Changes
+
+The API and Terraform provider uses the semantic versioning convention (major.minor.patch). In the event that a breaking change is introduced in future versions, we will publish guidance on the v1 support schedule and steps to mitigate disruption to your production environment.
+
+### The following do NOT constitute breaking changes:
 
 * Adding new resources or data sources
 * Adding new optional attributes to existing resources or data sources
@@ -33,5 +37,7 @@ For issues or questions about compatibility, please refer to the [troubleshootin
 * Deprecation warnings (without removal)
 * Bug fixes that don't change the resource schema
 * Performance improvements to provider operations
+
+### Best Practices
 
 Terraform configurations should be designed to gracefully handle new optional attributes and not rely on specific error message text. Use of `lifecycle` blocks with `ignore_changes` can help manage unexpected attribute additions during upgrades. Always test provider upgrades in non-production environments first.
