@@ -2912,7 +2912,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Organization#read
+      x-speakeasy-entity-operation: Orgs#read
     put:
       summary: Update organization
       description: Updates the details of the organization identified by the given `orgId`.

@@ -53,7 +53,7 @@ actions:
       # x-speakeasy-match: orgId
   - target: $["paths"]["/orgs/{orgId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Organization#read
+      x-speakeasy-entity-operation: Orgs#read
   - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
@@ -468,9 +468,6 @@ actions:
       x-speakeasy-param-optional: false
 
       ## Compute Config Schemas
-  - target: $["components"]["schemas"]["ListCredentialsResponse"]
-    update:
-      x-speakeasy-entity: Credentials
       ## Security Keys Schemas
   # - target: $["components"]["schemas"]["ListWorkspacesAndOrgResponse"]
   #   update:
@@ -860,3 +857,11 @@ actions:
   - target: $.components.schemas.SeqeraComputeSecurityKeys.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
+
+  # Fix discriminator mapping validation errors by removing problematic mappings
+  - target: $.components.schemas.ComputeConfig.discriminator.mapping["google-cloud"]
+    remove: true
+  - target: $.components.schemas.ComputeConfig.discriminator.mapping["azure-cloud"]
+    remove: true
+  - target: $.components.schemas.PlatformMetainfo.discriminator.mapping["seqeracompute"]
+    remove: true

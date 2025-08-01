@@ -46,3 +46,11 @@ resource "seqera_orgs" "my_orgs" {
 - `org_id` (Number) Unique numeric identifier for the organization
 - `paying` (Boolean, Deprecated) Deprecated flag indicating if organization has paid subscription
 - `type` (String) must be one of ["academic", "evaluating", "pro", "basic", "internal"]
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import seqera_orgs.my_seqera_orgs 0
+```
