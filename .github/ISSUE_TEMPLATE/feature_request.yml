@@ -2,7 +2,6 @@ name: Feature Request
 description: Suggest a new feature or enhancement for the Terraform provider
 title: "[Feature]: "
 labels: ["enhancement", "needs-triage"]
-assignees: []
 
 body:
   - type: markdown
@@ -88,12 +87,3 @@ body:
       label: Additional Context
       description: Add any other context, screenshots, or examples about the feature request
       placeholder: Any additional information that might be helpful
-
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our Code of Conduct
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
