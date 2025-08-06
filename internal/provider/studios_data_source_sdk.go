@@ -17,25 +17,17 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 
 	if resp != nil {
 		r.ActiveConnections = []tfTypes.ActiveConnection{}
-		if len(r.ActiveConnections) > len(resp.ActiveConnections) {
-			r.ActiveConnections = r.ActiveConnections[:len(resp.ActiveConnections)]
-		}
-		for activeConnectionsCount, activeConnectionsItem := range resp.ActiveConnections {
+
+		for _, activeConnectionsItem := range resp.ActiveConnections {
 			var activeConnections tfTypes.ActiveConnection
+
 			activeConnections.Avatar = types.StringValue(activeConnectionsItem.Avatar)
 			activeConnections.Email = types.StringValue(activeConnectionsItem.Email)
 			activeConnections.ID = types.Int64Value(activeConnectionsItem.ID)
 			activeConnections.LastActive = types.StringValue(typeconvert.TimeToString(activeConnectionsItem.LastActive))
 			activeConnections.UserName = types.StringValue(activeConnectionsItem.UserName)
-			if activeConnectionsCount+1 > len(r.ActiveConnections) {
-				r.ActiveConnections = append(r.ActiveConnections, activeConnections)
-			} else {
-				r.ActiveConnections[activeConnectionsCount].Avatar = activeConnections.Avatar
-				r.ActiveConnections[activeConnectionsCount].Email = activeConnections.Email
-				r.ActiveConnections[activeConnectionsCount].ID = activeConnections.ID
-				r.ActiveConnections[activeConnectionsCount].LastActive = activeConnections.LastActive
-				r.ActiveConnections[activeConnectionsCount].UserName = activeConnections.UserName
-			}
+
+			r.ActiveConnections = append(r.ActiveConnections, activeConnections)
 		}
 		r.BaseImage = types.StringPointerValue(resp.BaseImage)
 		if resp.ComputeEnv == nil {
@@ -70,50 +62,37 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
 		if resp.Labels != nil {
 			r.Labels = []tfTypes.LabelDbDto{}
-			if len(r.Labels) > len(resp.Labels) {
-				r.Labels = r.Labels[:len(resp.Labels)]
-			}
-			for labelsCount, labelsItem := range resp.Labels {
+
+			for _, labelsItem := range resp.Labels {
 				var labels tfTypes.LabelDbDto
+
 				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
 				labels.ID = types.Int64PointerValue(labelsItem.ID)
 				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
 				labels.Name = types.StringPointerValue(labelsItem.Name)
 				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
 				labels.Value = types.StringPointerValue(labelsItem.Value)
-				if labelsCount+1 > len(r.Labels) {
-					r.Labels = append(r.Labels, labels)
-				} else {
-					r.Labels[labelsCount].DateCreated = labels.DateCreated
-					r.Labels[labelsCount].ID = labels.ID
-					r.Labels[labelsCount].IsDefault = labels.IsDefault
-					r.Labels[labelsCount].Name = labels.Name
-					r.Labels[labelsCount].Resource = labels.Resource
-					r.Labels[labelsCount].Value = labels.Value
-				}
+
+				r.Labels = append(r.Labels, labels)
 			}
 		}
 		r.LastStarted = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastStarted))
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.MountedDataLinks = []tfTypes.DataLinkDto{}
-		if len(r.MountedDataLinks) > len(resp.MountedDataLinks) {
-			r.MountedDataLinks = r.MountedDataLinks[:len(resp.MountedDataLinks)]
-		}
-		for mountedDataLinksCount, mountedDataLinksItem := range resp.MountedDataLinks {
+
+		for _, mountedDataLinksItem := range resp.MountedDataLinks {
 			var mountedDataLinks tfTypes.DataLinkDto
+
 			mountedDataLinks.Credentials = []tfTypes.DataLinkCredentials{}
-			for credentialsCount, credentialsItem := range mountedDataLinksItem.Credentials {
+
+			for _, credentialsItem := range mountedDataLinksItem.Credentials {
 				var credentials tfTypes.DataLinkCredentials
+
 				credentials.ID = types.StringValue(credentialsItem.ID)
 				credentials.Name = types.StringValue(credentialsItem.Name)
 				credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
-				if credentialsCount+1 > len(mountedDataLinks.Credentials) {
-					mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
-				} else {
-					mountedDataLinks.Credentials[credentialsCount].ID = credentials.ID
-					mountedDataLinks.Credentials[credentialsCount].Name = credentials.Name
-					mountedDataLinks.Credentials[credentialsCount].ProviderType = credentials.ProviderType
-				}
+
+				mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
 			}
 			mountedDataLinks.DataLinkID = types.StringPointerValue(mountedDataLinksItem.DataLinkID)
 			mountedDataLinks.Description = types.StringPointerValue(mountedDataLinksItem.Description)
@@ -138,22 +117,8 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 			} else {
 				mountedDataLinks.Type = types.StringNull()
 			}
-			if mountedDataLinksCount+1 > len(r.MountedDataLinks) {
-				r.MountedDataLinks = append(r.MountedDataLinks, mountedDataLinks)
-			} else {
-				r.MountedDataLinks[mountedDataLinksCount].Credentials = mountedDataLinks.Credentials
-				r.MountedDataLinks[mountedDataLinksCount].DataLinkID = mountedDataLinks.DataLinkID
-				r.MountedDataLinks[mountedDataLinksCount].Description = mountedDataLinks.Description
-				r.MountedDataLinks[mountedDataLinksCount].Hidden = mountedDataLinks.Hidden
-				r.MountedDataLinks[mountedDataLinksCount].Message = mountedDataLinks.Message
-				r.MountedDataLinks[mountedDataLinksCount].Name = mountedDataLinks.Name
-				r.MountedDataLinks[mountedDataLinksCount].ProviderType = mountedDataLinks.ProviderType
-				r.MountedDataLinks[mountedDataLinksCount].PublicAccessible = mountedDataLinks.PublicAccessible
-				r.MountedDataLinks[mountedDataLinksCount].Region = mountedDataLinks.Region
-				r.MountedDataLinks[mountedDataLinksCount].ResourceRef = mountedDataLinks.ResourceRef
-				r.MountedDataLinks[mountedDataLinksCount].Status = mountedDataLinks.Status
-				r.MountedDataLinks[mountedDataLinksCount].Type = mountedDataLinks.Type
-			}
+
+			r.MountedDataLinks = append(r.MountedDataLinks, mountedDataLinks)
 		}
 		r.Name = types.StringPointerValue(resp.Name)
 		if resp.ParentCheckpoint == nil {
@@ -166,11 +131,10 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 			r.ParentCheckpoint.StudioName = types.StringPointerValue(resp.ParentCheckpoint.StudioName)
 		}
 		r.Progress = []tfTypes.DataStudioProgressStep{}
-		if len(r.Progress) > len(resp.Progress) {
-			r.Progress = r.Progress[:len(resp.Progress)]
-		}
-		for progressCount, progressItem := range resp.Progress {
+
+		for _, progressItem := range resp.Progress {
 			var progress tfTypes.DataStudioProgressStep
+
 			progress.Message = types.StringPointerValue(progressItem.Message)
 			if progressItem.Status != nil {
 				progress.Status = types.StringValue(string(*progressItem.Status))
@@ -181,13 +145,8 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 			for _, v := range progressItem.Warnings {
 				progress.Warnings = append(progress.Warnings, types.StringValue(v))
 			}
-			if progressCount+1 > len(r.Progress) {
-				r.Progress = append(r.Progress, progress)
-			} else {
-				r.Progress[progressCount].Message = progress.Message
-				r.Progress[progressCount].Status = progress.Status
-				r.Progress[progressCount].Warnings = progress.Warnings
-			}
+
+			r.Progress = append(r.Progress, progress)
 		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
 		if resp.StatusInfo == nil {

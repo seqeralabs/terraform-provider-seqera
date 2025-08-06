@@ -27,23 +27,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
 					r.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
 					r.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AltairPlatform.Environment) > len(resp.ComputeEnv.Config.AltairPBSConfiguration.Environment) {
-						r.ComputeEnv.Config.AltairPlatform.Environment = r.ComputeEnv.Config.AltairPlatform.Environment[:len(resp.ComputeEnv.Config.AltairPBSConfiguration.Environment)]
-					}
-					for environmentCount, environmentItem := range resp.ComputeEnv.Config.AltairPBSConfiguration.Environment {
+
+					for _, environmentItem := range resp.ComputeEnv.Config.AltairPBSConfiguration.Environment {
 						var environment tfTypes.ConfigEnvVariable
+
 						environment.Compute = types.BoolPointerValue(environmentItem.Compute)
 						environment.Head = types.BoolPointerValue(environmentItem.Head)
 						environment.Name = types.StringPointerValue(environmentItem.Name)
 						environment.Value = types.StringPointerValue(environmentItem.Value)
-						if environmentCount+1 > len(r.ComputeEnv.Config.AltairPlatform.Environment) {
-							r.ComputeEnv.Config.AltairPlatform.Environment = append(r.ComputeEnv.Config.AltairPlatform.Environment, environment)
-						} else {
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Compute = environment.Compute
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Head = environment.Head
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Name = environment.Name
-							r.ComputeEnv.Config.AltairPlatform.Environment[environmentCount].Value = environment.Value
-						}
+
+						r.ComputeEnv.Config.AltairPlatform.Environment = append(r.ComputeEnv.Config.AltairPlatform.Environment, environment)
 					}
 					r.ComputeEnv.Config.AltairPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadJobOptions)
 					r.ComputeEnv.Config.AltairPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadQueue)
@@ -63,23 +56,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
 					r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
 					r.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.EksPlatform.Environment) > len(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment) {
-						r.ComputeEnv.Config.EksPlatform.Environment = r.ComputeEnv.Config.EksPlatform.Environment[:len(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment)]
-					}
-					for environmentCount1, environmentItem1 := range resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
+
+					for _, environmentItem1 := range resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
 						var environment1 tfTypes.ConfigEnvVariable
+
 						environment1.Compute = types.BoolPointerValue(environmentItem1.Compute)
 						environment1.Head = types.BoolPointerValue(environmentItem1.Head)
 						environment1.Name = types.StringPointerValue(environmentItem1.Name)
 						environment1.Value = types.StringPointerValue(environmentItem1.Value)
-						if environmentCount1+1 > len(r.ComputeEnv.Config.EksPlatform.Environment) {
-							r.ComputeEnv.Config.EksPlatform.Environment = append(r.ComputeEnv.Config.EksPlatform.Environment, environment1)
-						} else {
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Compute = environment1.Compute
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Head = environment1.Head
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Name = environment1.Name
-							r.ComputeEnv.Config.EksPlatform.Environment[environmentCount1].Value = environment1.Value
-						}
+
+						r.ComputeEnv.Config.EksPlatform.Environment = append(r.ComputeEnv.Config.EksPlatform.Environment, environment1)
 					}
 					r.ComputeEnv.Config.EksPlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Fusion2Enabled)
 					r.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
@@ -112,23 +98,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.DragenInstanceType)
 					r.ComputeEnv.Config.AwsBatch.DragenQueue = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.DragenQueue)
 					r.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AwsBatch.Environment) > len(resp.ComputeEnv.Config.AWSBatchConfiguration.Environment) {
-						r.ComputeEnv.Config.AwsBatch.Environment = r.ComputeEnv.Config.AwsBatch.Environment[:len(resp.ComputeEnv.Config.AWSBatchConfiguration.Environment)]
-					}
-					for environmentCount2, environmentItem2 := range resp.ComputeEnv.Config.AWSBatchConfiguration.Environment {
+
+					for _, environmentItem2 := range resp.ComputeEnv.Config.AWSBatchConfiguration.Environment {
 						var environment2 tfTypes.ConfigEnvVariable
+
 						environment2.Compute = types.BoolPointerValue(environmentItem2.Compute)
 						environment2.Head = types.BoolPointerValue(environmentItem2.Head)
 						environment2.Name = types.StringPointerValue(environmentItem2.Name)
 						environment2.Value = types.StringPointerValue(environmentItem2.Value)
-						if environmentCount2+1 > len(r.ComputeEnv.Config.AwsBatch.Environment) {
-							r.ComputeEnv.Config.AwsBatch.Environment = append(r.ComputeEnv.Config.AwsBatch.Environment, environment2)
-						} else {
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Compute = environment2.Compute
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Head = environment2.Head
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Name = environment2.Name
-							r.ComputeEnv.Config.AwsBatch.Environment[environmentCount2].Value = environment2.Value
-						}
+
+						r.ComputeEnv.Config.AwsBatch.Environment = append(r.ComputeEnv.Config.AwsBatch.Environment, environment2)
 					}
 					r.ComputeEnv.Config.AwsBatch.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ExecutionRole)
 					if resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy != nil {
@@ -208,23 +187,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
 					r.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
 					r.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AwsCloud.Environment) > len(resp.ComputeEnv.Config.AWSCloudConfiguration.Environment) {
-						r.ComputeEnv.Config.AwsCloud.Environment = r.ComputeEnv.Config.AwsCloud.Environment[:len(resp.ComputeEnv.Config.AWSCloudConfiguration.Environment)]
-					}
-					for environmentCount3, environmentItem3 := range resp.ComputeEnv.Config.AWSCloudConfiguration.Environment {
+
+					for _, environmentItem3 := range resp.ComputeEnv.Config.AWSCloudConfiguration.Environment {
 						var environment3 tfTypes.ConfigEnvVariable
+
 						environment3.Compute = types.BoolPointerValue(environmentItem3.Compute)
 						environment3.Head = types.BoolPointerValue(environmentItem3.Head)
 						environment3.Name = types.StringPointerValue(environmentItem3.Name)
 						environment3.Value = types.StringPointerValue(environmentItem3.Value)
-						if environmentCount3+1 > len(r.ComputeEnv.Config.AwsCloud.Environment) {
-							r.ComputeEnv.Config.AwsCloud.Environment = append(r.ComputeEnv.Config.AwsCloud.Environment, environment3)
-						} else {
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Compute = environment3.Compute
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Head = environment3.Head
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Name = environment3.Name
-							r.ComputeEnv.Config.AwsCloud.Environment[environmentCount3].Value = environment3.Value
-						}
+
+						r.ComputeEnv.Config.AwsCloud.Environment = append(r.ComputeEnv.Config.AwsCloud.Environment, environment3)
 					}
 					r.ComputeEnv.Config.AwsCloud.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.Fusion2Enabled)
 					r.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
@@ -254,23 +226,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					}
 					r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
 					r.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.AzureBatch.Environment) > len(resp.ComputeEnv.Config.AzureBatchConfiguration.Environment) {
-						r.ComputeEnv.Config.AzureBatch.Environment = r.ComputeEnv.Config.AzureBatch.Environment[:len(resp.ComputeEnv.Config.AzureBatchConfiguration.Environment)]
-					}
-					for environmentCount4, environmentItem4 := range resp.ComputeEnv.Config.AzureBatchConfiguration.Environment {
+
+					for _, environmentItem4 := range resp.ComputeEnv.Config.AzureBatchConfiguration.Environment {
 						var environment4 tfTypes.ConfigEnvVariable
+
 						environment4.Compute = types.BoolPointerValue(environmentItem4.Compute)
 						environment4.Head = types.BoolPointerValue(environmentItem4.Head)
 						environment4.Name = types.StringPointerValue(environmentItem4.Name)
 						environment4.Value = types.StringPointerValue(environmentItem4.Value)
-						if environmentCount4+1 > len(r.ComputeEnv.Config.AzureBatch.Environment) {
-							r.ComputeEnv.Config.AzureBatch.Environment = append(r.ComputeEnv.Config.AzureBatch.Environment, environment4)
-						} else {
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Compute = environment4.Compute
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Head = environment4.Head
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Name = environment4.Name
-							r.ComputeEnv.Config.AzureBatch.Environment[environmentCount4].Value = environment4.Value
-						}
+
+						r.ComputeEnv.Config.AzureBatch.Environment = append(r.ComputeEnv.Config.AzureBatch.Environment, environment4)
 					}
 					r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
 					r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
@@ -299,23 +264,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
 					r.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
 					r.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.GoogleBatch.Environment) > len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment) {
-						r.ComputeEnv.Config.GoogleBatch.Environment = r.ComputeEnv.Config.GoogleBatch.Environment[:len(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment)]
-					}
-					for environmentCount5, environmentItem5 := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment {
+
+					for _, environmentItem5 := range resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment {
 						var environment5 tfTypes.ConfigEnvVariable
+
 						environment5.Compute = types.BoolPointerValue(environmentItem5.Compute)
 						environment5.Head = types.BoolPointerValue(environmentItem5.Head)
 						environment5.Name = types.StringPointerValue(environmentItem5.Name)
 						environment5.Value = types.StringPointerValue(environmentItem5.Value)
-						if environmentCount5+1 > len(r.ComputeEnv.Config.GoogleBatch.Environment) {
-							r.ComputeEnv.Config.GoogleBatch.Environment = append(r.ComputeEnv.Config.GoogleBatch.Environment, environment5)
-						} else {
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Compute = environment5.Compute
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Head = environment5.Head
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Name = environment5.Name
-							r.ComputeEnv.Config.GoogleBatch.Environment[environmentCount5].Value = environment5.Value
-						}
+
+						r.ComputeEnv.Config.GoogleBatch.Environment = append(r.ComputeEnv.Config.GoogleBatch.Environment, environment5)
 					}
 					r.ComputeEnv.Config.GoogleBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Fusion2Enabled)
 					r.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
@@ -350,23 +308,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ClusterName)
 					r.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.ComputeServiceAccount)
 					r.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.GkePlatform.Environment) > len(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment) {
-						r.ComputeEnv.Config.GkePlatform.Environment = r.ComputeEnv.Config.GkePlatform.Environment[:len(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment)]
-					}
-					for environmentCount6, environmentItem6 := range resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment {
+
+					for _, environmentItem6 := range resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment {
 						var environment6 tfTypes.ConfigEnvVariable
+
 						environment6.Compute = types.BoolPointerValue(environmentItem6.Compute)
 						environment6.Head = types.BoolPointerValue(environmentItem6.Head)
 						environment6.Name = types.StringPointerValue(environmentItem6.Name)
 						environment6.Value = types.StringPointerValue(environmentItem6.Value)
-						if environmentCount6+1 > len(r.ComputeEnv.Config.GkePlatform.Environment) {
-							r.ComputeEnv.Config.GkePlatform.Environment = append(r.ComputeEnv.Config.GkePlatform.Environment, environment6)
-						} else {
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Compute = environment6.Compute
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Head = environment6.Head
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Name = environment6.Name
-							r.ComputeEnv.Config.GkePlatform.Environment[environmentCount6].Value = environment6.Value
-						}
+
+						r.ComputeEnv.Config.GkePlatform.Environment = append(r.ComputeEnv.Config.GkePlatform.Environment, environment6)
 					}
 					r.ComputeEnv.Config.GkePlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.Fusion2Enabled)
 					r.ComputeEnv.Config.GkePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobCpus))
@@ -397,23 +348,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.GoogleLifesciences.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.CopyImage)
 					r.ComputeEnv.Config.GoogleLifesciences.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.DebugMode))
 					r.ComputeEnv.Config.GoogleLifesciences.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.GoogleLifesciences.Environment) > len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment) {
-						r.ComputeEnv.Config.GoogleLifesciences.Environment = r.ComputeEnv.Config.GoogleLifesciences.Environment[:len(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment)]
-					}
-					for environmentCount7, environmentItem7 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment {
+
+					for _, environmentItem7 := range resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment {
 						var environment7 tfTypes.ConfigEnvVariable
+
 						environment7.Compute = types.BoolPointerValue(environmentItem7.Compute)
 						environment7.Head = types.BoolPointerValue(environmentItem7.Head)
 						environment7.Name = types.StringPointerValue(environmentItem7.Name)
 						environment7.Value = types.StringPointerValue(environmentItem7.Value)
-						if environmentCount7+1 > len(r.ComputeEnv.Config.GoogleLifesciences.Environment) {
-							r.ComputeEnv.Config.GoogleLifesciences.Environment = append(r.ComputeEnv.Config.GoogleLifesciences.Environment, environment7)
-						} else {
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Compute = environment7.Compute
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Head = environment7.Head
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Name = environment7.Name
-							r.ComputeEnv.Config.GoogleLifesciences.Environment[environmentCount7].Value = environment7.Value
-						}
+
+						r.ComputeEnv.Config.GoogleLifesciences.Environment = append(r.ComputeEnv.Config.GoogleLifesciences.Environment, environment7)
 					}
 					r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobMemoryMb))
@@ -445,23 +389,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.LsfPlatform = &tfTypes.IBMLSFConfiguration{}
 					r.ComputeEnv.Config.LsfPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.ComputeQueue)
 					r.ComputeEnv.Config.LsfPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.LsfPlatform.Environment) > len(resp.ComputeEnv.Config.IBMLSFConfiguration.Environment) {
-						r.ComputeEnv.Config.LsfPlatform.Environment = r.ComputeEnv.Config.LsfPlatform.Environment[:len(resp.ComputeEnv.Config.IBMLSFConfiguration.Environment)]
-					}
-					for environmentCount8, environmentItem8 := range resp.ComputeEnv.Config.IBMLSFConfiguration.Environment {
+
+					for _, environmentItem8 := range resp.ComputeEnv.Config.IBMLSFConfiguration.Environment {
 						var environment8 tfTypes.ConfigEnvVariable
+
 						environment8.Compute = types.BoolPointerValue(environmentItem8.Compute)
 						environment8.Head = types.BoolPointerValue(environmentItem8.Head)
 						environment8.Name = types.StringPointerValue(environmentItem8.Name)
 						environment8.Value = types.StringPointerValue(environmentItem8.Value)
-						if environmentCount8+1 > len(r.ComputeEnv.Config.LsfPlatform.Environment) {
-							r.ComputeEnv.Config.LsfPlatform.Environment = append(r.ComputeEnv.Config.LsfPlatform.Environment, environment8)
-						} else {
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Compute = environment8.Compute
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Head = environment8.Head
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Name = environment8.Name
-							r.ComputeEnv.Config.LsfPlatform.Environment[environmentCount8].Value = environment8.Value
-						}
+
+						r.ComputeEnv.Config.LsfPlatform.Environment = append(r.ComputeEnv.Config.LsfPlatform.Environment, environment8)
 					}
 					r.ComputeEnv.Config.LsfPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HeadJobOptions)
 					r.ComputeEnv.Config.LsfPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.IBMLSFConfiguration.HeadQueue)
@@ -483,23 +420,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.K8sPlatform = &tfTypes.KubernetesComputeConfiguration{}
 					r.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.KubernetesComputeConfiguration.ComputeServiceAccount)
 					r.ComputeEnv.Config.K8sPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.K8sPlatform.Environment) > len(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment) {
-						r.ComputeEnv.Config.K8sPlatform.Environment = r.ComputeEnv.Config.K8sPlatform.Environment[:len(resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment)]
-					}
-					for environmentCount9, environmentItem9 := range resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment {
+
+					for _, environmentItem9 := range resp.ComputeEnv.Config.KubernetesComputeConfiguration.Environment {
 						var environment9 tfTypes.ConfigEnvVariable
+
 						environment9.Compute = types.BoolPointerValue(environmentItem9.Compute)
 						environment9.Head = types.BoolPointerValue(environmentItem9.Head)
 						environment9.Name = types.StringPointerValue(environmentItem9.Name)
 						environment9.Value = types.StringPointerValue(environmentItem9.Value)
-						if environmentCount9+1 > len(r.ComputeEnv.Config.K8sPlatform.Environment) {
-							r.ComputeEnv.Config.K8sPlatform.Environment = append(r.ComputeEnv.Config.K8sPlatform.Environment, environment9)
-						} else {
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Compute = environment9.Compute
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Head = environment9.Head
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Name = environment9.Name
-							r.ComputeEnv.Config.K8sPlatform.Environment[environmentCount9].Value = environment9.Value
-						}
+
+						r.ComputeEnv.Config.K8sPlatform.Environment = append(r.ComputeEnv.Config.K8sPlatform.Environment, environment9)
 					}
 					r.ComputeEnv.Config.K8sPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobCpus))
 					r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobMemoryMb))
@@ -525,23 +455,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.MoabPlatform = &tfTypes.MoabConfiguration{}
 					r.ComputeEnv.Config.MoabPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.ComputeQueue)
 					r.ComputeEnv.Config.MoabPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.MoabPlatform.Environment) > len(resp.ComputeEnv.Config.MoabConfiguration.Environment) {
-						r.ComputeEnv.Config.MoabPlatform.Environment = r.ComputeEnv.Config.MoabPlatform.Environment[:len(resp.ComputeEnv.Config.MoabConfiguration.Environment)]
-					}
-					for environmentCount10, environmentItem10 := range resp.ComputeEnv.Config.MoabConfiguration.Environment {
+
+					for _, environmentItem10 := range resp.ComputeEnv.Config.MoabConfiguration.Environment {
 						var environment10 tfTypes.ConfigEnvVariable
+
 						environment10.Compute = types.BoolPointerValue(environmentItem10.Compute)
 						environment10.Head = types.BoolPointerValue(environmentItem10.Head)
 						environment10.Name = types.StringPointerValue(environmentItem10.Name)
 						environment10.Value = types.StringPointerValue(environmentItem10.Value)
-						if environmentCount10+1 > len(r.ComputeEnv.Config.MoabPlatform.Environment) {
-							r.ComputeEnv.Config.MoabPlatform.Environment = append(r.ComputeEnv.Config.MoabPlatform.Environment, environment10)
-						} else {
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Compute = environment10.Compute
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Head = environment10.Head
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Name = environment10.Name
-							r.ComputeEnv.Config.MoabPlatform.Environment[environmentCount10].Value = environment10.Value
-						}
+
+						r.ComputeEnv.Config.MoabPlatform.Environment = append(r.ComputeEnv.Config.MoabPlatform.Environment, environment10)
 					}
 					r.ComputeEnv.Config.MoabPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HeadJobOptions)
 					r.ComputeEnv.Config.MoabPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.MoabConfiguration.HeadQueue)
@@ -564,23 +487,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenInstanceType)
 					r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenQueue)
 					r.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.SeqeracomputePlatform.Environment) > len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment) {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = r.ComputeEnv.Config.SeqeracomputePlatform.Environment[:len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment)]
-					}
-					for environmentCount11, environmentItem11 := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment {
+
+					for _, environmentItem11 := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment {
 						var environment11 tfTypes.ConfigEnvVariable
+
 						environment11.Compute = types.BoolPointerValue(environmentItem11.Compute)
 						environment11.Head = types.BoolPointerValue(environmentItem11.Head)
 						environment11.Name = types.StringPointerValue(environmentItem11.Name)
 						environment11.Value = types.StringPointerValue(environmentItem11.Value)
-						if environmentCount11+1 > len(r.ComputeEnv.Config.SeqeracomputePlatform.Environment) {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment = append(r.ComputeEnv.Config.SeqeracomputePlatform.Environment, environment11)
-						} else {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Compute = environment11.Compute
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Head = environment11.Head
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Name = environment11.Name
-							r.ComputeEnv.Config.SeqeracomputePlatform.Environment[environmentCount11].Value = environment11.Value
-						}
+
+						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = append(r.ComputeEnv.Config.SeqeracomputePlatform.Environment, environment11)
 					}
 					r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ExecutionRole)
 					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
@@ -654,23 +570,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.SlurmPlatform = &tfTypes.SlurmConfiguration{}
 					r.ComputeEnv.Config.SlurmPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.ComputeQueue)
 					r.ComputeEnv.Config.SlurmPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.SlurmPlatform.Environment) > len(resp.ComputeEnv.Config.SlurmConfiguration.Environment) {
-						r.ComputeEnv.Config.SlurmPlatform.Environment = r.ComputeEnv.Config.SlurmPlatform.Environment[:len(resp.ComputeEnv.Config.SlurmConfiguration.Environment)]
-					}
-					for environmentCount12, environmentItem12 := range resp.ComputeEnv.Config.SlurmConfiguration.Environment {
+
+					for _, environmentItem12 := range resp.ComputeEnv.Config.SlurmConfiguration.Environment {
 						var environment12 tfTypes.ConfigEnvVariable
+
 						environment12.Compute = types.BoolPointerValue(environmentItem12.Compute)
 						environment12.Head = types.BoolPointerValue(environmentItem12.Head)
 						environment12.Name = types.StringPointerValue(environmentItem12.Name)
 						environment12.Value = types.StringPointerValue(environmentItem12.Value)
-						if environmentCount12+1 > len(r.ComputeEnv.Config.SlurmPlatform.Environment) {
-							r.ComputeEnv.Config.SlurmPlatform.Environment = append(r.ComputeEnv.Config.SlurmPlatform.Environment, environment12)
-						} else {
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Compute = environment12.Compute
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Head = environment12.Head
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Name = environment12.Name
-							r.ComputeEnv.Config.SlurmPlatform.Environment[environmentCount12].Value = environment12.Value
-						}
+
+						r.ComputeEnv.Config.SlurmPlatform.Environment = append(r.ComputeEnv.Config.SlurmPlatform.Environment, environment12)
 					}
 					r.ComputeEnv.Config.SlurmPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HeadJobOptions)
 					r.ComputeEnv.Config.SlurmPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.SlurmConfiguration.HeadQueue)
@@ -689,23 +598,16 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 					r.ComputeEnv.Config.UgePlatform = &tfTypes.UnivaGridEngineConfiguration{}
 					r.ComputeEnv.Config.UgePlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.ComputeQueue)
 					r.ComputeEnv.Config.UgePlatform.Environment = []tfTypes.ConfigEnvVariable{}
-					if len(r.ComputeEnv.Config.UgePlatform.Environment) > len(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment) {
-						r.ComputeEnv.Config.UgePlatform.Environment = r.ComputeEnv.Config.UgePlatform.Environment[:len(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment)]
-					}
-					for environmentCount13, environmentItem13 := range resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment {
+
+					for _, environmentItem13 := range resp.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment {
 						var environment13 tfTypes.ConfigEnvVariable
+
 						environment13.Compute = types.BoolPointerValue(environmentItem13.Compute)
 						environment13.Head = types.BoolPointerValue(environmentItem13.Head)
 						environment13.Name = types.StringPointerValue(environmentItem13.Name)
 						environment13.Value = types.StringPointerValue(environmentItem13.Value)
-						if environmentCount13+1 > len(r.ComputeEnv.Config.UgePlatform.Environment) {
-							r.ComputeEnv.Config.UgePlatform.Environment = append(r.ComputeEnv.Config.UgePlatform.Environment, environment13)
-						} else {
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Compute = environment13.Compute
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Head = environment13.Head
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Name = environment13.Name
-							r.ComputeEnv.Config.UgePlatform.Environment[environmentCount13].Value = environment13.Value
-						}
+
+						r.ComputeEnv.Config.UgePlatform.Environment = append(r.ComputeEnv.Config.UgePlatform.Environment, environment13)
 					}
 					r.ComputeEnv.Config.UgePlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadJobOptions)
 					r.ComputeEnv.Config.UgePlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadQueue)
@@ -726,27 +628,18 @@ func (r *ComputeEnvDataSourceModel) RefreshFromSharedDescribeComputeEnvResponse(
 			r.ComputeEnv.Deleted = types.BoolPointerValue(resp.ComputeEnv.Deleted)
 			r.ComputeEnv.Description = types.StringPointerValue(resp.ComputeEnv.Description)
 			r.ComputeEnv.Labels = []tfTypes.LabelDbDto{}
-			if len(r.ComputeEnv.Labels) > len(resp.ComputeEnv.Labels) {
-				r.ComputeEnv.Labels = r.ComputeEnv.Labels[:len(resp.ComputeEnv.Labels)]
-			}
-			for labelsCount, labelsItem := range resp.ComputeEnv.Labels {
+
+			for _, labelsItem := range resp.ComputeEnv.Labels {
 				var labels tfTypes.LabelDbDto
+
 				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
 				labels.ID = types.Int64PointerValue(labelsItem.ID)
 				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
 				labels.Name = types.StringPointerValue(labelsItem.Name)
 				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
 				labels.Value = types.StringPointerValue(labelsItem.Value)
-				if labelsCount+1 > len(r.ComputeEnv.Labels) {
-					r.ComputeEnv.Labels = append(r.ComputeEnv.Labels, labels)
-				} else {
-					r.ComputeEnv.Labels[labelsCount].DateCreated = labels.DateCreated
-					r.ComputeEnv.Labels[labelsCount].ID = labels.ID
-					r.ComputeEnv.Labels[labelsCount].IsDefault = labels.IsDefault
-					r.ComputeEnv.Labels[labelsCount].Name = labels.Name
-					r.ComputeEnv.Labels[labelsCount].Resource = labels.Resource
-					r.ComputeEnv.Labels[labelsCount].Value = labels.Value
-				}
+
+				r.ComputeEnv.Labels = append(r.ComputeEnv.Labels, labels)
 			}
 			r.ComputeEnv.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ComputeEnv.LastUpdated))
 			r.ComputeEnv.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.ComputeEnv.LastUsed))

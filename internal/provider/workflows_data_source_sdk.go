@@ -28,27 +28,18 @@ func (r *WorkflowsDataSourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx
 			r.JobInfo.Status = types.StringPointerValue(resp.JobInfo.Status)
 		}
 		r.Labels = []tfTypes.LabelDbDto{}
-		if len(r.Labels) > len(resp.Labels) {
-			r.Labels = r.Labels[:len(resp.Labels)]
-		}
-		for labelsCount, labelsItem := range resp.Labels {
+
+		for _, labelsItem := range resp.Labels {
 			var labels tfTypes.LabelDbDto
+
 			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
 			labels.ID = types.Int64PointerValue(labelsItem.ID)
 			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
 			labels.Name = types.StringPointerValue(labelsItem.Name)
 			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
 			labels.Value = types.StringPointerValue(labelsItem.Value)
-			if labelsCount+1 > len(r.Labels) {
-				r.Labels = append(r.Labels, labels)
-			} else {
-				r.Labels[labelsCount].DateCreated = labels.DateCreated
-				r.Labels[labelsCount].ID = labels.ID
-				r.Labels[labelsCount].IsDefault = labels.IsDefault
-				r.Labels[labelsCount].Name = labels.Name
-				r.Labels[labelsCount].Resource = labels.Resource
-				r.Labels[labelsCount].Value = labels.Value
-			}
+
+			r.Labels = append(r.Labels, labels)
 		}
 		r.Messages = make([]types.String, 0, len(resp.Messages))
 		for _, v := range resp.Messages {
@@ -69,11 +60,10 @@ func (r *WorkflowsDataSourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx
 		} else {
 			r.Progress = &tfTypes.ProgressData{}
 			r.Progress.ProcessesProgress = []tfTypes.ProcessLoad{}
-			if len(r.Progress.ProcessesProgress) > len(resp.Progress.ProcessesProgress) {
-				r.Progress.ProcessesProgress = r.Progress.ProcessesProgress[:len(resp.Progress.ProcessesProgress)]
-			}
-			for processesProgressCount, processesProgressItem := range resp.Progress.ProcessesProgress {
+
+			for _, processesProgressItem := range resp.Progress.ProcessesProgress {
 				var processesProgress tfTypes.ProcessLoad
+
 				processesProgress.Aborted = types.Int64Value(processesProgressItem.Aborted)
 				processesProgress.Cached = types.Int64Value(processesProgressItem.Cached)
 				processesProgress.CPUEfficiency = types.Float32PointerValue(processesProgressItem.CPUEfficiency)
@@ -101,37 +91,8 @@ func (r *WorkflowsDataSourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx
 				processesProgress.Succeeded = types.Int64Value(processesProgressItem.Succeeded)
 				processesProgress.VolCtxSwitch = types.Int64Value(processesProgressItem.VolCtxSwitch)
 				processesProgress.WriteBytes = types.Int64Value(processesProgressItem.WriteBytes)
-				if processesProgressCount+1 > len(r.Progress.ProcessesProgress) {
-					r.Progress.ProcessesProgress = append(r.Progress.ProcessesProgress, processesProgress)
-				} else {
-					r.Progress.ProcessesProgress[processesProgressCount].Aborted = processesProgress.Aborted
-					r.Progress.ProcessesProgress[processesProgressCount].Cached = processesProgress.Cached
-					r.Progress.ProcessesProgress[processesProgressCount].CPUEfficiency = processesProgress.CPUEfficiency
-					r.Progress.ProcessesProgress[processesProgressCount].CPULoad = processesProgress.CPULoad
-					r.Progress.ProcessesProgress[processesProgressCount].Cpus = processesProgress.Cpus
-					r.Progress.ProcessesProgress[processesProgressCount].CPUTime = processesProgress.CPUTime
-					r.Progress.ProcessesProgress[processesProgressCount].DateCreated = processesProgress.DateCreated
-					r.Progress.ProcessesProgress[processesProgressCount].Failed = processesProgress.Failed
-					r.Progress.ProcessesProgress[processesProgressCount].InvCtxSwitch = processesProgress.InvCtxSwitch
-					r.Progress.ProcessesProgress[processesProgressCount].LastUpdated = processesProgress.LastUpdated
-					r.Progress.ProcessesProgress[processesProgressCount].LoadCpus = processesProgress.LoadCpus
-					r.Progress.ProcessesProgress[processesProgressCount].LoadMemory = processesProgress.LoadMemory
-					r.Progress.ProcessesProgress[processesProgressCount].LoadTasks = processesProgress.LoadTasks
-					r.Progress.ProcessesProgress[processesProgressCount].MemoryEfficiency = processesProgress.MemoryEfficiency
-					r.Progress.ProcessesProgress[processesProgressCount].MemoryReq = processesProgress.MemoryReq
-					r.Progress.ProcessesProgress[processesProgressCount].MemoryRss = processesProgress.MemoryRss
-					r.Progress.ProcessesProgress[processesProgressCount].PeakCpus = processesProgress.PeakCpus
-					r.Progress.ProcessesProgress[processesProgressCount].PeakMemory = processesProgress.PeakMemory
-					r.Progress.ProcessesProgress[processesProgressCount].PeakTasks = processesProgress.PeakTasks
-					r.Progress.ProcessesProgress[processesProgressCount].Pending = processesProgress.Pending
-					r.Progress.ProcessesProgress[processesProgressCount].Process = processesProgress.Process
-					r.Progress.ProcessesProgress[processesProgressCount].ReadBytes = processesProgress.ReadBytes
-					r.Progress.ProcessesProgress[processesProgressCount].Running = processesProgress.Running
-					r.Progress.ProcessesProgress[processesProgressCount].Submitted = processesProgress.Submitted
-					r.Progress.ProcessesProgress[processesProgressCount].Succeeded = processesProgress.Succeeded
-					r.Progress.ProcessesProgress[processesProgressCount].VolCtxSwitch = processesProgress.VolCtxSwitch
-					r.Progress.ProcessesProgress[processesProgressCount].WriteBytes = processesProgress.WriteBytes
-				}
+
+				r.Progress.ProcessesProgress = append(r.Progress.ProcessesProgress, processesProgress)
 			}
 			r.Progress.TotalProcesses = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Progress.TotalProcesses))
 			if resp.Progress.WorkflowProgress == nil {

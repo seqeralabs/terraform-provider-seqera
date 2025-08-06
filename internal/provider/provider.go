@@ -61,10 +61,10 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		return
 	}
 
-	ServerURL := data.ServerURL.ValueString()
+	serverUrl := data.ServerURL.ValueString()
 
-	if ServerURL == "" {
-		ServerURL = "https://api.cloud.seqera.io"
+	if serverUrl == "" {
+		serverUrl = "https://api.cloud.seqera.io"
 	}
 
 	security := shared.Security{}
@@ -89,7 +89,7 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
 
 	opts := []sdk.SDKOption{
-		sdk.WithServerURL(ServerURL),
+		sdk.WithServerURL(serverUrl),
 		sdk.WithSecurity(security),
 		sdk.WithClient(httpClient),
 	}
