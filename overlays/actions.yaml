@@ -1,0 +1,33 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Actions Overlay
+  version: 0.0.0
+actions:
+  # Remove readOnly from discriminator fields
+  - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.EventType"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.TowerActionConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["Action.TowerActionEvent"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GithubActionConfig"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+  - target: $["components"]["schemas"]["GithubActionEvent"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+
+  # Action entity operations
+  - target: $.paths["/actions"].post
+    update:
+      x-speakeasy-entity-operation: Action#create
+  - target: $.paths["/actions/{actionId}"].get
+    update:
+      x-speakeasy-entity-operation: Action#read
+  - target: $.paths["/actions/{actionId}"].delete
+    update:
+      x-speakeasy-entity-operation: Action#delete
+  - target: $.components.schemas.ActionResponseDto
+    update:
+      x-speakeasy-entity: Action

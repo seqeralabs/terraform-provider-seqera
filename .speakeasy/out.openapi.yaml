@@ -579,7 +579,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -590,6 +589,7 @@ paths:
         statusCodes:
           - 4XX
           - 5XX
+      x-speakeasy-entity-operation: ComputeEnv#create
   /compute-envs/validate:
     get:
       summary: Validate compute environment name
@@ -7886,11 +7886,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: Action
       description: |
         Represents a pipeline action in the Seqera Platform.
         Contains action configuration, triggers, and execution settings
         for automated pipeline workflows.
+      x-speakeasy-entity: Action
     ActiveConnection:
       type: object
       allOf:
@@ -8627,8 +8627,6 @@ components:
             - seqeracompute-platform
           x-speakeasy-plan-validators: ComputeConfigValidator
           x-speakeasy-param-optional: false
-          ## Compute Config Schemas
-          ## Security Keys Schemas
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -8785,13 +8783,13 @@ components:
           items:
             type: integer
             format: int64
-      x-speakeasy-entity: ComputeEnv
       required:
         - computeEnv
         - credentialsId
         - config
         - name
         - platform
+      x-speakeasy-entity: ComputeEnv
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -8967,9 +8965,9 @@ components:
         id:
           maxLength: 22
           type: string
+          description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-name-override: credentialsId
           x-speakeasy-param-suppress-computed-diff: true
-          description: Unique identifier for the credential (max 22 characters)
         name:
           maxLength: 100
           type: string
@@ -8977,9 +8975,9 @@ components:
           example: "my-gcp-credentials"
         description:
           type: string
-          x-speakeasy-param-computed: false
           description: Optional description explaining the purpose of the credential
           example: "Google Cloud credentials for production workloads"
+          x-speakeasy-param-computed: false
         provider:
           maxLength: 16
           type: string
@@ -8999,38 +8997,38 @@ components:
             - gitea
             - azurerepos
             - seqeracompute
-          x-speakeasy-name-override: providerType
-          x-speakeasy-plan-validators: CredentialsConfigValidator
           description: Cloud or service provider type (e.g., aws, azure, gcp)
           example: "google"
+          x-speakeasy-name-override: providerType
+          x-speakeasy-plan-validators: CredentialsConfigValidator
         baseUrl:
           maxLength: 200
           pattern: ""
           type: string
-          x-speakeasy-param-computed: false
           example: "https://www.googleapis.com"
+          x-speakeasy-param-computed: false
         category:
           maxLength: 20
           type: string
-          x-speakeasy-param-computed: false
           example: "cloud"
+          x-speakeasy-param-computed: false
         deleted:
           type: boolean
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-suppress-computed-diff: true
         lastUsed:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Timestamp when the credential was last used
+          x-speakeasy-param-suppress-computed-diff: true
         dateCreated:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Timestamp when the credential was created
+          x-speakeasy-param-suppress-computed-diff: true
         lastUpdated:
           type: string
           format: date-time
@@ -9038,11 +9036,11 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
-      x-speakeasy-entity: Credential
       description: |
         Represents credentials used for authentication with various platforms and services.
         Contains authentication information for accessing cloud providers, Git repositories,
         and other external services within the Seqera Platform.
+      x-speakeasy-entity: Credential
     DataLink.Status:
       type: string
       readOnly: true
@@ -10551,6 +10549,8 @@ components:
           maxLength: 22
           type: string
           x-speakeasy-param-readonly: true
+          ## Compute Config Schemas
+          ## Security Keys Schemas
         computeEnv:
           nullable: true
           allOf:

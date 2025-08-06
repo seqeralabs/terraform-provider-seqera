@@ -258,14 +258,6 @@ actions:
   - target: $["components"]["schemas"]["AccessToken"]
     update:
       x-speakeasy-entity: Tokens
-  - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["Action.EventType"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["Action.TowerActionConfig"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["Action.TowerActionEvent"]["properties"]["discriminator"]["readOnly"]
-    remove: true
   - target: $["components"]["schemas"]["AgentSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["AltairPbsComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
@@ -314,64 +306,10 @@ actions:
   - target: $["components"]["schemas"]["CreatePipelineResponse"]
     update:
       x-speakeasy-entity: Pipelines
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
-    remove: true
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
-    update:
-      - aws
-      - azure
-      - google
-      - github
-      - gitlab
-      - bitbucket
-      - ssh
-      - k8s
-      - container-reg
-      - tw-agent
-      - codecommit
-      - gitea
-      - azurerepos
-      - seqeracompute
-      # discriminator:
-      #   propertyName: discriminator
-      #   mapping:
-      #     aws: "#/components/schemas/AwsSecurityKeys"
-      #     azure: "#/components/schemas/AzureSecurityKeys"
-      #     google: "#/components/schemas/GoogleSecurityKeys"
-      #     github: "#/components/schemas/GitHubSecurityKeys"
-      #     gitlab: "#/components/schemas/GitLabSecurityKeys"
-      #     bitbucket: "#/components/schemas/BitBucketSecurityKeys"
-      #     ssh: "#/components/schemas/SSHSecurityKeys"
-      #     k8s: "#/components/schemas/K8sSecurityKeys"
-      #     container-reg: "#/components/schemas/ContainerRegistryKeys"
-      #     tw-agent: "#/components/schemas/AgentSecurityKeys"
-      #     codecommit: "#/components/schemas/CodeCommitSecurityKeys"
-      #     gitea: "#/components/schemas/GiteaSecurityKeys"
-      #     azurerepos: "#/components/schemas/AzureReposSecurityKeys"
-      #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
-      #     azure_entra: "#/components/schemas/AzureEntraKeys"
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
-    update:
-      x-speakeasy-name-override: providerType
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["lastUsed"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["lastUpdated"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $["paths"]["/credentials"]["post"]["parameters"][0]
-    update:
-      required: true
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]
-    update:
-      x-speakeasy-plan-validators: CredentialsConfigValidator
   - target: $["components"]["schemas"]["GoogleSecurityKeys"]
     update:
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
 
-  - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
-    update:
-      x-speakeasy-entity: Studios
   - target: $["components"]["schemas"]["DataStudioConfiguration"]
     update:
       x-speakeasy-entity: Studios
@@ -390,12 +328,6 @@ actions:
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: Studios
-  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]["properties"]["computeEnv"]
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]
-    update:
-      x-speakeasy-entity: ComputeEnv
   - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["x-speakeasy-entity"]
     remove: true
   - target: $["components"]["schemas"]["DescribeWorkflowResponse"]
@@ -414,10 +346,6 @@ actions:
   - target: $["components"]["schemas"]["GitLabSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["GiteaSecurityKeys"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["GithubActionConfig"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["GithubActionEvent"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["GkeComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
@@ -439,12 +367,6 @@ actions:
   - target: $["components"]["schemas"]["Launch"]["properties"]["id"]
     update:
       x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
-    update:
-      x-speakeasy-plan-validators: ComputeConfigValidator
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
-    update:
-      x-speakeasy-param-optional: false
 
       ## Compute Config Schemas
       ## Security Keys Schemas
@@ -557,61 +479,8 @@ actions:
         - url: https://api.cloud.seqera.io
 
   ####################################################################
-  ####                Action Entity Operations Configuration      ####
-  ####################################################################
-  # Add action entity operations that were removed from base API spec
-  # - target: $.paths["/actions"].get
-  #   update:
-  #     x-speakeasy-entity-operation: Actions#read
-  # - target: $["components"]["schemas"]["ListActionsResponse.ActionInfo"]
-  #   update:
-  #     x-speakeasy-entity: Action
-  - target: $.paths["/actions"].post
-    update:
-      x-speakeasy-entity-operation: Action#create
-  - target: $.paths["/actions/{actionId}"].get
-    update:
-      x-speakeasy-entity-operation: Action#read
-  # - target: $.paths["/actions/{actionId}"].put
-  #   update:
-  #     x-speakeasy-entity-operation: Action#update
-  - target: $.paths["/actions/{actionId}"].delete
-    update:
-      x-speakeasy-entity-operation: Action#delete
-  - target: $.components.schemas.ActionResponseDto
-    update:
-      x-speakeasy-entity: Action
-
-  ####################################################################
   ####              Additional Entity Operations                   ####
   ####################################################################
-  # ComputeEnv operations
-  - target: $.paths["/compute-envs"].post
-    update:
-      x-speakeasy-entity-operation: ComputeEnv#create
-  - target: $.paths["/compute-envs/{computeEnvId}"].get
-    update:
-      x-speakeasy-entity-operation: ComputeEnv#read
-  - target: $.paths["/compute-envs/{computeEnvId}"].put
-    update:
-      x-speakeasy-entity-operation: ComputeEnv#update
-  - target: $.paths["/compute-envs/{computeEnvId}"].delete
-    update:
-      x-speakeasy-entity-operation: ComputeEnv#delete
-
-  # Credentials operations
-  - target: $.paths["/credentials"].post
-    update:
-      x-speakeasy-entity-operation: Credential#create
-  - target: $.paths["/credentials/{credentialsId}"].get
-    update:
-      x-speakeasy-entity-operation: Credential#read
-  - target: $.paths["/credentials/{credentialsId}"].put
-    update:
-      x-speakeasy-entity-operation: Credential#update
-  - target: $.paths["/credentials/{credentialsId}"].delete
-    update:
-      x-speakeasy-entity-operation: Credential#delete
 
   # Dataset operations
   # - target: $.paths["/datasets"].get
@@ -692,55 +561,8 @@ actions:
     update:
       x-speakeasy-param-readonly: true
 
-  # CredentialsDto annotations
-  - target: $.components.schemas.CredentialsDto.properties.id
-    update:
-      x-speakeasy-name-override: credentialsId
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.CredentialsDto.properties.description
-    update:
-      x-speakeasy-param-computed: false
-  - target: $.components.schemas.CredentialsDto.properties.provider
-    update:
-      x-speakeasy-param-computed: false
-  - target: $.components.schemas.CredentialsDto.properties.category
-    update:
-      x-speakeasy-param-computed: false
-  - target: $.components.schemas.CredentialsDto.properties.deleted
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.CredentialsDto.properties.lastUsed
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.CredentialsDto.properties.lastUpdated
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.CredentialsDto.properties.dateCreated
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.CredentialsDto.properties.keys
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.CredentialsDto.properties.baseUrl
-    update:
-      x-speakeasy-param-computed: true
 
   # Entity annotations
-  - target: $.components.schemas.ComputeEnvResponseDto
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $.components.schemas.ComputeEnv_ComputeConfig_
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $.components.schemas.DescribeComputeEnvResponse
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $.components.schemas.CreateComputeEnvResponse
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $.components.schemas.CredentialsDto
-    update:
-      x-speakeasy-entity: Credential
 
   # Team entity annotations
   - target: $.components.schemas.Team
@@ -937,104 +759,6 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["azure-cloud"]
     remove: true
-  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: computeEnvId
-  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["dateCreated"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["lastUsed"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: computeEnvId
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]["enum"][*]
-    remove: true
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]["enum"]
-    update:
-      - aws-batch
-      - aws-cloud
-      - google-lifesciences
-      - google-batch
-      - azure-batch
-      - k8s-platform
-      - eks-platform
-      - gke-platform
-      - uge-platform
-      - slurm-platform
-      - lsf-platform
-      - altair-platform
-      - moab-platform
-      - local-platform
-      - seqeracompute-platform
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["dateCreated"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUpdated"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUsed"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["status"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["CreateComputeEnvRequest"]
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $["components"]["schemas"]["CreateComputeEnvResponse"]
-    update:
-      x-speakeasy-entity: ComputeEnv
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: credentialsId
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["id"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["description"]
-    update:
-      x-speakeasy-param-computed: false
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
-    remove: true
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
-    update:
-      - aws
-      - azure
-      - azure_entra
-      - google
-      - github
-      - gitlab
-      - bitbucket
-      - ssh
-      - k8s
-      - container-reg
-      - tw-agent
-      - codecommit
-      - gitea
-      - azurerepos
-      - seqeracompute
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["baseUrl"]
-    update:
-      x-speakeasy-param-computed: false
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["category"]
-    update:
-      x-speakeasy-param-computed: false
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["deleted"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $["components"]["schemas"]["Credentials"]["properties"]["dateCreated"]
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $["components"]["schemas"]["Credentials"]
-    update:
-      x-speakeasy-entity: Credential
   - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
     remove: true
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
