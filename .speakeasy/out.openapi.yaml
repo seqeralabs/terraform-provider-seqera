@@ -9147,8 +9147,8 @@ components:
       properties:
         id:
           type: string
-          x-speakeasy-name-override: dataLinkId
           description: Unique identifier for the data link
+          x-speakeasy-name-override: dataLinkId
         name:
           type: string
           description: Display name for the data link connection

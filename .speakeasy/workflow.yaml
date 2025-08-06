@@ -12,6 +12,7 @@ sources:
             - location: overlays/request-examples.yaml
             - location: overlays/validators.yaml
             - location: overlays/retry.yaml
+            - location: overlays/datalinks.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

@@ -4,18 +4,6 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
-  - target: $["paths"]["/data-links"]["post"]
-    update:
-      x-speakeasy-entity-operation: DataLink#create
-  - target: $["paths"]["/data-links/{dataLinkId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: DataLink#read
-  - target: $["paths"]["/data-links/{dataLinkId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: DataLink#update
-  - target: $["paths"]["/data-links/{dataLinkId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: DataLink#delete
   - target: $["paths"]["/datasets"]["get"]["x-speakeasy-entity-operation"]
     remove: true
   - target: $["paths"]["/datasets"]["post"]
@@ -381,15 +369,6 @@ actions:
     update:
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
 
-  - target: $["paths"]["/data-links"]["post"]["parameters"][0]
-    update:
-      required: true
-  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: dataLinkId
-  - target: $["components"]["schemas"]["DataLinkProvider"]
-    update:
-      x-speakeasy-name-override: providerType
   - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
     update:
       x-speakeasy-entity: Studios
@@ -940,26 +919,6 @@ actions:
   #     - altair-platform
   #     - seqeracompute-platform
 
-  # # Update DataLinkProvider enum
-  # - target: $.components.schemas.DataLinkProvider.enum[*]
-  #   remove: true
-  # - target: $.components.schemas.DataLinkProvider.enum
-  #   update:
-  #     - aws
-  #     - azure
-  #     - google
-  #     - github
-  #     - gitlab
-  #     - bitbucket
-  #     - ssh
-  #     - k8s
-  #     - container-reg
-  #     - tw-agent
-  #     - codecommit
-  #     - gitea
-  #     - azurerepos
-  #     - azure_entra
-  #     - seqeracompute
 
   # # Missing Speakeasy annotations
   # - target: $.components.schemas.Credentials.properties.baseUrl
@@ -969,8 +928,6 @@ actions:
   #   update:
   #     x-speakeasy-param-optional: true
 
-  - target: $["paths"]["/data-links/{dataLinkId}/script/download"]["get"]["description"]
-    update: "Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
   - target: $["paths"]["/labels/dynamic/allowed"]
     remove: true
   - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
@@ -1078,15 +1035,6 @@ actions:
   - target: $["components"]["schemas"]["Credentials"]
     update:
       x-speakeasy-entity: Credential
-  - target: $["components"]["schemas"]["DataLinkProvider"]["enum"][*]
-    remove: true
-  - target: $["components"]["schemas"]["DataLinkProvider"]["enum"]
-    update:
-      - aws
-      - google
-      - azure
-      - azure_entra
-      - seqeracompute
   - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
     remove: true
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
