@@ -16,6 +16,11 @@ sources:
             - location: overlays/actions.yaml
             - location: overlays/credentials.yaml
             - location: overlays/compute-env.yaml
+            - location: overlays/datasets.yaml
+            - location: overlays/labels.yaml
+            - location: overlays/orgs.yaml
+            - location: overlays/pipeline-secrets.yaml
+            - location: overlays/pipelines.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

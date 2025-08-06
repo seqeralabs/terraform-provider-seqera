@@ -4,209 +4,6 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
-  - target: $["paths"]["/datasets"]["get"]["x-speakeasy-entity-operation"]
-    remove: true
-  - target: $["paths"]["/datasets"]["post"]
-    update:
-      x-speakeasy-entity-operation: Datasets#create
-  - target: $["paths"]["/datasets/{datasetId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Dataset#update
-  - target: $["paths"]["/datasets/{datasetId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Dataset#delete
-  - target: $["paths"]["/datasets/{datasetId}/metadata"]["get"]
-    update:
-      x-speakeasy-entity-operation: Dataset#read
-  - target: $["paths"]["/labels"]["get"]
-    update:
-      x-speakeasy-entity-operation: Labels#read
-  - target: $["paths"]["/labels"]["post"]
-    update:
-      x-speakeasy-entity-operation: Labels#create
-  - target: $["paths"]["/labels/{labelId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Labels#update
-  - target: $["paths"]["/labels/{labelId}"]["post"]["parameters"][0]["required"]
-    remove: true
-  - target: $["paths"]["/labels/{labelId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Labels#delete
-  - target: $["paths"]["/orgs"]["post"]
-    update:
-      x-speakeasy-entity-operation: Orgs#create
-  - target: $["paths"]["/orgs/{orgId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-      # x-speakeasy-match: orgId
-  - target: $["paths"]["/orgs/{orgId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Orgs#read
-  - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Orgs#update
-  - target: $["paths"]["/orgs/{orgId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Orgs#delete
-  # - target: $["paths"]["/orgs/{orgId}/collaborators"]["get"]["parameters"][0]
-  #   update:
-  #     x-speakeasy-param-optional: true
-  # - target: $["paths"]["/orgs/{orgId}/members"]["get"]["parameters"][0]
-  #   update:
-  #     x-speakeasy-param-optional: true
-  # - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]["parameters"][0]
-  #   update:
-  #     x-speakeasy-param-optional: true
-  # - target: $["paths"]["/orgs/{orgId}/members/leave"]["delete"]["parameters"][0]
-  #   update:
-  #     x-speakeasy-param-optional: true
-  # - target: $["paths"]["/orgs/{orgId}/members/{memberId}"]["delete"]["parameters"][0]
-  #   update:
-  #     x-speakeasy-param-optional: true
-  # - target: $["paths"]["/orgs/{orgId}/members/{memberId}/role"]["put"]["parameters"][0]
-  #   update:
-  #     x-speakeasy-param-optional: true
-  # - target: $["paths"]["/orgs/{orgId}/quotas"]["get"]["parameters"][0]
-  #   update:
-  #     x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: false
-  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
-    update:
-      x-speakeasy-entity-operation: Teams#create
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Teams#read
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Teams#update
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Teams#delete
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]
-    update:
-      x-speakeasy-entity-operation: Workspaces#read
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: false
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
-    update:
-      x-speakeasy-entity-operation: Workspace#create
-  - target: $["paths"]["/orgs/{orgId}/workspaces/validate"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][1]
-    update:
-      x-speakeasy-name-override: id
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Workspace#read
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][1]
-    update:
-      x-speakeasy-name-override: id
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Workspace#update
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-name-override: id
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Workspace#delete
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/pipeline-secrets"]["post"]
-    update:
-      x-speakeasy-entity-operation: PipelineSecret#create
-  - target: $["paths"]["/pipeline-secrets/{secretId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: PipelineSecret#read
-  - target: $["paths"]["/pipeline-secrets/{secretId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: PipelineSecret#update
-  - target: $["paths"]["/pipeline-secrets/{secretId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: PipelineSecret#delete
   - target: $["paths"]["/studios"]["post"]
     update:
       x-speakeasy-entity-operation: Studios#create
@@ -288,24 +85,6 @@ actions:
   - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
     update:
       x-speakeasy-entity: Tokens
-  - target: $["paths"]["/datasets"]["post"]["parameters"][0]
-    update:
-      required: true
-  - target: $["components"]["schemas"]["CreateLabelRequest"]
-    update:
-      x-speakeasy-entity: Labels
-  - target: $["components"]["schemas"]["CreateLabelResponse"]
-    update:
-      x-speakeasy-entity: Labels
-  - target: $["components"]["schemas"]["CreateLabelResponse"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: labelId
-  - target: $["components"]["schemas"]["CreatePipelineRequest"]["properties"]["name"]
-    update:
-      x-speakeasy-param-optional: false
-  - target: $["components"]["schemas"]["CreatePipelineResponse"]
-    update:
-      x-speakeasy-entity: Pipelines
   - target: $["components"]["schemas"]["GoogleSecurityKeys"]
     update:
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
@@ -370,39 +149,10 @@ actions:
 
       ## Compute Config Schemas
       ## Security Keys Schemas
-  # - target: $["components"]["schemas"]["ListWorkspacesAndOrgResponse"]
-  #   update:
-  #     x-speakeasy-entity: UserWorkspaces
   - target: $["components"]["schemas"]["LsfComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["MoabComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["Organization"]
-    update:
-      x-speakeasy-entity: Orgs
-      #x-speakeasy-name-override: orgId
-  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoId"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoUrl"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["OrganizationDbDto"]
-    update:
-      x-speakeasy-entity: Orgs
-  - target: $["components"]["schemas"]["PipelineDbDto"]
-    update:
-      x-speakeasy-entity: Pipeline
-      ## Users
-  - target: $["components"]["schemas"]["PipelineInfo"]["properties"]["provider"]
-    update:
-      x-speakeasy-name-override: repositoryProvider
-  - target: $["components"]["schemas"]["PipelineSecret"]
-    update:
-      x-speakeasy-entity: PipelineSecret
   - target: $["components"]["schemas"]["SSHSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["SecurityKeys"]["properties"]["discriminator"]["readOnly"]
@@ -461,18 +211,6 @@ actions:
   - target: $["components"]["schemas"]["Workspace"]
     update:
       x-speakeasy-entity: Workspace
-  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["id"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["paths"]["/labels/{labelId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["paths"]["/labels/{labelId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["paths"]["/labels/{labelId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-readonly: true
   - target: $
     update:
       servers:
@@ -482,24 +220,6 @@ actions:
   ####              Additional Entity Operations                   ####
   ####################################################################
 
-  # Dataset operations
-  # - target: $.paths["/datasets"].get
-  #   update:
-  #     x-speakeasy-entity-operation: Datasets#read
-
-  # Pipeline operations
-  - target: $.paths["/pipelines"].post
-    update:
-      x-speakeasy-entity-operation: Pipeline#create
-  - target: $.paths["/pipelines/{pipelineId}"].get
-    update:
-      x-speakeasy-entity-operation: Pipeline#read
-  - target: $.paths["/pipelines/{pipelineId}"].put
-    update:
-      x-speakeasy-entity-operation: Pipeline#update
-  - target: $.paths["/pipelines/{pipelineId}"].delete
-    update:
-      x-speakeasy-entity-operation: Pipeline#delete
 
   # User operations
   - target: $.paths["/user"].get
@@ -750,8 +470,6 @@ actions:
   #   update:
   #     x-speakeasy-param-optional: true
 
-  - target: $["paths"]["/labels/dynamic/allowed"]
-    remove: true
   - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
     update:
       x-speakeasy-terraform-ignore: true
@@ -764,10 +482,6 @@ actions:
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
     update:
       x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isDynamic"]
-    remove: true
-  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isInterpolated"]
-    remove: true
   - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["seqeracompute"]
     remove: true
   - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["google-cloud"]
@@ -899,8 +613,6 @@ actions:
   - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netInvCtxSwitch"]
     remove: true
   - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCost"]
-    remove: true
-  - target: $["components"]["schemas"]["AllowedDynamicLabelsResponse"]
     remove: true
   - target: $["components"]["schemas"]["AzCloudConfig"]
     remove: true

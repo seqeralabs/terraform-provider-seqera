@@ -2894,7 +2894,6 @@ paths:
             type: integer
             format: int64
           x-speakeasy-param-optional: true
-          # x-speakeasy-match: orgId
       responses:
         "200":
           description: OK
@@ -10511,8 +10510,8 @@ components:
         id:
           type: integer
           format: int64
-          x-speakeasy-param-readonly: true
           description: Unique numeric identifier for the label
+          x-speakeasy-param-readonly: true
         name:
           type: string
           description: Name or key of the label
@@ -11111,7 +11110,6 @@ components:
           format: date-time
           readOnly: true
       x-speakeasy-entity: Orgs
-      #x-speakeasy-name-override: orgId
     OrganizationDbDto:
       type: object
       properties:
@@ -11140,8 +11138,8 @@ components:
           description: Official website URL for the organization
         logoId:
           type: string
-          x-speakeasy-param-optional: true
           description: Identifier for the organization's logo image
+          x-speakeasy-param-optional: true
         logoUrl:
           type: string
           x-speakeasy-param-optional: true
@@ -11152,11 +11150,11 @@ components:
           $ref: "#/components/schemas/OrgRole"
         type:
           $ref: "#/components/schemas/OrgType"
-      x-speakeasy-entity: Orgs
       description: |
         Represents an organization in the Seqera Platform.
         Contains organizational metadata, settings, and member management
         information for multi-tenant environments.
+      x-speakeasy-entity: Orgs
     OrganizationQuotas:
       type: object
       properties:
@@ -11298,13 +11296,11 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         computeEnv:
           $ref: "#/components/schemas/ComputeEnvDbDto"
-      x-speakeasy-entity: Pipeline
-      ## Users
-
       description: |
         Represents a pipeline configuration in the Seqera Platform.
         Contains pipeline metadata, configuration settings, and execution parameters
         for Nextflow workflows.
+      x-speakeasy-entity: Pipeline
     PipelineInfo:
       type: object
       properties:
@@ -11396,11 +11392,11 @@ components:
           type: string
           format: date-time
           readOnly: true
-      x-speakeasy-entity: PipelineSecret
       description: |
         Represents a secure secret for pipeline execution.
         Contains encrypted sensitive data such as API keys, passwords,
         and configuration values used in workflows.
+      x-speakeasy-entity: PipelineSecret
     PlatformMetainfo:
       type: object
       discriminator:

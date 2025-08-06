@@ -1,0 +1,175 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Organizations Overlay
+  version: 0.0.0
+actions:
+  # Organization entity operations
+  - target: $["paths"]["/orgs"]["post"]
+    update:
+      x-speakeasy-entity-operation: Orgs#create
+  - target: $["paths"]["/orgs/{orgId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Orgs#read
+  - target: $["paths"]["/orgs/{orgId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Orgs#update
+  - target: $["paths"]["/orgs/{orgId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Orgs#delete
+
+  # Organization parameter configurations
+  - target: $["paths"]["/orgs/{orgId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Teams operations within organizations
+  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: false
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
+    update:
+      x-speakeasy-entity-operation: Teams#create
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Teams#read
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Teams#update
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Teams#delete
+
+  # Team member operations
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Workspace operations within organizations
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]
+    update:
+      x-speakeasy-entity-operation: Workspaces#read
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: false
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
+    update:
+      x-speakeasy-entity-operation: Workspace#create
+  - target: $["paths"]["/orgs/{orgId}/workspaces/validate"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-name-override: id
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Workspace#read
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][1]
+    update:
+      x-speakeasy-name-override: id
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Workspace#update
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-name-override: id
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Workspace#delete
+
+  # Workspace participant operations
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Organization schema annotations
+  - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["Organization"]
+    update:
+      x-speakeasy-entity: Orgs
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoId"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoUrl"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["OrganizationDbDto"]
+    update:
+      x-speakeasy-entity: Orgs

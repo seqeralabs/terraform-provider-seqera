@@ -1,0 +1,35 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Pipelines Overlay
+  version: 0.0.0
+actions:
+  # Pipeline request schema annotations
+  - target: $["components"]["schemas"]["CreatePipelineRequest"]["properties"]["name"]
+    update:
+      x-speakeasy-param-optional: false
+  - target: $["components"]["schemas"]["CreatePipelineResponse"]
+    update:
+      x-speakeasy-entity: Pipelines
+
+  # Pipeline entity annotations
+  - target: $["components"]["schemas"]["PipelineDbDto"]
+    update:
+      x-speakeasy-entity: Pipeline
+  - target: $["components"]["schemas"]["PipelineInfo"]["properties"]["provider"]
+    update:
+      x-speakeasy-name-override: repositoryProvider
+
+  # Pipeline entity operations
+  - target: $.paths["/pipelines"].post
+    update:
+      x-speakeasy-entity-operation: Pipeline#create
+  - target: $.paths["/pipelines/{pipelineId}"].get
+    update:
+      x-speakeasy-entity-operation: Pipeline#read
+  - target: $.paths["/pipelines/{pipelineId}"].put
+    update:
+      x-speakeasy-entity-operation: Pipeline#update
+  - target: $.paths["/pipelines/{pipelineId}"].delete
+    update:
+      x-speakeasy-entity-operation: Pipeline#delete
