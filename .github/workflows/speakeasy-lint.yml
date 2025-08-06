@@ -38,7 +38,7 @@ jobs:
 
     - name: Lint OpenAPI Schema
       run: |
-        speakeasy lint openapi -s schemas/seqera-final.yaml > lint_output.txt 2>&1 || true
+        speakeasy lint openapi -s .speakeasy/out.openapi.yaml > lint_output.txt 2>&1 || true
         cat lint_output.txt
 
     - name: Generate Speakeasy Lint Comment
