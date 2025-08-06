@@ -12,7 +12,7 @@ type ListDataLinksRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Credentials identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
-	// Free text search criteria — data-link name and keywords: `region`, `provider`.
+	// Free text search criteria â€” data-link name and keywords: `region`, `provider`.
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`

@@ -44,7 +44,7 @@ type UpdateCustomDataLinkResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Success — Data-link updated
+	// Success â€” Data-link updated
 	DataLinkDto *shared.DataLinkDto
 	// BadRequest
 	ErrorResponse *shared.ErrorResponse

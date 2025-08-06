@@ -115,7 +115,7 @@ paths:
   /actions/labels/apply:
     post:
       summary: Replace action labels
-      description: Applies the given list of labels to the given pipeline actions. Existing labels are replaced — include labels to be preserved in `labelIds`.
+      description: Applies the given list of labels to the given pipeline actions. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
         - labels
       operationId: ApplyLabelsToActions
@@ -1052,7 +1052,7 @@ paths:
             type: string
         - name: search
           in: query
-          description: "Free text search criteria — data-link name and keywords: `region`, `provider`."
+          description: "Free text search criteria â€” data-link name and keywords: `region`, `provider`."
           schema:
             type: string
         - name: max
@@ -1092,7 +1092,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, or the API is disabled in the workspace."
+          description: "NotFound â€” workspace or credentials not found, or the API is disabled in the workspace."
           content:
             application/json:
               schema:
@@ -1136,7 +1136,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled in the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled in the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1211,7 +1211,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1249,7 +1249,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success — Data-link updated
+          description: Success â€” Data-link updated
           content:
             application/json:
               schema:
@@ -1261,7 +1261,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1292,7 +1292,7 @@ paths:
             format: int64
       responses:
         "200":
-          description: Success — Data-link deleted
+          description: Success â€” Data-link deleted
         "400":
           description: BadRequest
           content:
@@ -1300,7 +1300,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1367,7 +1367,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1492,7 +1492,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1546,7 +1546,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1601,7 +1601,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1659,7 +1659,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1721,7 +1721,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1782,7 +1782,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1832,7 +1832,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1894,7 +1894,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -2605,7 +2605,7 @@ paths:
             type: integer
             format: int64
       requestBody:
-        description: "Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` — if `resource: true`, include a `value`. Else, omit `value` from your request body."
+        description: "Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` â€” if `resource: true`, include a `value`. Else, omit `value` from your request body."
         content:
           application/json:
             schema:
@@ -4747,7 +4747,7 @@ paths:
   /pipelines/labels/apply:
     post:
       summary: Replace pipeline labels
-      description: Applies the given list of labels to the given pipelines. Existing labels are replaced — include labels to be preserved in `labelIds`.
+      description: Applies the given list of labels to the given pipelines. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
         - labels
       operationId: ApplyLabelsToPipelines
@@ -6522,7 +6522,7 @@ paths:
   /workflow/labels/apply:
     post:
       summary: Replace workflow labels
-      description: Applies the given list of labels to the given workflows. Existing labels are replaced — include labels to be preserved in `labelIds`.
+      description: Applies the given list of labels to the given workflows. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
         - labels
       operationId: ApplyLabelsToWorkflows
@@ -8628,6 +8628,7 @@ components:
           x-speakeasy-plan-validators: ComputeConfigValidator
           x-speakeasy-param-optional: false
           ## Compute Config Schemas
+          ## Security Keys Schemas
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -10726,8 +10727,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Credentials"
-      x-speakeasy-entity: Credentials
-      ## Security Keys Schemas
     ListDatasetVersionsResponse:
       type: object
       properties:
@@ -12625,6 +12624,11 @@ components:
         succeedDuration:
           type: integer
           format: int64
+    WfWaveMeta:
+      type: object
+      properties:
+        enabled:
+          type: boolean
     Workflow:
       required:
         - commandLine
