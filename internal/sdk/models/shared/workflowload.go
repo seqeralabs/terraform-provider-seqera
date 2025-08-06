@@ -8,48 +8,34 @@ import (
 )
 
 type WorkflowLoad struct {
-	Pending              int64      `json:"pending"`
-	Submitted            int64      `json:"submitted"`
-	Running              int64      `json:"running"`
-	Succeeded            int64      `json:"succeeded"`
-	Failed               int64      `json:"failed"`
-	Cached               int64      `json:"cached"`
-	Aborted              int64      `json:"aborted"`
-	Retries              int64      `json:"retries"`
-	Ignored              int64      `json:"ignored"`
-	MemoryEfficiency     *float32   `json:"memoryEfficiency,omitempty"`
-	CPUEfficiency        *float32   `json:"cpuEfficiency,omitempty"`
-	DateCreated          *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated          *time.Time `json:"lastUpdated,omitempty"`
-	Version              *int64     `json:"version,omitempty"`
-	Executors            []string   `json:"executors,omitempty"`
-	Cpus                 int64      `json:"cpus"`
-	CPUTime              int64      `json:"cpuTime"`
-	CPULoad              int64      `json:"cpuLoad"`
-	MemoryRss            int64      `json:"memoryRss"`
-	MemoryReq            int64      `json:"memoryReq"`
-	ReadBytes            int64      `json:"readBytes"`
-	WriteBytes           int64      `json:"writeBytes"`
-	VolCtxSwitch         int64      `json:"volCtxSwitch"`
-	InvCtxSwitch         int64      `json:"invCtxSwitch"`
-	LoadTasks            int64      `json:"loadTasks"`
-	LoadCpus             int64      `json:"loadCpus"`
-	LoadMemory           int64      `json:"loadMemory"`
-	PeakCpus             int64      `json:"peakCpus"`
-	PeakTasks            int64      `json:"peakTasks"`
-	PeakMemory           int64      `json:"peakMemory"`
-	Cost                 *float64   `json:"cost,omitempty"`
-	NetCpus              *int64     `json:"netCpus,omitempty"`
-	NetCPUTime           *int64     `json:"netCpuTime,omitempty"`
-	NetCPULoad           *int64     `json:"netCpuLoad,omitempty"`
-	NetMemoryRss         *int64     `json:"netMemoryRss,omitempty"`
-	NetMemoryReq         *int64     `json:"netMemoryReq,omitempty"`
-	NetMemoryConsumption *float64   `json:"netMemoryConsumption,omitempty"`
-	NetReadBytes         *int64     `json:"netReadBytes,omitempty"`
-	NetWriteBytes        *int64     `json:"netWriteBytes,omitempty"`
-	NetVolCtxSwitch      *int64     `json:"netVolCtxSwitch,omitempty"`
-	NetInvCtxSwitch      *int64     `json:"netInvCtxSwitch,omitempty"`
-	NetCost              *float64   `json:"netCost,omitempty"`
+	Pending          int64      `json:"pending"`
+	Submitted        int64      `json:"submitted"`
+	Running          int64      `json:"running"`
+	Succeeded        int64      `json:"succeeded"`
+	Failed           int64      `json:"failed"`
+	Cached           int64      `json:"cached"`
+	Aborted          int64      `json:"aborted"`
+	MemoryEfficiency *float32   `json:"memoryEfficiency,omitempty"`
+	CPUEfficiency    *float32   `json:"cpuEfficiency,omitempty"`
+	DateCreated      *time.Time `json:"dateCreated,omitempty"`
+	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
+	Executors        []string   `json:"executors,omitempty"`
+	Cpus             int64      `json:"cpus"`
+	CPUTime          int64      `json:"cpuTime"`
+	CPULoad          int64      `json:"cpuLoad"`
+	MemoryRss        int64      `json:"memoryRss"`
+	MemoryReq        int64      `json:"memoryReq"`
+	ReadBytes        int64      `json:"readBytes"`
+	WriteBytes       int64      `json:"writeBytes"`
+	VolCtxSwitch     int64      `json:"volCtxSwitch"`
+	InvCtxSwitch     int64      `json:"invCtxSwitch"`
+	LoadTasks        int64      `json:"loadTasks"`
+	LoadCpus         int64      `json:"loadCpus"`
+	LoadMemory       int64      `json:"loadMemory"`
+	PeakCpus         int64      `json:"peakCpus"`
+	PeakTasks        int64      `json:"peakTasks"`
+	PeakMemory       int64      `json:"peakMemory"`
+	Cost             *float64   `json:"cost,omitempty"`
 }
 
 func (w WorkflowLoad) MarshalJSON() ([]byte, error) {
@@ -152,13 +138,6 @@ func (o *WorkflowLoad) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return o.LastUpdated
-}
-
-func (o *WorkflowLoad) GetVersion() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Version
 }
 
 func (o *WorkflowLoad) GetExecutors() []string {
@@ -278,81 +257,4 @@ func (o *WorkflowLoad) GetCost() *float64 {
 		return nil
 	}
 	return o.Cost
-}
-
-func (o *WorkflowLoad) GetNetCpus() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetCpus
-}
-
-func (o *WorkflowLoad) GetNetCPUTime() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetCPUTime
-}
-
-func (o *WorkflowLoad) GetNetCPULoad() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetCPULoad
-}
-
-func (o *WorkflowLoad) GetNetMemoryRss() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetMemoryRss
-}
-
-func (o *WorkflowLoad) GetNetMemoryReq() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetMemoryReq
-}
-
-func (o *WorkflowLoad) GetNetMemoryConsumption() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetMemoryConsumption
-}
-
-func (o *WorkflowLoad) GetNetReadBytes() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetReadBytes
-}
-
-func (o *WorkflowLoad) GetNetWriteBytes() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetWriteBytes
-}
-
-func (o *WorkflowLoad) GetNetVolCtxSwitch() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetVolCtxSwitch
-}
-
-func (o *WorkflowLoad) GetNetInvCtxSwitch() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetInvCtxSwitch
-}
-
-func (o *WorkflowLoad) GetNetCost() *float64 {
-	if o == nil {
-		return nil
-	}
-	return o.NetCost
 }

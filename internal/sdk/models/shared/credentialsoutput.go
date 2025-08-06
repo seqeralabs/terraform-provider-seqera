@@ -15,6 +15,7 @@ type CredentialsProviderType string
 const (
 	CredentialsProviderTypeAws           CredentialsProviderType = "aws"
 	CredentialsProviderTypeAzure         CredentialsProviderType = "azure"
+	CredentialsProviderTypeAzureEntra    CredentialsProviderType = "azure_entra"
 	CredentialsProviderTypeGoogle        CredentialsProviderType = "google"
 	CredentialsProviderTypeGithub        CredentialsProviderType = "github"
 	CredentialsProviderTypeGitlab        CredentialsProviderType = "gitlab"
@@ -41,6 +42,8 @@ func (e *CredentialsProviderType) UnmarshalJSON(data []byte) error {
 	case "aws":
 		fallthrough
 	case "azure":
+		fallthrough
+	case "azure_entra":
 		fallthrough
 	case "google":
 		fallthrough

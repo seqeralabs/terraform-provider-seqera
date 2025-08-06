@@ -118,7 +118,7 @@ paths:
     post:
       summary: Replace action labels
       description: Applies the given list of labels to the given pipeline actions.
-        Existing labels are replaced — include labels to be preserved in `labelIds`.
+        Existing labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
       - labels
       operationId: ApplyLabelsToActions
@@ -1052,7 +1052,7 @@ paths:
           type: string
       - name: search
         in: query
-        description: "Free text search criteria — data-link\
+        description: "Free text search criteria â€” data-link\
           \ name and keywords: `region`, `provider`."
         schema:
           type: string
@@ -1093,7 +1093,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ or the API is disabled in the workspace."
           content:
             application/json:
@@ -1137,7 +1137,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled in the workspace, or data-link or path\
             \ not found"
           content:
@@ -1213,7 +1213,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link not found"
           content:
             application/json:
@@ -1251,7 +1251,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success — Data-link updated
+          description: Success â€” Data-link updated
           content:
             application/json:
               schema:
@@ -1263,7 +1263,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link not found"
           content:
             application/json:
@@ -1294,7 +1294,7 @@ paths:
           format: int64
       responses:
         "200":
-          description: Success — Data-link deleted
+          description: Success â€” Data-link deleted
         "400":
           description: BadRequest
           content:
@@ -1302,7 +1302,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link not found"
           content:
             application/json:
@@ -1369,7 +1369,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link not found"
           content:
             application/json:
@@ -1497,7 +1497,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -1552,7 +1552,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -1608,7 +1608,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -1668,7 +1668,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -1683,7 +1683,7 @@ paths:
       tags:
       - data-links
       summary: Generate download script
-      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`.\ 
+      description: "Creates a script to download files from the data-link associated with the given `dataLinkId`.\
         \ Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
       operationId: GenerateDownloadScript
       parameters:
@@ -1732,7 +1732,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -1794,7 +1794,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -1849,7 +1849,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -1916,7 +1916,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found,\
+          description: "NotFound â€” workspace or credentials not found,\
             \ API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
@@ -2642,7 +2642,7 @@ paths:
           format: int64
       requestBody:
         description: "Provide a label `name`. Set `resource: true` for resource labels.\
-          \ Only resource labels have a `value` — if `resource: true`, include a `value`.\
+          \ Only resource labels have a `value` â€” if `resource: true`, include a `value`.\
           \ Else, omit `value` from your request body."
         content:
           application/json:
@@ -4771,7 +4771,7 @@ paths:
     post:
       summary: Replace pipeline labels
       description: Applies the given list of labels to the given pipelines. Existing
-        labels are replaced — include labels to be preserved in `labelIds`.
+        labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
       - labels
       operationId: ApplyLabelsToPipelines
@@ -6561,7 +6561,7 @@ paths:
     post:
       summary: Replace workflow labels
       description: Applies the given list of labels to the given workflows. Existing
-        labels are replaced — include labels to be preserved in `labelIds`.
+        labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
       - labels
       operationId: ApplyLabelsToWorkflows

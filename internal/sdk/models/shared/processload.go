@@ -15,13 +15,10 @@ type ProcessLoad struct {
 	Failed           int64      `json:"failed"`
 	Cached           int64      `json:"cached"`
 	Aborted          int64      `json:"aborted"`
-	Retries          int64      `json:"retries"`
-	Ignored          int64      `json:"ignored"`
 	MemoryEfficiency *float32   `json:"memoryEfficiency,omitempty"`
 	CPUEfficiency    *float32   `json:"cpuEfficiency,omitempty"`
 	DateCreated      *time.Time `json:"dateCreated,omitempty"`
 	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
-	Version          *int64     `json:"version,omitempty"`
 	Process          string     `json:"process"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	Cpus int64 `json:"cpus"`
@@ -150,13 +147,6 @@ func (o *ProcessLoad) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return o.LastUpdated
-}
-
-func (o *ProcessLoad) GetVersion() *int64 {
-	if o == nil {
-		return nil
-	}
-	return o.Version
 }
 
 func (o *ProcessLoad) GetProcess() string {

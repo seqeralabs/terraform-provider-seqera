@@ -53,7 +53,7 @@ actions:
       # x-speakeasy-match: orgId
   - target: $["paths"]["/orgs/{orgId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Organization#read
+      x-speakeasy-entity-operation: Orgs#read
   - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-optional: true
@@ -468,9 +468,6 @@ actions:
       x-speakeasy-param-optional: false
 
       ## Compute Config Schemas
-  - target: $["components"]["schemas"]["ListCredentialsResponse"]
-    update:
-      x-speakeasy-entity: Credentials
       ## Security Keys Schemas
   # - target: $["components"]["schemas"]["ListWorkspacesAndOrgResponse"]
   #   update:
@@ -861,6 +858,399 @@ actions:
     update:
       x-speakeasy-terraform-ignore: true
 
+  # Ignore discriminator fields in all compute config schemas to prevent state changes
+  - target: $.components.schemas.AltairPbsComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AwsBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AzBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.K8sComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.LsfComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.MoabComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SeqeraComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SlurmComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.UnivaComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  # ####################################################################
+  # ####              Missing Actions from overlay_new                ####
+  # ####################################################################
+
+  # # Update API version
+  # - target: $.info.version
+  #   update: 1.45.0
+
+  # # Remove deprecated paths
+  # - target: $.paths["/labels/dynamic/allowed"]
+  #   remove: true
+
+  # # Remove deprecated discriminator mappings
+  # - target: $.components.schemas.ComputeConfig.discriminator.mapping.google-cloud
+  #   remove: true
+  # - target: $.components.schemas.ComputeConfig.discriminator.mapping.azure-cloud
+  #   remove: true
+  # - target: $.components.schemas.PlatformMetainfo.discriminator.mapping.seqeracompute
+  #   remove: true
+  # - target: $.components.schemas.PlatformMetainfo.discriminator.mapping.google-cloud
+  #   remove: true
+
+  # # Update platform enums
+  # - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.platform.enum[*]
+  #   remove: true
+  # - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.platform.enum
+  #   update:
+  #     - aws-batch
+  #     - aws-cloud
+  #     - google-lifesciences
+  #     - google-batch
+  #     - azure-batch
+  #     - k8s-platform
+  #     - eks-platform
+  #     - gke-platform
+  #     - uge-platform
+  #     - slurm-platform
+  #     - lsf-platform
+  #     - altair-platform
+  #     - seqeracompute-platform
+
+  # # Update DataLinkProvider enum
+  # - target: $.components.schemas.DataLinkProvider.enum[*]
+  #   remove: true
+  # - target: $.components.schemas.DataLinkProvider.enum
+  #   update:
+  #     - aws
+  #     - azure
+  #     - google
+  #     - github
+  #     - gitlab
+  #     - bitbucket
+  #     - ssh
+  #     - k8s
+  #     - container-reg
+  #     - tw-agent
+  #     - codecommit
+  #     - gitea
+  #     - azurerepos
+  #     - azure_entra
+  #     - seqeracompute
+
+  # # Missing Speakeasy annotations
+  # - target: $.components.schemas.Credentials.properties.baseUrl
+  #   update:
+  #     x-speakeasy-param-computed: false
+  # - target: $.components.schemas.DataStudioDto.properties.sessionId
+  #   update:
+  #     x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/data-links/{dataLinkId}/script/download"]["get"]["description"]
+    update: "Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
+  - target: $["paths"]["/labels/dynamic/allowed"]
+    remove: true
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["google-cloud"]
+    remove: true
+  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["azure-cloud"]
+    remove: true
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]["enum"][*]
+    remove: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]["enum"]
+    update:
+      - aws-batch
+      - aws-cloud
+      - google-lifesciences
+      - google-batch
+      - azure-batch
+      - k8s-platform
+      - eks-platform
+      - gke-platform
+      - uge-platform
+      - slurm-platform
+      - lsf-platform
+      - altair-platform
+      - moab-platform
+      - local-platform
+      - seqeracompute-platform
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["status"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["CreateComputeEnvRequest"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["CreateComputeEnvResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: credentialsId
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["id"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["description"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"][*]
+    remove: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["provider"]["enum"]
+    update:
+      - aws
+      - azure
+      - azure_entra
+      - google
+      - github
+      - gitlab
+      - bitbucket
+      - ssh
+      - k8s
+      - container-reg
+      - tw-agent
+      - codecommit
+      - gitea
+      - azurerepos
+      - seqeracompute
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["baseUrl"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["category"]
+    update:
+      x-speakeasy-param-computed: false
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["deleted"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Credentials"]
+    update:
+      x-speakeasy-entity: Credential
+  - target: $["components"]["schemas"]["DataLinkProvider"]["enum"][*]
+    remove: true
+  - target: $["components"]["schemas"]["DataLinkProvider"]["enum"]
+    update:
+      - aws
+      - google
+      - azure
+      - azure_entra
+      - seqeracompute
+  - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
+    remove: true
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isDynamic"]
+    remove: true
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isInterpolated"]
+    remove: true
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["seqeracompute"]
+    remove: true
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["google-cloud"]
+    remove: true
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["oneOf"][*]
+    remove: true
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["oneOf"]
+    update:
+      - $ref: "#/components/schemas/AwsBatchPlatformMetainfo"
+      - $ref: "#/components/schemas/AwsCloudPlatformMetainfo"
+      - $ref: "#/components/schemas/GooglePlatformMetainfo"
+      - $ref: "#/components/schemas/AzBatchPlatformMetainfo"
+      - $ref: "#/components/schemas/EksPlatformMetaInfo"
+      - $ref: "#/components/schemas/GkePlatformMetaInfo"
+      - $ref: "#/components/schemas/K8sPlatformMetaInfo"
+      - $ref: "#/components/schemas/GridPlatformMetainfo"
+      - $ref: "#/components/schemas/LocalPlatformMetainfo"
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"]
+    update:
+      - aborted
+      - cached
+      - cpuLoad
+      - cpuTime
+      - cpus
+      - failed
+      - invCtxSwitch
+      - loadCpus
+      - loadMemory
+      - loadTasks
+      - memoryReq
+      - memoryRss
+      - peakCpus
+      - peakMemory
+      - peakTasks
+      - pending
+      - process
+      - readBytes
+      - running
+      - submitted
+      - succeeded
+      - volCtxSwitch
+      - writeBytes
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["retries"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["ignored"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["version"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["region"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["workDir"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["preRunScript"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["postRunScript"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["defaultDataRetentionPolicy"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["nextflowConfig"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]
+    update:
+      allOf:
+        - $ref: "#/components/schemas/AwsBatchConfig"
+  - target: $["components"]["schemas"]["Team"]
+    update:
+      x-speakeasy-entity: Teams
+  - target: $["components"]["schemas"]["TeamDbDto"]
+    update:
+      x-speakeasy-entity: Teams
+  - target: $["components"]["schemas"]["Workflow"]["properties"]["fusion"]
+    remove: true
+  - target: $["components"]["schemas"]["Workflow"]["properties"]["wave"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["required"]
+    update:
+      - aborted
+      - cached
+      - cpuLoad
+      - cpuTime
+      - cpus
+      - failed
+      - invCtxSwitch
+      - loadCpus
+      - loadMemory
+      - loadTasks
+      - memoryReq
+      - memoryRss
+      - peakCpus
+      - peakMemory
+      - peakTasks
+      - pending
+      - readBytes
+      - running
+      - submitted
+      - succeeded
+      - volCtxSwitch
+      - writeBytes
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["retries"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["ignored"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["version"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpus"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuTime"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuLoad"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryRss"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryReq"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryConsumption"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netReadBytes"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netWriteBytes"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netVolCtxSwitch"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netInvCtxSwitch"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCost"]
+    remove: true
+  - target: $["components"]["schemas"]["AllowedDynamicLabelsResponse"]
+    remove: true
+  - target: $["components"]["schemas"]["AzCloudConfig"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleBucket"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleCloudConfig"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleCloudPlatformMetaInfo"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleImage"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleInstanceType"]
+    remove: true
+  - target: $["components"]["schemas"]["Map.Entry_String.String_"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputePlatformDescriber"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputePlatformMetainfo"]
+    remove: true
+  - target: $["components"]["schemas"]["WfFusionMeta"]
+    remove: true
+  - target: $["components"]["schemas"]["WfWaveMeta"]
   # Fix discriminator mapping validation errors by removing problematic mappings
   - target: $.components.schemas.ComputeConfig.discriminator.mapping["google-cloud"]
     remove: true

@@ -1,11 +1,11 @@
 # Testing the provider in Dev
 
-When working on the provider locally, terraform will try and pull the provider in the terraform registry. To prevent this from ocurring we will need to update the .terraformrc file in your $HOME directory to point to your local provider. 
+When working on the provider locally, terraform will try and pull the provider in the terraform registry. To prevent this from ocurring we will need to update the .terraformrc file in your $HOME directory to point to your local provider.
 
 ***NOTE***
-If you have this setting enabled, this will also override your ability to work with the external provider in the terraform registry. 
+If you have this setting enabled, this will also override your ability to work with the external provider in the terraform registry.
 
-1. Update you .terraformrc to point to your provider: 
+1. Update you .terraformrc to point to your provider:
 
 Example `.terraformrc`:
 ```sh
@@ -20,7 +20,7 @@ provider_installation {
 ```
 
 
-2. Ensure the provider in your terraform has the same source, as what is specified in the `.terraformrc` : 
+2. Ensure the provider in your terraform has the same source, as what is specified in the `.terraformrc` :
 
 ```hcl
 terraform {
@@ -35,7 +35,7 @@ terraform {
 
 3. Build the provider locally, so the binary is available, you will need to build the repo using the below command:
 
-```sh 
+```sh
 shahbaz.mahmood@Shahbazs-MacBook-Pro terraform-provider-seqera % go build .
 ```
 
@@ -47,7 +47,7 @@ export TF_VAR_seqera_bearer_auth="your-token-here"
 ```
 
 
-## Using this Terraform. 
+## Using this Terraform.
 
 Currently all terraform state is stored locally on your machine. Additionally for each cloud provider we need to provide some enviornment variables for access keys and such. List of required environment variables:
 ```sh
@@ -59,7 +59,7 @@ TF_VAR_azure_batch_key=$AZURE_BATCH_KEY
 TF_VAR_azure_storage_key=$AZURE_STORAGE_KEY
 ```
 
-Additionally, you will need to update the locals terraform code with your working directories for each cloud provider. 
+Additionally, you will need to update the locals terraform code with your working directories for each cloud provider.
 ```terraform
 locals {
   service_account_key = file("${path.module}/service-account-key.json")
@@ -74,6 +74,5 @@ Finally, for GCP make sure you service account key json is present in the below 
 `service_account_key = file("${path.module}/service-account-key.json")`
 
 
-***NOTE*** 
-You may need to run `terraform init` for the module calls to work, the command will fail but you should be able to run tf apply without failure. 
-
+***NOTE***
+You may need to run `terraform init` for the module calls to work, the command will fail but you should be able to run tf apply without failure.

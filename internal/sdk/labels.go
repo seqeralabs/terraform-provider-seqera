@@ -154,7 +154,7 @@ func (s *Labels) AddLabelsToActions(ctx context.Context, request operations.AddL
 }
 
 // ApplyLabelsToActions - Replace action labels
-// Applies the given list of labels to the given pipeline actions. Existing labels are replaced — include labels to be preserved in `labelIds`.
+// Applies the given list of labels to the given pipeline actions. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
 func (s *Labels) ApplyLabelsToActions(ctx context.Context, request operations.ApplyLabelsToActionsRequest, opts ...operations.Option) (*operations.ApplyLabelsToActionsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1287,7 +1287,7 @@ func (s *Labels) AddLabelsToPipelines(ctx context.Context, request operations.Ad
 }
 
 // ApplyLabelsToPipelines - Replace pipeline labels
-// Applies the given list of labels to the given pipelines. Existing labels are replaced — include labels to be preserved in `labelIds`.
+// Applies the given list of labels to the given pipelines. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
 func (s *Labels) ApplyLabelsToPipelines(ctx context.Context, request operations.ApplyLabelsToPipelinesRequest, opts ...operations.Option) (*operations.ApplyLabelsToPipelinesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1653,7 +1653,7 @@ func (s *Labels) AddLabelsToWorkflows(ctx context.Context, request operations.Ad
 }
 
 // ApplyLabelsToWorkflows - Replace workflow labels
-// Applies the given list of labels to the given workflows. Existing labels are replaced — include labels to be preserved in `labelIds`.
+// Applies the given list of labels to the given workflows. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
 func (s *Labels) ApplyLabelsToWorkflows(ctx context.Context, request operations.ApplyLabelsToWorkflowsRequest, opts ...operations.Option) (*operations.ApplyLabelsToWorkflowsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

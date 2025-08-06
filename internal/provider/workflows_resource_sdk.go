@@ -79,7 +79,6 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.Progress.WorkflowProgress.CPUEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.CPUEfficiency)
 				r.Progress.WorkflowProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.DateCreated))
 				r.Progress.WorkflowProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.LastUpdated))
-				r.Progress.WorkflowProgress.Version = types.Int64PointerValue(resp.Progress.WorkflowProgress.Version)
 				r.Progress.WorkflowProgress.Executors = make([]types.String, 0, len(resp.Progress.WorkflowProgress.Executors))
 				for _, v := range resp.Progress.WorkflowProgress.Executors {
 					r.Progress.WorkflowProgress.Executors = append(r.Progress.WorkflowProgress.Executors, types.StringValue(v))
@@ -100,17 +99,6 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.Progress.WorkflowProgress.PeakTasks = types.Int64Value(resp.Progress.WorkflowProgress.PeakTasks)
 				r.Progress.WorkflowProgress.PeakMemory = types.Int64Value(resp.Progress.WorkflowProgress.PeakMemory)
 				r.Progress.WorkflowProgress.Cost = types.Float64PointerValue(resp.Progress.WorkflowProgress.Cost)
-				r.Progress.WorkflowProgress.NetCpus = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetCpus)
-				r.Progress.WorkflowProgress.NetCPUTime = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetCPUTime)
-				r.Progress.WorkflowProgress.NetCPULoad = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetCPULoad)
-				r.Progress.WorkflowProgress.NetMemoryRss = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetMemoryRss)
-				r.Progress.WorkflowProgress.NetMemoryReq = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetMemoryReq)
-				r.Progress.WorkflowProgress.NetMemoryConsumption = types.Float64PointerValue(resp.Progress.WorkflowProgress.NetMemoryConsumption)
-				r.Progress.WorkflowProgress.NetReadBytes = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetReadBytes)
-				r.Progress.WorkflowProgress.NetWriteBytes = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetWriteBytes)
-				r.Progress.WorkflowProgress.NetVolCtxSwitch = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetVolCtxSwitch)
-				r.Progress.WorkflowProgress.NetInvCtxSwitch = types.Int64PointerValue(resp.Progress.WorkflowProgress.NetInvCtxSwitch)
-				r.Progress.WorkflowProgress.NetCost = types.Float64PointerValue(resp.Progress.WorkflowProgress.NetCost)
 			}
 			r.Progress.ProcessesProgress = []tfTypes.ProcessLoad{}
 
@@ -130,7 +118,6 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				processesProgress.CPUEfficiency = types.Float32PointerValue(processesProgressItem.CPUEfficiency)
 				processesProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.DateCreated))
 				processesProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.LastUpdated))
-				processesProgress.Version = types.Int64PointerValue(processesProgressItem.Version)
 				processesProgress.Process = types.StringValue(processesProgressItem.Process)
 				processesProgress.Cpus = types.Int64Value(processesProgressItem.Cpus)
 				processesProgress.CPUTime = types.Int64Value(processesProgressItem.CPUTime)
@@ -147,8 +134,37 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				processesProgress.PeakCpus = types.Int64Value(processesProgressItem.PeakCpus)
 				processesProgress.PeakTasks = types.Int64Value(processesProgressItem.PeakTasks)
 				processesProgress.PeakMemory = types.Int64Value(processesProgressItem.PeakMemory)
-
-				r.Progress.ProcessesProgress = append(r.Progress.ProcessesProgress, processesProgress)
+				if processesProgressCount+1 > len(r.Progress.ProcessesProgress) {
+					r.Progress.ProcessesProgress = append(r.Progress.ProcessesProgress, processesProgress)
+				} else {
+					r.Progress.ProcessesProgress[processesProgressCount].Pending = processesProgress.Pending
+					r.Progress.ProcessesProgress[processesProgressCount].Submitted = processesProgress.Submitted
+					r.Progress.ProcessesProgress[processesProgressCount].Running = processesProgress.Running
+					r.Progress.ProcessesProgress[processesProgressCount].Succeeded = processesProgress.Succeeded
+					r.Progress.ProcessesProgress[processesProgressCount].Failed = processesProgress.Failed
+					r.Progress.ProcessesProgress[processesProgressCount].Cached = processesProgress.Cached
+					r.Progress.ProcessesProgress[processesProgressCount].Aborted = processesProgress.Aborted
+					r.Progress.ProcessesProgress[processesProgressCount].MemoryEfficiency = processesProgress.MemoryEfficiency
+					r.Progress.ProcessesProgress[processesProgressCount].CPUEfficiency = processesProgress.CPUEfficiency
+					r.Progress.ProcessesProgress[processesProgressCount].DateCreated = processesProgress.DateCreated
+					r.Progress.ProcessesProgress[processesProgressCount].LastUpdated = processesProgress.LastUpdated
+					r.Progress.ProcessesProgress[processesProgressCount].Process = processesProgress.Process
+					r.Progress.ProcessesProgress[processesProgressCount].Cpus = processesProgress.Cpus
+					r.Progress.ProcessesProgress[processesProgressCount].CPUTime = processesProgress.CPUTime
+					r.Progress.ProcessesProgress[processesProgressCount].CPULoad = processesProgress.CPULoad
+					r.Progress.ProcessesProgress[processesProgressCount].MemoryRss = processesProgress.MemoryRss
+					r.Progress.ProcessesProgress[processesProgressCount].MemoryReq = processesProgress.MemoryReq
+					r.Progress.ProcessesProgress[processesProgressCount].ReadBytes = processesProgress.ReadBytes
+					r.Progress.ProcessesProgress[processesProgressCount].WriteBytes = processesProgress.WriteBytes
+					r.Progress.ProcessesProgress[processesProgressCount].VolCtxSwitch = processesProgress.VolCtxSwitch
+					r.Progress.ProcessesProgress[processesProgressCount].InvCtxSwitch = processesProgress.InvCtxSwitch
+					r.Progress.ProcessesProgress[processesProgressCount].LoadTasks = processesProgress.LoadTasks
+					r.Progress.ProcessesProgress[processesProgressCount].LoadCpus = processesProgress.LoadCpus
+					r.Progress.ProcessesProgress[processesProgressCount].LoadMemory = processesProgress.LoadMemory
+					r.Progress.ProcessesProgress[processesProgressCount].PeakCpus = processesProgress.PeakCpus
+					r.Progress.ProcessesProgress[processesProgressCount].PeakTasks = processesProgress.PeakTasks
+					r.Progress.ProcessesProgress[processesProgressCount].PeakMemory = processesProgress.PeakMemory
+				}
 			}
 			r.Progress.TotalProcesses = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Progress.TotalProcesses))
 		}

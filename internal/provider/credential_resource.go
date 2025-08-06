@@ -685,9 +685,55 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					`Contains authentication information for accessing cloud providers, Git repositories,` + "\n" +
 					`and other external services within the Seqera Platform.`,
 			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
+			"last_updated": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"last_used": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Timestamp when the credential was last used`,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"name": schema.StringAttribute{
+				Required:    true,
+				Description: `Display name for the credential (max 100 characters)`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(100),
+				},
+			},
+			"provider_type": schema.StringAttribute{
+				Required:    true,
+				Description: `Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "azure_entra", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"aws",
+						"azure",
+						"azure_entra",
+						"google",
+						"github",
+						"gitlab",
+						"bitbucket",
+						"ssh",
+						"k8s",
+						"container-reg",
+						"tw-agent",
+						"codecommit",
+						"gitea",
+						"azurerepos",
+						"seqeracompute",
+					),
+					custom_stringvalidators.CredentialsConfigValidator(),
+				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,
