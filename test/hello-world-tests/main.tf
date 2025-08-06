@@ -14,21 +14,6 @@ resource "seqera_workspace" "my_workspace" {
   visibility  = "PRIVATE"
 }
 
-## Datasets
-resource "seqera_datasets" "my_datasets" {
-  description  = "Terraform created dataset"
-  name         = "terraform-dataset"
-  workspace_id = resource.seqera_workspace.my_workspace.id
-}
-
-
-## Pipeline Secrets
-resource "seqera_pipeline_secret" "my_pipelinesecret" {
-  name         = "test_terraform_secret"
-  value        = "SECRET_VALUE"
-  workspace_id = resource.seqera_workspace.my_workspace.id
-}
-
 ## Teams
 resource "seqera_teams" "my_teams" {
   description = "Team created by Terraform"

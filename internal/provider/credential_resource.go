@@ -638,11 +638,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"provider_type": schema.StringAttribute{
 				Required:    true,
-				Description: `Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
+				Description: `Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "azure_entra", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"aws",
 						"azure",
+						"azure_entra",
 						"google",
 						"github",
 						"gitlab",

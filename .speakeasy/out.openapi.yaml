@@ -5,7 +5,7 @@ info:
   contact:
     url: https://seqera.io
     email: info@seqera.io
-  version: 1.45.0
+  version: 1.56.0
 paths:
   /actions:
     get:
@@ -115,7 +115,7 @@ paths:
   /actions/labels/apply:
     post:
       summary: Replace action labels
-      description: Applies the given list of labels to the given pipeline actions. Existing labels are replaced — include labels to be preserved in `labelIds`.
+      description: Applies the given list of labels to the given pipeline actions. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
         - labels
       operationId: ApplyLabelsToActions
@@ -1052,7 +1052,7 @@ paths:
             type: string
         - name: search
           in: query
-          description: "Free text search criteria — data-link name and keywords: `region`, `provider`."
+          description: "Free text search criteria â€” data-link name and keywords: `region`, `provider`."
           schema:
             type: string
         - name: max
@@ -1092,7 +1092,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, or the API is disabled in the workspace."
+          description: "NotFound â€” workspace or credentials not found, or the API is disabled in the workspace."
           content:
             application/json:
               schema:
@@ -1136,7 +1136,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled in the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled in the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1211,7 +1211,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1249,7 +1249,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success — Data-link updated
+          description: Success â€” Data-link updated
           content:
             application/json:
               schema:
@@ -1261,7 +1261,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1292,7 +1292,7 @@ paths:
             format: int64
       responses:
         "200":
-          description: Success — Data-link deleted
+          description: Success â€” Data-link deleted
         "400":
           description: BadRequest
           content:
@@ -1300,7 +1300,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1367,7 +1367,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link not found"
           content:
             application/json:
               schema:
@@ -1492,7 +1492,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1546,7 +1546,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1601,7 +1601,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1659,7 +1659,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1721,7 +1721,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1782,7 +1782,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1832,7 +1832,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -1894,7 +1894,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
-          description: "NotFound — workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
+          description: "NotFound â€” workspace or credentials not found, API disabled for the workspace, or data-link or path not found"
           content:
             application/json:
               schema:
@@ -2605,7 +2605,7 @@ paths:
             type: integer
             format: int64
       requestBody:
-        description: "Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` — if `resource: true`, include a `value`. Else, omit `value` from your request body."
+        description: "Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` â€” if `resource: true`, include a `value`. Else, omit `value` from your request body."
         content:
           application/json:
             schema:
@@ -4747,7 +4747,7 @@ paths:
   /pipelines/labels/apply:
     post:
       summary: Replace pipeline labels
-      description: Applies the given list of labels to the given pipelines. Existing labels are replaced — include labels to be preserved in `labelIds`.
+      description: Applies the given list of labels to the given pipelines. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
         - labels
       operationId: ApplyLabelsToPipelines
@@ -6522,7 +6522,7 @@ paths:
   /workflow/labels/apply:
     post:
       summary: Replace workflow labels
-      description: Applies the given list of labels to the given workflows. Existing labels are replaced — include labels to be preserved in `labelIds`.
+      description: Applies the given list of labels to the given workflows. Existing labels are replaced â€” include labels to be preserved in `labelIds`.
       tags:
         - labels
       operationId: ApplyLabelsToWorkflows
@@ -7953,6 +7953,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              x-speakeasy-terraform-ignore: true
             environment:
               type: array
               items:
@@ -8034,6 +8035,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          x-speakeasy-terraform-ignore: true
         region:
           type: string
         computeQueue:
@@ -8267,6 +8269,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          x-speakeasy-terraform-ignore: true
         workDir:
           type: string
           title: "Azure Batch Work Directory"
@@ -8625,6 +8628,7 @@ components:
           x-speakeasy-plan-validators: ComputeConfigValidator
           x-speakeasy-param-optional: false
           ## Compute Config Schemas
+          ## Security Keys Schemas
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -8982,6 +8986,7 @@ components:
           enum:
             - aws
             - azure
+            - azure_entra
             - google
             - github
             - gitlab
@@ -8994,24 +8999,6 @@ components:
             - gitea
             - azurerepos
             - seqeracompute
-            # discriminator:
-            #   propertyName: discriminator
-            #   mapping:
-            #     aws: "#/components/schemas/AwsSecurityKeys"
-            #     azure: "#/components/schemas/AzureSecurityKeys"
-            #     google: "#/components/schemas/GoogleSecurityKeys"
-            #     github: "#/components/schemas/GitHubSecurityKeys"
-            #     gitlab: "#/components/schemas/GitLabSecurityKeys"
-            #     bitbucket: "#/components/schemas/BitBucketSecurityKeys"
-            #     ssh: "#/components/schemas/SSHSecurityKeys"
-            #     k8s: "#/components/schemas/K8sSecurityKeys"
-            #     container-reg: "#/components/schemas/ContainerRegistryKeys"
-            #     tw-agent: "#/components/schemas/AgentSecurityKeys"
-            #     codecommit: "#/components/schemas/CodeCommitSecurityKeys"
-            #     gitea: "#/components/schemas/GiteaSecurityKeys"
-            #     azurerepos: "#/components/schemas/AzureReposSecurityKeys"
-            #     seqeracompute: "#/components/schemas/SeqeraComputeSecurityKeys"
-            #     azure_entra: "#/components/schemas/AzureEntraKeys"
           x-speakeasy-name-override: providerType
           x-speakeasy-plan-validators: CredentialsConfigValidator
           description: Cloud or service provider type (e.g., aws, azure, gcp)
@@ -9425,9 +9412,9 @@ components:
       properties:
         sessionId:
           type: string
-          x-speakeasy-param-optional: true
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
+          x-speakeasy-param-optional: true
           description: Unique identifier for the Studio session
         workspaceId:
           type: integer
@@ -9906,6 +9893,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              x-speakeasy-terraform-ignore: true
             workDir:
               type: string
             preRunScript:
@@ -10148,6 +10136,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              x-speakeasy-terraform-ignore: true
             workDir:
               type: string
             preRunScript:
@@ -10193,6 +10182,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          x-speakeasy-terraform-ignore: true
         location:
           type: string
         workDir:
@@ -10266,6 +10256,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          x-speakeasy-terraform-ignore: true
         region:
           type: string
         zones:
@@ -10450,6 +10441,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          x-speakeasy-terraform-ignore: true
         workDir:
           type: string
         preRunScript:
@@ -10735,8 +10727,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Credentials"
-      x-speakeasy-entity: Credentials
-      ## Security Keys Schemas
     ListDatasetVersionsResponse:
       type: object
       properties:
@@ -10970,6 +10960,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              x-speakeasy-terraform-ignore: true
             unitForLimits:
               type: string
             perJobMemLimit:
@@ -11012,6 +11003,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              x-speakeasy-terraform-ignore: true
             environment:
               type: array
               items:
@@ -11492,6 +11484,12 @@ components:
         cpuEfficiency:
           type: number
           format: float
+        dateCreated:
+          type: string
+          format: date-time
+        lastUpdated:
+          type: string
+          format: date-time
         process:
           type: string
         cpus:
@@ -11549,12 +11547,6 @@ components:
         peakMemory:
           type: integer
           format: int64
-        dateCreated:
-          type: string
-          format: date-time
-        lastUpdated:
-          type: string
-          format: date-time
     ProgressData:
       type: object
       properties:
@@ -11733,6 +11725,7 @@ components:
         discriminator:
           type: string
           description: property to select the compute config platform
+          x-speakeasy-terraform-ignore: true
       allOf:
         - $ref: "#/components/schemas/AwsBatchConfig"
       required:
@@ -11825,6 +11818,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              x-speakeasy-terraform-ignore: true
             environment:
               type: array
               items:
@@ -12307,6 +12301,7 @@ components:
             discriminator:
               type: string
               description: property to select the compute config platform
+              x-speakeasy-terraform-ignore: true
             environment:
               type: array
               items:
@@ -12629,6 +12624,11 @@ components:
         succeedDuration:
           type: integer
           format: int64
+    WfWaveMeta:
+      type: object
+      properties:
+        enabled:
+          type: boolean
     Workflow:
       required:
         - commandLine
@@ -13111,6 +13111,16 @@ components:
         cpuEfficiency:
           type: number
           format: float
+        dateCreated:
+          type: string
+          format: date-time
+        lastUpdated:
+          type: string
+          format: date-time
+        executors:
+          type: array
+          items:
+            type: string
         cpus:
           type: integer
           format: int64
@@ -13138,8 +13148,6 @@ components:
         invCtxSwitch:
           type: integer
           format: int64
-        cost:
-          type: number
         loadTasks:
           type: integer
           format: int64
@@ -13158,16 +13166,8 @@ components:
         peakMemory:
           type: integer
           format: int64
-        executors:
-          type: array
-          items:
-            type: string
-        dateCreated:
-          type: string
-          format: date-time
-        lastUpdated:
-          type: string
-          format: date-time
+        cost:
+          type: number
     WorkflowLogResponse:
       type: object
       properties:

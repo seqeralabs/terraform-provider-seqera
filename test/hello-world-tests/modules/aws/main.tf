@@ -1,24 +1,8 @@
-## Organizations
-resource "seqera_orgs" "test_org" {
-  description = "testing org for the terraform provider"
-  full_name   = "seqera_test_shahbaz_tf_provider"
-  name        = "seqera_test_shahbaz_tf_provider"
-}
-
-## Workspaces
-resource "seqera_workspace" "my_workspace" {
-  description = "A test workspace created with Terraform"
-  name        = "test-workspace-tf"
-  full_name   = "Test Workspace for Terraform Provider"
-  org_id      = resource.seqera_orgs.test_org.org_id
-  visibility  = "PRIVATE"
-}
-
 ## Datasets
 resource "seqera_datasets" "my_datasets" {
   description  = "Terraform created dataset"
   name         = "terraform-dataset"
-  workspace_id = resource.seqera_workspace.my_workspace.id
+  workspace_id = var.workspace_id
 }
 
 
@@ -26,14 +10,7 @@ resource "seqera_datasets" "my_datasets" {
 resource "seqera_pipeline_secret" "my_pipelinesecret" {
   name         = "test_terraform_secret"
   value        = "SECRET_VALUE"
-  workspace_id = resource.seqera_workspace.my_workspace.id
-}
-
-## Teams
-resource "seqera_teams" "my_teams" {
-  description = "Team created by Terraform"
-  name        = "terraform-test-team"
-  org_id      = resource.seqera_orgs.test_org.org_id
+  workspace_id = var.workspace_id
 }
 
 ## Credentials

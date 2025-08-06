@@ -10,7 +10,7 @@ import (
 type CreateLabelRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` — if `resource: true`, include a `value`. Else, omit `value` from your request body.
+	// Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` â€” if `resource: true`, include a `value`. Else, omit `value` from your request body.
 	CreateLabelRequest shared.CreateLabelRequest `request:"mediaType=application/json"`
 }
 
