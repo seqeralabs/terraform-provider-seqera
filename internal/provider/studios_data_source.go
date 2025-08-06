@@ -122,6 +122,10 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					"cpu": schema.Int32Attribute{
 						Computed: true,
 					},
+					"environment": schema.MapAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+					},
 					"gpu": schema.Int32Attribute{
 						Computed: true,
 					},
@@ -168,6 +172,14 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						"is_default": schema.BoolAttribute{
 							Computed:    true,
 							Description: `Flag indicating if this is a default system label`,
+						},
+						"is_dynamic": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value is dynamically generated`,
+						},
+						"is_interpolated": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value supports variable interpolation`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,

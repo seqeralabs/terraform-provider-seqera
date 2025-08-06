@@ -4,9 +4,12 @@ resource "seqera_studios" "my_studios" {
   configuration = {
     conda_environment = "...my_conda_environment..."
     cpu               = 2
-    gpu               = 8
-    lifespan_hours    = 2
-    memory            = 3
+    environment = {
+      key = "value"
+    }
+    gpu            = 8
+    lifespan_hours = 2
+    memory         = 3
     mount_data = [
       "..."
     ]

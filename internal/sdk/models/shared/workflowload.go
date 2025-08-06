@@ -98,6 +98,20 @@ func (o *WorkflowLoad) GetAborted() int64 {
 	return o.Aborted
 }
 
+func (o *WorkflowLoad) GetRetries() int64 {
+	if o == nil {
+		return 0
+	}
+	return o.Retries
+}
+
+func (o *WorkflowLoad) GetIgnored() int64 {
+	if o == nil {
+		return 0
+	}
+	return o.Ignored
+}
+
 func (o *WorkflowLoad) GetMemoryEfficiency() *float32 {
 	if o == nil {
 		return nil

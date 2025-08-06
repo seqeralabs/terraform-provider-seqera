@@ -169,6 +169,14 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed:    true,
 							Description: `Flag indicating if this is a default system label`,
 						},
+						"is_dynamic": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value is dynamically generated`,
+						},
+						"is_interpolated": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value supports variable interpolation`,
+						},
 						"name": schema.StringAttribute{
 							Computed:    true,
 							Description: `Name or key of the label`,
@@ -1254,21 +1262,6 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 									"seqeracompute_platform": schema.SingleNestedAttribute{
 										Computed: true,
 										Attributes: map[string]schema.Attribute{
-											"cli_path": schema.StringAttribute{
-												Computed: true,
-											},
-											"compute_job_role": schema.StringAttribute{
-												Computed: true,
-											},
-											"compute_queue": schema.StringAttribute{
-												Computed: true,
-											},
-											"dragen_instance_type": schema.StringAttribute{
-												Computed: true,
-											},
-											"dragen_queue": schema.StringAttribute{
-												Computed: true,
-											},
 											"environment": schema.ListNestedAttribute{
 												Computed: true,
 												NestedObject: schema.NestedAttributeObject{
@@ -1289,139 +1282,9 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												},
 												Description: `Array of environment variables for the compute environment`,
 											},
-											"execution_role": schema.StringAttribute{
-												Computed: true,
-											},
-											"forge": schema.SingleNestedAttribute{
-												Computed: true,
-												Attributes: map[string]schema.Attribute{
-													"alloc_strategy": schema.StringAttribute{
-														Computed: true,
-													},
-													"allow_buckets": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"arm64_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"bid_percentage": schema.Int32Attribute{
-														Computed: true,
-													},
-													"dispose_on_deletion": schema.BoolAttribute{
-														Computed: true,
-													},
-													"dragen_ami_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"dragen_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"dragen_instance_type": schema.StringAttribute{
-														Computed: true,
-													},
-													"ebs_auto_scale": schema.BoolAttribute{
-														Computed: true,
-													},
-													"ebs_block_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"ebs_boot_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"ec2_key_pair": schema.StringAttribute{
-														Computed: true,
-													},
-													"ecs_config": schema.StringAttribute{
-														Computed: true,
-													},
-													"efs_create": schema.BoolAttribute{
-														Computed: true,
-													},
-													"efs_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"efs_mount": schema.StringAttribute{
-														Computed: true,
-													},
-													"fargate_head_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"fsx_mount": schema.StringAttribute{
-														Computed: true,
-													},
-													"fsx_name": schema.StringAttribute{
-														Computed: true,
-													},
-													"fsx_size": schema.Int32Attribute{
-														Computed: true,
-													},
-													"fusion_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"gpu_enabled": schema.BoolAttribute{
-														Computed: true,
-													},
-													"image_id": schema.StringAttribute{
-														Computed: true,
-													},
-													"instance_types": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"max_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"min_cpus": schema.Int32Attribute{
-														Computed: true,
-													},
-													"security_groups": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"subnets": schema.ListAttribute{
-														Computed:    true,
-														ElementType: types.StringType,
-													},
-													"type": schema.StringAttribute{
-														Computed: true,
-													},
-													"vpc_id": schema.StringAttribute{
-														Computed: true,
-													},
-												},
-											},
-											"fusion_snapshots": schema.BoolAttribute{
-												Computed: true,
-											},
-											"fusion2_enabled": schema.BoolAttribute{
-												Computed: true,
-											},
-											"head_job_cpus": schema.Int32Attribute{
-												Computed: true,
-											},
-											"head_job_memory_mb": schema.Int32Attribute{
-												Computed: true,
-											},
-											"head_job_role": schema.StringAttribute{
-												Computed: true,
-											},
-											"head_queue": schema.StringAttribute{
-												Computed: true,
-											},
-											"log_group": schema.StringAttribute{
-												Computed: true,
-											},
-											"lustre_id": schema.StringAttribute{
-												Computed:           true,
-												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-											},
 											"nextflow_config": schema.StringAttribute{
 												Computed:    true,
 												Description: `Nextflow configuration settings and parameters`,
-											},
-											"nvnme_storage_enabled": schema.BoolAttribute{
-												Computed: true,
 											},
 											"post_run_script": schema.StringAttribute{
 												Computed:    true,
@@ -1432,17 +1295,6 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												Description: `Shell script to execute before workflow starts`,
 											},
 											"region": schema.StringAttribute{
-												Computed: true,
-											},
-											"storage_type": schema.StringAttribute{
-												Computed:           true,
-												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-											},
-											"volumes": schema.ListAttribute{
-												Computed:    true,
-												ElementType: types.StringType,
-											},
-											"wave_enabled": schema.BoolAttribute{
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{

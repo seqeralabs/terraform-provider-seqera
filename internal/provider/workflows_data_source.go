@@ -96,6 +96,14 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:    true,
 							Description: `Flag indicating if this is a default system label`,
 						},
+						"is_dynamic": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value is dynamically generated`,
+						},
+						"is_interpolated": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag indicating if the label value supports variable interpolation`,
+						},
 						"name": schema.StringAttribute{
 							Computed:    true,
 							Description: `Name or key of the label`,
@@ -169,6 +177,9 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 								"failed": schema.Int64Attribute{
 									Computed: true,
 								},
+								"ignored": schema.Int64Attribute{
+									Computed: true,
+								},
 								"inv_ctx_switch": schema.Int64Attribute{
 									Computed:           true,
 									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
@@ -216,6 +227,9 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									Computed:           true,
 									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 								},
+								"retries": schema.Int64Attribute{
+									Computed: true,
+								},
 								"running": schema.Int64Attribute{
 									Computed: true,
 								},
@@ -223,6 +237,9 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									Computed: true,
 								},
 								"succeeded": schema.Int64Attribute{
+									Computed: true,
+								},
+								"version": schema.Int64Attribute{
 									Computed: true,
 								},
 								"vol_ctx_switch": schema.Int64Attribute{
@@ -273,6 +290,9 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							"failed": schema.Int64Attribute{
 								Computed: true,
 							},
+							"ignored": schema.Int64Attribute{
+								Computed: true,
+							},
 							"inv_ctx_switch": schema.Int64Attribute{
 								Computed: true,
 							},
@@ -297,6 +317,39 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							"memory_rss": schema.Int64Attribute{
 								Computed: true,
 							},
+							"net_cost": schema.Float64Attribute{
+								Computed: true,
+							},
+							"net_cpu_load": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_cpu_time": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_cpus": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_inv_ctx_switch": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_memory_consumption": schema.Float64Attribute{
+								Computed: true,
+							},
+							"net_memory_req": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_memory_rss": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_read_bytes": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_vol_ctx_switch": schema.Int64Attribute{
+								Computed: true,
+							},
+							"net_write_bytes": schema.Int64Attribute{
+								Computed: true,
+							},
 							"peak_cpus": schema.Int64Attribute{
 								Computed: true,
 							},
@@ -312,6 +365,9 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							"read_bytes": schema.Int64Attribute{
 								Computed: true,
 							},
+							"retries": schema.Int64Attribute{
+								Computed: true,
+							},
 							"running": schema.Int64Attribute{
 								Computed: true,
 							},
@@ -319,6 +375,9 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 								Computed: true,
 							},
 							"succeeded": schema.Int64Attribute{
+								Computed: true,
+							},
+							"version": schema.Int64Attribute{
 								Computed: true,
 							},
 							"vol_ctx_switch": schema.Int64Attribute{
@@ -373,6 +432,17 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 					},
 					"exit_status": schema.Int32Attribute{
 						Computed: true,
+					},
+					"fusion": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Computed: true,
+							},
+							"version": schema.StringAttribute{
+								Computed: true,
+							},
+						},
 					},
 					"home_dir": schema.StringAttribute{
 						Computed: true,
@@ -557,6 +627,14 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 					},
 					"user_name": schema.StringAttribute{
 						Computed: true,
+					},
+					"wave": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Computed: true,
+							},
+						},
 					},
 					"work_dir": schema.StringAttribute{
 						Computed: true,

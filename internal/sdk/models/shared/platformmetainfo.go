@@ -17,21 +17,24 @@ const (
 	PlatformMetainfoTypeK8sPlatform   PlatformMetainfoType = "k8s-platform"
 	PlatformMetainfoTypeGrid          PlatformMetainfoType = "grid"
 	PlatformMetainfoTypeAwsBatch      PlatformMetainfoType = "aws-batch"
+	PlatformMetainfoTypeGoogleCloud   PlatformMetainfoType = "google-cloud"
 	PlatformMetainfoTypeLocalPlatform PlatformMetainfoType = "local-platform"
 	PlatformMetainfoTypeAzureBatch    PlatformMetainfoType = "azure-batch"
 	PlatformMetainfoTypeEksPlatform   PlatformMetainfoType = "eks-platform"
 )
 
 type PlatformMetainfo struct {
-	AwsBatchPlatformMetainfo *AwsBatchPlatformMetainfo `queryParam:"inline"`
-	AwsCloudPlatformMetainfo *AwsCloudPlatformMetainfo `queryParam:"inline"`
-	GooglePlatformMetainfo   *GooglePlatformMetainfo   `queryParam:"inline"`
-	AzBatchPlatformMetainfo  *AzBatchPlatformMetainfo  `queryParam:"inline"`
-	EksPlatformMetaInfo      *EksPlatformMetaInfo      `queryParam:"inline"`
-	GkePlatformMetaInfo      *GkePlatformMetaInfo      `queryParam:"inline"`
-	K8sPlatformMetaInfo      *K8sPlatformMetaInfo      `queryParam:"inline"`
-	GridPlatformMetainfo     *GridPlatformMetainfo     `queryParam:"inline"`
-	LocalPlatformMetainfo    *LocalPlatformMetainfo    `queryParam:"inline"`
+	AwsBatchPlatformMetainfo       *AwsBatchPlatformMetainfo       `queryParam:"inline"`
+	AwsCloudPlatformMetainfo       *AwsCloudPlatformMetainfo       `queryParam:"inline"`
+	GooglePlatformMetainfo         *GooglePlatformMetainfo         `queryParam:"inline"`
+	GoogleCloudPlatformMetaInfo    *GoogleCloudPlatformMetaInfo    `queryParam:"inline"`
+	AzBatchPlatformMetainfo        *AzBatchPlatformMetainfo        `queryParam:"inline"`
+	EksPlatformMetaInfo            *EksPlatformMetaInfo            `queryParam:"inline"`
+	GkePlatformMetaInfo            *GkePlatformMetaInfo            `queryParam:"inline"`
+	K8sPlatformMetaInfo            *K8sPlatformMetaInfo            `queryParam:"inline"`
+	GridPlatformMetainfo           *GridPlatformMetainfo           `queryParam:"inline"`
+	SeqeraComputePlatformDescriber *SeqeraComputePlatformDescriber `queryParam:"inline"`
+	LocalPlatformMetainfo          *LocalPlatformMetainfo          `queryParam:"inline"`
 
 	Type PlatformMetainfoType
 }
@@ -93,6 +96,18 @@ func CreatePlatformMetainfoAwsBatch(awsBatch AwsBatchPlatformMetainfo) PlatformM
 	return PlatformMetainfo{
 		AwsBatchPlatformMetainfo: &awsBatch,
 		Type:                     typ,
+	}
+}
+
+func CreatePlatformMetainfoGoogleCloud(googleCloud GoogleCloudPlatformMetaInfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeGoogleCloud
+
+	typStr := string(typ)
+	googleCloud.Discriminator = &typStr
+
+	return PlatformMetainfo{
+		GoogleCloudPlatformMetaInfo: &googleCloud,
+		Type:                        typ,
 	}
 }
 
@@ -189,6 +204,15 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		u.AwsBatchPlatformMetainfo = awsBatchPlatformMetainfo
 		u.Type = PlatformMetainfoTypeAwsBatch
 		return nil
+	case "google-cloud":
+		googleCloudPlatformMetaInfo := new(GoogleCloudPlatformMetaInfo)
+		if err := utils.UnmarshalJSON(data, &googleCloudPlatformMetaInfo, "", true, false); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-cloud) type GoogleCloudPlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
+		}
+
+		u.GoogleCloudPlatformMetaInfo = googleCloudPlatformMetaInfo
+		u.Type = PlatformMetainfoTypeGoogleCloud
+		return nil
 	case "local-platform":
 		localPlatformMetainfo := new(LocalPlatformMetainfo)
 		if err := utils.UnmarshalJSON(data, &localPlatformMetainfo, "", true, false); err != nil {
@@ -234,6 +258,10 @@ func (u PlatformMetainfo) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.GooglePlatformMetainfo, "", true)
 	}
 
+	if u.GoogleCloudPlatformMetaInfo != nil {
+		return utils.MarshalJSON(u.GoogleCloudPlatformMetaInfo, "", true)
+	}
+
 	if u.AzBatchPlatformMetainfo != nil {
 		return utils.MarshalJSON(u.AzBatchPlatformMetainfo, "", true)
 	}
@@ -252,6 +280,10 @@ func (u PlatformMetainfo) MarshalJSON() ([]byte, error) {
 
 	if u.GridPlatformMetainfo != nil {
 		return utils.MarshalJSON(u.GridPlatformMetainfo, "", true)
+	}
+
+	if u.SeqeraComputePlatformDescriber != nil {
+		return utils.MarshalJSON(u.SeqeraComputePlatformDescriber, "", true)
 	}
 
 	if u.LocalPlatformMetainfo != nil {

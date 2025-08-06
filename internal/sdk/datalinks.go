@@ -1885,7 +1885,7 @@ func (s *DataLinks) GenerateDownloadURLDataLink(ctx context.Context, request ope
 }
 
 // GenerateDownloadScript - Generate download script
-// Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link.
+// Creates a script to download files from the data-link associated with the given `dataLinkId`.   Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link.
 func (s *DataLinks) GenerateDownloadScript(ctx context.Context, request operations.GenerateDownloadScriptRequest, opts ...operations.Option) (*operations.GenerateDownloadScriptResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

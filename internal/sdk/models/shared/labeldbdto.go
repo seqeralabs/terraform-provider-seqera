@@ -21,6 +21,10 @@ type LabelDbDto struct {
 	Resource *bool `json:"resource,omitempty"`
 	// Flag indicating if this is a default system label
 	IsDefault *bool `json:"isDefault,omitempty"`
+	// Flag indicating if the label value is dynamically generated
+	IsDynamic *bool `json:"isDynamic,omitempty"`
+	// Flag indicating if the label value supports variable interpolation
+	IsInterpolated *bool `json:"isInterpolated,omitempty"`
 	// Timestamp when the label was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 }
@@ -69,6 +73,20 @@ func (o *LabelDbDto) GetIsDefault() *bool {
 		return nil
 	}
 	return o.IsDefault
+}
+
+func (o *LabelDbDto) GetIsDynamic() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IsDynamic
+}
+
+func (o *LabelDbDto) GetIsInterpolated() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.IsInterpolated
 }
 
 func (o *LabelDbDto) GetDateCreated() *time.Time {

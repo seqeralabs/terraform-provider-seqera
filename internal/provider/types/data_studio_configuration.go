@@ -7,10 +7,11 @@ import (
 )
 
 type DataStudioConfiguration struct {
-	CondaEnvironment types.String   `tfsdk:"conda_environment"`
-	CPU              types.Int32    `tfsdk:"cpu"`
-	Gpu              types.Int32    `tfsdk:"gpu"`
-	LifespanHours    types.Int32    `tfsdk:"lifespan_hours"`
-	Memory           types.Int32    `tfsdk:"memory"`
-	MountData        []types.String `tfsdk:"mount_data"`
+	CondaEnvironment types.String            `tfsdk:"conda_environment"`
+	CPU              types.Int32             `tfsdk:"cpu"`
+	Environment      map[string]types.String `tfsdk:"environment"`
+	Gpu              types.Int32             `tfsdk:"gpu"`
+	LifespanHours    types.Int32             `tfsdk:"lifespan_hours"`
+	Memory           types.Int32             `tfsdk:"memory"`
+	MountData        []types.String          `tfsdk:"mount_data"`
 }

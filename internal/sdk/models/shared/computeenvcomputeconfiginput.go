@@ -16,7 +16,9 @@ const (
 	ComputeEnvComputeConfigPlatformAwsCloud              ComputeEnvComputeConfigPlatform = "aws-cloud"
 	ComputeEnvComputeConfigPlatformGoogleLifesciences    ComputeEnvComputeConfigPlatform = "google-lifesciences"
 	ComputeEnvComputeConfigPlatformGoogleBatch           ComputeEnvComputeConfigPlatform = "google-batch"
+	ComputeEnvComputeConfigPlatformGoogleCloud           ComputeEnvComputeConfigPlatform = "google-cloud"
 	ComputeEnvComputeConfigPlatformAzureBatch            ComputeEnvComputeConfigPlatform = "azure-batch"
+	ComputeEnvComputeConfigPlatformAzureCloud            ComputeEnvComputeConfigPlatform = "azure-cloud"
 	ComputeEnvComputeConfigPlatformK8sPlatform           ComputeEnvComputeConfigPlatform = "k8s-platform"
 	ComputeEnvComputeConfigPlatformEksPlatform           ComputeEnvComputeConfigPlatform = "eks-platform"
 	ComputeEnvComputeConfigPlatformGkePlatform           ComputeEnvComputeConfigPlatform = "gke-platform"
@@ -46,7 +48,11 @@ func (e *ComputeEnvComputeConfigPlatform) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "google-batch":
 		fallthrough
+	case "google-cloud":
+		fallthrough
 	case "azure-batch":
+		fallthrough
+	case "azure-cloud":
 		fallthrough
 	case "k8s-platform":
 		fallthrough

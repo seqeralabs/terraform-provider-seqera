@@ -17,7 +17,7 @@ resource "seqera_data_link" "my_datalink" {
   credentials_id    = "aws-credentials-id"
   description       = "S3 bucket for production data storage"
   name              = "my-s3-datalink"
-  provider_type     = "seqeracompute"
+  provider_type     = "azure-cloud"
   public_accessible = false
   resource_ref      = "s3://my-bucket"
   type              = "bucket"
@@ -33,7 +33,7 @@ resource "seqera_data_link" "my_datalink" {
 - `credentials_id` (String)
 - `description` (String)
 - `name` (String)
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]; Requires replacement if changed.
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]; Requires replacement if changed.
 - `public_accessible` (Boolean) Requires replacement if changed.
 - `resource_ref` (String) Requires replacement if changed.
 - `type` (String) must be "bucket"; Requires replacement if changed.
@@ -55,7 +55,7 @@ Read-Only:
 
 - `id` (String)
 - `name` (String)
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "azure-cloud", "seqeracompute"]
 
 ## Import
 

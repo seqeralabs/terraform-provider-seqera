@@ -107,6 +107,20 @@ func (o *ProcessLoad) GetAborted() int64 {
 	return o.Aborted
 }
 
+func (o *ProcessLoad) GetRetries() int64 {
+	if o == nil {
+		return 0
+	}
+	return o.Retries
+}
+
+func (o *ProcessLoad) GetIgnored() int64 {
+	if o == nil {
+		return 0
+	}
+	return o.Ignored
+}
+
 func (o *ProcessLoad) GetMemoryEfficiency() *float32 {
 	if o == nil {
 		return nil

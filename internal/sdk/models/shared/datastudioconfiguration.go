@@ -3,12 +3,13 @@
 package shared
 
 type DataStudioConfiguration struct {
-	Gpu              *int     `json:"gpu,omitempty"`
-	CPU              *int     `json:"cpu,omitempty"`
-	Memory           *int     `json:"memory,omitempty"`
-	MountData        []string `json:"mountData,omitempty"`
-	CondaEnvironment *string  `json:"condaEnvironment,omitempty"`
-	LifespanHours    *int     `json:"lifespanHours,omitempty"`
+	Gpu              *int              `json:"gpu,omitempty"`
+	CPU              *int              `json:"cpu,omitempty"`
+	Memory           *int              `json:"memory,omitempty"`
+	MountData        []string          `json:"mountData,omitempty"`
+	Environment      map[string]string `json:"environment,omitempty"`
+	CondaEnvironment *string           `json:"condaEnvironment,omitempty"`
+	LifespanHours    *int              `json:"lifespanHours,omitempty"`
 }
 
 func (o *DataStudioConfiguration) GetGpu() *int {
@@ -37,6 +38,13 @@ func (o *DataStudioConfiguration) GetMountData() []string {
 		return nil
 	}
 	return o.MountData
+}
+
+func (o *DataStudioConfiguration) GetEnvironment() map[string]string {
+	if o == nil {
+		return nil
+	}
+	return o.Environment
 }
 
 func (o *DataStudioConfiguration) GetCondaEnvironment() *string {

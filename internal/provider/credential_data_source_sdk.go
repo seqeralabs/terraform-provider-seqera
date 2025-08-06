@@ -12,87 +12,92 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx context.Context, resp *shared.CredentialsOutput) diag.Diagnostics {
+func (r *CredentialDataSourceModel) RefreshFromSharedDescribeCredentialsResponse(ctx context.Context, resp *shared.DescribeCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		if resp.Keys.AgentSecurityKeys != nil {
-			r.Keys.TwAgent = &tfTypes.AgentSecurityKeys{}
-			r.Keys.TwAgent.ConnectionID = types.StringPointerValue(resp.Keys.AgentSecurityKeys.ConnectionID)
-			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.AgentSecurityKeys.Shared)
-			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.AgentSecurityKeys.WorkDir)
+		if resp.Credentials == nil {
+			r.Credentials = nil
+		} else {
+			r.Credentials = &tfTypes.Credentials1{}
+			r.Credentials.BaseURL = types.StringPointerValue(resp.Credentials.BaseURL)
+			r.Credentials.Category = types.StringPointerValue(resp.Credentials.Category)
+			r.Credentials.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Credentials.DateCreated))
+			r.Credentials.Deleted = types.BoolPointerValue(resp.Credentials.Deleted)
+			r.Credentials.Description = types.StringPointerValue(resp.Credentials.Description)
+			r.Credentials.ID = types.StringPointerValue(resp.Credentials.ID)
+			if resp.Credentials.Keys.AgentSecurityKeys != nil {
+				r.Credentials.Keys.TwAgent = &tfTypes.AgentSecurityKeys{}
+				r.Credentials.Keys.TwAgent.ConnectionID = types.StringPointerValue(resp.Credentials.Keys.AgentSecurityKeys.ConnectionID)
+				r.Credentials.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Credentials.Keys.AgentSecurityKeys.Shared)
+				r.Credentials.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Credentials.Keys.AgentSecurityKeys.WorkDir)
+			}
+			if resp.Credentials.Keys.AwsSecurityKeysOutput != nil {
+				r.Credentials.Keys.Aws = &tfTypes.AwsSecurityKeys1{}
+				r.Credentials.Keys.Aws.AccessKey = types.StringPointerValue(resp.Credentials.Keys.AwsSecurityKeysOutput.AccessKey)
+				r.Credentials.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Credentials.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
+			}
+			if resp.Credentials.Keys.AzureEntraKeysOutput != nil {
+				r.Credentials.Keys.AzureEntra = &tfTypes.AzureEntraKeys1{}
+				r.Credentials.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.BatchName)
+				r.Credentials.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.ClientID)
+				r.Credentials.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.StorageName)
+				r.Credentials.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.TenantID)
+			}
+			if resp.Credentials.Keys.AzureReposSecurityKeysOutput != nil {
+				r.Credentials.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys1{}
+				r.Credentials.Keys.Azurerepos.Username = types.StringPointerValue(resp.Credentials.Keys.AzureReposSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.AzureSecurityKeysOutput != nil {
+				r.Credentials.Keys.Azure = &tfTypes.AzureSecurityKeys1{}
+				r.Credentials.Keys.Azure.BatchName = types.StringPointerValue(resp.Credentials.Keys.AzureSecurityKeysOutput.BatchName)
+				r.Credentials.Keys.Azure.StorageName = types.StringPointerValue(resp.Credentials.Keys.AzureSecurityKeysOutput.StorageName)
+			}
+			if resp.Credentials.Keys.BitBucketSecurityKeysOutput != nil {
+				r.Credentials.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys1{}
+				r.Credentials.Keys.Bitbucket.Username = types.StringPointerValue(resp.Credentials.Keys.BitBucketSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.CodeCommitSecurityKeysOutput != nil {
+				r.Credentials.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys1{}
+				r.Credentials.Keys.Codecommit.Username = types.StringPointerValue(resp.Credentials.Keys.CodeCommitSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.ContainerRegistryKeysOutput != nil {
+				r.Credentials.Keys.ContainerReg = &tfTypes.ContainerRegistryKeys1{}
+				r.Credentials.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Credentials.Keys.ContainerRegistryKeysOutput.Registry)
+				r.Credentials.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Credentials.Keys.ContainerRegistryKeysOutput.UserName)
+			}
+			if resp.Credentials.Keys.GiteaSecurityKeysOutput != nil {
+				r.Credentials.Keys.Gitea = &tfTypes.GiteaSecurityKeys1{}
+				r.Credentials.Keys.Gitea.Username = types.StringPointerValue(resp.Credentials.Keys.GiteaSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.GitHubSecurityKeysOutput != nil {
+				r.Credentials.Keys.Github = &tfTypes.GitHubSecurityKeys1{}
+				r.Credentials.Keys.Github.Username = types.StringPointerValue(resp.Credentials.Keys.GitHubSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.GitLabSecurityKeysOutput != nil {
+				r.Credentials.Keys.Gitlab = &tfTypes.GitLabSecurityKeys1{}
+				r.Credentials.Keys.Gitlab.Username = types.StringPointerValue(resp.Credentials.Keys.GitLabSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.GoogleSecurityKeysOutput != nil {
+				r.Credentials.Keys.Google = &tfTypes.GoogleSecurityKeys1{}
+			}
+			if resp.Credentials.Keys.K8sSecurityKeysOutput != nil {
+				r.Credentials.Keys.K8s = &tfTypes.K8sSecurityKeys1{}
+				r.Credentials.Keys.K8s.Certificate = types.StringPointerValue(resp.Credentials.Keys.K8sSecurityKeysOutput.Certificate)
+			}
+			if resp.Credentials.Keys.SeqeraComputeSecurityKeysOutput != nil {
+				r.Credentials.Keys.Seqeracompute = &tfTypes.SeqeraComputeSecurityKeys1{}
+				r.Credentials.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Credentials.Keys.SeqeraComputeSecurityKeysOutput.AccessKey)
+				r.Credentials.Keys.Seqeracompute.AssumeRoleArn = types.StringPointerValue(resp.Credentials.Keys.SeqeraComputeSecurityKeysOutput.AssumeRoleArn)
+			}
+			if resp.Credentials.Keys.SSHSecurityKeysOutput != nil {
+				r.Credentials.Keys.SSH = &tfTypes.SSHSecurityKeys1{}
+			}
+			r.Credentials.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Credentials.LastUpdated))
+			r.Credentials.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Credentials.LastUsed))
+			r.Credentials.Name = types.StringValue(resp.Credentials.Name)
+			r.Credentials.ProviderType = types.StringValue(string(resp.Credentials.ProviderType))
 		}
-		if resp.Keys.AwsSecurityKeysOutput != nil {
-			r.Keys.Aws = &tfTypes.AwsSecurityKeys1{}
-			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AccessKey)
-			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
-		}
-		if resp.Keys.AzureEntraKeysOutput != nil {
-			r.Keys.AzureEntra = &tfTypes.AzureEntraKeys1{}
-			r.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.BatchName)
-			r.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.ClientID)
-			r.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.StorageName)
-			r.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.TenantID)
-		}
-		if resp.Keys.AzureReposSecurityKeysOutput != nil {
-			r.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys1{}
-			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
-		}
-		if resp.Keys.AzureSecurityKeysOutput != nil {
-			r.Keys.Azure = &tfTypes.AzureSecurityKeys1{}
-			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.BatchName)
-			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.StorageName)
-		}
-		if resp.Keys.BitBucketSecurityKeysOutput != nil {
-			r.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys1{}
-			r.Keys.Bitbucket.Username = types.StringPointerValue(resp.Keys.BitBucketSecurityKeysOutput.Username)
-		}
-		if resp.Keys.CodeCommitSecurityKeysOutput != nil {
-			r.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys1{}
-			r.Keys.Codecommit.Username = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Username)
-		}
-		if resp.Keys.ContainerRegistryKeysOutput != nil {
-			r.Keys.ContainerReg = &tfTypes.ContainerRegistryKeys1{}
-			r.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.Registry)
-			r.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.UserName)
-		}
-		if resp.Keys.GiteaSecurityKeysOutput != nil {
-			r.Keys.Gitea = &tfTypes.GiteaSecurityKeys1{}
-			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Username)
-		}
-		if resp.Keys.GitHubSecurityKeysOutput != nil {
-			r.Keys.Github = &tfTypes.GitHubSecurityKeys1{}
-			r.Keys.Github.Username = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Username)
-		}
-		if resp.Keys.GitLabSecurityKeysOutput != nil {
-			r.Keys.Gitlab = &tfTypes.GitLabSecurityKeys1{}
-			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
-		}
-		if resp.Keys.GoogleSecurityKeysOutput != nil {
-			r.Keys.Google = &tfTypes.GoogleSecurityKeys1{}
-		}
-		if resp.Keys.K8sSecurityKeysOutput != nil {
-			r.Keys.K8s = &tfTypes.K8sSecurityKeys1{}
-			r.Keys.K8s.Certificate = types.StringPointerValue(resp.Keys.K8sSecurityKeysOutput.Certificate)
-		}
-		if resp.Keys.SeqeraComputeSecurityKeysOutput != nil {
-			r.Keys.Seqeracompute = &tfTypes.SeqeraComputeSecurityKeys1{}
-			r.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.AccessKey)
-			r.Keys.Seqeracompute.AssumeRoleArn = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.AssumeRoleArn)
-		}
-		if resp.Keys.SSHSecurityKeysOutput != nil {
-			r.Keys.SSH = &tfTypes.SSHSecurityKeys1{}
-		}
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
-		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
 	}
 
 	return diags

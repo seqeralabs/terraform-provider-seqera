@@ -82,6 +82,7 @@ Read-Only:
 
 - `conda_environment` (String)
 - `cpu` (Number)
+- `environment` (Map of String)
 - `gpu` (Number)
 - `lifespan_hours` (Number)
 - `memory` (Number)
@@ -96,6 +97,8 @@ Read-Only:
 - `date_created` (String) Timestamp when the label was created
 - `id` (Number) Unique numeric identifier for the label
 - `is_default` (Boolean) Flag indicating if this is a default system label
+- `is_dynamic` (Boolean) Flag indicating if the label value is dynamically generated
+- `is_interpolated` (Boolean) Flag indicating if the label value supports variable interpolation
 - `name` (String) Name or key of the label
 - `resource` (Boolean) Flag indicating if this is a resource-level label
 - `value` (String) Value associated with the label

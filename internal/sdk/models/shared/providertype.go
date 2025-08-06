@@ -14,6 +14,7 @@ const (
 	ProviderTypeGoogle        ProviderType = "google"
 	ProviderTypeAzure         ProviderType = "azure"
 	ProviderTypeAzureEntra    ProviderType = "azure_entra"
+	ProviderTypeAzureCloud    ProviderType = "azure-cloud"
 	ProviderTypeSeqeracompute ProviderType = "seqeracompute"
 )
 
@@ -33,6 +34,8 @@ func (e *ProviderType) UnmarshalJSON(data []byte) error {
 	case "azure":
 		fallthrough
 	case "azure_entra":
+		fallthrough
+	case "azure-cloud":
 		fallthrough
 	case "seqeracompute":
 		*e = ProviderType(v)

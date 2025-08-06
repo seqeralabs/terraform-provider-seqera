@@ -29,27 +29,20 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			r.JobInfo.ExitCode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.JobInfo.ExitCode))
 		}
 		r.Labels = []tfTypes.LabelDbDto{}
-		if len(r.Labels) > len(resp.Labels) {
-			r.Labels = r.Labels[:len(resp.Labels)]
-		}
-		for labelsCount, labelsItem := range resp.Labels {
+
+		for _, labelsItem := range resp.Labels {
 			var labels tfTypes.LabelDbDto
+
 			labels.ID = types.Int64PointerValue(labelsItem.ID)
 			labels.Name = types.StringPointerValue(labelsItem.Name)
 			labels.Value = types.StringPointerValue(labelsItem.Value)
 			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
 			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+			labels.IsDynamic = types.BoolPointerValue(labelsItem.IsDynamic)
+			labels.IsInterpolated = types.BoolPointerValue(labelsItem.IsInterpolated)
 			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			if labelsCount+1 > len(r.Labels) {
-				r.Labels = append(r.Labels, labels)
-			} else {
-				r.Labels[labelsCount].ID = labels.ID
-				r.Labels[labelsCount].Name = labels.Name
-				r.Labels[labelsCount].Value = labels.Value
-				r.Labels[labelsCount].Resource = labels.Resource
-				r.Labels[labelsCount].IsDefault = labels.IsDefault
-				r.Labels[labelsCount].DateCreated = labels.DateCreated
-			}
+
+			r.Labels = append(r.Labels, labels)
 		}
 		r.Messages = make([]types.String, 0, len(resp.Messages))
 		for _, v := range resp.Messages {
@@ -80,6 +73,8 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.Progress.WorkflowProgress.Failed = types.Int64Value(resp.Progress.WorkflowProgress.Failed)
 				r.Progress.WorkflowProgress.Cached = types.Int64Value(resp.Progress.WorkflowProgress.Cached)
 				r.Progress.WorkflowProgress.Aborted = types.Int64Value(resp.Progress.WorkflowProgress.Aborted)
+				r.Progress.WorkflowProgress.Retries = types.Int64Value(resp.Progress.WorkflowProgress.Retries)
+				r.Progress.WorkflowProgress.Ignored = types.Int64Value(resp.Progress.WorkflowProgress.Ignored)
 				r.Progress.WorkflowProgress.MemoryEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.MemoryEfficiency)
 				r.Progress.WorkflowProgress.CPUEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.CPUEfficiency)
 				r.Progress.WorkflowProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.DateCreated))
@@ -106,11 +101,10 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.Progress.WorkflowProgress.Cost = types.Float64PointerValue(resp.Progress.WorkflowProgress.Cost)
 			}
 			r.Progress.ProcessesProgress = []tfTypes.ProcessLoad{}
-			if len(r.Progress.ProcessesProgress) > len(resp.Progress.ProcessesProgress) {
-				r.Progress.ProcessesProgress = r.Progress.ProcessesProgress[:len(resp.Progress.ProcessesProgress)]
-			}
-			for processesProgressCount, processesProgressItem := range resp.Progress.ProcessesProgress {
+
+			for _, processesProgressItem := range resp.Progress.ProcessesProgress {
 				var processesProgress tfTypes.ProcessLoad
+
 				processesProgress.Pending = types.Int64Value(processesProgressItem.Pending)
 				processesProgress.Submitted = types.Int64Value(processesProgressItem.Submitted)
 				processesProgress.Running = types.Int64Value(processesProgressItem.Running)
@@ -118,6 +112,8 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				processesProgress.Failed = types.Int64Value(processesProgressItem.Failed)
 				processesProgress.Cached = types.Int64Value(processesProgressItem.Cached)
 				processesProgress.Aborted = types.Int64Value(processesProgressItem.Aborted)
+				processesProgress.Retries = types.Int64Value(processesProgressItem.Retries)
+				processesProgress.Ignored = types.Int64Value(processesProgressItem.Ignored)
 				processesProgress.MemoryEfficiency = types.Float32PointerValue(processesProgressItem.MemoryEfficiency)
 				processesProgress.CPUEfficiency = types.Float32PointerValue(processesProgressItem.CPUEfficiency)
 				processesProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.DateCreated))
@@ -257,6 +253,19 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.Workflow.Stats.CachedDuration = types.Int64PointerValue(resp.Workflow.Stats.CachedDuration)
 				r.Workflow.Stats.FailedDuration = types.Int64PointerValue(resp.Workflow.Stats.FailedDuration)
 				r.Workflow.Stats.SucceedDuration = types.Int64PointerValue(resp.Workflow.Stats.SucceedDuration)
+			}
+			if resp.Workflow.Fusion == nil {
+				r.Workflow.Fusion = nil
+			} else {
+				r.Workflow.Fusion = &tfTypes.WfFusionMeta{}
+				r.Workflow.Fusion.Enabled = types.BoolPointerValue(resp.Workflow.Fusion.Enabled)
+				r.Workflow.Fusion.Version = types.StringPointerValue(resp.Workflow.Fusion.Version)
+			}
+			if resp.Workflow.Wave == nil {
+				r.Workflow.Wave = nil
+			} else {
+				r.Workflow.Wave = &tfTypes.WfWaveMeta{}
+				r.Workflow.Wave.Enabled = types.BoolPointerValue(resp.Workflow.Wave.Enabled)
 			}
 			r.Workflow.ErrorMessage = types.StringPointerValue(resp.Workflow.ErrorMessage)
 			r.Workflow.ErrorReport = types.StringPointerValue(resp.Workflow.ErrorReport)

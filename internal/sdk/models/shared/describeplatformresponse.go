@@ -48,6 +48,13 @@ func (o *DescribePlatformResponse) GetMetainfoAwsBatch() *AwsBatchPlatformMetain
 	return nil
 }
 
+func (o *DescribePlatformResponse) GetMetainfoGoogleCloud() *GoogleCloudPlatformMetaInfo {
+	if v := o.GetMetainfo(); v != nil {
+		return v.GoogleCloudPlatformMetaInfo
+	}
+	return nil
+}
+
 func (o *DescribePlatformResponse) GetMetainfoLocalPlatform() *LocalPlatformMetainfo {
 	if v := o.GetMetainfo(); v != nil {
 		return v.LocalPlatformMetainfo

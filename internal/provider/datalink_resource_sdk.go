@@ -16,21 +16,15 @@ func (r *DataLinkResourceModel) RefreshFromSharedDataLinkDto(ctx context.Context
 
 	if resp != nil {
 		r.Credentials = []tfTypes.DataLinkCredentials{}
-		if len(r.Credentials) > len(resp.Credentials) {
-			r.Credentials = r.Credentials[:len(resp.Credentials)]
-		}
-		for credentialsCount, credentialsItem := range resp.Credentials {
+
+		for _, credentialsItem := range resp.Credentials {
 			var credentials tfTypes.DataLinkCredentials
+
 			credentials.ID = types.StringValue(credentialsItem.ID)
 			credentials.Name = types.StringValue(credentialsItem.Name)
 			credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
-			if credentialsCount+1 > len(r.Credentials) {
-				r.Credentials = append(r.Credentials, credentials)
-			} else {
-				r.Credentials[credentialsCount].ID = credentials.ID
-				r.Credentials[credentialsCount].Name = credentials.Name
-				r.Credentials[credentialsCount].ProviderType = credentials.ProviderType
-			}
+
+			r.Credentials = append(r.Credentials, credentials)
 		}
 		r.DataLinkID = types.StringPointerValue(resp.DataLinkID)
 		r.Description = types.StringPointerValue(resp.Description)

@@ -16,11 +16,10 @@ func (r *WorkspacesDataSourceModel) RefreshFromSharedListWorkspacesResponse(ctx 
 
 	if resp != nil {
 		r.Workspaces = []tfTypes.WorkspaceDbDto{}
-		if len(r.Workspaces) > len(resp.Workspaces) {
-			r.Workspaces = r.Workspaces[:len(resp.Workspaces)]
-		}
-		for workspacesCount, workspacesItem := range resp.Workspaces {
+
+		for _, workspacesItem := range resp.Workspaces {
 			var workspaces tfTypes.WorkspaceDbDto
+
 			workspaces.Description = types.StringPointerValue(workspacesItem.Description)
 			workspaces.FullName = types.StringPointerValue(workspacesItem.FullName)
 			workspaces.ID = types.Int64PointerValue(workspacesItem.ID)
@@ -30,15 +29,8 @@ func (r *WorkspacesDataSourceModel) RefreshFromSharedListWorkspacesResponse(ctx 
 			} else {
 				workspaces.Visibility = types.StringNull()
 			}
-			if workspacesCount+1 > len(r.Workspaces) {
-				r.Workspaces = append(r.Workspaces, workspaces)
-			} else {
-				r.Workspaces[workspacesCount].Description = workspaces.Description
-				r.Workspaces[workspacesCount].FullName = workspaces.FullName
-				r.Workspaces[workspacesCount].ID = workspaces.ID
-				r.Workspaces[workspacesCount].Name = workspaces.Name
-				r.Workspaces[workspacesCount].Visibility = workspaces.Visibility
-			}
+
+			r.Workspaces = append(r.Workspaces, workspaces)
 		}
 	}
 

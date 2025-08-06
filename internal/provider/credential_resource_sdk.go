@@ -22,121 +22,126 @@ func (r *CredentialResourceModel) RefreshFromSharedCreateCredentialsResponse(ctx
 	return diags
 }
 
-func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context.Context, resp *shared.CredentialsOutput) diag.Diagnostics {
+func (r *CredentialResourceModel) RefreshFromSharedDescribeCredentialsResponse(ctx context.Context, resp *shared.DescribeCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		if resp.Keys.AgentSecurityKeys != nil {
-			r.Keys.TwAgent = &tfTypes.AgentSecurityKeys{}
-			r.Keys.TwAgent.ConnectionID = types.StringPointerValue(resp.Keys.AgentSecurityKeys.ConnectionID)
-			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.AgentSecurityKeys.Shared)
-			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.AgentSecurityKeys.WorkDir)
+		if resp.Credentials == nil {
+			r.Credentials = nil
+		} else {
+			r.Credentials = &tfTypes.Credentials{}
+			r.Credentials.BaseURL = types.StringPointerValue(resp.Credentials.BaseURL)
+			r.Credentials.Category = types.StringPointerValue(resp.Credentials.Category)
+			r.Credentials.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Credentials.DateCreated))
+			r.Credentials.Deleted = types.BoolPointerValue(resp.Credentials.Deleted)
+			r.Credentials.Description = types.StringPointerValue(resp.Credentials.Description)
+			r.Credentials.ID = types.StringPointerValue(resp.Credentials.ID)
+			if resp.Credentials.Keys.AgentSecurityKeys != nil {
+				r.Credentials.Keys.TwAgent = &tfTypes.AgentSecurityKeys{}
+				r.Credentials.Keys.TwAgent.ConnectionID = types.StringPointerValue(resp.Credentials.Keys.AgentSecurityKeys.ConnectionID)
+				r.Credentials.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Credentials.Keys.AgentSecurityKeys.Shared)
+				r.Credentials.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Credentials.Keys.AgentSecurityKeys.WorkDir)
+			}
+			if resp.Credentials.Keys.AwsSecurityKeysOutput != nil {
+				r.Credentials.Keys.Aws = &tfTypes.AwsSecurityKeys{}
+				awsPriorData := r.Credentials.Keys.Aws
+				r.Credentials.Keys.Aws.AccessKey = types.StringPointerValue(resp.Credentials.Keys.AwsSecurityKeysOutput.AccessKey)
+				r.Credentials.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Credentials.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
+				r.Credentials.Keys.Aws.SecretKey = awsPriorData.SecretKey
+			}
+			if resp.Credentials.Keys.AzureEntraKeysOutput != nil {
+				r.Credentials.Keys.AzureEntra = &tfTypes.AzureEntraKeys{}
+				azureEntraPriorData := r.Credentials.Keys.AzureEntra
+				r.Credentials.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
+				r.Credentials.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.BatchName)
+				r.Credentials.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.ClientID)
+				r.Credentials.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
+				r.Credentials.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
+				r.Credentials.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.StorageName)
+				r.Credentials.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Credentials.Keys.AzureEntraKeysOutput.TenantID)
+			}
+			if resp.Credentials.Keys.AzureReposSecurityKeysOutput != nil {
+				r.Credentials.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys{}
+				azurereposPriorData := r.Credentials.Keys.Azurerepos
+				r.Credentials.Keys.Azurerepos.Password = azurereposPriorData.Password
+				r.Credentials.Keys.Azurerepos.Username = types.StringPointerValue(resp.Credentials.Keys.AzureReposSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.AzureSecurityKeysOutput != nil {
+				r.Credentials.Keys.Azure = &tfTypes.AzureSecurityKeys{}
+				azurePriorData := r.Credentials.Keys.Azure
+				r.Credentials.Keys.Azure.BatchKey = azurePriorData.BatchKey
+				r.Credentials.Keys.Azure.BatchName = types.StringPointerValue(resp.Credentials.Keys.AzureSecurityKeysOutput.BatchName)
+				r.Credentials.Keys.Azure.StorageKey = azurePriorData.StorageKey
+				r.Credentials.Keys.Azure.StorageName = types.StringPointerValue(resp.Credentials.Keys.AzureSecurityKeysOutput.StorageName)
+			}
+			if resp.Credentials.Keys.BitBucketSecurityKeysOutput != nil {
+				r.Credentials.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys{}
+				bitbucketPriorData := r.Credentials.Keys.Bitbucket
+				r.Credentials.Keys.Bitbucket.Password = bitbucketPriorData.Password
+				r.Credentials.Keys.Bitbucket.Username = types.StringPointerValue(resp.Credentials.Keys.BitBucketSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.CodeCommitSecurityKeysOutput != nil {
+				r.Credentials.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys{}
+				codecommitPriorData := r.Credentials.Keys.Codecommit
+				r.Credentials.Keys.Codecommit.Password = codecommitPriorData.Password
+				r.Credentials.Keys.Codecommit.Username = types.StringPointerValue(resp.Credentials.Keys.CodeCommitSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.ContainerRegistryKeysOutput != nil {
+				r.Credentials.Keys.ContainerReg = &tfTypes.ContainerRegistryKeys{}
+				containerRegPriorData := r.Credentials.Keys.ContainerReg
+				r.Credentials.Keys.ContainerReg.Password = containerRegPriorData.Password
+				r.Credentials.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Credentials.Keys.ContainerRegistryKeysOutput.Registry)
+				r.Credentials.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Credentials.Keys.ContainerRegistryKeysOutput.UserName)
+			}
+			if resp.Credentials.Keys.GiteaSecurityKeysOutput != nil {
+				r.Credentials.Keys.Gitea = &tfTypes.GiteaSecurityKeys{}
+				giteaPriorData := r.Credentials.Keys.Gitea
+				r.Credentials.Keys.Gitea.Password = giteaPriorData.Password
+				r.Credentials.Keys.Gitea.Username = types.StringPointerValue(resp.Credentials.Keys.GiteaSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.GitHubSecurityKeysOutput != nil {
+				r.Credentials.Keys.Github = &tfTypes.GitHubSecurityKeys{}
+				githubPriorData := r.Credentials.Keys.Github
+				r.Credentials.Keys.Github.Password = githubPriorData.Password
+				r.Credentials.Keys.Github.Username = types.StringPointerValue(resp.Credentials.Keys.GitHubSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.GitLabSecurityKeysOutput != nil {
+				r.Credentials.Keys.Gitlab = &tfTypes.GitLabSecurityKeys{}
+				gitlabPriorData := r.Credentials.Keys.Gitlab
+				r.Credentials.Keys.Gitlab.Password = gitlabPriorData.Password
+				r.Credentials.Keys.Gitlab.Token = gitlabPriorData.Token
+				r.Credentials.Keys.Gitlab.Username = types.StringPointerValue(resp.Credentials.Keys.GitLabSecurityKeysOutput.Username)
+			}
+			if resp.Credentials.Keys.GoogleSecurityKeysOutput != nil {
+				r.Credentials.Keys.Google = &tfTypes.GoogleSecurityKeys{}
+				googlePriorData := r.Credentials.Keys.Google
+				r.Credentials.Keys.Google.Data = googlePriorData.Data
+			}
+			if resp.Credentials.Keys.K8sSecurityKeysOutput != nil {
+				r.Credentials.Keys.K8s = &tfTypes.K8sSecurityKeys{}
+				k8sPriorData := r.Credentials.Keys.K8s
+				r.Credentials.Keys.K8s.Certificate = types.StringPointerValue(resp.Credentials.Keys.K8sSecurityKeysOutput.Certificate)
+				r.Credentials.Keys.K8s.PrivateKey = k8sPriorData.PrivateKey
+				r.Credentials.Keys.K8s.Token = k8sPriorData.Token
+			}
+			if resp.Credentials.Keys.SeqeraComputeSecurityKeysOutput != nil {
+				r.Credentials.Keys.Seqeracompute = &tfTypes.SeqeraComputeSecurityKeys{}
+				seqeracomputePriorData := r.Credentials.Keys.Seqeracompute
+				r.Credentials.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Credentials.Keys.SeqeraComputeSecurityKeysOutput.AccessKey)
+				r.Credentials.Keys.Seqeracompute.AssumeRoleArn = types.StringPointerValue(resp.Credentials.Keys.SeqeraComputeSecurityKeysOutput.AssumeRoleArn)
+				r.Credentials.Keys.Seqeracompute.SecretKey = seqeracomputePriorData.SecretKey
+			}
+			if resp.Credentials.Keys.SSHSecurityKeysOutput != nil {
+				r.Credentials.Keys.SSH = &tfTypes.SSHSecurityKeys{}
+				sshPriorData := r.Credentials.Keys.SSH
+				r.Credentials.Keys.SSH.Passphrase = sshPriorData.Passphrase
+				r.Credentials.Keys.SSH.PrivateKey = sshPriorData.PrivateKey
+			}
+			r.Credentials.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Credentials.LastUpdated))
+			r.Credentials.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Credentials.LastUsed))
+			r.Credentials.Name = types.StringValue(resp.Credentials.Name)
+			r.Credentials.ProviderType = types.StringValue(string(resp.Credentials.ProviderType))
 		}
-		if resp.Keys.AwsSecurityKeysOutput != nil {
-			r.Keys.Aws = &tfTypes.AwsSecurityKeys{}
-			awsPriorData := r.Keys.Aws
-			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AccessKey)
-			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
-			r.Keys.Aws.SecretKey = awsPriorData.SecretKey
-		}
-		if resp.Keys.AzureEntraKeysOutput != nil {
-			r.Keys.AzureEntra = &tfTypes.AzureEntraKeys{}
-			azureEntraPriorData := r.Keys.AzureEntra
-			r.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
-			r.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.BatchName)
-			r.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.ClientID)
-			r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
-			r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
-			r.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.StorageName)
-			r.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.TenantID)
-		}
-		if resp.Keys.AzureReposSecurityKeysOutput != nil {
-			r.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys{}
-			azurereposPriorData := r.Keys.Azurerepos
-			r.Keys.Azurerepos.Password = azurereposPriorData.Password
-			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
-		}
-		if resp.Keys.AzureSecurityKeysOutput != nil {
-			r.Keys.Azure = &tfTypes.AzureSecurityKeys{}
-			azurePriorData := r.Keys.Azure
-			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
-			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.BatchName)
-			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
-			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.StorageName)
-		}
-		if resp.Keys.BitBucketSecurityKeysOutput != nil {
-			r.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys{}
-			bitbucketPriorData := r.Keys.Bitbucket
-			r.Keys.Bitbucket.Password = bitbucketPriorData.Password
-			r.Keys.Bitbucket.Username = types.StringPointerValue(resp.Keys.BitBucketSecurityKeysOutput.Username)
-		}
-		if resp.Keys.CodeCommitSecurityKeysOutput != nil {
-			r.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys{}
-			codecommitPriorData := r.Keys.Codecommit
-			r.Keys.Codecommit.Password = codecommitPriorData.Password
-			r.Keys.Codecommit.Username = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Username)
-		}
-		if resp.Keys.ContainerRegistryKeysOutput != nil {
-			r.Keys.ContainerReg = &tfTypes.ContainerRegistryKeys{}
-			containerRegPriorData := r.Keys.ContainerReg
-			r.Keys.ContainerReg.Password = containerRegPriorData.Password
-			r.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.Registry)
-			r.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.UserName)
-		}
-		if resp.Keys.GiteaSecurityKeysOutput != nil {
-			r.Keys.Gitea = &tfTypes.GiteaSecurityKeys{}
-			giteaPriorData := r.Keys.Gitea
-			r.Keys.Gitea.Password = giteaPriorData.Password
-			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Username)
-		}
-		if resp.Keys.GitHubSecurityKeysOutput != nil {
-			r.Keys.Github = &tfTypes.GitHubSecurityKeys{}
-			githubPriorData := r.Keys.Github
-			r.Keys.Github.Password = githubPriorData.Password
-			r.Keys.Github.Username = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Username)
-		}
-		if resp.Keys.GitLabSecurityKeysOutput != nil {
-			r.Keys.Gitlab = &tfTypes.GitLabSecurityKeys{}
-			gitlabPriorData := r.Keys.Gitlab
-			r.Keys.Gitlab.Password = gitlabPriorData.Password
-			r.Keys.Gitlab.Token = gitlabPriorData.Token
-			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
-		}
-		if resp.Keys.GoogleSecurityKeysOutput != nil {
-			r.Keys.Google = &tfTypes.GoogleSecurityKeys{}
-			googlePriorData := r.Keys.Google
-			r.Keys.Google.Data = googlePriorData.Data
-		}
-		if resp.Keys.K8sSecurityKeysOutput != nil {
-			r.Keys.K8s = &tfTypes.K8sSecurityKeys{}
-			k8sPriorData := r.Keys.K8s
-			r.Keys.K8s.Certificate = types.StringPointerValue(resp.Keys.K8sSecurityKeysOutput.Certificate)
-			r.Keys.K8s.PrivateKey = k8sPriorData.PrivateKey
-			r.Keys.K8s.Token = k8sPriorData.Token
-		}
-		if resp.Keys.SeqeraComputeSecurityKeysOutput != nil {
-			r.Keys.Seqeracompute = &tfTypes.SeqeraComputeSecurityKeys{}
-			seqeracomputePriorData := r.Keys.Seqeracompute
-			r.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.AccessKey)
-			r.Keys.Seqeracompute.AssumeRoleArn = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.AssumeRoleArn)
-			r.Keys.Seqeracompute.SecretKey = seqeracomputePriorData.SecretKey
-		}
-		if resp.Keys.SSHSecurityKeysOutput != nil {
-			r.Keys.SSH = &tfTypes.SSHSecurityKeys{}
-			sshPriorData := r.Keys.SSH
-			r.Keys.SSH.Passphrase = sshPriorData.Passphrase
-			r.Keys.SSH.PrivateKey = sshPriorData.PrivateKey
-		}
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
-		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
 	}
 
 	return diags
@@ -241,504 +246,493 @@ func (r *CredentialResourceModel) ToOperationsUpdateCredentialsRequest(ctx conte
 func (r *CredentialResourceModel) ToSharedCreateCredentialsRequest(ctx context.Context) (*shared.CreateCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedCredentialsInput(ctx)
-	diags.Append(credentialsDiags...)
+	var credentials *shared.CredentialsInput
+	if r.Credentials != nil {
+		id := new(string)
+		if !r.Credentials.ID.IsUnknown() && !r.Credentials.ID.IsNull() {
+			*id = r.Credentials.ID.ValueString()
+		} else {
+			id = nil
+		}
+		var name string
+		name = r.Credentials.Name.ValueString()
 
-	if diags.HasError() {
-		return nil, diags
+		description := new(string)
+		if !r.Credentials.Description.IsUnknown() && !r.Credentials.Description.IsNull() {
+			*description = r.Credentials.Description.ValueString()
+		} else {
+			description = nil
+		}
+		providerType := shared.CredentialsProviderType(r.Credentials.ProviderType.ValueString())
+		baseURL := new(string)
+		if !r.Credentials.BaseURL.IsUnknown() && !r.Credentials.BaseURL.IsNull() {
+			*baseURL = r.Credentials.BaseURL.ValueString()
+		} else {
+			baseURL = nil
+		}
+		category := new(string)
+		if !r.Credentials.Category.IsUnknown() && !r.Credentials.Category.IsNull() {
+			*category = r.Credentials.Category.ValueString()
+		} else {
+			category = nil
+		}
+		var keys shared.SecurityKeys
+		var awsSecurityKeys *shared.AwsSecurityKeys
+		if r.Credentials.Keys.Aws != nil {
+			accessKey := new(string)
+			if !r.Credentials.Keys.Aws.AccessKey.IsUnknown() && !r.Credentials.Keys.Aws.AccessKey.IsNull() {
+				*accessKey = r.Credentials.Keys.Aws.AccessKey.ValueString()
+			} else {
+				accessKey = nil
+			}
+			secretKey := new(string)
+			if !r.Credentials.Keys.Aws.SecretKey.IsUnknown() && !r.Credentials.Keys.Aws.SecretKey.IsNull() {
+				*secretKey = r.Credentials.Keys.Aws.SecretKey.ValueString()
+			} else {
+				secretKey = nil
+			}
+			assumeRoleArn := new(string)
+			if !r.Credentials.Keys.Aws.AssumeRoleArn.IsUnknown() && !r.Credentials.Keys.Aws.AssumeRoleArn.IsNull() {
+				*assumeRoleArn = r.Credentials.Keys.Aws.AssumeRoleArn.ValueString()
+			} else {
+				assumeRoleArn = nil
+			}
+			awsSecurityKeys = &shared.AwsSecurityKeys{
+				AccessKey:     accessKey,
+				SecretKey:     secretKey,
+				AssumeRoleArn: assumeRoleArn,
+			}
+		}
+		if awsSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AwsSecurityKeys: awsSecurityKeys,
+			}
+		}
+		var googleSecurityKeys *shared.GoogleSecurityKeys
+		if r.Credentials.Keys.Google != nil {
+			data := new(string)
+			if !r.Credentials.Keys.Google.Data.IsUnknown() && !r.Credentials.Keys.Google.Data.IsNull() {
+				*data = r.Credentials.Keys.Google.Data.ValueString()
+			} else {
+				data = nil
+			}
+			googleSecurityKeys = &shared.GoogleSecurityKeys{
+				Data: data,
+			}
+		}
+		if googleSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GoogleSecurityKeys: googleSecurityKeys,
+			}
+		}
+		var gitHubSecurityKeys *shared.GitHubSecurityKeys
+		if r.Credentials.Keys.Github != nil {
+			username := new(string)
+			if !r.Credentials.Keys.Github.Username.IsUnknown() && !r.Credentials.Keys.Github.Username.IsNull() {
+				*username = r.Credentials.Keys.Github.Username.ValueString()
+			} else {
+				username = nil
+			}
+			password := new(string)
+			if !r.Credentials.Keys.Github.Password.IsUnknown() && !r.Credentials.Keys.Github.Password.IsNull() {
+				*password = r.Credentials.Keys.Github.Password.ValueString()
+			} else {
+				password = nil
+			}
+			gitHubSecurityKeys = &shared.GitHubSecurityKeys{
+				Username: username,
+				Password: password,
+			}
+		}
+		if gitHubSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GitHubSecurityKeys: gitHubSecurityKeys,
+			}
+		}
+		var gitLabSecurityKeys *shared.GitLabSecurityKeys
+		if r.Credentials.Keys.Gitlab != nil {
+			username1 := new(string)
+			if !r.Credentials.Keys.Gitlab.Username.IsUnknown() && !r.Credentials.Keys.Gitlab.Username.IsNull() {
+				*username1 = r.Credentials.Keys.Gitlab.Username.ValueString()
+			} else {
+				username1 = nil
+			}
+			password1 := new(string)
+			if !r.Credentials.Keys.Gitlab.Password.IsUnknown() && !r.Credentials.Keys.Gitlab.Password.IsNull() {
+				*password1 = r.Credentials.Keys.Gitlab.Password.ValueString()
+			} else {
+				password1 = nil
+			}
+			token := new(string)
+			if !r.Credentials.Keys.Gitlab.Token.IsUnknown() && !r.Credentials.Keys.Gitlab.Token.IsNull() {
+				*token = r.Credentials.Keys.Gitlab.Token.ValueString()
+			} else {
+				token = nil
+			}
+			gitLabSecurityKeys = &shared.GitLabSecurityKeys{
+				Username: username1,
+				Password: password1,
+				Token:    token,
+			}
+		}
+		if gitLabSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GitLabSecurityKeys: gitLabSecurityKeys,
+			}
+		}
+		var bitBucketSecurityKeys *shared.BitBucketSecurityKeys
+		if r.Credentials.Keys.Bitbucket != nil {
+			username2 := new(string)
+			if !r.Credentials.Keys.Bitbucket.Username.IsUnknown() && !r.Credentials.Keys.Bitbucket.Username.IsNull() {
+				*username2 = r.Credentials.Keys.Bitbucket.Username.ValueString()
+			} else {
+				username2 = nil
+			}
+			password2 := new(string)
+			if !r.Credentials.Keys.Bitbucket.Password.IsUnknown() && !r.Credentials.Keys.Bitbucket.Password.IsNull() {
+				*password2 = r.Credentials.Keys.Bitbucket.Password.ValueString()
+			} else {
+				password2 = nil
+			}
+			bitBucketSecurityKeys = &shared.BitBucketSecurityKeys{
+				Username: username2,
+				Password: password2,
+			}
+		}
+		if bitBucketSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				BitBucketSecurityKeys: bitBucketSecurityKeys,
+			}
+		}
+		var giteaSecurityKeys *shared.GiteaSecurityKeys
+		if r.Credentials.Keys.Gitea != nil {
+			username3 := new(string)
+			if !r.Credentials.Keys.Gitea.Username.IsUnknown() && !r.Credentials.Keys.Gitea.Username.IsNull() {
+				*username3 = r.Credentials.Keys.Gitea.Username.ValueString()
+			} else {
+				username3 = nil
+			}
+			password3 := new(string)
+			if !r.Credentials.Keys.Gitea.Password.IsUnknown() && !r.Credentials.Keys.Gitea.Password.IsNull() {
+				*password3 = r.Credentials.Keys.Gitea.Password.ValueString()
+			} else {
+				password3 = nil
+			}
+			giteaSecurityKeys = &shared.GiteaSecurityKeys{
+				Username: username3,
+				Password: password3,
+			}
+		}
+		if giteaSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GiteaSecurityKeys: giteaSecurityKeys,
+			}
+		}
+		var sshSecurityKeys *shared.SSHSecurityKeys
+		if r.Credentials.Keys.SSH != nil {
+			privateKey := new(string)
+			if !r.Credentials.Keys.SSH.PrivateKey.IsUnknown() && !r.Credentials.Keys.SSH.PrivateKey.IsNull() {
+				*privateKey = r.Credentials.Keys.SSH.PrivateKey.ValueString()
+			} else {
+				privateKey = nil
+			}
+			passphrase := new(string)
+			if !r.Credentials.Keys.SSH.Passphrase.IsUnknown() && !r.Credentials.Keys.SSH.Passphrase.IsNull() {
+				*passphrase = r.Credentials.Keys.SSH.Passphrase.ValueString()
+			} else {
+				passphrase = nil
+			}
+			sshSecurityKeys = &shared.SSHSecurityKeys{
+				PrivateKey: privateKey,
+				Passphrase: passphrase,
+			}
+		}
+		if sshSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				SSHSecurityKeys: sshSecurityKeys,
+			}
+		}
+		var k8sSecurityKeys *shared.K8sSecurityKeys
+		if r.Credentials.Keys.K8s != nil {
+			certificate := new(string)
+			if !r.Credentials.Keys.K8s.Certificate.IsUnknown() && !r.Credentials.Keys.K8s.Certificate.IsNull() {
+				*certificate = r.Credentials.Keys.K8s.Certificate.ValueString()
+			} else {
+				certificate = nil
+			}
+			privateKey1 := new(string)
+			if !r.Credentials.Keys.K8s.PrivateKey.IsUnknown() && !r.Credentials.Keys.K8s.PrivateKey.IsNull() {
+				*privateKey1 = r.Credentials.Keys.K8s.PrivateKey.ValueString()
+			} else {
+				privateKey1 = nil
+			}
+			token1 := new(string)
+			if !r.Credentials.Keys.K8s.Token.IsUnknown() && !r.Credentials.Keys.K8s.Token.IsNull() {
+				*token1 = r.Credentials.Keys.K8s.Token.ValueString()
+			} else {
+				token1 = nil
+			}
+			k8sSecurityKeys = &shared.K8sSecurityKeys{
+				Certificate: certificate,
+				PrivateKey:  privateKey1,
+				Token:       token1,
+			}
+		}
+		if k8sSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				K8sSecurityKeys: k8sSecurityKeys,
+			}
+		}
+		var azureSecurityKeys *shared.AzureSecurityKeys
+		if r.Credentials.Keys.Azure != nil {
+			batchName := new(string)
+			if !r.Credentials.Keys.Azure.BatchName.IsUnknown() && !r.Credentials.Keys.Azure.BatchName.IsNull() {
+				*batchName = r.Credentials.Keys.Azure.BatchName.ValueString()
+			} else {
+				batchName = nil
+			}
+			storageName := new(string)
+			if !r.Credentials.Keys.Azure.StorageName.IsUnknown() && !r.Credentials.Keys.Azure.StorageName.IsNull() {
+				*storageName = r.Credentials.Keys.Azure.StorageName.ValueString()
+			} else {
+				storageName = nil
+			}
+			batchKey := new(string)
+			if !r.Credentials.Keys.Azure.BatchKey.IsUnknown() && !r.Credentials.Keys.Azure.BatchKey.IsNull() {
+				*batchKey = r.Credentials.Keys.Azure.BatchKey.ValueString()
+			} else {
+				batchKey = nil
+			}
+			storageKey := new(string)
+			if !r.Credentials.Keys.Azure.StorageKey.IsUnknown() && !r.Credentials.Keys.Azure.StorageKey.IsNull() {
+				*storageKey = r.Credentials.Keys.Azure.StorageKey.ValueString()
+			} else {
+				storageKey = nil
+			}
+			azureSecurityKeys = &shared.AzureSecurityKeys{
+				BatchName:   batchName,
+				StorageName: storageName,
+				BatchKey:    batchKey,
+				StorageKey:  storageKey,
+			}
+		}
+		if azureSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AzureSecurityKeys: azureSecurityKeys,
+			}
+		}
+		var azureReposSecurityKeys *shared.AzureReposSecurityKeys
+		if r.Credentials.Keys.Azurerepos != nil {
+			username4 := new(string)
+			if !r.Credentials.Keys.Azurerepos.Username.IsUnknown() && !r.Credentials.Keys.Azurerepos.Username.IsNull() {
+				*username4 = r.Credentials.Keys.Azurerepos.Username.ValueString()
+			} else {
+				username4 = nil
+			}
+			password4 := new(string)
+			if !r.Credentials.Keys.Azurerepos.Password.IsUnknown() && !r.Credentials.Keys.Azurerepos.Password.IsNull() {
+				*password4 = r.Credentials.Keys.Azurerepos.Password.ValueString()
+			} else {
+				password4 = nil
+			}
+			azureReposSecurityKeys = &shared.AzureReposSecurityKeys{
+				Username: username4,
+				Password: password4,
+			}
+		}
+		if azureReposSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AzureReposSecurityKeys: azureReposSecurityKeys,
+			}
+		}
+		var containerRegistryKeys *shared.ContainerRegistryKeys
+		if r.Credentials.Keys.ContainerReg != nil {
+			userName := new(string)
+			if !r.Credentials.Keys.ContainerReg.UserName.IsUnknown() && !r.Credentials.Keys.ContainerReg.UserName.IsNull() {
+				*userName = r.Credentials.Keys.ContainerReg.UserName.ValueString()
+			} else {
+				userName = nil
+			}
+			password5 := new(string)
+			if !r.Credentials.Keys.ContainerReg.Password.IsUnknown() && !r.Credentials.Keys.ContainerReg.Password.IsNull() {
+				*password5 = r.Credentials.Keys.ContainerReg.Password.ValueString()
+			} else {
+				password5 = nil
+			}
+			registry := new(string)
+			if !r.Credentials.Keys.ContainerReg.Registry.IsUnknown() && !r.Credentials.Keys.ContainerReg.Registry.IsNull() {
+				*registry = r.Credentials.Keys.ContainerReg.Registry.ValueString()
+			} else {
+				registry = nil
+			}
+			containerRegistryKeys = &shared.ContainerRegistryKeys{
+				UserName: userName,
+				Password: password5,
+				Registry: registry,
+			}
+		}
+		if containerRegistryKeys != nil {
+			keys = shared.SecurityKeys{
+				ContainerRegistryKeys: containerRegistryKeys,
+			}
+		}
+		var agentSecurityKeys *shared.AgentSecurityKeys
+		if r.Credentials.Keys.TwAgent != nil {
+			connectionID := new(string)
+			if !r.Credentials.Keys.TwAgent.ConnectionID.IsUnknown() && !r.Credentials.Keys.TwAgent.ConnectionID.IsNull() {
+				*connectionID = r.Credentials.Keys.TwAgent.ConnectionID.ValueString()
+			} else {
+				connectionID = nil
+			}
+			workDir := new(string)
+			if !r.Credentials.Keys.TwAgent.WorkDir.IsUnknown() && !r.Credentials.Keys.TwAgent.WorkDir.IsNull() {
+				*workDir = r.Credentials.Keys.TwAgent.WorkDir.ValueString()
+			} else {
+				workDir = nil
+			}
+			sharedVar := new(bool)
+			if !r.Credentials.Keys.TwAgent.Shared.IsUnknown() && !r.Credentials.Keys.TwAgent.Shared.IsNull() {
+				*sharedVar = r.Credentials.Keys.TwAgent.Shared.ValueBool()
+			} else {
+				sharedVar = nil
+			}
+			agentSecurityKeys = &shared.AgentSecurityKeys{
+				ConnectionID: connectionID,
+				WorkDir:      workDir,
+				Shared:       sharedVar,
+			}
+		}
+		if agentSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AgentSecurityKeys: agentSecurityKeys,
+			}
+		}
+		var codeCommitSecurityKeys *shared.CodeCommitSecurityKeys
+		if r.Credentials.Keys.Codecommit != nil {
+			username5 := new(string)
+			if !r.Credentials.Keys.Codecommit.Username.IsUnknown() && !r.Credentials.Keys.Codecommit.Username.IsNull() {
+				*username5 = r.Credentials.Keys.Codecommit.Username.ValueString()
+			} else {
+				username5 = nil
+			}
+			password6 := new(string)
+			if !r.Credentials.Keys.Codecommit.Password.IsUnknown() && !r.Credentials.Keys.Codecommit.Password.IsNull() {
+				*password6 = r.Credentials.Keys.Codecommit.Password.ValueString()
+			} else {
+				password6 = nil
+			}
+			codeCommitSecurityKeys = &shared.CodeCommitSecurityKeys{
+				Username: username5,
+				Password: password6,
+			}
+		}
+		if codeCommitSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				CodeCommitSecurityKeys: codeCommitSecurityKeys,
+			}
+		}
+		var azureEntraKeys *shared.AzureEntraKeys
+		if r.Credentials.Keys.AzureEntra != nil {
+			batchName1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.BatchName.IsUnknown() && !r.Credentials.Keys.AzureEntra.BatchName.IsNull() {
+				*batchName1 = r.Credentials.Keys.AzureEntra.BatchName.ValueString()
+			} else {
+				batchName1 = nil
+			}
+			storageName1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.StorageName.IsUnknown() && !r.Credentials.Keys.AzureEntra.StorageName.IsNull() {
+				*storageName1 = r.Credentials.Keys.AzureEntra.StorageName.ValueString()
+			} else {
+				storageName1 = nil
+			}
+			batchKey1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.BatchKey.IsUnknown() && !r.Credentials.Keys.AzureEntra.BatchKey.IsNull() {
+				*batchKey1 = r.Credentials.Keys.AzureEntra.BatchKey.ValueString()
+			} else {
+				batchKey1 = nil
+			}
+			storageKey1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.StorageKey.IsUnknown() && !r.Credentials.Keys.AzureEntra.StorageKey.IsNull() {
+				*storageKey1 = r.Credentials.Keys.AzureEntra.StorageKey.ValueString()
+			} else {
+				storageKey1 = nil
+			}
+			tenantID := new(string)
+			if !r.Credentials.Keys.AzureEntra.TenantID.IsUnknown() && !r.Credentials.Keys.AzureEntra.TenantID.IsNull() {
+				*tenantID = r.Credentials.Keys.AzureEntra.TenantID.ValueString()
+			} else {
+				tenantID = nil
+			}
+			clientID := new(string)
+			if !r.Credentials.Keys.AzureEntra.ClientID.IsUnknown() && !r.Credentials.Keys.AzureEntra.ClientID.IsNull() {
+				*clientID = r.Credentials.Keys.AzureEntra.ClientID.ValueString()
+			} else {
+				clientID = nil
+			}
+			clientSecret := new(string)
+			if !r.Credentials.Keys.AzureEntra.ClientSecret.IsUnknown() && !r.Credentials.Keys.AzureEntra.ClientSecret.IsNull() {
+				*clientSecret = r.Credentials.Keys.AzureEntra.ClientSecret.ValueString()
+			} else {
+				clientSecret = nil
+			}
+			azureEntraKeys = &shared.AzureEntraKeys{
+				BatchName:    batchName1,
+				StorageName:  storageName1,
+				BatchKey:     batchKey1,
+				StorageKey:   storageKey1,
+				TenantID:     tenantID,
+				ClientID:     clientID,
+				ClientSecret: clientSecret,
+			}
+		}
+		if azureEntraKeys != nil {
+			keys = shared.SecurityKeys{
+				AzureEntraKeys: azureEntraKeys,
+			}
+		}
+		var seqeraComputeSecurityKeys *shared.SeqeraComputeSecurityKeys
+		if r.Credentials.Keys.Seqeracompute != nil {
+			accessKey1 := new(string)
+			if !r.Credentials.Keys.Seqeracompute.AccessKey.IsUnknown() && !r.Credentials.Keys.Seqeracompute.AccessKey.IsNull() {
+				*accessKey1 = r.Credentials.Keys.Seqeracompute.AccessKey.ValueString()
+			} else {
+				accessKey1 = nil
+			}
+			secretKey1 := new(string)
+			if !r.Credentials.Keys.Seqeracompute.SecretKey.IsUnknown() && !r.Credentials.Keys.Seqeracompute.SecretKey.IsNull() {
+				*secretKey1 = r.Credentials.Keys.Seqeracompute.SecretKey.ValueString()
+			} else {
+				secretKey1 = nil
+			}
+			assumeRoleArn1 := new(string)
+			if !r.Credentials.Keys.Seqeracompute.AssumeRoleArn.IsUnknown() && !r.Credentials.Keys.Seqeracompute.AssumeRoleArn.IsNull() {
+				*assumeRoleArn1 = r.Credentials.Keys.Seqeracompute.AssumeRoleArn.ValueString()
+			} else {
+				assumeRoleArn1 = nil
+			}
+			seqeraComputeSecurityKeys = &shared.SeqeraComputeSecurityKeys{
+				AccessKey:     accessKey1,
+				SecretKey:     secretKey1,
+				AssumeRoleArn: assumeRoleArn1,
+			}
+		}
+		if seqeraComputeSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				SeqeraComputeSecurityKeys: seqeraComputeSecurityKeys,
+			}
+		}
+		credentials = &shared.CredentialsInput{
+			ID:           id,
+			Name:         name,
+			Description:  description,
+			ProviderType: providerType,
+			BaseURL:      baseURL,
+			Category:     category,
+			Keys:         keys,
+		}
 	}
-
 	out := shared.CreateCredentialsRequest{
 		Credentials: credentials,
-	}
-
-	return &out, diags
-}
-
-func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) (*shared.CredentialsInput, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	credentialsID := new(string)
-	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
-		*credentialsID = r.CredentialsID.ValueString()
-	} else {
-		credentialsID = nil
-	}
-	var name string
-	name = r.Name.ValueString()
-
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
-	} else {
-		description = nil
-	}
-	providerType := shared.CredentialsProviderType(r.ProviderType.ValueString())
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
-	category := new(string)
-	if !r.Category.IsUnknown() && !r.Category.IsNull() {
-		*category = r.Category.ValueString()
-	} else {
-		category = nil
-	}
-	var keys shared.SecurityKeys
-	var awsSecurityKeys *shared.AwsSecurityKeys
-	if r.Keys.Aws != nil {
-		accessKey := new(string)
-		if !r.Keys.Aws.AccessKey.IsUnknown() && !r.Keys.Aws.AccessKey.IsNull() {
-			*accessKey = r.Keys.Aws.AccessKey.ValueString()
-		} else {
-			accessKey = nil
-		}
-		secretKey := new(string)
-		if !r.Keys.Aws.SecretKey.IsUnknown() && !r.Keys.Aws.SecretKey.IsNull() {
-			*secretKey = r.Keys.Aws.SecretKey.ValueString()
-		} else {
-			secretKey = nil
-		}
-		assumeRoleArn := new(string)
-		if !r.Keys.Aws.AssumeRoleArn.IsUnknown() && !r.Keys.Aws.AssumeRoleArn.IsNull() {
-			*assumeRoleArn = r.Keys.Aws.AssumeRoleArn.ValueString()
-		} else {
-			assumeRoleArn = nil
-		}
-		awsSecurityKeys = &shared.AwsSecurityKeys{
-			AccessKey:     accessKey,
-			SecretKey:     secretKey,
-			AssumeRoleArn: assumeRoleArn,
-		}
-	}
-	if awsSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			AwsSecurityKeys: awsSecurityKeys,
-		}
-	}
-	var googleSecurityKeys *shared.GoogleSecurityKeys
-	if r.Keys.Google != nil {
-		data := new(string)
-		if !r.Keys.Google.Data.IsUnknown() && !r.Keys.Google.Data.IsNull() {
-			*data = r.Keys.Google.Data.ValueString()
-		} else {
-			data = nil
-		}
-		googleSecurityKeys = &shared.GoogleSecurityKeys{
-			Data: data,
-		}
-	}
-	if googleSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			GoogleSecurityKeys: googleSecurityKeys,
-		}
-	}
-	var gitHubSecurityKeys *shared.GitHubSecurityKeys
-	if r.Keys.Github != nil {
-		username := new(string)
-		if !r.Keys.Github.Username.IsUnknown() && !r.Keys.Github.Username.IsNull() {
-			*username = r.Keys.Github.Username.ValueString()
-		} else {
-			username = nil
-		}
-		password := new(string)
-		if !r.Keys.Github.Password.IsUnknown() && !r.Keys.Github.Password.IsNull() {
-			*password = r.Keys.Github.Password.ValueString()
-		} else {
-			password = nil
-		}
-		gitHubSecurityKeys = &shared.GitHubSecurityKeys{
-			Username: username,
-			Password: password,
-		}
-	}
-	if gitHubSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			GitHubSecurityKeys: gitHubSecurityKeys,
-		}
-	}
-	var gitLabSecurityKeys *shared.GitLabSecurityKeys
-	if r.Keys.Gitlab != nil {
-		username1 := new(string)
-		if !r.Keys.Gitlab.Username.IsUnknown() && !r.Keys.Gitlab.Username.IsNull() {
-			*username1 = r.Keys.Gitlab.Username.ValueString()
-		} else {
-			username1 = nil
-		}
-		password1 := new(string)
-		if !r.Keys.Gitlab.Password.IsUnknown() && !r.Keys.Gitlab.Password.IsNull() {
-			*password1 = r.Keys.Gitlab.Password.ValueString()
-		} else {
-			password1 = nil
-		}
-		token := new(string)
-		if !r.Keys.Gitlab.Token.IsUnknown() && !r.Keys.Gitlab.Token.IsNull() {
-			*token = r.Keys.Gitlab.Token.ValueString()
-		} else {
-			token = nil
-		}
-		gitLabSecurityKeys = &shared.GitLabSecurityKeys{
-			Username: username1,
-			Password: password1,
-			Token:    token,
-		}
-	}
-	if gitLabSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			GitLabSecurityKeys: gitLabSecurityKeys,
-		}
-	}
-	var bitBucketSecurityKeys *shared.BitBucketSecurityKeys
-	if r.Keys.Bitbucket != nil {
-		username2 := new(string)
-		if !r.Keys.Bitbucket.Username.IsUnknown() && !r.Keys.Bitbucket.Username.IsNull() {
-			*username2 = r.Keys.Bitbucket.Username.ValueString()
-		} else {
-			username2 = nil
-		}
-		password2 := new(string)
-		if !r.Keys.Bitbucket.Password.IsUnknown() && !r.Keys.Bitbucket.Password.IsNull() {
-			*password2 = r.Keys.Bitbucket.Password.ValueString()
-		} else {
-			password2 = nil
-		}
-		bitBucketSecurityKeys = &shared.BitBucketSecurityKeys{
-			Username: username2,
-			Password: password2,
-		}
-	}
-	if bitBucketSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			BitBucketSecurityKeys: bitBucketSecurityKeys,
-		}
-	}
-	var giteaSecurityKeys *shared.GiteaSecurityKeys
-	if r.Keys.Gitea != nil {
-		username3 := new(string)
-		if !r.Keys.Gitea.Username.IsUnknown() && !r.Keys.Gitea.Username.IsNull() {
-			*username3 = r.Keys.Gitea.Username.ValueString()
-		} else {
-			username3 = nil
-		}
-		password3 := new(string)
-		if !r.Keys.Gitea.Password.IsUnknown() && !r.Keys.Gitea.Password.IsNull() {
-			*password3 = r.Keys.Gitea.Password.ValueString()
-		} else {
-			password3 = nil
-		}
-		giteaSecurityKeys = &shared.GiteaSecurityKeys{
-			Username: username3,
-			Password: password3,
-		}
-	}
-	if giteaSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			GiteaSecurityKeys: giteaSecurityKeys,
-		}
-	}
-	var sshSecurityKeys *shared.SSHSecurityKeys
-	if r.Keys.SSH != nil {
-		privateKey := new(string)
-		if !r.Keys.SSH.PrivateKey.IsUnknown() && !r.Keys.SSH.PrivateKey.IsNull() {
-			*privateKey = r.Keys.SSH.PrivateKey.ValueString()
-		} else {
-			privateKey = nil
-		}
-		passphrase := new(string)
-		if !r.Keys.SSH.Passphrase.IsUnknown() && !r.Keys.SSH.Passphrase.IsNull() {
-			*passphrase = r.Keys.SSH.Passphrase.ValueString()
-		} else {
-			passphrase = nil
-		}
-		sshSecurityKeys = &shared.SSHSecurityKeys{
-			PrivateKey: privateKey,
-			Passphrase: passphrase,
-		}
-	}
-	if sshSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			SSHSecurityKeys: sshSecurityKeys,
-		}
-	}
-	var k8sSecurityKeys *shared.K8sSecurityKeys
-	if r.Keys.K8s != nil {
-		certificate := new(string)
-		if !r.Keys.K8s.Certificate.IsUnknown() && !r.Keys.K8s.Certificate.IsNull() {
-			*certificate = r.Keys.K8s.Certificate.ValueString()
-		} else {
-			certificate = nil
-		}
-		privateKey1 := new(string)
-		if !r.Keys.K8s.PrivateKey.IsUnknown() && !r.Keys.K8s.PrivateKey.IsNull() {
-			*privateKey1 = r.Keys.K8s.PrivateKey.ValueString()
-		} else {
-			privateKey1 = nil
-		}
-		token1 := new(string)
-		if !r.Keys.K8s.Token.IsUnknown() && !r.Keys.K8s.Token.IsNull() {
-			*token1 = r.Keys.K8s.Token.ValueString()
-		} else {
-			token1 = nil
-		}
-		k8sSecurityKeys = &shared.K8sSecurityKeys{
-			Certificate: certificate,
-			PrivateKey:  privateKey1,
-			Token:       token1,
-		}
-	}
-	if k8sSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			K8sSecurityKeys: k8sSecurityKeys,
-		}
-	}
-	var azureSecurityKeys *shared.AzureSecurityKeys
-	if r.Keys.Azure != nil {
-		batchName := new(string)
-		if !r.Keys.Azure.BatchName.IsUnknown() && !r.Keys.Azure.BatchName.IsNull() {
-			*batchName = r.Keys.Azure.BatchName.ValueString()
-		} else {
-			batchName = nil
-		}
-		storageName := new(string)
-		if !r.Keys.Azure.StorageName.IsUnknown() && !r.Keys.Azure.StorageName.IsNull() {
-			*storageName = r.Keys.Azure.StorageName.ValueString()
-		} else {
-			storageName = nil
-		}
-		batchKey := new(string)
-		if !r.Keys.Azure.BatchKey.IsUnknown() && !r.Keys.Azure.BatchKey.IsNull() {
-			*batchKey = r.Keys.Azure.BatchKey.ValueString()
-		} else {
-			batchKey = nil
-		}
-		storageKey := new(string)
-		if !r.Keys.Azure.StorageKey.IsUnknown() && !r.Keys.Azure.StorageKey.IsNull() {
-			*storageKey = r.Keys.Azure.StorageKey.ValueString()
-		} else {
-			storageKey = nil
-		}
-		azureSecurityKeys = &shared.AzureSecurityKeys{
-			BatchName:   batchName,
-			StorageName: storageName,
-			BatchKey:    batchKey,
-			StorageKey:  storageKey,
-		}
-	}
-	if azureSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			AzureSecurityKeys: azureSecurityKeys,
-		}
-	}
-	var azureReposSecurityKeys *shared.AzureReposSecurityKeys
-	if r.Keys.Azurerepos != nil {
-		username4 := new(string)
-		if !r.Keys.Azurerepos.Username.IsUnknown() && !r.Keys.Azurerepos.Username.IsNull() {
-			*username4 = r.Keys.Azurerepos.Username.ValueString()
-		} else {
-			username4 = nil
-		}
-		password4 := new(string)
-		if !r.Keys.Azurerepos.Password.IsUnknown() && !r.Keys.Azurerepos.Password.IsNull() {
-			*password4 = r.Keys.Azurerepos.Password.ValueString()
-		} else {
-			password4 = nil
-		}
-		azureReposSecurityKeys = &shared.AzureReposSecurityKeys{
-			Username: username4,
-			Password: password4,
-		}
-	}
-	if azureReposSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			AzureReposSecurityKeys: azureReposSecurityKeys,
-		}
-	}
-	var containerRegistryKeys *shared.ContainerRegistryKeys
-	if r.Keys.ContainerReg != nil {
-		userName := new(string)
-		if !r.Keys.ContainerReg.UserName.IsUnknown() && !r.Keys.ContainerReg.UserName.IsNull() {
-			*userName = r.Keys.ContainerReg.UserName.ValueString()
-		} else {
-			userName = nil
-		}
-		password5 := new(string)
-		if !r.Keys.ContainerReg.Password.IsUnknown() && !r.Keys.ContainerReg.Password.IsNull() {
-			*password5 = r.Keys.ContainerReg.Password.ValueString()
-		} else {
-			password5 = nil
-		}
-		registry := new(string)
-		if !r.Keys.ContainerReg.Registry.IsUnknown() && !r.Keys.ContainerReg.Registry.IsNull() {
-			*registry = r.Keys.ContainerReg.Registry.ValueString()
-		} else {
-			registry = nil
-		}
-		containerRegistryKeys = &shared.ContainerRegistryKeys{
-			UserName: userName,
-			Password: password5,
-			Registry: registry,
-		}
-	}
-	if containerRegistryKeys != nil {
-		keys = shared.SecurityKeys{
-			ContainerRegistryKeys: containerRegistryKeys,
-		}
-	}
-	var agentSecurityKeys *shared.AgentSecurityKeys
-	if r.Keys.TwAgent != nil {
-		connectionID := new(string)
-		if !r.Keys.TwAgent.ConnectionID.IsUnknown() && !r.Keys.TwAgent.ConnectionID.IsNull() {
-			*connectionID = r.Keys.TwAgent.ConnectionID.ValueString()
-		} else {
-			connectionID = nil
-		}
-		workDir := new(string)
-		if !r.Keys.TwAgent.WorkDir.IsUnknown() && !r.Keys.TwAgent.WorkDir.IsNull() {
-			*workDir = r.Keys.TwAgent.WorkDir.ValueString()
-		} else {
-			workDir = nil
-		}
-		sharedVar := new(bool)
-		if !r.Keys.TwAgent.Shared.IsUnknown() && !r.Keys.TwAgent.Shared.IsNull() {
-			*sharedVar = r.Keys.TwAgent.Shared.ValueBool()
-		} else {
-			sharedVar = nil
-		}
-		agentSecurityKeys = &shared.AgentSecurityKeys{
-			ConnectionID: connectionID,
-			WorkDir:      workDir,
-			Shared:       sharedVar,
-		}
-	}
-	if agentSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			AgentSecurityKeys: agentSecurityKeys,
-		}
-	}
-	var codeCommitSecurityKeys *shared.CodeCommitSecurityKeys
-	if r.Keys.Codecommit != nil {
-		username5 := new(string)
-		if !r.Keys.Codecommit.Username.IsUnknown() && !r.Keys.Codecommit.Username.IsNull() {
-			*username5 = r.Keys.Codecommit.Username.ValueString()
-		} else {
-			username5 = nil
-		}
-		password6 := new(string)
-		if !r.Keys.Codecommit.Password.IsUnknown() && !r.Keys.Codecommit.Password.IsNull() {
-			*password6 = r.Keys.Codecommit.Password.ValueString()
-		} else {
-			password6 = nil
-		}
-		codeCommitSecurityKeys = &shared.CodeCommitSecurityKeys{
-			Username: username5,
-			Password: password6,
-		}
-	}
-	if codeCommitSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			CodeCommitSecurityKeys: codeCommitSecurityKeys,
-		}
-	}
-	var azureEntraKeys *shared.AzureEntraKeys
-	if r.Keys.AzureEntra != nil {
-		batchName1 := new(string)
-		if !r.Keys.AzureEntra.BatchName.IsUnknown() && !r.Keys.AzureEntra.BatchName.IsNull() {
-			*batchName1 = r.Keys.AzureEntra.BatchName.ValueString()
-		} else {
-			batchName1 = nil
-		}
-		storageName1 := new(string)
-		if !r.Keys.AzureEntra.StorageName.IsUnknown() && !r.Keys.AzureEntra.StorageName.IsNull() {
-			*storageName1 = r.Keys.AzureEntra.StorageName.ValueString()
-		} else {
-			storageName1 = nil
-		}
-		batchKey1 := new(string)
-		if !r.Keys.AzureEntra.BatchKey.IsUnknown() && !r.Keys.AzureEntra.BatchKey.IsNull() {
-			*batchKey1 = r.Keys.AzureEntra.BatchKey.ValueString()
-		} else {
-			batchKey1 = nil
-		}
-		storageKey1 := new(string)
-		if !r.Keys.AzureEntra.StorageKey.IsUnknown() && !r.Keys.AzureEntra.StorageKey.IsNull() {
-			*storageKey1 = r.Keys.AzureEntra.StorageKey.ValueString()
-		} else {
-			storageKey1 = nil
-		}
-		tenantID := new(string)
-		if !r.Keys.AzureEntra.TenantID.IsUnknown() && !r.Keys.AzureEntra.TenantID.IsNull() {
-			*tenantID = r.Keys.AzureEntra.TenantID.ValueString()
-		} else {
-			tenantID = nil
-		}
-		clientID := new(string)
-		if !r.Keys.AzureEntra.ClientID.IsUnknown() && !r.Keys.AzureEntra.ClientID.IsNull() {
-			*clientID = r.Keys.AzureEntra.ClientID.ValueString()
-		} else {
-			clientID = nil
-		}
-		clientSecret := new(string)
-		if !r.Keys.AzureEntra.ClientSecret.IsUnknown() && !r.Keys.AzureEntra.ClientSecret.IsNull() {
-			*clientSecret = r.Keys.AzureEntra.ClientSecret.ValueString()
-		} else {
-			clientSecret = nil
-		}
-		azureEntraKeys = &shared.AzureEntraKeys{
-			BatchName:    batchName1,
-			StorageName:  storageName1,
-			BatchKey:     batchKey1,
-			StorageKey:   storageKey1,
-			TenantID:     tenantID,
-			ClientID:     clientID,
-			ClientSecret: clientSecret,
-		}
-	}
-	if azureEntraKeys != nil {
-		keys = shared.SecurityKeys{
-			AzureEntraKeys: azureEntraKeys,
-		}
-	}
-	var seqeraComputeSecurityKeys *shared.SeqeraComputeSecurityKeys
-	if r.Keys.Seqeracompute != nil {
-		accessKey1 := new(string)
-		if !r.Keys.Seqeracompute.AccessKey.IsUnknown() && !r.Keys.Seqeracompute.AccessKey.IsNull() {
-			*accessKey1 = r.Keys.Seqeracompute.AccessKey.ValueString()
-		} else {
-			accessKey1 = nil
-		}
-		secretKey1 := new(string)
-		if !r.Keys.Seqeracompute.SecretKey.IsUnknown() && !r.Keys.Seqeracompute.SecretKey.IsNull() {
-			*secretKey1 = r.Keys.Seqeracompute.SecretKey.ValueString()
-		} else {
-			secretKey1 = nil
-		}
-		assumeRoleArn1 := new(string)
-		if !r.Keys.Seqeracompute.AssumeRoleArn.IsUnknown() && !r.Keys.Seqeracompute.AssumeRoleArn.IsNull() {
-			*assumeRoleArn1 = r.Keys.Seqeracompute.AssumeRoleArn.ValueString()
-		} else {
-			assumeRoleArn1 = nil
-		}
-		seqeraComputeSecurityKeys = &shared.SeqeraComputeSecurityKeys{
-			AccessKey:     accessKey1,
-			SecretKey:     secretKey1,
-			AssumeRoleArn: assumeRoleArn1,
-		}
-	}
-	if seqeraComputeSecurityKeys != nil {
-		keys = shared.SecurityKeys{
-			SeqeraComputeSecurityKeys: seqeraComputeSecurityKeys,
-		}
-	}
-	out := shared.CredentialsInput{
-		CredentialsID: credentialsID,
-		Name:          name,
-		Description:   description,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Category:      category,
-		Keys:          keys,
 	}
 
 	return &out, diags
@@ -747,13 +741,491 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 func (r *CredentialResourceModel) ToSharedUpdateCredentialsRequest(ctx context.Context) (*shared.UpdateCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedCredentialsInput(ctx)
-	diags.Append(credentialsDiags...)
+	var credentials *shared.CredentialsInput
+	if r.Credentials != nil {
+		id := new(string)
+		if !r.Credentials.ID.IsUnknown() && !r.Credentials.ID.IsNull() {
+			*id = r.Credentials.ID.ValueString()
+		} else {
+			id = nil
+		}
+		var name string
+		name = r.Credentials.Name.ValueString()
 
-	if diags.HasError() {
-		return nil, diags
+		description := new(string)
+		if !r.Credentials.Description.IsUnknown() && !r.Credentials.Description.IsNull() {
+			*description = r.Credentials.Description.ValueString()
+		} else {
+			description = nil
+		}
+		providerType := shared.CredentialsProviderType(r.Credentials.ProviderType.ValueString())
+		baseURL := new(string)
+		if !r.Credentials.BaseURL.IsUnknown() && !r.Credentials.BaseURL.IsNull() {
+			*baseURL = r.Credentials.BaseURL.ValueString()
+		} else {
+			baseURL = nil
+		}
+		category := new(string)
+		if !r.Credentials.Category.IsUnknown() && !r.Credentials.Category.IsNull() {
+			*category = r.Credentials.Category.ValueString()
+		} else {
+			category = nil
+		}
+		var keys shared.SecurityKeys
+		var awsSecurityKeys *shared.AwsSecurityKeys
+		if r.Credentials.Keys.Aws != nil {
+			accessKey := new(string)
+			if !r.Credentials.Keys.Aws.AccessKey.IsUnknown() && !r.Credentials.Keys.Aws.AccessKey.IsNull() {
+				*accessKey = r.Credentials.Keys.Aws.AccessKey.ValueString()
+			} else {
+				accessKey = nil
+			}
+			secretKey := new(string)
+			if !r.Credentials.Keys.Aws.SecretKey.IsUnknown() && !r.Credentials.Keys.Aws.SecretKey.IsNull() {
+				*secretKey = r.Credentials.Keys.Aws.SecretKey.ValueString()
+			} else {
+				secretKey = nil
+			}
+			assumeRoleArn := new(string)
+			if !r.Credentials.Keys.Aws.AssumeRoleArn.IsUnknown() && !r.Credentials.Keys.Aws.AssumeRoleArn.IsNull() {
+				*assumeRoleArn = r.Credentials.Keys.Aws.AssumeRoleArn.ValueString()
+			} else {
+				assumeRoleArn = nil
+			}
+			awsSecurityKeys = &shared.AwsSecurityKeys{
+				AccessKey:     accessKey,
+				SecretKey:     secretKey,
+				AssumeRoleArn: assumeRoleArn,
+			}
+		}
+		if awsSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AwsSecurityKeys: awsSecurityKeys,
+			}
+		}
+		var googleSecurityKeys *shared.GoogleSecurityKeys
+		if r.Credentials.Keys.Google != nil {
+			data := new(string)
+			if !r.Credentials.Keys.Google.Data.IsUnknown() && !r.Credentials.Keys.Google.Data.IsNull() {
+				*data = r.Credentials.Keys.Google.Data.ValueString()
+			} else {
+				data = nil
+			}
+			googleSecurityKeys = &shared.GoogleSecurityKeys{
+				Data: data,
+			}
+		}
+		if googleSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GoogleSecurityKeys: googleSecurityKeys,
+			}
+		}
+		var gitHubSecurityKeys *shared.GitHubSecurityKeys
+		if r.Credentials.Keys.Github != nil {
+			username := new(string)
+			if !r.Credentials.Keys.Github.Username.IsUnknown() && !r.Credentials.Keys.Github.Username.IsNull() {
+				*username = r.Credentials.Keys.Github.Username.ValueString()
+			} else {
+				username = nil
+			}
+			password := new(string)
+			if !r.Credentials.Keys.Github.Password.IsUnknown() && !r.Credentials.Keys.Github.Password.IsNull() {
+				*password = r.Credentials.Keys.Github.Password.ValueString()
+			} else {
+				password = nil
+			}
+			gitHubSecurityKeys = &shared.GitHubSecurityKeys{
+				Username: username,
+				Password: password,
+			}
+		}
+		if gitHubSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GitHubSecurityKeys: gitHubSecurityKeys,
+			}
+		}
+		var gitLabSecurityKeys *shared.GitLabSecurityKeys
+		if r.Credentials.Keys.Gitlab != nil {
+			username1 := new(string)
+			if !r.Credentials.Keys.Gitlab.Username.IsUnknown() && !r.Credentials.Keys.Gitlab.Username.IsNull() {
+				*username1 = r.Credentials.Keys.Gitlab.Username.ValueString()
+			} else {
+				username1 = nil
+			}
+			password1 := new(string)
+			if !r.Credentials.Keys.Gitlab.Password.IsUnknown() && !r.Credentials.Keys.Gitlab.Password.IsNull() {
+				*password1 = r.Credentials.Keys.Gitlab.Password.ValueString()
+			} else {
+				password1 = nil
+			}
+			token := new(string)
+			if !r.Credentials.Keys.Gitlab.Token.IsUnknown() && !r.Credentials.Keys.Gitlab.Token.IsNull() {
+				*token = r.Credentials.Keys.Gitlab.Token.ValueString()
+			} else {
+				token = nil
+			}
+			gitLabSecurityKeys = &shared.GitLabSecurityKeys{
+				Username: username1,
+				Password: password1,
+				Token:    token,
+			}
+		}
+		if gitLabSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GitLabSecurityKeys: gitLabSecurityKeys,
+			}
+		}
+		var bitBucketSecurityKeys *shared.BitBucketSecurityKeys
+		if r.Credentials.Keys.Bitbucket != nil {
+			username2 := new(string)
+			if !r.Credentials.Keys.Bitbucket.Username.IsUnknown() && !r.Credentials.Keys.Bitbucket.Username.IsNull() {
+				*username2 = r.Credentials.Keys.Bitbucket.Username.ValueString()
+			} else {
+				username2 = nil
+			}
+			password2 := new(string)
+			if !r.Credentials.Keys.Bitbucket.Password.IsUnknown() && !r.Credentials.Keys.Bitbucket.Password.IsNull() {
+				*password2 = r.Credentials.Keys.Bitbucket.Password.ValueString()
+			} else {
+				password2 = nil
+			}
+			bitBucketSecurityKeys = &shared.BitBucketSecurityKeys{
+				Username: username2,
+				Password: password2,
+			}
+		}
+		if bitBucketSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				BitBucketSecurityKeys: bitBucketSecurityKeys,
+			}
+		}
+		var giteaSecurityKeys *shared.GiteaSecurityKeys
+		if r.Credentials.Keys.Gitea != nil {
+			username3 := new(string)
+			if !r.Credentials.Keys.Gitea.Username.IsUnknown() && !r.Credentials.Keys.Gitea.Username.IsNull() {
+				*username3 = r.Credentials.Keys.Gitea.Username.ValueString()
+			} else {
+				username3 = nil
+			}
+			password3 := new(string)
+			if !r.Credentials.Keys.Gitea.Password.IsUnknown() && !r.Credentials.Keys.Gitea.Password.IsNull() {
+				*password3 = r.Credentials.Keys.Gitea.Password.ValueString()
+			} else {
+				password3 = nil
+			}
+			giteaSecurityKeys = &shared.GiteaSecurityKeys{
+				Username: username3,
+				Password: password3,
+			}
+		}
+		if giteaSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				GiteaSecurityKeys: giteaSecurityKeys,
+			}
+		}
+		var sshSecurityKeys *shared.SSHSecurityKeys
+		if r.Credentials.Keys.SSH != nil {
+			privateKey := new(string)
+			if !r.Credentials.Keys.SSH.PrivateKey.IsUnknown() && !r.Credentials.Keys.SSH.PrivateKey.IsNull() {
+				*privateKey = r.Credentials.Keys.SSH.PrivateKey.ValueString()
+			} else {
+				privateKey = nil
+			}
+			passphrase := new(string)
+			if !r.Credentials.Keys.SSH.Passphrase.IsUnknown() && !r.Credentials.Keys.SSH.Passphrase.IsNull() {
+				*passphrase = r.Credentials.Keys.SSH.Passphrase.ValueString()
+			} else {
+				passphrase = nil
+			}
+			sshSecurityKeys = &shared.SSHSecurityKeys{
+				PrivateKey: privateKey,
+				Passphrase: passphrase,
+			}
+		}
+		if sshSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				SSHSecurityKeys: sshSecurityKeys,
+			}
+		}
+		var k8sSecurityKeys *shared.K8sSecurityKeys
+		if r.Credentials.Keys.K8s != nil {
+			certificate := new(string)
+			if !r.Credentials.Keys.K8s.Certificate.IsUnknown() && !r.Credentials.Keys.K8s.Certificate.IsNull() {
+				*certificate = r.Credentials.Keys.K8s.Certificate.ValueString()
+			} else {
+				certificate = nil
+			}
+			privateKey1 := new(string)
+			if !r.Credentials.Keys.K8s.PrivateKey.IsUnknown() && !r.Credentials.Keys.K8s.PrivateKey.IsNull() {
+				*privateKey1 = r.Credentials.Keys.K8s.PrivateKey.ValueString()
+			} else {
+				privateKey1 = nil
+			}
+			token1 := new(string)
+			if !r.Credentials.Keys.K8s.Token.IsUnknown() && !r.Credentials.Keys.K8s.Token.IsNull() {
+				*token1 = r.Credentials.Keys.K8s.Token.ValueString()
+			} else {
+				token1 = nil
+			}
+			k8sSecurityKeys = &shared.K8sSecurityKeys{
+				Certificate: certificate,
+				PrivateKey:  privateKey1,
+				Token:       token1,
+			}
+		}
+		if k8sSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				K8sSecurityKeys: k8sSecurityKeys,
+			}
+		}
+		var azureSecurityKeys *shared.AzureSecurityKeys
+		if r.Credentials.Keys.Azure != nil {
+			batchName := new(string)
+			if !r.Credentials.Keys.Azure.BatchName.IsUnknown() && !r.Credentials.Keys.Azure.BatchName.IsNull() {
+				*batchName = r.Credentials.Keys.Azure.BatchName.ValueString()
+			} else {
+				batchName = nil
+			}
+			storageName := new(string)
+			if !r.Credentials.Keys.Azure.StorageName.IsUnknown() && !r.Credentials.Keys.Azure.StorageName.IsNull() {
+				*storageName = r.Credentials.Keys.Azure.StorageName.ValueString()
+			} else {
+				storageName = nil
+			}
+			batchKey := new(string)
+			if !r.Credentials.Keys.Azure.BatchKey.IsUnknown() && !r.Credentials.Keys.Azure.BatchKey.IsNull() {
+				*batchKey = r.Credentials.Keys.Azure.BatchKey.ValueString()
+			} else {
+				batchKey = nil
+			}
+			storageKey := new(string)
+			if !r.Credentials.Keys.Azure.StorageKey.IsUnknown() && !r.Credentials.Keys.Azure.StorageKey.IsNull() {
+				*storageKey = r.Credentials.Keys.Azure.StorageKey.ValueString()
+			} else {
+				storageKey = nil
+			}
+			azureSecurityKeys = &shared.AzureSecurityKeys{
+				BatchName:   batchName,
+				StorageName: storageName,
+				BatchKey:    batchKey,
+				StorageKey:  storageKey,
+			}
+		}
+		if azureSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AzureSecurityKeys: azureSecurityKeys,
+			}
+		}
+		var azureReposSecurityKeys *shared.AzureReposSecurityKeys
+		if r.Credentials.Keys.Azurerepos != nil {
+			username4 := new(string)
+			if !r.Credentials.Keys.Azurerepos.Username.IsUnknown() && !r.Credentials.Keys.Azurerepos.Username.IsNull() {
+				*username4 = r.Credentials.Keys.Azurerepos.Username.ValueString()
+			} else {
+				username4 = nil
+			}
+			password4 := new(string)
+			if !r.Credentials.Keys.Azurerepos.Password.IsUnknown() && !r.Credentials.Keys.Azurerepos.Password.IsNull() {
+				*password4 = r.Credentials.Keys.Azurerepos.Password.ValueString()
+			} else {
+				password4 = nil
+			}
+			azureReposSecurityKeys = &shared.AzureReposSecurityKeys{
+				Username: username4,
+				Password: password4,
+			}
+		}
+		if azureReposSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AzureReposSecurityKeys: azureReposSecurityKeys,
+			}
+		}
+		var containerRegistryKeys *shared.ContainerRegistryKeys
+		if r.Credentials.Keys.ContainerReg != nil {
+			userName := new(string)
+			if !r.Credentials.Keys.ContainerReg.UserName.IsUnknown() && !r.Credentials.Keys.ContainerReg.UserName.IsNull() {
+				*userName = r.Credentials.Keys.ContainerReg.UserName.ValueString()
+			} else {
+				userName = nil
+			}
+			password5 := new(string)
+			if !r.Credentials.Keys.ContainerReg.Password.IsUnknown() && !r.Credentials.Keys.ContainerReg.Password.IsNull() {
+				*password5 = r.Credentials.Keys.ContainerReg.Password.ValueString()
+			} else {
+				password5 = nil
+			}
+			registry := new(string)
+			if !r.Credentials.Keys.ContainerReg.Registry.IsUnknown() && !r.Credentials.Keys.ContainerReg.Registry.IsNull() {
+				*registry = r.Credentials.Keys.ContainerReg.Registry.ValueString()
+			} else {
+				registry = nil
+			}
+			containerRegistryKeys = &shared.ContainerRegistryKeys{
+				UserName: userName,
+				Password: password5,
+				Registry: registry,
+			}
+		}
+		if containerRegistryKeys != nil {
+			keys = shared.SecurityKeys{
+				ContainerRegistryKeys: containerRegistryKeys,
+			}
+		}
+		var agentSecurityKeys *shared.AgentSecurityKeys
+		if r.Credentials.Keys.TwAgent != nil {
+			connectionID := new(string)
+			if !r.Credentials.Keys.TwAgent.ConnectionID.IsUnknown() && !r.Credentials.Keys.TwAgent.ConnectionID.IsNull() {
+				*connectionID = r.Credentials.Keys.TwAgent.ConnectionID.ValueString()
+			} else {
+				connectionID = nil
+			}
+			workDir := new(string)
+			if !r.Credentials.Keys.TwAgent.WorkDir.IsUnknown() && !r.Credentials.Keys.TwAgent.WorkDir.IsNull() {
+				*workDir = r.Credentials.Keys.TwAgent.WorkDir.ValueString()
+			} else {
+				workDir = nil
+			}
+			sharedVar := new(bool)
+			if !r.Credentials.Keys.TwAgent.Shared.IsUnknown() && !r.Credentials.Keys.TwAgent.Shared.IsNull() {
+				*sharedVar = r.Credentials.Keys.TwAgent.Shared.ValueBool()
+			} else {
+				sharedVar = nil
+			}
+			agentSecurityKeys = &shared.AgentSecurityKeys{
+				ConnectionID: connectionID,
+				WorkDir:      workDir,
+				Shared:       sharedVar,
+			}
+		}
+		if agentSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				AgentSecurityKeys: agentSecurityKeys,
+			}
+		}
+		var codeCommitSecurityKeys *shared.CodeCommitSecurityKeys
+		if r.Credentials.Keys.Codecommit != nil {
+			username5 := new(string)
+			if !r.Credentials.Keys.Codecommit.Username.IsUnknown() && !r.Credentials.Keys.Codecommit.Username.IsNull() {
+				*username5 = r.Credentials.Keys.Codecommit.Username.ValueString()
+			} else {
+				username5 = nil
+			}
+			password6 := new(string)
+			if !r.Credentials.Keys.Codecommit.Password.IsUnknown() && !r.Credentials.Keys.Codecommit.Password.IsNull() {
+				*password6 = r.Credentials.Keys.Codecommit.Password.ValueString()
+			} else {
+				password6 = nil
+			}
+			codeCommitSecurityKeys = &shared.CodeCommitSecurityKeys{
+				Username: username5,
+				Password: password6,
+			}
+		}
+		if codeCommitSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				CodeCommitSecurityKeys: codeCommitSecurityKeys,
+			}
+		}
+		var azureEntraKeys *shared.AzureEntraKeys
+		if r.Credentials.Keys.AzureEntra != nil {
+			batchName1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.BatchName.IsUnknown() && !r.Credentials.Keys.AzureEntra.BatchName.IsNull() {
+				*batchName1 = r.Credentials.Keys.AzureEntra.BatchName.ValueString()
+			} else {
+				batchName1 = nil
+			}
+			storageName1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.StorageName.IsUnknown() && !r.Credentials.Keys.AzureEntra.StorageName.IsNull() {
+				*storageName1 = r.Credentials.Keys.AzureEntra.StorageName.ValueString()
+			} else {
+				storageName1 = nil
+			}
+			batchKey1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.BatchKey.IsUnknown() && !r.Credentials.Keys.AzureEntra.BatchKey.IsNull() {
+				*batchKey1 = r.Credentials.Keys.AzureEntra.BatchKey.ValueString()
+			} else {
+				batchKey1 = nil
+			}
+			storageKey1 := new(string)
+			if !r.Credentials.Keys.AzureEntra.StorageKey.IsUnknown() && !r.Credentials.Keys.AzureEntra.StorageKey.IsNull() {
+				*storageKey1 = r.Credentials.Keys.AzureEntra.StorageKey.ValueString()
+			} else {
+				storageKey1 = nil
+			}
+			tenantID := new(string)
+			if !r.Credentials.Keys.AzureEntra.TenantID.IsUnknown() && !r.Credentials.Keys.AzureEntra.TenantID.IsNull() {
+				*tenantID = r.Credentials.Keys.AzureEntra.TenantID.ValueString()
+			} else {
+				tenantID = nil
+			}
+			clientID := new(string)
+			if !r.Credentials.Keys.AzureEntra.ClientID.IsUnknown() && !r.Credentials.Keys.AzureEntra.ClientID.IsNull() {
+				*clientID = r.Credentials.Keys.AzureEntra.ClientID.ValueString()
+			} else {
+				clientID = nil
+			}
+			clientSecret := new(string)
+			if !r.Credentials.Keys.AzureEntra.ClientSecret.IsUnknown() && !r.Credentials.Keys.AzureEntra.ClientSecret.IsNull() {
+				*clientSecret = r.Credentials.Keys.AzureEntra.ClientSecret.ValueString()
+			} else {
+				clientSecret = nil
+			}
+			azureEntraKeys = &shared.AzureEntraKeys{
+				BatchName:    batchName1,
+				StorageName:  storageName1,
+				BatchKey:     batchKey1,
+				StorageKey:   storageKey1,
+				TenantID:     tenantID,
+				ClientID:     clientID,
+				ClientSecret: clientSecret,
+			}
+		}
+		if azureEntraKeys != nil {
+			keys = shared.SecurityKeys{
+				AzureEntraKeys: azureEntraKeys,
+			}
+		}
+		var seqeraComputeSecurityKeys *shared.SeqeraComputeSecurityKeys
+		if r.Credentials.Keys.Seqeracompute != nil {
+			accessKey1 := new(string)
+			if !r.Credentials.Keys.Seqeracompute.AccessKey.IsUnknown() && !r.Credentials.Keys.Seqeracompute.AccessKey.IsNull() {
+				*accessKey1 = r.Credentials.Keys.Seqeracompute.AccessKey.ValueString()
+			} else {
+				accessKey1 = nil
+			}
+			secretKey1 := new(string)
+			if !r.Credentials.Keys.Seqeracompute.SecretKey.IsUnknown() && !r.Credentials.Keys.Seqeracompute.SecretKey.IsNull() {
+				*secretKey1 = r.Credentials.Keys.Seqeracompute.SecretKey.ValueString()
+			} else {
+				secretKey1 = nil
+			}
+			assumeRoleArn1 := new(string)
+			if !r.Credentials.Keys.Seqeracompute.AssumeRoleArn.IsUnknown() && !r.Credentials.Keys.Seqeracompute.AssumeRoleArn.IsNull() {
+				*assumeRoleArn1 = r.Credentials.Keys.Seqeracompute.AssumeRoleArn.ValueString()
+			} else {
+				assumeRoleArn1 = nil
+			}
+			seqeraComputeSecurityKeys = &shared.SeqeraComputeSecurityKeys{
+				AccessKey:     accessKey1,
+				SecretKey:     secretKey1,
+				AssumeRoleArn: assumeRoleArn1,
+			}
+		}
+		if seqeraComputeSecurityKeys != nil {
+			keys = shared.SecurityKeys{
+				SeqeraComputeSecurityKeys: seqeraComputeSecurityKeys,
+			}
+		}
+		credentials = &shared.CredentialsInput{
+			ID:           id,
+			Name:         name,
+			Description:  description,
+			ProviderType: providerType,
+			BaseURL:      baseURL,
+			Category:     category,
+			Keys:         keys,
+		}
 	}
-
 	out := shared.UpdateCredentialsRequest{
 		Credentials: credentials,
 	}
