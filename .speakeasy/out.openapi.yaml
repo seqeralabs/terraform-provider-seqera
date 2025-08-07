@@ -6766,6 +6766,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workflows#delete
   /workflow/{workflowId}/cancel:
     post:
       summary: Cancel workflow

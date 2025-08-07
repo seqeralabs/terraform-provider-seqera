@@ -21,6 +21,7 @@ resource "seqera_workflows" "my_workflows" {
   config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
   date_created       = "2024-07-23T10:30:00Z"
   entry_name         = "main.nf"
+  force              = false
   head_job_cpus      = 2
   head_job_memory_mb = 4096
   label_ids = [
@@ -70,6 +71,7 @@ resource "seqera_workflows" "my_workflows" {
 - `config_text` (String) Requires replacement if changed.
 - `date_created` (String) Requires replacement if changed.
 - `entry_name` (String) Requires replacement if changed.
+- `force` (Boolean) Force the deletion even if the workflow is active
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
@@ -103,7 +105,7 @@ resource "seqera_workflows" "my_workflows" {
 - `platform` (Attributes) (see [below for nested schema](#nestedatt--platform))
 - `progress` (Attributes) (see [below for nested schema](#nestedatt--progress))
 - `workflow` (Attributes) (see [below for nested schema](#nestedatt--workflow))
-- `workflow_id` (String)
+- `workflow_id` (String) Workflow string identifier
 - `workspace_name` (String)
 
 <a id="nestedatt--job_info"></a>

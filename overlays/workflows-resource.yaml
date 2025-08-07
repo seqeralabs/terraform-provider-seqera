@@ -11,23 +11,9 @@ actions:
   - target: $["paths"]["/workflow/{workflowId}"]["get"]
     update:
       x-speakeasy-entity-operation: Workflows#read
-  # - target: $["paths"]["/workflow/{workflowId}"]["delete"]
-  #   update:
-  #     x-speakeasy-entity-operation: Workflows#delete
-  #     x-speakeasy-retries:
-  #       strategy: backoff
-  #       backoff:
-  #         initialInterval: 500ms
-  #         maxInterval: 60000ms
-  #         maxElapsedTime: 180000ms
-  #         exponent: 1.5
-  #       statusCodes:
-  #         - 409
-  #         - 429
-  #         - 500
-  #         - 502
-  #         - 503
-  #         - 504
+  - target: $["paths"]["/workflow/{workflowId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Workflows#delete
 
   # Workflow star operations grouping
   - target: $["paths"]["/workflow/{workflowId}/star"]["get"]

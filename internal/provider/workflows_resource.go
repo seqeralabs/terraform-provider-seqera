@@ -46,6 +46,7 @@ type WorkflowsResourceModel struct {
 	ConfigText          types.String                `tfsdk:"config_text"`
 	DateCreated         types.String                `tfsdk:"date_created"`
 	EntryName           types.String                `tfsdk:"entry_name"`
+	Force               types.Bool                  `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
 	HeadJobCpus         types.Int32                 `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb     types.Int32                 `tfsdk:"head_job_memory_mb"`
 	JobInfo             *tfTypes.JobInfoDto         `tfsdk:"job_info"`
@@ -129,6 +130,10 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
+			},
+			"force": schema.BoolAttribute{
+				Optional:    true,
+				Description: `Force the deletion even if the workflow is active`,
 			},
 			"head_job_cpus": schema.Int32Attribute{
 				Optional: true,
@@ -921,7 +926,8 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"workflow_id": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Workflow string identifier`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,
@@ -1159,7 +1165,29 @@ func (r *WorkflowsResource) Delete(ctx context.Context, req resource.DeleteReque
 		return
 	}
 
-	// Not Implemented; entity does not have a configured DELETE operation
+	request, requestDiags := data.ToOperationsDeleteWorkflowRequest(ctx)
+	resp.Diagnostics.Append(requestDiags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res, err := r.client.Workflows.DeleteWorkflow(ctx, *request)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res != nil && res.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		}
+		return
+	}
+	if res == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode != 204 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+
 }
 
 func (r *WorkflowsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

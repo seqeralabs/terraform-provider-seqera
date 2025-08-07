@@ -6,6 +6,7 @@ resource "seqera_workflows" "my_workflows" {
   config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
   date_created       = "2024-07-23T10:30:00Z"
   entry_name         = "main.nf"
+  force              = false
   head_job_cpus      = 2
   head_job_memory_mb = 4096
   label_ids = [
