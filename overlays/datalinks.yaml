@@ -36,9 +36,8 @@ actions:
       x-speakeasy-entity-description: |
         Manage connections to external storage systems and data repositories.
 
-        Data links provide access to cloud storage, file systems, and data repositories
-        for pipeline input/output operations, enabling seamless data integration
-        across different storage platforms.
+        Data links provide access to cloud storage for pipeline input/output operations,
+        enabling seamless data integration.
 
   # DataLink description update
   - target: $["paths"]["/data-links/{dataLinkId}/script/download"]["get"]["description"]

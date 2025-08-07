@@ -3,19 +3,27 @@
 page_title: "seqera_studios Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage interactive data analysis sessions.
-  Studios provide Jupyter-based computational environments for
-  interactive data analysis, visualization, and development,
-  enabling researchers to explore data and prototype analyses.
+  Studios is a unified platform where you can host a combination of
+  container images and compute environments for interactive analysis using
+  your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
+  or Xpra remote desktops. Each Studio session is an individual interactive
+  environment that encapsulates the live environment for dynamic data analysis.
+  Note:
+  On Seqera Cloud, the free tier permits only one running Studio session at a time.
+  To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 ---
 
 # seqera_studios (Resource)
 
-Manage interactive data analysis sessions.
+Studios is a unified platform where you can host a combination of
+container images and compute environments for interactive analysis using
+your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
+or Xpra remote desktops. Each Studio session is an individual interactive
+environment that encapsulates the live environment for dynamic data analysis.
 
-Studios provide Jupyter-based computational environments for
-interactive data analysis, visualization, and development,
-enabling researchers to explore data and prototype analyses.
+Note:
+On Seqera Cloud, the free tier permits only one running Studio session at a time.
+To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 
 ## Example Usage
 

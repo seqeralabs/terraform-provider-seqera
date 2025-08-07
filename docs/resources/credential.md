@@ -3,7 +3,7 @@
 page_title: "seqera_credential Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage authentication credentials for various platforms and services.
+  Manage workspace credentials in Seqera platform using this resource.
   Credentials store authentication information for accessing cloud providers,
   Git repositories, container registries, and other external services
   within the Seqera Platform workflows.
@@ -11,7 +11,7 @@ description: |-
 
 # seqera_credential (Resource)
 
-Manage authentication credentials for various platforms and services.
+Manage workspace credentials in Seqera platform using this resource.
 
 Credentials store authentication information for accessing cloud providers,
 Git repositories, container registries, and other external services

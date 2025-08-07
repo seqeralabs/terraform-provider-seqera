@@ -29,3 +29,14 @@ actions:
         Workspaces provide isolated environments for organizing pipelines,
         compute environments, and data, with configurable permissions
         and access controls for collaborative research projects.
+
+        Each user has a unique user workspace to manage resources such as pipelines,
+        compute environments, and credentials. You can also create multiple workspaces within
+        an organization context and associate each of these workspaces with dedicated teams of users,
+        while providing fine-grained access control for each of the teams.
+
+        Organization workspaces extend the functionality of user workspaces by adding
+        the ability to fine-tune access levels for specific members, collaborators, or teams.
+        This is achieved by managing participants in the organization workspaces.
+
+        Organizations consist of members, while workspaces consist of participants.

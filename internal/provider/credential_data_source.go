@@ -53,7 +53,7 @@ func (r *CredentialDataSource) Metadata(ctx context.Context, req datasource.Meta
 // Schema defines the schema for the data source.
 func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage authentication credentials for various platforms and services.\n\nCredentials store authentication information for accessing cloud providers,\nGit repositories, container registries, and other external services\nwithin the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage workspace credentials in Seqera platform using this resource.\n\nCredentials store authentication information for accessing cloud providers,\nGit repositories, container registries, and other external services\nwithin the Seqera Platform workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{

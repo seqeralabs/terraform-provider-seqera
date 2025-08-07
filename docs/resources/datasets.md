@@ -4,18 +4,21 @@ page_title: "seqera_datasets Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
   Manage datasets for storing and versioning research data.
-  Datasets provide data management capabilities with versioning,
-  metadata, and access controls for organizing and sharing
-  research data across pipelines and teams.
+  Datasets in Seqera are CSV (comma-separated values) and TSV
+  (tab-separated values) files stored in a workspace.
+  They are used as inputs to pipelines to simplify data management,
+  minimize user data-input errors, and facilitate reproducible workflows.
 ---
 
 # seqera_datasets (Resource)
 
 Manage datasets for storing and versioning research data.
 
-Datasets provide data management capabilities with versioning,
-metadata, and access controls for organizing and sharing
-research data across pipelines and teams.
+Datasets in Seqera are CSV (comma-separated values) and TSV
+(tab-separated values) files stored in a workspace.
+
+They are used as inputs to pipelines to simplify data management,
+minimize user data-input errors, and facilitate reproducible workflows.
 
 ## Example Usage
 

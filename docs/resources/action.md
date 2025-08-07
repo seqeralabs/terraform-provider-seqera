@@ -3,19 +3,21 @@
 page_title: "seqera_action Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage pipeline actions and automated triggers.
-  Actions enable automation of pipeline execution based on events,
-  schedules, or external triggers, providing workflow orchestration
-  capabilities for continuous integration and deployment.
+  This resource allows the management of pipeline actions. Actions enable event-based
+  pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+  the pipeline repository is updated.
+  Seqera Platform currently offers support for native GitHub webhooks and a general
+  Tower webhook that can be invoked programmatically.
 ---
 
 # seqera_action (Resource)
 
-Manage pipeline actions and automated triggers.
+This resource allows the management of pipeline actions. Actions enable event-based
+pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+the pipeline repository is updated.
 
-Actions enable automation of pipeline execution based on events,
-schedules, or external triggers, providing workflow orchestration
-capabilities for continuous integration and deployment.
+Seqera Platform currently offers support for native GitHub webhooks and a general
+Tower webhook that can be invoked programmatically.
 
 ## Example Usage
 

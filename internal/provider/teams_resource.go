@@ -48,7 +48,7 @@ func (r *TeamsResource) Metadata(ctx context.Context, req resource.MetadataReque
 
 func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage teams within organizations.\n\nTeams provide collaborative workspaces with shared permissions\nand access controls, enabling organized project management\nand resource sharing within organizational boundaries.\n",
+		MarkdownDescription: "Manage teams within organizations.\n\nTeams are organizational units that allow \norganization owners to group users together, \nmanaging team members and access permissions as a whole.\n",
 		Attributes: map[string]schema.Attribute{
 			"avatar_id": schema.StringAttribute{
 				Optional: true,

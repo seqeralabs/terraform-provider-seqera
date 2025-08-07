@@ -70,7 +70,7 @@ func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage pipeline actions and automated triggers.\n\nActions enable automation of pipeline execution based on events,\nschedules, or external triggers, providing workflow orchestration\ncapabilities for continuous integration and deployment.\n",
+		MarkdownDescription: "This resource allows the management of pipeline actions. Actions enable event-based \npipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever \nthe pipeline repository is updated.\n\nSeqera Platform currently offers support for native GitHub webhooks and a general \nTower webhook that can be invoked programmatically.\n",
 		Attributes: map[string]schema.Attribute{
 			"action_id": schema.StringAttribute{
 				Computed:    true,
