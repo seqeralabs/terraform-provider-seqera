@@ -27,9 +27,21 @@ actions:
   - target: $["components"]["schemas"]["DataStudioConfiguration"]
     update:
       x-speakeasy-entity: Studios
+      x-speakeasy-entity-description: |
+        Manage interactive data analysis sessions.
+
+        Studios provide Jupyter-based computational environments for
+        interactive data analysis, visualization, and development,
+        enabling researchers to explore data and prototype analyses.
   - target: $["components"]["schemas"]["DataStudioCreateRequest"]
     update:
       x-speakeasy-entity: Studios
+      x-speakeasy-entity-description: |
+        Manage interactive data analysis sessions.
+
+        Studios provide Jupyter-based computational environments for
+        interactive data analysis, visualization, and development,
+        enabling researchers to explore data and prototype analyses.
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: Studios

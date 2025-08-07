@@ -56,7 +56,7 @@ func (r *ActionDataSource) Metadata(ctx context.Context, req datasource.Metadata
 // Schema defines the schema for the data source.
 func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Action DataSource",
+		MarkdownDescription: "Manage pipeline actions and automated triggers.\n\nActions enable automation of pipeline execution based on events,\nschedules, or external triggers, providing workflow orchestration\ncapabilities for continuous integration and deployment.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"action_id": schema.StringAttribute{

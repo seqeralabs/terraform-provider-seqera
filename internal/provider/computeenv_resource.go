@@ -64,7 +64,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "ComputeEnv Resource",
+		MarkdownDescription: "Manage compute environments for executing workflows on various cloud platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,

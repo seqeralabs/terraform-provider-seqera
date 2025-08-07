@@ -70,7 +70,7 @@ func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Action Resource",
+		MarkdownDescription: "Manage pipeline actions and automated triggers.\n\nActions enable automation of pipeline execution based on events,\nschedules, or external triggers, providing workflow orchestration\ncapabilities for continuous integration and deployment.\n",
 		Attributes: map[string]schema.Attribute{
 			"action_id": schema.StringAttribute{
 				Computed:    true,

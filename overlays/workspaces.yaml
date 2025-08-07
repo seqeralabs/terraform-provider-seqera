@@ -23,3 +23,9 @@ actions:
   - target: $["components"]["schemas"]["Workspace"]
     update:
       x-speakeasy-entity: Workspace
+      x-speakeasy-entity-description: |
+        Manage workspaces for organizing projects and resources.
+
+        Workspaces provide isolated environments for organizing pipelines,
+        compute environments, and data, with configurable permissions
+        and access controls for collaborative research projects.

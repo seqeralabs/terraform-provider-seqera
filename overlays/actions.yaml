@@ -31,3 +31,9 @@ actions:
   - target: $.components.schemas.ActionResponseDto
     update:
       x-speakeasy-entity: Action
+      x-speakeasy-entity-description: |
+        Manage pipeline actions and automated triggers.
+
+        Actions enable automation of pipeline execution based on events,
+        schedules, or external triggers, providing workflow orchestration
+        capabilities for continuous integration and deployment.

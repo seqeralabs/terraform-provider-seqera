@@ -3,12 +3,19 @@
 page_title: "seqera_workspace Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Workspace DataSource
+  Manage workspaces for organizing projects and resources.
+  Workspaces provide isolated environments for organizing pipelines,
+  compute environments, and data, with configurable permissions
+  and access controls for collaborative research projects.
 ---
 
 # seqera_workspace (Data Source)
 
-Workspace DataSource
+Manage workspaces for organizing projects and resources.
+
+Workspaces provide isolated environments for organizing pipelines,
+compute environments, and data, with configurable permissions
+and access controls for collaborative research projects.
 
 ## Example Usage
 

@@ -84,6 +84,15 @@ actions:
   - target: $.components.schemas.ComputeEnvResponseDto
     update:
       x-speakeasy-entity: ComputeEnv
+      x-speakeasy-entity-description: |
+        Seqera Platform compute environments define the execution platform where a pipeline will run.
+        Compute environments enable users to launch pipelines on a growing number of cloud and
+        on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+
+        Compute environments define the computational resources and configuration needed
+        to run Nextflow workflows, including cloud provider settings, resource limits,
+        and execution parameters.
+
   - target: $.components.schemas.ComputeEnv_ComputeConfig_
     update:
       x-speakeasy-entity: ComputeEnv
@@ -147,6 +156,12 @@ actions:
   - target: $["components"]["schemas"]["CreateComputeEnvRequest"]
     update:
       x-speakeasy-entity: ComputeEnv
+      x-speakeasy-entity-description: |
+        Manage compute environments for executing workflows on various cloud platforms.
+
+        Compute environments define the computational resources and configuration needed
+        to run Nextflow workflows, including cloud provider settings, resource limits,
+        and execution parameters.
   - target: $["components"]["schemas"]["CreateComputeEnvResponse"]
     update:
       x-speakeasy-entity: ComputeEnv

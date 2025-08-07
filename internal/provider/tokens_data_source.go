@@ -43,7 +43,7 @@ func (r *TokensDataSource) Metadata(ctx context.Context, req datasource.Metadata
 // Schema defines the schema for the data source.
 func (r *TokensDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Tokens DataSource",
+		MarkdownDescription: "Manage API access tokens for authentication.\n\nTokens provide secure API access with configurable permissions\nand expiration settings, enabling programmatic access to\nplatform resources and services.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"basic_auth": schema.StringAttribute{

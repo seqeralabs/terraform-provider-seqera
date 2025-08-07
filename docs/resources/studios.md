@@ -3,12 +3,19 @@
 page_title: "seqera_studios Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Studios Resource
+  Manage interactive data analysis sessions.
+  Studios provide Jupyter-based computational environments for
+  interactive data analysis, visualization, and development,
+  enabling researchers to explore data and prototype analyses.
 ---
 
 # seqera_studios (Resource)
 
-Studios Resource
+Manage interactive data analysis sessions.
+
+Studios provide Jupyter-based computational environments for
+interactive data analysis, visualization, and development,
+enabling researchers to explore data and prototype analyses.
 
 ## Example Usage
 

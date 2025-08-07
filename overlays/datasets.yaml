@@ -22,6 +22,17 @@ actions:
     update:
       x-speakeasy-entity-operation: Dataset#read
 
+  # Dataset entity annotation
+  - target: $["components"]["schemas"]["Dataset"]
+    update:
+      x-speakeasy-entity: Datasets
+      x-speakeasy-entity-description: |
+        Manage datasets for storing and versioning research data.
+
+        Datasets provide data management capabilities with versioning,
+        metadata, and access controls for organizing and sharing
+        research data across pipelines and teams.
+
   # Dataset parameter requirements
   - target: $["paths"]["/datasets"]["post"]["parameters"][0]
     update:

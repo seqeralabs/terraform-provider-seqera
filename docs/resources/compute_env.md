@@ -3,12 +3,19 @@
 page_title: "seqera_compute_env Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  ComputeEnv Resource
+  Manage compute environments for executing workflows on various cloud platforms.
+  Compute environments define the computational resources and configuration needed
+  to run Nextflow workflows, including cloud provider settings, resource limits,
+  and execution parameters.
 ---
 
 # seqera_compute_env (Resource)
 
-ComputeEnv Resource
+Manage compute environments for executing workflows on various cloud platforms.
+
+Compute environments define the computational resources and configuration needed
+to run Nextflow workflows, including cloud provider settings, resource limits,
+and execution parameters.
 
 ## Example Usage
 

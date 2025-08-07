@@ -48,7 +48,7 @@ func (r *WorkspaceDataSource) Metadata(ctx context.Context, req datasource.Metad
 // Schema defines the schema for the data source.
 func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Workspace DataSource",
+		MarkdownDescription: "Manage workspaces for organizing projects and resources.\n\nWorkspaces provide isolated environments for organizing pipelines,\ncompute environments, and data, with configurable permissions\nand access controls for collaborative research projects.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{

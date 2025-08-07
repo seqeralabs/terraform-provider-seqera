@@ -29,6 +29,17 @@ actions:
     update:
       x-speakeasy-name-override: providerType
 
+  # DataLink entity annotation
+  - target: $["components"]["schemas"]["DataLinkDto"]
+    update:
+      x-speakeasy-entity: DataLink
+      x-speakeasy-entity-description: |
+        Manage connections to external storage systems and data repositories.
+
+        Data links provide access to cloud storage, file systems, and data repositories
+        for pipeline input/output operations, enabling seamless data integration
+        across different storage platforms.
+
   # DataLink description update
   - target: $["paths"]["/data-links/{dataLinkId}/script/download"]["get"]["description"]
     update: "Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."

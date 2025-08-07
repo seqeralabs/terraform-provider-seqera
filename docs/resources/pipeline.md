@@ -3,12 +3,19 @@
 page_title: "seqera_pipeline Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Pipeline Resource
+  Manage Nextflow pipeline definitions and configurations.
+  Pipelines define reusable workflow templates with parameters,
+  compute environment settings, and execution configurations
+  for scalable bioinformatics and data processing workflows.
 ---
 
 # seqera_pipeline (Resource)
 
-Pipeline Resource
+Manage Nextflow pipeline definitions and configurations.
+
+Pipelines define reusable workflow templates with parameters,
+compute environment settings, and execution configurations
+for scalable bioinformatics and data processing workflows.
 
 ## Example Usage
 

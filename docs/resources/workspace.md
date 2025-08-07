@@ -3,12 +3,19 @@
 page_title: "seqera_workspace Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Workspace Resource
+  Manage workspaces for organizing projects and resources.
+  Workspaces provide isolated environments for organizing pipelines,
+  compute environments, and data, with configurable permissions
+  and access controls for collaborative research projects.
 ---
 
 # seqera_workspace (Resource)
 
-Workspace Resource
+Manage workspaces for organizing projects and resources.
+
+Workspaces provide isolated environments for organizing pipelines,
+compute environments, and data, with configurable permissions
+and access controls for collaborative research projects.
 
 ## Example Usage
 

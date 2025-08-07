@@ -66,7 +66,7 @@ func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Pipeline Resource",
+		MarkdownDescription: "Manage Nextflow pipeline definitions and configurations.\n\nPipelines define reusable workflow templates with parameters,\ncompute environment settings, and execution configurations\nfor scalable bioinformatics and data processing workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Computed: true,

@@ -3,12 +3,19 @@
 page_title: "seqera_action Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Action Resource
+  Manage pipeline actions and automated triggers.
+  Actions enable automation of pipeline execution based on events,
+  schedules, or external triggers, providing workflow orchestration
+  capabilities for continuous integration and deployment.
 ---
 
 # seqera_action (Resource)
 
-Action Resource
+Manage pipeline actions and automated triggers.
+
+Actions enable automation of pipeline execution based on events,
+schedules, or external triggers, providing workflow orchestration
+capabilities for continuous integration and deployment.
 
 ## Example Usage
 

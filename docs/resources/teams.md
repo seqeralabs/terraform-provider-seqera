@@ -3,12 +3,19 @@
 page_title: "seqera_teams Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Teams Resource
+  Manage teams within organizations.
+  Teams provide collaborative workspaces with shared permissions
+  and access controls, enabling organized project management
+  and resource sharing within organizational boundaries.
 ---
 
 # seqera_teams (Resource)
 
-Teams Resource
+Manage teams within organizations.
+
+Teams provide collaborative workspaces with shared permissions
+and access controls, enabling organized project management
+and resource sharing within organizational boundaries.
 
 ## Example Usage
 

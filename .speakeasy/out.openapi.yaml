@@ -7780,6 +7780,12 @@ components:
         Contains token metadata, permissions, and expiration information
         for secure API access to platform resources.
       x-speakeasy-entity: Tokens
+      x-speakeasy-entity-description: |
+        Manage API access tokens for authentication.
+
+        Tokens provide secure API access with configurable permissions
+        and expiration settings, enabling programmatic access to
+        platform resources and services.
     Action.ConfigType:
       type: object
       properties:
@@ -7890,6 +7896,12 @@ components:
         Contains action configuration, triggers, and execution settings
         for automated pipeline workflows.
       x-speakeasy-entity: Action
+      x-speakeasy-entity-description: |
+        Manage pipeline actions and automated triggers.
+
+        Actions enable automation of pipeline execution based on events,
+        schedules, or external triggers, providing workflow orchestration
+        capabilities for continuous integration and deployment.
     ActiveConnection:
       type: object
       allOf:
@@ -8573,6 +8585,7 @@ components:
           items:
             $ref: "#/components/schemas/LabelDbDto"
       x-speakeasy-entity: ComputeEnv
+      x-speakeasy-entity-description: "Seqera Platform compute environments define the execution platform where a pipeline will run. \nCompute environments enable users to launch pipelines on a growing number of cloud and \non-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n"
     ComputeEnv_ComputeConfig_:
       required:
         - config
@@ -8789,6 +8802,12 @@ components:
         - name
         - platform
       x-speakeasy-entity: ComputeEnv
+      x-speakeasy-entity-description: |
+        Manage compute environments for executing workflows on various cloud platforms.
+
+        Compute environments define the computational resources and configuration needed
+        to run Nextflow workflows, including cloud provider settings, resource limits,
+        and execution parameters.
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -8844,6 +8863,12 @@ components:
           type: boolean
           example: false
       x-speakeasy-entity: Labels
+      x-speakeasy-entity-description: |
+        Manage labels for organizing and categorizing resources.
+
+        Labels provide metadata tagging capabilities for pipelines, workflows,
+        and other platform resources, enabling resource organization, filtering,
+        and management across the platform.
     CreateLabelResponse:
       type: object
       properties:
@@ -9040,6 +9065,12 @@ components:
         Contains authentication information for accessing cloud providers, Git repositories,
         and other external services within the Seqera Platform.
       x-speakeasy-entity: Credential
+      x-speakeasy-entity-description: |
+        Manage authentication credentials for various platforms and services.
+
+        Credentials store authentication information for accessing cloud providers,
+        Git repositories, container registries, and other external services
+        within the Seqera Platform workflows.
     DataLink.Status:
       type: string
       readOnly: true
@@ -9184,6 +9215,13 @@ components:
         Represents a data link connection to external storage systems.
         Provides access to cloud storage, file systems, and data repositories
         for pipeline input/output operations.
+      x-speakeasy-entity: DataLink
+      x-speakeasy-entity-description: |
+        Manage connections to external storage systems and data repositories.
+
+        Data links provide access to cloud storage, file systems, and data repositories
+        for pipeline input/output operations, enabling seamless data integration
+        across different storage platforms.
     DataLinkFinishMultiPartUploadRequest:
       type: object
       properties:
@@ -9358,6 +9396,12 @@ components:
           type: integer
           format: int32
       x-speakeasy-entity: Studios
+      x-speakeasy-entity-description: |
+        Manage interactive data analysis sessions.
+
+        Studios provide Jupyter-based computational environments for
+        interactive data analysis, visualization, and development,
+        enabling researchers to explore data and prototype analyses.
     DataStudioCreateRequest:
       required:
         - computeEnvId
@@ -9399,6 +9443,12 @@ components:
           type: boolean
           nullable: true
       x-speakeasy-entity: Studios
+      x-speakeasy-entity-description: |
+        Manage interactive data analysis sessions.
+
+        Studios provide Jupyter-based computational environments for
+        interactive data analysis, visualization, and development,
+        enabling researchers to explore data and prototype analyses.
     DataStudioCreateResponse:
       type: object
       properties:
@@ -9700,6 +9750,13 @@ components:
         Represents a dataset in the Seqera Platform.
         Contains dataset metadata, versioning information, and access
         controls for data management and sharing.
+      x-speakeasy-entity: Datasets
+      x-speakeasy-entity-description: |
+        Manage datasets for storing and versioning research data.
+
+        Datasets provide data management capabilities with versioning,
+        metadata, and access controls for organizing and sharing
+        research data across pipelines and teams.
     DatasetVersionDbDto:
       type: object
       properties:
@@ -9871,6 +9928,12 @@ components:
           items:
             type: string
       x-speakeasy-entity: Workflows
+      x-speakeasy-entity-description: |
+        Manage workflow executions and pipeline runs.
+
+        Workflows represent individual executions of Nextflow pipelines,
+        containing execution status, parameters, results, and monitoring
+        information for computational workflows.
     DescribeWorkspaceResponse:
       type: object
       properties:
@@ -11108,6 +11171,12 @@ components:
           format: date-time
           readOnly: true
       x-speakeasy-entity: Orgs
+      x-speakeasy-entity-description: |
+        Manage organizations for multi-tenant platform environments.
+
+        Organizations provide administrative boundaries for teams, workspaces,
+        and resources, enabling enterprise-level management with role-based
+        access controls and resource isolation.
     OrganizationDbDto:
       type: object
       properties:
@@ -11299,6 +11368,12 @@ components:
         Contains pipeline metadata, configuration settings, and execution parameters
         for Nextflow workflows.
       x-speakeasy-entity: Pipeline
+      x-speakeasy-entity-description: |
+        Manage Nextflow pipeline definitions and configurations.
+
+        Pipelines define reusable workflow templates with parameters,
+        compute environment settings, and execution configurations
+        for scalable bioinformatics and data processing workflows.
     PipelineInfo:
       type: object
       properties:
@@ -11395,6 +11470,12 @@ components:
         Contains encrypted sensitive data such as API keys, passwords,
         and configuration values used in workflows.
       x-speakeasy-entity: PipelineSecret
+      x-speakeasy-entity-description: |
+        Manage secure secrets for pipeline execution.
+
+        Pipeline secrets store encrypted sensitive data such as API keys,
+        passwords, and configuration values used in workflows, providing
+        secure access to external services and resources.
     PlatformMetainfo:
       type: object
       discriminator:
@@ -12049,6 +12130,12 @@ components:
           format: date-time
           readOnly: true
       x-speakeasy-entity: Teams
+      x-speakeasy-entity-description: |
+        Manage teams within organizations.
+
+        Teams provide collaborative workspaces with shared permissions
+        and access controls, enabling organized project management
+        and resource sharing within organizational boundaries.
     TeamDbDto:
       type: object
       properties:
@@ -13247,6 +13334,12 @@ components:
           type: string
           format: date-time
       x-speakeasy-entity: Workspace
+      x-speakeasy-entity-description: |
+        Manage workspaces for organizing projects and resources.
+
+        Workspaces provide isolated environments for organizing pipelines,
+        compute environments, and data, with configurable permissions
+        and access controls for collaborative research projects.
     WorkspaceDbDto:
       type: object
       properties:

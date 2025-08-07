@@ -60,7 +60,7 @@ func (r *CredentialResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Credential Resource",
+		MarkdownDescription: "Manage authentication credentials for various platforms and services.\n\nCredentials store authentication information for accessing cloud providers,\nGit repositories, container registries, and other external services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional: true,

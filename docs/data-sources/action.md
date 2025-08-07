@@ -3,12 +3,19 @@
 page_title: "seqera_action Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Action DataSource
+  Manage pipeline actions and automated triggers.
+  Actions enable automation of pipeline execution based on events,
+  schedules, or external triggers, providing workflow orchestration
+  capabilities for continuous integration and deployment.
 ---
 
 # seqera_action (Data Source)
 
-Action DataSource
+Manage pipeline actions and automated triggers.
+
+Actions enable automation of pipeline execution based on events,
+schedules, or external triggers, providing workflow orchestration
+capabilities for continuous integration and deployment.
 
 ## Example Usage
 

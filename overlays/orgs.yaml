@@ -164,6 +164,12 @@ actions:
   - target: $["components"]["schemas"]["Organization"]
     update:
       x-speakeasy-entity: Orgs
+      x-speakeasy-entity-description: |
+        Manage organizations for multi-tenant platform environments.
+
+        Organizations provide administrative boundaries for teams, workspaces,
+        and resources, enabling enterprise-level management with role-based
+        access controls and resource isolation.
   - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoId"]
     update:
       x-speakeasy-param-optional: true

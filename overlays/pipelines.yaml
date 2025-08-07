@@ -16,6 +16,12 @@ actions:
   - target: $["components"]["schemas"]["PipelineDbDto"]
     update:
       x-speakeasy-entity: Pipeline
+      x-speakeasy-entity-description: |
+        Manage Nextflow pipeline definitions and configurations.
+
+        Pipelines define reusable workflow templates with parameters,
+        compute environment settings, and execution configurations
+        for scalable bioinformatics and data processing workflows.
   - target: $["components"]["schemas"]["PipelineInfo"]["properties"]["provider"]
     update:
       x-speakeasy-name-override: repositoryProvider

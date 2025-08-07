@@ -53,7 +53,7 @@ func (r *WorkspaceResource) Metadata(ctx context.Context, req resource.MetadataR
 
 func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Workspace Resource",
+		MarkdownDescription: "Manage workspaces for organizing projects and resources.\n\nWorkspaces provide isolated environments for organizing pipelines,\ncompute environments, and data, with configurable permissions\nand access controls for collaborative research projects.\n",
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed: true,

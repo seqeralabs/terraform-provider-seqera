@@ -83,7 +83,7 @@ func (r *StudiosResource) Metadata(ctx context.Context, req resource.MetadataReq
 
 func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Studios Resource",
+		MarkdownDescription: "Manage interactive data analysis sessions.\n\nStudios provide Jupyter-based computational environments for\ninteractive data analysis, visualization, and development,\nenabling researchers to explore data and prototype analyses.\n",
 		Attributes: map[string]schema.Attribute{
 			"active_connections": schema.ListNestedAttribute{
 				Computed: true,

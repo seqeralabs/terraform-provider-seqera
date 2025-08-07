@@ -3,12 +3,19 @@
 page_title: "seqera_datasets Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Datasets Resource
+  Manage datasets for storing and versioning research data.
+  Datasets provide data management capabilities with versioning,
+  metadata, and access controls for organizing and sharing
+  research data across pipelines and teams.
 ---
 
 # seqera_datasets (Resource)
 
-Datasets Resource
+Manage datasets for storing and versioning research data.
+
+Datasets provide data management capabilities with versioning,
+metadata, and access controls for organizing and sharing
+research data across pipelines and teams.
 
 ## Example Usage
 
@@ -34,19 +41,8 @@ resource "seqera_datasets" "my_datasets" {
 
 ### Read-Only
 
-- `dataset` (Attributes) Represents a dataset in the Seqera Platform.
-Contains dataset metadata, versioning information, and access
-controls for data management and sharing. (see [below for nested schema](#nestedatt--dataset))
-
-<a id="nestedatt--dataset"></a>
-### Nested Schema for `dataset`
-
-Read-Only:
-
 - `date_created` (String)
 - `deleted` (Boolean) Read-only flag indicating if the dataset has been deleted
-- `description` (String) Detailed description of the dataset contents and purpose (max 1000 characters)
 - `id` (String) Unique identifier for the dataset (max 22 characters)
 - `last_updated` (String)
 - `media_type` (String) MIME type or media type of the dataset content (max 80 characters)
-- `name` (String) Dataset name following naming conventions (1-100 characters)

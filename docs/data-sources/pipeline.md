@@ -3,12 +3,19 @@
 page_title: "seqera_pipeline Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Pipeline DataSource
+  Manage Nextflow pipeline definitions and configurations.
+  Pipelines define reusable workflow templates with parameters,
+  compute environment settings, and execution configurations
+  for scalable bioinformatics and data processing workflows.
 ---
 
 # seqera_pipeline (Data Source)
 
-Pipeline DataSource
+Manage Nextflow pipeline definitions and configurations.
+
+Pipelines define reusable workflow templates with parameters,
+compute environment settings, and execution configurations
+for scalable bioinformatics and data processing workflows.
 
 ## Example Usage
 

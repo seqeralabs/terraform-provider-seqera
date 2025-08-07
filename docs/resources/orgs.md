@@ -3,12 +3,19 @@
 page_title: "seqera_orgs Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Orgs Resource
+  Manage organizations for multi-tenant platform environments.
+  Organizations provide administrative boundaries for teams, workspaces,
+  and resources, enabling enterprise-level management with role-based
+  access controls and resource isolation.
 ---
 
 # seqera_orgs (Resource)
 
-Orgs Resource
+Manage organizations for multi-tenant platform environments.
+
+Organizations provide administrative boundaries for teams, workspaces,
+and resources, enabling enterprise-level management with role-based
+access controls and resource isolation.
 
 ## Example Usage
 

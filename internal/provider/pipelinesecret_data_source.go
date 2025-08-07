@@ -45,7 +45,7 @@ func (r *PipelineSecretDataSource) Metadata(ctx context.Context, req datasource.
 // Schema defines the schema for the data source.
 func (r *PipelineSecretDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PipelineSecret DataSource",
+		MarkdownDescription: "Manage secure secrets for pipeline execution.\n\nPipeline secrets store encrypted sensitive data such as API keys,\npasswords, and configuration values used in workflows, providing\nsecure access to external services and resources.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{

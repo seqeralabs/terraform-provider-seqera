@@ -52,7 +52,7 @@ func (r *OrgsResource) Metadata(ctx context.Context, req resource.MetadataReques
 
 func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Orgs Resource",
+		MarkdownDescription: "Manage organizations for multi-tenant platform environments.\n\nOrganizations provide administrative boundaries for teams, workspaces,\nand resources, enabling enterprise-level management with role-based\naccess controls and resource isolation.\n",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
 				Computed: true,

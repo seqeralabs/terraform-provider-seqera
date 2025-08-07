@@ -3,12 +3,19 @@
 page_title: "seqera_tokens Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Tokens DataSource
+  Manage API access tokens for authentication.
+  Tokens provide secure API access with configurable permissions
+  and expiration settings, enabling programmatic access to
+  platform resources and services.
 ---
 
 # seqera_tokens (Data Source)
 
-Tokens DataSource
+Manage API access tokens for authentication.
+
+Tokens provide secure API access with configurable permissions
+and expiration settings, enabling programmatic access to
+platform resources and services.
 
 ## Example Usage
 
