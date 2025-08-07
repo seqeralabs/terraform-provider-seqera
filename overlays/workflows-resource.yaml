@@ -115,3 +115,38 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCost"]
     remove: true
+
+  # ProcessLoad schema modifications
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"]
+    update:
+      - aborted
+      - cached
+      - cpuLoad
+      - cpuTime
+      - cpus
+      - failed
+      - invCtxSwitch
+      - loadCpus
+      - loadMemory
+      - loadTasks
+      - memoryReq
+      - memoryRss
+      - peakCpus
+      - peakMemory
+      - peakTasks
+      - pending
+      - process
+      - readBytes
+      - running
+      - submitted
+      - succeeded
+      - volCtxSwitch
+      - writeBytes
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["retries"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["ignored"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["version"]
+    remove: true

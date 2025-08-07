@@ -10547,8 +10547,6 @@ components:
           maxLength: 22
           type: string
           x-speakeasy-param-readonly: true
-          ## Compute Config Schemas
-          ## Security Keys Schemas
         computeEnv:
           nullable: true
           allOf:
@@ -11721,11 +11719,11 @@ components:
           type: string
           description: property to select the compute config platform
           x-speakeasy-terraform-ignore: true
-      allOf:
-        - $ref: "#/components/schemas/AwsBatchConfig"
       required:
         - region
         # Pipeline requests
+      allOf:
+        - $ref: "#/components/schemas/AwsBatchConfig"
     SeqeraComputeSecurityKeys:
       type: object
       allOf:
@@ -12619,11 +12617,6 @@ components:
         succeedDuration:
           type: integer
           format: int64
-    WfWaveMeta:
-      type: object
-      properties:
-        enabled:
-          type: boolean
     Workflow:
       required:
         - commandLine

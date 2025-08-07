@@ -154,3 +154,50 @@ actions:
   # SeqeraComputeConfig modifications
   - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
     remove: true
+
+  # ComputeConfig discriminator and state change handling
+  - target: $.components.schemas.ComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+
+  # Ignore discriminator fields in all compute config schemas to prevent state changes
+  - target: $.components.schemas.AltairPbsComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AwsBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AzBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.K8sComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.LsfComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.MoabComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SeqeraComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SlurmComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.UnivaComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
