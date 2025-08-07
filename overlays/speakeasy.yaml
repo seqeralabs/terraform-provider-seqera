@@ -4,57 +4,6 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
-  - target: $["paths"]["/studios"]["post"]
-    update:
-      x-speakeasy-entity-operation: Studios#create
-  - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/studios/{sessionId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/studios/{sessionId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Studios#delete
-  - target: $["paths"]["/studios/{sessionId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Studios#read
-  - target: $["paths"]["/tokens"]["get"]
-    update:
-      x-speakeasy-entity-operation: Tokens#read
-  - target: $["paths"]["/tokens"]["post"]
-    update:
-      x-speakeasy-entity-operation: Tokens#create
-  - target: $["paths"]["/tokens/{tokenId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/tokens/{tokenId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Tokens#delete
-  - target: $["paths"]["/workflow/launch"]["post"]
-    update:
-      x-speakeasy-entity-operation: Workflows#create
-  - target: $["paths"]["/workflow/{workflowId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Workflows#read
-  - target: $["paths"]["/workflow/{workflowId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Workflows#delete
-  - target: $["paths"]["/workflow/{workflowId}/star"]["get"]
-    update:
-      x-speakeasy-group: WorkflowStar
-  - target: $["paths"]["/workflow/{workflowId}/star"]["post"]
-    update:
-      x-speakeasy-group: WorkflowStar
-  - target: $["paths"]["/workflow/{workflowId}/star"]["delete"]
-    update:
-      x-speakeasy-group: WorkflowStar
-  - target: $["components"]["schemas"]["AccessToken"]["properties"]["id"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["AccessToken"]
-    update:
-      x-speakeasy-entity: Tokens
   - target: $["components"]["schemas"]["AgentSecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["AltairPbsComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
@@ -82,36 +31,10 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["ContainerRegistryKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
-    update:
-      x-speakeasy-entity: Tokens
   - target: $["components"]["schemas"]["GoogleSecurityKeys"]
     update:
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
 
-  - target: $["components"]["schemas"]["DataStudioConfiguration"]
-    update:
-      x-speakeasy-entity: Studios
-  - target: $["components"]["schemas"]["DataStudioCreateRequest"]
-    update:
-      x-speakeasy-entity: Studios
-
-  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
-    update:
-      x-speakeasy-name-override: sessionId
-  # - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]["x-speakeasy-param-optional"]
-  #   remove: true
-  - target: $["components"]["schemas"]["DataStudioDto"]
-    update:
-      x-speakeasy-entity: Studios
-  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["x-speakeasy-entity"]
-    remove: true
-  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]
-    update:
-      x-speakeasy-entity: Workflows
   - target: $["components"]["schemas"]["EksComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["discriminator"]["readOnly"]
@@ -166,18 +89,6 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["SlurmComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["Team"]["properties"]["id"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["Team"]["properties"]["id"]
-    update:
-      x-speakeasy-name-override: teamId
-  - target: $["components"]["schemas"]["TeamDbDto"]["properties"]["teamId"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["TeamDbDto"]["properties"]["teamId"]
-    update:
-      x-speakeasy-name-override: teamId
   - target: $["components"]["schemas"]["UnivaComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["UserDbDto"]
@@ -188,29 +99,6 @@ actions:
   - target: $["components"]["schemas"]["Visibility"]
     update:
       x-speakeasy-param-optional: false
-  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]
-    update:
-      x-speakeasy-entity: Workflows
-  - target: $["components"]["schemas"]["Workspace"]["properties"]["id"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["Workspace"]["properties"]["name"]
-    update:
-      x-speakeasy-param-readonly: false
-  - target: $["components"]["schemas"]["Workspace"]["properties"]["fullName"]
-    update:
-      x-speakeasy-param-readonly: false
-  - target: $["components"]["schemas"]["Workspace"]["properties"]["description"]
-    update:
-      x-speakeasy-param-readonly: false
-  - target: $["components"]["schemas"]["Workspace"]["properties"]["visibility"]
-    update:
-      x-speakeasy-param-readonly: false
-  - target: $["components"]["schemas"]["Workspace"]
-    update:
-      x-speakeasy-entity: Workspace
   - target: $
     update:
       servers:
@@ -284,44 +172,10 @@ actions:
 
   # Entity annotations
 
-  # Team entity annotations
-  - target: $.components.schemas.Team
-    update:
-      x-speakeasy-entity: Teams
-  - target: $.components.schemas.TeamDbDto
-    update:
-      x-speakeasy-entity: Teams
-
-  # Team parameter optional annotation
-  - target: $.components.schemas.TeamDbDto.properties.teamId
-    update:
-      x-speakeasy-param-optional: true
-
-  # DataStudioCreateRequest param-optional
-  - target: $.components.schemas.DataStudioCreateRequest.properties.sessionId
-    update:
-      x-speakeasy-param-optional: true
 
   ####################################################################
   ####              Custom Error Handling                           ####
   ####################################################################
-  # Add retry mechanism for studios deletion when studio needs to be stopped first
-  - target: $.paths["/studios/{sessionId}"].delete
-    update:
-      x-speakeasy-retries:
-        strategy: backoff
-        backoff:
-          initialInterval: 3000
-          maxInterval: 10000
-          maxElapsedTime: 30000
-          exponent: 1.5
-        statusCodes:
-          - 400
-
-  # Add custom error mapping for better user experience
-  - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
-    update:
-      description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
 
 
   # ComputeConfig discriminator and state change handling
@@ -466,9 +320,6 @@ actions:
   # - target: $.components.schemas.Credentials.properties.baseUrl
   #   update:
   #     x-speakeasy-param-computed: false
-  # - target: $.components.schemas.DataStudioDto.properties.sessionId
-  #   update:
-  #     x-speakeasy-param-optional: true
 
   - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
     update:
@@ -477,11 +328,6 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["azure-cloud"]
     remove: true
-  - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
-    remove: true
-  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
-    update:
-      x-speakeasy-param-optional: true
   - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["seqeracompute"]
     remove: true
   - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["google-cloud"]
@@ -550,70 +396,6 @@ actions:
     update:
       allOf:
         - $ref: "#/components/schemas/AwsBatchConfig"
-  - target: $["components"]["schemas"]["Team"]
-    update:
-      x-speakeasy-entity: Teams
-  - target: $["components"]["schemas"]["TeamDbDto"]
-    update:
-      x-speakeasy-entity: Teams
-  - target: $["components"]["schemas"]["Workflow"]["properties"]["fusion"]
-    remove: true
-  - target: $["components"]["schemas"]["Workflow"]["properties"]["wave"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["required"][*]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["required"]
-    update:
-      - aborted
-      - cached
-      - cpuLoad
-      - cpuTime
-      - cpus
-      - failed
-      - invCtxSwitch
-      - loadCpus
-      - loadMemory
-      - loadTasks
-      - memoryReq
-      - memoryRss
-      - peakCpus
-      - peakMemory
-      - peakTasks
-      - pending
-      - readBytes
-      - running
-      - submitted
-      - succeeded
-      - volCtxSwitch
-      - writeBytes
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["retries"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["ignored"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["version"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpus"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuTime"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuLoad"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryRss"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryReq"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryConsumption"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netReadBytes"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netWriteBytes"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netVolCtxSwitch"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netInvCtxSwitch"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCost"]
-    remove: true
   - target: $["components"]["schemas"]["AzCloudConfig"]
     remove: true
   - target: $["components"]["schemas"]["GoogleBucket"]

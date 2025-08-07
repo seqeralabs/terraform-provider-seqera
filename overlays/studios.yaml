@@ -1,0 +1,73 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Studios Overlay
+  version: 0.0.0
+actions:
+  # Studios entity operations
+  - target: $["paths"]["/studios"]["post"]
+    update:
+      x-speakeasy-entity-operation: Studios#create
+  - target: $["paths"]["/studios/{sessionId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Studios#read
+  - target: $["paths"]["/studios/{sessionId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Studios#delete
+
+  # Studios parameter configurations
+  - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/studios/{sessionId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Studios entity schema annotations
+  - target: $["components"]["schemas"]["DataStudioConfiguration"]
+    update:
+      x-speakeasy-entity: Studios
+  - target: $["components"]["schemas"]["DataStudioCreateRequest"]
+    update:
+      x-speakeasy-entity: Studios
+  - target: $["components"]["schemas"]["DataStudioDto"]
+    update:
+      x-speakeasy-entity: Studios
+
+  # DataStudioDto property configurations
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+    update:
+      x-speakeasy-name-override: sessionId
+
+  # DataStudioCreateRequest parameter configuration
+  - target: $.components.schemas.DataStudioCreateRequest.properties.sessionId
+    update:
+      x-speakeasy-param-optional: true
+
+  # Remove environment property
+  - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
+    remove: true
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Add retry mechanism for studios deletion when studio needs to be stopped first
+  - target: $.paths["/studios/{sessionId}"].delete
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 3000
+          maxInterval: 10000
+          maxElapsedTime: 30000
+          exponent: 1.5
+        statusCodes:
+          - 400
+
+  # Add custom error mapping for better user experience
+  - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
+    update:
+      description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"

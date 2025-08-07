@@ -5374,7 +5374,6 @@ paths:
                 $ref: "#/components/schemas/DataStudioCreateResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -5384,6 +5383,7 @@ paths:
           exponent: 1.0 # No exponential backoff, fixed interval
         statusCodes:
           - 400
+      x-speakeasy-entity-operation: Studios#create
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -6620,7 +6620,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -6630,6 +6629,7 @@ paths:
           exponent: 1.0 # No exponential backoff, fixed interval
         statusCodes:
           - 400
+      x-speakeasy-entity-operation: Workflows#create
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -6766,7 +6766,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#delete
   /workflow/{workflowId}/cancel:
     post:
       summary: Cancel workflow
@@ -7760,8 +7759,8 @@ components:
           type: integer
           format: int64
           nullable: true
-          x-speakeasy-param-optional: true
           description: Unique numeric identifier for the access token (nullable)
+          x-speakeasy-param-optional: true
         name:
           maxLength: 50
           minLength: 1
@@ -7775,11 +7774,11 @@ components:
           type: string
           format: date-time
           description: Timestamp when the token was created
-      x-speakeasy-entity: Tokens
       description: |
         Represents an API access token for authentication.
         Contains token metadata, permissions, and expiration information
         for secure API access to platform resources.
+      x-speakeasy-entity: Tokens
     Action.ConfigType:
       type: object
       properties:
@@ -9409,10 +9408,10 @@ components:
       properties:
         sessionId:
           type: string
+          description: Unique identifier for the Studio session
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
           x-speakeasy-param-optional: true
-          description: Unique identifier for the Studio session
         workspaceId:
           type: integer
           format: int64
@@ -9478,11 +9477,11 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: Studios
       description: |
         Represents a Studio session for interactive data analysis.
         Contains configuration and runtime information for Jupyter-based
         computational environments.
+      x-speakeasy-entity: Studios
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -12057,9 +12056,9 @@ components:
         teamId:
           type: integer
           format: int64
+          description: Unique numeric identifier for the team
           x-speakeasy-param-optional: true
           x-speakeasy-name-override: teamId
-          description: Unique numeric identifier for the team
         name:
           type: string
           description: Display name for the team
@@ -12073,11 +12072,11 @@ components:
           type: integer
           format: int64
           description: Total number of members in the team
-      x-speakeasy-entity: Teams
       description: |
         Represents a team within an organization.
         Contains team membership, permissions, and access controls
         for collaborative workspace management.
+      x-speakeasy-entity: Teams
     TraceBeginRequest:
       type: object
       properties:
@@ -12973,7 +12972,6 @@ components:
           type: string
           format: date-time
           example: "2024-07-23T10:30:00Z"
-      x-speakeasy-entity: Workflows
       required:
         - pipeline
         - computeEnvId
@@ -12983,6 +12981,7 @@ components:
         #     required:
         #     - workspaceId
         #     - credentialsId
+      x-speakeasy-entity: Workflows
     WorkflowLaunchResponse:
       type: object
       properties:
@@ -13231,22 +13230,22 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
-          x-speakeasy-param-readonly: false
           example: "genomics-research"
+          x-speakeasy-param-readonly: false
         fullName:
           maxLength: 100
           type: string
-          x-speakeasy-param-readonly: false
           example: "Genomics Research Workspace"
+          x-speakeasy-param-readonly: false
         description:
           maxLength: 1000
           type: string
-          x-speakeasy-param-readonly: false
           example: "Workspace for genomics research projects and computational biology workflows"
+          x-speakeasy-param-readonly: false
         visibility:
           $ref: "#/components/schemas/Visibility"
-          x-speakeasy-param-readonly: false
           example: "PRIVATE"
+          x-speakeasy-param-readonly: false
         dateCreated:
           type: string
           format: date-time

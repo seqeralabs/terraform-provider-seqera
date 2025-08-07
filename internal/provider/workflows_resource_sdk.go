@@ -281,33 +281,6 @@ func (r *WorkflowsResourceModel) ToOperationsCreateWorkflowLaunchRequest(ctx con
 	return &out, diags
 }
 
-func (r *WorkflowsResourceModel) ToOperationsDeleteWorkflowRequest(ctx context.Context) (*operations.DeleteWorkflowRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var workflowID string
-	workflowID = r.WorkflowID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	force := new(bool)
-	if !r.Force.IsUnknown() && !r.Force.IsNull() {
-		*force = r.Force.ValueBool()
-	} else {
-		force = nil
-	}
-	out := operations.DeleteWorkflowRequest{
-		WorkflowID:  workflowID,
-		WorkspaceID: workspaceID,
-		Force:       force,
-	}
-
-	return &out, diags
-}
-
 func (r *WorkflowsResourceModel) ToOperationsDescribeWorkflowRequest(ctx context.Context) (*operations.DescribeWorkflowRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

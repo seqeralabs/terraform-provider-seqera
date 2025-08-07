@@ -1,0 +1,32 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Tokens Overlay
+  version: 0.0.0
+actions:
+  # Tokens entity operations
+  - target: $["paths"]["/tokens"]["get"]
+    update:
+      x-speakeasy-entity-operation: Tokens#read
+  - target: $["paths"]["/tokens"]["post"]
+    update:
+      x-speakeasy-entity-operation: Tokens#create
+  - target: $["paths"]["/tokens/{tokenId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Tokens#delete
+
+  # Token parameter configurations
+  - target: $["paths"]["/tokens/{tokenId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # AccessToken schema annotations
+  - target: $["components"]["schemas"]["AccessToken"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["AccessToken"]
+    update:
+      x-speakeasy-entity: Tokens
+  - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
+    update:
+      x-speakeasy-entity: Tokens
