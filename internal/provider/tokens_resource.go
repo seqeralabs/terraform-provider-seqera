@@ -51,7 +51,7 @@ func (r *TokensResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *TokensResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage API access tokens for authentication.\n\nTokens provide secure API access, enabling programmatic \naccess to platform resources and services.\n",
+		MarkdownDescription: "Manage API access tokens for authentication.\n\nTokens provide secure API access, enabling programmatic\naccess to platform resources and services.\n",
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
 				Computed: true,

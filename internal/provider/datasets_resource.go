@@ -51,7 +51,7 @@ func (r *DatasetsResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage datasets for storing and versioning research data.\n\nDatasets in Seqera are CSV (comma-separated values) and TSV \n(tab-separated values) files stored in a workspace.\n\nThey are used as inputs to pipelines to simplify data management,\nminimize user data-input errors, and facilitate reproducible workflows.\n",
+		MarkdownDescription: "Manage datasets for storing and versioning research data.\n\nDatasets in Seqera are CSV (comma-separated values) and TSV\n(tab-separated values) files stored in a workspace.\n\nThey are used as inputs to pipelines to simplify data management,\nminimize user data-input errors, and facilitate reproducible workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed: true,

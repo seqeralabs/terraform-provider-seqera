@@ -7780,7 +7780,11 @@ components:
         Contains token metadata, permissions, and expiration information
         for secure API access to platform resources.
       x-speakeasy-entity: Tokens
-      x-speakeasy-entity-description: "Manage API access tokens for authentication.\n\nTokens provide secure API access, enabling programmatic \naccess to platform resources and services.\n"
+      x-speakeasy-entity-description: |
+        Manage API access tokens for authentication.
+
+        Tokens provide secure API access, enabling programmatic
+        access to platform resources and services.
     Action.ConfigType:
       type: object
       properties:
@@ -7891,7 +7895,13 @@ components:
         Contains action configuration, triggers, and execution settings
         for automated pipeline workflows.
       x-speakeasy-entity: Action
-      x-speakeasy-entity-description: "This resource allows the management of pipeline actions. Actions enable event-based \npipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever \nthe pipeline repository is updated.\n\nSeqera Platform currently offers support for native GitHub webhooks and a general \nTower webhook that can be invoked programmatically.\n"
+      x-speakeasy-entity-description: |
+        This resource allows the management of pipeline actions. Actions enable event-based
+        pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+        the pipeline repository is updated.
+
+        Seqera Platform currently offers support for native GitHub webhooks and a general
+        Tower webhook that can be invoked programmatically.
     ActiveConnection:
       type: object
       allOf:
@@ -9219,9 +9229,8 @@ components:
       x-speakeasy-entity-description: |
         Manage connections to external storage systems and data repositories.
 
-        Data links provide access to cloud storage, file systems, and data repositories
-        for pipeline input/output operations, enabling seamless data integration
-        across different storage platforms.
+        Data links provide access to cloud storage for pipeline input/output operations,
+        enabling seamless data integration.
     DataLinkFinishMultiPartUploadRequest:
       type: object
       properties:
@@ -9396,7 +9405,16 @@ components:
           type: integer
           format: int32
       x-speakeasy-entity: Studios
-      x-speakeasy-entity-description: "Studios is a unified platform where you can host a combination of \ncontainer images and compute environments for interactive analysis using \nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive \nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote: \nOn Seqera Cloud, the free tier permits only one running Studio session at a time. \nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n"
+      x-speakeasy-entity-description: |
+        Studios is a unified platform where you can host a combination of
+        container images and compute environments for interactive analysis using
+        your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
+        or Xpra remote desktops. Each Studio session is an individual interactive
+        environment that encapsulates the live environment for dynamic data analysis.
+
+        Note:
+        On Seqera Cloud, the free tier permits only one running Studio session at a time.
+        To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
     DataStudioCreateRequest:
       required:
         - computeEnvId
@@ -9438,7 +9456,16 @@ components:
           type: boolean
           nullable: true
       x-speakeasy-entity: Studios
-      x-speakeasy-entity-description: "Studios is a unified platform where you can host a combination of \ncontainer images and compute environments for interactive analysis using \nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive \nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote: \nOn Seqera Cloud, the free tier permits only one running Studio session at a time. \nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n"
+      x-speakeasy-entity-description: |
+        Studios is a unified platform where you can host a combination of
+        container images and compute environments for interactive analysis using
+        your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
+        or Xpra remote desktops. Each Studio session is an individual interactive
+        environment that encapsulates the live environment for dynamic data analysis.
+
+        Note:
+        On Seqera Cloud, the free tier permits only one running Studio session at a time.
+        To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
     DataStudioCreateResponse:
       type: object
       properties:
@@ -9741,7 +9768,14 @@ components:
         Contains dataset metadata, versioning information, and access
         controls for data management and sharing.
       x-speakeasy-entity: Datasets
-      x-speakeasy-entity-description: "Manage datasets for storing and versioning research data.\n\nDatasets in Seqera are CSV (comma-separated values) and TSV \n(tab-separated values) files stored in a workspace.\n\nThey are used as inputs to pipelines to simplify data management,\nminimize user data-input errors, and facilitate reproducible workflows.\n"
+      x-speakeasy-entity-description: |
+        Manage datasets for storing and versioning research data.
+
+        Datasets in Seqera are CSV (comma-separated values) and TSV
+        (tab-separated values) files stored in a workspace.
+
+        They are used as inputs to pipelines to simplify data management,
+        minimize user data-input errors, and facilitate reproducible workflows.
     DatasetVersionDbDto:
       type: object
       properties:
@@ -11156,7 +11190,13 @@ components:
           format: date-time
           readOnly: true
       x-speakeasy-entity: Orgs
-      x-speakeasy-entity-description: "Manage your organization in Seqera platform using this resource. \n\nOrganizations are the top-level structure and contain workspaces, members, and teams. \nYou can create multiple organizations, each of which can contain multiple workspaces \nwith shared users and resources. This means you can customize and organize the use of \nresources while maintaining an access control layer for users associated with a workspace.\n"
+      x-speakeasy-entity-description: |
+        Manage your organization in Seqera platform using this resource.
+
+        Organizations are the top-level structure and contain workspaces, members, and teams.
+        You can create multiple organizations, each of which can contain multiple workspaces
+        with shared users and resources. This means you can customize and organize the use of
+        resources while maintaining an access control layer for users associated with a workspace.
     OrganizationDbDto:
       type: object
       properties:
@@ -12110,7 +12150,12 @@ components:
           format: date-time
           readOnly: true
       x-speakeasy-entity: Teams
-      x-speakeasy-entity-description: "Manage teams within organizations.\n\nTeams are organizational units that allow \norganization owners to group users together, \nmanaging team members and access permissions as a whole.\n"
+      x-speakeasy-entity-description: |
+        Manage teams within organizations.
+
+        Teams are organizational units that allow
+        organization owners to group users together,
+        managing team members and access permissions as a whole.
     TeamDbDto:
       type: object
       properties:
@@ -13309,7 +13354,23 @@ components:
           type: string
           format: date-time
       x-speakeasy-entity: Workspace
-      x-speakeasy-entity-description: "Manage workspaces for organizing projects and resources.\n\nWorkspaces provide isolated environments for organizing pipelines,\ncompute environments, and data, with configurable permissions\nand access controls for collaborative research projects.\n\nEach user has a unique user workspace to manage resources such as pipelines,\ncompute environments, and credentials. You can also create multiple workspaces within \nan organization context and associate each of these workspaces with dedicated teams of users, \nwhile providing fine-grained access control for each of the teams.\n\nOrganization workspaces extend the functionality of user workspaces by adding \nthe ability to fine-tune access levels for specific members, collaborators, or teams. \nThis is achieved by managing participants in the organization workspaces.\n\nOrganizations consist of members, while workspaces consist of participants.\n"
+      x-speakeasy-entity-description: |
+        Manage workspaces for organizing projects and resources.
+
+        Workspaces provide isolated environments for organizing pipelines,
+        compute environments, and data, with configurable permissions
+        and access controls for collaborative research projects.
+
+        Each user has a unique user workspace to manage resources such as pipelines,
+        compute environments, and credentials. You can also create multiple workspaces within
+        an organization context and associate each of these workspaces with dedicated teams of users,
+        while providing fine-grained access control for each of the teams.
+
+        Organization workspaces extend the functionality of user workspaces by adding
+        the ability to fine-tune access levels for specific members, collaborators, or teams.
+        This is achieved by managing participants in the organization workspaces.
+
+        Organizations consist of members, while workspaces consist of participants.
     WorkspaceDbDto:
       type: object
       properties:

@@ -4,18 +4,16 @@ page_title: "seqera_data_link Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
   Manage connections to external storage systems and data repositories.
-  Data links provide access to cloud storage, file systems, and data repositories
-  for pipeline input/output operations, enabling seamless data integration
-  across different storage platforms.
+  Data links provide access to cloud storage for pipeline input/output operations,
+  enabling seamless data integration.
 ---
 
 # seqera_data_link (Resource)
 
 Manage connections to external storage systems and data repositories.
 
-Data links provide access to cloud storage, file systems, and data repositories
-for pipeline input/output operations, enabling seamless data integration
-across different storage platforms.
+Data links provide access to cloud storage for pipeline input/output operations,
+enabling seamless data integration.
 
 ## Example Usage
 
