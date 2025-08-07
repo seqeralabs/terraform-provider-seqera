@@ -1,0 +1,138 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Workflows Overlay
+  version: 0.0.0
+actions:
+  # Workflows entity operations
+  - target: $["paths"]["/workflow/launch"]["post"]
+    update:
+      x-speakeasy-entity-operation: Workflows#create
+  - target: $["paths"]["/workflow/{workflowId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Workflows#read
+  - target: $["paths"]["/workflow/{workflowId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Workflows#delete
+
+  # Workflow star operations grouping
+  - target: $["paths"]["/workflow/{workflowId}/star"]["get"]
+    update:
+      x-speakeasy-group: WorkflowStar
+  - target: $["paths"]["/workflow/{workflowId}/star"]["post"]
+    update:
+      x-speakeasy-group: WorkflowStar
+  - target: $["paths"]["/workflow/{workflowId}/star"]["delete"]
+    update:
+      x-speakeasy-group: WorkflowStar
+
+  # Workflow entity schema annotations
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["x-speakeasy-entity"]
+    remove: true
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]
+    update:
+      x-speakeasy-entity: Workflows
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]
+    update:
+      x-speakeasy-entity: Workflows
+
+  # Remove deprecated workflow properties
+  - target: $["components"]["schemas"]["Workflow"]["properties"]["fusion"]
+    remove: true
+  - target: $["components"]["schemas"]["Workflow"]["properties"]["wave"]
+    remove: true
+
+  # WorkflowLoad schema modifications
+  - target: $["components"]["schemas"]["WorkflowLoad"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["required"]
+    update:
+      - aborted
+      - cached
+      - cpuLoad
+      - cpuTime
+      - cpus
+      - failed
+      - invCtxSwitch
+      - loadCpus
+      - loadMemory
+      - loadTasks
+      - memoryReq
+      - memoryRss
+      - peakCpus
+      - peakMemory
+      - peakTasks
+      - pending
+      - readBytes
+      - running
+      - submitted
+      - succeeded
+      - volCtxSwitch
+      - writeBytes
+
+  # Remove deprecated WorkflowLoad properties
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["retries"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["ignored"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["version"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpus"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuTime"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuLoad"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryRss"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryReq"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryConsumption"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netReadBytes"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netWriteBytes"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netVolCtxSwitch"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netInvCtxSwitch"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCost"]
+    remove: true
+
+  # ProcessLoad schema modifications
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"]
+    update:
+      - aborted
+      - cached
+      - cpuLoad
+      - cpuTime
+      - cpus
+      - failed
+      - invCtxSwitch
+      - loadCpus
+      - loadMemory
+      - loadTasks
+      - memoryReq
+      - memoryRss
+      - peakCpus
+      - peakMemory
+      - peakTasks
+      - pending
+      - process
+      - readBytes
+      - running
+      - submitted
+      - succeeded
+      - volCtxSwitch
+      - writeBytes
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["retries"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["ignored"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["version"]
+    remove: true

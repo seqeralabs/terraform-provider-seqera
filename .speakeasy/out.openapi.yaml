@@ -579,7 +579,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -590,6 +589,7 @@ paths:
         statusCodes:
           - 4XX
           - 5XX
+      x-speakeasy-entity-operation: ComputeEnv#create
   /compute-envs/validate:
     get:
       summary: Validate compute environment name
@@ -2894,7 +2894,6 @@ paths:
             type: integer
             format: int64
           x-speakeasy-param-optional: true
-          # x-speakeasy-match: orgId
       responses:
         "200":
           description: OK
@@ -5375,7 +5374,6 @@ paths:
                 $ref: "#/components/schemas/DataStudioCreateResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -5385,6 +5383,7 @@ paths:
           exponent: 1.0 # No exponential backoff, fixed interval
         statusCodes:
           - 400
+      x-speakeasy-entity-operation: Studios#create
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -6621,7 +6620,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -6631,6 +6629,7 @@ paths:
           exponent: 1.0 # No exponential backoff, fixed interval
         statusCodes:
           - 400
+      x-speakeasy-entity-operation: Workflows#create
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -7761,8 +7760,8 @@ components:
           type: integer
           format: int64
           nullable: true
-          x-speakeasy-param-optional: true
           description: Unique numeric identifier for the access token (nullable)
+          x-speakeasy-param-optional: true
         name:
           maxLength: 50
           minLength: 1
@@ -7776,11 +7775,11 @@ components:
           type: string
           format: date-time
           description: Timestamp when the token was created
-      x-speakeasy-entity: Tokens
       description: |
         Represents an API access token for authentication.
         Contains token metadata, permissions, and expiration information
         for secure API access to platform resources.
+      x-speakeasy-entity: Tokens
     Action.ConfigType:
       type: object
       properties:
@@ -7886,11 +7885,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: Action
       description: |
         Represents a pipeline action in the Seqera Platform.
         Contains action configuration, triggers, and execution settings
         for automated pipeline workflows.
+      x-speakeasy-entity: Action
     ActiveConnection:
       type: object
       allOf:
@@ -8627,8 +8626,6 @@ components:
             - seqeracompute-platform
           x-speakeasy-plan-validators: ComputeConfigValidator
           x-speakeasy-param-optional: false
-          ## Compute Config Schemas
-          ## Security Keys Schemas
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -8785,13 +8782,13 @@ components:
           items:
             type: integer
             format: int64
-      x-speakeasy-entity: ComputeEnv
       required:
         - computeEnv
         - credentialsId
         - config
         - name
         - platform
+      x-speakeasy-entity: ComputeEnv
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -8967,9 +8964,9 @@ components:
         id:
           maxLength: 22
           type: string
+          description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-name-override: credentialsId
           x-speakeasy-param-suppress-computed-diff: true
-          description: Unique identifier for the credential (max 22 characters)
         name:
           maxLength: 100
           type: string
@@ -8977,9 +8974,9 @@ components:
           example: "my-gcp-credentials"
         description:
           type: string
-          x-speakeasy-param-computed: false
           description: Optional description explaining the purpose of the credential
           example: "Google Cloud credentials for production workloads"
+          x-speakeasy-param-computed: false
         provider:
           maxLength: 16
           type: string
@@ -8999,38 +8996,38 @@ components:
             - gitea
             - azurerepos
             - seqeracompute
-          x-speakeasy-name-override: providerType
-          x-speakeasy-plan-validators: CredentialsConfigValidator
           description: Cloud or service provider type (e.g., aws, azure, gcp)
           example: "google"
+          x-speakeasy-name-override: providerType
+          x-speakeasy-plan-validators: CredentialsConfigValidator
         baseUrl:
           maxLength: 200
           pattern: ""
           type: string
-          x-speakeasy-param-computed: false
           example: "https://www.googleapis.com"
+          x-speakeasy-param-computed: false
         category:
           maxLength: 20
           type: string
-          x-speakeasy-param-computed: false
           example: "cloud"
+          x-speakeasy-param-computed: false
         deleted:
           type: boolean
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-suppress-computed-diff: true
         lastUsed:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Timestamp when the credential was last used
+          x-speakeasy-param-suppress-computed-diff: true
         dateCreated:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
           description: Timestamp when the credential was created
+          x-speakeasy-param-suppress-computed-diff: true
         lastUpdated:
           type: string
           format: date-time
@@ -9038,11 +9035,11 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
-      x-speakeasy-entity: Credential
       description: |
         Represents credentials used for authentication with various platforms and services.
         Contains authentication information for accessing cloud providers, Git repositories,
         and other external services within the Seqera Platform.
+      x-speakeasy-entity: Credential
     DataLink.Status:
       type: string
       readOnly: true
@@ -9147,8 +9144,8 @@ components:
       properties:
         id:
           type: string
-          x-speakeasy-name-override: dataLinkId
           description: Unique identifier for the data link
+          x-speakeasy-name-override: dataLinkId
         name:
           type: string
           description: Display name for the data link connection
@@ -9412,10 +9409,10 @@ components:
       properties:
         sessionId:
           type: string
+          description: Unique identifier for the Studio session
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
           x-speakeasy-param-optional: true
-          description: Unique identifier for the Studio session
         workspaceId:
           type: integer
           format: int64
@@ -9481,11 +9478,11 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      x-speakeasy-entity: Studios
       description: |
         Represents a Studio session for interactive data analysis.
         Contains configuration and runtime information for Jupyter-based
         computational environments.
+      x-speakeasy-entity: Studios
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -10513,8 +10510,8 @@ components:
         id:
           type: integer
           format: int64
-          x-speakeasy-param-readonly: true
           description: Unique numeric identifier for the label
+          x-speakeasy-param-readonly: true
         name:
           type: string
           description: Name or key of the label
@@ -11111,7 +11108,6 @@ components:
           format: date-time
           readOnly: true
       x-speakeasy-entity: Orgs
-      #x-speakeasy-name-override: orgId
     OrganizationDbDto:
       type: object
       properties:
@@ -11140,8 +11136,8 @@ components:
           description: Official website URL for the organization
         logoId:
           type: string
-          x-speakeasy-param-optional: true
           description: Identifier for the organization's logo image
+          x-speakeasy-param-optional: true
         logoUrl:
           type: string
           x-speakeasy-param-optional: true
@@ -11152,11 +11148,11 @@ components:
           $ref: "#/components/schemas/OrgRole"
         type:
           $ref: "#/components/schemas/OrgType"
-      x-speakeasy-entity: Orgs
       description: |
         Represents an organization in the Seqera Platform.
         Contains organizational metadata, settings, and member management
         information for multi-tenant environments.
+      x-speakeasy-entity: Orgs
     OrganizationQuotas:
       type: object
       properties:
@@ -11298,13 +11294,11 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         computeEnv:
           $ref: "#/components/schemas/ComputeEnvDbDto"
-      x-speakeasy-entity: Pipeline
-      ## Users
-
       description: |
         Represents a pipeline configuration in the Seqera Platform.
         Contains pipeline metadata, configuration settings, and execution parameters
         for Nextflow workflows.
+      x-speakeasy-entity: Pipeline
     PipelineInfo:
       type: object
       properties:
@@ -11396,11 +11390,11 @@ components:
           type: string
           format: date-time
           readOnly: true
-      x-speakeasy-entity: PipelineSecret
       description: |
         Represents a secure secret for pipeline execution.
         Contains encrypted sensitive data such as API keys, passwords,
         and configuration values used in workflows.
+      x-speakeasy-entity: PipelineSecret
     PlatformMetainfo:
       type: object
       discriminator:
@@ -11726,11 +11720,11 @@ components:
           type: string
           description: property to select the compute config platform
           x-speakeasy-terraform-ignore: true
-      allOf:
-        - $ref: "#/components/schemas/AwsBatchConfig"
       required:
         - region
         # Pipeline requests
+      allOf:
+        - $ref: "#/components/schemas/AwsBatchConfig"
     SeqeraComputeSecurityKeys:
       type: object
       allOf:
@@ -12061,9 +12055,9 @@ components:
         teamId:
           type: integer
           format: int64
+          description: Unique numeric identifier for the team
           x-speakeasy-param-optional: true
           x-speakeasy-name-override: teamId
-          description: Unique numeric identifier for the team
         name:
           type: string
           description: Display name for the team
@@ -12077,11 +12071,11 @@ components:
           type: integer
           format: int64
           description: Total number of members in the team
-      x-speakeasy-entity: Teams
       description: |
         Represents a team within an organization.
         Contains team membership, permissions, and access controls
         for collaborative workspace management.
+      x-speakeasy-entity: Teams
     TraceBeginRequest:
       type: object
       properties:
@@ -12624,11 +12618,6 @@ components:
         succeedDuration:
           type: integer
           format: int64
-    WfWaveMeta:
-      type: object
-      properties:
-        enabled:
-          type: boolean
     Workflow:
       required:
         - commandLine
@@ -12977,7 +12966,6 @@ components:
           type: string
           format: date-time
           example: "2024-07-23T10:30:00Z"
-      x-speakeasy-entity: Workflows
       required:
         - pipeline
         - computeEnvId
@@ -12987,6 +12975,7 @@ components:
         #     required:
         #     - workspaceId
         #     - credentialsId
+      x-speakeasy-entity: Workflows
     WorkflowLaunchResponse:
       type: object
       properties:
@@ -13235,22 +13224,22 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
-          x-speakeasy-param-readonly: false
           example: "genomics-research"
+          x-speakeasy-param-readonly: false
         fullName:
           maxLength: 100
           type: string
-          x-speakeasy-param-readonly: false
           example: "Genomics Research Workspace"
+          x-speakeasy-param-readonly: false
         description:
           maxLength: 1000
           type: string
-          x-speakeasy-param-readonly: false
           example: "Workspace for genomics research projects and computational biology workflows"
+          x-speakeasy-param-readonly: false
         visibility:
           $ref: "#/components/schemas/Visibility"
-          x-speakeasy-param-readonly: false
           example: "PRIVATE"
+          x-speakeasy-param-readonly: false
         dateCreated:
           type: string
           format: date-time

@@ -1,0 +1,203 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Compute Environment Overlay
+  version: 0.0.0
+actions:
+  # DataStudioComputeEnvDto entity annotation
+  - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
+    update:
+      x-speakeasy-entity: Studios
+
+  # DescribeComputeEnvResponse entity annotations
+  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]["properties"]["computeEnv"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["DescribeComputeEnvResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+
+  # ComputeConfig platform validator
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
+    update:
+      x-speakeasy-plan-validators: ComputeConfigValidator
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]
+    update:
+      x-speakeasy-param-optional: false
+
+  # ComputeEnv entity operations
+  - target: $.paths["/compute-envs"].post
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#create
+  - target: $.paths["/compute-envs/{computeEnvId}"].get
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#read
+  - target: $.paths["/compute-envs/{computeEnvId}"].put
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#update
+  - target: $.paths["/compute-envs/{computeEnvId}"].delete
+    update:
+      x-speakeasy-entity-operation: ComputeEnv#delete
+
+  # ComputeEnvResponseDto annotations
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.id
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.dateCreated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.lastUpdated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.lastUsed
+    update:
+      x-speakeasy-param-readonly: true
+
+  # ComputeEnv_ComputeConfig_ annotations
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.id
+    update:
+      x-speakeasy-name-override: computeEnvId
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.dateCreated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.lastUpdated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.lastUsed
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.deleted
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.status
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.orgId
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.workspaceId
+    update:
+      x-speakeasy-param-readonly: true
+
+  # Entity annotations
+  - target: $.components.schemas.ComputeEnvResponseDto
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $.components.schemas.DescribeComputeEnvResponse
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $.components.schemas.CreateComputeEnvResponse
+    update:
+      x-speakeasy-entity: ComputeEnv
+
+  # Updated overlay annotations
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnvResponseDto"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: computeEnvId
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["id"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]["enum"][*]
+    remove: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["platform"]["enum"]
+    update:
+      - aws-batch
+      - aws-cloud
+      - google-lifesciences
+      - google-batch
+      - azure-batch
+      - k8s-platform
+      - eks-platform
+      - gke-platform
+      - uge-platform
+      - slurm-platform
+      - lsf-platform
+      - altair-platform
+      - moab-platform
+      - local-platform
+      - seqeracompute-platform
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["status"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["CreateComputeEnvRequest"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+  - target: $["components"]["schemas"]["CreateComputeEnvResponse"]
+    update:
+      x-speakeasy-entity: ComputeEnv
+
+  # SeqeraComputeConfig modifications
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
+    remove: true
+
+  # ComputeConfig discriminator and state change handling
+  - target: $.components.schemas.ComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-terraform-ignore: true
+
+  # Ignore discriminator fields in all compute config schemas to prevent state changes
+  - target: $.components.schemas.AltairPbsComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AwsBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.AzBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleBatchConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.K8sComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.LsfComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.MoabComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SeqeraComputeConfig.properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SlurmComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.UnivaComputeConfig.allOf[1].properties.discriminator
+    update:
+      x-speakeasy-terraform-ignore: true

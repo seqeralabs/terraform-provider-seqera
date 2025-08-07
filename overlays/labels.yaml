@@ -1,0 +1,58 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Labels Overlay
+  version: 0.0.0
+actions:
+  # Labels entity operations
+  - target: $["paths"]["/labels"]["get"]
+    update:
+      x-speakeasy-entity-operation: Labels#read
+  - target: $["paths"]["/labels"]["post"]
+    update:
+      x-speakeasy-entity-operation: Labels#create
+  - target: $["paths"]["/labels/{labelId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Labels#update
+  - target: $["paths"]["/labels/{labelId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Labels#delete
+
+  # Remove required parameter
+  - target: $["paths"]["/labels/{labelId}"]["post"]["parameters"][0]["required"]
+    remove: true
+
+  # Entity schema annotations
+  - target: $["components"]["schemas"]["CreateLabelRequest"]
+    update:
+      x-speakeasy-entity: Labels
+  - target: $["components"]["schemas"]["CreateLabelResponse"]
+    update:
+      x-speakeasy-entity: Labels
+  - target: $["components"]["schemas"]["CreateLabelResponse"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: labelId
+
+  # LabelDbDto property annotations
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["id"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["paths"]["/labels/{labelId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["paths"]["/labels/{labelId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["paths"]["/labels/{labelId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-readonly: true
+
+  # Remove deprecated paths and properties
+  - target: $["paths"]["/labels/dynamic/allowed"]
+    remove: true
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isDynamic"]
+    remove: true
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isInterpolated"]
+    remove: true
+  - target: $["components"]["schemas"]["AllowedDynamicLabelsResponse"]
+    remove: true

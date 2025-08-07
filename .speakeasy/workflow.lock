@@ -2,8 +2,8 @@ speakeasyVersion: 1.598.3
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:d3f3449086ddad08ea694ab30ad5babdc7ef6ae4e096c4f51a2ddd90cf83b9ed
-        sourceBlobDigest: sha256:90674dc0888354cf3f8cc5c2489968f34bf49595fc7cb2468a38d0e6fe5d3e63
+        sourceRevisionDigest: sha256:d258d0e83f1ed41bed9c6c4f2ef01827e7aa9f86f2d5edc58613a31383afb8b9
+        sourceBlobDigest: sha256:4f607eb7ffbb173a127fd19e23cfc3d20999a61a9ac159234073e2a381d85d88
         tags:
             - latest
             - 1.56.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:d3f3449086ddad08ea694ab30ad5babdc7ef6ae4e096c4f51a2ddd90cf83b9ed
-        sourceBlobDigest: sha256:90674dc0888354cf3f8cc5c2489968f34bf49595fc7cb2468a38d0e6fe5d3e63
+        sourceRevisionDigest: sha256:d258d0e83f1ed41bed9c6c4f2ef01827e7aa9f86f2d5edc58613a31383afb8b9
+        sourceBlobDigest: sha256:4f607eb7ffbb173a127fd19e23cfc3d20999a61a9ac159234073e2a381d85d88
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -28,6 +28,22 @@ workflow:
                 - location: overlays/request-examples.yaml
                 - location: overlays/validators.yaml
                 - location: overlays/retry.yaml
+                - location: overlays/datalinks.yaml
+                - location: overlays/actions.yaml
+                - location: overlays/credentials.yaml
+                - location: overlays/compute-env.yaml
+                - location: overlays/datasets.yaml
+                - location: overlays/labels.yaml
+                - location: overlays/orgs.yaml
+                - location: overlays/pipeline-secrets.yaml
+                - location: overlays/pipelines.yaml
+                - location: overlays/studios.yaml
+                - location: overlays/teams.yaml
+                - location: overlays/tokens.yaml
+                - location: overlays/workflows-resource.yaml
+                - location: overlays/workspaces.yaml
+                - location: overlays/users.yaml
+                - location: overlays/schema-fixes.yaml
             output: .speakeasy/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

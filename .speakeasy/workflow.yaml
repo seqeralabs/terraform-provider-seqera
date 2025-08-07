@@ -12,6 +12,22 @@ sources:
             - location: overlays/request-examples.yaml
             - location: overlays/validators.yaml
             - location: overlays/retry.yaml
+            - location: overlays/datalinks.yaml
+            - location: overlays/actions.yaml
+            - location: overlays/credentials.yaml
+            - location: overlays/compute-env.yaml
+            - location: overlays/datasets.yaml
+            - location: overlays/labels.yaml
+            - location: overlays/orgs.yaml
+            - location: overlays/pipeline-secrets.yaml
+            - location: overlays/pipelines.yaml
+            - location: overlays/studios.yaml
+            - location: overlays/teams.yaml
+            - location: overlays/tokens.yaml
+            - location: overlays/workflows-resource.yaml
+            - location: overlays/workspaces.yaml
+            - location: overlays/users.yaml
+            - location: overlays/schema-fixes.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

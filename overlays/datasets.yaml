@@ -1,0 +1,28 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Datasets Overlay
+  version: 0.0.0
+actions:
+  # Remove existing entity operation
+  - target: $["paths"]["/datasets"]["get"]["x-speakeasy-entity-operation"]
+    remove: true
+
+  # Dataset entity operations
+  - target: $["paths"]["/datasets"]["post"]
+    update:
+      x-speakeasy-entity-operation: Datasets#create
+  - target: $["paths"]["/datasets/{datasetId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Dataset#update
+  - target: $["paths"]["/datasets/{datasetId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Dataset#delete
+  - target: $["paths"]["/datasets/{datasetId}/metadata"]["get"]
+    update:
+      x-speakeasy-entity-operation: Dataset#read
+
+  # Dataset parameter requirements
+  - target: $["paths"]["/datasets"]["post"]["parameters"][0]
+    update:
+      required: true

@@ -1,0 +1,25 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Workspaces Overlay
+  version: 0.0.0
+actions:
+  # Workspace schema annotations
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["name"]
+    update:
+      x-speakeasy-param-readonly: false
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["fullName"]
+    update:
+      x-speakeasy-param-readonly: false
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["description"]
+    update:
+      x-speakeasy-param-readonly: false
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["visibility"]
+    update:
+      x-speakeasy-param-readonly: false
+  - target: $["components"]["schemas"]["Workspace"]
+    update:
+      x-speakeasy-entity: Workspace

@@ -1,0 +1,40 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Teams Overlay
+  version: 0.0.0
+actions:
+  # Team schema annotations
+  - target: $["components"]["schemas"]["Team"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["Team"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: teamId
+  - target: $["components"]["schemas"]["TeamDbDto"]["properties"]["teamId"]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["components"]["schemas"]["TeamDbDto"]["properties"]["teamId"]
+    update:
+      x-speakeasy-name-override: teamId
+
+  # Team entity annotations
+  - target: $.components.schemas.Team
+    update:
+      x-speakeasy-entity: Teams
+  - target: $.components.schemas.TeamDbDto
+    update:
+      x-speakeasy-entity: Teams
+
+  # Team parameter optional annotation
+  - target: $.components.schemas.TeamDbDto.properties.teamId
+    update:
+      x-speakeasy-param-optional: true
+
+  # Updated overlay annotations
+  - target: $["components"]["schemas"]["Team"]
+    update:
+      x-speakeasy-entity: Teams
+  - target: $["components"]["schemas"]["TeamDbDto"]
+    update:
+      x-speakeasy-entity: Teams

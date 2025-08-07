@@ -1,0 +1,100 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Schema Fixes Overlay
+  version: 0.0.0
+actions:
+  # Fix AWS Batch Config terraform-ignore
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  # Fix discriminator mapping validation errors by removing problematic mappings
+  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["google-cloud"]
+    remove: true
+  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["azure-cloud"]
+    remove: true
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["seqeracompute"]
+    remove: true
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["google-cloud"]
+    remove: true
+  - target: $.components.schemas.ComputeConfig.discriminator.mapping["google-cloud"]
+    remove: true
+  - target: $.components.schemas.ComputeConfig.discriminator.mapping["azure-cloud"]
+    remove: true
+  - target: $.components.schemas.PlatformMetainfo.discriminator.mapping["seqeracompute"]
+    remove: true
+
+  # Update PlatformMetainfo oneOf references
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["oneOf"][*]
+    remove: true
+  - target: $["components"]["schemas"]["PlatformMetainfo"]["oneOf"]
+    update:
+      - $ref: "#/components/schemas/AwsBatchPlatformMetainfo"
+      - $ref: "#/components/schemas/AwsCloudPlatformMetainfo"
+      - $ref: "#/components/schemas/GooglePlatformMetainfo"
+      - $ref: "#/components/schemas/AzBatchPlatformMetainfo"
+      - $ref: "#/components/schemas/EksPlatformMetaInfo"
+      - $ref: "#/components/schemas/GkePlatformMetaInfo"
+      - $ref: "#/components/schemas/K8sPlatformMetaInfo"
+      - $ref: "#/components/schemas/GridPlatformMetainfo"
+      - $ref: "#/components/schemas/LocalPlatformMetainfo"
+
+  # SeqeraComputeConfig modifications
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["region"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["workDir"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["preRunScript"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["postRunScript"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["defaultDataRetentionPolicy"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["nextflowConfig"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]
+    update:
+      allOf:
+        - $ref: "#/components/schemas/AwsBatchConfig"
+
+  # Remove deprecated schemas
+  - target: $["components"]["schemas"]["AzCloudConfig"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleBucket"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleCloudConfig"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleCloudPlatformMetaInfo"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleImage"]
+    remove: true
+  - target: $["components"]["schemas"]["GoogleInstanceType"]
+    remove: true
+  - target: $["components"]["schemas"]["Map.Entry_String.String_"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputePlatformDescriber"]
+    remove: true
+  - target: $["components"]["schemas"]["SeqeraComputePlatformMetainfo"]
+    remove: true
+  - target: $["components"]["schemas"]["WfFusionMeta"]
+    remove: true
+  - target: $["components"]["schemas"]["WfWaveMeta"]
+    remove: true
+
+  # AWS Cloud Config terraform-ignore
+  - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  # Launch property configuration
+  - target: $["components"]["schemas"]["Launch"]["properties"]["id"]
+    update:
+      x-speakeasy-param-readonly: true
+
+  # Visibility parameter configuration
+  - target: $["components"]["schemas"]["Visibility"]
+    update:
+      x-speakeasy-param-optional: false

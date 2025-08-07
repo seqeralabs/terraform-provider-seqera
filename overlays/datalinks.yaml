@@ -1,0 +1,45 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: DataLinks Overlay
+  version: 0.0.0
+actions:
+  # DataLink entity operations
+  - target: $["paths"]["/data-links"]["post"]
+    update:
+      x-speakeasy-entity-operation: DataLink#create
+  - target: $["paths"]["/data-links/{dataLinkId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: DataLink#read
+  - target: $["paths"]["/data-links/{dataLinkId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: DataLink#update
+  - target: $["paths"]["/data-links/{dataLinkId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: DataLink#delete
+
+  # DataLink parameter configurations
+  - target: $["paths"]["/data-links"]["post"]["parameters"][0]
+    update:
+      required: true
+  - target: $["components"]["schemas"]["DataLinkDto"]["properties"]["id"]
+    update:
+      x-speakeasy-name-override: dataLinkId
+  - target: $["components"]["schemas"]["DataLinkProvider"]
+    update:
+      x-speakeasy-name-override: providerType
+
+  # DataLink description update
+  - target: $["paths"]["/data-links/{dataLinkId}/script/download"]["get"]["description"]
+    update: "Creates a script to download files from the data-link associated with the given `dataLinkId`. Append `?dirs` or `?files` to specify a list of files or paths to download within the data-link."
+
+  # DataLinkProvider enum updates
+  - target: $["components"]["schemas"]["DataLinkProvider"]["enum"][*]
+    remove: true
+  - target: $["components"]["schemas"]["DataLinkProvider"]["enum"]
+    update:
+      - aws
+      - google
+      - azure
+      - azure_entra
+      - seqeracompute

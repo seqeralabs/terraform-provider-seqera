@@ -1,0 +1,23 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Users Overlay
+  version: 0.0.0
+actions:
+  # User operations
+  - target: $.paths["/user"].get
+    update:
+      x-speakeasy-entity-operation: CurrentUser#read
+  - target: $.paths["/user/{userId}/workspaces"].get
+    update:
+      x-speakeasy-entity-operation: UserWorkspaces#read
+  - target: $.paths["/users/{userId}"].get
+    update:
+      x-speakeasy-entity-operation: User#read
+
+  # UserDbDto entity configuration
+  - target: $["components"]["schemas"]["UserDbDto"]
+    update:
+      x-speakeasy-entity:
+        - CurrentUser
+        - User
