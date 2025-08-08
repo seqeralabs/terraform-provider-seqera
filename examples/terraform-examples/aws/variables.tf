@@ -5,7 +5,7 @@ variable "seqera_server_url" {
   default     = "https://api.cloud.seqera.io"
 
   validation {
-    condition = can(regex("^https?://", var.seqera_server_url))
+    condition     = can(regex("^https?://", var.seqera_server_url))
     error_message = "Server URL must be a valid HTTP or HTTPS URL."
   }
 }
@@ -28,7 +28,7 @@ variable "aws_region" {
   default     = "us-east-1"
 
   validation {
-    condition = can(regex("^[a-z]{2}-[a-z]+-[0-9]$", var.aws_region))
+    condition     = can(regex("^[a-z]{2}-[a-z]+-[0-9]$", var.aws_region))
     error_message = "AWS region must be in the format xx-xxxx-x (e.g., us-east-1)."
   }
 }
@@ -61,7 +61,7 @@ variable "iam_role" {
   default     = null
 
   validation {
-    condition = var.iam_role == null || can(regex("^arn:aws:iam::[0-9]{12}:role/.+$", var.iam_role))
+    condition     = var.iam_role == null || can(regex("^arn:aws:iam::[0-9]{12}:role/.+$", var.iam_role))
     error_message = "IAM role must be a valid ARN format (arn:aws:iam::account:role/role-name)."
   }
 }

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     seqera = {
-      source = "registry.terraform.io/speakeasy/seqera"
+      source = "registry.terraform.io/seqeralabs/seqera"
       #version = "0.0.3"
     }
   }

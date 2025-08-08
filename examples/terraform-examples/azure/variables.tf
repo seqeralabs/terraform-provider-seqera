@@ -5,7 +5,7 @@ variable "seqera_server_url" {
   default     = "https://api.cloud.seqera.io"
 
   validation {
-    condition = can(regex("^https?://", var.seqera_server_url))
+    condition     = can(regex("^https?://", var.seqera_server_url))
     error_message = "Server URL must be a valid HTTP or HTTPS URL."
   }
 }
@@ -28,7 +28,7 @@ variable "azure_region" {
   default     = "eastus"
 
   validation {
-    condition = can(regex("^[a-z0-9]+$", var.azure_region))
+    condition     = can(regex("^[a-z0-9]+$", var.azure_region))
     error_message = "Azure region must be a valid region name (e.g., eastus, westus2)."
   }
 }

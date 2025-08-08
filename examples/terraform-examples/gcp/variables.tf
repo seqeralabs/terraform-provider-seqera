@@ -5,7 +5,7 @@ variable "seqera_server_url" {
   default     = "https://api.cloud.seqera.io"
 
   validation {
-    condition = can(regex("^https?://", var.seqera_server_url))
+    condition     = can(regex("^https?://", var.seqera_server_url))
     error_message = "Server URL must be a valid HTTP or HTTPS URL."
   }
 }
@@ -28,7 +28,7 @@ variable "gcp_region" {
   default     = "us-central1"
 
   validation {
-    condition = can(regex("^[a-z]+-[a-z]+[0-9]$", var.gcp_region))
+    condition     = can(regex("^[a-z]+-[a-z]+[0-9]$", var.gcp_region))
     error_message = "GCP region must be in the format region-zone (e.g., us-central1, europe-west1)."
   }
 }
@@ -39,7 +39,7 @@ variable "gcp_location" {
   default     = "us-central1"
 
   validation {
-    condition = can(regex("^[a-z]+-[a-z]+[0-9](-[a-z])?$", var.gcp_location))
+    condition     = can(regex("^[a-z]+-[a-z]+[0-9](-[a-z])?$", var.gcp_location))
     error_message = "GCP location must be a valid region or zone (e.g., us-central1, us-central1-a)."
   }
 }

@@ -51,7 +51,7 @@ resource "seqera_compute_env" "gcp_batch_compute_env" {
         work_dir = var.work_dir
         location = var.gcp_location
 
-        machine_type = "n2-standard-8"  # 8 vCPUs, 32GB RAM
+        machine_type = "n2-standard-8" # 8 vCPUs, 32GB RAM
 
         head_job_cpus      = 4
         head_job_memory_mb = 16384
@@ -76,36 +76,36 @@ resource "seqera_pipeline" "rnaseq_pipeline" {
   icon        = "https://avatars.githubusercontent.com/u/35520196?v=4"
   label_ids   = [resource.seqera_labels.my_labels.label_id]
   launch = {
-    compute_env_id      = resource.seqera_compute_env.gcp_batch_compute_env.compute_env_id
-    config_profiles     = ["test"]
-    pipeline            = "https://github.com/nf-core/rnaseq"
-    revision            = "3.19.0"
-    work_dir            = var.work_dir
-    params_text         = "{\"outdir\": \"${var.work_dir}\"}"
-    pull_latest         = false
-    stub_run            = false
-    workspace_secrets   = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
-    pre_run_script      = file("${path.module}/scripts/pre-run.sh")
-    post_run_script     = file("${path.module}/scripts/post-run.sh")
+    compute_env_id    = resource.seqera_compute_env.gcp_batch_compute_env.compute_env_id
+    config_profiles   = ["test"]
+    pipeline          = "https://github.com/nf-core/rnaseq"
+    revision          = "3.19.0"
+    work_dir          = var.work_dir
+    params_text       = "{\"outdir\": \"${var.work_dir}\"}"
+    pull_latest       = false
+    stub_run          = false
+    workspace_secrets = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
+    pre_run_script    = file("${path.module}/scripts/pre-run.sh")
+    post_run_script   = file("${path.module}/scripts/post-run.sh")
   }
   workspace_id = resource.seqera_workspace.my_workspace.id
 }
 
 resource "seqera_workflows" "rnaseq_workflow" {
-  compute_env_id      = resource.seqera_compute_env.gcp_batch_compute_env.compute_env_id
-  pipeline            = "nf-core/rnaseq"
-  revision            = "3.19.0"
-  work_dir            = var.work_dir
-  workspace_id        = resource.seqera_workspace.my_workspace.id
-  config_profiles     = ["test"]
-  params_text         = "{\"outdir\": \"${var.work_dir}\"}"
-  pull_latest         = false
-  stub_run            = false
-  label_ids           = [resource.seqera_labels.my_labels.label_id]
-  workspace_secrets   = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
-  pre_run_script      = file("${path.module}/scripts/pre-run.sh")
-  post_run_script     = file("${path.module}/scripts/post-run.sh")
-  depends_on          = [seqera_compute_env.gcp_batch_compute_env]
+  compute_env_id    = resource.seqera_compute_env.gcp_batch_compute_env.compute_env_id
+  pipeline          = "nf-core/rnaseq"
+  revision          = "3.19.0"
+  work_dir          = var.work_dir
+  workspace_id      = resource.seqera_workspace.my_workspace.id
+  config_profiles   = ["test"]
+  params_text       = "{\"outdir\": \"${var.work_dir}\"}"
+  pull_latest       = false
+  stub_run          = false
+  label_ids         = [resource.seqera_labels.my_labels.label_id]
+  workspace_secrets = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
+  pre_run_script    = file("${path.module}/scripts/pre-run.sh")
+  post_run_script   = file("${path.module}/scripts/post-run.sh")
+  depends_on        = [seqera_compute_env.gcp_batch_compute_env]
 }
 
 # Resource Labels
