@@ -48,7 +48,7 @@ func (r *WorkspaceDataSource) Metadata(ctx context.Context, req datasource.Metad
 // Schema defines the schema for the data source.
 func (r *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Workspace DataSource",
+		MarkdownDescription: "Manage workspaces for organizing projects and resources.\n\nWorkspaces provide isolated environments for organizing pipelines,\ncompute environments, and data, with configurable permissions\nand access controls for collaborative research projects.\n\nEach user has a unique user workspace to manage resources such as pipelines,\ncompute environments, and credentials. You can also create multiple workspaces within\nan organization context and associate each of these workspaces with dedicated teams of users,\nwhile providing fine-grained access control for each of the teams.\n\nOrganization workspaces extend the functionality of user workspaces by adding\nthe ability to fine-tune access levels for specific members, collaborators, or teams.\nThis is achieved by managing participants in the organization workspaces.\n\nOrganizations consist of members, while workspaces consist of participants.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{

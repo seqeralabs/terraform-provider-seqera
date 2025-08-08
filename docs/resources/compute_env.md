@@ -3,12 +3,24 @@
 page_title: "seqera_compute_env Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  ComputeEnv Resource
+  This resource allows the management of Seqera compute environments.
+  Seqera Platform compute environments define the execution platform where a pipeline will run.
+  Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
+  Compute environments define the computational resources and configuration needed
+  to run Nextflow workflows, including cloud provider settings, resource limits,
+  and execution parameters.
 ---
 
 # seqera_compute_env (Resource)
 
-ComputeEnv Resource
+This resource allows the management of Seqera compute environments.
+
+Seqera Platform compute environments define the execution platform where a pipeline will run.
+Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
+
+Compute environments define the computational resources and configuration needed
+to run Nextflow workflows, including cloud provider settings, resource limits,
+and execution parameters.
 
 ## Example Usage
 
@@ -750,5 +762,5 @@ Read-Only:
 Import is supported using the following syntax:
 
 ```shell
-terraform import seqera_compute_env.my_seqera_compute_env ""
+terraform import seqera_compute_env.my_seqera_compute_env '{"compute_env_id": "", "workspace_id": 0}'
 ```

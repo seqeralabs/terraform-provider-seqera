@@ -62,7 +62,7 @@ func (r *PipelineDataSource) Metadata(ctx context.Context, req datasource.Metada
 // Schema defines the schema for the data source.
 func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Pipeline DataSource",
+		MarkdownDescription: "Manage Nextflow pipeline definitions and configurations.\n\nPipelines define reusable workflow templates with parameters,\ncompute environment settings, and execution configurations\nfor scalable bioinformatics and data processing workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"attributes": schema.ListAttribute{
@@ -182,8 +182,7 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Computed:    true,
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 			"workspace_name": schema.StringAttribute{

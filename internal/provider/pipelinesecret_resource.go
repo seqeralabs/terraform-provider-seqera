@@ -52,7 +52,7 @@ func (r *PipelineSecretResource) Metadata(ctx context.Context, req resource.Meta
 
 func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PipelineSecret Resource",
+		MarkdownDescription: "Manage secure secrets for pipeline execution.\n\nPipeline secrets store encrypted sensitive data such as API keys,\npasswords, and configuration values used in workflows, providing\nsecure access to external services and resources.\n",
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed:    true,

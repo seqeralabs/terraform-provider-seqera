@@ -3,12 +3,19 @@
 page_title: "seqera_credential Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Credential Resource
+  Manage workspace credentials in Seqera platform using this resource.
+  Credentials store authentication information for accessing cloud providers,
+  Git repositories, container registries, and other external services
+  within the Seqera Platform workflows.
 ---
 
 # seqera_credential (Resource)
 
-Credential Resource
+Manage workspace credentials in Seqera platform using this resource.
+
+Credentials store authentication information for accessing cloud providers,
+Git repositories, container registries, and other external services
+within the Seqera Platform workflows.
 
 ## Example Usage
 
@@ -181,7 +188,7 @@ Optional:
 
 Optional:
 
-- `data` (String)
+- `data` (String, Sensitive)
 
 
 <a id="nestedatt--keys--k8s"></a>

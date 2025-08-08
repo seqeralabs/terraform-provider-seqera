@@ -52,7 +52,7 @@ func (r *OrgsResource) Metadata(ctx context.Context, req resource.MetadataReques
 
 func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Orgs Resource",
+		MarkdownDescription: "Manage your organization in Seqera platform using this resource.\n\nOrganizations are the top-level structure and contain workspaces, members, and teams.\nYou can create multiple organizations, each of which can contain multiple workspaces\nwith shared users and resources. This means you can customize and organize the use of\nresources while maintaining an access control layer for users associated with a workspace.\n",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
 				Computed: true,

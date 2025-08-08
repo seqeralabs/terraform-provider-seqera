@@ -3,12 +3,22 @@
 page_title: "seqera_datasets Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Datasets Resource
+  Manage datasets for storing and versioning research data.
+  Datasets in Seqera are CSV (comma-separated values) and TSV
+  (tab-separated values) files stored in a workspace.
+  They are used as inputs to pipelines to simplify data management,
+  minimize user data-input errors, and facilitate reproducible workflows.
 ---
 
 # seqera_datasets (Resource)
 
-Datasets Resource
+Manage datasets for storing and versioning research data.
+
+Datasets in Seqera are CSV (comma-separated values) and TSV
+(tab-separated values) files stored in a workspace.
+
+They are used as inputs to pipelines to simplify data management,
+minimize user data-input errors, and facilitate reproducible workflows.
 
 ## Example Usage
 
@@ -34,19 +44,8 @@ resource "seqera_datasets" "my_datasets" {
 
 ### Read-Only
 
-- `dataset` (Attributes) Represents a dataset in the Seqera Platform.
-Contains dataset metadata, versioning information, and access
-controls for data management and sharing. (see [below for nested schema](#nestedatt--dataset))
-
-<a id="nestedatt--dataset"></a>
-### Nested Schema for `dataset`
-
-Read-Only:
-
 - `date_created` (String)
 - `deleted` (Boolean) Read-only flag indicating if the dataset has been deleted
-- `description` (String) Detailed description of the dataset contents and purpose (max 1000 characters)
 - `id` (String) Unique identifier for the dataset (max 22 characters)
 - `last_updated` (String)
 - `media_type` (String) MIME type or media type of the dataset content (max 80 characters)
-- `name` (String) Dataset name following naming conventions (1-100 characters)

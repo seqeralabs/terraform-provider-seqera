@@ -3,12 +3,19 @@
 page_title: "seqera_credential Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Credential DataSource
+  Manage workspace credentials in Seqera platform using this resource.
+  Credentials store authentication information for accessing cloud providers,
+  Git repositories, container registries, and other external services
+  within the Seqera Platform workflows.
 ---
 
 # seqera_credential (Data Source)
 
-Credential DataSource
+Manage workspace credentials in Seqera platform using this resource.
+
+Credentials store authentication information for accessing cloud providers,
+Git repositories, container registries, and other external services
+within the Seqera Platform workflows.
 
 ## Example Usage
 

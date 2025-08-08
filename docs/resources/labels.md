@@ -3,12 +3,19 @@
 page_title: "seqera_labels Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Labels Resource
+  Manage labels for organizing and categorizing resources.
+  Labels provide metadata tagging capabilities for pipelines, workflows,
+  and other platform resources, enabling resource organization, filtering,
+  and management across the platform.
 ---
 
 # seqera_labels (Resource)
 
-Labels Resource
+Manage labels for organizing and categorizing resources.
+
+Labels provide metadata tagging capabilities for pipelines, workflows,
+and other platform resources, enabling resource organization, filtering,
+and management across the platform.
 
 ## Example Usage
 

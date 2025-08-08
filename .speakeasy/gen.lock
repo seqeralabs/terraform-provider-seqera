@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: ef1549789445335239bee63bfcb069e2
+  docChecksum: 67a48a9cb1919de0a022c6d5d15b0f6c
   docVersion: 1.56.0
-  speakeasyVersion: 1.598.3
-  generationVersion: 2.674.3
+  speakeasyVersion: 1.599.0
+  generationVersion: 2.675.0
   releaseVersion: 0.0.3
   configChecksum: 5c3813c4103a8ca333c43c650567a209
 features:
@@ -20,7 +20,7 @@ features:
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     nullables: 0.0.0
-    retries: 2.81.3
+    retries: 2.81.4
     unions: 2.81.17
 generatedFiles:
   - .gitattributes
@@ -961,6 +961,8 @@ examples:
       parameters:
         path:
           computeEnvId: "<id>"
+        query:
+          workspaceId: 90014
       responses:
         "200":
           application/json: {}
@@ -1946,6 +1948,8 @@ examples:
       parameters:
         path:
           pipelineId: 589518
+        query:
+          workspaceId: 589518
       responses:
         "200":
           application/json: {}

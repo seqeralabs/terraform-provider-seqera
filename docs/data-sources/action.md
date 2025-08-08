@@ -3,12 +3,21 @@
 page_title: "seqera_action Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Action DataSource
+  This resource allows the management of pipeline actions. Actions enable event-based
+  pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+  the pipeline repository is updated.
+  Seqera Platform currently offers support for native GitHub webhooks and a general
+  Tower webhook that can be invoked programmatically.
 ---
 
 # seqera_action (Data Source)
 
-Action DataSource
+This resource allows the management of pipeline actions. Actions enable event-based
+pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+the pipeline repository is updated.
+
+Seqera Platform currently offers support for native GitHub webhooks and a general
+Tower webhook that can be invoked programmatically.
 
 ## Example Usage
 

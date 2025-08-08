@@ -51,7 +51,7 @@ func (r *LabelsResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Labels Resource",
+		MarkdownDescription: "Manage labels for organizing and categorizing resources.\n\nLabels provide metadata tagging capabilities for pipelines, workflows,\nand other platform resources, enabling resource organization, filtering,\nand management across the platform.\n",
 		Attributes: map[string]schema.Attribute{
 			"is_default": schema.BoolAttribute{
 				Computed: true,

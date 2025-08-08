@@ -3,12 +3,21 @@
 page_title: "seqera_orgs Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Orgs Resource
+  Manage your organization in Seqera platform using this resource.
+  Organizations are the top-level structure and contain workspaces, members, and teams.
+  You can create multiple organizations, each of which can contain multiple workspaces
+  with shared users and resources. This means you can customize and organize the use of
+  resources while maintaining an access control layer for users associated with a workspace.
 ---
 
 # seqera_orgs (Resource)
 
-Orgs Resource
+Manage your organization in Seqera platform using this resource.
+
+Organizations are the top-level structure and contain workspaces, members, and teams.
+You can create multiple organizations, each of which can contain multiple workspaces
+with shared users and resources. This means you can customize and organize the use of
+resources while maintaining an access control layer for users associated with a workspace.
 
 ## Example Usage
 

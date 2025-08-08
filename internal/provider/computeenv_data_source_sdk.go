@@ -671,12 +671,9 @@ func (r *ComputeEnvDataSourceModel) ToOperationsDescribeComputeEnvRequest(ctx co
 	var computeEnvID string
 	computeEnvID = r.ComputeEnvID.ValueString()
 
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
+	var workspaceID int64
+	workspaceID = r.WorkspaceID.ValueInt64()
+
 	attributes := make([]shared.ComputeEnvQueryAttribute, 0, len(r.Attributes))
 	for _, attributesItem := range r.Attributes {
 		attributes = append(attributes, shared.ComputeEnvQueryAttribute(attributesItem.ValueString()))

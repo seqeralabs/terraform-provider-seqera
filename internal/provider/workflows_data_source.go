@@ -52,7 +52,7 @@ func (r *WorkflowsDataSource) Metadata(ctx context.Context, req datasource.Metad
 // Schema defines the schema for the data source.
 func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Workflows DataSource",
+		MarkdownDescription: "Manage workflow executions and pipeline runs.\n\nWorkflows represent individual executions of Nextflow pipelines,\ncontaining execution status, parameters, results, and monitoring\ninformation for computational workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"attributes": schema.ListAttribute{

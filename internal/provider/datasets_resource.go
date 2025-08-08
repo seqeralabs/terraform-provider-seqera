@@ -14,7 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
+	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
 )
@@ -35,10 +35,14 @@ type DatasetsResource struct {
 
 // DatasetsResourceModel describes the resource data model.
 type DatasetsResourceModel struct {
-	Dataset     *tfTypes.Dataset `tfsdk:"dataset"`
-	Description types.String     `tfsdk:"description"`
-	Name        types.String     `tfsdk:"name"`
-	WorkspaceID types.Int64      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	DateCreated types.String `tfsdk:"date_created"`
+	Deleted     types.Bool   `tfsdk:"deleted"`
+	Description types.String `tfsdk:"description"`
+	ID          types.String `tfsdk:"id"`
+	LastUpdated types.String `tfsdk:"last_updated"`
+	MediaType   types.String `tfsdk:"media_type"`
+	Name        types.String `tfsdk:"name"`
+	WorkspaceID types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *DatasetsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -47,73 +51,60 @@ func (r *DatasetsResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Datasets Resource",
+		MarkdownDescription: "Manage datasets for storing and versioning research data.\n\nDatasets in Seqera are CSV (comma-separated values) and TSV\n(tab-separated values) files stored in a workspace.\n\nThey are used as inputs to pipelines to simplify data management,\nminimize user data-input errors, and facilitate reproducible workflows.\n",
 		Attributes: map[string]schema.Attribute{
-			"dataset": schema.SingleNestedAttribute{
+			"date_created": schema.StringAttribute{
 				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"date_created": schema.StringAttribute{
-						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"deleted": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Read-only flag indicating if the dataset has been deleted`,
-					},
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Detailed description of the dataset contents and purpose (max 1000 characters)`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(1000),
-						},
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the dataset (max 22 characters)`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
-					},
-					"last_updated": schema.StringAttribute{
-						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"media_type": schema.StringAttribute{
-						Computed:    true,
-						Description: `MIME type or media type of the dataset content (max 80 characters)`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(80),
-						},
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Dataset name following naming conventions (1-100 characters)`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
-					},
+				Validators: []validator.String{
+					validators.IsRFC3339(),
 				},
-				MarkdownDescription: `Represents a dataset in the Seqera Platform.` + "\n" +
-					`Contains dataset metadata, versioning information, and access` + "\n" +
-					`controls for data management and sharing.`,
+			},
+			"deleted": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Read-only flag indicating if the dataset has been deleted`,
 			},
 			"description": schema.StringAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(1000),
+				},
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the dataset (max 22 characters)`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(22),
+				},
+			},
+			"last_updated": schema.StringAttribute{
+				Computed: true,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"media_type": schema.StringAttribute{
+				Computed:    true,
+				Description: `MIME type or media type of the dataset content (max 80 characters)`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(80),
+				},
 			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(100),
+				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,
@@ -186,11 +177,11 @@ func (r *DatasetsResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateDatasetResponse != nil) {
+	if !(res.CreateDatasetResponse != nil && res.CreateDatasetResponse.Dataset != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCreateDatasetResponse(ctx, res.CreateDatasetResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDataset(ctx, res.CreateDatasetResponse.Dataset)...)
 
 	if resp.Diagnostics.HasError() {
 		return

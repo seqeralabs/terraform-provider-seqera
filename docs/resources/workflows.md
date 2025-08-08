@@ -3,12 +3,19 @@
 page_title: "seqera_workflows Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Workflows Resource
+  Manage workflow executions and pipeline runs.
+  Workflows represent individual executions of Nextflow pipelines,
+  containing execution status, parameters, results, and monitoring
+  information for computational workflows.
 ---
 
 # seqera_workflows (Resource)
 
-Workflows Resource
+Manage workflow executions and pipeline runs.
+
+Workflows represent individual executions of Nextflow pipelines,
+containing execution status, parameters, results, and monitoring
+information for computational workflows.
 
 ## Example Usage
 

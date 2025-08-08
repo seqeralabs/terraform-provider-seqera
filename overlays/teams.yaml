@@ -22,6 +22,12 @@ actions:
   - target: $.components.schemas.Team
     update:
       x-speakeasy-entity: Teams
+      x-speakeasy-entity-description: |
+        Manage teams within organizations.
+
+        Teams are organizational units that allow
+        organization owners to group users together,
+        managing team members and access permissions as a whole.
   - target: $.components.schemas.TeamDbDto
     update:
       x-speakeasy-entity: Teams

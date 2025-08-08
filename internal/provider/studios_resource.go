@@ -83,7 +83,7 @@ func (r *StudiosResource) Metadata(ctx context.Context, req resource.MetadataReq
 
 func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Studios Resource",
+		MarkdownDescription: "Studios is a unified platform where you can host a combination of\ncontainer images and compute environments for interactive analysis using\nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive\nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote:\nOn Seqera Cloud, the free tier permits only one running Studio session at a time.\nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n",
 		Attributes: map[string]schema.Attribute{
 			"active_connections": schema.ListNestedAttribute{
 				Computed: true,
