@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.

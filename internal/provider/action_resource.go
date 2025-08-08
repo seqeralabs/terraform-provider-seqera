@@ -20,14 +20,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
-	speakeasy_int32planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
-	speakeasy_listplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
-	speakeasy_objectplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
-	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
-	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_int32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
+	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.

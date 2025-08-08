@@ -4,7 +4,7 @@ package config
 
 import (
 	"context"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/retry"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/retry"
 	"net/http"
 	"time"
 )

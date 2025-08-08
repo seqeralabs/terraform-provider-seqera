@@ -15,10 +15,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
-	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
+	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.

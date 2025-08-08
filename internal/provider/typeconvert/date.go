@@ -3,7 +3,7 @@
 package typeconvert
 
 import (
-	sdkTypes "github.com/speakeasy/terraform-provider-seqera/internal/sdk/types"
+	sdkTypes "github.com/seqeralabs/terraform-provider-seqera/internal/sdk/types"
 )
 
 // Converts a date types.Date to string.

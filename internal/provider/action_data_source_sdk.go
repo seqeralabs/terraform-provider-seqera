@@ -6,10 +6,10 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/provider/typeconvert"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
 func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.Context, resp *shared.ActionResponseDto) diag.Diagnostics {

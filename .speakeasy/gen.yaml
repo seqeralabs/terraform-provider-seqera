@@ -31,7 +31,7 @@ terraform:
     tlsSkipVerify: ""
   additionalResources: []
   allowUnknownFieldsInWeakUnions: false
-  author: speakeasy
+  author: seqeralabs
   baseErrorName: SeqeraError
   defaultErrorName: APIError
   enableTypeDeduplication: false

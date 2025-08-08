@@ -3,7 +3,7 @@
 package operations
 
 import (
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
 

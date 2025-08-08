@@ -19,10 +19,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_int64planmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
-	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
