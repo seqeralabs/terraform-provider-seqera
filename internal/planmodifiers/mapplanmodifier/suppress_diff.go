@@ -4,7 +4,7 @@ package mapplanmodifier
 
 import (
 	"context"
-	"github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/utils"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/utils"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 )

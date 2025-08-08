@@ -5,7 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/internal/utils"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
 

@@ -16,9 +16,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
-	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
+	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.

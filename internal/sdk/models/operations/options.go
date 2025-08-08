@@ -4,8 +4,8 @@ package operations
 
 import (
 	"errors"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/internal/utils"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/retry"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/retry"
 	"time"
 )
 

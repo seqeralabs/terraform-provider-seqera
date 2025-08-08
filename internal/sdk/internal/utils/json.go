@@ -13,7 +13,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/types"
 
 	"github.com/ericlagergren/decimal"
 )

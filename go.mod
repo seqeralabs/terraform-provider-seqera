@@ -1,4 +1,4 @@
-module github.com/speakeasy/terraform-provider-seqera
+module github.com/seqeralabs/terraform-provider-seqera
 
 go 1.23.0
 

@@ -6,9 +6,9 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
 func (r *DataLinkResourceModel) RefreshFromSharedDataLinkDto(ctx context.Context, resp *shared.DataLinkDto) diag.Diagnostics {

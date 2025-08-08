@@ -6,12 +6,12 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/internal/config"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/internal/hooks"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/internal/utils"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/errors"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/config"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/hooks"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/errors"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
 

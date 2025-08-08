@@ -6,8 +6,8 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
 func (r *TeamsResourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, resp *shared.TeamDbDto) diag.Diagnostics {

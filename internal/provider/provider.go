@@ -10,8 +10,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"net/http"
 )
 

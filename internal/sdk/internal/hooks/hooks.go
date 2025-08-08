@@ -5,7 +5,7 @@ package hooks
 import (
 	"context"
 	"errors"
-	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/internal/config"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/config"
 	"net/http"
 )
 
