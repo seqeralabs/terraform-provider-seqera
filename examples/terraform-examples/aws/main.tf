@@ -115,7 +115,7 @@ resource "seqera_action" "my_action" {
     pull_latest = true
     resume      = true
     revision    = "master"
-    work_dir = var.work_dir
+    work_dir    = var.work_dir
   }
   name         = "terraform-hello-world-action"
   workspace_id = resource.seqera_workspace.my_workspace.id
@@ -128,44 +128,44 @@ resource "seqera_pipeline" "rnaseq_pipeline" {
   icon        = "https://avatars.githubusercontent.com/u/35520196?v=4"
   label_ids   = [resource.seqera_labels.my_labels.label_id]
   launch = {
-    compute_env_id      = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
-    config_profiles     = ["test"]
-    pipeline            = "https://github.com/nf-core/rnaseq"
-    revision            = "3.19.0"
-    work_dir            = var.work_dir
-    params_text         = "{\"outdir\": \"${var.work_dir}\"}"
-    pull_latest         = false
-    stub_run            = false
-    workspace_secrets   = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
-    pre_run_script      = file("${path.module}/scripts/pre-run.sh")
-    post_run_script     = file("${path.module}/scripts/post-run.sh")
+    compute_env_id    = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
+    config_profiles   = ["test"]
+    pipeline          = "https://github.com/nf-core/rnaseq"
+    revision          = "3.19.0"
+    work_dir          = var.work_dir
+    params_text       = "{\"outdir\": \"${var.work_dir}\"}"
+    pull_latest       = false
+    stub_run          = false
+    workspace_secrets = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
+    pre_run_script    = file("${path.module}/scripts/pre-run.sh")
+    post_run_script   = file("${path.module}/scripts/post-run.sh")
   }
 
   workspace_id = resource.seqera_workspace.my_workspace.id
 }
 
 resource "seqera_workflows" "rnaseq_workflow" {
-  compute_env_id      = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
-  pipeline            = "nf-core/rnaseq"
-  revision            = "3.19.0"
-  work_dir            = var.work_dir
-  workspace_id        = resource.seqera_workspace.my_workspace.id
-  config_profiles     = ["test"]
-  params_text         = "{\"outdir\": \"${var.work_dir}\"}"
-  pull_latest         = false
-  stub_run            = false
-  label_ids           = [resource.seqera_labels.my_labels.label_id]
-  workspace_secrets   = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
-  pre_run_script      = file("${path.module}/scripts/pre-run.sh")
-  post_run_script     = file("${path.module}/scripts/post-run.sh")
-  depends_on          = [seqera_compute_env.aws_batch_compute_env]
+  compute_env_id    = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
+  pipeline          = "nf-core/rnaseq"
+  revision          = "3.19.0"
+  work_dir          = var.work_dir
+  workspace_id      = resource.seqera_workspace.my_workspace.id
+  config_profiles   = ["test"]
+  params_text       = "{\"outdir\": \"${var.work_dir}\"}"
+  pull_latest       = false
+  stub_run          = false
+  label_ids         = [resource.seqera_labels.my_labels.label_id]
+  workspace_secrets = [resource.seqera_pipeline_secret.my_pipelinesecret.name]
+  pre_run_script    = file("${path.module}/scripts/pre-run.sh")
+  post_run_script   = file("${path.module}/scripts/post-run.sh")
+  depends_on        = [seqera_compute_env.aws_batch_compute_env]
 }
 
 resource "seqera_studios" "my_datastudios" {
-  compute_env_id = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
-  description    = "Data studio"
-  name           = "Terraform-Data-Studio"
-  configuration = {}
+  compute_env_id       = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
+  description          = "Data studio"
+  name                 = "Terraform-Data-Studio"
+  configuration        = {}
   workspace_id         = resource.seqera_workspace.my_workspace.id
   data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
   depends_on           = [seqera_compute_env.aws_batch_compute_env]

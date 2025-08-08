@@ -2,7 +2,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "registry.terraform.io/speakeasy/seqera"
-      version = "~> 0.0.3"
+      version = "0.25.1"
     }
   }
   required_version = ">= 1.0"
