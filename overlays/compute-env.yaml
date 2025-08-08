@@ -39,6 +39,17 @@ actions:
     update:
       x-speakeasy-entity-operation: ComputeEnv#delete
 
+  # Mark workspaceId as required for compute-envs GET endpoint to fix import
+  - target: $.paths["/compute-envs/{computeEnvId}"].get.parameters[?(@.name == "workspaceId")]
+    update:
+      name: workspaceId
+      in: query
+      description: Workspace numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
   # ComputeEnvResponseDto annotations
   - target: $.components.schemas.ComputeEnvResponseDto.properties.id
     update:

@@ -648,6 +648,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: attributes
           in: query
           description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."

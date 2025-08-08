@@ -1529,7 +1529,7 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 				Description: `Compute environment string identifier`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 		},

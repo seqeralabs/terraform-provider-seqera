@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: d0d56c7c2bd220c5517012113bb379f2
+  docChecksum: 95101fd788cad625d88a379f959dea77
   docVersion: 1.56.0
   speakeasyVersion: 1.599.0
   generationVersion: 2.675.0
@@ -961,6 +961,8 @@ examples:
       parameters:
         path:
           computeEnvId: "<id>"
+        query:
+          workspaceId: 90014
       responses:
         "200":
           application/json: {}
