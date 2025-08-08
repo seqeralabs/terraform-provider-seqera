@@ -43,7 +43,7 @@ jobs:
         cat > ~/.terraformrc << EOF
         provider_installation {
           dev_overrides {
-            "registry.terraform.io/speakeasy/seqera" = "${{ github.workspace }}"
+            "registry.terraform.io/seqeralabs/seqera" = "${{ github.workspace }}"
           }
           direct {}
         }
