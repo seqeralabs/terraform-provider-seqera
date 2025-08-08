@@ -10451,6 +10451,8 @@ components:
               "auth_uri": "https://accounts.google.com/o/oauth2/auth",
               "token_uri": "https://oauth2.googleapis.com/token"
             }
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
     GridPlatformMetainfo:
       type: object

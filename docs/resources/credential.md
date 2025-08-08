@@ -188,7 +188,7 @@ Optional:
 
 Optional:
 
-- `data` (String)
+- `data` (String, Sensitive)
 
 
 <a id="nestedatt--keys--k8s"></a>

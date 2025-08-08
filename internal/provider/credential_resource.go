@@ -454,7 +454,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"data": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 						},
 						Validators: []validator.Object{
