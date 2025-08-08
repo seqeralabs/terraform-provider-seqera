@@ -9,5 +9,19 @@ For additional known issues and bug reports, please check the [GitHub Issues](ht
 
 ## Import Limitations
 
-### Tokens and Labels Resources
-It is currently not possible to import existing `seqera_tokens` and `seqera_labels` resources into Terraform state. These resources lack the necessary individual GET endpoints in the Seqera Platform API specification, which are required for the import functionality to work properly.
+### Import Functionality Work in Progress
+Import functionality for most resources is currently work in progress. The following resources do not yet support importing existing infrastructure into Terraform state:
+
+- `seqera_action`
+- `seqera_compute_env`
+- `seqera_credential`
+- `seqera_data_link`
+- `seqera_datasets`
+- `seqera_labels`
+- `seqera_pipeline`
+- `seqera_pipeline_secret`
+- `seqera_studios`
+- `seqera_tokens`
+- `seqera_workflows`
+
+This functionality is being actively developed and will be available in future releases.
