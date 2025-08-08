@@ -49,6 +49,35 @@ Content-Length: 0
 
 If you encounter 403 errors, please create a bug report with your example configuration and the complete error message.
 
+### Other API Errors
+Users may encounter various API errors with detailed response information:
+
+```
+Error: unexpected response from API. Got an unexpected response code 409
+
+  with seqera_orgs.test_org,
+  on workspace.tf line 38, in resource "seqera_orgs" "test_org":
+  38: resource "seqera_orgs" "test_org" {
+
+**Request**:
+POST /orgs HTTP/1.1
+Host: api.cloud.seqera.io
+Accept: application/json
+Authorization: (sensitive)
+Content-Type: application/json
+User-Agent: speakeasy-sdk/terraform 0.0.3 2.634.2 1.45.0 github.com/speakeasy/terraform-provider-seqera/internal/sdk
+
+**Response**:
+HTTP/2.0 409 Conflict
+Content-Length: 90
+Content-Type: application/json
+Date: Tue, 24 Jun 2025 19:22:16 GMT
+
+{"message":"An organization with name 'seqera_test_shahbaz_tf_provider_1' already exists"}
+```
+
+If you encounter API errors that are not documented as known issues, please create a bug report including the complete error message and your Terraform configuration.
+
 ## Resource State Issues
 
 ### Credentials Drift Detection
