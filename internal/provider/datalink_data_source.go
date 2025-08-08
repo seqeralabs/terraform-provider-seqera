@@ -53,7 +53,7 @@ func (r *DataLinkDataSource) Metadata(ctx context.Context, req datasource.Metada
 // Schema defines the schema for the data source.
 func (r *DataLinkDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "DataLink DataSource",
+		MarkdownDescription: "Manage connections to external storage systems and data repositories.\n\nData links provide access to cloud storage for pipeline input/output operations,\nenabling seamless data integration.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"credentials": schema.ListNestedAttribute{

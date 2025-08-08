@@ -22,6 +22,19 @@ actions:
     update:
       x-speakeasy-entity-operation: Dataset#read
 
+  # Dataset entity annotation
+  - target: $["components"]["schemas"]["Dataset"]
+    update:
+      x-speakeasy-entity: Datasets
+      x-speakeasy-entity-description: |
+        Manage datasets for storing and versioning research data.
+
+        Datasets in Seqera are CSV (comma-separated values) and TSV
+        (tab-separated values) files stored in a workspace.
+
+        They are used as inputs to pipelines to simplify data management,
+        minimize user data-input errors, and facilitate reproducible workflows.
+
   # Dataset parameter requirements
   - target: $["paths"]["/datasets"]["post"]["parameters"][0]
     update:

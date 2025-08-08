@@ -3,12 +3,21 @@
 page_title: "seqera_action Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Action Resource
+  This resource allows the management of pipeline actions. Actions enable event-based
+  pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+  the pipeline repository is updated.
+  Seqera Platform currently offers support for native GitHub webhooks and a general
+  Tower webhook that can be invoked programmatically.
 ---
 
 # seqera_action (Resource)
 
-Action Resource
+This resource allows the management of pipeline actions. Actions enable event-based
+pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+the pipeline repository is updated.
+
+Seqera Platform currently offers support for native GitHub webhooks and a general
+Tower webhook that can be invoked programmatically.
 
 ## Example Usage
 

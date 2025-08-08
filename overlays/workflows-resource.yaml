@@ -32,6 +32,12 @@ actions:
   - target: $["components"]["schemas"]["DescribeWorkflowResponse"]
     update:
       x-speakeasy-entity: Workflows
+      x-speakeasy-entity-description: |
+        Manage workflow executions and pipeline runs.
+
+        Workflows represent individual executions of Nextflow pipelines,
+        containing execution status, parameters, results, and monitoring
+        information for computational workflows.
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
     remove: true
   - target: $["components"]["schemas"]["WorkflowLaunchRequest"]

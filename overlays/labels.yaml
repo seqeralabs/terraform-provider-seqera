@@ -26,6 +26,12 @@ actions:
   - target: $["components"]["schemas"]["CreateLabelRequest"]
     update:
       x-speakeasy-entity: Labels
+      x-speakeasy-entity-description: |
+        Manage labels for organizing and categorizing resources.
+
+        Labels provide metadata tagging capabilities for pipelines, workflows,
+        and other platform resources, enabling resource organization, filtering,
+        and management across the platform.
   - target: $["components"]["schemas"]["CreateLabelResponse"]
     update:
       x-speakeasy-entity: Labels

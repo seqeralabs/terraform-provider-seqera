@@ -3,12 +3,19 @@
 page_title: "seqera_pipeline Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Pipeline DataSource
+  Manage Nextflow pipeline definitions and configurations.
+  Pipelines define reusable workflow templates with parameters,
+  compute environment settings, and execution configurations
+  for scalable bioinformatics and data processing workflows.
 ---
 
 # seqera_pipeline (Data Source)
 
-Pipeline DataSource
+Manage Nextflow pipeline definitions and configurations.
+
+Pipelines define reusable workflow templates with parameters,
+compute environment settings, and execution configurations
+for scalable bioinformatics and data processing workflows.
 
 ## Example Usage
 
@@ -29,12 +36,12 @@ data "seqera_pipeline" "my_pipeline" {
 ### Required
 
 - `pipeline_id` (Number) Pipeline numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
 
 - `attributes` (List of String) Additional attribute values to include in the response (`labels`, `optimized` status, `computeEnv`). Returns an empty value (`labels: null`, etc.) if omitted.
 - `source_workspace_id` (Number) Source Optional workspace numeric identifier
-- `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 

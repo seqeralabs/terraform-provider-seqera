@@ -16,6 +16,12 @@ actions:
   - target: $["components"]["schemas"]["PipelineDbDto"]
     update:
       x-speakeasy-entity: Pipeline
+      x-speakeasy-entity-description: |
+        Manage Nextflow pipeline definitions and configurations.
+
+        Pipelines define reusable workflow templates with parameters,
+        compute environment settings, and execution configurations
+        for scalable bioinformatics and data processing workflows.
   - target: $["components"]["schemas"]["PipelineInfo"]["properties"]["provider"]
     update:
       x-speakeasy-name-override: repositoryProvider
@@ -33,3 +39,14 @@ actions:
   - target: $.paths["/pipelines/{pipelineId}"].delete
     update:
       x-speakeasy-entity-operation: Pipeline#delete
+
+  # Mark workspaceId as required for pipelines GET endpoint to fix import
+  - target: $.paths["/pipelines/{pipelineId}"].get.parameters[?(@.name == "workspaceId")]
+    update:
+      name: workspaceId
+      in: query
+      description: Workspace numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64

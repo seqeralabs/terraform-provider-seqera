@@ -7,27 +7,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/provider/typeconvert"
-	tfTypes "github.com/speakeasy/terraform-provider-seqera/internal/provider/types"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *DatasetsResourceModel) RefreshFromSharedCreateDatasetResponse(ctx context.Context, resp *shared.CreateDatasetResponse) diag.Diagnostics {
+func (r *DatasetsResourceModel) RefreshFromSharedDataset(ctx context.Context, resp *shared.Dataset) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.Dataset == nil {
-			r.Dataset = nil
-		} else {
-			r.Dataset = &tfTypes.Dataset{}
-			r.Dataset.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.DateCreated))
-			r.Dataset.Deleted = types.BoolPointerValue(resp.Dataset.Deleted)
-			r.Dataset.Description = types.StringPointerValue(resp.Dataset.Description)
-			r.Dataset.ID = types.StringPointerValue(resp.Dataset.ID)
-			r.Dataset.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.LastUpdated))
-			r.Dataset.MediaType = types.StringPointerValue(resp.Dataset.MediaType)
-			r.Dataset.Name = types.StringValue(resp.Dataset.Name)
-		}
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.Deleted = types.BoolPointerValue(resp.Deleted)
+		r.Description = types.StringPointerValue(resp.Description)
+		r.ID = types.StringPointerValue(resp.ID)
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.MediaType = types.StringPointerValue(resp.MediaType)
+		r.Name = types.StringValue(resp.Name)
 	}
 
 	return diags

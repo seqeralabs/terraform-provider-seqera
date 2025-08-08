@@ -3,12 +3,19 @@
 page_title: "seqera_pipeline_secret Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  PipelineSecret Resource
+  Manage secure secrets for pipeline execution.
+  Pipeline secrets store encrypted sensitive data such as API keys,
+  passwords, and configuration values used in workflows, providing
+  secure access to external services and resources.
 ---
 
 # seqera_pipeline_secret (Resource)
 
-PipelineSecret Resource
+Manage secure secrets for pipeline execution.
+
+Pipeline secrets store encrypted sensitive data such as API keys,
+passwords, and configuration values used in workflows, providing
+secure access to external services and resources.
 
 ## Example Usage
 

@@ -28,11 +28,11 @@ data "seqera_compute_env" "my_computeenv" {
 ### Required
 
 - `compute_env_id` (String) Compute environment string identifier
+- `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
 
 - `attributes` (List of String) Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.
-- `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 

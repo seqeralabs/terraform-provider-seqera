@@ -3,12 +3,19 @@
 page_title: "seqera_teams Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Teams Resource
+  Manage teams within organizations.
+  Teams are organizational units that allow
+  organization owners to group users together,
+  managing team members and access permissions as a whole.
 ---
 
 # seqera_teams (Resource)
 
-Teams Resource
+Manage teams within organizations.
+
+Teams are organizational units that allow
+organization owners to group users together,
+managing team members and access permissions as a whole.
 
 ## Example Usage
 

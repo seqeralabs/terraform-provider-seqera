@@ -27,6 +27,11 @@ actions:
   - target: $["components"]["schemas"]["AccessToken"]
     update:
       x-speakeasy-entity: Tokens
+      x-speakeasy-entity-description: |
+        Manage API access tokens for authentication.
+
+        Tokens provide secure API access, enabling programmatic
+        access to platform resources and services.
   - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
     update:
       x-speakeasy-entity: Tokens

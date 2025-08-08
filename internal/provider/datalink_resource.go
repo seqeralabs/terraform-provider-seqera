@@ -59,7 +59,7 @@ func (r *DataLinkResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "DataLink Resource",
+		MarkdownDescription: "Manage connections to external storage systems and data repositories.\n\nData links provide access to cloud storage for pipeline input/output operations,\nenabling seamless data integration.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials": schema.ListNestedAttribute{
 				Computed: true,

@@ -3,7 +3,9 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -16,7 +18,6 @@ import (
 	"github.com/speakeasy/terraform-provider-seqera/internal/sdk"
 	"github.com/speakeasy/terraform-provider-seqera/internal/validators"
 	custom_stringvalidators "github.com/speakeasy/terraform-provider-seqera/internal/validators/stringvalidators"
-	"strconv"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -66,7 +67,7 @@ func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Pipeline Resource",
+		MarkdownDescription: "Manage Nextflow pipeline definitions and configurations.\n\nPipelines define reusable workflow templates with parameters,\ncompute environment settings, and execution configurations\nfor scalable bioinformatics and data processing workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Computed: true,
@@ -614,11 +615,18 @@ func (r *PipelineResource) Delete(ctx context.Context, req resource.DeleteReques
 }
 
 func (r *PipelineResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	pipelineID, err := strconv.Atoi(req.ID)
-	if err != nil {
-		resp.Diagnostics.AddError("Invalid ID", fmt.Sprintf("ID must be an integer but was %s", req.ID))
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		PipelineID  int64 `json:"pipeline_id"`
+		WorkspaceID int64 `json:"workspace_id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"pipeline_id": 0, "workspace_id": 0}': `+err.Error())
 		return
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pipeline_id"), pipelineID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("pipeline_id"), data.PipelineID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
 }
