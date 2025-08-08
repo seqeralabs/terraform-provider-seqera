@@ -1,7 +1,7 @@
 # Seqera Platform Terraform Provider
 
 > [!CAUTION] 
-> **Early Preview** - This provider is in early preview and subject to breaking changes. APIs and resource schemas may change without notice. Please use with caution > in production environments and report any issues you encounter. 
+> **Early Preview** - This provider is in early preview and subject to breaking changes. APIs and resource schemas may change without notice. Please use with caution in production environments and report any issues you encounter. 
 
 
 Terraform Provider for the Seqera Platform API.
