@@ -182,8 +182,7 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Computed:    true,
-				Optional:    true,
+				Required:    true,
 				Description: `Workspace numeric identifier`,
 			},
 			"workspace_name": schema.StringAttribute{

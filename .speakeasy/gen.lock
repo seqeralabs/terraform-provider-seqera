@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 95101fd788cad625d88a379f959dea77
+  docChecksum: ced64cb731837c41d54585c26c1c1c34
   docVersion: 1.56.0
   speakeasyVersion: 1.599.0
   generationVersion: 2.675.0
@@ -1948,6 +1948,8 @@ examples:
       parameters:
         path:
           pipelineId: 589518
+        query:
+          workspaceId: 589518
       responses:
         "200":
           application/json: {}

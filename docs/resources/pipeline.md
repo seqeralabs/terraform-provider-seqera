@@ -168,5 +168,5 @@ Read-Only:
 Import is supported using the following syntax:
 
 ```shell
-terraform import seqera_pipeline.my_seqera_pipeline 0
+terraform import seqera_pipeline.my_seqera_pipeline '{"pipeline_id": 0, "workspace_id": 0}'
 ```

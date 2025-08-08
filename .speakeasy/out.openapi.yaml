@@ -4904,6 +4904,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: sourceWorkspaceId
           in: query
           description: Source Optional workspace numeric identifier

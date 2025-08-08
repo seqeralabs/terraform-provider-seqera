@@ -13,7 +13,7 @@ type DescribePipelineRequest struct {
 	// Additional attribute values to include in the response (`labels`, `optimized` status, `computeEnv`). Returns an empty value (`labels: null`, etc.) if omitted.
 	Attributes []shared.PipelineQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Source Optional workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 }
@@ -32,9 +32,9 @@ func (o *DescribePipelineRequest) GetAttributes() []shared.PipelineQueryAttribut
 	return o.Attributes
 }
 
-func (o *DescribePipelineRequest) GetWorkspaceID() *int64 {
+func (o *DescribePipelineRequest) GetWorkspaceID() int64 {
 	if o == nil {
-		return nil
+		return 0
 	}
 	return o.WorkspaceID
 }
