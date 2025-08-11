@@ -3,12 +3,12 @@
 page_title: "seqera Provider"
 subcategory: ""
 description: |-
-  Seqera API: Seqera Platform services API
+  Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
 ---
 
 # seqera Provider
 
-Seqera API: Seqera Platform services API
+Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
 
 ## Example Usage
 
