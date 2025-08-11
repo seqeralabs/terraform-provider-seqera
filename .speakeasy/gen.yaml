@@ -22,7 +22,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.0.3
+  version: 0.25.3
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []

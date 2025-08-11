@@ -48,7 +48,7 @@ func (p *SeqeraProvider) Schema(ctx context.Context, req provider.SchemaRequest,
 				Optional:    true,
 			},
 		},
-		MarkdownDescription: `Seqera API: Seqera Platform services API`,
+		MarkdownDescription: `Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.`,
 	}
 }
 
