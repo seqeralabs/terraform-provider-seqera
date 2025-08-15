@@ -128,7 +128,7 @@ provider "seqera" {
 
 #### ❌ DON'T
 
-* **Pipeline Orchestration**: Don't use for launching pipelines (use Seqera Platform APIs)
+* **Pipeline Orchestration**: Don't use for launching pipelines except as smoke tests for compute environments (use Seqera Platform APIs for routine pipeline launches)
 * **Cross Dependencies**: Avoid dependencies between Batch Forge and Terraform resources
 * **State Assumptions**: Don't assume state reflects user-managed resources
 
