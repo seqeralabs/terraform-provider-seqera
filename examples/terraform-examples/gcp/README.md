@@ -13,19 +13,25 @@ This example demonstrates a complete Google Cloud Platform setup for running bio
 - **Security Features**: Pipeline secrets and workspace labels
 - **External Scripts**: Pre and post-run bash scripts for workflow customization
 
+> [!WARNING]
+> This will create cloud resources that will incur costs. Please be aware of your current cloud spend and remove resources when you are done.
+
 ## How to Run This Example
 
 1. **Navigate to the GCP example directory**:
+
    ```bash
    cd examples/terraform-examples/gcp
    ```
 
 2. **Copy the example variables file**:
+
    ```bash
    cp terraform.tfvars.example terraform.tfvars
    ```
 
 3. **Edit the terraform.tfvars file** with your GCP settings:
+
    ```bash
    # Required GCP settings
    gcp_region = "us-central1"  # or your preferred region
@@ -39,16 +45,19 @@ This example demonstrates a complete Google Cloud Platform setup for running bio
    ```
 
 4. **Initialize Terraform**:
+
    ```bash
    terraform init
    ```
 
 5. **Review the execution plan**:
+
    ```bash
    terraform plan
    ```
 
 6. **Apply the configuration**:
+
    ```bash
    terraform apply
    ```
@@ -90,6 +99,7 @@ This example uses **n2-standard-8** instances (8 vCPUs, 32GB RAM) which are opti
 ## Resources Created
 
 This example creates the following resources:
+
 - Seqera Organization
 - Seqera Workspace
 - GCP Credentials
@@ -111,6 +121,7 @@ terraform destroy
 ## Customization
 
 You can customize this example by:
+
 - Modifying machine types in the compute environment (e.g., n2-highmem-8 for memory-intensive workflows)
 - Changing the pipeline to a different nf-core workflow
 - Adjusting resource configurations in `variables.tf`

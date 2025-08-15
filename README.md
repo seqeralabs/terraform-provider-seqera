@@ -3,7 +3,6 @@
 > [!CAUTION]
 > **Early Preview** - This provider is in early preview and subject to breaking changes. APIs and resource schemas may change without notice. Please use with caution in production environments and report any issues you encounter.
 
-
 Terraform Provider for the Seqera Platform API.
 
 <div align="left">
@@ -12,7 +11,6 @@ Terraform Provider for the Seqera Platform API.
         <img src="https://img.shields.io/badge/License-MIT-blue.svg" style="width: 100px; height: 28px;" />
     </a>
 </div>
-
 
 <!-- Start Summary [summary] -->
 ## Summary
@@ -73,6 +71,7 @@ provider "seqera" {
 * [seqera_tokens](docs/resources/tokens.md)
 * [seqera_workflows](docs/resources/workflows.md)
 * [seqera_workspace](docs/resources/workspace.md)
+
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
@@ -94,6 +93,61 @@ provider "seqera" {
 * [seqera_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
+## Best Practices
+
+### Prerequisites
+
+* **Terraform Knowledge**: Familiar with Terraform concepts, state management, and limitations
+* **Permissions**: Sufficient permissions in cloud provider and Seqera Platform
+* **Cost Management**: Infrastructure spend awareness and cost controls
+* **API Access**: Proper API access to Seqera Platform with authentication
+
+### Security
+
+#### ✅ DO
+
+* **Secure Credentials**: Use environment variables, Terraform Cloud variables, or secret management systems
+* **Least Privilege**: Grant minimum necessary permissions to Terraform service accounts
+* **Secure State**: Store Terraform state in remote backends (Terraform Cloud, S3, Azure Storage)
+* **Encryption**: Ensure sensitive data is encrypted at rest and in transit
+
+#### ❌ DON'T
+
+* **Plain Text Secrets**: Never pass secrets, API keys, or credentials in plain text
+* **Hardcoded Values**: Avoid hardcoding sensitive information in `.tf` files
+* **Public State**: Never commit Terraform state files with sensitive information
+
+### Resource Management
+
+#### ✅ DO
+
+* **Persistent Resources**: Use for persistent infrastructure resources on Seqera Platform
+* **State Management**: Always use Terraform state to track infrastructure
+* **Naming & Tagging**: Use consistent naming conventions and comprehensive tagging
+* **Modular Design**: Organize code into reusable modules
+
+#### ❌ DON'T
+
+* **Pipeline Orchestration**: Don't use for launching pipelines (use Seqera Platform APIs)
+* **Cross Dependencies**: Avoid dependencies between Batch Forge and Terraform resources
+* **State Assumptions**: Don't assume state reflects user-managed resources
+
+### Operations
+
+#### ✅ DO
+
+* **Version Control**: Store configurations in version control
+* **Code Review**: Implement review processes for infrastructure changes
+* **Environment Separation**: Use separate workspaces/configurations for environments
+* **Monitoring**: Set up monitoring and alerting
+* **Backup Strategy**: Maintain backups of state and configurations
+
+#### ❌ DON'T
+
+* **Manual Changes**: Avoid direct modifications to Terraform-managed resources
+* **Single Recovery**: Don't rely solely on Terraform for disaster recovery
+* **Resource Drift**: Don't allow resources to drift from Terraform state
+
 <!-- Start Examples [examples] -->
 ## Examples
 
@@ -101,9 +155,9 @@ The `examples/terraform-examples` directory contains comprehensive Terraform con
 
 ### Cloud Platform Examples
 
-- **[AWS Example (`examples/terraform-examples/aws/`)](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
-- **[Azure Example (`examples/terraform-examples/azure/`)](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline
-- **[GCP Example (`examples/terraform-examples/gcp/`)](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
+* **[AWS Example (`examples/terraform-examples/aws/`)](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
+* **[Azure Example (`examples/terraform-examples/azure/`)](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline
+* **[GCP Example (`examples/terraform-examples/gcp/`)](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
 
 ### Getting Started with Examples
 

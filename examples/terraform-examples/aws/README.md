@@ -1,6 +1,6 @@
 # AWS Example - Seqera Platform Terraform Provider
 
-This example demonstrates a complete AWS setup for running bioinformatics workflows using Seqera Platform. It includes organization setup, AWS Batch compute environment, and a configured nf-core/rnaseq pipeline. 
+This example demonstrates a complete AWS setup for running bioinformatics workflows using Seqera Platform. It includes organization setup, AWS Batch compute environment, and a configured nf-core/rnaseq pipeline.
 
 ## What This Example Includes
 
@@ -12,19 +12,25 @@ This example demonstrates a complete AWS setup for running bioinformatics workfl
 - **Security Features**: Pipeline secrets and workspace labels
 - **External Scripts**: Pre and post-run bash scripts for workflow customization
 
+> [!WARNING]
+> This will create cloud resources that will incur costs. Please be aware of your current cloud spend and remove resources when you are done.
+
 ## How to Run This Example
 
 1. **Navigate to the AWS example directory**:
+
    ```bash
    cd examples/terraform-examples/aws
    ```
 
 2. **Copy the example variables file**:
+
    ```bash
    cp terraform.tfvars.example terraform.tfvars
    ```
 
 3. **Edit the terraform.tfvars file** with your AWS credentials and settings:
+
    ```bash
    # Required AWS credentials
    access_key = "your-aws-access-key"
@@ -39,16 +45,19 @@ This example demonstrates a complete AWS setup for running bioinformatics workfl
    ```
 
 4. **Initialize Terraform**:
+
    ```bash
    terraform init
    ```
 
 5. **Review the execution plan**:
+
    ```bash
    terraform plan
    ```
 
 6. **Apply the configuration**:
+
    ```bash
    terraform apply
    ```
@@ -74,6 +83,7 @@ resource "seqera_orgs" "my_org" {
 ## Resources Created
 
 This example creates the following resources:
+
 - Seqera Organization
 - Seqera Workspace  
 - AWS Credentials
@@ -99,6 +109,7 @@ terraform destroy
 ## Customization
 
 You can customize this example by:
+
 - Modifying instance types in the compute environment
 - Changing the pipeline to a different nf-core workflow
 - Adjusting resource configurations in `variables.tf`
