@@ -117,52 +117,57 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.AwsBatch.Environment = append(r.ComputeEnv.Config.AwsBatch.Environment, environment2)
 					}
 					r.ComputeEnv.Config.AwsBatch.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ExecutionRole)
-					if resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy != nil {
-						r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringValue(string(*resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy))
+					if resp.ComputeEnv.Config.AWSBatchConfiguration.Forge == nil {
+						r.ComputeEnv.Config.AwsBatch.Forge = nil
 					} else {
-						r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringNull()
+						r.ComputeEnv.Config.AwsBatch.Forge = &tfTypes.ForgeConfig{}
+						if resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy != nil {
+							r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringValue(string(*resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy))
+						} else {
+							r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringNull()
+						}
+						r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
+						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
+							r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
+						r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
+						r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
+						r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenAmiID)
+						r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenEnabled)
+						r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenInstanceType)
+						r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
+						r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBlockSize))
+						r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBootSize))
+						r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Ec2KeyPair)
+						r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EcsConfig)
+						r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsCreate)
+						r.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsID)
+						r.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsMount)
+						r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FargateHeadEnabled)
+						r.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
+						r.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
+						r.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
+						r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
+						r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
+						r.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
+						r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
+						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
+							r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
+						r.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
+						r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
+						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
+							r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets))
+						for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets {
+							r.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
+						r.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
 					}
-					r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
-						r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
-					r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
-					r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenAmiID)
-					r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenEnabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenInstanceType)
-					r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
-					r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBlockSize))
-					r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBootSize))
-					r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Ec2KeyPair)
-					r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EcsConfig)
-					r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsCreate)
-					r.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsID)
-					r.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsMount)
-					r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FargateHeadEnabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
-					r.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
-					r.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
-					r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
-					r.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
-					r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
-						r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
-					r.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
-					r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
-						r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets))
-					for _, v := range resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets {
-						r.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
-					r.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
 					r.ComputeEnv.Config.AwsBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Fusion2Enabled)
 					r.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
 					r.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AWSBatchConfiguration.HeadJobCpus))
@@ -244,14 +249,19 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 
 						r.ComputeEnv.Config.AzureBatch.Environment = append(r.ComputeEnv.Config.AzureBatch.Environment, environment4)
 					}
-					r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
-					r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
-					for _, v := range resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
-						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+					if resp.ComputeEnv.Config.AzureBatchConfiguration.Forge == nil {
+						r.ComputeEnv.Config.AzureBatch.Forge = nil
+					} else {
+						r.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
+						r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
+						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
+						for _, v := range resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
+							r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
+						r.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
+						r.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
 					}
-					r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
-					r.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
-					r.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
 					r.ComputeEnv.Config.AzureBatch.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Fusion2Enabled)
 					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
 					r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
@@ -506,52 +516,57 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = append(r.ComputeEnv.Config.SeqeracomputePlatform.Environment, environment11)
 					}
 					r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ExecutionRole)
-					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy))
+					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge == nil {
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge = nil
 					} else {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringNull()
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge = &tfTypes.ForgeConfig{}
+						if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
+							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy))
+						} else {
+							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringNull()
+						}
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets))
+						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets {
+							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Arm64Enabled)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.BidPercentage))
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DisposeOnDeletion)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenAmiID)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenEnabled)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenInstanceType)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBlockSize))
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBootSize))
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Ec2KeyPair)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EcsConfig)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsCreate)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsID)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsMount)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FargateHeadEnabled)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FusionEnabled)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
+						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
+							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
+						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
+							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets))
+						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets {
+							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
+						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
 					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Arm64Enabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.BidPercentage))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DisposeOnDeletion)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenAmiID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenInstanceType)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBlockSize))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBootSize))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Ec2KeyPair)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EcsConfig)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsCreate)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsMount)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FargateHeadEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FusionEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
-					r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
 					r.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Fusion2Enabled)
 					r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.FusionSnapshots)
 					r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobCpus))
@@ -943,198 +958,201 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionSnapshots = nil
 		}
-		typeVar := shared.ForgeConfigType(r.ComputeEnv.Config.AwsBatch.Forge.Type.ValueString())
-		var minCpus int
-		minCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MinCpus.ValueInt32())
+		var forge *shared.ForgeConfig
+		if r.ComputeEnv.Config.AwsBatch.Forge != nil {
+			typeVar := shared.ForgeConfigType(r.ComputeEnv.Config.AwsBatch.Forge.Type.ValueString())
+			var minCpus int
+			minCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MinCpus.ValueInt32())
 
-		var maxCpus int
-		maxCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus.ValueInt32())
+			var maxCpus int
+			maxCpus = int(r.ComputeEnv.Config.AwsBatch.Forge.MaxCpus.ValueInt32())
 
-		gpuEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsNull() {
-			*gpuEnabled = r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.ValueBool()
-		} else {
-			gpuEnabled = nil
-		}
-		ebsAutoScale := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsNull() {
-			*ebsAutoScale = r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.ValueBool()
-		} else {
-			ebsAutoScale = nil
-		}
-		instanceTypes := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes))
-		for _, instanceTypesItem := range r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes {
-			instanceTypes = append(instanceTypes, instanceTypesItem.ValueString())
-		}
-		allocStrategy := new(shared.AllocStrategy)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsNull() {
-			*allocStrategy = shared.AllocStrategy(r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.ValueString())
-		} else {
-			allocStrategy = nil
-		}
-		imageID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsNull() {
-			*imageID = r.ComputeEnv.Config.AwsBatch.Forge.ImageID.ValueString()
-		} else {
-			imageID = nil
-		}
-		vpcID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsNull() {
-			*vpcID = r.ComputeEnv.Config.AwsBatch.Forge.VpcID.ValueString()
-		} else {
-			vpcID = nil
-		}
-		subnets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.Subnets))
-		for _, subnetsItem := range r.ComputeEnv.Config.AwsBatch.Forge.Subnets {
-			subnets = append(subnets, subnetsItem.ValueString())
-		}
-		securityGroups := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups))
-		for _, securityGroupsItem := range r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups {
-			securityGroups = append(securityGroups, securityGroupsItem.ValueString())
-		}
-		fsxMount := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsNull() {
-			*fsxMount = r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.ValueString()
-		} else {
-			fsxMount = nil
-		}
-		fsxName := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsNull() {
-			*fsxName = r.ComputeEnv.Config.AwsBatch.Forge.FsxName.ValueString()
-		} else {
-			fsxName = nil
-		}
-		fsxSize := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsNull() {
-			*fsxSize = int(r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.ValueInt32())
-		} else {
-			fsxSize = nil
-		}
-		disposeOnDeletion := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsNull() {
-			*disposeOnDeletion = r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.ValueBool()
-		} else {
-			disposeOnDeletion = nil
-		}
-		ec2KeyPair := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsNull() {
-			*ec2KeyPair = r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.ValueString()
-		} else {
-			ec2KeyPair = nil
-		}
-		allowBuckets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets))
-		for _, allowBucketsItem := range r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets {
-			allowBuckets = append(allowBuckets, allowBucketsItem.ValueString())
-		}
-		ebsBlockSize := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsNull() {
-			*ebsBlockSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.ValueInt32())
-		} else {
-			ebsBlockSize = nil
-		}
-		fusionEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsNull() {
-			*fusionEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.ValueBool()
-		} else {
-			fusionEnabled = nil
-		}
-		bidPercentage := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsNull() {
-			*bidPercentage = int(r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.ValueInt32())
-		} else {
-			bidPercentage = nil
-		}
-		efsCreate := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsNull() {
-			*efsCreate = r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.ValueBool()
-		} else {
-			efsCreate = nil
-		}
-		efsID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsNull() {
-			*efsID = r.ComputeEnv.Config.AwsBatch.Forge.EfsID.ValueString()
-		} else {
-			efsID = nil
-		}
-		efsMount := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsNull() {
-			*efsMount = r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.ValueString()
-		} else {
-			efsMount = nil
-		}
-		dragenEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsNull() {
-			*dragenEnabled = r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.ValueBool()
-		} else {
-			dragenEnabled = nil
-		}
-		dragenAmiID := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsNull() {
-			*dragenAmiID = r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.ValueString()
-		} else {
-			dragenAmiID = nil
-		}
-		ebsBootSize := new(int)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsNull() {
-			*ebsBootSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.ValueInt32())
-		} else {
-			ebsBootSize = nil
-		}
-		ecsConfig := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsNull() {
-			*ecsConfig = r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.ValueString()
-		} else {
-			ecsConfig = nil
-		}
-		fargateHeadEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsNull() {
-			*fargateHeadEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.ValueBool()
-		} else {
-			fargateHeadEnabled = nil
-		}
-		arm64Enabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsNull() {
-			*arm64Enabled = r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.ValueBool()
-		} else {
-			arm64Enabled = nil
-		}
-		dragenInstanceType1 := new(string)
-		if !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsNull() {
-			*dragenInstanceType1 = r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.ValueString()
-		} else {
-			dragenInstanceType1 = nil
-		}
-		forge := shared.ForgeConfig{
-			Type:               typeVar,
-			MinCpus:            minCpus,
-			MaxCpus:            maxCpus,
-			GpuEnabled:         gpuEnabled,
-			EbsAutoScale:       ebsAutoScale,
-			InstanceTypes:      instanceTypes,
-			AllocStrategy:      allocStrategy,
-			ImageID:            imageID,
-			VpcID:              vpcID,
-			Subnets:            subnets,
-			SecurityGroups:     securityGroups,
-			FsxMount:           fsxMount,
-			FsxName:            fsxName,
-			FsxSize:            fsxSize,
-			DisposeOnDeletion:  disposeOnDeletion,
-			Ec2KeyPair:         ec2KeyPair,
-			AllowBuckets:       allowBuckets,
-			EbsBlockSize:       ebsBlockSize,
-			FusionEnabled:      fusionEnabled,
-			BidPercentage:      bidPercentage,
-			EfsCreate:          efsCreate,
-			EfsID:              efsID,
-			EfsMount:           efsMount,
-			DragenEnabled:      dragenEnabled,
-			DragenAmiID:        dragenAmiID,
-			EbsBootSize:        ebsBootSize,
-			EcsConfig:          ecsConfig,
-			FargateHeadEnabled: fargateHeadEnabled,
-			Arm64Enabled:       arm64Enabled,
-			DragenInstanceType: dragenInstanceType1,
+			gpuEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.IsNull() {
+				*gpuEnabled = r.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled.ValueBool()
+			} else {
+				gpuEnabled = nil
+			}
+			ebsAutoScale := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.IsNull() {
+				*ebsAutoScale = r.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale.ValueBool()
+			} else {
+				ebsAutoScale = nil
+			}
+			instanceTypes := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes))
+			for _, instanceTypesItem := range r.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes {
+				instanceTypes = append(instanceTypes, instanceTypesItem.ValueString())
+			}
+			allocStrategy := new(shared.AllocStrategy)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.IsNull() {
+				*allocStrategy = shared.AllocStrategy(r.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy.ValueString())
+			} else {
+				allocStrategy = nil
+			}
+			imageID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.ImageID.IsNull() {
+				*imageID = r.ComputeEnv.Config.AwsBatch.Forge.ImageID.ValueString()
+			} else {
+				imageID = nil
+			}
+			vpcID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.VpcID.IsNull() {
+				*vpcID = r.ComputeEnv.Config.AwsBatch.Forge.VpcID.ValueString()
+			} else {
+				vpcID = nil
+			}
+			subnets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.Subnets))
+			for _, subnetsItem := range r.ComputeEnv.Config.AwsBatch.Forge.Subnets {
+				subnets = append(subnets, subnetsItem.ValueString())
+			}
+			securityGroups := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups))
+			for _, securityGroupsItem := range r.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups {
+				securityGroups = append(securityGroups, securityGroupsItem.ValueString())
+			}
+			fsxMount := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.IsNull() {
+				*fsxMount = r.ComputeEnv.Config.AwsBatch.Forge.FsxMount.ValueString()
+			} else {
+				fsxMount = nil
+			}
+			fsxName := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxName.IsNull() {
+				*fsxName = r.ComputeEnv.Config.AwsBatch.Forge.FsxName.ValueString()
+			} else {
+				fsxName = nil
+			}
+			fsxSize := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.IsNull() {
+				*fsxSize = int(r.ComputeEnv.Config.AwsBatch.Forge.FsxSize.ValueInt32())
+			} else {
+				fsxSize = nil
+			}
+			disposeOnDeletion := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.IsNull() {
+				*disposeOnDeletion = r.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion.ValueBool()
+			} else {
+				disposeOnDeletion = nil
+			}
+			ec2KeyPair := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.IsNull() {
+				*ec2KeyPair = r.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair.ValueString()
+			} else {
+				ec2KeyPair = nil
+			}
+			allowBuckets := make([]string, 0, len(r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets))
+			for _, allowBucketsItem := range r.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets {
+				allowBuckets = append(allowBuckets, allowBucketsItem.ValueString())
+			}
+			ebsBlockSize := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.IsNull() {
+				*ebsBlockSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize.ValueInt32())
+			} else {
+				ebsBlockSize = nil
+			}
+			fusionEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.IsNull() {
+				*fusionEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled.ValueBool()
+			} else {
+				fusionEnabled = nil
+			}
+			bidPercentage := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.IsNull() {
+				*bidPercentage = int(r.ComputeEnv.Config.AwsBatch.Forge.BidPercentage.ValueInt32())
+			} else {
+				bidPercentage = nil
+			}
+			efsCreate := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.IsNull() {
+				*efsCreate = r.ComputeEnv.Config.AwsBatch.Forge.EfsCreate.ValueBool()
+			} else {
+				efsCreate = nil
+			}
+			efsID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsID.IsNull() {
+				*efsID = r.ComputeEnv.Config.AwsBatch.Forge.EfsID.ValueString()
+			} else {
+				efsID = nil
+			}
+			efsMount := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.IsNull() {
+				*efsMount = r.ComputeEnv.Config.AwsBatch.Forge.EfsMount.ValueString()
+			} else {
+				efsMount = nil
+			}
+			dragenEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.IsNull() {
+				*dragenEnabled = r.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled.ValueBool()
+			} else {
+				dragenEnabled = nil
+			}
+			dragenAmiID := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.IsNull() {
+				*dragenAmiID = r.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID.ValueString()
+			} else {
+				dragenAmiID = nil
+			}
+			ebsBootSize := new(int)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.IsNull() {
+				*ebsBootSize = int(r.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize.ValueInt32())
+			} else {
+				ebsBootSize = nil
+			}
+			ecsConfig := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.IsNull() {
+				*ecsConfig = r.ComputeEnv.Config.AwsBatch.Forge.EcsConfig.ValueString()
+			} else {
+				ecsConfig = nil
+			}
+			fargateHeadEnabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.IsNull() {
+				*fargateHeadEnabled = r.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled.ValueBool()
+			} else {
+				fargateHeadEnabled = nil
+			}
+			arm64Enabled := new(bool)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.IsNull() {
+				*arm64Enabled = r.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled.ValueBool()
+			} else {
+				arm64Enabled = nil
+			}
+			dragenInstanceType1 := new(string)
+			if !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.IsNull() {
+				*dragenInstanceType1 = r.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType.ValueString()
+			} else {
+				dragenInstanceType1 = nil
+			}
+			forge = &shared.ForgeConfig{
+				Type:               typeVar,
+				MinCpus:            minCpus,
+				MaxCpus:            maxCpus,
+				GpuEnabled:         gpuEnabled,
+				EbsAutoScale:       ebsAutoScale,
+				InstanceTypes:      instanceTypes,
+				AllocStrategy:      allocStrategy,
+				ImageID:            imageID,
+				VpcID:              vpcID,
+				Subnets:            subnets,
+				SecurityGroups:     securityGroups,
+				FsxMount:           fsxMount,
+				FsxName:            fsxName,
+				FsxSize:            fsxSize,
+				DisposeOnDeletion:  disposeOnDeletion,
+				Ec2KeyPair:         ec2KeyPair,
+				AllowBuckets:       allowBuckets,
+				EbsBlockSize:       ebsBlockSize,
+				FusionEnabled:      fusionEnabled,
+				BidPercentage:      bidPercentage,
+				EfsCreate:          efsCreate,
+				EfsID:              efsID,
+				EfsMount:           efsMount,
+				DragenEnabled:      dragenEnabled,
+				DragenAmiID:        dragenAmiID,
+				EbsBootSize:        ebsBootSize,
+				EcsConfig:          ecsConfig,
+				FargateHeadEnabled: fargateHeadEnabled,
+				Arm64Enabled:       arm64Enabled,
+				DragenInstanceType: dragenInstanceType1,
+			}
 		}
 		awsBatchConfiguration = &shared.AWSBatchConfiguration{
 			StorageType:         storageType,
@@ -1500,198 +1518,201 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusionSnapshots1 = nil
 		}
-		typeVar1 := shared.ForgeConfigType(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type.ValueString())
-		var minCpus1 int
-		minCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus.ValueInt32())
+		var forge1 *shared.ForgeConfig
+		if r.ComputeEnv.Config.SeqeracomputePlatform.Forge != nil {
+			typeVar1 := shared.ForgeConfigType(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type.ValueString())
+			var minCpus1 int
+			minCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus.ValueInt32())
 
-		var maxCpus1 int
-		maxCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus.ValueInt32())
+			var maxCpus1 int
+			maxCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus.ValueInt32())
 
-		gpuEnabled2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsNull() {
-			*gpuEnabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.ValueBool()
-		} else {
-			gpuEnabled2 = nil
-		}
-		ebsAutoScale1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsNull() {
-			*ebsAutoScale1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.ValueBool()
-		} else {
-			ebsAutoScale1 = nil
-		}
-		instanceTypes1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes))
-		for _, instanceTypesItem1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes {
-			instanceTypes1 = append(instanceTypes1, instanceTypesItem1.ValueString())
-		}
-		allocStrategy1 := new(shared.AllocStrategy)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsNull() {
-			*allocStrategy1 = shared.AllocStrategy(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.ValueString())
-		} else {
-			allocStrategy1 = nil
-		}
-		imageId2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsNull() {
-			*imageId2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.ValueString()
-		} else {
-			imageId2 = nil
-		}
-		vpcId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsNull() {
-			*vpcId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.ValueString()
-		} else {
-			vpcId1 = nil
-		}
-		subnets1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets))
-		for _, subnetsItem1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets {
-			subnets1 = append(subnets1, subnetsItem1.ValueString())
-		}
-		securityGroups2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups))
-		for _, securityGroupsItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups {
-			securityGroups2 = append(securityGroups2, securityGroupsItem2.ValueString())
-		}
-		fsxMount1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsNull() {
-			*fsxMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.ValueString()
-		} else {
-			fsxMount1 = nil
-		}
-		fsxName1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsNull() {
-			*fsxName1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.ValueString()
-		} else {
-			fsxName1 = nil
-		}
-		fsxSize1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsNull() {
-			*fsxSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.ValueInt32())
-		} else {
-			fsxSize1 = nil
-		}
-		disposeOnDeletion1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsNull() {
-			*disposeOnDeletion1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.ValueBool()
-		} else {
-			disposeOnDeletion1 = nil
-		}
-		ec2KeyPair2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsNull() {
-			*ec2KeyPair2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.ValueString()
-		} else {
-			ec2KeyPair2 = nil
-		}
-		allowBuckets2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets))
-		for _, allowBucketsItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets {
-			allowBuckets2 = append(allowBuckets2, allowBucketsItem2.ValueString())
-		}
-		ebsBlockSize1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsNull() {
-			*ebsBlockSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.ValueInt32())
-		} else {
-			ebsBlockSize1 = nil
-		}
-		fusionEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.IsNull() {
-			*fusionEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.ValueBool()
-		} else {
-			fusionEnabled1 = nil
-		}
-		bidPercentage1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsNull() {
-			*bidPercentage1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.ValueInt32())
-		} else {
-			bidPercentage1 = nil
-		}
-		efsCreate1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsNull() {
-			*efsCreate1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.ValueBool()
-		} else {
-			efsCreate1 = nil
-		}
-		efsId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsNull() {
-			*efsId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.ValueString()
-		} else {
-			efsId1 = nil
-		}
-		efsMount1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsNull() {
-			*efsMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.ValueString()
-		} else {
-			efsMount1 = nil
-		}
-		dragenEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsNull() {
-			*dragenEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.ValueBool()
-		} else {
-			dragenEnabled1 = nil
-		}
-		dragenAmiId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsNull() {
-			*dragenAmiId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.ValueString()
-		} else {
-			dragenAmiId1 = nil
-		}
-		ebsBootSize2 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsNull() {
-			*ebsBootSize2 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.ValueInt32())
-		} else {
-			ebsBootSize2 = nil
-		}
-		ecsConfig1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsNull() {
-			*ecsConfig1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.ValueString()
-		} else {
-			ecsConfig1 = nil
-		}
-		fargateHeadEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsNull() {
-			*fargateHeadEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.ValueBool()
-		} else {
-			fargateHeadEnabled1 = nil
-		}
-		arm64Enabled2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsNull() {
-			*arm64Enabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.ValueBool()
-		} else {
-			arm64Enabled2 = nil
-		}
-		dragenInstanceType3 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsNull() {
-			*dragenInstanceType3 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.ValueString()
-		} else {
-			dragenInstanceType3 = nil
-		}
-		forge1 := shared.ForgeConfig{
-			Type:               typeVar1,
-			MinCpus:            minCpus1,
-			MaxCpus:            maxCpus1,
-			GpuEnabled:         gpuEnabled2,
-			EbsAutoScale:       ebsAutoScale1,
-			InstanceTypes:      instanceTypes1,
-			AllocStrategy:      allocStrategy1,
-			ImageID:            imageId2,
-			VpcID:              vpcId1,
-			Subnets:            subnets1,
-			SecurityGroups:     securityGroups2,
-			FsxMount:           fsxMount1,
-			FsxName:            fsxName1,
-			FsxSize:            fsxSize1,
-			DisposeOnDeletion:  disposeOnDeletion1,
-			Ec2KeyPair:         ec2KeyPair2,
-			AllowBuckets:       allowBuckets2,
-			EbsBlockSize:       ebsBlockSize1,
-			FusionEnabled:      fusionEnabled1,
-			BidPercentage:      bidPercentage1,
-			EfsCreate:          efsCreate1,
-			EfsID:              efsId1,
-			EfsMount:           efsMount1,
-			DragenEnabled:      dragenEnabled1,
-			DragenAmiID:        dragenAmiId1,
-			EbsBootSize:        ebsBootSize2,
-			EcsConfig:          ecsConfig1,
-			FargateHeadEnabled: fargateHeadEnabled1,
-			Arm64Enabled:       arm64Enabled2,
-			DragenInstanceType: dragenInstanceType3,
+			gpuEnabled2 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsNull() {
+				*gpuEnabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.ValueBool()
+			} else {
+				gpuEnabled2 = nil
+			}
+			ebsAutoScale1 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsNull() {
+				*ebsAutoScale1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.ValueBool()
+			} else {
+				ebsAutoScale1 = nil
+			}
+			instanceTypes1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes))
+			for _, instanceTypesItem1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes {
+				instanceTypes1 = append(instanceTypes1, instanceTypesItem1.ValueString())
+			}
+			allocStrategy1 := new(shared.AllocStrategy)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsNull() {
+				*allocStrategy1 = shared.AllocStrategy(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.ValueString())
+			} else {
+				allocStrategy1 = nil
+			}
+			imageId2 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsNull() {
+				*imageId2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.ValueString()
+			} else {
+				imageId2 = nil
+			}
+			vpcId1 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsNull() {
+				*vpcId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.ValueString()
+			} else {
+				vpcId1 = nil
+			}
+			subnets1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets))
+			for _, subnetsItem1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets {
+				subnets1 = append(subnets1, subnetsItem1.ValueString())
+			}
+			securityGroups2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups))
+			for _, securityGroupsItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups {
+				securityGroups2 = append(securityGroups2, securityGroupsItem2.ValueString())
+			}
+			fsxMount1 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsNull() {
+				*fsxMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.ValueString()
+			} else {
+				fsxMount1 = nil
+			}
+			fsxName1 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsNull() {
+				*fsxName1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.ValueString()
+			} else {
+				fsxName1 = nil
+			}
+			fsxSize1 := new(int)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsNull() {
+				*fsxSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.ValueInt32())
+			} else {
+				fsxSize1 = nil
+			}
+			disposeOnDeletion1 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsNull() {
+				*disposeOnDeletion1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.ValueBool()
+			} else {
+				disposeOnDeletion1 = nil
+			}
+			ec2KeyPair2 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsNull() {
+				*ec2KeyPair2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.ValueString()
+			} else {
+				ec2KeyPair2 = nil
+			}
+			allowBuckets2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets))
+			for _, allowBucketsItem2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets {
+				allowBuckets2 = append(allowBuckets2, allowBucketsItem2.ValueString())
+			}
+			ebsBlockSize1 := new(int)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsNull() {
+				*ebsBlockSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.ValueInt32())
+			} else {
+				ebsBlockSize1 = nil
+			}
+			fusionEnabled1 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.IsNull() {
+				*fusionEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled.ValueBool()
+			} else {
+				fusionEnabled1 = nil
+			}
+			bidPercentage1 := new(int)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsNull() {
+				*bidPercentage1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.ValueInt32())
+			} else {
+				bidPercentage1 = nil
+			}
+			efsCreate1 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsNull() {
+				*efsCreate1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.ValueBool()
+			} else {
+				efsCreate1 = nil
+			}
+			efsId1 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsNull() {
+				*efsId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.ValueString()
+			} else {
+				efsId1 = nil
+			}
+			efsMount1 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsNull() {
+				*efsMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.ValueString()
+			} else {
+				efsMount1 = nil
+			}
+			dragenEnabled1 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsNull() {
+				*dragenEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.ValueBool()
+			} else {
+				dragenEnabled1 = nil
+			}
+			dragenAmiId1 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsNull() {
+				*dragenAmiId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.ValueString()
+			} else {
+				dragenAmiId1 = nil
+			}
+			ebsBootSize2 := new(int)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsNull() {
+				*ebsBootSize2 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.ValueInt32())
+			} else {
+				ebsBootSize2 = nil
+			}
+			ecsConfig1 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsNull() {
+				*ecsConfig1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.ValueString()
+			} else {
+				ecsConfig1 = nil
+			}
+			fargateHeadEnabled1 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsNull() {
+				*fargateHeadEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.ValueBool()
+			} else {
+				fargateHeadEnabled1 = nil
+			}
+			arm64Enabled2 := new(bool)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsNull() {
+				*arm64Enabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.ValueBool()
+			} else {
+				arm64Enabled2 = nil
+			}
+			dragenInstanceType3 := new(string)
+			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsNull() {
+				*dragenInstanceType3 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.ValueString()
+			} else {
+				dragenInstanceType3 = nil
+			}
+			forge1 = &shared.ForgeConfig{
+				Type:               typeVar1,
+				MinCpus:            minCpus1,
+				MaxCpus:            maxCpus1,
+				GpuEnabled:         gpuEnabled2,
+				EbsAutoScale:       ebsAutoScale1,
+				InstanceTypes:      instanceTypes1,
+				AllocStrategy:      allocStrategy1,
+				ImageID:            imageId2,
+				VpcID:              vpcId1,
+				Subnets:            subnets1,
+				SecurityGroups:     securityGroups2,
+				FsxMount:           fsxMount1,
+				FsxName:            fsxName1,
+				FsxSize:            fsxSize1,
+				DisposeOnDeletion:  disposeOnDeletion1,
+				Ec2KeyPair:         ec2KeyPair2,
+				AllowBuckets:       allowBuckets2,
+				EbsBlockSize:       ebsBlockSize1,
+				FusionEnabled:      fusionEnabled1,
+				BidPercentage:      bidPercentage1,
+				EfsCreate:          efsCreate1,
+				EfsID:              efsId1,
+				EfsMount:           efsMount1,
+				DragenEnabled:      dragenEnabled1,
+				DragenAmiID:        dragenAmiId1,
+				EbsBootSize:        ebsBootSize2,
+				EcsConfig:          ecsConfig1,
+				FargateHeadEnabled: fargateHeadEnabled1,
+				Arm64Enabled:       arm64Enabled2,
+				DragenInstanceType: dragenInstanceType3,
+			}
 		}
 		seqeraComputeConfiguration = &shared.SeqeraComputeConfiguration{
 			StorageType:         storageType1,
@@ -2178,37 +2199,40 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			autoPoolMode = nil
 		}
-		vmType := new(string)
-		if !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsNull() {
-			*vmType = r.ComputeEnv.Config.AzureBatch.Forge.VMType.ValueString()
-		} else {
-			vmType = nil
-		}
-		var vmCount int
-		vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.VMCount.ValueInt32())
+		var forge2 *shared.AzBatchForgeConfig
+		if r.ComputeEnv.Config.AzureBatch.Forge != nil {
+			vmType := new(string)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsNull() {
+				*vmType = r.ComputeEnv.Config.AzureBatch.Forge.VMType.ValueString()
+			} else {
+				vmType = nil
+			}
+			var vmCount int
+			vmCount = int(r.ComputeEnv.Config.AzureBatch.Forge.VMCount.ValueInt32())
 
-		autoScale := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsNull() {
-			*autoScale = r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.ValueBool()
-		} else {
-			autoScale = nil
-		}
-		disposeOnDeletion2 := new(bool)
-		if !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsNull() {
-			*disposeOnDeletion2 = r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.ValueBool()
-		} else {
-			disposeOnDeletion2 = nil
-		}
-		containerRegIds := make([]string, 0, len(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds))
-		for _, containerRegIdsItem := range r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds {
-			containerRegIds = append(containerRegIds, containerRegIdsItem.ValueString())
-		}
-		forge2 := shared.AzBatchForgeConfig{
-			VMType:            vmType,
-			VMCount:           vmCount,
-			AutoScale:         autoScale,
-			DisposeOnDeletion: disposeOnDeletion2,
-			ContainerRegIds:   containerRegIds,
+			autoScale := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.IsNull() {
+				*autoScale = r.ComputeEnv.Config.AzureBatch.Forge.AutoScale.ValueBool()
+			} else {
+				autoScale = nil
+			}
+			disposeOnDeletion2 := new(bool)
+			if !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsNull() {
+				*disposeOnDeletion2 = r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.ValueBool()
+			} else {
+				disposeOnDeletion2 = nil
+			}
+			containerRegIds := make([]string, 0, len(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds))
+			for _, containerRegIdsItem := range r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds {
+				containerRegIds = append(containerRegIds, containerRegIdsItem.ValueString())
+			}
+			forge2 = &shared.AzBatchForgeConfig{
+				VMType:            vmType,
+				VMCount:           vmCount,
+				AutoScale:         autoScale,
+				DisposeOnDeletion: disposeOnDeletion2,
+				ContainerRegIds:   containerRegIds,
+			}
 		}
 		tokenDuration := new(string)
 		if !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.TokenDuration.IsNull() {

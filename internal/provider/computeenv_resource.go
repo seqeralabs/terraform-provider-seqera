@@ -714,10 +714,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Not Null; Requires replacement if changed.`,
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
+										Description: `Requires replacement if changed.`,
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,
@@ -1306,10 +1303,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Not Null; Requires replacement if changed.`,
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
+										Description: `Requires replacement if changed.`,
 									},
 									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -3709,10 +3703,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Description: `Requires replacement if changed.`,
 											},
 										},
-										Description: `Not Null; Requires replacement if changed.`,
-										Validators: []validator.Object{
-											speakeasy_objectvalidators.NotNull(),
-										},
+										Description: `Requires replacement if changed.`,
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,

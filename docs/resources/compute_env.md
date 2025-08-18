@@ -185,7 +185,7 @@ Optional:
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
 - `execution_role` (String) Requires replacement if changed.
-- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
+- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -299,7 +299,7 @@ Optional:
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
-- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
+- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
 - `managed_identity_client_id` (String) Requires replacement if changed.
@@ -612,7 +612,7 @@ Optional:
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
 - `execution_role` (String) Requires replacement if changed.
-- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
+- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
