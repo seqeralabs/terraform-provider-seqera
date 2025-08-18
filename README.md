@@ -115,7 +115,7 @@ provider "seqera" {
 
 * **Plain Text Secrets**: Never pass secrets, API keys, or credentials in plain text
 * **Hardcoded Values**: Avoid hardcoding sensitive information in `.tf` files
-* **Public State**: Never commit Terraform state files with sensitive information
+* **Public State**: Never commit Terraform state files to version control
 
 ### Resource Management
 
