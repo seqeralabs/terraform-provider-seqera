@@ -5,10 +5,12 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
@@ -16,8 +18,10 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &CredentialsDataSource{}
-var _ datasource.DataSourceWithConfigure = &CredentialsDataSource{}
+var (
+	_ datasource.DataSource              = &CredentialsDataSource{}
+	_ datasource.DataSourceWithConfigure = &CredentialsDataSource{}
+)
 
 func NewCredentialsDataSource() datasource.DataSource {
 	return &CredentialsDataSource{}
