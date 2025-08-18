@@ -3,14 +3,14 @@ id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
   docChecksum: b5565db50947472b679a131c613f3a9d
   docVersion: 1.56.0
-  speakeasyVersion: 1.600.2
-  generationVersion: 2.677.3
+  speakeasyVersion: 1.605.5
+  generationVersion: 2.684.0
   releaseVersion: 0.25.2
   configChecksum: 7098de119880fa227d0cc61808d0f9ba
 features:
   terraform:
     additionalDependencies: 0.1.0
-    core: 3.43.1
+    core: 3.44.1
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
