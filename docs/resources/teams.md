@@ -51,6 +51,20 @@ resource "seqera_teams" "my_teams" {
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = seqera_teams.my_seqera_teams
+  id = jsonencode({
+    org_id = 0
+    team_id = 0
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import seqera_teams.my_seqera_teams '{"org_id": 0, "team_id": 0}'
 ```
