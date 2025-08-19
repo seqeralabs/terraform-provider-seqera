@@ -8108,7 +8108,6 @@ components:
           x-speakeasy-terraform-ignore: true
       required:
         - region
-        - forge
     AwsBatchPlatformMetainfo:
       type: object
       properties:
@@ -8326,7 +8325,6 @@ components:
           nullable: true
       required:
         - region
-        - forge
     AzBatchForgeConfig:
       type: object
       properties:

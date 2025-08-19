@@ -1217,11 +1217,11 @@ type AzureBatchConfiguration struct {
 	Region        string  `json:"region"`
 	HeadPool      *string `json:"headPool,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	AutoPoolMode            *bool              `json:"autoPoolMode,omitempty"`
-	Forge                   AzBatchForgeConfig `json:"forge"`
-	TokenDuration           *string            `json:"tokenDuration,omitempty"`
-	DeleteJobsOnCompletion  *JobCleanupPolicy  `json:"deleteJobsOnCompletion,omitempty"`
-	DeletePoolsOnCompletion *bool              `json:"deletePoolsOnCompletion,omitempty"`
+	AutoPoolMode            *bool               `json:"autoPoolMode,omitempty"`
+	Forge                   *AzBatchForgeConfig `json:"forge,omitempty"`
+	TokenDuration           *string             `json:"tokenDuration,omitempty"`
+	DeleteJobsOnCompletion  *JobCleanupPolicy   `json:"deleteJobsOnCompletion,omitempty"`
+	DeletePoolsOnCompletion *bool               `json:"deletePoolsOnCompletion,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
 	WaveEnabled    *bool               `json:"waveEnabled,omitempty"`
@@ -1280,9 +1280,9 @@ func (o *AzureBatchConfiguration) GetAutoPoolMode() *bool {
 	return o.AutoPoolMode
 }
 
-func (o *AzureBatchConfiguration) GetForge() AzBatchForgeConfig {
+func (o *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
 	if o == nil {
-		return AzBatchForgeConfig{}
+		return nil
 	}
 	return o.Forge
 }
@@ -1803,7 +1803,7 @@ type SeqeraComputeConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           ForgeConfig      `json:"forge"`
+	Forge           *ForgeConfig     `json:"forge,omitempty"`
 	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
@@ -1982,9 +1982,9 @@ func (o *SeqeraComputeConfiguration) GetFusionSnapshots() *bool {
 	return o.FusionSnapshots
 }
 
-func (o *SeqeraComputeConfiguration) GetForge() ForgeConfig {
+func (o *SeqeraComputeConfiguration) GetForge() *ForgeConfig {
 	if o == nil {
-		return ForgeConfig{}
+		return nil
 	}
 	return o.Forge
 }
@@ -2207,7 +2207,7 @@ type AWSBatchConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           ForgeConfig      `json:"forge"`
+	Forge           *ForgeConfig     `json:"forge,omitempty"`
 	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
@@ -2386,9 +2386,9 @@ func (o *AWSBatchConfiguration) GetFusionSnapshots() *bool {
 	return o.FusionSnapshots
 }
 
-func (o *AWSBatchConfiguration) GetForge() ForgeConfig {
+func (o *AWSBatchConfiguration) GetForge() *ForgeConfig {
 	if o == nil {
-		return ForgeConfig{}
+		return nil
 	}
 	return o.Forge
 }
