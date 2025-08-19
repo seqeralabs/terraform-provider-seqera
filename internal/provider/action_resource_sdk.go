@@ -124,52 +124,57 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.AwsBatch.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.LogGroup)
 					r.Launch.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.NextflowConfig)
 					r.Launch.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
-					for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
-					}
-					if resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy != nil {
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy))
+					if resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge == nil {
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge = nil
 					} else {
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringNull()
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge = &tfTypes.ForgeConfig{}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
+						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
+						}
+						if resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy != nil {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy))
+						} else {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringNull()
+						}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets))
+						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
+						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Ec2KeyPair)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
+						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBlockSize))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsCreate)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsID)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsMount)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenAmiID)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBootSize))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EcsConfig)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FargateHeadEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenInstanceType)
 					}
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets))
-					for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets {
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
-					for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Ec2KeyPair)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
-					for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBlockSize))
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsCreate)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsID)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsMount)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenEnabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenAmiID)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBootSize))
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EcsConfig)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FargateHeadEnabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenInstanceType)
 				}
 				if resp.Launch.ComputeEnv.Config.AWSCloudConfiguration != nil {
 					r.Launch.ComputeEnv.Config.AwsCloud = &tfTypes.AWSCloudConfiguration{}
@@ -250,52 +255,57 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.LogGroup)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.FusionSnapshots)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
-					for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
-					}
-					if resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy))
+					if resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge == nil {
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge = nil
 					} else {
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringNull()
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge = &tfTypes.ForgeConfig{}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
+						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
+						}
+						if resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy))
+						} else {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringNull()
+						}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets))
+						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
+						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DisposeOnDeletion)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Ec2KeyPair)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets))
+						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBlockSize))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FusionEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.BidPercentage))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsCreate)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsID)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsMount)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenAmiID)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBootSize))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EcsConfig)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FargateHeadEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Arm64Enabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenInstanceType)
 					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets))
-					for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets {
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
-					for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DisposeOnDeletion)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Ec2KeyPair)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets))
-					for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets {
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBlockSize))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FusionEnabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.BidPercentage))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsCreate)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsID)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsMount)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenEnabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenAmiID)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBootSize))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EcsConfig)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FargateHeadEnabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Arm64Enabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenInstanceType)
 				}
 				if resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration != nil {
 					r.Launch.ComputeEnv.Config.GoogleLifesciences = &tfTypes.GoogleLifeSciencesConfiguration{}
@@ -395,13 +405,18 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Region)
 					r.Launch.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
 					r.Launch.ComputeEnv.Config.AzureBatch.AutoPoolMode = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.AutoPoolMode)
-					r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
-					r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
-					r.Launch.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
-					r.Launch.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
-					r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
-					for _, v := range resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+					if resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge == nil {
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge = nil
+					} else {
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
+						for _, v := range resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
+							r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+						}
 					}
 					r.Launch.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
 					if resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion != nil {

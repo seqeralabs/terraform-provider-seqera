@@ -8108,7 +8108,6 @@ components:
           x-speakeasy-terraform-ignore: true
       required:
         - region
-        - forge
     AwsBatchPlatformMetainfo:
       type: object
       properties:
@@ -8326,7 +8325,6 @@ components:
           nullable: true
       required:
         - region
-        - forge
     AzBatchForgeConfig:
       type: object
       properties:
@@ -9034,8 +9032,8 @@ components:
             - seqeracompute
           description: Cloud or service provider type (e.g., aws, azure, gcp)
           example: "google"
-          x-speakeasy-name-override: providerType
           x-speakeasy-plan-validators: CredentialsConfigValidator
+          x-speakeasy-name-override: providerType
         baseUrl:
           maxLength: 200
           pattern: ""

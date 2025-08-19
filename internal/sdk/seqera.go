@@ -2,18 +2,19 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.56.0 and generator version 2.684.0
+// Generated from OpenAPI doc version 1.56.0 and generator version 2.686.7
 
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/config"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/hooks"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/retry"
-	"net/http"
-	"time"
 )
 
 // ServerList contains the list of servers available to the SDK
@@ -170,7 +171,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.25.2",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.25.2 2.684.0 1.56.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.25.2 2.686.7 1.56.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

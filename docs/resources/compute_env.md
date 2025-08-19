@@ -185,7 +185,7 @@ Optional:
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
 - `execution_role` (String) Requires replacement if changed.
-- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
+- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -299,7 +299,7 @@ Optional:
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
-- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
+- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
 - `managed_identity_client_id` (String) Requires replacement if changed.
@@ -612,7 +612,7 @@ Optional:
 - `dragen_queue` (String) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
 - `execution_role` (String) Requires replacement if changed.
-- `forge` (Attributes) Not Null; Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
+- `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
 - `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -761,6 +761,20 @@ Read-Only:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = seqera_compute_env.my_seqera_compute_env
+  id = jsonencode({
+    compute_env_id = "..."
+    workspace_id = 0
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import seqera_compute_env.my_seqera_compute_env '{"compute_env_id": "", "workspace_id": 0}'
+terraform import seqera_compute_env.my_seqera_compute_env '{"compute_env_id": "...", "workspace_id": 0}'
 ```
