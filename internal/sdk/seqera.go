@@ -7,14 +7,13 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"net/http"
-	"time"
-
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/config"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/hooks"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/retry"
+	"net/http"
+	"time"
 )
 
 // ServerList contains the list of servers available to the SDK

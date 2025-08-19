@@ -124,7 +124,6 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewActionDataSource,
 		NewComputeEnvDataSource,
 		NewCredentialDataSource,
-		NewCredentialsDataSource,
 		NewDataLinkDataSource,
 		NewDatasetDataSource,
 		NewLabelsDataSource,

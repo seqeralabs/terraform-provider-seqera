@@ -1,12 +1,29 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 5c94f611254114e69d75fc1b0d9a434b
+  docChecksum: 08d0ae4f41d56c9573b371b02b6e9481
   docVersion: 1.56.0
-  speakeasyVersion: 1.605.5
-  generationVersion: 2.684.0
+  speakeasyVersion: 1.606.0
+  generationVersion: 2.686.7
+  releaseVersion: 0.25.2
+  configChecksum: 7098de119880fa227d0cc61808d0f9ba
   terraform:
     additionalDependencies: 0.1.0
+    deepObjectParams: 0.1.0
+    deprecations: 2.82.0
+    getRequestBodies: 2.81.1
+    globalSecurity: 2.81.12
+    globalServerURLs: 2.83.0
+    groups: 2.81.2
+    inputOutputModels: 2.83.0
+    nameOverrides: 2.81.3
+    nullables: 0.0.0
+    retries: 2.81.4
+    unions: 2.81.17
+features:
+  terraform:
+    additionalDependencies: 0.1.0
+    core: 3.44.1
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
