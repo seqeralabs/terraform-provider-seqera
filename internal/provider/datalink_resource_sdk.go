@@ -167,9 +167,12 @@ func (r *DataLinkResourceModel) ToSharedDataLinkCreateRequest(ctx context.Contex
 	var publicAccessible bool
 	publicAccessible = r.PublicAccessible.ValueBool()
 
-	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
-
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
 	out := shared.DataLinkCreateRequest{
 		Name:             name,
 		Description:      description,

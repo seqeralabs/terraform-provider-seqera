@@ -166,7 +166,6 @@ actions:
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]
     update:
       required:
-        - credentialsId
         - description
         - name
         - provider

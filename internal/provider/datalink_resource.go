@@ -89,7 +89,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Array of credentials required to access the data link`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 			},
 			"data_link_id": schema.StringAttribute{
 				Computed:    true,
