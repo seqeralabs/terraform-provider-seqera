@@ -154,11 +154,14 @@ actions:
         - value
         - workspace_id
 
-  - target: $["components"]["schemas"]["Credentials"]["required"]
+  - target: $["components"]["schemas"]["Credentials"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["Credentials"]
     update:
-      - name
-      - provider
-      - keys
+      required:
+        - name
+        - provider
+        - keys
 
   - target: $["components"]["schemas"]["DataLinkCreateRequest"]["required"][*]
     remove: true
