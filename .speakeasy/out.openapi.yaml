@@ -8108,6 +8108,7 @@ components:
           x-speakeasy-terraform-ignore: true
       required:
         - region
+      x-speakeasy-plan-validators: awsForgeValidator
     AwsBatchPlatformMetainfo:
       type: object
       properties:
@@ -9133,7 +9134,6 @@ components:
           type: string
           example: "aws-credentials-id"
       required:
-        - credentialsId
         - description
         - name
         - provider

@@ -1,1 +1,1 @@
-terraform import seqera_studios.my_seqera_studios ""
+terraform import seqera_studios.my_seqera_studios "..."

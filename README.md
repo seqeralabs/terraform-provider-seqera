@@ -24,6 +24,7 @@ Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-cod
 * [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
   * [Installation](#installation)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
+  * [Best Practices](#best-practices)
   * [Examples](#examples)
   * [Testing the provider locally](#testing-the-provider-locally)
 * [Development](#development)
@@ -41,7 +42,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.25.2"
+      version = "0.25.3"
     }
   }
 }
@@ -71,7 +72,6 @@ provider "seqera" {
 * [seqera_tokens](docs/resources/tokens.md)
 * [seqera_workflows](docs/resources/workflows.md)
 * [seqera_workspace](docs/resources/workspace.md)
-
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)

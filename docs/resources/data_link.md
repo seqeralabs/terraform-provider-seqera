@@ -35,7 +35,6 @@ resource "seqera_data_link" "my_datalink" {
 
 ### Required
 
-- `credentials_id` (String)
 - `description` (String)
 - `name` (String)
 - `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]; Requires replacement if changed.
@@ -43,6 +42,10 @@ resource "seqera_data_link" "my_datalink" {
 - `resource_ref` (String) Requires replacement if changed.
 - `type` (String) must be "bucket"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier
+
+### Optional
+
+- `credentials_id` (String)
 
 ### Read-Only
 
@@ -66,6 +69,17 @@ Read-Only:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = seqera_data_link.my_seqera_data_link
+  id = "..."
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import seqera_data_link.my_seqera_data_link ""
+terraform import seqera_data_link.my_seqera_data_link "..."
 ```

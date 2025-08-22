@@ -231,3 +231,8 @@ actions:
   - target: $.components.schemas.UnivaComputeConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
+
+  # Add AWS Forge validator to AWS Batch configuration
+  - target: $.components.schemas.AwsBatchConfig
+    update:
+      x-speakeasy-plan-validators: awsForgeValidator

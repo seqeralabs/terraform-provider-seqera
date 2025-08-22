@@ -9,7 +9,7 @@ type DataLinkCreateRequest struct {
 	ProviderType     ProviderType `json:"provider"`
 	ResourceRef      string       `json:"resourceRef"`
 	PublicAccessible bool         `json:"publicAccessible"`
-	CredentialsID    string       `json:"credentialsId"`
+	CredentialsID    *string      `json:"credentialsId,omitempty"`
 }
 
 func (o *DataLinkCreateRequest) GetName() string {
@@ -54,9 +54,9 @@ func (o *DataLinkCreateRequest) GetPublicAccessible() bool {
 	return o.PublicAccessible
 }
 
-func (o *DataLinkCreateRequest) GetCredentialsID() string {
+func (o *DataLinkCreateRequest) GetCredentialsID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
 	return o.CredentialsID
 }
