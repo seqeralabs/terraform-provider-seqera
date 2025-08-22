@@ -26,7 +26,8 @@ resource "seqera_action" "my_action" {
   launch = {
     compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
-      "..."
+      "docker",
+      "aws",
     ]
     config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
     date_created       = "2024-07-23T10:30:00Z"
@@ -34,7 +35,9 @@ resource "seqera_action" "my_action" {
     head_job_cpus      = 2
     head_job_memory_mb = 4096
     label_ids = [
-      2
+      1001,
+      1002,
+      1003,
     ]
     launch_container     = "...my_launch_container..."
     main_script          = "main.nf"
@@ -53,11 +56,13 @@ resource "seqera_action" "my_action" {
     stub_run             = false
     tower_config         = "...my_tower_config..."
     user_secrets = [
-      "..."
+      "MY_API_KEY",
+      "DATABASE_PASSWORD",
     ]
     work_dir = "s3://my-bucket/work"
     workspace_secrets = [
-      "..."
+      "WORKSPACE_TOKEN",
+      "SHARED_CREDENTIALS",
     ]
   }
   name         = "...my_name..."
@@ -857,6 +862,17 @@ Read-Only:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = seqera_action.my_seqera_action
+  id = "..."
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import seqera_action.my_seqera_action ""
+terraform import seqera_action.my_seqera_action "..."
 ```
