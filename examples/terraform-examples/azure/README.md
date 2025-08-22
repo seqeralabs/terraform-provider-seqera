@@ -12,19 +12,25 @@ This example demonstrates a complete Azure setup for running bioinformatics work
 - **Security Features**: Pipeline secrets and workspace labels
 - **External Scripts**: Pre and post-run bash scripts for workflow customization
 
+> [!WARNING]
+> This will create cloud resources that will incur costs. Please be aware of your current cloud spend and remove resources when you are done.
+
 ## How to Run This Example
 
 1. **Navigate to the Azure example directory**:
+
    ```bash
    cd examples/terraform-examples/azure
    ```
 
 2. **Copy the example variables file**:
+
    ```bash
    cp terraform.tfvars.example terraform.tfvars
    ```
 
 3. **Edit the terraform.tfvars file** with your Azure credentials and settings:
+
    ```bash
    # Required Azure credentials
    batch_key    = "your-azure-batch-access-key"
@@ -40,16 +46,19 @@ This example demonstrates a complete Azure setup for running bioinformatics work
    ```
 
 4. **Initialize Terraform**:
+
    ```bash
    terraform init
    ```
 
 5. **Review the execution plan**:
+
    ```bash
    terraform plan
    ```
 
 6. **Apply the configuration**:
+
    ```bash
    terraform apply
    ```
@@ -77,6 +86,7 @@ resource "seqera_orgs" "my_org" {
 ## Resources Created
 
 This example creates the following resources:
+
 - Seqera Organization
 - Seqera Workspace
 - Azure Credentials
@@ -98,6 +108,7 @@ terraform destroy
 ## Customization
 
 You can customize this example by:
+
 - Modifying VM sizes in the compute environment forge configuration
 - Changing the pipeline to a different nf-core workflow
 - Adjusting resource configurations in `variables.tf`
