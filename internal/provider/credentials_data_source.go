@@ -357,7 +357,7 @@ func (r *CredentialsDataSource) Read(ctx context.Context, req datasource.ReadReq
 	}
 
 	// Call the ListCredentials API
-	res, err := r.client.Credentials.ListCredentials(ctx, request)
+	res, err := r.client.Credentials.Credentials(ctx, request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

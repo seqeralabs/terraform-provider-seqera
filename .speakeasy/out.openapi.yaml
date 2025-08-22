@@ -834,6 +834,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: credentials
     post:
       summary: Create credentials
       description: Creates new credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -10450,7 +10451,7 @@ components:
             }
           x-speakeasy-param-sensitive: true
           x-speakeasy-param-suppress-computed-diff: true
-      x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
+      x-speakeasy-plan-validators: GoogleKeysCredentialValidator
     GridPlatformMetainfo:
       type: object
       properties:
@@ -10807,6 +10808,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Credentials"
+          x-speakeasy-list-item-field: true
+      x-speakeasy-list-wrapper: true
     ListDatasetVersionsResponse:
       type: object
       properties:

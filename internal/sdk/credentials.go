@@ -31,9 +31,9 @@ func newCredentials(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *h
 	}
 }
 
-// ListCredentials - List credentials
+// Credentials - List credentials
 // Lists all available credentials in a user context. Append `?workspaceId` to list credentials in a workspace context, and `?platformId` to filter credentials by computing platform.
-func (s *Credentials) ListCredentials(ctx context.Context, request operations.ListCredentialsRequest, opts ...operations.Option) (*operations.ListCredentialsResponse, error) {
+func (s *Credentials) Credentials(ctx context.Context, request operations.ListCredentialsRequest, opts ...operations.Option) (*operations.ListCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

@@ -475,7 +475,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
-							custom_objectvalidators.GoogleKeysCrdentialValidator(),
+							custom_objectvalidators.GoogleKeysCredentialValidator(),
 						},
 					},
 					"k8s": schema.SingleNestedAttribute{
