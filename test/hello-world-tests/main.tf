@@ -21,6 +21,11 @@ resource "seqera_teams" "my_teams" {
   org_id      = resource.seqera_orgs.test_org.org_id
 }
 
+resource "seqera_members" "my_members" {
+  org_id             = resource.seqera_orgs.test_org.org_id
+  team_id            = resource.seqera_teams.my_teams.team_id
+  user_name_or_email = "shahzeb.mahmood@sqera.io"
+}
 
 module "aws_batch" {
   source             = "./modules/aws"

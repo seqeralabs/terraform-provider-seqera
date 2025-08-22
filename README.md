@@ -24,6 +24,7 @@ Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-cod
 * [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
   * [Installation](#installation)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
+  * [Best Practices](#best-practices)
   * [Examples](#examples)
   * [Testing the provider locally](#testing-the-provider-locally)
 * [Development](#development)
@@ -63,6 +64,7 @@ provider "seqera" {
 * [seqera_data_link](docs/resources/data_link.md)
 * [seqera_datasets](docs/resources/datasets.md)
 * [seqera_labels](docs/resources/labels.md)
+* [seqera_members](docs/resources/members.md)
 * [seqera_orgs](docs/resources/orgs.md)
 * [seqera_pipeline](docs/resources/pipeline.md)
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
@@ -71,7 +73,6 @@ provider "seqera" {
 * [seqera_tokens](docs/resources/tokens.md)
 * [seqera_workflows](docs/resources/workflows.md)
 * [seqera_workspace](docs/resources/workspace.md)
-
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
@@ -80,6 +81,7 @@ provider "seqera" {
 * [seqera_data_link](docs/data-sources/data_link.md)
 * [seqera_dataset](docs/data-sources/dataset.md)
 * [seqera_labels](docs/data-sources/labels.md)
+* [seqera_members](docs/data-sources/members.md)
 * [seqera_orgs](docs/data-sources/orgs.md)
 * [seqera_pipeline](docs/data-sources/pipeline.md)
 * [seqera_pipeline_secret](docs/data-sources/pipeline_secret.md)

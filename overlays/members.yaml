@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: Team Members Resource Entity Configuration
+  version: 0.0.0
+actions:
+  # Configure the List operation as the read operation for Members resource (using team members endpoint)
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}/members"].get
+    update:
+      x-speakeasy-entity-operation: Members#read
+
+  # Configure the Create operation (team member creation)
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}/members"].post
+    update:
+      x-speakeasy-entity-operation: Members#create
+
+  # Configure the Delete operation (team member deletion)
+  - target: $.paths["/orgs/{orgId}/teams/{teamId}/members/{memberId}"].delete
+    update:
+      x-speakeasy-entity-operation: Members#delete
+
+  # Add entity annotation to the MemberDbDto schema
+  - target: $.components.schemas.MemberDbDto
+    update:
+      x-speakeasy-entity: Members

@@ -3594,6 +3594,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Members#read
     post:
       summary: Create team member
       description: Adds a new member to the team identified by the given `teamId`.
@@ -3641,6 +3642,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Members#create
   /orgs/{orgId}/teams/{teamId}/members/{memberId}/delete:
     delete:
       summary: Delete team member
@@ -11076,6 +11078,7 @@ components:
           type: string
         role:
           $ref: "#/components/schemas/OrgRole"
+      x-speakeasy-entity: Members
     MoabComputeConfig:
       title: Moab configuration
       type: object

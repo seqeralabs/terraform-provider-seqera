@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: bae7e77e3d01bf7b2835f66f663ea133
+  docChecksum: 819a475518d5649599e65e28bc224fe4
   docVersion: 1.56.0
-  speakeasyVersion: 1.600.2
-  generationVersion: 2.677.3
+  speakeasyVersion: 1.606.2
+  generationVersion: 2.687.1
   releaseVersion: 0.25.2
   configChecksum: 7098de119880fa227d0cc61808d0f9ba
 features:
   terraform:
     additionalDependencies: 0.1.0
-    core: 3.43.1
+    core: 3.44.1
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
@@ -32,6 +32,7 @@ generatedFiles:
   - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
+  - examples/data-sources/seqera_members/data-source.tf
   - examples/data-sources/seqera_orgs/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
@@ -44,29 +45,43 @@ generatedFiles:
   - examples/data-sources/seqera_workspace/data-source.tf
   - examples/data-sources/seqera_workspaces/data-source.tf
   - examples/provider/provider.tf
+  - examples/resources/seqera_action/import-by-string-id.tf
   - examples/resources/seqera_action/import.sh
   - examples/resources/seqera_action/resource.tf
+  - examples/resources/seqera_compute_env/import-by-string-id.tf
   - examples/resources/seqera_compute_env/import.sh
   - examples/resources/seqera_compute_env/resource.tf
+  - examples/resources/seqera_credential/import-by-string-id.tf
   - examples/resources/seqera_credential/import.sh
   - examples/resources/seqera_credential/resource.tf
+  - examples/resources/seqera_data_link/import-by-string-id.tf
   - examples/resources/seqera_data_link/import.sh
   - examples/resources/seqera_data_link/resource.tf
   - examples/resources/seqera_datasets/resource.tf
   - examples/resources/seqera_labels/resource.tf
+  - examples/resources/seqera_members/import-by-string-id.tf
+  - examples/resources/seqera_members/import.sh
+  - examples/resources/seqera_members/resource.tf
+  - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
   - examples/resources/seqera_orgs/resource.tf
+  - examples/resources/seqera_pipeline/import-by-string-id.tf
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
+  - examples/resources/seqera_pipeline_secret/import-by-string-id.tf
   - examples/resources/seqera_pipeline_secret/import.sh
   - examples/resources/seqera_pipeline_secret/resource.tf
+  - examples/resources/seqera_studios/import-by-string-id.tf
   - examples/resources/seqera_studios/import.sh
   - examples/resources/seqera_studios/resource.tf
+  - examples/resources/seqera_teams/import-by-string-id.tf
   - examples/resources/seqera_teams/import.sh
   - examples/resources/seqera_teams/resource.tf
   - examples/resources/seqera_tokens/resource.tf
+  - examples/resources/seqera_workflows/import-by-string-id.tf
   - examples/resources/seqera_workflows/import.sh
   - examples/resources/seqera_workflows/resource.tf
+  - examples/resources/seqera_workspace/import-by-string-id.tf
   - examples/resources/seqera_workspace/import.sh
   - examples/resources/seqera_workspace/resource.tf
   - go.mod
@@ -107,6 +122,10 @@ generatedFiles:
   - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
   - internal/provider/labels_resource_sdk.go
+  - internal/provider/members_data_source.go
+  - internal/provider/members_data_source_sdk.go
+  - internal/provider/members_resource.go
+  - internal/provider/members_resource_sdk.go
   - internal/provider/orgs_data_source.go
   - internal/provider/orgs_data_source_sdk.go
   - internal/provider/orgs_resource.go

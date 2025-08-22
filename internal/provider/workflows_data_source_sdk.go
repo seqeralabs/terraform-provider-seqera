@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
@@ -185,10 +186,10 @@ func (r *WorkflowsDataSourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx
 			r.Workflow.OutFile = types.StringPointerValue(resp.Workflow.OutFile)
 			r.Workflow.OwnerID = types.Int64PointerValue(resp.Workflow.OwnerID)
 			if len(resp.Workflow.Params) > 0 {
-				r.Workflow.Params = make(map[string]types.String, len(resp.Workflow.Params))
+				r.Workflow.Params = make(map[string]jsontypes.Normalized, len(resp.Workflow.Params))
 				for key, value := range resp.Workflow.Params {
 					result, _ := json.Marshal(value)
-					r.Workflow.Params[key] = types.StringValue(string(result))
+					r.Workflow.Params[key] = jsontypes.NewNormalizedValue(string(result))
 				}
 			}
 			r.Workflow.Profile = types.StringPointerValue(resp.Workflow.Profile)
