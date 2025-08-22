@@ -117,6 +117,7 @@ type ComputeEnvComputeConfigInput struct {
 	Config  ComputeConfig                  `json:"config"`
 	Status  *ComputeEnvComputeConfigStatus `json:"status,omitempty"`
 	Message *string                        `json:"message,omitempty"`
+	Primary *bool                          `json:"primary,omitempty"`
 }
 
 func (o *ComputeEnvComputeConfigInput) GetCredentialsID() string {
@@ -222,6 +223,13 @@ func (o *ComputeEnvComputeConfigInput) GetMessage() *string {
 		return nil
 	}
 	return o.Message
+}
+
+func (o *ComputeEnvComputeConfigInput) GetPrimary() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Primary
 }
 
 type ComputeEnvComputeConfig struct {

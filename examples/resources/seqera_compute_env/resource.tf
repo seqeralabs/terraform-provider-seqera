@@ -39,6 +39,7 @@ resource "seqera_compute_env" "my_computeenv" {
     message        = "...my_message..."
     name           = "...my_name..."
     platform       = "google-lifesciences"
+    primary        = false
   }
   label_ids = [
     6

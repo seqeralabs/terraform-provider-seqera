@@ -4473,9 +4473,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"primary": schema.BoolAttribute{
 						Computed: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 						},
+						Description: `Requires replacement if changed.`,
 					},
 					"status": schema.StringAttribute{
 						Computed: true,
@@ -4832,7 +4835,7 @@ func (r *ComputeEnvResource) ImportState(ctx context.Context, req resource.Impor
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"compute_env_id": "", "workspace_id": 0}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"compute_env_id": "...", "workspace_id": 0}': `+err.Error())
 		return
 	}
 

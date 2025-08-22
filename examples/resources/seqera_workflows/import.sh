@@ -1,1 +1,1 @@
-terraform import seqera_workflows.my_seqera_workflows ""
+terraform import seqera_workflows.my_seqera_workflows "..."

@@ -8679,7 +8679,6 @@ components:
           type: string
         primary:
           type: boolean
-          readOnly: true
       x-speakeasy-entity: ComputeEnv
     ComputePlatform:
       type: object

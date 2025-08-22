@@ -91,6 +91,10 @@ actions:
     update:
       x-speakeasy-param-readonly: true
 
+  # Remove readonly annotation from primary field to make it writable
+  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.primary.readOnly
+    remove: true
+
   # Entity annotations
   - target: $.components.schemas.ComputeEnvResponseDto
     update:

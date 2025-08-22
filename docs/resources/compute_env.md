@@ -66,6 +66,7 @@ resource "seqera_compute_env" "my_computeenv" {
     message        = "...my_message..."
     name           = "...my_name..."
     platform       = "google-lifesciences"
+    primary        = false
   }
   label_ids = [
     6
@@ -106,6 +107,7 @@ Optional:
 
 - `description` (String) Requires replacement if changed.
 - `message` (String) Requires replacement if changed.
+- `primary` (Boolean) Requires replacement if changed.
 
 Read-Only:
 
@@ -117,7 +119,6 @@ Read-Only:
 - `last_used` (String)
 - `managed_identity_id` (String)
 - `org_id` (Number)
-- `primary` (Boolean)
 - `status` (String) must be one of ["CREATING", "AVAILABLE", "ERRORED", "INVALID"]
 - `workspace_id` (Number)
 
@@ -761,6 +762,20 @@ Read-Only:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = seqera_compute_env.my_seqera_compute_env
+  id = jsonencode({
+    compute_env_id = "..."
+    workspace_id = 0
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import seqera_compute_env.my_seqera_compute_env '{"compute_env_id": "", "workspace_id": 0}'
+terraform import seqera_compute_env.my_seqera_compute_env '{"compute_env_id": "...", "workspace_id": 0}'
 ```

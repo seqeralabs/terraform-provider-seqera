@@ -3492,6 +3492,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 	} else {
 		message = nil
 	}
+	primary := new(bool)
+	if !r.ComputeEnv.Primary.IsUnknown() && !r.ComputeEnv.Primary.IsNull() {
+		*primary = r.ComputeEnv.Primary.ValueBool()
+	} else {
+		primary = nil
+	}
 	computeEnv := shared.ComputeEnvComputeConfigInput{
 		CredentialsID: credentialsID,
 		Name:          name,
@@ -3500,6 +3506,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		Config:        config,
 		Status:        status,
 		Message:       message,
+		Primary:       primary,
 	}
 	labelIds := make([]int64, 0, len(r.LabelIds))
 	for _, labelIdsItem := range r.LabelIds {
