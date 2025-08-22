@@ -9134,7 +9134,6 @@ components:
           type: string
           example: "aws-credentials-id"
       required:
-        - credentialsId
         - description
         - name
         - provider

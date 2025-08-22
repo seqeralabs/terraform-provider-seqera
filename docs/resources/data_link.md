@@ -35,7 +35,6 @@ resource "seqera_data_link" "my_datalink" {
 
 ### Required
 
-- `credentials_id` (String)
 - `description` (String)
 - `name` (String)
 - `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]; Requires replacement if changed.
@@ -43,6 +42,10 @@ resource "seqera_data_link" "my_datalink" {
 - `resource_ref` (String) Requires replacement if changed.
 - `type` (String) must be "bucket"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier
+
+### Optional
+
+- `credentials_id` (String)
 
 ### Read-Only
 
