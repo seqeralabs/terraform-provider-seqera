@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -767,7 +768,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"params": schema.MapAttribute{
 						Computed:    true,
-						ElementType: types.StringType,
+						ElementType: jsontypes.NormalizedType{},
 						Validators: []validator.Map{
 							mapvalidator.ValueStringsAre(validators.IsValidJSON()),
 						},

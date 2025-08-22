@@ -8108,6 +8108,7 @@ components:
           x-speakeasy-terraform-ignore: true
       required:
         - region
+      x-speakeasy-plan-validators: awsForgeValidator
     AwsBatchPlatformMetainfo:
       type: object
       properties:

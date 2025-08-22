@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -452,7 +453,7 @@ func (r *WorkflowsDataSource) Schema(ctx context.Context, req datasource.SchemaR
 					},
 					"params": schema.MapAttribute{
 						Computed:    true,
-						ElementType: types.StringType,
+						ElementType: jsontypes.NormalizedType{},
 					},
 					"profile": schema.StringAttribute{
 						Computed: true,
