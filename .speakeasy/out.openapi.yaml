@@ -780,6 +780,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         content:
           application/json:
@@ -798,6 +799,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: PrimaryComputeEnv#create
   /credentials:
     get:
       summary: List credentials
@@ -10014,6 +10016,7 @@ components:
             type: string
     EmptyBodyRequest:
       type: object
+      x-speakeasy-terraform-ignore: true
     ErrorResponse:
       required:
         - message

@@ -1,0 +1,25 @@
+overlay: 1.0.0
+info:
+  title: Primary Compute Environment Resource Configuration
+  version: 0.0.0
+actions:
+  # Configure primary compute environment as a create-only resource
+  - target: $.paths["/compute-envs/{computeEnvId}/primary"].post
+    update:
+      x-speakeasy-entity-operation: PrimaryComputeEnv#create
+
+  # Make workspace_id required for primary compute environment endpoint
+  - target: $.paths["/compute-envs/{computeEnvId}/primary"].post.parameters[?(@.name == "workspaceId")]
+    update:
+      name: workspaceId
+      in: query
+      description: Workspace numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+
+  - target: $.components.schemas.EmptyBodyRequest
+    update:
+      x-speakeasy-terraform-ignore: true

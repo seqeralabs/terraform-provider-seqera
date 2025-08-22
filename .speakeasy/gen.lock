@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 72e07674b9b40c1df62032ed814b9211
+  docChecksum: 8498c8dc7c6891b873660e547364bad9
   docVersion: 1.56.0
   speakeasyVersion: 1.606.2
   generationVersion: 2.687.1
@@ -67,6 +67,7 @@ generatedFiles:
   - examples/resources/seqera_pipeline_secret/import-by-string-id.tf
   - examples/resources/seqera_pipeline_secret/import.sh
   - examples/resources/seqera_pipeline_secret/resource.tf
+  - examples/resources/seqera_primary_compute_env/resource.tf
   - examples/resources/seqera_studios/import-by-string-id.tf
   - examples/resources/seqera_studios/import.sh
   - examples/resources/seqera_studios/resource.tf
@@ -130,6 +131,8 @@ generatedFiles:
   - internal/provider/pipelinesecret_data_source_sdk.go
   - internal/provider/pipelinesecret_resource.go
   - internal/provider/pipelinesecret_resource_sdk.go
+  - internal/provider/primarycomputeenv_resource.go
+  - internal/provider/primarycomputeenv_resource_sdk.go
   - internal/provider/provider.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go
@@ -1002,6 +1005,8 @@ examples:
       parameters:
         path:
           computeEnvId: "<id>"
+        query:
+          workspaceId: 687324
       responses:
         "400":
           application/json: {"message": "<value>"}

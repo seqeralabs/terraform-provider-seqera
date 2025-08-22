@@ -106,6 +106,11 @@ resource "seqera_compute_env" "aws_batch_compute_env" {
   }
 }
 
+resource "seqera_primary_compute_env" "my_primarycomputeenv" {
+  compute_env_id = resource.seqera_compute_env.aws_batch_compute_env.compute_env_id
+  workspace_id   = var.workspace_id
+}
+
 ## Data Link
 resource "seqera_data_link" "my_datalink" {
   credentials_id    = resource.seqera_credential.aws_credential.credentials_id
