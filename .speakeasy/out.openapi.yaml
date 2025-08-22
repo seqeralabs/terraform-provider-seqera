@@ -8995,8 +8995,6 @@ components:
       required:
         - name
         - provider
-        - name
-        - provider
         - keys
       type: object
       properties:
