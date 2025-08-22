@@ -67,6 +67,7 @@ provider "seqera" {
 * [seqera_orgs](docs/resources/orgs.md)
 * [seqera_pipeline](docs/resources/pipeline.md)
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
+* [seqera_primary_compute_env](docs/resources/primary_compute_env.md)
 * [seqera_studios](docs/resources/studios.md)
 * [seqera_teams](docs/resources/teams.md)
 * [seqera_tokens](docs/resources/tokens.md)

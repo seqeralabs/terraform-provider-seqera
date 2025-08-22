@@ -111,6 +111,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewOrgsResource,
 		NewPipelineResource,
 		NewPipelineSecretResource,
+		NewPrimaryComputeEnvResource,
 		NewStudiosResource,
 		NewTeamsResource,
 		NewTokensResource,
