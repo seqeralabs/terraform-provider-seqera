@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: f0fa33d74152381a86b8bbb0bf8aa165
+  docChecksum: 2a536ff8167b62036e637b27aea9ee6d
   docVersion: 1.56.0
-  speakeasyVersion: 1.606.3
+  speakeasyVersion: 1.606.5
   generationVersion: 2.687.1
   releaseVersion: 0.25.3
   configChecksum: 142ac7791bde47d0e562a6a1a28da2ac
@@ -27,6 +27,7 @@ generatedFiles:
   - USAGE.md
   - examples/README.md
   - examples/data-sources/seqera_action/data-source.tf
+  - examples/data-sources/seqera_aws_credential/data-source.tf
   - examples/data-sources/seqera_compute_env/data-source.tf
   - examples/data-sources/seqera_credential/data-source.tf
   - examples/data-sources/seqera_data_link/data-source.tf
@@ -47,6 +48,9 @@ generatedFiles:
   - examples/resources/seqera_action/import-by-string-id.tf
   - examples/resources/seqera_action/import.sh
   - examples/resources/seqera_action/resource.tf
+  - examples/resources/seqera_aws_credential/import-by-string-id.tf
+  - examples/resources/seqera_aws_credential/import.sh
+  - examples/resources/seqera_aws_credential/resource.tf
   - examples/resources/seqera_compute_env/import-by-string-id.tf
   - examples/resources/seqera_compute_env/import.sh
   - examples/resources/seqera_compute_env/resource.tf
@@ -99,6 +103,10 @@ generatedFiles:
   - internal/provider/action_data_source_sdk.go
   - internal/provider/action_resource.go
   - internal/provider/action_resource_sdk.go
+  - internal/provider/awscredential_data_source.go
+  - internal/provider/awscredential_data_source_sdk.go
+  - internal/provider/awscredential_resource.go
+  - internal/provider/awscredential_resource_sdk.go
   - internal/provider/computeenv_data_source.go
   - internal/provider/computeenv_data_source_sdk.go
   - internal/provider/computeenv_resource.go
@@ -174,6 +182,7 @@ generatedFiles:
   - internal/provider/types/amazon_eks_cluster_configuration.go
   - internal/provider/types/aws_batch_configuration.go
   - internal/provider/types/aws_cloud_configuration.go
+  - internal/provider/types/aws_credential_input.go
   - internal/provider/types/aws_security_keys.go
   - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
@@ -232,6 +241,8 @@ generatedFiles:
   - internal/provider/types/process_load.go
   - internal/provider/types/progress_data.go
   - internal/provider/types/security_keys.go
+  - internal/provider/types/security_keys_aws_security_keys.go
+  - internal/provider/types/security_keys_aws_security_keys1.go
   - internal/provider/types/security_keys_output.go
   - internal/provider/types/seqera_compute_configuration.go
   - internal/provider/types/seqera_compute_security_keys.go
@@ -297,6 +308,7 @@ generatedFiles:
   - internal/sdk/models/operations/applylabelstoworkflows.go
   - internal/sdk/models/operations/cancelworkflow.go
   - internal/sdk/models/operations/createaction.go
+  - internal/sdk/models/operations/createawscredentials.go
   - internal/sdk/models/operations/createcomputeenv.go
   - internal/sdk/models/operations/createcredentials.go
   - internal/sdk/models/operations/createcustomdatalink.go
@@ -318,6 +330,7 @@ generatedFiles:
   - internal/sdk/models/operations/createworkspaceparticipant.go
   - internal/sdk/models/operations/deleteaction.go
   - internal/sdk/models/operations/deletealltokens.go
+  - internal/sdk/models/operations/deleteawscredentials.go
   - internal/sdk/models/operations/deletecomputeenv.go
   - internal/sdk/models/operations/deletecredentials.go
   - internal/sdk/models/operations/deletecustomdatalink.go
@@ -340,6 +353,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteworkspace.go
   - internal/sdk/models/operations/deleteworkspaceparticipant.go
   - internal/sdk/models/operations/describeaction.go
+  - internal/sdk/models/operations/describeawscredentials.go
   - internal/sdk/models/operations/describecomputeenv.go
   - internal/sdk/models/operations/describecredentials.go
   - internal/sdk/models/operations/describedatalink.go
@@ -437,6 +451,7 @@ generatedFiles:
   - internal/sdk/models/operations/stopdatastudio.go
   - internal/sdk/models/operations/tokenlist.go
   - internal/sdk/models/operations/updateaction.go
+  - internal/sdk/models/operations/updateawscredentials.go
   - internal/sdk/models/operations/updatecomputeenv.go
   - internal/sdk/models/operations/updatecomputeenvprimary.go
   - internal/sdk/models/operations/updatecredentials.go
@@ -492,6 +507,10 @@ generatedFiles:
   - internal/sdk/models/shared/associateworkflowlabelsrequest.go
   - internal/sdk/models/shared/awsbatchplatformmetainfo.go
   - internal/sdk/models/shared/awscloudplatformmetainfo.go
+  - internal/sdk/models/shared/awscredential.go
+  - internal/sdk/models/shared/awscredentialinput.go
+  - internal/sdk/models/shared/awssecuritykeys.go
+  - internal/sdk/models/shared/awssecuritykeysoutput.go
   - internal/sdk/models/shared/azbatchforgeconfig.go
   - internal/sdk/models/shared/azbatchplatformmetainfo.go
   - internal/sdk/models/shared/bucket.go
@@ -511,6 +530,8 @@ generatedFiles:
   - internal/sdk/models/shared/createaccesstokenresponse.go
   - internal/sdk/models/shared/createactionrequest.go
   - internal/sdk/models/shared/createactionresponse.go
+  - internal/sdk/models/shared/createawscredentialsrequest.go
+  - internal/sdk/models/shared/createawscredentialsresponse.go
   - internal/sdk/models/shared/createcomputeenvrequest.go
   - internal/sdk/models/shared/createcomputeenvresponse.go
   - internal/sdk/models/shared/createcredentialsrequest.go
@@ -582,6 +603,7 @@ generatedFiles:
   - internal/sdk/models/shared/deleteworkflowsrequest.go
   - internal/sdk/models/shared/deleteworkflowsresponse.go
   - internal/sdk/models/shared/describeactionresponse.go
+  - internal/sdk/models/shared/describeawscredentialsresponse.go
   - internal/sdk/models/shared/describecomputeenvresponse.go
   - internal/sdk/models/shared/describecredentialsresponse.go
   - internal/sdk/models/shared/describedatasetresponse.go
@@ -711,6 +733,7 @@ generatedFiles:
   - internal/sdk/models/shared/traceprogressrequest.go
   - internal/sdk/models/shared/traceprogressresponse.go
   - internal/sdk/models/shared/updateactionrequest.go
+  - internal/sdk/models/shared/updateawscredentialsrequest.go
   - internal/sdk/models/shared/updatecomputeenvrequest.go
   - internal/sdk/models/shared/updatecredentialsrequest.go
   - internal/sdk/models/shared/updatedatasetrequest.go
@@ -2474,5 +2497,44 @@ examples:
           application/json: {}
         "400":
           application/json: {"message": "<value>"}
+  CreateAWSCredentials:
+    speakeasy-default-create-AWS-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAWSCredentials:
+    speakeasy-default-describe-AWS-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAWSCredentials:
+    speakeasy-default-update-AWS-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAWSCredentials:
+    speakeasy-default-delete-AWS-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
 examplesVersion: 1.0.2
 generatedTests: {}

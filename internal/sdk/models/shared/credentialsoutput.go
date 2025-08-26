@@ -239,8 +239,8 @@ func (o *CredentialsOutput) GetKeysGitlab() *GitLabSecurityKeysOutput {
 	return o.GetKeys().GitLabSecurityKeysOutput
 }
 
-func (o *CredentialsOutput) GetKeysAws() *AwsSecurityKeysOutput {
-	return o.GetKeys().AwsSecurityKeysOutput
+func (o *CredentialsOutput) GetKeysAws() *SecurityKeysAwsSecurityKeysOutput {
+	return o.GetKeys().SecurityKeysAwsSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
@@ -365,8 +365,8 @@ func (o *CredentialsInput) GetKeysGitlab() *GitLabSecurityKeys {
 	return o.GetKeys().GitLabSecurityKeys
 }
 
-func (o *CredentialsInput) GetKeysAws() *AwsSecurityKeys {
-	return o.GetKeys().AwsSecurityKeys
+func (o *CredentialsInput) GetKeysAws() *SecurityKeysAwsSecurityKeys {
+	return o.GetKeys().SecurityKeysAwsSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysAzure() *AzureSecurityKeys {

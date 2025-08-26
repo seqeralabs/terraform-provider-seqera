@@ -28,10 +28,10 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.AgentSecurityKeys.Shared)
 			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.AgentSecurityKeys.WorkDir)
 		}
-		if resp.Keys.AwsSecurityKeysOutput != nil {
-			r.Keys.Aws = &tfTypes.AwsSecurityKeys1{}
-			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AccessKey)
-			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
+		if resp.Keys.SecurityKeysAwsSecurityKeysOutput != nil {
+			r.Keys.Aws = &tfTypes.SecurityKeysAwsSecurityKeys1{}
+			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AccessKey)
+			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AssumeRoleArn)
 		}
 		if resp.Keys.AzureEntraKeysOutput != nil {
 			r.Keys.AzureEntra = &tfTypes.AzureEntraKeys1{}

@@ -59,6 +59,7 @@ provider "seqera" {
 ### Resources
 
 * [seqera_action](docs/resources/action.md)
+* [seqera_aws_credential](docs/resources/aws_credential.md)
 * [seqera_compute_env](docs/resources/compute_env.md)
 * [seqera_credential](docs/resources/credential.md)
 * [seqera_data_link](docs/resources/data_link.md)
@@ -76,6 +77,7 @@ provider "seqera" {
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
+* [seqera_aws_credential](docs/data-sources/aws_credential.md)
 * [seqera_compute_env](docs/data-sources/compute_env.md)
 * [seqera_credential](docs/data-sources/credential.md)
 * [seqera_data_link](docs/data-sources/data_link.md)

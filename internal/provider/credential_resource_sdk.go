@@ -38,11 +38,11 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.AgentSecurityKeys.Shared)
 			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.AgentSecurityKeys.WorkDir)
 		}
-		if resp.Keys.AwsSecurityKeysOutput != nil {
-			r.Keys.Aws = &tfTypes.AwsSecurityKeys{}
+		if resp.Keys.SecurityKeysAwsSecurityKeysOutput != nil {
+			r.Keys.Aws = &tfTypes.SecurityKeysAwsSecurityKeys{}
 			awsPriorData := r.Keys.Aws
-			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AccessKey)
-			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
+			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AccessKey)
+			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AssumeRoleArn)
 			r.Keys.Aws.SecretKey = awsPriorData.SecretKey
 		}
 		if resp.Keys.AzureEntraKeysOutput != nil {
@@ -287,7 +287,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		category = nil
 	}
 	var keys shared.SecurityKeys
-	var awsSecurityKeys *shared.AwsSecurityKeys
+	var securityKeysAwsSecurityKeys *shared.SecurityKeysAwsSecurityKeys
 	if r.Keys.Aws != nil {
 		accessKey := new(string)
 		if !r.Keys.Aws.AccessKey.IsUnknown() && !r.Keys.Aws.AccessKey.IsNull() {
@@ -307,15 +307,15 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			assumeRoleArn = nil
 		}
-		awsSecurityKeys = &shared.AwsSecurityKeys{
+		securityKeysAwsSecurityKeys = &shared.SecurityKeysAwsSecurityKeys{
 			AccessKey:     accessKey,
 			SecretKey:     secretKey,
 			AssumeRoleArn: assumeRoleArn,
 		}
 	}
-	if awsSecurityKeys != nil {
+	if securityKeysAwsSecurityKeys != nil {
 		keys = shared.SecurityKeys{
-			AwsSecurityKeys: awsSecurityKeys,
+			SecurityKeysAwsSecurityKeys: securityKeysAwsSecurityKeys,
 		}
 	}
 	var googleSecurityKeys *shared.GoogleSecurityKeys
