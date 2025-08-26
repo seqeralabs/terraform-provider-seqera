@@ -215,8 +215,8 @@ func (o *CredentialsOutput) GetKeysSSH() *SSHSecurityKeysOutput {
 	return o.GetKeys().SSHSecurityKeysOutput
 }
 
-func (o *CredentialsOutput) GetKeysGoogle() *GoogleSecurityKeysOutput {
-	return o.GetKeys().GoogleSecurityKeysOutput
+func (o *CredentialsOutput) GetKeysGoogle() *SecurityKeysGoogleSecurityKeysOutput {
+	return o.GetKeys().SecurityKeysGoogleSecurityKeysOutput
 }
 
 func (o *CredentialsOutput) GetKeysBitbucket() *BitBucketSecurityKeysOutput {
@@ -243,8 +243,8 @@ func (o *CredentialsOutput) GetKeysAws() *SecurityKeysAwsSecurityKeysOutput {
 	return o.GetKeys().SecurityKeysAwsSecurityKeysOutput
 }
 
-func (o *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
-	return o.GetKeys().AzureSecurityKeysOutput
+func (o *CredentialsOutput) GetKeysAzure() *SecurityKeysAzureSecurityKeysOutput {
+	return o.GetKeys().SecurityKeysAzureSecurityKeysOutput
 }
 
 // CredentialsInput - Represents credentials used for authentication with various platforms and services.
@@ -341,8 +341,8 @@ func (o *CredentialsInput) GetKeysSSH() *SSHSecurityKeys {
 	return o.GetKeys().SSHSecurityKeys
 }
 
-func (o *CredentialsInput) GetKeysGoogle() *GoogleSecurityKeys {
-	return o.GetKeys().GoogleSecurityKeys
+func (o *CredentialsInput) GetKeysGoogle() *SecurityKeysGoogleSecurityKeys {
+	return o.GetKeys().SecurityKeysGoogleSecurityKeys
 }
 
 func (o *CredentialsInput) GetKeysBitbucket() *BitBucketSecurityKeys {
@@ -369,6 +369,6 @@ func (o *CredentialsInput) GetKeysAws() *SecurityKeysAwsSecurityKeys {
 	return o.GetKeys().SecurityKeysAwsSecurityKeys
 }
 
-func (o *CredentialsInput) GetKeysAzure() *AzureSecurityKeys {
-	return o.GetKeys().AzureSecurityKeys
+func (o *CredentialsInput) GetKeysAzure() *SecurityKeysAzureSecurityKeys {
+	return o.GetKeys().SecurityKeysAzureSecurityKeys
 }

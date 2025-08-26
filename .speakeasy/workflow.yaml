@@ -16,6 +16,8 @@ sources:
             - location: overlays/datalinks.yaml
             - location: overlays/actions.yaml
             - location: overlays/credentials.yaml
+            - location: overlays/azure-credentials.yaml
+            - location: overlays/gcp-credentials.yaml
             - location: overlays/compute-env.yaml
             - location: overlays/datasets.yaml
             - location: overlays/labels.yaml

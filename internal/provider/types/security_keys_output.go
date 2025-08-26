@@ -3,19 +3,19 @@
 package types
 
 type SecurityKeysOutput struct {
-	TwAgent       *AgentSecurityKeys            `queryParam:"inline" tfsdk:"tw_agent" tfPlanOnly:"true"`
-	Aws           *SecurityKeysAwsSecurityKeys1 `queryParam:"inline" tfsdk:"aws" tfPlanOnly:"true"`
-	AzureEntra    *AzureEntraKeys1              `queryParam:"inline" tfsdk:"azure_entra" tfPlanOnly:"true"`
-	Azurerepos    *AzureReposSecurityKeys1      `queryParam:"inline" tfsdk:"azurerepos" tfPlanOnly:"true"`
-	Azure         *AzureSecurityKeys1           `queryParam:"inline" tfsdk:"azure" tfPlanOnly:"true"`
-	Bitbucket     *BitBucketSecurityKeys1       `queryParam:"inline" tfsdk:"bitbucket" tfPlanOnly:"true"`
-	Codecommit    *CodeCommitSecurityKeys1      `queryParam:"inline" tfsdk:"codecommit" tfPlanOnly:"true"`
-	ContainerReg  *ContainerRegistryKeys1       `queryParam:"inline" tfsdk:"container_reg" tfPlanOnly:"true"`
-	Gitea         *GiteaSecurityKeys1           `queryParam:"inline" tfsdk:"gitea" tfPlanOnly:"true"`
-	Github        *GitHubSecurityKeys1          `queryParam:"inline" tfsdk:"github" tfPlanOnly:"true"`
-	Gitlab        *GitLabSecurityKeys1          `queryParam:"inline" tfsdk:"gitlab" tfPlanOnly:"true"`
-	Google        *GoogleSecurityKeys1          `queryParam:"inline" tfsdk:"google" tfPlanOnly:"true"`
-	K8s           *K8sSecurityKeys1             `queryParam:"inline" tfsdk:"k8s" tfPlanOnly:"true"`
-	Seqeracompute *SeqeraComputeSecurityKeys1   `queryParam:"inline" tfsdk:"seqeracompute" tfPlanOnly:"true"`
-	SSH           *SSHSecurityKeys1             `queryParam:"inline" tfsdk:"ssh" tfPlanOnly:"true"`
+	TwAgent       *AgentSecurityKeys               `queryParam:"inline" tfsdk:"tw_agent" tfPlanOnly:"true"`
+	Aws           *SecurityKeysAwsSecurityKeys1    `queryParam:"inline" tfsdk:"aws" tfPlanOnly:"true"`
+	AzureEntra    *AzureEntraKeys1                 `queryParam:"inline" tfsdk:"azure_entra" tfPlanOnly:"true"`
+	Azurerepos    *AzureReposSecurityKeys1         `queryParam:"inline" tfsdk:"azurerepos" tfPlanOnly:"true"`
+	Azure         *SecurityKeysAzureSecurityKeys1  `queryParam:"inline" tfsdk:"azure" tfPlanOnly:"true"`
+	Bitbucket     *BitBucketSecurityKeys1          `queryParam:"inline" tfsdk:"bitbucket" tfPlanOnly:"true"`
+	Codecommit    *CodeCommitSecurityKeys1         `queryParam:"inline" tfsdk:"codecommit" tfPlanOnly:"true"`
+	ContainerReg  *ContainerRegistryKeys1          `queryParam:"inline" tfsdk:"container_reg" tfPlanOnly:"true"`
+	Gitea         *GiteaSecurityKeys1              `queryParam:"inline" tfsdk:"gitea" tfPlanOnly:"true"`
+	Github        *GitHubSecurityKeys1             `queryParam:"inline" tfsdk:"github" tfPlanOnly:"true"`
+	Gitlab        *GitLabSecurityKeys1             `queryParam:"inline" tfsdk:"gitlab" tfPlanOnly:"true"`
+	Google        *SecurityKeysGoogleSecurityKeys1 `queryParam:"inline" tfsdk:"google" tfPlanOnly:"true"`
+	K8s           *K8sSecurityKeys1                `queryParam:"inline" tfsdk:"k8s" tfPlanOnly:"true"`
+	Seqeracompute *SeqeraComputeSecurityKeys1      `queryParam:"inline" tfsdk:"seqeracompute" tfPlanOnly:"true"`
+	SSH           *SSHSecurityKeys1                `queryParam:"inline" tfsdk:"ssh" tfPlanOnly:"true"`
 }

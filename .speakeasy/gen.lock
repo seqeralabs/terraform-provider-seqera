@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 2a536ff8167b62036e637b27aea9ee6d
+  docChecksum: ca4cf0f036ebe4ea22a12569d0e8fe99
   docVersion: 1.56.0
   speakeasyVersion: 1.606.5
   generationVersion: 2.687.1
@@ -28,10 +28,12 @@ generatedFiles:
   - examples/README.md
   - examples/data-sources/seqera_action/data-source.tf
   - examples/data-sources/seqera_aws_credential/data-source.tf
+  - examples/data-sources/seqera_azure_credential/data-source.tf
   - examples/data-sources/seqera_compute_env/data-source.tf
   - examples/data-sources/seqera_credential/data-source.tf
   - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
+  - examples/data-sources/seqera_google_credential/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
   - examples/data-sources/seqera_orgs/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
@@ -51,6 +53,9 @@ generatedFiles:
   - examples/resources/seqera_aws_credential/import-by-string-id.tf
   - examples/resources/seqera_aws_credential/import.sh
   - examples/resources/seqera_aws_credential/resource.tf
+  - examples/resources/seqera_azure_credential/import-by-string-id.tf
+  - examples/resources/seqera_azure_credential/import.sh
+  - examples/resources/seqera_azure_credential/resource.tf
   - examples/resources/seqera_compute_env/import-by-string-id.tf
   - examples/resources/seqera_compute_env/import.sh
   - examples/resources/seqera_compute_env/resource.tf
@@ -61,6 +66,9 @@ generatedFiles:
   - examples/resources/seqera_data_link/import.sh
   - examples/resources/seqera_data_link/resource.tf
   - examples/resources/seqera_datasets/resource.tf
+  - examples/resources/seqera_google_credential/import-by-string-id.tf
+  - examples/resources/seqera_google_credential/import.sh
+  - examples/resources/seqera_google_credential/resource.tf
   - examples/resources/seqera_labels/resource.tf
   - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
@@ -107,6 +115,10 @@ generatedFiles:
   - internal/provider/awscredential_data_source_sdk.go
   - internal/provider/awscredential_resource.go
   - internal/provider/awscredential_resource_sdk.go
+  - internal/provider/azurecredential_data_source.go
+  - internal/provider/azurecredential_data_source_sdk.go
+  - internal/provider/azurecredential_resource.go
+  - internal/provider/azurecredential_resource_sdk.go
   - internal/provider/computeenv_data_source.go
   - internal/provider/computeenv_data_source_sdk.go
   - internal/provider/computeenv_resource.go
@@ -123,6 +135,10 @@ generatedFiles:
   - internal/provider/dataset_data_source_sdk.go
   - internal/provider/datasets_resource.go
   - internal/provider/datasets_resource_sdk.go
+  - internal/provider/googlecredential_data_source.go
+  - internal/provider/googlecredential_data_source_sdk.go
+  - internal/provider/googlecredential_resource.go
+  - internal/provider/googlecredential_resource_sdk.go
   - internal/provider/labels_data_source.go
   - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
@@ -187,6 +203,7 @@ generatedFiles:
   - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
   - internal/provider/types/azure_batch_configuration.go
+  - internal/provider/types/azure_credential_input.go
   - internal/provider/types/azure_entra_keys.go
   - internal/provider/types/azure_entra_keys1.go
   - internal/provider/types/azure_repos_security_keys.go
@@ -225,6 +242,7 @@ generatedFiles:
   - internal/provider/types/github_action_config.go
   - internal/provider/types/github_action_event.go
   - internal/provider/types/google_batch_service_configuration.go
+  - internal/provider/types/google_credential_input.go
   - internal/provider/types/google_gke_cluster_configuration.go
   - internal/provider/types/google_life_sciences_configuration.go
   - internal/provider/types/google_security_keys.go
@@ -243,6 +261,10 @@ generatedFiles:
   - internal/provider/types/security_keys.go
   - internal/provider/types/security_keys_aws_security_keys.go
   - internal/provider/types/security_keys_aws_security_keys1.go
+  - internal/provider/types/security_keys_azure_security_keys.go
+  - internal/provider/types/security_keys_azure_security_keys1.go
+  - internal/provider/types/security_keys_google_security_keys.go
+  - internal/provider/types/security_keys_google_security_keys1.go
   - internal/provider/types/security_keys_output.go
   - internal/provider/types/seqera_compute_configuration.go
   - internal/provider/types/seqera_compute_security_keys.go
@@ -309,12 +331,14 @@ generatedFiles:
   - internal/sdk/models/operations/cancelworkflow.go
   - internal/sdk/models/operations/createaction.go
   - internal/sdk/models/operations/createawscredentials.go
+  - internal/sdk/models/operations/createazurecredentials.go
   - internal/sdk/models/operations/createcomputeenv.go
   - internal/sdk/models/operations/createcredentials.go
   - internal/sdk/models/operations/createcustomdatalink.go
   - internal/sdk/models/operations/createdataset.go
   - internal/sdk/models/operations/createdatasetv2.go
   - internal/sdk/models/operations/createdatastudio.go
+  - internal/sdk/models/operations/creategooglecredentials.go
   - internal/sdk/models/operations/createlabel.go
   - internal/sdk/models/operations/createorganization.go
   - internal/sdk/models/operations/createorganizationmember.go
@@ -331,6 +355,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteaction.go
   - internal/sdk/models/operations/deletealltokens.go
   - internal/sdk/models/operations/deleteawscredentials.go
+  - internal/sdk/models/operations/deleteazurecredentials.go
   - internal/sdk/models/operations/deletecomputeenv.go
   - internal/sdk/models/operations/deletecredentials.go
   - internal/sdk/models/operations/deletecustomdatalink.go
@@ -338,6 +363,7 @@ generatedFiles:
   - internal/sdk/models/operations/deletedataset.go
   - internal/sdk/models/operations/deletedatasetv2.go
   - internal/sdk/models/operations/deletedatastudio.go
+  - internal/sdk/models/operations/deletegooglecredentials.go
   - internal/sdk/models/operations/deletelabel.go
   - internal/sdk/models/operations/deleteorganization.go
   - internal/sdk/models/operations/deleteorganizationmember.go
@@ -354,12 +380,14 @@ generatedFiles:
   - internal/sdk/models/operations/deleteworkspaceparticipant.go
   - internal/sdk/models/operations/describeaction.go
   - internal/sdk/models/operations/describeawscredentials.go
+  - internal/sdk/models/operations/describeazurecredentials.go
   - internal/sdk/models/operations/describecomputeenv.go
   - internal/sdk/models/operations/describecredentials.go
   - internal/sdk/models/operations/describedatalink.go
   - internal/sdk/models/operations/describedataset.go
   - internal/sdk/models/operations/describedatasetv2.go
   - internal/sdk/models/operations/describedatastudio.go
+  - internal/sdk/models/operations/describegooglecredentials.go
   - internal/sdk/models/operations/describelaunch.go
   - internal/sdk/models/operations/describeorganization.go
   - internal/sdk/models/operations/describeorganizationquotas.go
@@ -452,6 +480,7 @@ generatedFiles:
   - internal/sdk/models/operations/tokenlist.go
   - internal/sdk/models/operations/updateaction.go
   - internal/sdk/models/operations/updateawscredentials.go
+  - internal/sdk/models/operations/updateazurecredentials.go
   - internal/sdk/models/operations/updatecomputeenv.go
   - internal/sdk/models/operations/updatecomputeenvprimary.go
   - internal/sdk/models/operations/updatecredentials.go
@@ -460,6 +489,7 @@ generatedFiles:
   - internal/sdk/models/operations/updatedatasetv2.go
   - internal/sdk/models/operations/updatedatastudiocheckpoint.go
   - internal/sdk/models/operations/updatedatastudiosworkspacesettings.go
+  - internal/sdk/models/operations/updategooglecredentials.go
   - internal/sdk/models/operations/updatelabel.go
   - internal/sdk/models/operations/updateorganization.go
   - internal/sdk/models/operations/updateorganizationmemberrole.go
@@ -513,6 +543,10 @@ generatedFiles:
   - internal/sdk/models/shared/awssecuritykeysoutput.go
   - internal/sdk/models/shared/azbatchforgeconfig.go
   - internal/sdk/models/shared/azbatchplatformmetainfo.go
+  - internal/sdk/models/shared/azurecredential.go
+  - internal/sdk/models/shared/azurecredentialinput.go
+  - internal/sdk/models/shared/azuresecuritykeys.go
+  - internal/sdk/models/shared/azuresecuritykeysoutput.go
   - internal/sdk/models/shared/bucket.go
   - internal/sdk/models/shared/cloudpricemodel.go
   - internal/sdk/models/shared/computeconfig.go
@@ -532,12 +566,16 @@ generatedFiles:
   - internal/sdk/models/shared/createactionresponse.go
   - internal/sdk/models/shared/createawscredentialsrequest.go
   - internal/sdk/models/shared/createawscredentialsresponse.go
+  - internal/sdk/models/shared/createazurecredentialsrequest.go
+  - internal/sdk/models/shared/createazurecredentialsresponse.go
   - internal/sdk/models/shared/createcomputeenvrequest.go
   - internal/sdk/models/shared/createcomputeenvresponse.go
   - internal/sdk/models/shared/createcredentialsrequest.go
   - internal/sdk/models/shared/createcredentialsresponse.go
   - internal/sdk/models/shared/createdatasetrequest.go
   - internal/sdk/models/shared/createdatasetresponse.go
+  - internal/sdk/models/shared/creategooglecredentialsrequest.go
+  - internal/sdk/models/shared/creategooglecredentialsresponse.go
   - internal/sdk/models/shared/createlabelrequest.go
   - internal/sdk/models/shared/createlabelresponse.go
   - internal/sdk/models/shared/createorganizationrequest.go
@@ -604,9 +642,11 @@ generatedFiles:
   - internal/sdk/models/shared/deleteworkflowsresponse.go
   - internal/sdk/models/shared/describeactionresponse.go
   - internal/sdk/models/shared/describeawscredentialsresponse.go
+  - internal/sdk/models/shared/describeazurecredentialsresponse.go
   - internal/sdk/models/shared/describecomputeenvresponse.go
   - internal/sdk/models/shared/describecredentialsresponse.go
   - internal/sdk/models/shared/describedatasetresponse.go
+  - internal/sdk/models/shared/describegooglecredentialsresponse.go
   - internal/sdk/models/shared/describelaunchresponse.go
   - internal/sdk/models/shared/describeorganizationquotasresponse.go
   - internal/sdk/models/shared/describeorganizationresponse.go
@@ -630,9 +670,13 @@ generatedFiles:
   - internal/sdk/models/shared/getprogressresponse.go
   - internal/sdk/models/shared/getworkflowmetricsresponse.go
   - internal/sdk/models/shared/gkeplatformmetainfo.go
+  - internal/sdk/models/shared/googlecredential.go
+  - internal/sdk/models/shared/googlecredentialinput.go
   - internal/sdk/models/shared/googleplatformmetainfo.go
   - internal/sdk/models/shared/googleplatformmetainfobucket.go
   - internal/sdk/models/shared/googleplatformmetainfofilestore.go
+  - internal/sdk/models/shared/googlesecuritykeys.go
+  - internal/sdk/models/shared/googlesecuritykeysoutput.go
   - internal/sdk/models/shared/gridplatformmetainfo.go
   - internal/sdk/models/shared/image.go
   - internal/sdk/models/shared/instancetype.go
@@ -734,9 +778,11 @@ generatedFiles:
   - internal/sdk/models/shared/traceprogressresponse.go
   - internal/sdk/models/shared/updateactionrequest.go
   - internal/sdk/models/shared/updateawscredentialsrequest.go
+  - internal/sdk/models/shared/updateazurecredentialsrequest.go
   - internal/sdk/models/shared/updatecomputeenvrequest.go
   - internal/sdk/models/shared/updatecredentialsrequest.go
   - internal/sdk/models/shared/updatedatasetrequest.go
+  - internal/sdk/models/shared/updategooglecredentialsrequest.go
   - internal/sdk/models/shared/updatelabelrequest.go
   - internal/sdk/models/shared/updatelabelresponse.go
   - internal/sdk/models/shared/updatememberrolerequest.go
@@ -2528,6 +2574,84 @@ examples:
           application/json: {"message": "<value>"}
   DeleteAWSCredentials:
     speakeasy-default-delete-AWS-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  CreateAzureCredentials:
+    speakeasy-default-create-azure-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere=="}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAzureCredentials:
+    speakeasy-default-describe-azure-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAzureCredentials:
+    speakeasy-default-update-azure-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere=="}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAzureCredentials:
+    speakeasy-default-delete-azure-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  CreateGoogleCredentials:
+    speakeasy-default-create-google-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGoogleCredentials:
+    speakeasy-default-describe-google-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGoogleCredentials:
+    speakeasy-default-update-google-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGoogleCredentials:
+    speakeasy-default-delete-google-credentials:
       parameters:
         path:
           credentialsId: "<id>"
