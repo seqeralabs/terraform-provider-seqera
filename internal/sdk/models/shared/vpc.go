@@ -2,9 +2,24 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type Vpc struct {
 	ID        *string `json:"id,omitempty"`
 	IsDefault *bool   `json:"isDefault,omitempty"`
+}
+
+func (v Vpc) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(v, "", false)
+}
+
+func (v *Vpc) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &v, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Vpc) GetID() *string {

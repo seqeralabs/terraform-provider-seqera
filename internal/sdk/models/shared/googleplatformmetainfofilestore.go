@@ -2,10 +2,25 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type GooglePlatformMetainfoFilestore struct {
 	Target   *string `json:"target,omitempty"`
 	Name     *string `json:"name,omitempty"`
 	Location *string `json:"location,omitempty"`
+}
+
+func (g GooglePlatformMetainfoFilestore) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GooglePlatformMetainfoFilestore) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GooglePlatformMetainfoFilestore) GetTarget() *string {

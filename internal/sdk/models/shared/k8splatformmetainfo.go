@@ -2,8 +2,23 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type K8sPlatformMetaInfo struct {
 	Discriminator *string `json:"discriminator,omitempty"`
+}
+
+func (k K8sPlatformMetaInfo) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *K8sPlatformMetaInfo) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *K8sPlatformMetaInfo) GetDiscriminator() *string {

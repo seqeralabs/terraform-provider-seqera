@@ -2,12 +2,27 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type AzBatchPlatformMetainfo struct {
 	Discriminator *string  `json:"discriminator,omitempty"`
 	Warnings      []string `json:"warnings,omitempty"`
 	Pools         []string `json:"pools,omitempty"`
 	Containers    []string `json:"containers,omitempty"`
 	VMTypes       []string `json:"vmTypes,omitempty"`
+}
+
+func (a AzBatchPlatformMetainfo) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AzBatchPlatformMetainfo) GetDiscriminator() *string {

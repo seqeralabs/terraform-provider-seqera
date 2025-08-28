@@ -2,9 +2,24 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type InstanceType struct {
 	ID   *string `json:"id,omitempty"`
 	Arch string  `json:"arch"`
+}
+
+func (i InstanceType) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *InstanceType) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"arch"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *InstanceType) GetID() *string {

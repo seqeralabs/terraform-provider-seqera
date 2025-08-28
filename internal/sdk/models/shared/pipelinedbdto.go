@@ -47,7 +47,7 @@ func (p PipelineDbDto) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PipelineDbDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

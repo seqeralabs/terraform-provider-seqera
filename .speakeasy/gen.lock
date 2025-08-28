@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: ca4cf0f036ebe4ea22a12569d0e8fe99
+  docChecksum: 2f3091b36d720bf2c7d8b47ed4d38ba7
   docVersion: 1.56.0
-  speakeasyVersion: 1.606.5
-  generationVersion: 2.687.1
+  speakeasyVersion: 1.606.8
+  generationVersion: 2.687.13
   releaseVersion: 0.25.3
   configChecksum: 142ac7791bde47d0e562a6a1a28da2ac
 features:
@@ -199,6 +199,7 @@ generatedFiles:
   - internal/provider/types/aws_batch_configuration.go
   - internal/provider/types/aws_cloud_configuration.go
   - internal/provider/types/aws_credential_input.go
+  - internal/provider/types/aws_credential_input1.go
   - internal/provider/types/aws_security_keys.go
   - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
@@ -537,7 +538,6 @@ generatedFiles:
   - internal/sdk/models/shared/associateworkflowlabelsrequest.go
   - internal/sdk/models/shared/awsbatchplatformmetainfo.go
   - internal/sdk/models/shared/awscloudplatformmetainfo.go
-  - internal/sdk/models/shared/awscredential.go
   - internal/sdk/models/shared/awscredentialinput.go
   - internal/sdk/models/shared/awssecuritykeys.go
   - internal/sdk/models/shared/awssecuritykeysoutput.go

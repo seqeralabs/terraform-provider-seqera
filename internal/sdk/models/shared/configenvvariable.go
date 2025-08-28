@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type ConfigEnvVariable struct {
 	Name    *string `json:"name,omitempty"`
 	Value   *string `json:"value,omitempty"`
 	Head    *bool   `json:"head,omitempty"`
 	Compute *bool   `json:"compute,omitempty"`
+}
+
+func (c ConfigEnvVariable) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ConfigEnvVariable) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ConfigEnvVariable) GetName() *string {

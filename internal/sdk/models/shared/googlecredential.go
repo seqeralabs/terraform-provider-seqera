@@ -62,7 +62,7 @@ func (g GoogleCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GoogleCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "provider", "keys"}); err != nil {
 		return err
 	}
 	return nil

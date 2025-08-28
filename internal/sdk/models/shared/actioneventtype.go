@@ -21,7 +21,7 @@ func (a ActionTowerActionEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (a *ActionTowerActionEvent) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -63,7 +63,7 @@ func (g GithubActionEvent) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GithubActionEvent) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -170,7 +170,7 @@ func (u *ActionEventType) UnmarshalJSON(data []byte) error {
 	switch dis.Discriminator {
 	case "github":
 		githubActionEvent := new(GithubActionEvent)
-		if err := utils.UnmarshalJSON(data, &githubActionEvent, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &githubActionEvent, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GithubActionEvent within ActionEventType: %w", string(data), err)
 		}
 
@@ -179,7 +179,7 @@ func (u *ActionEventType) UnmarshalJSON(data []byte) error {
 		return nil
 	case "tower":
 		actionTowerActionEvent := new(ActionTowerActionEvent)
-		if err := utils.UnmarshalJSON(data, &actionTowerActionEvent, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &actionTowerActionEvent, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tower) type ActionTowerActionEvent within ActionEventType: %w", string(data), err)
 		}
 

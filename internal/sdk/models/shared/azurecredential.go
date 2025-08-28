@@ -62,7 +62,7 @@ func (a AzureCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "provider", "keys"}); err != nil {
 		return err
 	}
 	return nil

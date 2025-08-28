@@ -45,7 +45,7 @@ func (w WorkflowLaunchResponse) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowLaunchResponse) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -2,8 +2,23 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type GooglePlatformMetainfoBucket struct {
 	Path *string `json:"path,omitempty"`
+}
+
+func (g GooglePlatformMetainfoBucket) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GooglePlatformMetainfoBucket) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GooglePlatformMetainfoBucket) GetPath() *string {

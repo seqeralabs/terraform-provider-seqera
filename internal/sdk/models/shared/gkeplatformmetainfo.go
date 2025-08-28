@@ -2,10 +2,25 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type GkePlatformMetaInfo struct {
 	Discriminator *string  `json:"discriminator,omitempty"`
 	Warnings      []string `json:"warnings,omitempty"`
 	Clusters      []string `json:"clusters,omitempty"`
+}
+
+func (g GkePlatformMetaInfo) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GkePlatformMetaInfo) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GkePlatformMetaInfo) GetDiscriminator() *string {

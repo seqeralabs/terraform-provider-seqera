@@ -3,17 +3,12 @@
 page_title: "seqera_aws_credential Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage AWS credentials in Seqera platform using this resource.
-  AWS credentials store authentication information for accessing AWS services
-  within the Seqera Platform workflows.
+  AWSCredential DataSource
 ---
 
 # seqera_aws_credential (Data Source)
 
-Manage AWS credentials in Seqera platform using this resource.
-
-AWS credentials store authentication information for accessing AWS services
-within the Seqera Platform workflows.
+AWSCredential DataSource
 
 ## Example Usage
 
@@ -37,19 +32,23 @@ data "seqera_aws_credential" "my_awscredential" {
 
 ### Read-Only
 
+- `credentials` (Attributes) (see [below for nested schema](#nestedatt--credentials))
+
+<a id="nestedatt--credentials"></a>
+### Nested Schema for `credentials`
+
+Read-Only:
+
 - `base_url` (String) Base URL for the service
 - `category` (String) Category of the credential
-- `date_created` (String) Timestamp when the credential was created
-- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `description` (String) Optional description explaining the purpose of the credential
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `last_updated` (String) Timestamp when the credential was last updated
-- `last_used` (String) Timestamp when the credential was last used
+- `keys` (Attributes) (see [below for nested schema](#nestedatt--credentials--keys))
 - `name` (String) Display name for the credential (max 100 characters)
 - `provider_type` (String) Cloud provider type (aws)
 
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
+<a id="nestedatt--credentials--keys"></a>
+### Nested Schema for `credentials.keys`
 
 Read-Only:
 

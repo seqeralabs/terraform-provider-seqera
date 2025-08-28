@@ -32,6 +32,7 @@ sources:
             - location: overlays/users.yaml
             - location: overlays/schema-fixes.yaml
             - location: overlays/primary-compute-env.yaml
+            - location: overlays/aws-credentials.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

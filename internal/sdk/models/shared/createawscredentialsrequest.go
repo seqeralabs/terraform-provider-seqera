@@ -3,12 +3,12 @@
 package shared
 
 type CreateAWSCredentialsRequest struct {
-	Credentials AWSCredentialInput `json:"credentials"`
+	Credentials *AWSCredentialInput `json:"credentials,omitempty"`
 }
 
-func (o *CreateAWSCredentialsRequest) GetCredentials() AWSCredentialInput {
+func (o *CreateAWSCredentialsRequest) GetCredentials() *AWSCredentialInput {
 	if o == nil {
-		return AWSCredentialInput{}
+		return nil
 	}
 	return o.Credentials
 }

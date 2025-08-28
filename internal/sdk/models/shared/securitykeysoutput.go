@@ -15,6 +15,17 @@ type SeqeraComputeSecurityKeysOutput struct {
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 }
 
+func (s SeqeraComputeSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SeqeraComputeSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SeqeraComputeSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -42,6 +53,17 @@ type AzureEntraKeysOutput struct {
 	StorageName   *string `json:"storageName,omitempty"`
 	TenantID      *string `json:"tenantId,omitempty"`
 	ClientID      *string `json:"clientId,omitempty"`
+}
+
+func (a AzureEntraKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureEntraKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AzureEntraKeysOutput) GetDiscriminator() *string {
@@ -84,6 +106,17 @@ type CodeCommitSecurityKeysOutput struct {
 	Username      *string `json:"username,omitempty"`
 }
 
+func (c CodeCommitSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CodeCommitSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *CodeCommitSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -103,6 +136,17 @@ type AgentSecurityKeys struct {
 	ConnectionID  *string `json:"connectionId,omitempty"`
 	WorkDir       *string `json:"workDir,omitempty"`
 	Shared        *bool   `json:"shared,omitempty"`
+}
+
+func (a AgentSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AgentSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AgentSecurityKeys) GetDiscriminator() *string {
@@ -139,6 +183,17 @@ type ContainerRegistryKeysOutput struct {
 	Registry      *string `json:"registry,omitempty"`
 }
 
+func (c ContainerRegistryKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ContainerRegistryKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *ContainerRegistryKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -165,6 +220,17 @@ type AzureReposSecurityKeysOutput struct {
 	Username      *string `json:"username,omitempty"`
 }
 
+func (a AzureReposSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureReposSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *AzureReposSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -183,6 +249,17 @@ type SecurityKeysAzureSecurityKeysOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	BatchName     *string `json:"batchName,omitempty"`
 	StorageName   *string `json:"storageName,omitempty"`
+}
+
+func (s SecurityKeysAzureSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SecurityKeysAzureSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SecurityKeysAzureSecurityKeysOutput) GetDiscriminator() *string {
@@ -211,6 +288,17 @@ type K8sSecurityKeysOutput struct {
 	Certificate   *string `json:"certificate,omitempty"`
 }
 
+func (k K8sSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *K8sSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *K8sSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -229,6 +317,17 @@ type SSHSecurityKeysOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
+func (s SSHSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SSHSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SSHSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -239,6 +338,17 @@ func (o *SSHSecurityKeysOutput) GetDiscriminator() *string {
 type GiteaSecurityKeysOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	Username      *string `json:"username,omitempty"`
+}
+
+func (g GiteaSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GiteaSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GiteaSecurityKeysOutput) GetDiscriminator() *string {
@@ -260,6 +370,17 @@ type BitBucketSecurityKeysOutput struct {
 	Username      *string `json:"username,omitempty"`
 }
 
+func (b BitBucketSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
+}
+
+func (b *BitBucketSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *BitBucketSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -277,6 +398,17 @@ func (o *BitBucketSecurityKeysOutput) GetUsername() *string {
 type GitLabSecurityKeysOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	Username      *string `json:"username,omitempty"`
+}
+
+func (g GitLabSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GitLabSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GitLabSecurityKeysOutput) GetDiscriminator() *string {
@@ -298,6 +430,17 @@ type GitHubSecurityKeysOutput struct {
 	Username      *string `json:"username,omitempty"`
 }
 
+func (g GitHubSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GitHubSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *GitHubSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -316,6 +459,17 @@ type SecurityKeysGoogleSecurityKeysOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
+func (s SecurityKeysGoogleSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SecurityKeysGoogleSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SecurityKeysGoogleSecurityKeysOutput) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -327,6 +481,17 @@ type SecurityKeysAwsSecurityKeysOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	AccessKey     *string `json:"accessKey,omitempty"`
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+}
+
+func (s SecurityKeysAwsSecurityKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SecurityKeysAwsSecurityKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SecurityKeysAwsSecurityKeysOutput) GetDiscriminator() *string {
@@ -584,7 +749,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	switch dis.Discriminator {
 	case "github":
 		gitHubSecurityKeysOutput := new(GitHubSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &gitHubSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &gitHubSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GitHubSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -593,7 +758,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azurerepos":
 		azureReposSecurityKeysOutput := new(AzureReposSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &azureReposSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &azureReposSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azurerepos) type AzureReposSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -602,7 +767,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azure_entra":
 		azureEntraKeysOutput := new(AzureEntraKeysOutput)
-		if err := utils.UnmarshalJSON(data, &azureEntraKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &azureEntraKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure_entra) type AzureEntraKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -611,7 +776,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "container-reg":
 		containerRegistryKeysOutput := new(ContainerRegistryKeysOutput)
-		if err := utils.UnmarshalJSON(data, &containerRegistryKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &containerRegistryKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == container-reg) type ContainerRegistryKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -620,7 +785,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "tw-agent":
 		agentSecurityKeys := new(AgentSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &agentSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &agentSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tw-agent) type AgentSecurityKeys within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -629,7 +794,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "k8s":
 		k8sSecurityKeysOutput := new(K8sSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &k8sSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &k8sSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s) type K8sSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -638,7 +803,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "ssh":
 		sshSecurityKeysOutput := new(SSHSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &sshSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &sshSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == ssh) type SSHSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -647,7 +812,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "google":
 		securityKeysGoogleSecurityKeysOutput := new(SecurityKeysGoogleSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &securityKeysGoogleSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &securityKeysGoogleSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google) type SecurityKeysGoogleSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -656,7 +821,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "bitbucket":
 		bitBucketSecurityKeysOutput := new(BitBucketSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &bitBucketSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &bitBucketSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bitbucket) type BitBucketSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -665,7 +830,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "gitea":
 		giteaSecurityKeysOutput := new(GiteaSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &giteaSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &giteaSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitea) type GiteaSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -674,7 +839,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "seqeracompute":
 		seqeraComputeSecurityKeysOutput := new(SeqeraComputeSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &seqeraComputeSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &seqeraComputeSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute) type SeqeraComputeSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -683,7 +848,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "codecommit":
 		codeCommitSecurityKeysOutput := new(CodeCommitSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &codeCommitSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &codeCommitSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == codecommit) type CodeCommitSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -692,7 +857,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "gitlab":
 		gitLabSecurityKeysOutput := new(GitLabSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &gitLabSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &gitLabSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitlab) type GitLabSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -701,7 +866,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "aws":
 		securityKeysAwsSecurityKeysOutput := new(SecurityKeysAwsSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &securityKeysAwsSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &securityKeysAwsSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws) type SecurityKeysAwsSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -710,7 +875,7 @@ func (u *SecurityKeysOutput) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azure":
 		securityKeysAzureSecurityKeysOutput := new(SecurityKeysAzureSecurityKeysOutput)
-		if err := utils.UnmarshalJSON(data, &securityKeysAzureSecurityKeysOutput, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &securityKeysAzureSecurityKeysOutput, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure) type SecurityKeysAzureSecurityKeysOutput within SecurityKeysOutput: %w", string(data), err)
 		}
 
@@ -793,6 +958,17 @@ type SeqeraComputeSecurityKeys struct {
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 }
 
+func (s SeqeraComputeSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SeqeraComputeSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SeqeraComputeSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -830,6 +1006,17 @@ type AzureEntraKeys struct {
 	TenantID      *string `json:"tenantId,omitempty"`
 	ClientID      *string `json:"clientId,omitempty"`
 	ClientSecret  *string `json:"clientSecret,omitempty"`
+}
+
+func (a AzureEntraKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureEntraKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AzureEntraKeys) GetDiscriminator() *string {
@@ -894,6 +1081,17 @@ type CodeCommitSecurityKeys struct {
 	Password      *string `json:"password,omitempty"`
 }
 
+func (c CodeCommitSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CodeCommitSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *CodeCommitSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -920,6 +1118,17 @@ type ContainerRegistryKeys struct {
 	UserName      *string `json:"userName,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Registry      *string `json:"registry,omitempty"`
+}
+
+func (c ContainerRegistryKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ContainerRegistryKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ContainerRegistryKeys) GetDiscriminator() *string {
@@ -956,6 +1165,17 @@ type AzureReposSecurityKeys struct {
 	Password      *string `json:"password,omitempty"`
 }
 
+func (a AzureReposSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureReposSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *AzureReposSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -983,6 +1203,17 @@ type SecurityKeysAzureSecurityKeys struct {
 	StorageName   *string `json:"storageName,omitempty"`
 	BatchKey      *string `json:"batchKey,omitempty"`
 	StorageKey    *string `json:"storageKey,omitempty"`
+}
+
+func (s SecurityKeysAzureSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SecurityKeysAzureSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SecurityKeysAzureSecurityKeys) GetDiscriminator() *string {
@@ -1027,6 +1258,17 @@ type K8sSecurityKeys struct {
 	Token         *string `json:"token,omitempty"`
 }
 
+func (k K8sSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *K8sSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *K8sSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -1061,6 +1303,17 @@ type SSHSecurityKeys struct {
 	Passphrase    *string `json:"passphrase,omitempty"`
 }
 
+func (s SSHSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SSHSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SSHSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -1086,6 +1339,17 @@ type GiteaSecurityKeys struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
+}
+
+func (g GiteaSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GiteaSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GiteaSecurityKeys) GetDiscriminator() *string {
@@ -1115,6 +1379,17 @@ type BitBucketSecurityKeys struct {
 	Password      *string `json:"password,omitempty"`
 }
 
+func (b BitBucketSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
+}
+
+func (b *BitBucketSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *BitBucketSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -1141,6 +1416,17 @@ type GitLabSecurityKeys struct {
 	Username      *string `json:"username,omitempty"`
 	Password      *string `json:"password,omitempty"`
 	Token         *string `json:"token,omitempty"`
+}
+
+func (g GitLabSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GitLabSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GitLabSecurityKeys) GetDiscriminator() *string {
@@ -1177,6 +1463,17 @@ type GitHubSecurityKeys struct {
 	Password      *string `json:"password,omitempty"`
 }
 
+func (g GitHubSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GitHubSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *GitHubSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -1203,6 +1500,17 @@ type SecurityKeysGoogleSecurityKeys struct {
 	Data          *string `json:"data,omitempty"`
 }
 
+func (s SecurityKeysGoogleSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SecurityKeysGoogleSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SecurityKeysGoogleSecurityKeys) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -1222,6 +1530,17 @@ type SecurityKeysAwsSecurityKeys struct {
 	AccessKey     *string `json:"accessKey,omitempty"`
 	SecretKey     *string `json:"secretKey,omitempty"`
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+}
+
+func (s SecurityKeysAwsSecurityKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SecurityKeysAwsSecurityKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SecurityKeysAwsSecurityKeys) GetDiscriminator() *string {
@@ -1486,7 +1805,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 	switch dis.Discriminator {
 	case "github":
 		gitHubSecurityKeys := new(GitHubSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &gitHubSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &gitHubSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GitHubSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1495,7 +1814,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azurerepos":
 		azureReposSecurityKeys := new(AzureReposSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &azureReposSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &azureReposSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azurerepos) type AzureReposSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1504,7 +1823,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azure_entra":
 		azureEntraKeys := new(AzureEntraKeys)
-		if err := utils.UnmarshalJSON(data, &azureEntraKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &azureEntraKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure_entra) type AzureEntraKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1513,7 +1832,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "container-reg":
 		containerRegistryKeys := new(ContainerRegistryKeys)
-		if err := utils.UnmarshalJSON(data, &containerRegistryKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &containerRegistryKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == container-reg) type ContainerRegistryKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1522,7 +1841,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "tw-agent":
 		agentSecurityKeys := new(AgentSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &agentSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &agentSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tw-agent) type AgentSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1531,7 +1850,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "k8s":
 		k8sSecurityKeys := new(K8sSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &k8sSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &k8sSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s) type K8sSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1540,7 +1859,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "ssh":
 		sshSecurityKeys := new(SSHSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &sshSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &sshSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == ssh) type SSHSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1549,7 +1868,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "google":
 		securityKeysGoogleSecurityKeys := new(SecurityKeysGoogleSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &securityKeysGoogleSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &securityKeysGoogleSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google) type SecurityKeysGoogleSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1558,7 +1877,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "bitbucket":
 		bitBucketSecurityKeys := new(BitBucketSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &bitBucketSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &bitBucketSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == bitbucket) type BitBucketSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1567,7 +1886,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "gitea":
 		giteaSecurityKeys := new(GiteaSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &giteaSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &giteaSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitea) type GiteaSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1576,7 +1895,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "seqeracompute":
 		seqeraComputeSecurityKeys := new(SeqeraComputeSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &seqeraComputeSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &seqeraComputeSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute) type SeqeraComputeSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1585,7 +1904,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "codecommit":
 		codeCommitSecurityKeys := new(CodeCommitSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &codeCommitSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &codeCommitSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == codecommit) type CodeCommitSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1594,7 +1913,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "gitlab":
 		gitLabSecurityKeys := new(GitLabSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &gitLabSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &gitLabSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gitlab) type GitLabSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1603,7 +1922,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "aws":
 		securityKeysAwsSecurityKeys := new(SecurityKeysAwsSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &securityKeysAwsSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &securityKeysAwsSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws) type SecurityKeysAwsSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 
@@ -1612,7 +1931,7 @@ func (u *SecurityKeys) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azure":
 		securityKeysAzureSecurityKeys := new(SecurityKeysAzureSecurityKeys)
-		if err := utils.UnmarshalJSON(data, &securityKeysAzureSecurityKeys, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &securityKeysAzureSecurityKeys, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure) type SecurityKeysAzureSecurityKeys within SecurityKeys: %w", string(data), err)
 		}
 

@@ -95,3 +95,68 @@ func (o *AWSCredentialInput) GetKeys() AwsSecurityKeys {
 	}
 	return o.Keys
 }
+
+type AWSCredentialInputOutput struct {
+	// Unique identifier for the credential (max 22 characters)
+	CredentialsID *string `json:"id,omitempty"`
+	// Display name for the credential (max 100 characters)
+	Name string `json:"name"`
+	// Optional description explaining the purpose of the credential
+	Description *string `json:"description,omitempty"`
+	// Cloud provider type (aws)
+	ProviderType AWSCredentialInputProviderType `json:"provider"`
+	// Base URL for the service
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// Category of the credential
+	Category *string               `json:"category,omitempty"`
+	Keys     AwsSecurityKeysOutput `json:"keys"`
+}
+
+func (o *AWSCredentialInputOutput) GetCredentialsID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CredentialsID
+}
+
+func (o *AWSCredentialInputOutput) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *AWSCredentialInputOutput) GetDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *AWSCredentialInputOutput) GetProviderType() AWSCredentialInputProviderType {
+	if o == nil {
+		return AWSCredentialInputProviderType("")
+	}
+	return o.ProviderType
+}
+
+func (o *AWSCredentialInputOutput) GetBaseURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.BaseURL
+}
+
+func (o *AWSCredentialInputOutput) GetCategory() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Category
+}
+
+func (o *AWSCredentialInputOutput) GetKeys() AwsSecurityKeysOutput {
+	if o == nil {
+		return AwsSecurityKeysOutput{}
+	}
+	return o.Keys
+}

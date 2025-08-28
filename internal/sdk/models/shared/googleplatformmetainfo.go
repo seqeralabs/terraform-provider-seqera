@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type GooglePlatformMetainfo struct {
 	Locations     []string                          `json:"locations,omitempty"`
 	Discriminator *string                           `json:"discriminator,omitempty"`
@@ -9,6 +13,17 @@ type GooglePlatformMetainfo struct {
 	Zones         []string                          `json:"zones,omitempty"`
 	Buckets       []GooglePlatformMetainfoBucket    `json:"buckets,omitempty"`
 	Filestores    []GooglePlatformMetainfoFilestore `json:"filestores,omitempty"`
+}
+
+func (g GooglePlatformMetainfo) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GooglePlatformMetainfo) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GooglePlatformMetainfo) GetLocations() []string {

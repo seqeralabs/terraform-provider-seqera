@@ -132,7 +132,7 @@ func (c ComputeEnv) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ComputeEnv) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"credentialsId", "name", "platform", "config"}); err != nil {
 		return err
 	}
 	return nil
@@ -338,7 +338,7 @@ func (l Launch) MarshalJSON() ([]byte, error) {
 }
 
 func (l *Launch) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"pipeline", "dateCreated"}); err != nil {
 		return err
 	}
 	return nil

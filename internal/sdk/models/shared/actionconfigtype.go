@@ -14,6 +14,17 @@ type GithubActionConfig struct {
 	Events        []string `json:"events,omitempty"`
 }
 
+func (g GithubActionConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GithubActionConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *GithubActionConfig) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -30,6 +41,17 @@ func (o *GithubActionConfig) GetEvents() []string {
 
 type ActionTowerActionConfig struct {
 	Discriminator *string `json:"discriminator,omitempty"`
+}
+
+func (a ActionTowerActionConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *ActionTowerActionConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ActionTowerActionConfig) GetDiscriminator() *string {
@@ -91,7 +113,7 @@ func (u *ActionConfigType) UnmarshalJSON(data []byte) error {
 	switch dis.Discriminator {
 	case "github":
 		githubActionConfig := new(GithubActionConfig)
-		if err := utils.UnmarshalJSON(data, &githubActionConfig, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &githubActionConfig, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == github) type GithubActionConfig within ActionConfigType: %w", string(data), err)
 		}
 
@@ -100,7 +122,7 @@ func (u *ActionConfigType) UnmarshalJSON(data []byte) error {
 		return nil
 	case "tower":
 		actionTowerActionConfig := new(ActionTowerActionConfig)
-		if err := utils.UnmarshalJSON(data, &actionTowerActionConfig, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &actionTowerActionConfig, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == tower) type ActionTowerActionConfig within ActionConfigType: %w", string(data), err)
 		}
 

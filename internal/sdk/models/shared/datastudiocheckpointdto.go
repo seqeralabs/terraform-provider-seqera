@@ -21,7 +21,7 @@ func (d DataStudioCheckpointDto) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DataStudioCheckpointDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"id", "name", "dateCreated", "dateSaved", "author", "path"}); err != nil {
 		return err
 	}
 	return nil
