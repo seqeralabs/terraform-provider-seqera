@@ -29,9 +29,18 @@ type AWSCredentialDataSource struct {
 
 // AWSCredentialDataSourceModel describes the data model.
 type AWSCredentialDataSourceModel struct {
-	Credentials   *tfTypes.AWSCredentialInput1 `tfsdk:"credentials"`
-	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL       types.String             `tfsdk:"base_url"`
+	Category      types.String             `tfsdk:"category"`
+	CredentialsID types.String             `tfsdk:"credentials_id"`
+	DateCreated   types.String             `tfsdk:"date_created"`
+	Deleted       types.Bool               `tfsdk:"deleted"`
+	Description   types.String             `tfsdk:"description"`
+	Keys          tfTypes.AwsSecurityKeys1 `tfsdk:"keys"`
+	LastUpdated   types.String             `tfsdk:"last_updated"`
+	LastUsed      types.String             `tfsdk:"last_used"`
+	Name          types.String             `tfsdk:"name"`
+	ProviderType  types.String             `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64              `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -42,52 +51,59 @@ func (r *AWSCredentialDataSource) Metadata(ctx context.Context, req datasource.M
 // Schema defines the schema for the data source.
 func (r *AWSCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AWSCredential DataSource",
+		MarkdownDescription: "Manage AWS credentials in Seqera platform using this resource.\n\nAWS credentials store authentication information for accessing AWS services\nwithin the Seqera Platform workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
-			"credentials": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"base_url": schema.StringAttribute{
-						Computed:    true,
-						Description: `Base URL for the service`,
-					},
-					"category": schema.StringAttribute{
-						Computed:    true,
-						Description: `Category of the credential`,
-					},
-					"credentials_id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the credential (max 22 characters)`,
-					},
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Optional description explaining the purpose of the credential`,
-					},
-					"keys": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"access_key": schema.StringAttribute{
-								Computed: true,
-							},
-							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Display name for the credential (max 100 characters)`,
-					},
-					"provider_type": schema.StringAttribute{
-						Computed:    true,
-						Description: `Cloud provider type (aws)`,
-					},
-				},
+			"base_url": schema.StringAttribute{
+				Computed:    true,
+				Description: `Base URL for the service`,
+			},
+			"category": schema.StringAttribute{
+				Computed:    true,
+				Description: `Category of the credential`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Credentials string identifier`,
+			},
+			"date_created": schema.StringAttribute{
+				Computed:    true,
+				Description: `Timestamp when the credential was created`,
+			},
+			"deleted": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Flag indicating if the credential has been soft-deleted`,
+			},
+			"description": schema.StringAttribute{
+				Computed:    true,
+				Description: `Optional description explaining the purpose of the credential`,
+			},
+			"keys": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"access_key": schema.StringAttribute{
+						Computed: true,
+					},
+					"assume_role_arn": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
+			"last_updated": schema.StringAttribute{
+				Computed:    true,
+				Description: `Timestamp when the credential was last updated`,
+			},
+			"last_used": schema.StringAttribute{
+				Computed:    true,
+				Description: `Timestamp when the credential was last used`,
+			},
+			"name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Display name for the credential (max 100 characters)`,
+			},
+			"provider_type": schema.StringAttribute{
+				Computed:    true,
+				Description: `Cloud provider type (aws)`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
@@ -157,11 +173,11 @@ func (r *AWSCredentialDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAWSCredentialsResponse != nil) {
+	if !(res.DescribeAWSCredentialsResponse != nil && res.DescribeAWSCredentialsResponse.Credentials != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res.DescribeAWSCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res.DescribeAWSCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return

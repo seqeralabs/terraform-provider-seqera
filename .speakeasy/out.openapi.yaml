@@ -14217,7 +14217,7 @@ components:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/AWSCredentialInput'
+          $ref: '#/components/schemas/AWSCredential'
     CreateAWSCredentialsResponse:
       type: object
       properties:
@@ -14227,12 +14227,12 @@ components:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/AWSCredentialInput'
+          $ref: '#/components/schemas/AWSCredential'
     DescribeAWSCredentialsResponse:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/AWSCredentialInput'
+          $ref: '#/components/schemas/AWSCredential'
     # AWS credential input schema (for create/update)
     AWSCredentialInput:
       required:

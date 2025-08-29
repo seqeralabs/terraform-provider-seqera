@@ -6,40 +6,40 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
+	"time"
 )
+
+func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialOutput(ctx context.Context, resp *shared.AWSCredentialOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.BaseURL = types.StringPointerValue(resp.BaseURL)
+		r.Category = types.StringPointerValue(resp.Category)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.Deleted = types.BoolPointerValue(resp.Deleted)
+		r.Description = types.StringPointerValue(resp.Description)
+		keysPriorData := r.Keys
+		r.Keys.AccessKey = types.StringPointerValue(resp.Keys.AccessKey)
+		r.Keys.AssumeRoleArn = types.StringPointerValue(resp.Keys.AssumeRoleArn)
+		r.Keys.SecretKey = keysPriorData.SecretKey
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		r.Name = types.StringValue(resp.Name)
+		r.ProviderType = types.StringValue(string(resp.ProviderType))
+	}
+
+	return diags
+}
 
 func (r *AWSCredentialResourceModel) RefreshFromSharedCreateAWSCredentialsResponse(ctx context.Context, resp *shared.CreateAWSCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-	}
-
-	return diags
-}
-
-func (r *AWSCredentialResourceModel) RefreshFromSharedDescribeAWSCredentialsResponse(ctx context.Context, resp *shared.DescribeAWSCredentialsResponse) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		if resp.Credentials == nil {
-			r.Credentials = nil
-		} else {
-			r.Credentials = &tfTypes.AWSCredentialInput{}
-			r.Credentials.BaseURL = types.StringPointerValue(resp.Credentials.BaseURL)
-			r.Credentials.Category = types.StringPointerValue(resp.Credentials.Category)
-			r.Credentials.CredentialsID = types.StringPointerValue(resp.Credentials.CredentialsID)
-			r.Credentials.Description = types.StringPointerValue(resp.Credentials.Description)
-			keysPriorData := r.Credentials.Keys
-			r.Credentials.Keys.AccessKey = types.StringPointerValue(resp.Credentials.Keys.AccessKey)
-			r.Credentials.Keys.AssumeRoleArn = types.StringPointerValue(resp.Credentials.Keys.AssumeRoleArn)
-			r.Credentials.Keys.SecretKey = keysPriorData.SecretKey
-			r.Credentials.Name = types.StringValue(resp.Credentials.Name)
-			r.Credentials.ProviderType = types.StringValue(string(resp.Credentials.ProviderType))
-		}
 	}
 
 	return diags
@@ -144,72 +144,111 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 	return &out, diags
 }
 
+func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context) (*shared.AWSCredential, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
+	} else {
+		credentialsID = nil
+	}
+	var name string
+	name = r.Name.ValueString()
+
+	description := new(string)
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
+	} else {
+		description = nil
+	}
+	providerType := shared.AWSCredentialProviderType(r.ProviderType.ValueString())
+	baseURL := new(string)
+	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
+		*baseURL = r.BaseURL.ValueString()
+	} else {
+		baseURL = nil
+	}
+	category := new(string)
+	if !r.Category.IsUnknown() && !r.Category.IsNull() {
+		*category = r.Category.ValueString()
+	} else {
+		category = nil
+	}
+	deleted := new(bool)
+	if !r.Deleted.IsUnknown() && !r.Deleted.IsNull() {
+		*deleted = r.Deleted.ValueBool()
+	} else {
+		deleted = nil
+	}
+	lastUsed := new(time.Time)
+	if !r.LastUsed.IsUnknown() && !r.LastUsed.IsNull() {
+		*lastUsed, _ = time.Parse(time.RFC3339Nano, r.LastUsed.ValueString())
+	} else {
+		lastUsed = nil
+	}
+	dateCreated := new(time.Time)
+	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
+	} else {
+		dateCreated = nil
+	}
+	lastUpdated := new(time.Time)
+	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
+		*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.LastUpdated.ValueString())
+	} else {
+		lastUpdated = nil
+	}
+	accessKey := new(string)
+	if !r.Keys.AccessKey.IsUnknown() && !r.Keys.AccessKey.IsNull() {
+		*accessKey = r.Keys.AccessKey.ValueString()
+	} else {
+		accessKey = nil
+	}
+	secretKey := new(string)
+	if !r.Keys.SecretKey.IsUnknown() && !r.Keys.SecretKey.IsNull() {
+		*secretKey = r.Keys.SecretKey.ValueString()
+	} else {
+		secretKey = nil
+	}
+	assumeRoleArn := new(string)
+	if !r.Keys.AssumeRoleArn.IsUnknown() && !r.Keys.AssumeRoleArn.IsNull() {
+		*assumeRoleArn = r.Keys.AssumeRoleArn.ValueString()
+	} else {
+		assumeRoleArn = nil
+	}
+	keys := shared.AwsSecurityKeys{
+		AccessKey:     accessKey,
+		SecretKey:     secretKey,
+		AssumeRoleArn: assumeRoleArn,
+	}
+	out := shared.AWSCredential{
+		CredentialsID: credentialsID,
+		Name:          name,
+		Description:   description,
+		ProviderType:  providerType,
+		BaseURL:       baseURL,
+		Category:      category,
+		Deleted:       deleted,
+		LastUsed:      lastUsed,
+		DateCreated:   dateCreated,
+		LastUpdated:   lastUpdated,
+		Keys:          keys,
+	}
+
+	return &out, diags
+}
+
 func (r *AWSCredentialResourceModel) ToSharedCreateAWSCredentialsRequest(ctx context.Context) (*shared.CreateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var credentials *shared.AWSCredentialInput
-	if r.Credentials != nil {
-		credentialsID := new(string)
-		if !r.Credentials.CredentialsID.IsUnknown() && !r.Credentials.CredentialsID.IsNull() {
-			*credentialsID = r.Credentials.CredentialsID.ValueString()
-		} else {
-			credentialsID = nil
-		}
-		var name string
-		name = r.Credentials.Name.ValueString()
+	credentials, credentialsDiags := r.ToSharedAWSCredential(ctx)
+	diags.Append(credentialsDiags...)
 
-		description := new(string)
-		if !r.Credentials.Description.IsUnknown() && !r.Credentials.Description.IsNull() {
-			*description = r.Credentials.Description.ValueString()
-		} else {
-			description = nil
-		}
-		providerType := shared.AWSCredentialInputProviderType(r.Credentials.ProviderType.ValueString())
-		baseURL := new(string)
-		if !r.Credentials.BaseURL.IsUnknown() && !r.Credentials.BaseURL.IsNull() {
-			*baseURL = r.Credentials.BaseURL.ValueString()
-		} else {
-			baseURL = nil
-		}
-		category := new(string)
-		if !r.Credentials.Category.IsUnknown() && !r.Credentials.Category.IsNull() {
-			*category = r.Credentials.Category.ValueString()
-		} else {
-			category = nil
-		}
-		accessKey := new(string)
-		if !r.Credentials.Keys.AccessKey.IsUnknown() && !r.Credentials.Keys.AccessKey.IsNull() {
-			*accessKey = r.Credentials.Keys.AccessKey.ValueString()
-		} else {
-			accessKey = nil
-		}
-		secretKey := new(string)
-		if !r.Credentials.Keys.SecretKey.IsUnknown() && !r.Credentials.Keys.SecretKey.IsNull() {
-			*secretKey = r.Credentials.Keys.SecretKey.ValueString()
-		} else {
-			secretKey = nil
-		}
-		assumeRoleArn := new(string)
-		if !r.Credentials.Keys.AssumeRoleArn.IsUnknown() && !r.Credentials.Keys.AssumeRoleArn.IsNull() {
-			*assumeRoleArn = r.Credentials.Keys.AssumeRoleArn.ValueString()
-		} else {
-			assumeRoleArn = nil
-		}
-		keys := shared.AwsSecurityKeys{
-			AccessKey:     accessKey,
-			SecretKey:     secretKey,
-			AssumeRoleArn: assumeRoleArn,
-		}
-		credentials = &shared.AWSCredentialInput{
-			CredentialsID: credentialsID,
-			Name:          name,
-			Description:   description,
-			ProviderType:  providerType,
-			BaseURL:       baseURL,
-			Category:      category,
-			Keys:          keys,
-		}
+	if diags.HasError() {
+		return nil, diags
 	}
+
 	out := shared.CreateAWSCredentialsRequest{
 		Credentials: credentials,
 	}
@@ -220,69 +259,13 @@ func (r *AWSCredentialResourceModel) ToSharedCreateAWSCredentialsRequest(ctx con
 func (r *AWSCredentialResourceModel) ToSharedUpdateAWSCredentialsRequest(ctx context.Context) (*shared.UpdateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var credentials *shared.AWSCredentialInput
-	if r.Credentials != nil {
-		credentialsID := new(string)
-		if !r.Credentials.CredentialsID.IsUnknown() && !r.Credentials.CredentialsID.IsNull() {
-			*credentialsID = r.Credentials.CredentialsID.ValueString()
-		} else {
-			credentialsID = nil
-		}
-		var name string
-		name = r.Credentials.Name.ValueString()
+	credentials, credentialsDiags := r.ToSharedAWSCredential(ctx)
+	diags.Append(credentialsDiags...)
 
-		description := new(string)
-		if !r.Credentials.Description.IsUnknown() && !r.Credentials.Description.IsNull() {
-			*description = r.Credentials.Description.ValueString()
-		} else {
-			description = nil
-		}
-		providerType := shared.AWSCredentialInputProviderType(r.Credentials.ProviderType.ValueString())
-		baseURL := new(string)
-		if !r.Credentials.BaseURL.IsUnknown() && !r.Credentials.BaseURL.IsNull() {
-			*baseURL = r.Credentials.BaseURL.ValueString()
-		} else {
-			baseURL = nil
-		}
-		category := new(string)
-		if !r.Credentials.Category.IsUnknown() && !r.Credentials.Category.IsNull() {
-			*category = r.Credentials.Category.ValueString()
-		} else {
-			category = nil
-		}
-		accessKey := new(string)
-		if !r.Credentials.Keys.AccessKey.IsUnknown() && !r.Credentials.Keys.AccessKey.IsNull() {
-			*accessKey = r.Credentials.Keys.AccessKey.ValueString()
-		} else {
-			accessKey = nil
-		}
-		secretKey := new(string)
-		if !r.Credentials.Keys.SecretKey.IsUnknown() && !r.Credentials.Keys.SecretKey.IsNull() {
-			*secretKey = r.Credentials.Keys.SecretKey.ValueString()
-		} else {
-			secretKey = nil
-		}
-		assumeRoleArn := new(string)
-		if !r.Credentials.Keys.AssumeRoleArn.IsUnknown() && !r.Credentials.Keys.AssumeRoleArn.IsNull() {
-			*assumeRoleArn = r.Credentials.Keys.AssumeRoleArn.ValueString()
-		} else {
-			assumeRoleArn = nil
-		}
-		keys := shared.AwsSecurityKeys{
-			AccessKey:     accessKey,
-			SecretKey:     secretKey,
-			AssumeRoleArn: assumeRoleArn,
-		}
-		credentials = &shared.AWSCredentialInput{
-			CredentialsID: credentialsID,
-			Name:          name,
-			Description:   description,
-			ProviderType:  providerType,
-			BaseURL:       baseURL,
-			Category:      category,
-			Keys:          keys,
-		}
+	if diags.HasError() {
+		return nil, diags
 	}
+
 	out := shared.UpdateAWSCredentialsRequest{
 		Credentials: credentials,
 	}

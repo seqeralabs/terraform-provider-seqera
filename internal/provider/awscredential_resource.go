@@ -13,11 +13,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
-	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -36,10 +36,19 @@ type AWSCredentialResource struct {
 
 // AWSCredentialResourceModel describes the resource data model.
 type AWSCredentialResourceModel struct {
-	Checked       types.Bool                  `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
-	Credentials   *tfTypes.AWSCredentialInput `tfsdk:"credentials"`
-	CredentialsID types.String                `tfsdk:"credentials_id"`
-	WorkspaceID   types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL       types.String            `tfsdk:"base_url"`
+	Category      types.String            `tfsdk:"category"`
+	Checked       types.Bool              `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
+	CredentialsID types.String            `tfsdk:"credentials_id"`
+	DateCreated   types.String            `tfsdk:"date_created"`
+	Deleted       types.Bool              `tfsdk:"deleted"`
+	Description   types.String            `tfsdk:"description"`
+	Keys          tfTypes.AwsSecurityKeys `tfsdk:"keys"`
+	LastUpdated   types.String            `tfsdk:"last_updated"`
+	LastUsed      types.String            `tfsdk:"last_used"`
+	Name          types.String            `tfsdk:"name"`
+	ProviderType  types.String            `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64             `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AWSCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -48,83 +57,102 @@ func (r *AWSCredentialResource) Metadata(ctx context.Context, req resource.Metad
 
 func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AWSCredential Resource",
+		MarkdownDescription: "Manage AWS credentials in Seqera platform using this resource.\n\nAWS credentials store authentication information for accessing AWS services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
+			"base_url": schema.StringAttribute{
+				Optional:    true,
+				Description: `Base URL for the service`,
+			},
+			"category": schema.StringAttribute{
+				Optional:    true,
+				Description: `Category of the credential`,
+			},
 			"checked": schema.BoolAttribute{
 				Optional:    true,
 				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
 			},
-			"credentials": schema.SingleNestedAttribute{
+			"credentials_id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique identifier for the credential (max 22 characters)`,
+			},
+			"date_created": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Timestamp when the credential was created`,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"deleted": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Bool{
+					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+				},
+				Description: `Flag indicating if the credential has been soft-deleted`,
+			},
+			"description": schema.StringAttribute{
+				Optional:    true,
+				Description: `Optional description explaining the purpose of the credential`,
+			},
+			"keys": schema.SingleNestedAttribute{
+				Required: true,
 				Attributes: map[string]schema.Attribute{
-					"base_url": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Base URL for the service`,
-					},
-					"category": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Category of the credential`,
-					},
-					"credentials_id": schema.StringAttribute{
-						Computed: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Unique identifier for the credential (max 22 characters)`,
-					},
-					"description": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Optional description explaining the purpose of the credential`,
-					},
-					"keys": schema.SingleNestedAttribute{
+					"access_key": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
-						Attributes: map[string]schema.Attribute{
-							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"assume_role_arn": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-							"secret_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-							},
-						},
-						Description: `Not Null`,
-						Validators: []validator.Object{
-							speakeasy_objectvalidators.NotNull(),
-						},
 					},
-					"name": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Display name for the credential (max 100 characters). Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-							stringvalidator.UTF8LengthAtMost(100),
-						},
+					"assume_role_arn": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
 					},
-					"provider_type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Cloud provider type (aws). Not Null; must be "aws"`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-							stringvalidator.OneOf("aws"),
-						},
+					"secret_key": schema.StringAttribute{
+						Optional: true,
 					},
 				},
 			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
+			"last_updated": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Timestamp when the credential was last updated`,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"last_used": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Timestamp when the credential was last used`,
+				Validators: []validator.String{
+					validators.IsRFC3339(),
+				},
+			},
+			"name": schema.StringAttribute{
+				Required:    true,
+				Description: `Display name for the credential (max 100 characters)`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(100),
+				},
+			},
+			"provider_type": schema.StringAttribute{
+				Required:    true,
+				Description: `Cloud provider type (aws). must be "aws"`,
+				Validators: []validator.String{
+					stringvalidator.OneOf("aws"),
+				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
@@ -231,11 +259,11 @@ func (r *AWSCredentialResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeAWSCredentialsResponse != nil) {
+	if !(res1.DescribeAWSCredentialsResponse != nil && res1.DescribeAWSCredentialsResponse.Credentials != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res1.DescribeAWSCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res1.DescribeAWSCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -295,11 +323,11 @@ func (r *AWSCredentialResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAWSCredentialsResponse != nil) {
+	if !(res.DescribeAWSCredentialsResponse != nil && res.DescribeAWSCredentialsResponse.Credentials != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res.DescribeAWSCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res.DescribeAWSCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -373,11 +401,11 @@ func (r *AWSCredentialResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeAWSCredentialsResponse != nil) {
+	if !(res1.DescribeAWSCredentialsResponse != nil && res1.DescribeAWSCredentialsResponse.Credentials != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res1.DescribeAWSCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res1.DescribeAWSCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return

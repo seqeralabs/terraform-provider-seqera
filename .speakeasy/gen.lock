@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 2f3091b36d720bf2c7d8b47ed4d38ba7
+  docChecksum: 798a082e1b596985214720db2148a80d
   docVersion: 1.56.0
-  speakeasyVersion: 1.606.8
+  speakeasyVersion: 1.606.9
   generationVersion: 2.687.13
   releaseVersion: 0.25.3
   configChecksum: 142ac7791bde47d0e562a6a1a28da2ac
@@ -198,8 +198,6 @@ generatedFiles:
   - internal/provider/types/amazon_eks_cluster_configuration.go
   - internal/provider/types/aws_batch_configuration.go
   - internal/provider/types/aws_cloud_configuration.go
-  - internal/provider/types/aws_credential_input.go
-  - internal/provider/types/aws_credential_input1.go
   - internal/provider/types/aws_security_keys.go
   - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
@@ -538,7 +536,7 @@ generatedFiles:
   - internal/sdk/models/shared/associateworkflowlabelsrequest.go
   - internal/sdk/models/shared/awsbatchplatformmetainfo.go
   - internal/sdk/models/shared/awscloudplatformmetainfo.go
-  - internal/sdk/models/shared/awscredentialinput.go
+  - internal/sdk/models/shared/awscredential.go
   - internal/sdk/models/shared/awssecuritykeys.go
   - internal/sdk/models/shared/awssecuritykeysoutput.go
   - internal/sdk/models/shared/azbatchforgeconfig.go

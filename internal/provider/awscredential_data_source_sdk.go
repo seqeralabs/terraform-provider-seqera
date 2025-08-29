@@ -6,28 +6,27 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *AWSCredentialDataSourceModel) RefreshFromSharedDescribeAWSCredentialsResponse(ctx context.Context, resp *shared.DescribeAWSCredentialsResponse) diag.Diagnostics {
+func (r *AWSCredentialDataSourceModel) RefreshFromSharedAWSCredentialOutput(ctx context.Context, resp *shared.AWSCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.Credentials == nil {
-			r.Credentials = nil
-		} else {
-			r.Credentials = &tfTypes.AWSCredentialInput1{}
-			r.Credentials.BaseURL = types.StringPointerValue(resp.Credentials.BaseURL)
-			r.Credentials.Category = types.StringPointerValue(resp.Credentials.Category)
-			r.Credentials.CredentialsID = types.StringPointerValue(resp.Credentials.CredentialsID)
-			r.Credentials.Description = types.StringPointerValue(resp.Credentials.Description)
-			r.Credentials.Keys.AccessKey = types.StringPointerValue(resp.Credentials.Keys.AccessKey)
-			r.Credentials.Keys.AssumeRoleArn = types.StringPointerValue(resp.Credentials.Keys.AssumeRoleArn)
-			r.Credentials.Name = types.StringValue(resp.Credentials.Name)
-			r.Credentials.ProviderType = types.StringValue(string(resp.Credentials.ProviderType))
-		}
+		r.BaseURL = types.StringPointerValue(resp.BaseURL)
+		r.Category = types.StringPointerValue(resp.Category)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
+		r.Deleted = types.BoolPointerValue(resp.Deleted)
+		r.Description = types.StringPointerValue(resp.Description)
+		r.Keys.AccessKey = types.StringPointerValue(resp.Keys.AccessKey)
+		r.Keys.AssumeRoleArn = types.StringPointerValue(resp.Keys.AssumeRoleArn)
+		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
+		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		r.Name = types.StringValue(resp.Name)
+		r.ProviderType = types.StringValue(string(resp.ProviderType))
 	}
 
 	return diags
