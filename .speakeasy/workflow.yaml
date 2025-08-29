@@ -19,6 +19,7 @@ sources:
             - location: overlays/azure-credentials.yaml
             - location: overlays/gcp-credentials.yaml
             - location: overlays/compute-env.yaml
+            - location: overlays/aws-compute-env.yaml
             - location: overlays/datasets.yaml
             - location: overlays/labels.yaml
             - location: overlays/orgs.yaml

@@ -8046,6 +8046,169 @@ paths:
                 $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
       security:
         - BearerAuth: []
+  "/compute-envs#aws":
+    post:
+      x-speakeasy-entity-operation: AWSComputeEnv#create
+      x-speakeasy-name-override: CreateAWSComputeEnv
+      summary: Create AWS compute environment
+      description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
+      tags:
+        - compute-envs
+      operationId: CreateAWSComputeEnv
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: AWS compute environment create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAWSComputeEnvRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateAWSComputeEnvResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/compute-envs/{computeEnvId}#aws":
+    get:
+      x-speakeasy-entity-operation: AWSComputeEnv#read
+      x-speakeasy-name-override: DescribeAWSComputeEnv
+      summary: Describe AWS compute environment
+      description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DescribeAWSComputeEnv
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: attributes
+          in: query
+          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeAWSComputeEnvResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: AWSComputeEnv#update
+      x-speakeasy-name-override: UpdateAWSComputeEnv
+      summary: Update AWS compute environment
+      description: Updates the details of the AWS compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: UpdateAWSComputeEnv
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: AWS compute environment update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAWSComputeEnvRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: AWSComputeEnv#delete
+      x-speakeasy-name-override: DeleteAWSComputeEnv
+      summary: Delete AWS compute environment
+      description: Deletes the AWS compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DeleteAWSComputeEnv
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
   "/credentials#aws":
     post:
       x-speakeasy-entity-operation: AWSCredential#create
@@ -14083,6 +14246,114 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/GoogleCredential'
+    # AWS-specific compute environment schema
+    AWSComputeEnv_ComputeConfig:
+      x-speakeasy-entity: AWSComputeEnv
+      x-speakeasy-entity-description: |
+        Manage AWS compute environments in Seqera platform using this resource.
+
+        AWS compute environments define the execution platform where a pipeline will run
+        on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
+      required:
+        - config
+        - name
+        - platform
+        - credentialsId
+      type: object
+      properties:
+        credentialsId:
+          type: string
+          description: AWS credentials identifier
+        orgId:
+          type: integer
+          format: int64
+          readOnly: true
+          x-speakeasy-param-readonly: true
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+        id:
+          type: string
+          description: Unique identifier for the compute environment
+          x-speakeasy-name-override: computeEnvId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the compute environment
+        description:
+          type: string
+          description: Optional description of the compute environment
+          x-speakeasy-param-computed: false
+        platform:
+          type: string
+          enum:
+            - aws-batch
+          description: AWS platform type
+          x-speakeasy-param-optional: false
+        status:
+          type: string
+          description: Compute environment status
+          x-speakeasy-param-readonly: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was created
+          x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last updated
+          x-speakeasy-param-readonly: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last used
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the compute environment has been deleted
+          x-speakeasy-param-readonly: true
+        config:
+          description: AWS-specific compute environment configuration
+          $ref: '#/components/schemas/AwsBatchConfig'
+    # AWS-specific request/response schemas
+    CreateAWSComputeEnvRequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateAWSComputeEnvResponse:
+      type: object
+      properties:
+        computeEnvId:
+          type: string
+    UpdateAWSComputeEnvRequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+    DescribeAWSComputeEnvResponse:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+    ListAWSComputeEnvsResponse:
+      type: object
+      properties:
+        computeEnvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+        totalSize:
+          type: integer
+          format: int64
     # AWS-specific credential schema
     AWSCredential:
       x-speakeasy-entity: AWSCredential
