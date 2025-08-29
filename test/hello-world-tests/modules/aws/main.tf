@@ -32,6 +32,41 @@ resource "seqera_aws_credential" "aws_credential" {
   }
 }
 
+## AWS-specific Compute Environment (new dedicated resource)
+resource "seqera_aws_compute_env" "aws_batch_compute_env_dedicated" {
+  name           = "aws-batch-dedicated"
+  workspace_id   = var.workspace_id
+  platform       = "aws-batch"
+  credentials_id = resource.seqera_aws_credential.aws_credential.credentials_id
+
+  config = {
+    discriminator = "aws-batch"
+    work_dir      = var.work_dir
+
+    head_job_cpus      = 2
+    head_job_memory_mb = 4096
+
+    fusion2_enabled = true
+    wave_enabled    = true
+
+    region = "us-east-1"
+
+    forge = {
+      dispose_on_deletion = true
+      type                = "EC2" # or "SPOT" for cost savings
+      alloc_strategy      = "BEST_FIT_PROGRESSIVE"
+
+      instance_types = ["m5.large", "m5.xlarge", "m5.2xlarge"]
+      min_cpus       = 0
+      max_cpus       = 1000
+
+      ebs_auto_scale = false
+      gpu_enabled    = false
+      arm64_enabled  = false
+    }
+  }
+}
+
 ## Compute Environments
 resource "seqera_compute_env" "aws_batch_compute_env" {
   workspace_id = var.workspace_id

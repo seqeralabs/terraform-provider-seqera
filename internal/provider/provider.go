@@ -103,6 +103,7 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewActionResource,
+		NewAWSComputeEnvResource,
 		NewAWSCredentialResource,
 		NewAzureCredentialResource,
 		NewComputeEnvResource,
@@ -126,6 +127,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewActionDataSource,
+		NewAWSComputeEnvDataSource,
 		NewAWSCredentialDataSource,
 		NewAzureCredentialDataSource,
 		NewComputeEnvDataSource,
