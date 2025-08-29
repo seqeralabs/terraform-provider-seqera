@@ -30,7 +30,7 @@ func (d Dataset) MarshalJSON() ([]byte, error) {
 }
 
 func (d *Dataset) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"name"}); err != nil {
 		return err
 	}
 	return nil

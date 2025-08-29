@@ -2,10 +2,25 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type EksPlatformMetaInfo struct {
 	Discriminator *string  `json:"discriminator,omitempty"`
 	Warnings      []string `json:"warnings,omitempty"`
 	Clusters      []string `json:"clusters,omitempty"`
+}
+
+func (e EksPlatformMetaInfo) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *EksPlatformMetaInfo) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *EksPlatformMetaInfo) GetDiscriminator() *string {

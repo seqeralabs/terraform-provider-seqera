@@ -16,6 +16,8 @@ sources:
             - location: overlays/datalinks.yaml
             - location: overlays/actions.yaml
             - location: overlays/credentials.yaml
+            - location: overlays/azure-credentials.yaml
+            - location: overlays/gcp-credentials.yaml
             - location: overlays/compute-env.yaml
             - location: overlays/datasets.yaml
             - location: overlays/labels.yaml
@@ -30,6 +32,7 @@ sources:
             - location: overlays/users.yaml
             - location: overlays/schema-fixes.yaml
             - location: overlays/primary-compute-env.yaml
+            - location: overlays/aws-credentials.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

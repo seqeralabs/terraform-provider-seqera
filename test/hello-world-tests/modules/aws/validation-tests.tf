@@ -7,7 +7,7 @@
 #     name           = "invalid-forge-fusion2-clipath"
 #     description    = "INVALID: Forge + Fusion2 with cli_path set"
 #     platform       = "aws-batch"
-#     credentials_id = resource.seqera_credential.aws_credential.credentials_id
+#     credentials_id = resource.seqera_aws_credential.aws_credential.credentials_id
 
 #     config = {
 #       aws_batch = {
@@ -38,7 +38,7 @@
 #     name           = "invalid-fusion2-no-wave"
 #     description    = "INVALID: Fusion2 enabled without Wave"
 #     platform       = "aws-batch"
-#     credentials_id = resource.seqera_credential.aws_credential.credentials_id
+#     credentials_id = resource.seqera_aws_credential.aws_credential.credentials_id
 
 #     config = {
 #       aws_batch = {

@@ -2,8 +2,23 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type Bucket struct {
 	Path *string `json:"path,omitempty"`
+}
+
+func (b Bucket) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(b, "", false)
+}
+
+func (b *Bucket) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Bucket) GetPath() *string {

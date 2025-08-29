@@ -2,12 +2,27 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type AzBatchForgeConfig struct {
 	VMType            *string  `json:"vmType,omitempty"`
 	VMCount           int      `json:"vmCount"`
 	AutoScale         *bool    `json:"autoScale,omitempty"`
 	DisposeOnDeletion *bool    `json:"disposeOnDeletion,omitempty"`
 	ContainerRegIds   []string `json:"containerRegIds,omitempty"`
+}
+
+func (a AzBatchForgeConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzBatchForgeConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"vmCount"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AzBatchForgeConfig) GetVMType() *string {

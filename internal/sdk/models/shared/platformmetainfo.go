@@ -146,7 +146,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 	switch dis.Discriminator {
 	case "gke-platform":
 		gkePlatformMetaInfo := new(GkePlatformMetaInfo)
-		if err := utils.UnmarshalJSON(data, &gkePlatformMetaInfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &gkePlatformMetaInfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gke-platform) type GkePlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
 		}
 
@@ -155,7 +155,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		return nil
 	case "aws-cloud":
 		awsCloudPlatformMetainfo := new(AwsCloudPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &awsCloudPlatformMetainfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &awsCloudPlatformMetainfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AwsCloudPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
 		}
 
@@ -164,7 +164,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		return nil
 	case "k8s-platform":
 		k8sPlatformMetaInfo := new(K8sPlatformMetaInfo)
-		if err := utils.UnmarshalJSON(data, &k8sPlatformMetaInfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &k8sPlatformMetaInfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s-platform) type K8sPlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
 		}
 
@@ -173,7 +173,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		return nil
 	case "grid":
 		gridPlatformMetainfo := new(GridPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &gridPlatformMetainfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &gridPlatformMetainfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == grid) type GridPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
 		}
 
@@ -182,7 +182,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		return nil
 	case "aws-batch":
 		awsBatchPlatformMetainfo := new(AwsBatchPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &awsBatchPlatformMetainfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &awsBatchPlatformMetainfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-batch) type AwsBatchPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
 		}
 
@@ -191,7 +191,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		return nil
 	case "local-platform":
 		localPlatformMetainfo := new(LocalPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &localPlatformMetainfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &localPlatformMetainfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
 		}
 
@@ -200,7 +200,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azure-batch":
 		azBatchPlatformMetainfo := new(AzBatchPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &azBatchPlatformMetainfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &azBatchPlatformMetainfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzBatchPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
 		}
 
@@ -209,7 +209,7 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		return nil
 	case "eks-platform":
 		eksPlatformMetaInfo := new(EksPlatformMetaInfo)
-		if err := utils.UnmarshalJSON(data, &eksPlatformMetaInfo, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &eksPlatformMetaInfo, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type EksPlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
 		}
 

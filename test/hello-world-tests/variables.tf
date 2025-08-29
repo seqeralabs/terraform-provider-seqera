@@ -1,6 +1,6 @@
 locals {
-  #   service_account_key = file("${path.module}/service-account-key.json")
-  #   gcp_work_dir        = "gs://terraform-provider-testing"
+  # service_account_key = file("${path.module}/service-account-key.json")
+  # gcp_work_dir        = "gs://terraform-provider-testing"
   azure_batch_name   = "seqeralabs"
   azure_storage_name = "seqeralabs"
   azure_work_dir     = "az://terraform-provider"

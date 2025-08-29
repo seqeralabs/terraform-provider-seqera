@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
 type ForgeConfigType string
@@ -96,6 +97,17 @@ type ForgeConfig struct {
 	FargateHeadEnabled *bool           `json:"fargateHeadEnabled,omitempty"`
 	Arm64Enabled       *bool           `json:"arm64Enabled,omitempty"`
 	DragenInstanceType *string         `json:"dragenInstanceType,omitempty"`
+}
+
+func (f ForgeConfig) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(f, "", false)
+}
+
+func (f *ForgeConfig) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &f, "", false, []string{"type", "minCpus", "maxCpus"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ForgeConfig) GetType() ForgeConfigType {

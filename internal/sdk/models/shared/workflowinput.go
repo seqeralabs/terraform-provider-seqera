@@ -55,7 +55,7 @@ func (w WorkflowInput) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"submit", "runName", "sessionId", "workDir", "userName", "commandLine", "projectName"}); err != nil {
 		return err
 	}
 	return nil

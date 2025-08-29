@@ -2,10 +2,25 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type FsxFileSystem struct {
 	ID    *string `json:"id,omitempty"`
 	DNS   *string `json:"dns,omitempty"`
 	Mount *string `json:"mount,omitempty"`
+}
+
+func (f FsxFileSystem) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(f, "", false)
+}
+
+func (f *FsxFileSystem) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *FsxFileSystem) GetID() *string {

@@ -18,7 +18,7 @@ func (w WfNextflow) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WfNextflow) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil

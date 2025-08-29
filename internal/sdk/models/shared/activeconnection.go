@@ -20,7 +20,7 @@ func (a ActiveConnection) MarshalJSON() ([]byte, error) {
 }
 
 func (a *ActiveConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "userName", "email", "avatar", "lastActive"}); err != nil {
 		return err
 	}
 	return nil

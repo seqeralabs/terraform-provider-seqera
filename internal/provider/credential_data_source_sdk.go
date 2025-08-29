@@ -28,10 +28,10 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.AgentSecurityKeys.Shared)
 			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.AgentSecurityKeys.WorkDir)
 		}
-		if resp.Keys.AwsSecurityKeysOutput != nil {
-			r.Keys.Aws = &tfTypes.AwsSecurityKeys1{}
-			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AccessKey)
-			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
+		if resp.Keys.SecurityKeysAwsSecurityKeysOutput != nil {
+			r.Keys.Aws = &tfTypes.SecurityKeysAwsSecurityKeys1{}
+			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AccessKey)
+			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AssumeRoleArn)
 		}
 		if resp.Keys.AzureEntraKeysOutput != nil {
 			r.Keys.AzureEntra = &tfTypes.AzureEntraKeys1{}
@@ -44,10 +44,10 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 			r.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys1{}
 			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
 		}
-		if resp.Keys.AzureSecurityKeysOutput != nil {
-			r.Keys.Azure = &tfTypes.AzureSecurityKeys1{}
-			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.BatchName)
-			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.StorageName)
+		if resp.Keys.SecurityKeysAzureSecurityKeysOutput != nil {
+			r.Keys.Azure = &tfTypes.SecurityKeysAzureSecurityKeys1{}
+			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.BatchName)
+			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.StorageName)
 		}
 		if resp.Keys.BitBucketSecurityKeysOutput != nil {
 			r.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys1{}
@@ -74,8 +74,8 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 			r.Keys.Gitlab = &tfTypes.GitLabSecurityKeys1{}
 			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
 		}
-		if resp.Keys.GoogleSecurityKeysOutput != nil {
-			r.Keys.Google = &tfTypes.GoogleSecurityKeys1{}
+		if resp.Keys.SecurityKeysGoogleSecurityKeysOutput != nil {
+			r.Keys.Google = &tfTypes.SecurityKeysGoogleSecurityKeys1{}
 		}
 		if resp.Keys.K8sSecurityKeysOutput != nil {
 			r.Keys.K8s = &tfTypes.K8sSecurityKeys1{}

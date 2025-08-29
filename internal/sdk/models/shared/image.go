@@ -2,11 +2,26 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type Image struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Arch        string `json:"arch"`
+}
+
+func (i Image) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *Image) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "name", "description", "arch"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Image) GetID() string {

@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type AwsBatchPlatformMetainfo struct {
 	Discriminator    *string         `json:"discriminator,omitempty"`
 	Warnings         []string        `json:"warnings,omitempty"`
@@ -16,6 +20,17 @@ type AwsBatchPlatformMetainfo struct {
 	Subnets          []Subnet        `json:"subnets,omitempty"`
 	InstanceFamilies []string        `json:"instanceFamilies,omitempty"`
 	AllocStrategy    []string        `json:"allocStrategy,omitempty"`
+}
+
+func (a AwsBatchPlatformMetainfo) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AwsBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AwsBatchPlatformMetainfo) GetDiscriminator() *string {

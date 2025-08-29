@@ -33,6 +33,17 @@ type MoabConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
+func (m MoabConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(m, "", false)
+}
+
+func (m *MoabConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"workDir"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *MoabConfiguration) GetWorkDir() string {
 	if o == nil {
 		return ""
@@ -162,6 +173,17 @@ type AltairPBSConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
+func (a AltairPBSConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AltairPBSConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"workDir"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *AltairPBSConfiguration) GetWorkDir() string {
 	if o == nil {
 		return ""
@@ -289,6 +311,17 @@ type UnivaGridEngineConfiguration struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+}
+
+func (u UnivaGridEngineConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(u, "", false)
+}
+
+func (u *UnivaGridEngineConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"workDir"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *UnivaGridEngineConfiguration) GetWorkDir() string {
@@ -427,6 +460,17 @@ type GoogleGKEClusterConfiguration struct {
 	ClusterName    string `json:"clusterName"`
 	Fusion2Enabled *bool  `json:"fusion2Enabled,omitempty"`
 	WaveEnabled    *bool  `json:"waveEnabled,omitempty"`
+}
+
+func (g GoogleGKEClusterConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleGKEClusterConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"server", "sslCert", "namespace", "headServiceAccount", "storageClaimName", "region", "clusterName"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GoogleGKEClusterConfiguration) GetDiscriminator() *string {
@@ -616,6 +660,17 @@ type AmazonEKSClusterConfiguration struct {
 	Fusion2Enabled *bool  `json:"fusion2Enabled,omitempty"`
 }
 
+func (a AmazonEKSClusterConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AmazonEKSClusterConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"server", "sslCert", "namespace", "headServiceAccount", "storageClaimName", "region", "clusterName"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *AmazonEKSClusterConfiguration) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -797,6 +852,17 @@ type KubernetesComputeConfiguration struct {
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 }
 
+func (k KubernetesComputeConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *KubernetesComputeConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"server", "sslCert", "namespace", "headServiceAccount", "storageClaimName"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *KubernetesComputeConfiguration) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -947,6 +1013,17 @@ type SlurmConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
+func (s SlurmConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SlurmConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"workDir"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *SlurmConfiguration) GetWorkDir() string {
 	if o == nil {
 		return ""
@@ -1077,6 +1154,17 @@ type IBMLSFConfiguration struct {
 	PerTaskReserve *bool   `json:"perTaskReserve,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+}
+
+func (i IBMLSFConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(i, "", false)
+}
+
+func (i *IBMLSFConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"workDir"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *IBMLSFConfiguration) GetWorkDir() string {
@@ -1231,6 +1319,17 @@ type AzureBatchConfiguration struct {
 	ManagedIdentityClientID *string `json:"managedIdentityClientId,omitempty"`
 }
 
+func (a AzureBatchConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"region"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *AzureBatchConfiguration) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -1379,6 +1478,17 @@ type GoogleBatchServiceConfiguration struct {
 	Subnetwork                  *string             `json:"subnetwork,omitempty"`
 	HeadJobInstanceTemplate     *string             `json:"headJobInstanceTemplate,omitempty"`
 	ComputeJobsInstanceTemplate *string             `json:"computeJobsInstanceTemplate,omitempty"`
+}
+
+func (g GoogleBatchServiceConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleBatchServiceConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *GoogleBatchServiceConfiguration) GetDiscriminator() *string {
@@ -1615,6 +1725,17 @@ type GoogleLifeSciencesConfiguration struct {
 	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
+func (g GoogleLifeSciencesConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleLifeSciencesConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *GoogleLifeSciencesConfiguration) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -1805,6 +1926,17 @@ type SeqeraComputeConfiguration struct {
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
 	Forge           *ForgeConfig     `json:"forge,omitempty"`
 	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
+}
+
+func (s SeqeraComputeConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SeqeraComputeConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"region"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SeqeraComputeConfiguration) GetStorageType() *string {
@@ -2026,6 +2158,17 @@ type AWSCloudConfiguration struct {
 	ForgedResources    []map[string]any    `json:"forgedResources,omitempty"`
 }
 
+func (a AWSCloudConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AWSCloudConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"region"}); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *AWSCloudConfiguration) GetDiscriminator() *string {
 	if o == nil {
 		return nil
@@ -2209,6 +2352,17 @@ type AWSBatchConfiguration struct {
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
 	Forge           *ForgeConfig     `json:"forge,omitempty"`
 	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
+}
+
+func (a AWSBatchConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AWSBatchConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"region"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *AWSBatchConfiguration) GetStorageType() *string {
@@ -2622,7 +2776,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 	switch dis.Discriminator {
 	case "moab-platform":
 		moabConfiguration := new(MoabConfiguration)
-		if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == moab-platform) type MoabConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2631,7 +2785,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "aws-batch":
 		awsBatchConfiguration := new(AWSBatchConfiguration)
-		if err := utils.UnmarshalJSON(data, &awsBatchConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &awsBatchConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-batch) type AWSBatchConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2640,7 +2794,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "gke-platform":
 		googleGKEClusterConfiguration := new(GoogleGKEClusterConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleGKEClusterConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &googleGKEClusterConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gke-platform) type GoogleGKEClusterConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2649,7 +2803,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "google-batch":
 		googleBatchServiceConfiguration := new(GoogleBatchServiceConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleBatchServiceConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &googleBatchServiceConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-batch) type GoogleBatchServiceConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2658,7 +2812,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "aws-cloud":
 		awsCloudConfiguration := new(AWSCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AWSCloudConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2667,7 +2821,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "slurm-platform":
 		slurmConfiguration := new(SlurmConfiguration)
-		if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == slurm-platform) type SlurmConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2676,7 +2830,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "k8s-platform":
 		kubernetesComputeConfiguration := new(KubernetesComputeConfiguration)
-		if err := utils.UnmarshalJSON(data, &kubernetesComputeConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &kubernetesComputeConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s-platform) type KubernetesComputeConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2685,7 +2839,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "altair-platform":
 		altairPBSConfiguration := new(AltairPBSConfiguration)
-		if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == altair-platform) type AltairPBSConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2694,7 +2848,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "lsf-platform":
 		ibmLSFConfiguration := new(IBMLSFConfiguration)
-		if err := utils.UnmarshalJSON(data, &ibmLSFConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &ibmLSFConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == lsf-platform) type IBMLSFConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2703,7 +2857,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "azure-batch":
 		azureBatchConfiguration := new(AzureBatchConfiguration)
-		if err := utils.UnmarshalJSON(data, &azureBatchConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &azureBatchConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzureBatchConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2712,7 +2866,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "seqeracompute-platform":
 		seqeraComputeConfiguration := new(SeqeraComputeConfiguration)
-		if err := utils.UnmarshalJSON(data, &seqeraComputeConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &seqeraComputeConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute-platform) type SeqeraComputeConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2721,7 +2875,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "eks-platform":
 		amazonEKSClusterConfiguration := new(AmazonEKSClusterConfiguration)
-		if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type AmazonEKSClusterConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2730,7 +2884,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "google-lifesciences":
 		googleLifeSciencesConfiguration := new(GoogleLifeSciencesConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-lifesciences) type GoogleLifeSciencesConfiguration within ComputeConfig: %w", string(data), err)
 		}
 
@@ -2739,7 +2893,7 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		return nil
 	case "uge-platform":
 		univaGridEngineConfiguration := new(UnivaGridEngineConfiguration)
-		if err := utils.UnmarshalJSON(data, &univaGridEngineConfiguration, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &univaGridEngineConfiguration, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == uge-platform) type UnivaGridEngineConfiguration within ComputeConfig: %w", string(data), err)
 		}
 

@@ -43,7 +43,7 @@ func (w WorkflowLoad) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowLoad) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"pending", "submitted", "running", "succeeded", "failed", "cached", "aborted", "cpus", "cpuTime", "cpuLoad", "memoryRss", "memoryReq", "readBytes", "writeBytes", "volCtxSwitch", "invCtxSwitch", "loadTasks", "loadCpus", "loadMemory", "peakCpus", "peakTasks", "peakMemory"}); err != nil {
 		return err
 	}
 	return nil

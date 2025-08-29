@@ -2,9 +2,24 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type JobQueue struct {
 	Name  string `json:"name"`
 	State string `json:"state"`
+}
+
+func (j JobQueue) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(j, "", false)
+}
+
+func (j *JobQueue) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &j, "", false, []string{"name", "state"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *JobQueue) GetName() string {

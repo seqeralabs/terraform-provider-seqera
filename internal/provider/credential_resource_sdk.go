@@ -38,11 +38,11 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.AgentSecurityKeys.Shared)
 			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.AgentSecurityKeys.WorkDir)
 		}
-		if resp.Keys.AwsSecurityKeysOutput != nil {
-			r.Keys.Aws = &tfTypes.AwsSecurityKeys{}
+		if resp.Keys.SecurityKeysAwsSecurityKeysOutput != nil {
+			r.Keys.Aws = &tfTypes.SecurityKeysAwsSecurityKeys{}
 			awsPriorData := r.Keys.Aws
-			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AccessKey)
-			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AwsSecurityKeysOutput.AssumeRoleArn)
+			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AccessKey)
+			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AssumeRoleArn)
 			r.Keys.Aws.SecretKey = awsPriorData.SecretKey
 		}
 		if resp.Keys.AzureEntraKeysOutput != nil {
@@ -62,13 +62,13 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.Azurerepos.Password = azurereposPriorData.Password
 			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
 		}
-		if resp.Keys.AzureSecurityKeysOutput != nil {
-			r.Keys.Azure = &tfTypes.AzureSecurityKeys{}
+		if resp.Keys.SecurityKeysAzureSecurityKeysOutput != nil {
+			r.Keys.Azure = &tfTypes.SecurityKeysAzureSecurityKeys{}
 			azurePriorData := r.Keys.Azure
 			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
-			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.BatchName)
+			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.BatchName)
 			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
-			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.AzureSecurityKeysOutput.StorageName)
+			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.StorageName)
 		}
 		if resp.Keys.BitBucketSecurityKeysOutput != nil {
 			r.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys{}
@@ -108,8 +108,8 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.Gitlab.Token = gitlabPriorData.Token
 			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
 		}
-		if resp.Keys.GoogleSecurityKeysOutput != nil {
-			r.Keys.Google = &tfTypes.GoogleSecurityKeys{}
+		if resp.Keys.SecurityKeysGoogleSecurityKeysOutput != nil {
+			r.Keys.Google = &tfTypes.SecurityKeysGoogleSecurityKeys{}
 			googlePriorData := r.Keys.Google
 			r.Keys.Google.Data = googlePriorData.Data
 		}
@@ -287,7 +287,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		category = nil
 	}
 	var keys shared.SecurityKeys
-	var awsSecurityKeys *shared.AwsSecurityKeys
+	var securityKeysAwsSecurityKeys *shared.SecurityKeysAwsSecurityKeys
 	if r.Keys.Aws != nil {
 		accessKey := new(string)
 		if !r.Keys.Aws.AccessKey.IsUnknown() && !r.Keys.Aws.AccessKey.IsNull() {
@@ -307,18 +307,18 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			assumeRoleArn = nil
 		}
-		awsSecurityKeys = &shared.AwsSecurityKeys{
+		securityKeysAwsSecurityKeys = &shared.SecurityKeysAwsSecurityKeys{
 			AccessKey:     accessKey,
 			SecretKey:     secretKey,
 			AssumeRoleArn: assumeRoleArn,
 		}
 	}
-	if awsSecurityKeys != nil {
+	if securityKeysAwsSecurityKeys != nil {
 		keys = shared.SecurityKeys{
-			AwsSecurityKeys: awsSecurityKeys,
+			SecurityKeysAwsSecurityKeys: securityKeysAwsSecurityKeys,
 		}
 	}
-	var googleSecurityKeys *shared.GoogleSecurityKeys
+	var securityKeysGoogleSecurityKeys *shared.SecurityKeysGoogleSecurityKeys
 	if r.Keys.Google != nil {
 		data := new(string)
 		if !r.Keys.Google.Data.IsUnknown() && !r.Keys.Google.Data.IsNull() {
@@ -326,13 +326,13 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			data = nil
 		}
-		googleSecurityKeys = &shared.GoogleSecurityKeys{
+		securityKeysGoogleSecurityKeys = &shared.SecurityKeysGoogleSecurityKeys{
 			Data: data,
 		}
 	}
-	if googleSecurityKeys != nil {
+	if securityKeysGoogleSecurityKeys != nil {
 		keys = shared.SecurityKeys{
-			GoogleSecurityKeys: googleSecurityKeys,
+			SecurityKeysGoogleSecurityKeys: securityKeysGoogleSecurityKeys,
 		}
 	}
 	var gitHubSecurityKeys *shared.GitHubSecurityKeys
@@ -493,7 +493,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			K8sSecurityKeys: k8sSecurityKeys,
 		}
 	}
-	var azureSecurityKeys *shared.AzureSecurityKeys
+	var securityKeysAzureSecurityKeys *shared.SecurityKeysAzureSecurityKeys
 	if r.Keys.Azure != nil {
 		batchName := new(string)
 		if !r.Keys.Azure.BatchName.IsUnknown() && !r.Keys.Azure.BatchName.IsNull() {
@@ -519,16 +519,16 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			storageKey = nil
 		}
-		azureSecurityKeys = &shared.AzureSecurityKeys{
+		securityKeysAzureSecurityKeys = &shared.SecurityKeysAzureSecurityKeys{
 			BatchName:   batchName,
 			StorageName: storageName,
 			BatchKey:    batchKey,
 			StorageKey:  storageKey,
 		}
 	}
-	if azureSecurityKeys != nil {
+	if securityKeysAzureSecurityKeys != nil {
 		keys = shared.SecurityKeys{
-			AzureSecurityKeys: azureSecurityKeys,
+			SecurityKeysAzureSecurityKeys: securityKeysAzureSecurityKeys,
 		}
 	}
 	var azureReposSecurityKeys *shared.AzureReposSecurityKeys

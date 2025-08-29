@@ -2,10 +2,25 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type Subnet struct {
 	ID    *string `json:"id,omitempty"`
 	Zone  *string `json:"zone,omitempty"`
 	VpcID *string `json:"vpcId,omitempty"`
+}
+
+func (s Subnet) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *Subnet) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *Subnet) GetID() *string {
