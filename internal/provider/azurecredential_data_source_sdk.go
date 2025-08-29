@@ -11,7 +11,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *AzureCredentialDataSourceModel) RefreshFromSharedAzureCredential(ctx context.Context, resp *shared.AzureCredential) diag.Diagnostics {
+func (r *AzureCredentialDataSourceModel) RefreshFromSharedAzureCredentialOutput(ctx context.Context, resp *shared.AzureCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {

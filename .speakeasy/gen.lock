@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: dcef39d817837bdcfd3b48ebd4a120ec
+  docChecksum: 005b92577f8479d1905f563a28c3fd3a
   docVersion: 1.56.0
   speakeasyVersion: 1.606.9
   generationVersion: 2.687.13
@@ -202,7 +202,6 @@ generatedFiles:
   - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
   - internal/provider/types/azure_batch_configuration.go
-  - internal/provider/types/azure_credential_input.go
   - internal/provider/types/azure_entra_keys.go
   - internal/provider/types/azure_entra_keys1.go
   - internal/provider/types/azure_repos_security_keys.go
@@ -541,7 +540,6 @@ generatedFiles:
   - internal/sdk/models/shared/azbatchforgeconfig.go
   - internal/sdk/models/shared/azbatchplatformmetainfo.go
   - internal/sdk/models/shared/azurecredential.go
-  - internal/sdk/models/shared/azurecredentialinput.go
   - internal/sdk/models/shared/azuresecuritykeys.go
   - internal/sdk/models/shared/azuresecuritykeysoutput.go
   - internal/sdk/models/shared/bucket.go

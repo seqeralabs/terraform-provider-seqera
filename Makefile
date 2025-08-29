@@ -7,7 +7,7 @@ help: ## Show this help message
 build: ## Build the provider binary
 	go build -o terraform-provider-seqera
 
-generate: ## Generate provider code using Speakeasy and build
+run: ## Generate provider code using Speakeasy and build binary for testing
 	speakeasy run --skip-versioning
 	go build -o terraform-provider-seqera
 

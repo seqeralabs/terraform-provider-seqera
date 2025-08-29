@@ -19,22 +19,24 @@ within the Seqera Platform workflows.
 
 ```terraform
 resource "seqera_azure_credential" "my_azurecredential" {
-  checked = true
-  credentials = {
-    base_url       = "...my_base_url..."
-    category       = "...my_category..."
-    credentials_id = "...my_credentials_id..."
-    description    = "...my_description..."
-    keys = {
-      batch_key    = "YourAzureBatchAccountKeyHere=="
-      batch_name   = "myazurebatch"
-      storage_key  = "YourAzureStorageAccountKeyHere=="
-      storage_name = "myazurestorage"
-    }
-    name          = "...my_name..."
-    provider_type = "azure"
+  base_url       = "...my_base_url..."
+  category       = "...my_category..."
+  checked        = true
+  credentials_id = "...my_credentials_id..."
+  date_created   = "2020-01-26T14:24:16.244Z"
+  deleted        = true
+  description    = "...my_description..."
+  keys = {
+    batch_key    = "YourAzureBatchAccountKeyHere=="
+    batch_name   = "myazurebatch"
+    storage_key  = "YourAzureStorageAccountKeyHere=="
+    storage_name = "myazurestorage"
   }
-  workspace_id = 0
+  last_updated  = "2022-05-23T22:58:45.279Z"
+  last_used     = "2022-09-15T14:55:29.777Z"
+  name          = "...my_name..."
+  provider_type = "azure"
+  workspace_id  = 0
 }
 ```
 
@@ -43,61 +45,31 @@ resource "seqera_azure_credential" "my_azurecredential" {
 
 ### Required
 
-- `credentials` (Attributes) (see [below for nested schema](#nestedatt--credentials))
+- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
+- `name` (String) Display name for the credential (max 100 characters)
+- `provider_type` (String) Cloud provider type (azure). must be "azure"
 
 ### Optional
 
-- `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
-- `workspace_id` (Number) Workspace numeric identifier
-
-### Read-Only
-
 - `base_url` (String) Base URL for the service
 - `category` (String) Category of the credential
-- `credentials_id` (String) Credentials string identifier
+- `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `date_created` (String) Timestamp when the credential was created
 - `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
 - `description` (String) Optional description explaining the purpose of the credential
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `last_updated` (String) Timestamp when the credential was last updated
 - `last_used` (String) Timestamp when the credential was last used
-- `name` (String) Display name for the credential (max 100 characters)
-- `provider_type` (String) Cloud provider type (azure). must be "azure"
+- `workspace_id` (Number) Workspace numeric identifier
 
-<a id="nestedatt--credentials"></a>
-### Nested Schema for `credentials`
-
-Required:
-
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--credentials--keys))
-- `name` (String) Display name for the credential (max 100 characters)
-- `provider_type` (String) Cloud provider type (azure). must be "azure"
-
-Optional:
-
-- `base_url` (String) Base URL for the service
-- `category` (String) Category of the credential
-- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
-- `description` (String) Optional description explaining the purpose of the credential
-
-<a id="nestedatt--credentials--keys"></a>
-### Nested Schema for `credentials.keys`
+<a id="nestedatt--keys"></a>
+### Nested Schema for `keys`
 
 Optional:
 
 - `batch_key` (String)
 - `batch_name` (String)
 - `storage_key` (String)
-- `storage_name` (String)
-
-
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
-
-Read-Only:
-
-- `batch_name` (String)
 - `storage_name` (String)
 
 ## Import

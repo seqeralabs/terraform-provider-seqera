@@ -36,20 +36,19 @@ type AzureCredentialResource struct {
 
 // AzureCredentialResourceModel describes the resource data model.
 type AzureCredentialResourceModel struct {
-	BaseURL       types.String                 `tfsdk:"base_url"`
-	Category      types.String                 `tfsdk:"category"`
-	Checked       types.Bool                   `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
-	Credentials   tfTypes.AzureCredentialInput `tfsdk:"credentials"`
-	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	DateCreated   types.String                 `tfsdk:"date_created"`
-	Deleted       types.Bool                   `tfsdk:"deleted"`
-	Description   types.String                 `tfsdk:"description"`
-	Keys          tfTypes.AzureSecurityKeys1   `tfsdk:"keys"`
-	LastUpdated   types.String                 `tfsdk:"last_updated"`
-	LastUsed      types.String                 `tfsdk:"last_used"`
-	Name          types.String                 `tfsdk:"name"`
-	ProviderType  types.String                 `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL       types.String              `tfsdk:"base_url"`
+	Category      types.String              `tfsdk:"category"`
+	Checked       types.Bool                `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
+	CredentialsID types.String              `tfsdk:"credentials_id"`
+	DateCreated   types.String              `tfsdk:"date_created"`
+	Deleted       types.Bool                `tfsdk:"deleted"`
+	Description   types.String              `tfsdk:"description"`
+	Keys          tfTypes.AzureSecurityKeys `tfsdk:"keys"`
+	LastUpdated   types.String              `tfsdk:"last_updated"`
+	LastUsed      types.String              `tfsdk:"last_used"`
+	Name          types.String              `tfsdk:"name"`
+	ProviderType  types.String              `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64               `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AzureCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -61,78 +60,28 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 		MarkdownDescription: "Manage Azure credentials in Seqera platform using this resource.\n\nAzure credentials store authentication information for accessing Azure services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
-				Computed:    true,
+				Optional:    true,
 				Description: `Base URL for the service`,
 			},
 			"category": schema.StringAttribute{
-				Computed:    true,
+				Optional:    true,
 				Description: `Category of the credential`,
 			},
 			"checked": schema.BoolAttribute{
 				Optional:    true,
 				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
 			},
-			"credentials": schema.SingleNestedAttribute{
-				Required: true,
-				Attributes: map[string]schema.Attribute{
-					"base_url": schema.StringAttribute{
-						Optional:    true,
-						Description: `Base URL for the service`,
-					},
-					"category": schema.StringAttribute{
-						Optional:    true,
-						Description: `Category of the credential`,
-					},
-					"credentials_id": schema.StringAttribute{
-						Optional:    true,
-						Description: `Unique identifier for the credential (max 22 characters)`,
-					},
-					"description": schema.StringAttribute{
-						Optional:    true,
-						Description: `Optional description explaining the purpose of the credential`,
-					},
-					"keys": schema.SingleNestedAttribute{
-						Required: true,
-						Attributes: map[string]schema.Attribute{
-							"batch_key": schema.StringAttribute{
-								Optional: true,
-							},
-							"batch_name": schema.StringAttribute{
-								Optional: true,
-							},
-							"storage_key": schema.StringAttribute{
-								Optional: true,
-							},
-							"storage_name": schema.StringAttribute{
-								Optional: true,
-							},
-						},
-					},
-					"name": schema.StringAttribute{
-						Required:    true,
-						Description: `Display name for the credential (max 100 characters)`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
-					},
-					"provider_type": schema.StringAttribute{
-						Required:    true,
-						Description: `Cloud provider type (azure). must be "azure"`,
-						Validators: []validator.String{
-							stringvalidator.OneOf("azure"),
-						},
-					},
-				},
-			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Credentials string identifier`,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"date_created": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
@@ -143,28 +92,38 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 			},
 			"deleted": schema.BoolAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
 				Description: `Flag indicating if the credential has been soft-deleted`,
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
+				Optional:    true,
 				Description: `Optional description explaining the purpose of the credential`,
 			},
 			"keys": schema.SingleNestedAttribute{
-				Computed: true,
+				Required: true,
 				Attributes: map[string]schema.Attribute{
+					"batch_key": schema.StringAttribute{
+						Optional: true,
+					},
 					"batch_name": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
+					},
+					"storage_key": schema.StringAttribute{
+						Optional: true,
 					},
 					"storage_name": schema.StringAttribute{
 						Computed: true,
+						Optional: true,
 					},
 				},
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
@@ -175,6 +134,7 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 			},
 			"last_used": schema.StringAttribute{
 				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
@@ -184,14 +144,14 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 				},
 			},
 			"name": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Display name for the credential (max 100 characters)`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
 			},
 			"provider_type": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Cloud provider type (azure). must be "azure"`,
 				Validators: []validator.String{
 					stringvalidator.OneOf("azure"),
@@ -306,7 +266,7 @@ func (r *AzureCredentialResource) Create(ctx context.Context, req resource.Creat
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredential(ctx, res1.DescribeAzureCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredentialOutput(ctx, res1.DescribeAzureCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -370,7 +330,7 @@ func (r *AzureCredentialResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredential(ctx, res.DescribeAzureCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredentialOutput(ctx, res.DescribeAzureCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -448,7 +408,7 @@ func (r *AzureCredentialResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredential(ctx, res1.DescribeAzureCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredentialOutput(ctx, res1.DescribeAzureCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return

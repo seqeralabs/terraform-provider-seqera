@@ -177,7 +177,7 @@ func (r *AzureCredentialDataSource) Read(ctx context.Context, req datasource.Rea
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredential(ctx, res.DescribeAzureCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredentialOutput(ctx, res.DescribeAzureCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return

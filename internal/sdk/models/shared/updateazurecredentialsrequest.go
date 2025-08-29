@@ -3,12 +3,12 @@
 package shared
 
 type UpdateAzureCredentialsRequest struct {
-	Credentials AzureCredentialInput `json:"credentials"`
+	Credentials AzureCredential `json:"credentials"`
 }
 
-func (o *UpdateAzureCredentialsRequest) GetCredentials() AzureCredentialInput {
+func (o *UpdateAzureCredentialsRequest) GetCredentials() AzureCredential {
 	if o == nil {
-		return AzureCredentialInput{}
+		return AzureCredential{}
 	}
 	return o.Credentials
 }

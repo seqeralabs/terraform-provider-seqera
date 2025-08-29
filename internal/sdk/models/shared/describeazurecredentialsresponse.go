@@ -3,10 +3,10 @@
 package shared
 
 type DescribeAzureCredentialsResponse struct {
-	Credentials *AzureCredential `json:"credentials,omitempty"`
+	Credentials *AzureCredentialOutput `json:"credentials,omitempty"`
 }
 
-func (o *DescribeAzureCredentialsResponse) GetCredentials() *AzureCredential {
+func (o *DescribeAzureCredentialsResponse) GetCredentials() *AzureCredentialOutput {
 	if o == nil {
 		return nil
 	}
