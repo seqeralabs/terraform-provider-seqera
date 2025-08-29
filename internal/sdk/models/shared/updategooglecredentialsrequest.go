@@ -3,12 +3,12 @@
 package shared
 
 type UpdateGoogleCredentialsRequest struct {
-	Credentials GoogleCredentialInput `json:"credentials"`
+	Credentials GoogleCredential `json:"credentials"`
 }
 
-func (o *UpdateGoogleCredentialsRequest) GetCredentials() GoogleCredentialInput {
+func (o *UpdateGoogleCredentialsRequest) GetCredentials() GoogleCredential {
 	if o == nil {
-		return GoogleCredentialInput{}
+		return GoogleCredential{}
 	}
 	return o.Credentials
 }

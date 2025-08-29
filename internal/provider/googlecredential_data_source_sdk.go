@@ -11,7 +11,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *GoogleCredentialDataSourceModel) RefreshFromSharedGoogleCredential(ctx context.Context, resp *shared.GoogleCredential) diag.Diagnostics {
+func (r *GoogleCredentialDataSourceModel) RefreshFromSharedGoogleCredentialOutput(ctx context.Context, resp *shared.GoogleCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {

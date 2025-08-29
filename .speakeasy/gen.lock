@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 798a082e1b596985214720db2148a80d
+  docChecksum: dcef39d817837bdcfd3b48ebd4a120ec
   docVersion: 1.56.0
   speakeasyVersion: 1.606.9
   generationVersion: 2.687.13
@@ -241,7 +241,6 @@ generatedFiles:
   - internal/provider/types/github_action_config.go
   - internal/provider/types/github_action_event.go
   - internal/provider/types/google_batch_service_configuration.go
-  - internal/provider/types/google_credential_input.go
   - internal/provider/types/google_gke_cluster_configuration.go
   - internal/provider/types/google_life_sciences_configuration.go
   - internal/provider/types/google_security_keys.go
@@ -669,7 +668,6 @@ generatedFiles:
   - internal/sdk/models/shared/getworkflowmetricsresponse.go
   - internal/sdk/models/shared/gkeplatformmetainfo.go
   - internal/sdk/models/shared/googlecredential.go
-  - internal/sdk/models/shared/googlecredentialinput.go
   - internal/sdk/models/shared/googleplatformmetainfo.go
   - internal/sdk/models/shared/googleplatformmetainfobucket.go
   - internal/sdk/models/shared/googleplatformmetainfofilestore.go

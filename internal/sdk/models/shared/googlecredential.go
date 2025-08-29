@@ -53,8 +53,8 @@ type GoogleCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        GoogleSecurityKeysOutput `json:"keys"`
+	LastUpdated *time.Time         `json:"lastUpdated,omitempty"`
+	Keys        GoogleSecurityKeys `json:"keys"`
 }
 
 func (g GoogleCredential) MarshalJSON() ([]byte, error) {
@@ -138,7 +138,119 @@ func (o *GoogleCredential) GetLastUpdated() *time.Time {
 	return o.LastUpdated
 }
 
-func (o *GoogleCredential) GetKeys() GoogleSecurityKeysOutput {
+func (o *GoogleCredential) GetKeys() GoogleSecurityKeys {
+	if o == nil {
+		return GoogleSecurityKeys{}
+	}
+	return o.Keys
+}
+
+type GoogleCredentialOutput struct {
+	// Unique identifier for the credential (max 22 characters)
+	CredentialsID *string `json:"id,omitempty"`
+	// Display name for the credential (max 100 characters)
+	Name string `json:"name"`
+	// Optional description explaining the purpose of the credential
+	Description *string `json:"description,omitempty"`
+	// Cloud provider type (google)
+	ProviderType GoogleCredentialProviderType `json:"provider"`
+	// Base URL for the service
+	BaseURL *string `json:"baseUrl,omitempty"`
+	// Category of the credential
+	Category *string `json:"category,omitempty"`
+	// Flag indicating if the credential has been soft-deleted
+	Deleted *bool `json:"deleted,omitempty"`
+	// Timestamp when the credential was last used
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Timestamp when the credential was created
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	// Timestamp when the credential was last updated
+	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
+	Keys        GoogleSecurityKeysOutput `json:"keys"`
+}
+
+func (g GoogleCredentialOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleCredentialOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "provider", "keys"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *GoogleCredentialOutput) GetCredentialsID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.CredentialsID
+}
+
+func (o *GoogleCredentialOutput) GetName() string {
+	if o == nil {
+		return ""
+	}
+	return o.Name
+}
+
+func (o *GoogleCredentialOutput) GetDescription() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Description
+}
+
+func (o *GoogleCredentialOutput) GetProviderType() GoogleCredentialProviderType {
+	if o == nil {
+		return GoogleCredentialProviderType("")
+	}
+	return o.ProviderType
+}
+
+func (o *GoogleCredentialOutput) GetBaseURL() *string {
+	if o == nil {
+		return nil
+	}
+	return o.BaseURL
+}
+
+func (o *GoogleCredentialOutput) GetCategory() *string {
+	if o == nil {
+		return nil
+	}
+	return o.Category
+}
+
+func (o *GoogleCredentialOutput) GetDeleted() *bool {
+	if o == nil {
+		return nil
+	}
+	return o.Deleted
+}
+
+func (o *GoogleCredentialOutput) GetLastUsed() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.LastUsed
+}
+
+func (o *GoogleCredentialOutput) GetDateCreated() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.DateCreated
+}
+
+func (o *GoogleCredentialOutput) GetLastUpdated() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.LastUpdated
+}
+
+func (o *GoogleCredentialOutput) GetKeys() GoogleSecurityKeysOutput {
 	if o == nil {
 		return GoogleSecurityKeysOutput{}
 	}

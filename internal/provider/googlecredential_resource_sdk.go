@@ -9,6 +9,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
+	"time"
 )
 
 func (r *GoogleCredentialResourceModel) RefreshFromSharedCreateGoogleCredentialsResponse(ctx context.Context, resp *shared.CreateGoogleCredentialsResponse) diag.Diagnostics {
@@ -21,7 +22,7 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedCreateGoogleCredentials
 	return diags
 }
 
-func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredential(ctx context.Context, resp *shared.GoogleCredential) diag.Diagnostics {
+func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(ctx context.Context, resp *shared.GoogleCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -31,6 +32,8 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredential(ctx co
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		keysPriorData := r.Keys
+		r.Keys.Data = keysPriorData.Data
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
@@ -142,54 +145,96 @@ func (r *GoogleCredentialResourceModel) ToOperationsUpdateGoogleCredentialsReque
 func (r *GoogleCredentialResourceModel) ToSharedCreateGoogleCredentialsRequest(ctx context.Context) (*shared.CreateGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	credentials, credentialsDiags := r.ToSharedGoogleCredential(ctx)
+	diags.Append(credentialsDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
+	out := shared.CreateGoogleCredentialsRequest{
+		Credentials: *credentials,
+	}
+
+	return &out, diags
+}
+
+func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Context) (*shared.GoogleCredential, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
 	credentialsID := new(string)
-	if !r.Credentials.CredentialsID.IsUnknown() && !r.Credentials.CredentialsID.IsNull() {
-		*credentialsID = r.Credentials.CredentialsID.ValueString()
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
 		credentialsID = nil
 	}
 	var name string
-	name = r.Credentials.Name.ValueString()
+	name = r.Name.ValueString()
 
 	description := new(string)
-	if !r.Credentials.Description.IsUnknown() && !r.Credentials.Description.IsNull() {
-		*description = r.Credentials.Description.ValueString()
+	if !r.Description.IsUnknown() && !r.Description.IsNull() {
+		*description = r.Description.ValueString()
 	} else {
 		description = nil
 	}
-	providerType := shared.GoogleCredentialInputProviderType(r.Credentials.ProviderType.ValueString())
+	providerType := shared.GoogleCredentialProviderType(r.ProviderType.ValueString())
 	baseURL := new(string)
-	if !r.Credentials.BaseURL.IsUnknown() && !r.Credentials.BaseURL.IsNull() {
-		*baseURL = r.Credentials.BaseURL.ValueString()
+	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
+		*baseURL = r.BaseURL.ValueString()
 	} else {
 		baseURL = nil
 	}
 	category := new(string)
-	if !r.Credentials.Category.IsUnknown() && !r.Credentials.Category.IsNull() {
-		*category = r.Credentials.Category.ValueString()
+	if !r.Category.IsUnknown() && !r.Category.IsNull() {
+		*category = r.Category.ValueString()
 	} else {
 		category = nil
 	}
+	deleted := new(bool)
+	if !r.Deleted.IsUnknown() && !r.Deleted.IsNull() {
+		*deleted = r.Deleted.ValueBool()
+	} else {
+		deleted = nil
+	}
+	lastUsed := new(time.Time)
+	if !r.LastUsed.IsUnknown() && !r.LastUsed.IsNull() {
+		*lastUsed, _ = time.Parse(time.RFC3339Nano, r.LastUsed.ValueString())
+	} else {
+		lastUsed = nil
+	}
+	dateCreated := new(time.Time)
+	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
+		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
+	} else {
+		dateCreated = nil
+	}
+	lastUpdated := new(time.Time)
+	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
+		*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.LastUpdated.ValueString())
+	} else {
+		lastUpdated = nil
+	}
 	data := new(string)
-	if !r.Credentials.Keys.Data.IsUnknown() && !r.Credentials.Keys.Data.IsNull() {
-		*data = r.Credentials.Keys.Data.ValueString()
+	if !r.Keys.Data.IsUnknown() && !r.Keys.Data.IsNull() {
+		*data = r.Keys.Data.ValueString()
 	} else {
 		data = nil
 	}
 	keys := shared.GoogleSecurityKeys{
 		Data: data,
 	}
-	credentials := shared.GoogleCredentialInput{
+	out := shared.GoogleCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
 		Description:   description,
 		ProviderType:  providerType,
 		BaseURL:       baseURL,
 		Category:      category,
+		Deleted:       deleted,
+		LastUsed:      lastUsed,
+		DateCreated:   dateCreated,
+		LastUpdated:   lastUpdated,
 		Keys:          keys,
-	}
-	out := shared.CreateGoogleCredentialsRequest{
-		Credentials: credentials,
 	}
 
 	return &out, diags
@@ -198,54 +243,15 @@ func (r *GoogleCredentialResourceModel) ToSharedCreateGoogleCredentialsRequest(c
 func (r *GoogleCredentialResourceModel) ToSharedUpdateGoogleCredentialsRequest(ctx context.Context) (*shared.UpdateGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentialsID := new(string)
-	if !r.Credentials.CredentialsID.IsUnknown() && !r.Credentials.CredentialsID.IsNull() {
-		*credentialsID = r.Credentials.CredentialsID.ValueString()
-	} else {
-		credentialsID = nil
-	}
-	var name string
-	name = r.Credentials.Name.ValueString()
+	credentials, credentialsDiags := r.ToSharedGoogleCredential(ctx)
+	diags.Append(credentialsDiags...)
 
-	description := new(string)
-	if !r.Credentials.Description.IsUnknown() && !r.Credentials.Description.IsNull() {
-		*description = r.Credentials.Description.ValueString()
-	} else {
-		description = nil
+	if diags.HasError() {
+		return nil, diags
 	}
-	providerType := shared.GoogleCredentialInputProviderType(r.Credentials.ProviderType.ValueString())
-	baseURL := new(string)
-	if !r.Credentials.BaseURL.IsUnknown() && !r.Credentials.BaseURL.IsNull() {
-		*baseURL = r.Credentials.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
-	category := new(string)
-	if !r.Credentials.Category.IsUnknown() && !r.Credentials.Category.IsNull() {
-		*category = r.Credentials.Category.ValueString()
-	} else {
-		category = nil
-	}
-	data := new(string)
-	if !r.Credentials.Keys.Data.IsUnknown() && !r.Credentials.Keys.Data.IsNull() {
-		*data = r.Credentials.Keys.Data.ValueString()
-	} else {
-		data = nil
-	}
-	keys := shared.GoogleSecurityKeys{
-		Data: data,
-	}
-	credentials := shared.GoogleCredentialInput{
-		CredentialsID: credentialsID,
-		Name:          name,
-		Description:   description,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Category:      category,
-		Keys:          keys,
-	}
+
 	out := shared.UpdateGoogleCredentialsRequest{
-		Credentials: credentials,
+		Credentials: *credentials,
 	}
 
 	return &out, diags

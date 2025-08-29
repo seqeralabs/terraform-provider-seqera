@@ -169,7 +169,7 @@ func (r *GoogleCredentialDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGoogleCredential(ctx, res.DescribeGoogleCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedGoogleCredentialOutput(ctx, res.DescribeGoogleCredentialsResponse.Credentials)...)
 
 	if resp.Diagnostics.HasError() {
 		return

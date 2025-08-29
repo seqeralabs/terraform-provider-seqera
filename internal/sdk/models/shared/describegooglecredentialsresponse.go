@@ -3,10 +3,10 @@
 package shared
 
 type DescribeGoogleCredentialsResponse struct {
-	Credentials *GoogleCredential `json:"credentials,omitempty"`
+	Credentials *GoogleCredentialOutput `json:"credentials,omitempty"`
 }
 
-func (o *DescribeGoogleCredentialsResponse) GetCredentials() *GoogleCredential {
+func (o *DescribeGoogleCredentialsResponse) GetCredentials() *GoogleCredentialOutput {
 	if o == nil {
 		return nil
 	}

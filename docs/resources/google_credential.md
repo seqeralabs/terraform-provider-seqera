@@ -19,19 +19,21 @@ within the Seqera Platform workflows.
 
 ```terraform
 resource "seqera_google_credential" "my_googlecredential" {
-  checked = false
-  credentials = {
-    base_url       = "...my_base_url..."
-    category       = "...my_category..."
-    credentials_id = "...my_credentials_id..."
-    description    = "...my_description..."
-    keys = {
-      data = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
-    }
-    name          = "...my_name..."
-    provider_type = "google"
+  base_url       = "...my_base_url..."
+  category       = "...my_category..."
+  checked        = false
+  credentials_id = "...my_credentials_id..."
+  date_created   = "2022-11-20T02:44:17.334Z"
+  deleted        = false
+  description    = "...my_description..."
+  keys = {
+    data = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
   }
-  workspace_id = 6
+  last_updated  = "2022-05-09T00:51:23.496Z"
+  last_used     = "2021-10-25T20:07:00.111Z"
+  name          = "...my_name..."
+  provider_type = "google"
+  workspace_id  = 6
 }
 ```
 
@@ -40,54 +42,29 @@ resource "seqera_google_credential" "my_googlecredential" {
 
 ### Required
 
-- `credentials` (Attributes) (see [below for nested schema](#nestedatt--credentials))
+- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
+- `name` (String) Display name for the credential (max 100 characters)
+- `provider_type` (String) Cloud provider type (google). must be "google"
 
 ### Optional
 
-- `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
-- `workspace_id` (Number) Workspace numeric identifier
-
-### Read-Only
-
 - `base_url` (String) Base URL for the service
 - `category` (String) Category of the credential
-- `credentials_id` (String) Credentials string identifier
+- `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `date_created` (String) Timestamp when the credential was created
 - `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
 - `description` (String) Optional description explaining the purpose of the credential
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `last_updated` (String) Timestamp when the credential was last updated
 - `last_used` (String) Timestamp when the credential was last used
-- `name` (String) Display name for the credential (max 100 characters)
-- `provider_type` (String) Cloud provider type (google). must be "google"
+- `workspace_id` (Number) Workspace numeric identifier
 
-<a id="nestedatt--credentials"></a>
-### Nested Schema for `credentials`
-
-Required:
-
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--credentials--keys))
-- `name` (String) Display name for the credential (max 100 characters)
-- `provider_type` (String) Cloud provider type (google). must be "google"
-
-Optional:
-
-- `base_url` (String) Base URL for the service
-- `category` (String) Category of the credential
-- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
-- `description` (String) Optional description explaining the purpose of the credential
-
-<a id="nestedatt--credentials--keys"></a>
-### Nested Schema for `credentials.keys`
+<a id="nestedatt--keys"></a>
+### Nested Schema for `keys`
 
 Optional:
 
 - `data` (String, Sensitive)
-
-
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
 
 ## Import
 
