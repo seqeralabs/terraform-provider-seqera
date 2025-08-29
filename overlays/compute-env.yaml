@@ -236,3 +236,11 @@ actions:
   - target: $.components.schemas.AwsBatchConfig
     update:
       x-speakeasy-plan-validators: awsForgeValidator
+
+  # Fix ForgeConfig subnets field type to ensure it's treated as array of strings
+  - target: $.components.schemas.ForgeConfig.properties.subnets
+    update:
+      type: array
+      items:
+        type: string
+      description: "List of subnet IDs"

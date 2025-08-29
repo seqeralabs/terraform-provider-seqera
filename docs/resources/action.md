@@ -287,7 +287,7 @@ Read-Only:
 - `max_cpus` (Number)
 - `min_cpus` (Number)
 - `security_groups` (List of String)
-- `subnets` (List of String)
+- `subnets` (List of String) List of subnet IDs
 - `type` (String) must be one of ["SPOT", "EC2"]
 - `vpc_id` (String)
 
@@ -714,7 +714,7 @@ Read-Only:
 - `max_cpus` (Number)
 - `min_cpus` (Number)
 - `security_groups` (List of String)
-- `subnets` (List of String)
+- `subnets` (List of String) List of subnet IDs
 - `type` (String) must be one of ["SPOT", "EC2"]
 - `vpc_id` (String)
 

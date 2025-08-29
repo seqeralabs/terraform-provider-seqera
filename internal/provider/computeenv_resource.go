@@ -687,7 +687,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												Description: `List of subnet IDs. Requires replacement if changed.`,
 											},
 											"type": schema.StringAttribute{
 												Computed: true,
@@ -3677,7 +3677,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												Description: `List of subnet IDs. Requires replacement if changed.`,
 											},
 											"type": schema.StringAttribute{
 												Computed: true,

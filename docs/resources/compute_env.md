@@ -247,7 +247,7 @@ Optional:
 - `max_cpus` (Number) Not Null; Requires replacement if changed.
 - `min_cpus` (Number) Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
-- `subnets` (List of String) Requires replacement if changed.
+- `subnets` (List of String) List of subnet IDs. Requires replacement if changed.
 - `type` (String) Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
 - `vpc_id` (String) Requires replacement if changed.
 
@@ -674,7 +674,7 @@ Optional:
 - `max_cpus` (Number) Not Null; Requires replacement if changed.
 - `min_cpus` (Number) Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
-- `subnets` (List of String) Requires replacement if changed.
+- `subnets` (List of String) List of subnet IDs. Requires replacement if changed.
 - `type` (String) Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
 - `vpc_id` (String) Requires replacement if changed.
 

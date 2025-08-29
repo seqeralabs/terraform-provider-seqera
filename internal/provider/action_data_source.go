@@ -401,6 +401,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													"subnets": schema.ListAttribute{
 														Computed:    true,
 														ElementType: types.StringType,
+														Description: `List of subnet IDs`,
 													},
 													"type": schema.StringAttribute{
 														Computed: true,
@@ -1382,6 +1383,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 													"subnets": schema.ListAttribute{
 														Computed:    true,
 														ElementType: types.StringType,
+														Description: `List of subnet IDs`,
 													},
 													"type": schema.StringAttribute{
 														Computed: true,

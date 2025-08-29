@@ -74,6 +74,8 @@ resource "seqera_compute_env" "aws_batch_compute_env" {
           gpu_enabled    = false
           arm64_enabled  = false
 
+          subnets = ["subnet-007904cf8fb267b5c", "subnet-084937d89da29ae0c", "subnet-0a1a389f81da4bdd6"]
+
           #   # Optional: EC2 key pair for debugging
           #   ec2_key_pair = var.ec2_key_pair_name
         }

@@ -67,36 +67,37 @@ func (e *AllocStrategy) UnmarshalJSON(data []byte) error {
 }
 
 type ForgeConfig struct {
-	Type               ForgeConfigType `json:"type"`
-	MinCpus            int             `json:"minCpus"`
-	MaxCpus            int             `json:"maxCpus"`
-	GpuEnabled         *bool           `json:"gpuEnabled,omitempty"`
-	EbsAutoScale       *bool           `json:"ebsAutoScale,omitempty"`
-	InstanceTypes      []string        `json:"instanceTypes,omitempty"`
-	AllocStrategy      *AllocStrategy  `json:"allocStrategy,omitempty"`
-	ImageID            *string         `json:"imageId,omitempty"`
-	VpcID              *string         `json:"vpcId,omitempty"`
-	Subnets            []string        `json:"subnets,omitempty"`
-	SecurityGroups     []string        `json:"securityGroups,omitempty"`
-	FsxMount           *string         `json:"fsxMount,omitempty"`
-	FsxName            *string         `json:"fsxName,omitempty"`
-	FsxSize            *int            `json:"fsxSize,omitempty"`
-	DisposeOnDeletion  *bool           `json:"disposeOnDeletion,omitempty"`
-	Ec2KeyPair         *string         `json:"ec2KeyPair,omitempty"`
-	AllowBuckets       []string        `json:"allowBuckets,omitempty"`
-	EbsBlockSize       *int            `json:"ebsBlockSize,omitempty"`
-	FusionEnabled      *bool           `json:"fusionEnabled,omitempty"`
-	BidPercentage      *int            `json:"bidPercentage,omitempty"`
-	EfsCreate          *bool           `json:"efsCreate,omitempty"`
-	EfsID              *string         `json:"efsId,omitempty"`
-	EfsMount           *string         `json:"efsMount,omitempty"`
-	DragenEnabled      *bool           `json:"dragenEnabled,omitempty"`
-	DragenAmiID        *string         `json:"dragenAmiId,omitempty"`
-	EbsBootSize        *int            `json:"ebsBootSize,omitempty"`
-	EcsConfig          *string         `json:"ecsConfig,omitempty"`
-	FargateHeadEnabled *bool           `json:"fargateHeadEnabled,omitempty"`
-	Arm64Enabled       *bool           `json:"arm64Enabled,omitempty"`
-	DragenInstanceType *string         `json:"dragenInstanceType,omitempty"`
+	Type          ForgeConfigType `json:"type"`
+	MinCpus       int             `json:"minCpus"`
+	MaxCpus       int             `json:"maxCpus"`
+	GpuEnabled    *bool           `json:"gpuEnabled,omitempty"`
+	EbsAutoScale  *bool           `json:"ebsAutoScale,omitempty"`
+	InstanceTypes []string        `json:"instanceTypes,omitempty"`
+	AllocStrategy *AllocStrategy  `json:"allocStrategy,omitempty"`
+	ImageID       *string         `json:"imageId,omitempty"`
+	VpcID         *string         `json:"vpcId,omitempty"`
+	// List of subnet IDs
+	Subnets            []string `json:"subnets,omitempty"`
+	SecurityGroups     []string `json:"securityGroups,omitempty"`
+	FsxMount           *string  `json:"fsxMount,omitempty"`
+	FsxName            *string  `json:"fsxName,omitempty"`
+	FsxSize            *int     `json:"fsxSize,omitempty"`
+	DisposeOnDeletion  *bool    `json:"disposeOnDeletion,omitempty"`
+	Ec2KeyPair         *string  `json:"ec2KeyPair,omitempty"`
+	AllowBuckets       []string `json:"allowBuckets,omitempty"`
+	EbsBlockSize       *int     `json:"ebsBlockSize,omitempty"`
+	FusionEnabled      *bool    `json:"fusionEnabled,omitempty"`
+	BidPercentage      *int     `json:"bidPercentage,omitempty"`
+	EfsCreate          *bool    `json:"efsCreate,omitempty"`
+	EfsID              *string  `json:"efsId,omitempty"`
+	EfsMount           *string  `json:"efsMount,omitempty"`
+	DragenEnabled      *bool    `json:"dragenEnabled,omitempty"`
+	DragenAmiID        *string  `json:"dragenAmiId,omitempty"`
+	EbsBootSize        *int     `json:"ebsBootSize,omitempty"`
+	EcsConfig          *string  `json:"ecsConfig,omitempty"`
+	FargateHeadEnabled *bool    `json:"fargateHeadEnabled,omitempty"`
+	Arm64Enabled       *bool    `json:"arm64Enabled,omitempty"`
+	DragenInstanceType *string  `json:"dragenInstanceType,omitempty"`
 }
 
 func (f ForgeConfig) MarshalJSON() ([]byte, error) {

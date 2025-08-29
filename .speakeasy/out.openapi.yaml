@@ -10570,6 +10570,7 @@ components:
           type: array
           items:
             type: string
+          description: "List of subnet IDs"
         securityGroups:
           type: array
           items:

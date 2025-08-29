@@ -259,6 +259,7 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 											"subnets": schema.ListAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
+												Description: `List of subnet IDs`,
 											},
 											"type": schema.StringAttribute{
 												Computed: true,
@@ -1240,6 +1241,7 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 											"subnets": schema.ListAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
+												Description: `List of subnet IDs`,
 											},
 											"type": schema.StringAttribute{
 												Computed: true,
