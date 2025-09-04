@@ -6,7 +6,7 @@ resource "seqera_studios" "my_studios" {
     cpu               = 2
     gpu               = 8
     lifespan_hours    = 2
-    memory            = 3
+    memory            = 8192
     mount_data = [
       "..."
     ]
