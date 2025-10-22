@@ -798,18 +798,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"last_used": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Timestamp when the credential was last used`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),

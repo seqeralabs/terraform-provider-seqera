@@ -352,7 +352,7 @@ func (r *AWSComputeEnvDataSource) Read(ctx context.Context, req datasource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.GetAws(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

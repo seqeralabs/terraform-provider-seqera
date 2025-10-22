@@ -1,0 +1,49 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Deduplicate Enum Schemas
+  version: 0.0.0
+actions:
+  # Create a shared enum schema for grid platform types
+  # This enum is duplicated in CreateManagedIdentityRequest and ManagedIdentityDbDto_AbstractGridConfig_
+
+  # Step 1: Create a shared GridPlatform enum schema
+  - target: $.components.schemas
+    update:
+      GridPlatform:
+        type: string
+        description: Grid computing platform type
+        enum:
+          - altair-platform
+          - lsf-platform
+          - moab-platform
+          - slurm-platform
+          - uge-platform
+        x-enum-varnames:
+          - AltairPlatform
+          - LsfPlatform
+          - MoabPlatform
+          - SlurmPlatform
+          - UgePlatform
+
+  # Step 2: Remove inline enum properties from CreateManagedIdentityRequest
+  - target: $.components.schemas.CreateManagedIdentityRequest.properties.platform.type
+    remove: true
+  - target: $.components.schemas.CreateManagedIdentityRequest.properties.platform.enum
+    remove: true
+
+  # Step 3: Add reference to CreateManagedIdentityRequest
+  - target: $.components.schemas.CreateManagedIdentityRequest.properties.platform
+    update:
+      $ref: "#/components/schemas/GridPlatform"
+
+  # Step 4: Remove inline enum properties from ManagedIdentityDbDto_AbstractGridConfig_
+  - target: $.components.schemas["ManagedIdentityDbDto_AbstractGridConfig_"].properties.platform.type
+    remove: true
+  - target: $.components.schemas["ManagedIdentityDbDto_AbstractGridConfig_"].properties.platform.enum
+    remove: true
+
+  # Step 5: Add reference to ManagedIdentityDbDto_AbstractGridConfig_
+  - target: $.components.schemas["ManagedIdentityDbDto_AbstractGridConfig_"].properties.platform
+    update:
+      $ref: "#/components/schemas/GridPlatform"

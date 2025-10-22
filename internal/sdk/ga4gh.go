@@ -532,10 +532,6 @@ func (s *Ga4gh) Ga4ghRunCancel(ctx context.Context, request operations.Ga4ghRunC
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
 
 	timeout := o.Timeout
 	if timeout == nil {
@@ -548,15 +544,12 @@ func (s *Ga4gh) Ga4ghRunCancel(ctx context.Context, request operations.Ga4ghRunC
 		defer cancel()
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
 
 	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
 		return nil, err

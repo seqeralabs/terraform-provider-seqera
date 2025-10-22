@@ -944,9 +944,9 @@ func (s *Credentials) DeleteCredentials(ctx context.Context, request operations.
 
 }
 
-// CreateAzureCredentials - Create Azure credentials
+// CreateAzure - Create Azure credentials
 // Creates new Azure credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateAzureCredentials(ctx context.Context, request operations.CreateAzureCredentialsRequest, opts ...operations.Option) (*operations.CreateAzureCredentialsResponse, error) {
+func (s *Credentials) CreateAzure(ctx context.Context, request operations.CreateAzureCredentialsRequest, opts ...operations.Option) (*operations.CreateAzureCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1107,9 +1107,9 @@ func (s *Credentials) CreateAzureCredentials(ctx context.Context, request operat
 
 }
 
-// DescribeAzureCredentials - Describe Azure credentials
+// GetAzure - Describe Azure credentials
 // Retrieves the details of the Azure credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeAzureCredentials(ctx context.Context, request operations.DescribeAzureCredentialsRequest, opts ...operations.Option) (*operations.DescribeAzureCredentialsResponse, error) {
+func (s *Credentials) GetAzure(ctx context.Context, request operations.DescribeAzureCredentialsRequest, opts ...operations.Option) (*operations.DescribeAzureCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1263,9 +1263,9 @@ func (s *Credentials) DescribeAzureCredentials(ctx context.Context, request oper
 
 }
 
-// UpdateAzureCredentials - Update Azure credentials
+// UpdateAzure - Update Azure credentials
 // Updates the details of the Azure credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateAzureCredentials(ctx context.Context, request operations.UpdateAzureCredentialsRequest, opts ...operations.Option) (*operations.UpdateAzureCredentialsResponse, error) {
+func (s *Credentials) UpdateAzure(ctx context.Context, request operations.UpdateAzureCredentialsRequest, opts ...operations.Option) (*operations.UpdateAzureCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1406,9 +1406,9 @@ func (s *Credentials) UpdateAzureCredentials(ctx context.Context, request operat
 
 }
 
-// DeleteAzureCredentials - Delete Azure credentials
+// Delete Azure credentials
 // Deletes the Azure credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteAzureCredentials(ctx context.Context, request operations.DeleteAzureCredentialsRequest, opts ...operations.Option) (*operations.DeleteAzureCredentialsResponse, error) {
+func (s *Credentials) Delete(ctx context.Context, request operations.DeleteAzureCredentialsRequest, opts ...operations.Option) (*operations.DeleteAzureCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1563,9 +1563,9 @@ func (s *Credentials) DeleteAzureCredentials(ctx context.Context, request operat
 
 }
 
-// CreateGoogleCredentials - Create Google credentials
+// CreateGoogle - Create Google credentials
 // Creates new Google credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateGoogleCredentials(ctx context.Context, request operations.CreateGoogleCredentialsRequest, opts ...operations.Option) (*operations.CreateGoogleCredentialsResponse, error) {
+func (s *Credentials) CreateGoogle(ctx context.Context, request operations.CreateGoogleCredentialsRequest, opts ...operations.Option) (*operations.CreateGoogleCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1726,9 +1726,9 @@ func (s *Credentials) CreateGoogleCredentials(ctx context.Context, request opera
 
 }
 
-// DescribeGoogleCredentials - Describe Google credentials
+// GetGoogle - Describe Google credentials
 // Retrieves the details of the Google credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeGoogleCredentials(ctx context.Context, request operations.DescribeGoogleCredentialsRequest, opts ...operations.Option) (*operations.DescribeGoogleCredentialsResponse, error) {
+func (s *Credentials) GetGoogle(ctx context.Context, request operations.DescribeGoogleCredentialsRequest, opts ...operations.Option) (*operations.DescribeGoogleCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1882,9 +1882,9 @@ func (s *Credentials) DescribeGoogleCredentials(ctx context.Context, request ope
 
 }
 
-// UpdateGoogleCredentials - Update Google credentials
+// UpdateGoogle - Update Google credentials
 // Updates the details of the Google credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateGoogleCredentials(ctx context.Context, request operations.UpdateGoogleCredentialsRequest, opts ...operations.Option) (*operations.UpdateGoogleCredentialsResponse, error) {
+func (s *Credentials) UpdateGoogle(ctx context.Context, request operations.UpdateGoogleCredentialsRequest, opts ...operations.Option) (*operations.UpdateGoogleCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2025,9 +2025,9 @@ func (s *Credentials) UpdateGoogleCredentials(ctx context.Context, request opera
 
 }
 
-// DeleteGoogleCredentials - Delete Google credentials
+// DeleteGoogle - Delete Google credentials
 // Deletes the Google credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteGoogleCredentials(ctx context.Context, request operations.DeleteGoogleCredentialsRequest, opts ...operations.Option) (*operations.DeleteGoogleCredentialsResponse, error) {
+func (s *Credentials) DeleteGoogle(ctx context.Context, request operations.DeleteGoogleCredentialsRequest, opts ...operations.Option) (*operations.DeleteGoogleCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2182,9 +2182,9 @@ func (s *Credentials) DeleteGoogleCredentials(ctx context.Context, request opera
 
 }
 
-// CreateAWSCredentials - Create AWS credentials
+// CreateAws - Create AWS credentials
 // Creates new AWS credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateAWSCredentials(ctx context.Context, request operations.CreateAWSCredentialsRequest, opts ...operations.Option) (*operations.CreateAWSCredentialsResponse, error) {
+func (s *Credentials) CreateAws(ctx context.Context, request operations.CreateAWSCredentialsRequest, opts ...operations.Option) (*operations.CreateAWSCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2345,9 +2345,9 @@ func (s *Credentials) CreateAWSCredentials(ctx context.Context, request operatio
 
 }
 
-// DescribeAWSCredentials - Describe AWS credentials
+// GetAWS - Describe AWS credentials
 // Retrieves the details of the AWS credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeAWSCredentials(ctx context.Context, request operations.DescribeAWSCredentialsRequest, opts ...operations.Option) (*operations.DescribeAWSCredentialsResponse, error) {
+func (s *Credentials) GetAWS(ctx context.Context, request operations.DescribeAWSCredentialsRequest, opts ...operations.Option) (*operations.DescribeAWSCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2501,9 +2501,9 @@ func (s *Credentials) DescribeAWSCredentials(ctx context.Context, request operat
 
 }
 
-// UpdateAWSCredentials - Update AWS credentials
+// UpdateAws - Update AWS credentials
 // Updates the details of the AWS credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateAWSCredentials(ctx context.Context, request operations.UpdateAWSCredentialsRequest, opts ...operations.Option) (*operations.UpdateAWSCredentialsResponse, error) {
+func (s *Credentials) UpdateAws(ctx context.Context, request operations.UpdateAWSCredentialsRequest, opts ...operations.Option) (*operations.UpdateAWSCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2644,9 +2644,9 @@ func (s *Credentials) UpdateAWSCredentials(ctx context.Context, request operatio
 
 }
 
-// DeleteAWSCredentials - Delete AWS credentials
+// DeleteAWS - Delete AWS credentials
 // Deletes the AWS credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteAWSCredentials(ctx context.Context, request operations.DeleteAWSCredentialsRequest, opts ...operations.Option) (*operations.DeleteAWSCredentialsResponse, error) {
+func (s *Credentials) DeleteAWS(ctx context.Context, request operations.DeleteAWSCredentialsRequest, opts ...operations.Option) (*operations.DeleteAWSCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

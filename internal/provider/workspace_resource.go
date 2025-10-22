@@ -12,13 +12,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -57,12 +58,9 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -81,18 +79,18 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"id": schema.Int64Attribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Int64{
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+				},
 				Description: `Workspace numeric identifier`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -101,6 +99,7 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				Required: true,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(40),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$`).String()),
 				},
 			},
 			"org_id": schema.Int64Attribute{

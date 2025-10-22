@@ -397,9 +397,9 @@ func (s *Labels) RemoveLabelsFromActions(ctx context.Context, request operations
 
 }
 
-// AddLabelsToDatasets - Add labels to datasets
+// AddToDatasets - Add labels to datasets
 // Adds the given list of labels to the given datasets. Existing labels are preserved.
-func (s *Labels) AddLabelsToDatasets(ctx context.Context, request operations.AddLabelsToDatasetsRequest, opts ...operations.Option) (*operations.AddLabelsToDatasetsResponse, error) {
+func (s *Labels) AddToDatasets(ctx context.Context, request operations.AddLabelsToDatasetsRequest, opts ...operations.Option) (*operations.AddLabelsToDatasetsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -519,9 +519,9 @@ func (s *Labels) AddLabelsToDatasets(ctx context.Context, request operations.Add
 
 }
 
-// ApplyLabelsToDatasets - Replace datasets labels
+// ApplyToDatasets - Replace datasets labels
 // Applies the given list of labels to the given datasets. Existing labels are replaced - include labels to be preserved in `labelIds`. Only simple labels can be attached to datasets
-func (s *Labels) ApplyLabelsToDatasets(ctx context.Context, request operations.ApplyLabelsToDatasetsRequest, opts ...operations.Option) (*operations.ApplyLabelsToDatasetsResponse, error) {
+func (s *Labels) ApplyToDatasets(ctx context.Context, request operations.ApplyLabelsToDatasetsRequest, opts ...operations.Option) (*operations.ApplyLabelsToDatasetsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -643,9 +643,9 @@ func (s *Labels) ApplyLabelsToDatasets(ctx context.Context, request operations.A
 
 }
 
-// RemoveLabelsFromDatasets - Remove labels from datasets
+// RemoveFromDatasets - Remove labels from datasets
 // Removes the given list of labels from the given datasets.
-func (s *Labels) RemoveLabelsFromDatasets(ctx context.Context, request operations.RemoveLabelsFromDatasetsRequest, opts ...operations.Option) (*operations.RemoveLabelsFromDatasetsResponse, error) {
+func (s *Labels) RemoveFromDatasets(ctx context.Context, request operations.RemoveLabelsFromDatasetsRequest, opts ...operations.Option) (*operations.RemoveLabelsFromDatasetsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

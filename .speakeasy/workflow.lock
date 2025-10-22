@@ -2,8 +2,8 @@ speakeasyVersion: 1.638.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:106de97fcdc623906f864c187fb628703a8b5aa72fd2bd9cf8422163a1700ca4
-        sourceBlobDigest: sha256:ea0d41b727128d1a68b63d00b6deb0ce6c900881cecccfbb225e6871af297896
+        sourceRevisionDigest: sha256:20774b254f8e3b1aff0f5f67d21c76a8c177d20e2c0684f5692461750c4164f6
+        sourceBlobDigest: sha256:1c549514d48d05b0f88fd905fda918c642a403e88e706cec72899fe1969defb4
         tags:
             - latest
             - 1.85.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:106de97fcdc623906f864c187fb628703a8b5aa72fd2bd9cf8422163a1700ca4
-        sourceBlobDigest: sha256:ea0d41b727128d1a68b63d00b6deb0ce6c900881cecccfbb225e6871af297896
+        sourceRevisionDigest: sha256:20774b254f8e3b1aff0f5f67d21c76a8c177d20e2c0684f5692461750c4164f6
+        sourceBlobDigest: sha256:1c549514d48d05b0f88fd905fda918c642a403e88e706cec72899fe1969defb4
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -27,6 +27,9 @@ workflow:
                 - location: overlays/schema-descriptions.yaml
                 - location: overlays/schema-field-descriptions.yaml
                 - location: overlays/request-examples.yaml
+                - location: overlays/request-body-fixes.yaml
+                - location: overlays/regex-fixes.yaml
+                - location: overlays/deduplicate-enums.yaml
                 - location: overlays/validators.yaml
                 - location: overlays/retry.yaml
                 - location: overlays/datalinks.yaml
@@ -50,6 +53,7 @@ workflow:
                 - location: overlays/schema-fixes.yaml
                 - location: overlays/primary-compute-env.yaml
                 - location: overlays/aws-credentials.yaml
+                - location: .speakeasy/speakeasy-modifications-overlay-1.yaml
             output: .speakeasy/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

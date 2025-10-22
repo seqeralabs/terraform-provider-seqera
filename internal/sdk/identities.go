@@ -30,9 +30,9 @@ func newIdentities(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *ho
 	}
 }
 
-// ListManagedIdentities - List Managed Identities
+// List Managed Identities
 // List all Managed Identities in an organization.
-func (s *Identities) ListManagedIdentities(ctx context.Context, request operations.ListManagedIdentitiesRequest, opts ...operations.Option) (*operations.ListManagedIdentitiesResponse, error) {
+func (s *Identities) List(ctx context.Context, request operations.ListManagedIdentitiesRequest, opts ...operations.Option) (*operations.ListManagedIdentitiesResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -186,9 +186,9 @@ func (s *Identities) ListManagedIdentities(ctx context.Context, request operatio
 
 }
 
-// CreateManagedIdentity - Create Managed Identity
+// Create Managed Identity
 // Create a new Managed Identity in an organization.
-func (s *Identities) CreateManagedIdentity(ctx context.Context, request operations.CreateManagedIdentityRequest, opts ...operations.Option) (*operations.CreateManagedIdentityResponse, error) {
+func (s *Identities) Create(ctx context.Context, request operations.CreateManagedIdentityRequest, opts ...operations.Option) (*operations.CreateManagedIdentityResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -349,9 +349,9 @@ func (s *Identities) CreateManagedIdentity(ctx context.Context, request operatio
 
 }
 
-// DescribeManagedIdentity - Describe a Managed Identity
+// Get - Describe a Managed Identity
 // Describe a Managed Identity in an organization.
-func (s *Identities) DescribeManagedIdentity(ctx context.Context, request operations.DescribeManagedIdentityRequest, opts ...operations.Option) (*operations.DescribeManagedIdentityResponse, error) {
+func (s *Identities) Get(ctx context.Context, request operations.DescribeManagedIdentityRequest, opts ...operations.Option) (*operations.DescribeManagedIdentityResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -505,9 +505,9 @@ func (s *Identities) DescribeManagedIdentity(ctx context.Context, request operat
 
 }
 
-// UpdateManagedIdentity - Update a Managed Identity
+// Update a Managed Identity
 // Update a Managed Identity identified by the given ID.
-func (s *Identities) UpdateManagedIdentity(ctx context.Context, request operations.UpdateManagedIdentityRequest, opts ...operations.Option) (*operations.UpdateManagedIdentityResponse, error) {
+func (s *Identities) Update(ctx context.Context, request operations.UpdateManagedIdentityRequest, opts ...operations.Option) (*operations.UpdateManagedIdentityResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -648,9 +648,9 @@ func (s *Identities) UpdateManagedIdentity(ctx context.Context, request operatio
 
 }
 
-// DeleteManagedIdentity - Delete a Managed Identity
+// Delete a Managed Identity
 // Delete a Managed Identity identified by the given ID.
-func (s *Identities) DeleteManagedIdentity(ctx context.Context, request operations.DeleteManagedIdentityRequest, opts ...operations.Option) (*operations.DeleteManagedIdentityResponse, error) {
+func (s *Identities) Delete(ctx context.Context, request operations.DeleteManagedIdentityRequest, opts ...operations.Option) (*operations.DeleteManagedIdentityResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

@@ -23,16 +23,12 @@ resource "seqera_aws_credential" "my_awscredential" {
   category       = "...my_category..."
   checked        = false
   credentials_id = "...my_credentials_id..."
-  date_created   = "2022-09-21T21:03:12.536Z"
-  deleted        = true
   description    = "...my_description..."
   keys = {
     access_key      = "AKIAIOSFODNN7EXAMPLE"
     assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraRole"
     secret_key      = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   }
-  last_updated  = "2022-07-20T00:51:49.763Z"
-  last_used     = "2021-06-04T18:43:01.971Z"
   name          = "...my_name..."
   provider_type = "aws"
   workspace_id  = 4
@@ -54,12 +50,15 @@ resource "seqera_aws_credential" "my_awscredential" {
 - `category` (String) Category of the credential
 - `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
 - `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `description` (String) Optional description explaining the purpose of the credential
+- `workspace_id` (Number) Workspace numeric identifier
+
+### Read-Only
+
 - `date_created` (String) Timestamp when the credential was created
 - `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
-- `description` (String) Optional description explaining the purpose of the credential
 - `last_updated` (String) Timestamp when the credential was last updated
 - `last_used` (String) Timestamp when the credential was last used
-- `workspace_id` (Number) Workspace numeric identifier
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

@@ -1,0 +1,43 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Regex Pattern Fixes for RE2 Compatibility
+  version: 0.0.0
+actions:
+  # Fix regex patterns to be compatible with Go's RE2 engine
+  # RE2 doesn't support: \p{Graph}, lookahead (?=), lookbehind (?<=), backreferences
+
+  # Fix Launch.schemaName - uses \p{Graph} which is not supported in RE2
+  # Original: "[\p{Graph}&&[^/]]\p{Graph}+"
+  # Meaning: Starts with any non-whitespace char except '/', followed by any non-whitespace chars
+  # RE2 equivalent: Use explicit character class for printable characters except whitespace and /
+  - target: $["components"]["schemas"]["Launch"]["properties"]["schemaName"]["pattern"]
+    update: "^[!-\\.0-~][!-~]*$"
+
+  # Fix Organization.name - uses lookahead (?=) which is not supported in RE2
+  # Original: "^[a-zA-Z\d](?:[a-zA-Z\d]|[-_](?=[a-zA-Z\d])){1,38}$"
+  # Meaning: 1-40 chars, starts with alphanumeric, middle can be alphanumeric or [-_] but [-_] can't be at end
+  # RE2 equivalent: Ensure it ends with alphanumeric
+  - target: $["components"]["schemas"]["Organization"]["properties"]["name"]["pattern"]
+    update: "^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$"
+
+  # Fix PipelineSecret.name - uses negative lookahead (?!) which is not supported in RE2
+  # Original: "^[a-zA-Z_](?:[0-9A-Za-z]+|(_)(?!\1)){1,49}$"
+  # Meaning: 1-50 chars, starts with letter or _, can contain alphanumeric and _, no consecutive underscores
+  # RE2 equivalent: Use simpler pattern without backreference
+  - target: $["components"]["schemas"]["PipelineSecret"]["properties"]["name"]["pattern"]
+    update: "^[a-zA-Z_][0-9A-Za-z_]{0,49}$"
+
+  # Fix Team.name - uses lookahead (?=) which is not supported in RE2
+  # Original: "^[a-zA-Z\d](?:[a-zA-Z\d]|[-_](?=[a-zA-Z\d])){1,38}$"
+  # Meaning: 1-40 chars, starts with alphanumeric, middle can be alphanumeric or [-_] but [-_] can't be at end
+  # RE2 equivalent: Ensure it ends with alphanumeric
+  - target: $["components"]["schemas"]["Team"]["properties"]["name"]["pattern"]
+    update: "^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$"
+
+  # Fix Workspace.name - uses lookahead (?=) which is not supported in RE2
+  # Original: "^[a-zA-Z\d](?:[a-zA-Z\d]|[-_](?=[a-zA-Z\d])){1,38}$"
+  # Meaning: 1-40 chars, starts with alphanumeric, middle can be alphanumeric or [-_] but [-_] can't be at end
+  # RE2 equivalent: Ensure it ends with alphanumeric
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["name"]["pattern"]
+    update: "^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$"

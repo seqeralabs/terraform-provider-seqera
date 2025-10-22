@@ -157,7 +157,7 @@ func (r *AWSCredentialDataSource) Read(ctx context.Context, req datasource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeAWSCredentials(ctx, *request)
+	res, err := r.client.Credentials.GetAWS(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

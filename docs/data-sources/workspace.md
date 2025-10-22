@@ -54,12 +54,12 @@ data "seqera_workspace" "my_workspace" {
 ### Required
 
 - `full_name` (String)
+- `id` (Number) Workspace numeric identifier
 - `name` (String)
 
 ### Optional
 
 - `description` (String)
-- `id` (Number) Workspace numeric identifier
 - `org_id` (Number) Organization numeric identifier
 
 ### Read-Only

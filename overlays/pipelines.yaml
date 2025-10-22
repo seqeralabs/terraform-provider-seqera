@@ -40,6 +40,14 @@ actions:
     update:
       x-speakeasy-entity-operation: Pipeline#delete
 
+  # Mark server-managed fields as read-only
+  - target: $["components"]["schemas"]["PipelineDbDto"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["PipelineDbDto"]["properties"]["deleted"]
+    update:
+      x-speakeasy-param-readonly: true
+
   # Mark workspaceId as required for pipelines GET endpoint to fix import
   - target: $.paths["/pipelines/{pipelineId}"].get.parameters[?(@.name == "workspaceId")]
     update:

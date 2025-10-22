@@ -50,6 +50,17 @@ actions:
   - target: $["components"]["schemas"]["Workflow"]["properties"]["wave"]
     remove: true
 
+  # Mark server-managed fields as read-only in WorkflowDbDto
+  - target: $["components"]["schemas"]["WorkflowDbDto"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["WorkflowDbDto"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["WorkflowDbDto"]["properties"]["deleted"]
+    update:
+      x-speakeasy-param-readonly: true
+
   # WorkflowLoad schema modifications
   - target: $["components"]["schemas"]["WorkflowLoad"]["required"][*]
     remove: true

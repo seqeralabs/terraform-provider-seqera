@@ -2,51 +2,12 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
-type ManagedIdentityDbDtoAbstractGridConfigPlatform string
-
-const (
-	ManagedIdentityDbDtoAbstractGridConfigPlatformAltairPlatform ManagedIdentityDbDtoAbstractGridConfigPlatform = "altair-platform"
-	ManagedIdentityDbDtoAbstractGridConfigPlatformLsfPlatform    ManagedIdentityDbDtoAbstractGridConfigPlatform = "lsf-platform"
-	ManagedIdentityDbDtoAbstractGridConfigPlatformMoabPlatform   ManagedIdentityDbDtoAbstractGridConfigPlatform = "moab-platform"
-	ManagedIdentityDbDtoAbstractGridConfigPlatformSlurmPlatform  ManagedIdentityDbDtoAbstractGridConfigPlatform = "slurm-platform"
-	ManagedIdentityDbDtoAbstractGridConfigPlatformUgePlatform    ManagedIdentityDbDtoAbstractGridConfigPlatform = "uge-platform"
-)
-
-func (e ManagedIdentityDbDtoAbstractGridConfigPlatform) ToPointer() *ManagedIdentityDbDtoAbstractGridConfigPlatform {
-	return &e
-}
-func (e *ManagedIdentityDbDtoAbstractGridConfigPlatform) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "altair-platform":
-		fallthrough
-	case "lsf-platform":
-		fallthrough
-	case "moab-platform":
-		fallthrough
-	case "slurm-platform":
-		fallthrough
-	case "uge-platform":
-		*e = ManagedIdentityDbDtoAbstractGridConfigPlatform(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ManagedIdentityDbDtoAbstractGridConfigPlatform: %v", v)
-	}
-}
-
 type ManagedIdentityDbDtoAbstractGridConfig struct {
-	ID       *int64                                          `json:"id,omitempty"`
-	Name     *string                                         `json:"name,omitempty"`
-	Platform *ManagedIdentityDbDtoAbstractGridConfigPlatform `json:"platform,omitempty"`
-	Config   *AbstractGridConfig                             `json:"config,omitempty"`
+	ID   *int64  `json:"id,omitempty"`
+	Name *string `json:"name,omitempty"`
+	// Grid computing platform type
+	Platform *GridPlatform       `json:"platform,omitempty"`
+	Config   *AbstractGridConfig `json:"config,omitempty"`
 }
 
 func (m *ManagedIdentityDbDtoAbstractGridConfig) GetID() *int64 {
@@ -63,7 +24,7 @@ func (m *ManagedIdentityDbDtoAbstractGridConfig) GetName() *string {
 	return m.Name
 }
 
-func (m *ManagedIdentityDbDtoAbstractGridConfig) GetPlatform() *ManagedIdentityDbDtoAbstractGridConfigPlatform {
+func (m *ManagedIdentityDbDtoAbstractGridConfig) GetPlatform() *GridPlatform {
 	if m == nil {
 		return nil
 	}

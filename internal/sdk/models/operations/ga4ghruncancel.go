@@ -9,8 +9,7 @@ import (
 
 type Ga4ghRunCancelRequest struct {
 	// Run string identifier
-	RunID            string                   `pathParam:"style=simple,explode=false,name=run_id"`
-	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
+	RunID string `pathParam:"style=simple,explode=false,name=run_id"`
 }
 
 func (g *Ga4ghRunCancelRequest) GetRunID() string {
@@ -18,13 +17,6 @@ func (g *Ga4ghRunCancelRequest) GetRunID() string {
 		return ""
 	}
 	return g.RunID
-}
-
-func (g *Ga4ghRunCancelRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
-	if g == nil {
-		return nil
-	}
-	return g.EmptyBodyRequest
 }
 
 type Ga4ghRunCancelResponse struct {

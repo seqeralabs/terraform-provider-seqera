@@ -1,19 +1,18 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 131ef7b0033b101d33b899fad3662884
+  docChecksum: f5110bc0fcb87433c9acbbe09aa4643a
   docVersion: 1.85.0
   speakeasyVersion: 1.638.0
   generationVersion: 2.728.0
-  releaseVersion: 0.25.4
-  configChecksum: 82407cfee73f39a7ed1fabfae13d6385
+  releaseVersion: 0.25.7
+  configChecksum: f9f5ece70f5121b2a0ce3308f002a0a5
 features:
   terraform:
     additionalDependencies: 0.1.0
     core: 3.46.2
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
-    getRequestBodies: 2.81.1
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     groups: 2.81.3
@@ -720,7 +719,6 @@ generatedFiles:
   - internal/sdk/models/shared/describeworkspaceresponse.go
   - internal/sdk/models/shared/efsfilesystem.go
   - internal/sdk/models/shared/eksplatformmetainfo.go
-  - internal/sdk/models/shared/emptybodyrequest.go
   - internal/sdk/models/shared/errorresponse.go
   - internal/sdk/models/shared/eventtype.go
   - internal/sdk/models/shared/forgeconfig.go
@@ -734,6 +732,7 @@ generatedFiles:
   - internal/sdk/models/shared/googleplatformmetainfofilestore.go
   - internal/sdk/models/shared/googlesecuritykeys.go
   - internal/sdk/models/shared/googlesecuritykeysoutput.go
+  - internal/sdk/models/shared/gridplatform.go
   - internal/sdk/models/shared/gridplatformmetainfo.go
   - internal/sdk/models/shared/image.go
   - internal/sdk/models/shared/instancetype.go

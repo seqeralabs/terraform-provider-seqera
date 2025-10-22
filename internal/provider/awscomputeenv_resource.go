@@ -470,7 +470,7 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.CreateAWSComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.CreateAws(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -507,7 +507,7 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request1)
+	res1, err := r.client.ComputeEnvs.GetAws(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -567,7 +567,7 @@ func (r *AWSComputeEnvResource) Read(ctx context.Context, req resource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DescribeAWSComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.GetAws(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -621,7 +621,7 @@ func (r *AWSComputeEnvResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.UpdateAWSComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.UpdateAWS(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -672,7 +672,7 @@ func (r *AWSComputeEnvResource) Delete(ctx context.Context, req resource.DeleteR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.ComputeEnvs.DeleteAWSComputeEnv(ctx, *request)
+	res, err := r.client.ComputeEnvs.DeleteAWS(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

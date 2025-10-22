@@ -13,7 +13,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
@@ -81,22 +80,14 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"date_created": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Timestamp when the credential was created`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"deleted": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Flag indicating if the credential has been soft-deleted`,
 			},
 			"description": schema.StringAttribute{
@@ -116,22 +107,14 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"last_updated": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Timestamp when the credential was last updated`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"last_used": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Timestamp when the credential was last used`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
@@ -203,7 +186,7 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.CreateGoogleCredentials(ctx, *request)
+	res, err := r.client.Credentials.CreateGoogle(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -240,7 +223,7 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeGoogleCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.GetGoogle(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -300,7 +283,7 @@ func (r *GoogleCredentialResource) Read(ctx context.Context, req resource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeGoogleCredentials(ctx, *request)
+	res, err := r.client.Credentials.GetGoogle(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -354,7 +337,7 @@ func (r *GoogleCredentialResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.UpdateGoogleCredentials(ctx, *request)
+	res, err := r.client.Credentials.UpdateGoogle(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -382,7 +365,7 @@ func (r *GoogleCredentialResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeGoogleCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.GetGoogle(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -442,7 +425,7 @@ func (r *GoogleCredentialResource) Delete(ctx context.Context, req resource.Dele
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DeleteGoogleCredentials(ctx, *request)
+	res, err := r.client.Credentials.DeleteGoogle(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

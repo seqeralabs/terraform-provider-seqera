@@ -462,11 +462,6 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EmptyBodyRequest"
       responses:
         "204":
           description: OK - No content
@@ -832,11 +827,6 @@ paths:
             type: integer
             format: int64
           required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EmptyBodyRequest"
       responses:
         "204":
           description: OK - No content
@@ -1672,6 +1662,8 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: download
   /data-links/{dataLinkId}/generate-download-url:
     get:
       tags:
@@ -2208,6 +2200,7 @@ paths:
                 $ref: "#/components/schemas/DeleteDatasetsResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: delete
   /datasets/hide:
     post:
       tags:
@@ -2242,6 +2235,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: hide
   /datasets/labels/add:
     post:
       tags:
@@ -2270,6 +2264,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: addToDatasets
   /datasets/labels/apply:
     post:
       tags:
@@ -2300,6 +2295,7 @@ paths:
           description: "Invalid request, if trying to associate resource labels"
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: applyToDatasets
   /datasets/labels/remove:
     post:
       tags:
@@ -2328,6 +2324,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: removeFromDatasets
   /datasets/show:
     post:
       tags:
@@ -2362,6 +2359,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: show
   /datasets/versions:
     get:
       tags:
@@ -2734,6 +2732,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: disableVersion
   /ga4gh/wes/v1/runs:
     get:
       tags:
@@ -2842,11 +2841,6 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EmptyBodyRequest"
       responses:
         "200":
           description: OK
@@ -2963,6 +2957,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: list
     post:
       tags:
         - identities
@@ -3000,6 +2995,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: create
   /identities/{managedIdentityId}:
     get:
       tags:
@@ -3038,6 +3034,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: get
     put:
       tags:
         - identities
@@ -3078,6 +3075,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: update
     delete:
       tags:
         - identities
@@ -3123,6 +3121,7 @@ paths:
                 $ref: "#/components/schemas/DeleteManagedCredentialsConflictResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-name-override: delete
   /identities/{managedIdentityId}/credentials:
     get:
       tags:
@@ -5065,12 +5064,6 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        description: Workspace update request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateWorkspaceRequest"
       responses:
         "200":
           description: OK
@@ -7608,11 +7601,6 @@ paths:
           description: Cancel on the Platform side even if it cannot be cancelled on the CE provider side
           schema:
             type: boolean
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EmptyBodyRequest"
       responses:
         "204":
           description: OK - No content
@@ -8555,7 +8543,7 @@ paths:
   "/credentials#azure":
     post:
       x-speakeasy-entity-operation: AzureCredential#create
-      x-speakeasy-name-override: CreateAzureCredentials
+      x-speakeasy-name-override: createAzure
       summary: Create Azure credentials
       description: Creates new Azure credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
       tags:
@@ -8595,7 +8583,7 @@ paths:
   "/credentials/{credentialsId}#azure":
     get:
       x-speakeasy-entity-operation: AzureCredential#read
-      x-speakeasy-name-override: DescribeAzureCredentials
+      x-speakeasy-name-override: getAzure
       summary: Describe Azure credentials
       description: Retrieves the details of the Azure credentials identified by the given `credentialsId`.
       tags:
@@ -8633,7 +8621,7 @@ paths:
         - BearerAuth: []
     put:
       x-speakeasy-entity-operation: AzureCredential#update
-      x-speakeasy-name-override: UpdateAzureCredentials
+      x-speakeasy-name-override: updateAzure
       summary: Update Azure credentials
       description: Updates the details of the Azure credentials identified by the given `credentialsId`.
       tags:
@@ -8674,7 +8662,7 @@ paths:
         - BearerAuth: []
     delete:
       x-speakeasy-entity-operation: AzureCredential#delete
-      x-speakeasy-name-override: DeleteAzureCredentials
+      x-speakeasy-name-override: delete
       summary: Delete Azure credentials
       description: Deletes the Azure credentials identified by the given `credentialsId`.
       tags:
@@ -8720,7 +8708,7 @@ paths:
   "/credentials#google":
     post:
       x-speakeasy-entity-operation: GoogleCredential#create
-      x-speakeasy-name-override: CreateGoogleCredentials
+      x-speakeasy-name-override: createGoogle
       summary: Create Google credentials
       description: Creates new Google credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
       tags:
@@ -8760,7 +8748,7 @@ paths:
   "/credentials/{credentialsId}#google":
     get:
       x-speakeasy-entity-operation: GoogleCredential#read
-      x-speakeasy-name-override: DescribeGoogleCredentials
+      x-speakeasy-name-override: getGoogle
       summary: Describe Google credentials
       description: Retrieves the details of the Google credentials identified by the given `credentialsId`.
       tags:
@@ -8798,7 +8786,7 @@ paths:
         - BearerAuth: []
     put:
       x-speakeasy-entity-operation: GoogleCredential#update
-      x-speakeasy-name-override: UpdateGoogleCredentials
+      x-speakeasy-name-override: updateGoogle
       summary: Update Google credentials
       description: Updates the details of the Google credentials identified by the given `credentialsId`.
       tags:
@@ -8839,7 +8827,7 @@ paths:
         - BearerAuth: []
     delete:
       x-speakeasy-entity-operation: GoogleCredential#delete
-      x-speakeasy-name-override: DeleteGoogleCredentials
+      x-speakeasy-name-override: deleteGoogle
       summary: Delete Google credentials
       description: Deletes the Google credentials identified by the given `credentialsId`.
       tags:
@@ -8885,7 +8873,7 @@ paths:
   "/compute-envs#aws":
     post:
       x-speakeasy-entity-operation: AWSComputeEnv#create
-      x-speakeasy-name-override: CreateAWSComputeEnv
+      x-speakeasy-name-override: createAws
       summary: Create AWS compute environment
       description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
       tags:
@@ -8923,10 +8911,11 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-group: computeEnvs
   "/compute-envs/{computeEnvId}#aws":
     get:
       x-speakeasy-entity-operation: AWSComputeEnv#read
-      x-speakeasy-name-override: DescribeAWSComputeEnv
+      x-speakeasy-name-override: getAws
       summary: Describe AWS compute environment
       description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
       tags:
@@ -8970,9 +8959,10 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-group: computeEnvs
     put:
       x-speakeasy-entity-operation: AWSComputeEnv#update
-      x-speakeasy-name-override: UpdateAWSComputeEnv
+      x-speakeasy-name-override: updateAWS
       summary: Update AWS compute environment
       description: Updates the details of the AWS compute environment identified by the given `computeEnvId`.
       tags:
@@ -9011,9 +9001,10 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-group: computeEnvs
     delete:
       x-speakeasy-entity-operation: AWSComputeEnv#delete
-      x-speakeasy-name-override: DeleteAWSComputeEnv
+      x-speakeasy-name-override: deleteAWS
       summary: Delete AWS compute environment
       description: Deletes the AWS compute environment identified by the given `computeEnvId`.
       tags:
@@ -9045,10 +9036,11 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-group: computeEnvs
   "/credentials#aws":
     post:
       x-speakeasy-entity-operation: AWSCredential#create
-      x-speakeasy-name-override: CreateAWSCredentials
+      x-speakeasy-name-override: createAws
       summary: Create AWS credentials
       description: Creates new AWS credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
       tags:
@@ -9088,7 +9080,7 @@ paths:
   "/credentials/{credentialsId}#aws":
     get:
       x-speakeasy-entity-operation: AWSCredential#read
-      x-speakeasy-name-override: DescribeAWSCredentials
+      x-speakeasy-name-override: getAWS
       summary: Describe AWS credentials
       description: Retrieves the details of the AWS credentials identified by the given `credentialsId`.
       tags:
@@ -9126,7 +9118,7 @@ paths:
         - BearerAuth: []
     put:
       x-speakeasy-entity-operation: AWSCredential#update
-      x-speakeasy-name-override: UpdateAWSCredentials
+      x-speakeasy-name-override: updateAws
       summary: Update AWS credentials
       description: Updates the details of the AWS credentials identified by the given `credentialsId`.
       tags:
@@ -9167,7 +9159,7 @@ paths:
         - BearerAuth: []
     delete:
       x-speakeasy-entity-operation: AWSCredential#delete
-      x-speakeasy-name-override: DeleteAWSCredentials
+      x-speakeasy-name-override: deleteAWS
       summary: Delete AWS credentials
       description: Deletes the AWS credentials identified by the given `credentialsId`.
       tags:
@@ -9212,9 +9204,9 @@ paths:
         - BearerAuth: []
           # "/credentials#azure":
           #   # Similar duplication for Azure operations
+# "/credentials/{credentialsId}#azure":
+#   # Similar duplication for Azure operations
 
-          # "/credentials/{credentialsId}#azure":
-          #   # Similar duplication for Azure operations
 components:
   schemas:
     AbstractGridConfig:
@@ -9264,7 +9256,7 @@ components:
           format: int64
           nullable: true
           description: Unique numeric identifier for the access token (nullable)
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-suppress-computed-diff: true
         name:
           maxLength: 50
           minLength: 1
@@ -9274,10 +9266,12 @@ components:
           type: string
           format: date-time
           description: Timestamp when the token was last used for authentication
+          x-speakeasy-param-readonly: true
         dateCreated:
           type: string
           format: date-time
           description: Timestamp when the token was created
+          x-speakeasy-param-readonly: true
       description: |
         Represents an API access token for authentication.
         Contains token metadata, permissions, and expiration information
@@ -10592,13 +10586,7 @@ components:
         name:
           type: string
         platform:
-          type: string
-          enum:
-            - altair-platform
-            - lsf-platform
-            - moab-platform
-            - slurm-platform
-            - uge-platform
+          $ref: "#/components/schemas/GridPlatform"
         config:
           $ref: "#/components/schemas/AbstractGridConfig"
     CreateManagedIdentityResponse:
@@ -10766,24 +10754,26 @@ components:
           type: boolean
           readOnly: true
           description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         lastUsed:
           type: string
           format: date-time
           readOnly: true
           description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         dateCreated:
           type: string
           format: date-time
           readOnly: true
           description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         lastUpdated:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
       description: |
@@ -12510,7 +12500,7 @@ components:
           description: Name of the workflow entry point when using multiple workflows
         schemaName:
           maxLength: 100
-          pattern: "[\\p{Graph}&&[^/]]\\p{Graph}+"
+          pattern: "^[!-\\.0-~][!-~]*$"
           type: string
           description: Name of the pipeline schema file for parameter validation
         resume:
@@ -13049,13 +13039,7 @@ components:
         name:
           type: string
         platform:
-          type: string
-          enum:
-            - altair-platform
-            - lsf-platform
-            - moab-platform
-            - slurm-platform
-            - uge-platform
+          $ref: "#/components/schemas/GridPlatform"
         config:
           $ref: "#/components/schemas/AbstractGridConfig"
     Map.Entry_String.String_:
@@ -13211,7 +13195,7 @@ components:
           x-speakeasy-param-optional: true
         name:
           maxLength: 40
-          pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
+          pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$"
           type: string
           example: "my-org"
         fullName:
@@ -13416,9 +13400,11 @@ components:
           type: string
         deleted:
           type: boolean
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         optimizationId:
           type: string
         optimizationTargets:
@@ -13540,7 +13526,7 @@ components:
           description: Unique numeric identifier for the secret (nullable)
         name:
           maxLength: 100
-          pattern: "^[a-zA-Z_](?:[0-9A-Za-z]+|(_)(?!\\1)){1,49}$"
+          pattern: "^[a-zA-Z_][0-9A-Za-z_]{0,49}$"
           type: string
           description: Secret name following naming conventions (max 100 characters)
         lastUsed:
@@ -14265,7 +14251,7 @@ components:
           x-speakeasy-name-override: teamId
         name:
           maxLength: 40
-          pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
+          pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$"
           type: string
           example: "bioinformatics-team"
         description:
@@ -15071,9 +15057,11 @@ components:
         dateCreated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         runName:
           type: string
         sessionId:
@@ -15123,6 +15111,7 @@ components:
           type: string
         deleted:
           type: boolean
+          x-speakeasy-param-readonly: true
         projectDir:
           type: string
         homeDir:
@@ -15510,10 +15499,10 @@ components:
           type: integer
           format: int64
           nullable: true
-          x-speakeasy-param-optional: true
+          x-speakeasy-param-suppress-computed-diff: true
         name:
           maxLength: 40
-          pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
+          pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$"
           type: string
           example: "genomics-research"
           x-speakeasy-param-readonly: false
@@ -15534,9 +15523,11 @@ components:
         dateCreated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
       x-speakeasy-entity: Workspace
       x-speakeasy-entity-description: |
         Manage workspaces for organizing projects and resources.
@@ -15594,6 +15585,21 @@ components:
         - launch
         - connect
         - view
+    GridPlatform:
+      type: string
+      description: Grid computing platform type
+      enum:
+        - altair-platform
+        - lsf-platform
+        - moab-platform
+        - slurm-platform
+        - uge-platform
+      x-enum-varnames:
+        - AltairPlatform
+        - LsfPlatform
+        - MoabPlatform
+        - SlurmPlatform
+        - UgePlatform
     # Azure-specific credential schema
     AzureCredential:
       x-speakeasy-entity: AzureCredential
@@ -15638,22 +15644,22 @@ components:
         deleted:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         lastUsed:
           type: string
           format: date-time
           description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         dateCreated:
           type: string
           format: date-time
           description: Timestamp when the credential was created
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
           description: Timestamp when the credential was last updated
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         keys:
           $ref: '#/components/schemas/AzureSecurityKeys'
           description: Azure security keys for authentication
@@ -15726,22 +15732,22 @@ components:
         deleted:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         lastUsed:
           type: string
           format: date-time
           description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         dateCreated:
           type: string
           format: date-time
           description: Timestamp when the credential was created
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
           description: Timestamp when the credential was last updated
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         keys:
           $ref: '#/components/schemas/GoogleSecurityKeys'
           description: Google security keys for authentication
@@ -15922,22 +15928,22 @@ components:
         deleted:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         lastUsed:
           type: string
           format: date-time
           description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         dateCreated:
           type: string
           format: date-time
           description: Timestamp when the credential was created
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
           description: Timestamp when the credential was last updated
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         keys:
           $ref: '#/components/schemas/AwsSecurityKeys'
           description: AWS security keys for authentication

@@ -11,8 +11,7 @@ type UpdateComputeEnvPrimaryRequest struct {
 	// Compute environment string identifier
 	ComputeEnvID string `pathParam:"style=simple,explode=false,name=computeEnvId"`
 	// Workspace numeric identifier
-	WorkspaceID      int64                    `queryParam:"style=form,explode=true,name=workspaceId"`
-	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (u *UpdateComputeEnvPrimaryRequest) GetComputeEnvID() string {
@@ -27,13 +26,6 @@ func (u *UpdateComputeEnvPrimaryRequest) GetWorkspaceID() int64 {
 		return 0
 	}
 	return u.WorkspaceID
-}
-
-func (u *UpdateComputeEnvPrimaryRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
-	if u == nil {
-		return nil
-	}
-	return u.EmptyBodyRequest
 }
 
 type UpdateComputeEnvPrimaryResponse struct {

@@ -17,7 +17,6 @@ import (
 	"net/url"
 )
 
-// ComputeEnvs - Compute environments
 type ComputeEnvs struct {
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration
@@ -1032,10 +1031,6 @@ func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request opera
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
 
 	timeout := o.Timeout
 	if timeout == nil {
@@ -1048,15 +1043,12 @@ func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request opera
 		defer cancel()
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", opURL, bodyReader)
+	req, err := http.NewRequestWithContext(ctx, "POST", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
@@ -1141,9 +1133,9 @@ func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request opera
 
 }
 
-// CreateAWSComputeEnv - Create AWS compute environment
-// Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
-func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operations.CreateAWSComputeEnvRequest, opts ...operations.Option) (*operations.CreateAWSComputeEnvResponse, error) {
+// CreateAws - Create AWS credentials
+// Creates new AWS credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+func (s *ComputeEnvs) CreateAws(ctx context.Context, request operations.CreateAWSComputeEnvRequest, opts ...operations.Option) (*operations.CreateAWSComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1304,9 +1296,9 @@ func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operation
 
 }
 
-// DescribeAWSComputeEnv - Describe AWS compute environment
+// GetAws - Describe AWS compute environment
 // Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operations.DescribeAWSComputeEnvRequest, opts ...operations.Option) (*operations.DescribeAWSComputeEnvResponse, error) {
+func (s *ComputeEnvs) GetAws(ctx context.Context, request operations.DescribeAWSComputeEnvRequest, opts ...operations.Option) (*operations.DescribeAWSComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1460,9 +1452,9 @@ func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operati
 
 }
 
-// UpdateAWSComputeEnv - Update AWS compute environment
+// UpdateAWS - Update AWS compute environment
 // Updates the details of the AWS compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) UpdateAWSComputeEnv(ctx context.Context, request operations.UpdateAWSComputeEnvRequest, opts ...operations.Option) (*operations.UpdateAWSComputeEnvResponse, error) {
+func (s *ComputeEnvs) UpdateAWS(ctx context.Context, request operations.UpdateAWSComputeEnvRequest, opts ...operations.Option) (*operations.UpdateAWSComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1603,9 +1595,9 @@ func (s *ComputeEnvs) UpdateAWSComputeEnv(ctx context.Context, request operation
 
 }
 
-// DeleteAWSComputeEnv - Delete AWS compute environment
+// DeleteAWS - Delete AWS compute environment
 // Deletes the AWS compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operations.DeleteAWSComputeEnvRequest, opts ...operations.Option) (*operations.DeleteAWSComputeEnvResponse, error) {
+func (s *ComputeEnvs) DeleteAWS(ctx context.Context, request operations.DeleteAWSComputeEnvRequest, opts ...operations.Option) (*operations.DeleteAWSComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,

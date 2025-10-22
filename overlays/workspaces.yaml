@@ -7,7 +7,13 @@ actions:
   # Workspace schema annotations
   - target: $["components"]["schemas"]["Workspace"]["properties"]["id"]
     update:
-      x-speakeasy-param-optional: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["lastUpdated"]
+    update:
+      x-speakeasy-param-readonly: true
   - target: $["components"]["schemas"]["Workspace"]["properties"]["name"]
     update:
       x-speakeasy-param-readonly: false

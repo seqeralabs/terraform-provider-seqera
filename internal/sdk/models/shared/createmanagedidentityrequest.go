@@ -2,50 +2,11 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
-type CreateManagedIdentityRequestPlatform string
-
-const (
-	CreateManagedIdentityRequestPlatformAltairPlatform CreateManagedIdentityRequestPlatform = "altair-platform"
-	CreateManagedIdentityRequestPlatformLsfPlatform    CreateManagedIdentityRequestPlatform = "lsf-platform"
-	CreateManagedIdentityRequestPlatformMoabPlatform   CreateManagedIdentityRequestPlatform = "moab-platform"
-	CreateManagedIdentityRequestPlatformSlurmPlatform  CreateManagedIdentityRequestPlatform = "slurm-platform"
-	CreateManagedIdentityRequestPlatformUgePlatform    CreateManagedIdentityRequestPlatform = "uge-platform"
-)
-
-func (e CreateManagedIdentityRequestPlatform) ToPointer() *CreateManagedIdentityRequestPlatform {
-	return &e
-}
-func (e *CreateManagedIdentityRequestPlatform) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "altair-platform":
-		fallthrough
-	case "lsf-platform":
-		fallthrough
-	case "moab-platform":
-		fallthrough
-	case "slurm-platform":
-		fallthrough
-	case "uge-platform":
-		*e = CreateManagedIdentityRequestPlatform(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for CreateManagedIdentityRequestPlatform: %v", v)
-	}
-}
-
 type CreateManagedIdentityRequest struct {
-	Name     *string                               `json:"name,omitempty"`
-	Platform *CreateManagedIdentityRequestPlatform `json:"platform,omitempty"`
-	Config   *AbstractGridConfig                   `json:"config,omitempty"`
+	Name *string `json:"name,omitempty"`
+	// Grid computing platform type
+	Platform *GridPlatform       `json:"platform,omitempty"`
+	Config   *AbstractGridConfig `json:"config,omitempty"`
 }
 
 func (c *CreateManagedIdentityRequest) GetName() *string {
@@ -55,7 +16,7 @@ func (c *CreateManagedIdentityRequest) GetName() *string {
 	return c.Name
 }
 
-func (c *CreateManagedIdentityRequest) GetPlatform() *CreateManagedIdentityRequestPlatform {
+func (c *CreateManagedIdentityRequest) GetPlatform() *GridPlatform {
 	if c == nil {
 		return nil
 	}

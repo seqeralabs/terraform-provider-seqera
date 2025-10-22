@@ -149,7 +149,7 @@ func (r *GoogleCredentialDataSource) Read(ctx context.Context, req datasource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeGoogleCredentials(ctx, *request)
+	res, err := r.client.Credentials.GetGoogle(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

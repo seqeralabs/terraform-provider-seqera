@@ -17,6 +17,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
+	"regexp"
 	"strconv"
 )
 
@@ -87,6 +88,7 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z_][0-9A-Za-z_]{0,49}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z_][0-9A-Za-z_]{0,49}$`).String()),
 				},
 			},
 			"secret_id": schema.Int64Attribute{

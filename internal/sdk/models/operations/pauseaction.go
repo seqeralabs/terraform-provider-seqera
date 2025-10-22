@@ -11,8 +11,7 @@ type PauseActionRequest struct {
 	// Action string identifier
 	ActionID string `pathParam:"style=simple,explode=false,name=actionId"`
 	// Workspace numeric identifier
-	WorkspaceID      *int64                   `queryParam:"style=form,explode=true,name=workspaceId"`
-	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
+	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
 func (p *PauseActionRequest) GetActionID() string {
@@ -27,13 +26,6 @@ func (p *PauseActionRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return p.WorkspaceID
-}
-
-func (p *PauseActionRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
-	if p == nil {
-		return nil
-	}
-	return p.EmptyBodyRequest
 }
 
 type PauseActionResponse struct {

@@ -23,8 +23,6 @@ resource "seqera_azure_credential" "my_azurecredential" {
   category       = "...my_category..."
   checked        = true
   credentials_id = "...my_credentials_id..."
-  date_created   = "2020-01-26T14:24:16.244Z"
-  deleted        = true
   description    = "...my_description..."
   keys = {
     batch_key    = "YourAzureBatchAccountKeyHere=="
@@ -32,8 +30,6 @@ resource "seqera_azure_credential" "my_azurecredential" {
     storage_key  = "YourAzureStorageAccountKeyHere=="
     storage_name = "myazurestorage"
   }
-  last_updated  = "2022-05-23T22:58:45.279Z"
-  last_used     = "2022-09-15T14:55:29.777Z"
   name          = "...my_name..."
   provider_type = "azure"
   workspace_id  = 0
@@ -55,12 +51,15 @@ resource "seqera_azure_credential" "my_azurecredential" {
 - `category` (String) Category of the credential
 - `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
 - `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `description` (String) Optional description explaining the purpose of the credential
+- `workspace_id` (Number) Workspace numeric identifier
+
+### Read-Only
+
 - `date_created` (String) Timestamp when the credential was created
 - `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
-- `description` (String) Optional description explaining the purpose of the credential
 - `last_updated` (String) Timestamp when the credential was last updated
 - `last_used` (String) Timestamp when the credential was last used
-- `workspace_id` (Number) Workspace numeric identifier
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

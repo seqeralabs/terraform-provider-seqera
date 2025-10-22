@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"regexp"
 	"strconv"
 )
 
@@ -99,6 +100,7 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Required: true,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(40),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$`).String()),
 				},
 			},
 			"org_id": schema.Int64Attribute{

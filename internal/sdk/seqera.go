@@ -55,13 +55,11 @@ type Seqera struct {
 	// Labels and resource labels
 	Labels *Labels
 	// Avatars
-	Avatars *Avatars
-	// Compute environments
+	Avatars     *Avatars
 	ComputeEnvs *ComputeEnvs
 	// Credentials
 	Credentials *Credentials
-	// Cloud storage directory paths in Data Explorer
-	DataLinks *DataLinks
+	DataLinks   *DataLinks
 	// Pipeline input datasets (samplesheets) in CSV or TSV format
 	Datasets *Datasets
 	// GA4GH workflow execution service runs
@@ -169,9 +167,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
-		SDKVersion: "0.25.4",
+		SDKVersion: "0.25.7",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.25.4 2.728.0 1.85.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.25.7 2.728.0 1.85.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

@@ -20,10 +20,16 @@ actions:
     update:
       x-speakeasy-param-optional: true
 
-  # AccessToken schema annotations
+  # AccessToken schema annotations - mark server-managed fields as read-only (except id)
   - target: $["components"]["schemas"]["AccessToken"]["properties"]["id"]
     update:
-      x-speakeasy-param-optional: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $["components"]["schemas"]["AccessToken"]["properties"]["dateCreated"]
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["AccessToken"]["properties"]["lastUsed"]
+    update:
+      x-speakeasy-param-readonly: true
   - target: $["components"]["schemas"]["AccessToken"]
     update:
       x-speakeasy-entity: Tokens

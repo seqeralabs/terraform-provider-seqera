@@ -1,0 +1,30 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Request Body Linting Fixes
+  version: 0.0.0
+actions:
+  # Fix optional request body warnings by removing unnecessary empty request bodies
+  # These POST operations don't actually need a request body - they're action endpoints
+  # that operate on the resource identified in the path
+
+  # POST /actions/{actionId}/pause - remove empty body
+  - target: $.paths["/actions/{actionId}/pause"].post.requestBody
+    remove: true
+
+  # POST /compute-envs/{computeEnvId}/primary - remove empty body
+  - target: $.paths["/compute-envs/{computeEnvId}/primary"].post.requestBody
+    remove: true
+
+  # POST /ga4gh/wes/v1/runs/{run_id}/cancel - remove empty body
+  - target: $.paths["/ga4gh/wes/v1/runs/{run_id}/cancel"].post.requestBody
+    remove: true
+
+  # POST /workflow/{workflowId}/cancel - remove empty body
+  - target: $.paths["/workflow/{workflowId}/cancel"].post.requestBody
+    remove: true
+
+  # GET /orgs/{orgId}/workspaces/{workspaceId}/settings/studios - remove body from GET
+  # GET operations should not have request bodies per HTTP spec
+  - target: $.paths["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"].get.requestBody
+    remove: true

@@ -352,9 +352,9 @@ func (s *Datasets) CreateDatasetV2(ctx context.Context, request operations.Creat
 
 }
 
-// DeleteDatasets - Delete dataset
+// Delete dataset
 // Deletes the dataset identified by the given `datasetId`.
-func (s *Datasets) DeleteDatasets(ctx context.Context, request operations.DeleteDatasetsRequest, opts ...operations.Option) (*operations.DeleteDatasetsResponse, error) {
+func (s *Datasets) Delete(ctx context.Context, request operations.DeleteDatasetsRequest, opts ...operations.Option) (*operations.DeleteDatasetsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -517,9 +517,9 @@ func (s *Datasets) DeleteDatasets(ctx context.Context, request operations.Delete
 
 }
 
-// HideDatasets - Hide dataset
+// Hide dataset
 // Hide the given `datasetIds`
-func (s *Datasets) HideDatasets(ctx context.Context, request operations.HideDatasetsRequest, opts ...operations.Option) (*operations.HideDatasetsResponse, error) {
+func (s *Datasets) Hide(ctx context.Context, request operations.HideDatasetsRequest, opts ...operations.Option) (*operations.HideDatasetsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -660,9 +660,9 @@ func (s *Datasets) HideDatasets(ctx context.Context, request operations.HideData
 
 }
 
-// ShowDatasets - Show dataset
+// Show dataset
 // Show the given `datasetIds`
-func (s *Datasets) ShowDatasets(ctx context.Context, request operations.ShowDatasetsRequest, opts ...operations.Option) (*operations.ShowDatasetsResponse, error) {
+func (s *Datasets) Show(ctx context.Context, request operations.ShowDatasetsRequest, opts ...operations.Option) (*operations.ShowDatasetsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1868,9 +1868,9 @@ func (s *Datasets) ListDatasetVersionsV2(ctx context.Context, request operations
 
 }
 
-// DisableDatasetVersion - Disable a dataset version
+// DisableVersion - Disable a dataset version
 // Disable a dataset version, the dataset version cannot be used for runs, and cannot be enabled again
-func (s *Datasets) DisableDatasetVersion(ctx context.Context, request operations.DisableDatasetVersionRequest, opts ...operations.Option) (*operations.DisableDatasetVersionResponse, error) {
+func (s *Datasets) DisableVersion(ctx context.Context, request operations.DisableDatasetVersionRequest, opts ...operations.Option) (*operations.DisableDatasetVersionResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
