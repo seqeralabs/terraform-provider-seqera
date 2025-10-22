@@ -8,14 +8,14 @@ import (
 )
 
 type CreateManagedCredentialsRequest struct {
-	// Managed Identity numeric identifier
+	// Parent Managed Identity numeric identifier
 	ManagedIdentityID int64 `pathParam:"style=simple,explode=false,name=managedIdentityId"`
 	// Organization numeric identifier
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// User numeric identifier
 	UserID *int64 `queryParam:"style=form,explode=true,name=userId"`
 	// Managed Credentials create request
-	CreateManagedCredentialsRequest shared.CreateManagedCredentialsRequest `request:"mediaType=application/json"`
+	CreateGridManagedCredentialsRequest shared.CreateGridManagedCredentialsRequest `request:"mediaType=application/json"`
 }
 
 func (c *CreateManagedCredentialsRequest) GetManagedIdentityID() int64 {
@@ -25,9 +25,9 @@ func (c *CreateManagedCredentialsRequest) GetManagedIdentityID() int64 {
 	return c.ManagedIdentityID
 }
 
-func (c *CreateManagedCredentialsRequest) GetOrgID() *int64 {
+func (c *CreateManagedCredentialsRequest) GetOrgID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.OrgID
 }
@@ -39,11 +39,11 @@ func (c *CreateManagedCredentialsRequest) GetUserID() *int64 {
 	return c.UserID
 }
 
-func (c *CreateManagedCredentialsRequest) GetCreateManagedCredentialsRequest() shared.CreateManagedCredentialsRequest {
+func (c *CreateManagedCredentialsRequest) GetCreateGridManagedCredentialsRequest() shared.CreateGridManagedCredentialsRequest {
 	if c == nil {
-		return shared.CreateManagedCredentialsRequest{}
+		return shared.CreateGridManagedCredentialsRequest{}
 	}
-	return c.CreateManagedCredentialsRequest
+	return c.CreateGridManagedCredentialsRequest
 }
 
 type CreateManagedCredentialsResponse struct {
@@ -54,7 +54,7 @@ type CreateManagedCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	CreateManagedCredentialsResponse *shared.CreateManagedCredentialsResponse
+	CreateGridManagedCredentialsResponse *shared.CreateGridManagedCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -80,11 +80,11 @@ func (c *CreateManagedCredentialsResponse) GetRawResponse() *http.Response {
 	return c.RawResponse
 }
 
-func (c *CreateManagedCredentialsResponse) GetCreateManagedCredentialsResponse() *shared.CreateManagedCredentialsResponse {
+func (c *CreateManagedCredentialsResponse) GetCreateGridManagedCredentialsResponse() *shared.CreateGridManagedCredentialsResponse {
 	if c == nil {
 		return nil
 	}
-	return c.CreateManagedCredentialsResponse
+	return c.CreateGridManagedCredentialsResponse
 }
 
 func (c *CreateManagedCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {

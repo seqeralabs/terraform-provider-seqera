@@ -3,21 +3,28 @@
 page_title: "seqera_managed_identity Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage Managed Identities in Seqera Platform using this resource.
-  Managed Identities provide a way to securely authenticate and authorize
-  access to grid computing platforms (Altair, LSF, Moab, Slurm, UGE) within
-  the Seqera Platform. Each identity encapsulates platform-specific
-  configuration required for job submission and management.
+  Manage Managed Identities for HPC environments in Seqera Platform.
+  Managed Identities are organization-level credentials for HPC/grid computing
+  platforms that enable granular access control for individual workspace users.
+  Unlike shared SSH credentials where all activities appear under one account,
+  managed identities link multiple user credentials to a single identity,
+  preserving each user's identity in system logs and enabling fair resource
+  allocation through HPC queue policies.
+  Supported platforms: Altair PBS, IBM LSF, Moab, Slurm, and Univa Grid Engine.
 ---
 
 # seqera_managed_identity (Resource)
 
-Manage Managed Identities in Seqera Platform using this resource.
+Manage Managed Identities for HPC environments in Seqera Platform.
 
-Managed Identities provide a way to securely authenticate and authorize
-access to grid computing platforms (Altair, LSF, Moab, Slurm, UGE) within
-the Seqera Platform. Each identity encapsulates platform-specific
-configuration required for job submission and management.
+Managed Identities are organization-level credentials for HPC/grid computing
+platforms that enable granular access control for individual workspace users.
+Unlike shared SSH credentials where all activities appear under one account,
+managed identities link multiple user credentials to a single identity,
+preserving each user's identity in system logs and enabling fair resource
+allocation through HPC queue policies.
+
+Supported platforms: Altair PBS, IBM LSF, Moab, Slurm, and Univa Grid Engine.
 
 ## Example Usage
 

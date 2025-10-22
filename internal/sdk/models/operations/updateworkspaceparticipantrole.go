@@ -15,7 +15,7 @@ type UpdateWorkspaceParticipantRoleRequest struct {
 	// Participant numeric identifier
 	ParticipantID int64 `pathParam:"style=simple,explode=false,name=participantId"`
 	// Participant role update request
-	UpdateParticipantRoleRequest shared.UpdateParticipantRoleRequest `request:"mediaType=application/json"`
+	UpdateWorkspaceParticipantRoleRequest shared.UpdateWorkspaceParticipantRoleRequest `request:"mediaType=application/json"`
 }
 
 func (u *UpdateWorkspaceParticipantRoleRequest) GetOrgID() int64 {
@@ -39,11 +39,11 @@ func (u *UpdateWorkspaceParticipantRoleRequest) GetParticipantID() int64 {
 	return u.ParticipantID
 }
 
-func (u *UpdateWorkspaceParticipantRoleRequest) GetUpdateParticipantRoleRequest() shared.UpdateParticipantRoleRequest {
+func (u *UpdateWorkspaceParticipantRoleRequest) GetUpdateWorkspaceParticipantRoleRequest() shared.UpdateWorkspaceParticipantRoleRequest {
 	if u == nil {
-		return shared.UpdateParticipantRoleRequest{}
+		return shared.UpdateWorkspaceParticipantRoleRequest{}
 	}
-	return u.UpdateParticipantRoleRequest
+	return u.UpdateWorkspaceParticipantRoleRequest
 }
 
 type UpdateWorkspaceParticipantRoleResponse struct {

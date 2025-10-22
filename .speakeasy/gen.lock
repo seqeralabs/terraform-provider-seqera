@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: cf1d83442f66444007b767c2b263da2c
+  docChecksum: 3431ed044adebdeb4c918445623e4c2e
   docVersion: 1.85.0
   speakeasyVersion: 1.638.0
   generationVersion: 2.728.0
@@ -10,6 +10,7 @@ management:
 features:
   terraform:
     additionalDependencies: 0.1.0
+    constsAndDefaults: 0.3.0
     core: 3.46.2
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
@@ -34,7 +35,9 @@ generatedFiles:
   - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_google_credential/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
+  - examples/data-sources/seqera_managed_credentials/data-source.tf
   - examples/data-sources/seqera_managed_identity/data-source.tf
+  - examples/data-sources/seqera_organization_member/data-source.tf
   - examples/data-sources/seqera_orgs/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
@@ -45,6 +48,7 @@ generatedFiles:
   - examples/data-sources/seqera_user_workspaces/data-source.tf
   - examples/data-sources/seqera_workflows/data-source.tf
   - examples/data-sources/seqera_workspace/data-source.tf
+  - examples/data-sources/seqera_workspace_participant/data-source.tf
   - examples/data-sources/seqera_workspaces/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/seqera_action/import-by-string-id.tf
@@ -73,9 +77,15 @@ generatedFiles:
   - examples/resources/seqera_google_credential/import.sh
   - examples/resources/seqera_google_credential/resource.tf
   - examples/resources/seqera_labels/resource.tf
+  - examples/resources/seqera_managed_credentials/import-by-string-id.tf
+  - examples/resources/seqera_managed_credentials/import.sh
+  - examples/resources/seqera_managed_credentials/resource.tf
   - examples/resources/seqera_managed_identity/import-by-string-id.tf
   - examples/resources/seqera_managed_identity/import.sh
   - examples/resources/seqera_managed_identity/resource.tf
+  - examples/resources/seqera_organization_member/import-by-string-id.tf
+  - examples/resources/seqera_organization_member/import.sh
+  - examples/resources/seqera_organization_member/resource.tf
   - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
   - examples/resources/seqera_orgs/resource.tf
@@ -99,6 +109,9 @@ generatedFiles:
   - examples/resources/seqera_workspace/import-by-string-id.tf
   - examples/resources/seqera_workspace/import.sh
   - examples/resources/seqera_workspace/resource.tf
+  - examples/resources/seqera_workspace_participant/import-by-string-id.tf
+  - examples/resources/seqera_workspace_participant/import.sh
+  - examples/resources/seqera_workspace_participant/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -153,10 +166,18 @@ generatedFiles:
   - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
   - internal/provider/labels_resource_sdk.go
+  - internal/provider/managedcredentials_data_source.go
+  - internal/provider/managedcredentials_data_source_sdk.go
+  - internal/provider/managedcredentials_resource.go
+  - internal/provider/managedcredentials_resource_sdk.go
   - internal/provider/managedidentity_data_source.go
   - internal/provider/managedidentity_data_source_sdk.go
   - internal/provider/managedidentity_resource.go
   - internal/provider/managedidentity_resource_sdk.go
+  - internal/provider/organizationmember_data_source.go
+  - internal/provider/organizationmember_data_source_sdk.go
+  - internal/provider/organizationmember_resource.go
+  - internal/provider/organizationmember_resource_sdk.go
   - internal/provider/orgs_data_source.go
   - internal/provider/orgs_data_source_sdk.go
   - internal/provider/orgs_resource.go
@@ -321,6 +342,10 @@ generatedFiles:
   - internal/provider/workspace_data_source_sdk.go
   - internal/provider/workspace_resource.go
   - internal/provider/workspace_resource_sdk.go
+  - internal/provider/workspaceparticipant_data_source.go
+  - internal/provider/workspaceparticipant_data_source_sdk.go
+  - internal/provider/workspaceparticipant_resource.go
+  - internal/provider/workspaceparticipant_resource_sdk.go
   - internal/provider/workspaces_data_source.go
   - internal/provider/workspaces_data_source_sdk.go
   - internal/sdk/.gitattributes
@@ -573,11 +598,11 @@ generatedFiles:
   - internal/sdk/models/shared/actionsource.go
   - internal/sdk/models/shared/actionstatus.go
   - internal/sdk/models/shared/activeconnection.go
-  - internal/sdk/models/shared/addmemberrequest.go
-  - internal/sdk/models/shared/addmemberresponse.go
-  - internal/sdk/models/shared/addparticipantrequest.go
-  - internal/sdk/models/shared/addparticipantresponse.go
+  - internal/sdk/models/shared/addorganizationmemberrequest.go
+  - internal/sdk/models/shared/addorganizationmemberresponse.go
   - internal/sdk/models/shared/addteammemberresponse.go
+  - internal/sdk/models/shared/addworkspaceparticipantrequest.go
+  - internal/sdk/models/shared/addworkspaceparticipantresponse.go
   - internal/sdk/models/shared/analytics.go
   - internal/sdk/models/shared/associateactionlabelsrequest.go
   - internal/sdk/models/shared/associatedatasetslabelsrequest.go
@@ -628,12 +653,12 @@ generatedFiles:
   - internal/sdk/models/shared/createdatasetresponse.go
   - internal/sdk/models/shared/creategooglecredentialsrequest.go
   - internal/sdk/models/shared/creategooglecredentialsresponse.go
+  - internal/sdk/models/shared/creategridmanagedcredentialsrequest.go
+  - internal/sdk/models/shared/creategridmanagedcredentialsresponse.go
   - internal/sdk/models/shared/creategridmanagedidentityrequest.go
   - internal/sdk/models/shared/creategridmanagedidentityresponse.go
   - internal/sdk/models/shared/createlabelrequest.go
   - internal/sdk/models/shared/createlabelresponse.go
-  - internal/sdk/models/shared/createmanagedcredentialsrequest.go
-  - internal/sdk/models/shared/createmanagedcredentialsresponse.go
   - internal/sdk/models/shared/createorganizationrequest.go
   - internal/sdk/models/shared/createorganizationresponse.go
   - internal/sdk/models/shared/createpipelinerequest.go
@@ -740,6 +765,7 @@ generatedFiles:
   - internal/sdk/models/shared/googleplatformmetainfofilestore.go
   - internal/sdk/models/shared/googlesecuritykeys.go
   - internal/sdk/models/shared/googlesecuritykeysoutput.go
+  - internal/sdk/models/shared/gridmanagedcredentials.go
   - internal/sdk/models/shared/gridmanagedidentity.go
   - internal/sdk/models/shared/gridplatform.go
   - internal/sdk/models/shared/gridplatformmetainfo.go
@@ -764,13 +790,12 @@ generatedFiles:
   - internal/sdk/models/shared/listdatasetsresponse.go
   - internal/sdk/models/shared/listdatasetversionsresponse.go
   - internal/sdk/models/shared/listeventtypesresponse.go
+  - internal/sdk/models/shared/listgridmanagedcredentialsresponse.go
   - internal/sdk/models/shared/listgridmanagedidentitiesresponse.go
   - internal/sdk/models/shared/listlabelsresponse.go
-  - internal/sdk/models/shared/listmanagedcredentialsrespdto.go
-  - internal/sdk/models/shared/listmanagedcredentialsresponse.go
   - internal/sdk/models/shared/listmembersresponse.go
+  - internal/sdk/models/shared/listorganizationmembersresponse.go
   - internal/sdk/models/shared/listorganizationsresponse.go
-  - internal/sdk/models/shared/listparticipantsresponse.go
   - internal/sdk/models/shared/listpipelineinforesponse.go
   - internal/sdk/models/shared/listpipelinesecretsresponse.go
   - internal/sdk/models/shared/listpipelinesresponse.go
@@ -780,15 +805,13 @@ generatedFiles:
   - internal/sdk/models/shared/listteamresponse.go
   - internal/sdk/models/shared/listworkflowsresponse.go
   - internal/sdk/models/shared/listworkflowsresponselistworkflowselement.go
+  - internal/sdk/models/shared/listworkspaceparticipantsresponse.go
   - internal/sdk/models/shared/listworkspacesandorgresponse.go
   - internal/sdk/models/shared/listworkspacesresponse.go
   - internal/sdk/models/shared/localplatformmetainfo.go
   - internal/sdk/models/shared/log.go
   - internal/sdk/models/shared/logpage.go
   - internal/sdk/models/shared/logpagedownload.go
-  - internal/sdk/models/shared/managedcredentialsdbdto.go
-  - internal/sdk/models/shared/managedcredentialsmetadata.go
-  - internal/sdk/models/shared/managedcredentialsmetadatainput.go
   - internal/sdk/models/shared/mapentrystringstring.go
   - internal/sdk/models/shared/memberdbdto.go
   - internal/sdk/models/shared/multirequestfileschema.go
@@ -796,11 +819,10 @@ generatedFiles:
   - internal/sdk/models/shared/organdworkspacedto.go
   - internal/sdk/models/shared/organization.go
   - internal/sdk/models/shared/organizationdbdto.go
+  - internal/sdk/models/shared/organizationmember.go
   - internal/sdk/models/shared/organizationquotas.go
   - internal/sdk/models/shared/orgrole.go
   - internal/sdk/models/shared/orgtype.go
-  - internal/sdk/models/shared/participantdbdto.go
-  - internal/sdk/models/shared/participanttype.go
   - internal/sdk/models/shared/pipelinedbdto.go
   - internal/sdk/models/shared/pipelineinfo.go
   - internal/sdk/models/shared/pipelinelistparamssortby.go
@@ -858,17 +880,17 @@ generatedFiles:
   - internal/sdk/models/shared/updatecredentialsrequest.go
   - internal/sdk/models/shared/updatedatasetrequest.go
   - internal/sdk/models/shared/updategooglecredentialsrequest.go
+  - internal/sdk/models/shared/updategridmanagedcredentialsrequest.go
   - internal/sdk/models/shared/updategridmanagedidentityrequest.go
   - internal/sdk/models/shared/updatelabelrequest.go
   - internal/sdk/models/shared/updatelabelresponse.go
-  - internal/sdk/models/shared/updatemanagedcredentialsrequest.go
-  - internal/sdk/models/shared/updatememberrolerequest.go
+  - internal/sdk/models/shared/updateorganizationmemberrolerequest.go
   - internal/sdk/models/shared/updateorganizationrequest.go
-  - internal/sdk/models/shared/updateparticipantrolerequest.go
   - internal/sdk/models/shared/updatepipelinerequest.go
   - internal/sdk/models/shared/updatepipelineresponse.go
   - internal/sdk/models/shared/updatepipelinesecretrequest.go
   - internal/sdk/models/shared/updateteamrequest.go
+  - internal/sdk/models/shared/updateworkspaceparticipantrolerequest.go
   - internal/sdk/models/shared/updateworkspacerequest.go
   - internal/sdk/models/shared/uploaddatasetversionresponse.go
   - internal/sdk/models/shared/uploadetag.go
@@ -892,6 +914,7 @@ generatedFiles:
   - internal/sdk/models/shared/workflowstatus.go
   - internal/sdk/models/shared/workspace.go
   - internal/sdk/models/shared/workspacedbdto.go
+  - internal/sdk/models/shared/workspaceparticipant.go
   - internal/sdk/models/shared/wsprole.go
   - internal/sdk/optionalnullable/optionalnullable.go
   - internal/sdk/optionalnullable/optionalnullable_test.go
@@ -1720,7 +1743,7 @@ examples:
           orgId: 395253
       responses:
         "200":
-          application/json: {}
+          application/json: {"members": [{"orgId": 395253, "user": "user@example.com"}]}
         "400":
           application/json: {"message": "<value>"}
   CreateOrganizationMember:
@@ -1729,10 +1752,10 @@ examples:
         path:
           orgId: 761726
       requestBody:
-        application/json: {}
+        application/json: {"member": {"orgId": 761726, "user": "user@example.com"}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"member": {"orgId": 761726, "user": "user@example.com"}}
         "400":
           application/json: {"message": "<value>"}
   LeaveOrganization:
@@ -1759,7 +1782,7 @@ examples:
           orgId: 977615
           memberId: 493581
       requestBody:
-        application/json: {}
+        application/json: {"role": "collaborator"}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -1950,7 +1973,7 @@ examples:
           workspaceId: 773845
       responses:
         "200":
-          application/json: {}
+          application/json: {"participants": [{"orgId": 493072, "workspaceId": 773845, "userNameOrEmail": "user@example.com"}]}
         "400":
           application/json: {"message": "<value>"}
   LeaveWorkspaceParticipant:
@@ -1969,10 +1992,10 @@ examples:
           orgId: 685908
           workspaceId: 100022
       requestBody:
-        application/json: {}
+        application/json: {"participant": {"orgId": 685908, "workspaceId": 100022, "userNameOrEmail": "user@example.com"}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"participant": {"orgId": 685908, "workspaceId": 100022, "userNameOrEmail": "user@example.com"}}
         "400":
           application/json: {"message": "<value>"}
   DeleteWorkspaceParticipant:
@@ -1993,7 +2016,7 @@ examples:
           workspaceId: 913254
           participantId: 428418
       requestBody:
-        application/json: {}
+        application/json: {"role": "owner"}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2892,9 +2915,11 @@ examples:
       parameters:
         path:
           managedIdentityId: 552174
+        query:
+          orgId: 552174
       responses:
         "200":
-          application/json: {}
+          application/json: {"managedCredentials": [{"managedIdentityId": 758663, "provider": "ssh"}]}
         "400":
           application/json: {"message": "<value>"}
   CreateManagedCredentials:
@@ -2902,8 +2927,10 @@ examples:
       parameters:
         path:
           managedIdentityId: 540701
+        query:
+          orgId: 540701
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "container-reg"}}}
+        application/json: {"managedCredentials": {"managedIdentityId": 243163, "provider": "ssh"}}
       responses:
         "200":
           application/json: {}
@@ -2916,7 +2943,7 @@ examples:
           managedIdentityId: 221555
           managedCredentialsId: 485576
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure-cloud"}}}
+        application/json: {"managedCredentials": {"managedIdentityId": 562195, "provider": "ssh"}}
       responses:
         "400":
           application/json: {"message": "<value>"}

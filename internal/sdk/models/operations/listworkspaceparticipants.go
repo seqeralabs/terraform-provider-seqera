@@ -63,7 +63,7 @@ type ListWorkspaceParticipantsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	ListParticipantsResponse *shared.ListParticipantsResponse
+	ListWorkspaceParticipantsResponse *shared.ListWorkspaceParticipantsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -89,11 +89,11 @@ func (l *ListWorkspaceParticipantsResponse) GetRawResponse() *http.Response {
 	return l.RawResponse
 }
 
-func (l *ListWorkspaceParticipantsResponse) GetListParticipantsResponse() *shared.ListParticipantsResponse {
+func (l *ListWorkspaceParticipantsResponse) GetListWorkspaceParticipantsResponse() *shared.ListWorkspaceParticipantsResponse {
 	if l == nil {
 		return nil
 	}
-	return l.ListParticipantsResponse
+	return l.ListWorkspaceParticipantsResponse
 }
 
 func (l *ListWorkspaceParticipantsResponse) GetErrorResponse() *shared.ErrorResponse {

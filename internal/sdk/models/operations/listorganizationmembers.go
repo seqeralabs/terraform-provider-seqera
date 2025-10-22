@@ -54,7 +54,7 @@ type ListOrganizationMembersResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	ListMembersResponse *shared.ListMembersResponse
+	ListOrganizationMembersResponse *shared.ListOrganizationMembersResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -80,11 +80,11 @@ func (l *ListOrganizationMembersResponse) GetRawResponse() *http.Response {
 	return l.RawResponse
 }
 
-func (l *ListOrganizationMembersResponse) GetListMembersResponse() *shared.ListMembersResponse {
+func (l *ListOrganizationMembersResponse) GetListOrganizationMembersResponse() *shared.ListOrganizationMembersResponse {
 	if l == nil {
 		return nil
 	}
-	return l.ListMembersResponse
+	return l.ListOrganizationMembersResponse
 }
 
 func (l *ListOrganizationMembersResponse) GetErrorResponse() *shared.ErrorResponse {

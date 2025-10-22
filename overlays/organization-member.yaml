@@ -1,0 +1,157 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Organization Member Overlay
+  version: 0.0.0
+actions:
+  # Create custom Organization Member schema with flattened structure
+  - target: $.components.schemas
+    update:
+      OrganizationMember:
+        x-speakeasy-entity: OrganizationMember
+        x-speakeasy-entity-description: |
+          Manage organization membership in Seqera Platform.
+
+          Organization members are users who have been granted access to an
+          organization. Members can have different roles (owner, member, collaborator)
+          that determine their permissions and access levels within the organization.
+
+          Adding a member to an organization grants them the ability to access
+          organization resources based on their assigned role. Members can be added
+          by username or email address.
+        required:
+          - orgId
+          - user
+        type: object
+        properties:
+          memberId:
+            type: integer
+            format: int64
+            description: Organization member numeric identifier
+            x-speakeasy-param-computed: true
+            x-speakeasy-param-suppress-computed-diff: true
+            x-speakeasy-param-ordering: 1
+          orgId:
+            type: integer
+            format: int64
+            description: Organization numeric identifier
+            x-speakeasy-param-ordering: 2
+          user:
+            type: string
+            description: Username or email address of the user to add as a member
+            example: user@example.com
+            x-speakeasy-param-ordering: 3
+          role:
+            $ref: "#/components/schemas/OrgRole"
+            description: Organization role
+            example: member
+            x-speakeasy-plan-validators: OrgRoleValidator
+            x-speakeasy-param-ordering: 4
+          userName:
+            type: string
+            description: Member username
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-ordering: 5
+          email:
+            type: string
+            description: Member email address
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-ordering: 6
+
+  # Organization Member entity operations
+  - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]
+    update:
+      x-speakeasy-entity-operation: OrganizationMember#create
+
+  - target: $["paths"]["/orgs/{orgId}/members"]["get"]
+    update:
+      x-speakeasy-entity-operation: OrganizationMember#read
+
+  - target: $["paths"]["/orgs/{orgId}/members/{memberId}/role"]["put"]
+    update:
+      x-speakeasy-entity-operation: OrganizationMember#update
+
+  - target: $["paths"]["/orgs/{orgId}/members/{memberId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: OrganizationMember#delete
+
+  # Parameter configurations for CREATE
+  - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]["parameters"][?(@.name == "orgId")]
+    update:
+      name: orgId
+      in: path
+      description: Organization numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  # Parameter configurations for LIST/READ
+  - target: $["paths"]["/orgs/{orgId}/members"]["get"]["parameters"][?(@.name == "orgId")]
+    update:
+      name: orgId
+      in: path
+      description: Organization numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  # Update request/response schemas
+  - target: $.components.schemas
+    update:
+      AddOrganizationMemberRequest:
+        type: object
+        required:
+          - member
+        properties:
+          member:
+            $ref: '#/components/schemas/OrganizationMember'
+
+      AddOrganizationMemberResponse:
+        type: object
+        properties:
+          member:
+            $ref: '#/components/schemas/OrganizationMember'
+
+      ListOrganizationMembersResponse:
+        type: object
+        properties:
+          members:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrganizationMember'
+            x-speakeasy-param-readonly: true
+          totalSize:
+            type: integer
+            format: int64
+            x-speakeasy-param-readonly: true
+
+      UpdateOrganizationMemberRoleRequest:
+        type: object
+        required:
+          - role
+        properties:
+          role:
+            $ref: '#/components/schemas/OrgRole'
+
+  # Update API paths to use new schemas
+  - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]["requestBody"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/AddOrganizationMemberRequest"
+
+  - target: $["paths"]["/orgs/{orgId}/members/add"]["put"]["responses"]["200"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/AddOrganizationMemberResponse"
+
+  - target: $["paths"]["/orgs/{orgId}/members"]["get"]["responses"]["200"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/ListOrganizationMembersResponse"
+
+  - target: $["paths"]["/orgs/{orgId}/members/{memberId}/role"]["put"]["requestBody"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/UpdateOrganizationMemberRoleRequest"

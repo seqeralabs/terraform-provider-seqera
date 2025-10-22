@@ -8,10 +8,10 @@ import (
 )
 
 type ListManagedCredentialsRequest struct {
-	// Managed Identity numeric identifier
+	// Parent Managed Identity numeric identifier
 	ManagedIdentityID int64 `pathParam:"style=simple,explode=false,name=managedIdentityId"`
 	// Organization numeric identifier
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// User numeric identifier to filter records by
 	UserID *int64 `queryParam:"style=form,explode=true,name=userId"`
 	// Optional filtering on Managed Credentials for the given Managed Identity:                                              Allows free text search on `userName` or `firstName + lastName`.                                              Accepts keywords: `is:missing` or `is:added` to filter on credentials status.                                              If not provided (or both provided), all are returned.
@@ -29,9 +29,9 @@ func (l *ListManagedCredentialsRequest) GetManagedIdentityID() int64 {
 	return l.ManagedIdentityID
 }
 
-func (l *ListManagedCredentialsRequest) GetOrgID() *int64 {
+func (l *ListManagedCredentialsRequest) GetOrgID() int64 {
 	if l == nil {
-		return nil
+		return 0
 	}
 	return l.OrgID
 }
@@ -72,7 +72,7 @@ type ListManagedCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	ListManagedCredentialsResponse *shared.ListManagedCredentialsResponse
+	ListGridManagedCredentialsResponse *shared.ListGridManagedCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -98,11 +98,11 @@ func (l *ListManagedCredentialsResponse) GetRawResponse() *http.Response {
 	return l.RawResponse
 }
 
-func (l *ListManagedCredentialsResponse) GetListManagedCredentialsResponse() *shared.ListManagedCredentialsResponse {
+func (l *ListManagedCredentialsResponse) GetListGridManagedCredentialsResponse() *shared.ListGridManagedCredentialsResponse {
 	if l == nil {
 		return nil
 	}
-	return l.ListManagedCredentialsResponse
+	return l.ListGridManagedCredentialsResponse
 }
 
 func (l *ListManagedCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {

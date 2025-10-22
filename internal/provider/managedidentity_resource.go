@@ -50,7 +50,7 @@ func (r *ManagedIdentityResource) Metadata(ctx context.Context, req resource.Met
 
 func (r *ManagedIdentityResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Managed Identities in Seqera Platform using this resource.\n\nManaged Identities provide a way to securely authenticate and authorize\naccess to grid computing platforms (Altair, LSF, Moab, Slurm, UGE) within\nthe Seqera Platform. Each identity encapsulates platform-specific\nconfiguration required for job submission and management.\n",
+		MarkdownDescription: "Manage Managed Identities for HPC environments in Seqera Platform.\n\nManaged Identities are organization-level credentials for HPC/grid computing\nplatforms that enable granular access control for individual workspace users.\nUnlike shared SSH credentials where all activities appear under one account,\nmanaged identities link multiple user credentials to a single identity,\npreserving each user's identity in system logs and enabling fair resource\nallocation through HPC queue policies.\n\nSupported platforms: Altair PBS, IBM LSF, Moab, Slurm, and Univa Grid Engine.\n",
 		Attributes: map[string]schema.Attribute{
 			"checked": schema.BoolAttribute{
 				Optional:    true,
