@@ -332,9 +332,20 @@ actions:
       description: AWS region where the compute environment will be deployed. This field is required and must be provided
 
   # Azure Batch Config field descriptions
+  - target: $.components.schemas.AzBatchConfig.properties.workDir
+    update:
+      description: "Azure Blob storage container for workflow execution. Must use az:// protocol format (e.g., az://my-container/work). Do not use HTTPS URLs"
+      example: "az://my-container/work"
+
   - target: $.components.schemas.AzBatchConfig.properties.region
     update:
       description: Azure region where the compute environment will be deployed. This field is required and must be provided
+
+  # Azure Cloud Config field descriptions
+  - target: $.components.schemas.AzCloudConfig.properties.workDir
+    update:
+      description: "Azure Blob storage container for workflow execution. Must use az:// protocol format (e.g., az://my-container/work). Do not use HTTPS URLs"
+      example: "az://my-container/work"
 
   # EKS Config field descriptions (allOf structure)
   - target: $.components.schemas.EksComputeConfig.allOf[1].properties.region

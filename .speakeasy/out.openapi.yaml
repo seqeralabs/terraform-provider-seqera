@@ -9823,10 +9823,8 @@ components:
           x-speakeasy-terraform-ignore: true
         workDir:
           type: string
-          title: "Azure Batch Work Directory"
-          description: "Must be a valid Azure Blob container URL with format az://container-name/path"
+          description: "Azure Blob storage container for workflow execution. Must use az:// protocol format (e.g., az://my-container/work). Do not use HTTPS URLs"
           example: "az://my-container/work"
-          x-speakeasy-plan-validators: AzureBatchWorkDirValidator
         preRunScript:
           type: string
         postRunScript:
@@ -9909,6 +9907,8 @@ components:
           type: string
         workDir:
           type: string
+          description: "Azure Blob storage container for workflow execution. Must use az:// protocol format (e.g., az://my-container/work). Do not use HTTPS URLs"
+          example: "az://my-container/work"
         preRunScript:
           type: string
         postRunScript:

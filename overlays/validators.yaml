@@ -46,18 +46,6 @@ actions:
       x-speakeasy-plan-validators: LabelValueValidator
 
   ####################################################################
-  ####              Azure Batch Work Directory Validation        ####
-  ####################################################################
-  # Add custom validator for Azure Batch work directory
-  # Must be a valid Azure Blob container URL with az:// prefix
-  - target: $.components.schemas.AzBatchConfig.properties.workDir
-    update:
-      title: "Azure Batch Work Directory"
-      description: "Must be a valid Azure Blob container URL with format az://container-name/path"
-      example: "az://my-container/work"
-      x-speakeasy-plan-validators: AzureBatchWorkDirValidator
-
-  ####################################################################
   ####                Pipeline Name Validation                   ####
   ####################################################################
   # Add custom validator for pipeline names
