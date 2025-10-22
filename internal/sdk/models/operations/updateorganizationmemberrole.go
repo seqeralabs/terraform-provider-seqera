@@ -13,7 +13,7 @@ type UpdateOrganizationMemberRoleRequest struct {
 	// Organization member numeric identifier
 	MemberID int64 `pathParam:"style=simple,explode=false,name=memberId"`
 	// Member role update request
-	UpdateMemberRoleRequest shared.UpdateMemberRoleRequest `request:"mediaType=application/json"`
+	UpdateOrganizationMemberRoleRequest shared.UpdateOrganizationMemberRoleRequest `request:"mediaType=application/json"`
 }
 
 func (u *UpdateOrganizationMemberRoleRequest) GetOrgID() int64 {
@@ -30,11 +30,11 @@ func (u *UpdateOrganizationMemberRoleRequest) GetMemberID() int64 {
 	return u.MemberID
 }
 
-func (u *UpdateOrganizationMemberRoleRequest) GetUpdateMemberRoleRequest() shared.UpdateMemberRoleRequest {
+func (u *UpdateOrganizationMemberRoleRequest) GetUpdateOrganizationMemberRoleRequest() shared.UpdateOrganizationMemberRoleRequest {
 	if u == nil {
-		return shared.UpdateMemberRoleRequest{}
+		return shared.UpdateOrganizationMemberRoleRequest{}
 	}
-	return u.UpdateMemberRoleRequest
+	return u.UpdateOrganizationMemberRoleRequest
 }
 
 type UpdateOrganizationMemberRoleResponse struct {

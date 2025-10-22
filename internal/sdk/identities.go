@@ -915,12 +915,12 @@ func (s *Identities) ListManagedCredentials(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out shared.ListManagedCredentialsResponse
+			var out shared.ListGridManagedCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListManagedCredentialsResponse = &out
+			res.ListGridManagedCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -996,7 +996,7 @@ func (s *Identities) CreateManagedCredentials(ctx context.Context, request opera
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateManagedCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGridManagedCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -1078,12 +1078,12 @@ func (s *Identities) CreateManagedCredentials(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out shared.CreateManagedCredentialsResponse
+			var out shared.CreateGridManagedCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateManagedCredentialsResponse = &out
+			res.CreateGridManagedCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1159,7 +1159,7 @@ func (s *Identities) UpdateManagedCredentials(ctx context.Context, request opera
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateManagedCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGridManagedCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}

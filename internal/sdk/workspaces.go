@@ -1035,12 +1035,12 @@ func (s *Workspaces) ListWorkspaceParticipants(ctx context.Context, request oper
 				return nil, err
 			}
 
-			var out shared.ListParticipantsResponse
+			var out shared.ListWorkspaceParticipantsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListParticipantsResponse = &out
+			res.ListWorkspaceParticipantsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1248,7 +1248,7 @@ func (s *Workspaces) CreateWorkspaceParticipant(ctx context.Context, request ope
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AddParticipantRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AddWorkspaceParticipantRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -1326,12 +1326,12 @@ func (s *Workspaces) CreateWorkspaceParticipant(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out shared.AddParticipantResponse
+			var out shared.AddWorkspaceParticipantResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.AddParticipantResponse = &out
+			res.AddWorkspaceParticipantResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1541,7 +1541,7 @@ func (s *Workspaces) UpdateWorkspaceParticipantRole(ctx context.Context, request
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateParticipantRoleRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateWorkspaceParticipantRoleRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}

@@ -1,0 +1,198 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Workspace Participant Overlay
+  version: 0.0.0
+actions:
+  # Create custom Workspace Participant schema with flattened structure
+  - target: $.components.schemas
+    update:
+      WorkspaceParticipant:
+        x-speakeasy-entity: WorkspaceParticipant
+        x-speakeasy-entity-description: |
+          Manage workspace participant access in Seqera Platform.
+
+          Workspace participants are users or teams who have been granted access to a
+          specific workspace within an organization. Participants can have granular
+          roles (owner, admin, maintain, launch, connect, view) that determine their
+          permissions within the workspace.
+
+          Participants can be added by username/email, or by referencing an existing
+          organization member ID or team ID. This enables flexible access control at
+          the workspace level.
+        required:
+          - orgId
+          - workspaceId
+        type: object
+        properties:
+          participantId:
+            type: integer
+            format: int64
+            description: Workspace participant numeric identifier
+            x-speakeasy-param-computed: true
+            x-speakeasy-param-ordering: 1
+          orgId:
+            type: integer
+            format: int64
+            description: Organization numeric identifier
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-ordering: 2
+          workspaceId:
+            type: integer
+            format: int64
+            description: Workspace numeric identifier
+            x-speakeasy-param-ordering: 3
+          memberId:
+            type: integer
+            format: int64
+            description: Organization member numeric identifier (use this OR userNameOrEmail)
+            x-speakeasy-param-ordering: 4
+          teamId:
+            type: integer
+            format: int64
+            description: Team numeric identifier (for adding entire teams)
+            x-speakeasy-param-ordering: 5
+          userNameOrEmail:
+            type: string
+            description: Username or email address (use this OR memberId)
+            example: user@example.com
+            x-speakeasy-param-ordering: 6
+          role:
+            $ref: "#/components/schemas/WspRole"
+            description: Workspace role
+            example: maintain
+            x-speakeasy-plan-validators: WspRoleValidator
+            x-speakeasy-param-ordering: 7
+          userName:
+            type: string
+            description: Participant username
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-ordering: 8
+          email:
+            type: string
+            description: Participant email address
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-ordering: 9
+          participantType:
+            type: string
+            description: Type of participant (MEMBER or TEAM)
+            x-speakeasy-param-readonly: true
+            x-speakeasy-param-ordering: 10
+
+  # Workspace Participant entity operations
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]
+    update:
+      x-speakeasy-entity-operation: WorkspaceParticipant#create
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]
+    update:
+      x-speakeasy-entity-operation: WorkspaceParticipant#read
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]
+    update:
+      x-speakeasy-entity-operation: WorkspaceParticipant#update
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: WorkspaceParticipant#delete
+
+  # Parameter configurations for CREATE
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["parameters"][?(@.name == "orgId")]
+    update:
+      name: orgId
+      in: path
+      description: Organization numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["parameters"][?(@.name == "workspaceId")]
+    update:
+      name: workspaceId
+      in: path
+      description: Workspace numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  # Parameter configurations for LIST/READ
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["parameters"][?(@.name == "orgId")]
+    update:
+      name: orgId
+      in: path
+      description: Organization numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["parameters"][?(@.name == "workspaceId")]
+    update:
+      name: workspaceId
+      in: path
+      description: Workspace numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  # Update request/response schemas
+  - target: $.components.schemas
+    update:
+      AddWorkspaceParticipantRequest:
+        type: object
+        required:
+          - participant
+        properties:
+          participant:
+            $ref: '#/components/schemas/WorkspaceParticipant'
+
+      AddWorkspaceParticipantResponse:
+        type: object
+        properties:
+          participant:
+            $ref: '#/components/schemas/WorkspaceParticipant'
+
+      ListWorkspaceParticipantsResponse:
+        type: object
+        properties:
+          participants:
+            type: array
+            items:
+              $ref: '#/components/schemas/WorkspaceParticipant'
+            x-speakeasy-param-readonly: true
+          totalSize:
+            type: integer
+            format: int64
+            x-speakeasy-param-readonly: true
+
+      UpdateWorkspaceParticipantRoleRequest:
+        type: object
+        required:
+          - role
+        properties:
+          role:
+            $ref: '#/components/schemas/WspRole'
+
+  # Update API paths to use new schemas
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["requestBody"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/AddWorkspaceParticipantRequest"
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["responses"]["200"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/AddWorkspaceParticipantResponse"
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["responses"]["200"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/ListWorkspaceParticipantsResponse"
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]["requestBody"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/UpdateWorkspaceParticipantRoleRequest"

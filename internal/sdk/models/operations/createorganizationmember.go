@@ -11,7 +11,7 @@ type CreateOrganizationMemberRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 	// Member addition request
-	AddMemberRequest shared.AddMemberRequest `request:"mediaType=application/json"`
+	AddOrganizationMemberRequest shared.AddOrganizationMemberRequest `request:"mediaType=application/json"`
 }
 
 func (c *CreateOrganizationMemberRequest) GetOrgID() int64 {
@@ -21,11 +21,11 @@ func (c *CreateOrganizationMemberRequest) GetOrgID() int64 {
 	return c.OrgID
 }
 
-func (c *CreateOrganizationMemberRequest) GetAddMemberRequest() shared.AddMemberRequest {
+func (c *CreateOrganizationMemberRequest) GetAddOrganizationMemberRequest() shared.AddOrganizationMemberRequest {
 	if c == nil {
-		return shared.AddMemberRequest{}
+		return shared.AddOrganizationMemberRequest{}
 	}
-	return c.AddMemberRequest
+	return c.AddOrganizationMemberRequest
 }
 
 type CreateOrganizationMemberResponse struct {
@@ -36,7 +36,7 @@ type CreateOrganizationMemberResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	AddMemberResponse *shared.AddMemberResponse
+	AddOrganizationMemberResponse *shared.AddOrganizationMemberResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -62,11 +62,11 @@ func (c *CreateOrganizationMemberResponse) GetRawResponse() *http.Response {
 	return c.RawResponse
 }
 
-func (c *CreateOrganizationMemberResponse) GetAddMemberResponse() *shared.AddMemberResponse {
+func (c *CreateOrganizationMemberResponse) GetAddOrganizationMemberResponse() *shared.AddOrganizationMemberResponse {
 	if c == nil {
 		return nil
 	}
-	return c.AddMemberResponse
+	return c.AddOrganizationMemberResponse
 }
 
 func (c *CreateOrganizationMemberResponse) GetErrorResponse() *shared.ErrorResponse {

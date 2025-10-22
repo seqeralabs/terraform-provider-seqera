@@ -13,7 +13,7 @@ type CreateWorkspaceParticipantRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Participant addition request
-	AddParticipantRequest shared.AddParticipantRequest `request:"mediaType=application/json"`
+	AddWorkspaceParticipantRequest shared.AddWorkspaceParticipantRequest `request:"mediaType=application/json"`
 }
 
 func (c *CreateWorkspaceParticipantRequest) GetOrgID() int64 {
@@ -30,11 +30,11 @@ func (c *CreateWorkspaceParticipantRequest) GetWorkspaceID() int64 {
 	return c.WorkspaceID
 }
 
-func (c *CreateWorkspaceParticipantRequest) GetAddParticipantRequest() shared.AddParticipantRequest {
+func (c *CreateWorkspaceParticipantRequest) GetAddWorkspaceParticipantRequest() shared.AddWorkspaceParticipantRequest {
 	if c == nil {
-		return shared.AddParticipantRequest{}
+		return shared.AddWorkspaceParticipantRequest{}
 	}
-	return c.AddParticipantRequest
+	return c.AddWorkspaceParticipantRequest
 }
 
 type CreateWorkspaceParticipantResponse struct {
@@ -45,7 +45,7 @@ type CreateWorkspaceParticipantResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	AddParticipantResponse *shared.AddParticipantResponse
+	AddWorkspaceParticipantResponse *shared.AddWorkspaceParticipantResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -71,11 +71,11 @@ func (c *CreateWorkspaceParticipantResponse) GetRawResponse() *http.Response {
 	return c.RawResponse
 }
 
-func (c *CreateWorkspaceParticipantResponse) GetAddParticipantResponse() *shared.AddParticipantResponse {
+func (c *CreateWorkspaceParticipantResponse) GetAddWorkspaceParticipantResponse() *shared.AddWorkspaceParticipantResponse {
 	if c == nil {
 		return nil
 	}
-	return c.AddParticipantResponse
+	return c.AddWorkspaceParticipantResponse
 }
 
 func (c *CreateWorkspaceParticipantResponse) GetErrorResponse() *shared.ErrorResponse {

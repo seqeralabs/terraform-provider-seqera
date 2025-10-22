@@ -15,7 +15,7 @@ type UpdateManagedCredentialsRequest struct {
 	// Organization numeric identifier
 	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// Managed Credentials update request
-	UpdateManagedCredentialsRequest shared.UpdateManagedCredentialsRequest `request:"mediaType=application/json"`
+	UpdateGridManagedCredentialsRequest shared.UpdateGridManagedCredentialsRequest `request:"mediaType=application/json"`
 }
 
 func (u *UpdateManagedCredentialsRequest) GetManagedIdentityID() int64 {
@@ -39,11 +39,11 @@ func (u *UpdateManagedCredentialsRequest) GetOrgID() *int64 {
 	return u.OrgID
 }
 
-func (u *UpdateManagedCredentialsRequest) GetUpdateManagedCredentialsRequest() shared.UpdateManagedCredentialsRequest {
+func (u *UpdateManagedCredentialsRequest) GetUpdateGridManagedCredentialsRequest() shared.UpdateGridManagedCredentialsRequest {
 	if u == nil {
-		return shared.UpdateManagedCredentialsRequest{}
+		return shared.UpdateGridManagedCredentialsRequest{}
 	}
-	return u.UpdateManagedCredentialsRequest
+	return u.UpdateGridManagedCredentialsRequest
 }
 
 type UpdateManagedCredentialsResponse struct {
