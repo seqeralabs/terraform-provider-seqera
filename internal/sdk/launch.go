@@ -15,7 +15,6 @@ import (
 	"net/http"
 )
 
-// Launch - Workflow launch events
 type Launch struct {
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration

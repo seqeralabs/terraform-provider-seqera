@@ -16,6 +16,7 @@ import (
 	"net/url"
 )
 
+// Identities - Managed identities for grid computing platforms
 type Identities struct {
 	rootSDK          *Seqera
 	sdkConfiguration config.SDKConfiguration

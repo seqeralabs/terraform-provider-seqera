@@ -14,6 +14,7 @@ sources:
             - location: overlays/request-body-fixes.yaml
             - location: overlays/regex-fixes.yaml
             - location: overlays/deduplicate-enums.yaml
+            - location: overlays/tag-and-schema-cleanup.yaml
             - location: overlays/validators.yaml
             - location: overlays/retry.yaml
             - location: overlays/datalinks.yaml

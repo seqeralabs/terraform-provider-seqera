@@ -63,10 +63,10 @@ type Seqera struct {
 	// Pipeline input datasets (samplesheets) in CSV or TSV format
 	Datasets *Datasets
 	// GA4GH workflow execution service runs
-	Ga4gh      *Ga4gh
+	Ga4gh *Ga4gh
+	// Managed identities for grid computing platforms
 	Identities *Identities
-	// Workflow launch events
-	Launch *Launch
+	Launch     *Launch
 	// Organizations
 	Orgs *Orgs
 	// Teams in an organization context
