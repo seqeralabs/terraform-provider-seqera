@@ -3666,6 +3666,9 @@ paths:
       security:
         - BearerAuth: []
       x-speakeasy-entity-operation: Orgs#create
+      x-speakeasy-errors:
+        statusCodes:
+          - "409"
   /orgs/validate:
     get:
       tags:
@@ -8580,6 +8583,7 @@ paths:
           schema:
             type: integer
             format: int64
+          example: 123
       requestBody:
         description: Azure credentials create request
         content:
@@ -8745,6 +8749,7 @@ paths:
           schema:
             type: integer
             format: int64
+          example: 123
       requestBody:
         description: Google credentials create request
         content:
@@ -9077,6 +9082,7 @@ paths:
           schema:
             type: integer
             format: int64
+          example: 123
       requestBody:
         description: AWS credentials create request
         content:
@@ -9286,6 +9292,7 @@ components:
           minLength: 1
           type: string
           description: Display name for the token (1-50 characters)
+          example: "ci-cd-token"
         lastUsed:
           type: string
           format: date-time
@@ -9306,6 +9313,8 @@ components:
 
         Tokens provide secure API access, enabling programmatic
         access to platform resources and services.
+      example:
+        name: "ci-cd-token"
     Action.ConfigType:
       type: object
       properties:
@@ -9825,10 +9834,14 @@ components:
         accessKey:
           type: string
           example: "AKIAIOSFODNN7EXAMPLE"
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         secretKey:
           type: string
           writeOnly: true
           example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         assumeRoleArn:
           type: string
           example: "arn:aws:iam::123456789012:role/SeqeraRole"
@@ -10044,10 +10057,14 @@ components:
           type: string
           writeOnly: true
           example: "YourAzureBatchAccountKeyHere=="
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         storageKey:
           type: string
           writeOnly: true
           example: "YourAzureStorageAccountKeyHere=="
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     BitBucketSecurityKeys:
       type: object
       properties:
@@ -10059,9 +10076,13 @@ components:
         password:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         token:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     Bucket:
       type: object
       properties:
@@ -10095,6 +10116,8 @@ components:
         password:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     ComputeConfig:
       type: object
       properties:
@@ -10444,6 +10467,8 @@ components:
         password:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         registry:
           type: string
     CreateAccessTokenRequest:
@@ -10644,8 +10669,10 @@ components:
         name:
           type: string
           x-speakeasy-param-optional: false
+          example: "nf-core-rnaseq"
         description:
           type: string
+          example: "RNA-Seq analysis pipeline using nf-core best practices"
         icon:
           type: string
         launch:
@@ -11974,9 +12001,13 @@ components:
         password:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         token:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     GiteaSecurityKeys:
       type: object
       properties:
@@ -11985,11 +12016,15 @@ components:
           x-speakeasy-terraform-ignore: true
         token:
           type: string
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         username:
           type: string
         password:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     GithubActionConfig:
       type: object
       properties:
@@ -12280,17 +12315,8 @@ components:
         data:
           type: string
           writeOnly: true
-          example: |
-            {
-              "type": "service_account",
-              "project_id": "my-project",
-              "private_key_id": "key-id",
-              "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
-              "client_email": "service-account@my-project.iam.gserviceaccount.com",
-              "client_id": "123456789",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token"
-            }
+          example: |-
+            file("${path.module}/service-account-key.json")
           x-speakeasy-param-sensitive: true
           x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
@@ -12425,12 +12451,18 @@ components:
           x-speakeasy-terraform-ignore: true
         certificate:
           type: string
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         privateKey:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         token:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     LabelDbDto:
       type: object
       properties:
@@ -13857,9 +13889,13 @@ components:
         privateKey:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
         passphrase:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
     SecurityGroup:
       type: object
       properties:
@@ -15525,17 +15561,17 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]{0,37}[a-zA-Z0-9]|[a-zA-Z0-9]{0,38})$"
           type: string
-          example: "genomics-research"
+          example: "my-research-workspace"
           x-speakeasy-param-readonly: false
         fullName:
           maxLength: 100
           type: string
-          example: "Genomics Research Workspace"
+          example: "My Research Workspace"
           x-speakeasy-param-readonly: false
         description:
           maxLength: 1000
           type: string
-          example: "Workspace for genomics research projects and computational biology workflows"
+          example: "Workspace for bioinformatics research projects"
           x-speakeasy-param-readonly: false
         visibility:
           $ref: "#/components/schemas/Visibility"
@@ -15634,6 +15670,15 @@ components:
         - provider
         - keys
       type: object
+      example:
+        name: "My Azure Credentials"
+        description: "Azure credentials for Seqera workflow execution"
+        provider: "azure"
+        keys:
+          batchKey: "base64-encoded-batch-key"
+          batchName: "mybatchaccount"
+          storageKey: "base64-encoded-storage-key"
+          storageName: "mystorageaccount"
       properties:
         id:
           type: string
@@ -15644,9 +15689,11 @@ components:
           maxLength: 100
           type: string
           description: Display name for the credential (max 100 characters)
+          example: "My Azure Credentials"
         description:
           type: string
           description: Optional description explaining the purpose of the credential
+          example: "Azure credentials for Seqera workflow execution"
           x-speakeasy-param-computed: false
         provider:
           type: string
@@ -15722,6 +15769,12 @@ components:
         - provider
         - keys
       type: object
+      example:
+        name: "My Google Cloud Credentials"
+        description: "Google Cloud service account for workflow execution"
+        provider: "google"
+        keys:
+          data: file("${path.module}/service-account-key.json")
       properties:
         id:
           type: string
@@ -15732,9 +15785,11 @@ components:
           maxLength: 100
           type: string
           description: Display name for the credential (max 100 characters)
+          example: "My Google Cloud Credentials"
         description:
           type: string
           description: Optional description explaining the purpose of the credential
+          example: "Google Cloud service account for workflow execution"
           x-speakeasy-param-computed: false
         provider:
           type: string
@@ -16283,6 +16338,14 @@ components:
         - provider
         - keys
       type: object
+      example:
+        name: "My AWS Credentials"
+        description: "AWS credentials for Seqera workflow execution"
+        provider: "aws"
+        keys:
+          accessKey: "AKIAIOSFODNN7EXAMPLE"
+          secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+          assumeRoleArn: "arn:aws:iam::123456789012:role/SeqeraRole"
       properties:
         id:
           type: string
@@ -16293,9 +16356,11 @@ components:
           maxLength: 100
           type: string
           description: Display name for the credential (max 100 characters)
+          example: "My AWS Credentials"
         description:
           type: string
           description: Optional description explaining the purpose of the credential
+          example: "AWS credentials for Seqera workflow execution"
           x-speakeasy-param-computed: false
         provider:
           type: string

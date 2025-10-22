@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 3431ed044adebdeb4c918445623e4c2e
+  docChecksum: 1ee39b56b4281c3f898c533920d89583
   docVersion: 1.85.0
   speakeasyVersion: 1.638.0
   generationVersion: 2.728.0
@@ -14,6 +14,7 @@ features:
     core: 3.46.2
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
+    errors: 0.0.0
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     groups: 2.81.3
@@ -1918,10 +1919,10 @@ examples:
         path:
           orgId: 726719
       requestBody:
-        application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
+        application/json: {"workspace": {"name": "my-research-workspace", "fullName": "My Research Workspace", "description": "Workspace for bioinformatics research projects", "visibility": "SHARED"}}
       responses:
         "200":
-          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
+          application/json: {"workspace": {"name": "my-research-workspace", "fullName": "My Research Workspace", "description": "Workspace for bioinformatics research projects", "visibility": "SHARED"}}
         "400":
           application/json: {"message": "<value>"}
   WorkspaceValidate:
@@ -1940,7 +1941,7 @@ examples:
           workspaceId: 29089
       responses:
         "200":
-          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "PRIVATE"}}
+          application/json: {"workspace": {"name": "my-research-workspace", "fullName": "My Research Workspace", "description": "Workspace for bioinformatics research projects", "visibility": "PRIVATE"}}
         "400":
           application/json: {"message": "<value>"}
   UpdateWorkspace:
@@ -1953,7 +1954,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
+          application/json: {"workspace": {"name": "my-research-workspace", "fullName": "My Research Workspace", "description": "Workspace for bioinformatics research projects", "visibility": "SHARED"}}
         "400":
           application/json: {"message": "<value>"}
   DeleteWorkspace:
@@ -2113,7 +2114,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "my_secondary_workflow", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "nf-core-rnaseq", "description": "RNA-Seq analysis pipeline using nf-core best practices", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "my_secondary_workflow", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -2344,7 +2345,7 @@ examples:
     speakeasy-default-token-list:
       responses:
         "200":
-          application/json: {}
+          application/json: {"tokens": [{"name": "ci-cd-token"}]}
         "400":
           application/json: {"message": "<value>"}
   CreateToken:
@@ -2353,7 +2354,7 @@ examples:
         application/json: {"name": "ci-cd-pipeline-token"}
       responses:
         "200":
-          application/json: {}
+          application/json: {"token": {"name": "ci-cd-token"}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAllTokens:
@@ -2655,8 +2656,11 @@ examples:
           application/json: {"message": "<value>"}
   CreateAWSCredentials:
     speakeasy-default-create-AWS-credentials:
+      parameters:
+        query:
+          workspaceId: 123
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "My AWS Credentials", "description": "AWS credentials for Seqera workflow execution", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
       responses:
         "200":
           application/json: {}
@@ -2669,7 +2673,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+          application/json: {"credentials": {"name": "My AWS Credentials", "description": "AWS credentials for Seqera workflow execution", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSCredentials:
@@ -2678,7 +2682,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "My AWS Credentials", "description": "AWS credentials for Seqera workflow execution", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2694,8 +2698,11 @@ examples:
           application/json: {}
   CreateAzureCredentials:
     speakeasy-default-create-azure-credentials:
+      parameters:
+        query:
+          workspaceId: 123
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere=="}}}
+        application/json: {"credentials": {"name": "My Azure Credentials", "description": "Azure credentials for Seqera workflow execution", "provider": "azure", "keys": {"batchName": "mybatchaccount", "storageName": "mystorageaccount", "batchKey": "base64-encoded-batch-key", "storageKey": "base64-encoded-storage-key"}}}
       responses:
         "200":
           application/json: {}
@@ -2708,7 +2715,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage"}}}
+          application/json: {"credentials": {"name": "My Azure Credentials", "description": "Azure credentials for Seqera workflow execution", "provider": "azure", "keys": {"batchName": "mybatchaccount", "storageName": "mystorageaccount"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAzureCredentials:
@@ -2717,7 +2724,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere=="}}}
+        application/json: {"credentials": {"name": "My Azure Credentials", "description": "Azure credentials for Seqera workflow execution", "provider": "azure", "keys": {"batchName": "mybatchaccount", "storageName": "mystorageaccount", "batchKey": "base64-encoded-batch-key", "storageKey": "base64-encoded-storage-key"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2733,8 +2740,11 @@ examples:
           application/json: {}
   CreateGoogleCredentials:
     speakeasy-default-create-google-credentials:
+      parameters:
+        query:
+          workspaceId: 123
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"}}}
+        application/json: {"credentials": {"name": "My Google Cloud Credentials", "description": "Google Cloud service account for workflow execution", "provider": "google", "keys": {"data": "file(\"${path.module}/service-account-key.json\")"}}}
       responses:
         "200":
           application/json: {}
@@ -2747,7 +2757,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"credentials": {"name": "My Google Cloud Credentials", "description": "Google Cloud service account for workflow execution", "provider": "google", "keys": {}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGoogleCredentials:
@@ -2756,7 +2766,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"}}}
+        application/json: {"credentials": {"name": "My Google Cloud Credentials", "description": "Google Cloud service account for workflow execution", "provider": "google", "keys": {"data": "file(\"${path.module}/service-account-key.json\")"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}

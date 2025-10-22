@@ -30,6 +30,9 @@ actions:
   - target: $["components"]["schemas"]["AccessToken"]["properties"]["lastUsed"]
     update:
       x-speakeasy-param-readonly: true
+  - target: $["components"]["schemas"]["AccessToken"]["properties"]["name"]
+    update:
+      example: "ci-cd-token"
   - target: $["components"]["schemas"]["AccessToken"]
     update:
       x-speakeasy-entity: Tokens
@@ -38,6 +41,8 @@ actions:
 
         Tokens provide secure API access, enabling programmatic
         access to platform resources and services.
+      example:
+        name: "ci-cd-token"
   - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
     update:
       x-speakeasy-entity: Tokens

@@ -36,12 +36,11 @@ go build
 
 ### Code Generation
 ```bash
-
-# Create a new overaly file from the update openAPI spec (example). The file must be name seqera-final.yaml for speakeasy to pick it up.
+# Create a new overlay file from the updated openAPI spec (example). The file must be named seqera-final.yaml for speakeasy to pick it up.
 speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml
-# Regenerate provider code using Speakeasy
-speakeasy run --skip-versioning 
 
+# Regenerate provider code using Speakeasy
+speakeasy run --skip-versioning
 ```
 
 ## Project Structure

@@ -91,9 +91,9 @@ Optional:
 
 Optional:
 
-- `access_key` (String)
+- `access_key` (String, Sensitive)
 - `assume_role_arn` (String)
-- `secret_key` (String)
+- `secret_key` (String, Sensitive)
 
 
 <a id="nestedatt--keys--azure"></a>
@@ -101,9 +101,9 @@ Optional:
 
 Optional:
 
-- `batch_key` (String)
+- `batch_key` (String, Sensitive)
 - `batch_name` (String)
-- `storage_key` (String)
+- `storage_key` (String, Sensitive)
 - `storage_name` (String)
 
 
@@ -112,11 +112,11 @@ Optional:
 
 Optional:
 
-- `batch_key` (String)
+- `batch_key` (String, Sensitive)
 - `batch_name` (String)
 - `client_id` (String)
 - `client_secret` (String)
-- `storage_key` (String)
+- `storage_key` (String, Sensitive)
 - `storage_name` (String)
 - `subscription_id` (String)
 - `tenant_id` (String)
@@ -127,11 +127,11 @@ Optional:
 
 Optional:
 
-- `batch_key` (String)
+- `batch_key` (String, Sensitive)
 - `batch_name` (String)
 - `client_id` (String)
 - `client_secret` (String)
-- `storage_key` (String)
+- `storage_key` (String, Sensitive)
 - `storage_name` (String)
 - `tenant_id` (String)
 
@@ -151,8 +151,8 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `username` (String)
 
 
@@ -161,7 +161,7 @@ Optional:
 
 Optional:
 
-- `password` (String)
+- `password` (String, Sensitive)
 - `token` (String)
 - `username` (String)
 
@@ -171,7 +171,7 @@ Optional:
 
 Optional:
 
-- `password` (String)
+- `password` (String, Sensitive)
 - `registry` (String)
 - `user_name` (String)
 
@@ -181,8 +181,8 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `username` (String)
 
 
@@ -201,8 +201,8 @@ Optional:
 
 Optional:
 
-- `password` (String)
-- `token` (String)
+- `password` (String, Sensitive)
+- `token` (String, Sensitive)
 - `username` (String)
 
 
@@ -219,9 +219,9 @@ Optional:
 
 Optional:
 
-- `certificate` (String)
-- `private_key` (String)
-- `token` (String)
+- `certificate` (String, Sensitive)
+- `private_key` (String, Sensitive)
+- `token` (String, Sensitive)
 
 
 <a id="nestedatt--keys--local"></a>
@@ -247,9 +247,9 @@ Optional:
 
 Optional:
 
-- `access_key` (String)
+- `access_key` (String, Sensitive)
 - `assume_role_arn` (String)
-- `secret_key` (String)
+- `secret_key` (String, Sensitive)
 
 
 <a id="nestedatt--keys--ssh"></a>
@@ -257,8 +257,8 @@ Optional:
 
 Optional:
 
-- `passphrase` (String)
-- `private_key` (String)
+- `passphrase` (String, Sensitive)
+- `private_key` (String, Sensitive)
 
 
 <a id="nestedatt--keys--tw_agent"></a>

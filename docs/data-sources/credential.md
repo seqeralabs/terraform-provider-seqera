@@ -79,7 +79,7 @@ Read-Only:
 
 Read-Only:
 
-- `access_key` (String)
+- `access_key` (String, Sensitive)
 - `assume_role_arn` (String)
 
 
@@ -155,7 +155,7 @@ Read-Only:
 
 Read-Only:
 
-- `token` (String)
+- `token` (String, Sensitive)
 - `username` (String)
 
 
@@ -185,7 +185,7 @@ Read-Only:
 
 Read-Only:
 
-- `certificate` (String)
+- `certificate` (String, Sensitive)
 
 
 <a id="nestedatt--keys--local"></a>
@@ -206,7 +206,7 @@ Read-Only:
 
 Read-Only:
 
-- `access_key` (String)
+- `access_key` (String, Sensitive)
 - `assume_role_arn` (String)
 
 

@@ -97,14 +97,16 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"batch_key": schema.StringAttribute{
-						Optional: true,
+						Optional:  true,
+						Sensitive: true,
 					},
 					"batch_name": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
 					},
 					"storage_key": schema.StringAttribute{
-						Optional: true,
+						Optional:  true,
+						Sensitive: true,
 					},
 					"storage_name": schema.StringAttribute{
 						Computed: true,

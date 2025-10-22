@@ -53,5 +53,5 @@ data "seqera_aws_credential" "my_awscredential" {
 
 Read-Only:
 
-- `access_key` (String)
+- `access_key` (String, Sensitive)
 - `assume_role_arn` (String)

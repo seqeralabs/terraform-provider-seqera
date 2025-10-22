@@ -82,7 +82,8 @@ func (r *AWSCredentialDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"access_key": schema.StringAttribute{
-						Computed: true,
+						Computed:  true,
+						Sensitive: true,
 					},
 					"assume_role_arn": schema.StringAttribute{
 						Computed: true,

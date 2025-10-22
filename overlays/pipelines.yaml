@@ -8,6 +8,10 @@ actions:
   - target: $["components"]["schemas"]["CreatePipelineRequest"]["properties"]["name"]
     update:
       x-speakeasy-param-optional: false
+      example: "nf-core-rnaseq"
+  - target: $["components"]["schemas"]["CreatePipelineRequest"]["properties"]["description"]
+    update:
+      example: "RNA-Seq analysis pipeline using nf-core best practices"
   - target: $["components"]["schemas"]["CreatePipelineResponse"]
     update:
       x-speakeasy-entity: Pipelines

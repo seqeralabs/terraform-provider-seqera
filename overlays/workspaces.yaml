@@ -17,15 +17,19 @@ actions:
   - target: $["components"]["schemas"]["Workspace"]["properties"]["name"]
     update:
       x-speakeasy-param-readonly: false
+      example: "my-research-workspace"
   - target: $["components"]["schemas"]["Workspace"]["properties"]["fullName"]
     update:
       x-speakeasy-param-readonly: false
+      example: "My Research Workspace"
   - target: $["components"]["schemas"]["Workspace"]["properties"]["description"]
     update:
       x-speakeasy-param-readonly: false
+      example: "Workspace for bioinformatics research projects"
   - target: $["components"]["schemas"]["Workspace"]["properties"]["visibility"]
     update:
       x-speakeasy-param-readonly: false
+      example: "PRIVATE"
   - target: $["components"]["schemas"]["Workspace"]
     update:
       x-speakeasy-entity: Workspace

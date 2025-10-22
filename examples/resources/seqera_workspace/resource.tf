@@ -1,8 +1,8 @@
 resource "seqera_workspace" "my_workspace" {
-  description = "Workspace for genomics research projects and computational biology workflows"
-  full_name   = "Genomics Research Workspace"
+  description = "Workspace for bioinformatics research projects"
+  full_name   = "My Research Workspace"
   id          = 1
-  name        = "genomics-research"
+  name        = "my-research-workspace"
   org_id      = 7
   visibility  = "SHARED"
 }

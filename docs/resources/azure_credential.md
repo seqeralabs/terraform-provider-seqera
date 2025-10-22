@@ -23,16 +23,16 @@ resource "seqera_azure_credential" "my_azurecredential" {
   category       = "...my_category..."
   checked        = true
   credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
+  description    = "Azure credentials for Seqera workflow execution"
   keys = {
     batch_key    = "YourAzureBatchAccountKeyHere=="
     batch_name   = "myazurebatch"
     storage_key  = "YourAzureStorageAccountKeyHere=="
     storage_name = "myazurestorage"
   }
-  name          = "...my_name..."
+  name          = "My Azure Credentials"
   provider_type = "azure"
-  workspace_id  = 0
+  workspace_id  = 123
 }
 ```
 
@@ -66,9 +66,9 @@ resource "seqera_azure_credential" "my_azurecredential" {
 
 Optional:
 
-- `batch_key` (String)
+- `batch_key` (String, Sensitive)
 - `batch_name` (String)
-- `storage_key` (String)
+- `storage_key` (String, Sensitive)
 - `storage_name` (String)
 
 ## Import

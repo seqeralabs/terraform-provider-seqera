@@ -117,15 +117,20 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:  true,
+								Optional:  true,
+								Sensitive: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"assume_role_arn": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
 							},
 							"secret_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 						},
 						Validators: []validator.Object{
@@ -154,14 +159,16 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"batch_name": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
 							},
 							"storage_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"storage_name": schema.StringAttribute{
 								Computed: true,
@@ -194,7 +201,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"batch_name": schema.StringAttribute{
 								Computed: true,
@@ -208,7 +216,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"storage_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"storage_name": schema.StringAttribute{
 								Computed: true,
@@ -249,7 +258,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"batch_name": schema.StringAttribute{
 								Computed: true,
@@ -263,7 +273,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 							},
 							"storage_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"storage_name": schema.StringAttribute{
 								Computed: true,
@@ -337,10 +348,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"username": schema.StringAttribute{
 								Computed: true,
@@ -373,7 +386,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"token": schema.StringAttribute{
 								Computed: true,
@@ -410,7 +424,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"registry": schema.StringAttribute{
 								Computed: true,
@@ -447,11 +462,16 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"token": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:  true,
+								Optional:  true,
+								Sensitive: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"username": schema.StringAttribute{
 								Computed: true,
@@ -522,10 +542,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"username": schema.StringAttribute{
 								Computed: true,
@@ -589,14 +611,20 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"certificate": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:  true,
+								Optional:  true,
+								Sensitive: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"private_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"token": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 						},
 						Validators: []validator.Object{
@@ -691,15 +719,20 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								Computed:  true,
+								Optional:  true,
+								Sensitive: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"assume_role_arn": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
 							},
 							"secret_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 						},
 						Validators: []validator.Object{
@@ -728,10 +761,12 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"passphrase": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 							"private_key": schema.StringAttribute{
-								Optional: true,
+								Optional:  true,
+								Sensitive: true,
 							},
 						},
 						Validators: []validator.Object{

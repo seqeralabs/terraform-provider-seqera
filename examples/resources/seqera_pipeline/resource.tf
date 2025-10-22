@@ -1,5 +1,5 @@
 resource "seqera_pipeline" "my_pipeline" {
-  description = "...my_description..."
+  description = "RNA-Seq analysis pipeline using nf-core best practices"
   icon        = "...my_icon..."
   label_ids = [
     7
@@ -47,6 +47,6 @@ resource "seqera_pipeline" "my_pipeline" {
       "SHARED_CREDENTIALS",
     ]
   }
-  name         = "my-pipeline"
+  name         = "nf-core-rnaseq"
   workspace_id = 3
 }

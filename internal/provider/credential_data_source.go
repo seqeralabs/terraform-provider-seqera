@@ -88,7 +88,8 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
-								Computed: true,
+								Computed:  true,
+								Sensitive: true,
 							},
 							"assume_role_arn": schema.StringAttribute{
 								Computed: true,
@@ -188,7 +189,8 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"token": schema.StringAttribute{
-								Computed: true,
+								Computed:  true,
+								Sensitive: true,
 							},
 							"username": schema.StringAttribute{
 								Computed: true,
@@ -221,7 +223,8 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"certificate": schema.StringAttribute{
-								Computed: true,
+								Computed:  true,
+								Sensitive: true,
 							},
 						},
 					},
@@ -243,7 +246,8 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
-								Computed: true,
+								Computed:  true,
+								Sensitive: true,
 							},
 							"assume_role_arn": schema.StringAttribute{
 								Computed: true,

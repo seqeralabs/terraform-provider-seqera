@@ -97,15 +97,20 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"access_key": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
+						Computed:  true,
+						Optional:  true,
+						Sensitive: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 					},
 					"assume_role_arn": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
 					},
 					"secret_key": schema.StringAttribute{
-						Optional: true,
+						Optional:  true,
+						Sensitive: true,
 					},
 				},
 			},

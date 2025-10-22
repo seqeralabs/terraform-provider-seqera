@@ -8,6 +8,9 @@ actions:
   - target: $["paths"]["/orgs"]["post"]
     update:
       x-speakeasy-entity-operation: Orgs#create
+      x-speakeasy-errors:
+        statusCodes:
+          - "409"
   - target: $["paths"]["/orgs/{orgId}"]["get"]
     update:
       x-speakeasy-entity-operation: Orgs#read

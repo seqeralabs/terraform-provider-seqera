@@ -23,15 +23,15 @@ resource "seqera_aws_credential" "my_awscredential" {
   category       = "...my_category..."
   checked        = false
   credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
+  description    = "AWS credentials for Seqera workflow execution"
   keys = {
     access_key      = "AKIAIOSFODNN7EXAMPLE"
     assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraRole"
     secret_key      = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   }
-  name          = "...my_name..."
+  name          = "My AWS Credentials"
   provider_type = "aws"
-  workspace_id  = 4
+  workspace_id  = 123
 }
 ```
 
@@ -65,9 +65,9 @@ resource "seqera_aws_credential" "my_awscredential" {
 
 Optional:
 
-- `access_key` (String)
+- `access_key` (String, Sensitive)
 - `assume_role_arn` (String)
-- `secret_key` (String)
+- `secret_key` (String, Sensitive)
 
 ## Import
 
