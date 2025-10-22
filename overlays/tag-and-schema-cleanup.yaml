@@ -1,0 +1,20 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Tag and Schema Cleanup
+  version: 0.0.0
+actions:
+  # Add missing 'identities' tag to global tags section
+  # Insert it after 'ga4gh' tag (index 8) and before 'labels' tag
+  - target: $.tags[8]
+    update:
+      name: identities
+      description: Managed identities for grid computing platforms
+
+  # Remove unused EmptyBodyRequest schema (we removed all requestBodies using it)
+  - target: $.components.schemas.EmptyBodyRequest
+    remove: true
+
+  # Remove unused ListAWSComputeEnvsResponse schema
+  - target: $.components.schemas.ListAWSComputeEnvsResponse
+    remove: true
