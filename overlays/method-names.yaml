@@ -1,0 +1,113 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: SDK Method Name Overrides
+  version: 0.0.0
+actions:
+  # AWS Credentials method names
+  - target: $["paths"]["/credentials#aws"]["post"]
+    update:
+      x-speakeasy-name-override: createAws
+  - target: $["paths"]["/credentials/{credentialsId}#aws"]["get"]
+    update:
+      x-speakeasy-name-override: getAWS
+  - target: $["paths"]["/credentials/{credentialsId}#aws"]["put"]
+    update:
+      x-speakeasy-name-override: updateAws
+  - target: $["paths"]["/credentials/{credentialsId}#aws"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteAWS
+
+  # Azure Credentials method names
+  - target: $["paths"]["/credentials#azure"]["post"]
+    update:
+      x-speakeasy-name-override: createAzure
+  - target: $["paths"]["/credentials/{credentialsId}#azure"]["get"]
+    update:
+      x-speakeasy-name-override: getAzure
+  - target: $["paths"]["/credentials/{credentialsId}#azure"]["put"]
+    update:
+      x-speakeasy-name-override: updateAzure
+  - target: $["paths"]["/credentials/{credentialsId}#azure"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+
+  # Google Credentials method names
+  - target: $["paths"]["/credentials#google"]["post"]
+    update:
+      x-speakeasy-name-override: createGoogle
+  - target: $["paths"]["/credentials/{credentialsId}#google"]["get"]
+    update:
+      x-speakeasy-name-override: getGoogle
+  - target: $["paths"]["/credentials/{credentialsId}#google"]["put"]
+    update:
+      x-speakeasy-name-override: updateGoogle
+  - target: $["paths"]["/credentials/{credentialsId}#google"]["delete"]
+    update:
+      x-speakeasy-name-override: deleteGoogle
+
+  # AWS Compute Environment method names
+  - target: $["paths"]["/compute-envs#aws"]["post"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: createAws
+  - target: $["paths"]["/compute-envs/{computeEnvId}#aws"]["get"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: getAws
+  - target: $["paths"]["/compute-envs/{computeEnvId}#aws"]["put"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: updateAWS
+  - target: $["paths"]["/compute-envs/{computeEnvId}#aws"]["delete"]
+    update:
+      x-speakeasy-group: computeEnvs
+      x-speakeasy-name-override: deleteAWS
+
+  # DataLinks method names
+  - target: $["paths"]["/data-links/{dataLinkId}/download"]["get"]
+    update:
+      x-speakeasy-group: dataLinks
+      x-speakeasy-name-override: download
+
+  # Datasets method names
+  - target: $["paths"]["/datasets"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+  - target: $["paths"]["/datasets/hide"]["post"]
+    update:
+      x-speakeasy-name-override: hide
+  - target: $["paths"]["/datasets/show"]["post"]
+    update:
+      x-speakeasy-name-override: show
+  - target: $["paths"]["/datasets/{datasetId}/versions/{version}/disable"]["post"]
+    update:
+      x-speakeasy-name-override: disableVersion
+
+  # Labels method names
+  - target: $["paths"]["/datasets/labels/add"]["post"]
+    update:
+      x-speakeasy-name-override: addToDatasets
+  - target: $["paths"]["/datasets/labels/apply"]["post"]
+    update:
+      x-speakeasy-name-override: applyToDatasets
+  - target: $["paths"]["/datasets/labels/remove"]["post"]
+    update:
+      x-speakeasy-name-override: removeFromDatasets
+
+  # Managed Identities method names
+  - target: $["paths"]["/identities"]["post"]
+    update:
+      x-speakeasy-name-override: create
+  - target: $["paths"]["/identities"]["get"]
+    update:
+      x-speakeasy-name-override: list
+  - target: $["paths"]["/identities/{managedIdentityId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+  - target: $["paths"]["/identities/{managedIdentityId}"]["put"]
+    update:
+      x-speakeasy-name-override: update
+  - target: $["paths"]["/identities/{managedIdentityId}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete

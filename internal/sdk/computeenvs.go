@@ -1133,8 +1133,8 @@ func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request opera
 
 }
 
-// CreateAws - Create AWS credentials
-// Creates new AWS credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+// CreateAws - Create AWS compute environment
+// Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
 func (s *ComputeEnvs) CreateAws(ctx context.Context, request operations.CreateAWSComputeEnvRequest, opts ...operations.Option) (*operations.CreateAWSComputeEnvResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
