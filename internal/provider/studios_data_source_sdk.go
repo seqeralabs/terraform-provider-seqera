@@ -21,11 +21,11 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 		for _, activeConnectionsItem := range resp.ActiveConnections {
 			var activeConnections tfTypes.ActiveConnection
 
-			activeConnections.Avatar = types.StringValue(activeConnectionsItem.Avatar)
-			activeConnections.Email = types.StringValue(activeConnectionsItem.Email)
-			activeConnections.ID = types.Int64Value(activeConnectionsItem.ID)
-			activeConnections.LastActive = types.StringValue(typeconvert.TimeToString(activeConnectionsItem.LastActive))
-			activeConnections.UserName = types.StringValue(activeConnectionsItem.UserName)
+			activeConnections.Avatar = types.StringPointerValue(activeConnectionsItem.Avatar)
+			activeConnections.Email = types.StringPointerValue(activeConnectionsItem.Email)
+			activeConnections.ID = types.Int64PointerValue(activeConnectionsItem.ID)
+			activeConnections.LastActive = types.StringPointerValue(typeconvert.TimePointerToStringPointer(activeConnectionsItem.LastActive))
+			activeConnections.UserName = types.StringPointerValue(activeConnectionsItem.UserName)
 
 			r.ActiveConnections = append(r.ActiveConnections, activeConnections)
 		}
@@ -148,6 +148,14 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 
 			r.Progress = append(r.Progress, progress)
 		}
+		if resp.RemoteConfig == nil {
+			r.RemoteConfig = nil
+		} else {
+			r.RemoteConfig = &tfTypes.StudioRemoteConfiguration{}
+			r.RemoteConfig.CommitID = types.StringPointerValue(resp.RemoteConfig.CommitID)
+			r.RemoteConfig.Repository = types.StringValue(resp.RemoteConfig.Repository)
+			r.RemoteConfig.Revision = types.StringPointerValue(resp.RemoteConfig.Revision)
+		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
 		if resp.StatusInfo == nil {
 			r.StatusInfo = nil
@@ -159,6 +167,11 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 				r.StatusInfo.Status = types.StringValue(string(*resp.StatusInfo.Status))
 			} else {
 				r.StatusInfo.Status = types.StringNull()
+			}
+			if resp.StatusInfo.StopReason != nil {
+				r.StatusInfo.StopReason = types.StringValue(string(*resp.StatusInfo.StopReason))
+			} else {
+				r.StatusInfo.StopReason = types.StringNull()
 			}
 		}
 		r.StudioURL = types.StringPointerValue(resp.StudioURL)
@@ -178,11 +191,11 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 		if resp.User == nil {
 			r.User = nil
 		} else {
-			r.User = &tfTypes.StudioUser{}
-			r.User.Avatar = types.StringValue(resp.User.Avatar)
-			r.User.Email = types.StringValue(resp.User.Email)
-			r.User.ID = types.Int64Value(resp.User.ID)
-			r.User.UserName = types.StringValue(resp.User.UserName)
+			r.User = &tfTypes.UserInfo{}
+			r.User.Avatar = types.StringPointerValue(resp.User.Avatar)
+			r.User.Email = types.StringPointerValue(resp.User.Email)
+			r.User.ID = types.Int64PointerValue(resp.User.ID)
+			r.User.UserName = types.StringPointerValue(resp.User.UserName)
 		}
 		r.WaveBuildURL = types.StringPointerValue(resp.WaveBuildURL)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)

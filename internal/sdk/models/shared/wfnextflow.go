@@ -24,23 +24,23 @@ func (w *WfNextflow) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *WfNextflow) GetVersion() *string {
-	if o == nil {
+func (w *WfNextflow) GetVersion() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Version
+	return w.Version
 }
 
-func (o *WfNextflow) GetBuild() *string {
-	if o == nil {
+func (w *WfNextflow) GetBuild() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Build
+	return w.Build
 }
 
-func (o *WfNextflow) GetTimestamp() *time.Time {
-	if o == nil {
+func (w *WfNextflow) GetTimestamp() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.Timestamp
+	return w.Timestamp
 }

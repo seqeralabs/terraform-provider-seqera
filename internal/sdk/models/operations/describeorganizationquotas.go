@@ -17,18 +17,18 @@ type DescribeOrganizationQuotasRequest struct {
 	Include []Include `queryParam:"style=form,explode=true,name=include"`
 }
 
-func (o *DescribeOrganizationQuotasRequest) GetOrgID() int64 {
-	if o == nil {
+func (d *DescribeOrganizationQuotasRequest) GetOrgID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.OrgID
+	return d.OrgID
 }
 
-func (o *DescribeOrganizationQuotasRequest) GetInclude() []Include {
-	if o == nil {
+func (d *DescribeOrganizationQuotasRequest) GetInclude() []Include {
+	if d == nil {
 		return nil
 	}
-	return o.Include
+	return d.Include
 }
 
 type DescribeOrganizationQuotasResponse struct {
@@ -44,37 +44,37 @@ type DescribeOrganizationQuotasResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeOrganizationQuotasResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeOrganizationQuotasResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeOrganizationQuotasResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeOrganizationQuotasResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeOrganizationQuotasResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeOrganizationQuotasResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeOrganizationQuotasResponse) GetDescribeOrganizationQuotasResponse() *shared.DescribeOrganizationQuotasResponse {
-	if o == nil {
+func (d *DescribeOrganizationQuotasResponse) GetDescribeOrganizationQuotasResponse() *shared.DescribeOrganizationQuotasResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeOrganizationQuotasResponse
+	return d.DescribeOrganizationQuotasResponse
 }
 
-func (o *DescribeOrganizationQuotasResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeOrganizationQuotasResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

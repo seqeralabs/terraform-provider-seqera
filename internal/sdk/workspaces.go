@@ -61,7 +61,7 @@ func (s *Workspaces) ListWorkspaces(ctx context.Context, request operations.List
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListWorkspaces",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -213,7 +213,7 @@ func (s *Workspaces) CreateWorkspace(ctx context.Context, request operations.Cre
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateWorkspace",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateWorkspaceRequest", "json", `request:"mediaType=application/json"`)
@@ -343,9 +343,9 @@ func (s *Workspaces) CreateWorkspace(ctx context.Context, request operations.Cre
 
 }
 
-// WorkspaceValidate - Validate workspace name
+// ValidateWorkspaceName - Validate workspace name
 // Confirms the validity of the given workspace name. Append `?name=<your_workspace_name>`.
-func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.WorkspaceValidateRequest, opts ...operations.Option) (*operations.WorkspaceValidateResponse, error) {
+func (s *Workspaces) ValidateWorkspaceName(ctx context.Context, request operations.ValidateWorkspaceNameRequest, opts ...operations.Option) (*operations.ValidateWorkspaceNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -373,8 +373,8 @@ func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.W
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "WorkspaceValidate",
-		OAuth2Scopes:     []string{},
+		OperationID:      "ValidateWorkspaceName",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -437,7 +437,7 @@ func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.W
 		}
 	}
 
-	res := &operations.WorkspaceValidateResponse{
+	res := &operations.ValidateWorkspaceNameResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -512,7 +512,7 @@ func (s *Workspaces) DescribeWorkspace(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeWorkspace",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -664,7 +664,7 @@ func (s *Workspaces) UpdateWorkspace(ctx context.Context, request operations.Upd
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateWorkspace",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateWorkspaceRequest", "json", `request:"mediaType=application/json"`)
@@ -825,7 +825,7 @@ func (s *Workspaces) DeleteWorkspace(ctx context.Context, request operations.Del
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteWorkspace",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -957,7 +957,7 @@ func (s *Workspaces) ListWorkspaceParticipants(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListWorkspaceParticipants",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1113,7 +1113,7 @@ func (s *Workspaces) LeaveWorkspaceParticipant(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "LeaveWorkspaceParticipant",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1245,7 +1245,7 @@ func (s *Workspaces) CreateWorkspaceParticipant(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateWorkspaceParticipant",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AddParticipantRequest", "json", `request:"mediaType=application/json"`)
@@ -1406,7 +1406,7 @@ func (s *Workspaces) DeleteWorkspaceParticipant(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteWorkspaceParticipant",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1538,7 +1538,7 @@ func (s *Workspaces) UpdateWorkspaceParticipantRole(ctx context.Context, request
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateWorkspaceParticipantRole",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateParticipantRoleRequest", "json", `request:"mediaType=application/json"`)
@@ -1677,7 +1677,7 @@ func (s *Workspaces) FindDataStudiosWorkspaceSettings(ctx context.Context, reque
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "FindDataStudiosWorkspaceSettings",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "UpdateWorkspaceRequest", "json", `request:"mediaType=application/json"`)
@@ -1838,7 +1838,7 @@ func (s *Workspaces) UpdateDataStudiosWorkspaceSettings(ctx context.Context, req
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateDataStudiosWorkspaceSettings",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateWorkspaceRequest", "json", `request:"mediaType=application/json"`)
@@ -1911,27 +1911,6 @@ func (s *Workspaces) UpdateDataStudiosWorkspaceSettings(ctx context.Context, req
 	}
 
 	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out operations.UpdateDataStudiosWorkspaceSettingsResponseBody
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Object = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
 	case httpRes.StatusCode == 204:
 	case httpRes.StatusCode == 403:
 	case httpRes.StatusCode == 400:
@@ -2000,7 +1979,7 @@ func (s *Workspaces) ListWorkspacesUser(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListWorkspacesUser",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

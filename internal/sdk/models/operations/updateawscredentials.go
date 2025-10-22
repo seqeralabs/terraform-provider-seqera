@@ -16,25 +16,25 @@ type UpdateAWSCredentialsRequest struct {
 	UpdateAWSCredentialsRequest shared.UpdateAWSCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateAWSCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (u *UpdateAWSCredentialsRequest) GetCredentialsID() string {
+	if u == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return u.CredentialsID
 }
 
-func (o *UpdateAWSCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateAWSCredentialsRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateAWSCredentialsRequest) GetUpdateAWSCredentialsRequest() shared.UpdateAWSCredentialsRequest {
-	if o == nil {
+func (u *UpdateAWSCredentialsRequest) GetUpdateAWSCredentialsRequest() shared.UpdateAWSCredentialsRequest {
+	if u == nil {
 		return shared.UpdateAWSCredentialsRequest{}
 	}
-	return o.UpdateAWSCredentialsRequest
+	return u.UpdateAWSCredentialsRequest
 }
 
 type UpdateAWSCredentialsResponse struct {
@@ -48,30 +48,30 @@ type UpdateAWSCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateAWSCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateAWSCredentialsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateAWSCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateAWSCredentialsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateAWSCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateAWSCredentialsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

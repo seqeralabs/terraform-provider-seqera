@@ -6,9 +6,9 @@ type ListEventTypesResponse struct {
 	EventTypes []EventType `json:"eventTypes,omitempty"`
 }
 
-func (o *ListEventTypesResponse) GetEventTypes() []EventType {
-	if o == nil {
+func (l *ListEventTypesResponse) GetEventTypes() []EventType {
+	if l == nil {
 		return nil
 	}
-	return o.EventTypes
+	return l.EventTypes
 }

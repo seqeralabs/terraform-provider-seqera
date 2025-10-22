@@ -8,11 +8,11 @@ import (
 )
 
 type ActiveConnection struct {
-	ID         int64     `json:"id"`
-	UserName   string    `json:"userName"`
-	Email      string    `json:"email"`
-	Avatar     string    `json:"avatar"`
-	LastActive time.Time `json:"lastActive"`
+	ID         *int64     `json:"id,omitempty"`
+	UserName   *string    `json:"userName,omitempty"`
+	Email      *string    `json:"email,omitempty"`
+	Avatar     *string    `json:"avatar,omitempty"`
+	LastActive *time.Time `json:"lastActive,omitempty"`
 }
 
 func (a ActiveConnection) MarshalJSON() ([]byte, error) {
@@ -20,43 +20,43 @@ func (a ActiveConnection) MarshalJSON() ([]byte, error) {
 }
 
 func (a *ActiveConnection) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"id", "userName", "email", "avatar", "lastActive"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ActiveConnection) GetID() int64 {
-	if o == nil {
-		return 0
+func (a *ActiveConnection) GetID() *int64 {
+	if a == nil {
+		return nil
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *ActiveConnection) GetUserName() string {
-	if o == nil {
-		return ""
+func (a *ActiveConnection) GetUserName() *string {
+	if a == nil {
+		return nil
 	}
-	return o.UserName
+	return a.UserName
 }
 
-func (o *ActiveConnection) GetEmail() string {
-	if o == nil {
-		return ""
+func (a *ActiveConnection) GetEmail() *string {
+	if a == nil {
+		return nil
 	}
-	return o.Email
+	return a.Email
 }
 
-func (o *ActiveConnection) GetAvatar() string {
-	if o == nil {
-		return ""
+func (a *ActiveConnection) GetAvatar() *string {
+	if a == nil {
+		return nil
 	}
-	return o.Avatar
+	return a.Avatar
 }
 
-func (o *ActiveConnection) GetLastActive() time.Time {
-	if o == nil {
-		return time.Time{}
+func (a *ActiveConnection) GetLastActive() *time.Time {
+	if a == nil {
+		return nil
 	}
-	return o.LastActive
+	return a.LastActive
 }

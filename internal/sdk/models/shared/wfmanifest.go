@@ -15,72 +15,72 @@ type WfManifest struct {
 	Icon            *string `json:"icon,omitempty"`
 }
 
-func (o *WfManifest) GetNextflowVersion() *string {
-	if o == nil {
+func (w *WfManifest) GetNextflowVersion() *string {
+	if w == nil {
 		return nil
 	}
-	return o.NextflowVersion
+	return w.NextflowVersion
 }
 
-func (o *WfManifest) GetDefaultBranch() *string {
-	if o == nil {
+func (w *WfManifest) GetDefaultBranch() *string {
+	if w == nil {
 		return nil
 	}
-	return o.DefaultBranch
+	return w.DefaultBranch
 }
 
-func (o *WfManifest) GetVersion() *string {
-	if o == nil {
+func (w *WfManifest) GetVersion() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Version
+	return w.Version
 }
 
-func (o *WfManifest) GetHomePage() *string {
-	if o == nil {
+func (w *WfManifest) GetHomePage() *string {
+	if w == nil {
 		return nil
 	}
-	return o.HomePage
+	return w.HomePage
 }
 
-func (o *WfManifest) GetGitmodules() *string {
-	if o == nil {
+func (w *WfManifest) GetGitmodules() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Gitmodules
+	return w.Gitmodules
 }
 
-func (o *WfManifest) GetDescription() *string {
-	if o == nil {
+func (w *WfManifest) GetDescription() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Description
+	return w.Description
 }
 
-func (o *WfManifest) GetName() *string {
-	if o == nil {
+func (w *WfManifest) GetName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Name
+	return w.Name
 }
 
-func (o *WfManifest) GetMainScript() *string {
-	if o == nil {
+func (w *WfManifest) GetMainScript() *string {
+	if w == nil {
 		return nil
 	}
-	return o.MainScript
+	return w.MainScript
 }
 
-func (o *WfManifest) GetAuthor() *string {
-	if o == nil {
+func (w *WfManifest) GetAuthor() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Author
+	return w.Author
 }
 
-func (o *WfManifest) GetIcon() *string {
-	if o == nil {
+func (w *WfManifest) GetIcon() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Icon
+	return w.Icon
 }

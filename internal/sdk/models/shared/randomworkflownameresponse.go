@@ -6,9 +6,9 @@ type RandomWorkflowNameResponse struct {
 	Name *string `json:"name,omitempty"`
 }
 
-func (o *RandomWorkflowNameResponse) GetName() *string {
-	if o == nil {
+func (r *RandomWorkflowNameResponse) GetName() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Name
+	return r.Name
 }

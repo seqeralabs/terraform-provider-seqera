@@ -94,7 +94,7 @@ actions:
 
   - target: $.components.schemas.WorkflowLaunchRequest.properties.entryName
     update:
-      example: "main.nf"
+      example: "my_secondary_workflow"
 
   - target: $.components.schemas.WorkflowLaunchRequest.properties.schemaName
     update:
@@ -313,6 +313,9 @@ actions:
   - target: $.components.schemas.DataStudioCreateRequest.properties.computeEnvId
     update:
       example: "compute-env-id"
+  - target: $.components.schemas.DataStudioConfiguration.properties.memory
+    update:
+      example: 8192
 
   ####################################################################
   ####                       Team Resource                       ####

@@ -43,128 +43,128 @@ func (a *ActionResponseDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ActionResponseDto) GetID() *string {
-	if o == nil {
+func (a *ActionResponseDto) GetID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *ActionResponseDto) GetLaunch() *Launch {
-	if o == nil {
+func (a *ActionResponseDto) GetLaunch() *Launch {
+	if a == nil {
 		return nil
 	}
-	return o.Launch
+	return a.Launch
 }
 
-func (o *ActionResponseDto) GetName() *string {
-	if o == nil {
+func (a *ActionResponseDto) GetName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *ActionResponseDto) GetHookID() *string {
-	if o == nil {
+func (a *ActionResponseDto) GetHookID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HookID
+	return a.HookID
 }
 
-func (o *ActionResponseDto) GetHookURL() *string {
-	if o == nil {
+func (a *ActionResponseDto) GetHookURL() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HookURL
+	return a.HookURL
 }
 
-func (o *ActionResponseDto) GetMessage() *string {
-	if o == nil {
+func (a *ActionResponseDto) GetMessage() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Message
+	return a.Message
 }
 
-func (o *ActionResponseDto) GetSource() *ActionSource {
-	if o == nil {
+func (a *ActionResponseDto) GetSource() *ActionSource {
+	if a == nil {
 		return nil
 	}
-	return o.Source
+	return a.Source
 }
 
-func (o *ActionResponseDto) GetStatus() *ActionStatus {
-	if o == nil {
+func (a *ActionResponseDto) GetStatus() *ActionStatus {
+	if a == nil {
 		return nil
 	}
-	return o.Status
+	return a.Status
 }
 
-func (o *ActionResponseDto) GetConfig() *ActionConfigType {
-	if o == nil {
+func (a *ActionResponseDto) GetConfig() *ActionConfigType {
+	if a == nil {
 		return nil
 	}
-	return o.Config
+	return a.Config
 }
 
-func (o *ActionResponseDto) GetConfigGithub() *GithubActionConfig {
-	if v := o.GetConfig(); v != nil {
+func (a *ActionResponseDto) GetConfigGithub() *GithubActionConfig {
+	if v := a.GetConfig(); v != nil {
 		return v.GithubActionConfig
 	}
 	return nil
 }
 
-func (o *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
-	if v := o.GetConfig(); v != nil {
+func (a *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
+	if v := a.GetConfig(); v != nil {
 		return v.ActionTowerActionConfig
 	}
 	return nil
 }
 
-func (o *ActionResponseDto) GetEvent() *ActionEventType {
-	if o == nil {
+func (a *ActionResponseDto) GetEvent() *ActionEventType {
+	if a == nil {
 		return nil
 	}
-	return o.Event
+	return a.Event
 }
 
-func (o *ActionResponseDto) GetEventGithub() *GithubActionEvent {
-	if v := o.GetEvent(); v != nil {
+func (a *ActionResponseDto) GetEventGithub() *GithubActionEvent {
+	if v := a.GetEvent(); v != nil {
 		return v.GithubActionEvent
 	}
 	return nil
 }
 
-func (o *ActionResponseDto) GetEventTower() *ActionTowerActionEvent {
-	if v := o.GetEvent(); v != nil {
+func (a *ActionResponseDto) GetEventTower() *ActionTowerActionEvent {
+	if v := a.GetEvent(); v != nil {
 		return v.ActionTowerActionEvent
 	}
 	return nil
 }
 
-func (o *ActionResponseDto) GetLastSeen() *time.Time {
-	if o == nil {
+func (a *ActionResponseDto) GetLastSeen() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastSeen
+	return a.LastSeen
 }
 
-func (o *ActionResponseDto) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *ActionResponseDto) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }
 
-func (o *ActionResponseDto) GetLastUpdated() *time.Time {
-	if o == nil {
+func (a *ActionResponseDto) GetLastUpdated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return a.LastUpdated
 }
 
-func (o *ActionResponseDto) GetLabels() []LabelDbDto {
-	if o == nil {
+func (a *ActionResponseDto) GetLabels() []LabelDbDto {
+	if a == nil {
 		return nil
 	}
-	return o.Labels
+	return a.Labels
 }

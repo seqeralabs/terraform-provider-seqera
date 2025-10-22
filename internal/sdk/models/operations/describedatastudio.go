@@ -14,18 +14,18 @@ type DescribeDataStudioRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeDataStudioRequest) GetSessionID() string {
-	if o == nil {
+func (d *DescribeDataStudioRequest) GetSessionID() string {
+	if d == nil {
 		return ""
 	}
-	return o.SessionID
+	return d.SessionID
 }
 
-func (o *DescribeDataStudioRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeDataStudioRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeDataStudioResponse struct {
@@ -37,41 +37,41 @@ type DescribeDataStudioResponse struct {
 	RawResponse *http.Response
 	// OK
 	DataStudioDto *shared.DataStudioDto
-	// NotFound, when the studio is not found or when the API is disabled for the workspace.
+	// NotFound, when the Studio is not found or when the API is disabled for the workspace.
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeDataStudioResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeDataStudioResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeDataStudioResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeDataStudioResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeDataStudioResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeDataStudioResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeDataStudioResponse) GetDataStudioDto() *shared.DataStudioDto {
-	if o == nil {
+func (d *DescribeDataStudioResponse) GetDataStudioDto() *shared.DataStudioDto {
+	if d == nil {
 		return nil
 	}
-	return o.DataStudioDto
+	return d.DataStudioDto
 }
 
-func (o *DescribeDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

@@ -9,30 +9,30 @@ type UpdateWorkspaceRequest struct {
 	Visibility  *Visibility `json:"visibility,omitempty"`
 }
 
-func (o *UpdateWorkspaceRequest) GetName() *string {
-	if o == nil {
+func (u *UpdateWorkspaceRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateWorkspaceRequest) GetFullName() *string {
-	if o == nil {
+func (u *UpdateWorkspaceRequest) GetFullName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.FullName
+	return u.FullName
 }
 
-func (o *UpdateWorkspaceRequest) GetDescription() *string {
-	if o == nil {
+func (u *UpdateWorkspaceRequest) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }
 
-func (o *UpdateWorkspaceRequest) GetVisibility() *Visibility {
-	if o == nil {
+func (u *UpdateWorkspaceRequest) GetVisibility() *Visibility {
+	if u == nil {
 		return nil
 	}
-	return o.Visibility
+	return u.Visibility
 }

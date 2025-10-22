@@ -11,37 +11,37 @@ type UpdatePipelineRequest struct {
 	LabelIds    []int64                `json:"labelIds,omitempty"`
 }
 
-func (o *UpdatePipelineRequest) GetName() *string {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdatePipelineRequest) GetDescription() *string {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }
 
-func (o *UpdatePipelineRequest) GetIcon() *string {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetIcon() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Icon
+	return u.Icon
 }
 
-func (o *UpdatePipelineRequest) GetLaunch() *WorkflowLaunchRequest {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetLaunch() *WorkflowLaunchRequest {
+	if u == nil {
 		return nil
 	}
-	return o.Launch
+	return u.Launch
 }
 
-func (o *UpdatePipelineRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetLabelIds() []int64 {
+	if u == nil {
 		return nil
 	}
-	return o.LabelIds
+	return u.LabelIds
 }

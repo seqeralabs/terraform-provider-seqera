@@ -19,14 +19,57 @@ func (r *DatasetDataSourceModel) RefreshFromSharedDescribeDatasetResponse(ctx co
 		if resp.Dataset == nil {
 			r.Dataset = nil
 		} else {
-			r.Dataset = &tfTypes.Dataset{}
+			r.Dataset = &tfTypes.DatasetDto{}
 			r.Dataset.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.DateCreated))
 			r.Dataset.Deleted = types.BoolPointerValue(resp.Dataset.Deleted)
 			r.Dataset.Description = types.StringPointerValue(resp.Dataset.Description)
+			r.Dataset.Hidden = types.BoolPointerValue(resp.Dataset.Hidden)
 			r.Dataset.ID = types.StringPointerValue(resp.Dataset.ID)
+			r.Dataset.Labels = []tfTypes.LabelDbDto{}
+
+			for _, labelsItem := range resp.Dataset.Labels {
+				var labels tfTypes.LabelDbDto
+
+				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+				labels.ID = types.Int64PointerValue(labelsItem.ID)
+				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+				labels.Name = types.StringPointerValue(labelsItem.Name)
+				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+				labels.Value = types.StringPointerValue(labelsItem.Value)
+
+				r.Dataset.Labels = append(r.Dataset.Labels, labels)
+			}
 			r.Dataset.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.LastUpdated))
+			if resp.Dataset.LastUpdatedBy == nil {
+				r.Dataset.LastUpdatedBy = nil
+			} else {
+				r.Dataset.LastUpdatedBy = &tfTypes.UserInfo{}
+				r.Dataset.LastUpdatedBy.Avatar = types.StringPointerValue(resp.Dataset.LastUpdatedBy.Avatar)
+				r.Dataset.LastUpdatedBy.Email = types.StringPointerValue(resp.Dataset.LastUpdatedBy.Email)
+				r.Dataset.LastUpdatedBy.ID = types.Int64PointerValue(resp.Dataset.LastUpdatedBy.ID)
+				r.Dataset.LastUpdatedBy.UserName = types.StringPointerValue(resp.Dataset.LastUpdatedBy.UserName)
+			}
 			r.Dataset.MediaType = types.StringPointerValue(resp.Dataset.MediaType)
-			r.Dataset.Name = types.StringValue(resp.Dataset.Name)
+			r.Dataset.Name = types.StringPointerValue(resp.Dataset.Name)
+			r.Dataset.OrganizationID = types.Int64PointerValue(resp.Dataset.OrganizationID)
+			if resp.Dataset.RunsInfo == nil {
+				r.Dataset.RunsInfo = nil
+			} else {
+				r.Dataset.RunsInfo = &tfTypes.DatasetRunsInfo{}
+				r.Dataset.RunsInfo.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.RunsInfo.LastUsed))
+				r.Dataset.RunsInfo.RunsCount = types.Int64PointerValue(resp.Dataset.RunsInfo.RunsCount)
+			}
+			if resp.Dataset.User == nil {
+				r.Dataset.User = nil
+			} else {
+				r.Dataset.User = &tfTypes.UserInfo{}
+				r.Dataset.User.Avatar = types.StringPointerValue(resp.Dataset.User.Avatar)
+				r.Dataset.User.Email = types.StringPointerValue(resp.Dataset.User.Email)
+				r.Dataset.User.ID = types.Int64PointerValue(resp.Dataset.User.ID)
+				r.Dataset.User.UserName = types.StringPointerValue(resp.Dataset.User.UserName)
+			}
+			r.Dataset.Version = types.Int64PointerValue(resp.Dataset.Version)
+			r.Dataset.WorkspaceID = types.Int64PointerValue(resp.Dataset.WorkspaceID)
 		}
 	}
 
@@ -45,9 +88,14 @@ func (r *DatasetDataSourceModel) ToOperationsDescribeDatasetV2Request(ctx contex
 	var datasetID string
 	datasetID = r.DatasetID.ValueString()
 
+	attributes := make([]shared.DatasetQueryAttribute, 0, len(r.Attributes))
+	for _, attributesItem := range r.Attributes {
+		attributes = append(attributes, shared.DatasetQueryAttribute(attributesItem.ValueString()))
+	}
 	out := operations.DescribeDatasetV2Request{
 		WorkspaceID: workspaceID,
 		DatasetID:   datasetID,
+		Attributes:  attributes,
 	}
 
 	return &out, diags

@@ -8,33 +8,33 @@ import (
 )
 
 type UpdateTraceHeartbeatRequest struct {
-	// Workflow string identifier.
+	// Workflow string identifier
 	WorkflowID string `pathParam:"style=simple,explode=false,name=workflowId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Trace heartbeat request.
+	// Trace heartbeat request
 	TraceHeartbeatRequest shared.TraceHeartbeatRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateTraceHeartbeatRequest) GetWorkflowID() string {
-	if o == nil {
+func (u *UpdateTraceHeartbeatRequest) GetWorkflowID() string {
+	if u == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return u.WorkflowID
 }
 
-func (o *UpdateTraceHeartbeatRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateTraceHeartbeatRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateTraceHeartbeatRequest) GetTraceHeartbeatRequest() shared.TraceHeartbeatRequest {
-	if o == nil {
+func (u *UpdateTraceHeartbeatRequest) GetTraceHeartbeatRequest() shared.TraceHeartbeatRequest {
+	if u == nil {
 		return shared.TraceHeartbeatRequest{}
 	}
-	return o.TraceHeartbeatRequest
+	return u.TraceHeartbeatRequest
 }
 
 type UpdateTraceHeartbeatResponse struct {
@@ -50,37 +50,37 @@ type UpdateTraceHeartbeatResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateTraceHeartbeatResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateTraceHeartbeatResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateTraceHeartbeatResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateTraceHeartbeatResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateTraceHeartbeatResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateTraceHeartbeatResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateTraceHeartbeatResponse) GetTraceHeartbeatResponse() *shared.TraceHeartbeatResponse {
-	if o == nil {
+func (u *UpdateTraceHeartbeatResponse) GetTraceHeartbeatResponse() *shared.TraceHeartbeatResponse {
+	if u == nil {
 		return nil
 	}
-	return o.TraceHeartbeatResponse
+	return u.TraceHeartbeatResponse
 }
 
-func (o *UpdateTraceHeartbeatResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateTraceHeartbeatResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

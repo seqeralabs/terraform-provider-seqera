@@ -54,6 +54,21 @@ func (r *DataLinkResourceModel) RefreshFromSharedDataLinkDto(ctx context.Context
 	return diags
 }
 
+func (r *DataLinkResourceModel) RefreshFromSharedDataLinkResponse(ctx context.Context, resp *shared.DataLinkResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedDataLinkDto(ctx, resp.DataLink)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *DataLinkResourceModel) ToOperationsCreateCustomDataLinkRequest(ctx context.Context) (*operations.CreateCustomDataLinkRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

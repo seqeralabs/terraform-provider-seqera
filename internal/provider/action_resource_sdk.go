@@ -4,6 +4,8 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
@@ -37,12 +39,12 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			r.Event = &tfTypes.ActionEventType{}
 			if resp.Event.GithubActionEvent != nil {
 				r.Event.Github = &tfTypes.GithubActionEvent{}
-				r.Event.Github.Discriminator = types.StringPointerValue(resp.Event.GithubActionEvent.Discriminator)
-				r.Event.Github.Ref = types.StringPointerValue(resp.Event.GithubActionEvent.Ref)
 				r.Event.Github.CommitID = types.StringPointerValue(resp.Event.GithubActionEvent.CommitID)
 				r.Event.Github.CommitMessage = types.StringPointerValue(resp.Event.GithubActionEvent.CommitMessage)
-				r.Event.Github.PusherName = types.StringPointerValue(resp.Event.GithubActionEvent.PusherName)
+				r.Event.Github.Discriminator = types.StringPointerValue(resp.Event.GithubActionEvent.Discriminator)
 				r.Event.Github.PusherEmail = types.StringPointerValue(resp.Event.GithubActionEvent.PusherEmail)
+				r.Event.Github.PusherName = types.StringPointerValue(resp.Event.GithubActionEvent.PusherName)
+				r.Event.Github.Ref = types.StringPointerValue(resp.Event.GithubActionEvent.Ref)
 				r.Event.Github.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.GithubActionEvent.Timestamp))
 			}
 			if resp.Event.ActionTowerActionEvent != nil {
@@ -60,12 +62,12 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 		for _, labelsItem := range resp.Labels {
 			var labels tfTypes.LabelDbDto
 
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
 			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+			labels.ID = types.Int64PointerValue(labelsItem.ID)
+			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+			labels.Name = types.StringPointerValue(labelsItem.Name)
+			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+			labels.Value = types.StringPointerValue(labelsItem.Value)
 
 			r.Labels = append(r.Labels, labels)
 		}
@@ -73,644 +75,749 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		if resp.Launch != nil {
 			launchPriorData := r.Launch
+			r.Launch.CommitID = types.StringPointerValue(resp.Launch.CommitID)
 			if resp.Launch.ComputeEnv == nil {
 				r.Launch.ComputeEnv = nil
 			} else {
 				r.Launch.ComputeEnv = &tfTypes.ComputeEnv{}
-				r.Launch.ComputeEnv.CredentialsID = types.StringValue(resp.Launch.ComputeEnv.CredentialsID)
-				r.Launch.ComputeEnv.OrgID = types.Int64PointerValue(resp.Launch.ComputeEnv.OrgID)
-				r.Launch.ComputeEnv.WorkspaceID = types.Int64PointerValue(resp.Launch.ComputeEnv.WorkspaceID)
 				r.Launch.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.Launch.ComputeEnv.ComputeEnvID)
-				r.Launch.ComputeEnv.Name = types.StringValue(resp.Launch.ComputeEnv.Name)
-				r.Launch.ComputeEnv.Description = types.StringPointerValue(resp.Launch.ComputeEnv.Description)
-				r.Launch.ComputeEnv.Platform = types.StringValue(string(resp.Launch.ComputeEnv.Platform))
-				if resp.Launch.ComputeEnv.Config.AWSBatchConfiguration != nil {
-					r.Launch.ComputeEnv.Config.AwsBatch = &tfTypes.AWSBatchConfiguration{}
-					r.Launch.ComputeEnv.Config.AwsBatch.StorageType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.StorageType)
-					r.Launch.ComputeEnv.Config.AwsBatch.LustreID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.LustreID)
-					r.Launch.ComputeEnv.Config.AwsBatch.Volumes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Volumes))
-					for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Volumes {
-						r.Launch.ComputeEnv.Config.AwsBatch.Volumes = append(r.Launch.ComputeEnv.Config.AwsBatch.Volumes, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Region)
-					r.Launch.ComputeEnv.Config.AwsBatch.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.AwsBatch.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.DragenQueue)
-					r.Launch.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.DragenInstanceType)
-					r.Launch.ComputeEnv.Config.AwsBatch.ComputeJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.ComputeJobRole)
-					r.Launch.ComputeEnv.Config.AwsBatch.ExecutionRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.ExecutionRole)
-					r.Launch.ComputeEnv.Config.AwsBatch.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.HeadQueue)
-					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.HeadJobRole)
-					r.Launch.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
-					r.Launch.ComputeEnv.Config.AwsBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.HeadJobCpus))
-					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.HeadJobMemoryMb))
+				if resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration != nil {
+					r.Launch.ComputeEnv.Config.AwsBatch = &tfTypes.ComputeConfigAWSBatchConfiguration{}
+					r.Launch.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.CliPath)
+					r.Launch.ComputeEnv.Config.AwsBatch.ComputeJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.ComputeJobRole)
+					r.Launch.ComputeEnv.Config.AwsBatch.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.ComputeQueue)
+					r.Launch.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.DragenInstanceType)
+					r.Launch.ComputeEnv.Config.AwsBatch.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.DragenQueue)
 					r.Launch.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Environment {
+					for _, environmentItem := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Environment {
 						var environment tfTypes.ConfigEnvVariable
 
+						environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+						environment.Head = types.BoolPointerValue(environmentItem.Head)
 						environment.Name = types.StringPointerValue(environmentItem.Name)
 						environment.Value = types.StringPointerValue(environmentItem.Value)
-						environment.Head = types.BoolPointerValue(environmentItem.Head)
-						environment.Compute = types.BoolPointerValue(environmentItem.Compute)
 
 						r.Launch.ComputeEnv.Config.AwsBatch.Environment = append(r.Launch.ComputeEnv.Config.AwsBatch.Environment, environment)
 					}
-					r.Launch.ComputeEnv.Config.AwsBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.WaveEnabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Fusion2Enabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.NvnmeStorageEnabled)
-					r.Launch.ComputeEnv.Config.AwsBatch.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.LogGroup)
-					r.Launch.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
-					if resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge == nil {
+					r.Launch.ComputeEnv.Config.AwsBatch.ExecutionRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.ExecutionRole)
+					if resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge == nil {
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge = nil
 					} else {
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge = &tfTypes.ForgeConfig{}
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MinCpus))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.MaxCpus))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsAutoScale)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
-						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes {
-							r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
-						}
-						if resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy != nil {
-							r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllocStrategy))
+						if resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.AllocStrategy != nil {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.AllocStrategy))
 						} else {
 							r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllocStrategy = types.StringNull()
 						}
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets))
-						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Subnets {
-							r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
-						}
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups))
-						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.SecurityGroups {
-							r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
-						}
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DisposeOnDeletion)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Ec2KeyPair)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets))
-						for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.AllowBuckets {
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.AllowBuckets))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.AllowBuckets {
 							r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.AllowBuckets, types.StringValue(v))
 						}
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBlockSize))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.BidPercentage))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsCreate)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsID)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EfsMount)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenEnabled)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenAmiID)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EbsBootSize))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.EcsConfig)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FargateHeadEnabled)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Arm64Enabled)
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.DragenInstanceType)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.Arm64Enabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.BidPercentage))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.DisposeOnDeletion)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.DragenAmiID)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.DragenEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.DragenInstanceType)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.EbsAutoScale)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.EbsBlockSize))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.EbsBootSize))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.Ec2KeyPair)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.EcsConfig)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.EfsCreate)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.EfsID)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.EfsMount)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.FargateHeadEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.FsxMount)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.FsxName)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.FsxSize))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.FusionEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.GpuEnabled)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.ImageID)
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.InstanceTypes))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.InstanceTypes {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.MaxCpus))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.MinCpus))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.SecurityGroups))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.SecurityGroups {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.SecurityGroups, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.Subnets))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.Subnets {
+							r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets = append(r.Launch.ComputeEnv.Config.AwsBatch.Forge.Subnets, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.Type))
+						r.Launch.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Forge.VpcID)
 					}
+					r.Launch.ComputeEnv.Config.AwsBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.FusionSnapshots)
+					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.HeadJobCpus))
+					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.HeadJobMemoryMb))
+					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.HeadJobRole)
+					r.Launch.ComputeEnv.Config.AwsBatch.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.HeadQueue)
+					r.Launch.ComputeEnv.Config.AwsBatch.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.LogGroup)
+					r.Launch.ComputeEnv.Config.AwsBatch.LustreID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.LustreID)
+					r.Launch.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.NvnmeStorageEnabled)
+					r.Launch.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Region)
+					r.Launch.ComputeEnv.Config.AwsBatch.StorageType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.StorageType)
+					r.Launch.ComputeEnv.Config.AwsBatch.Volumes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Volumes))
+					for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.Volumes {
+						r.Launch.ComputeEnv.Config.AwsBatch.Volumes = append(r.Launch.ComputeEnv.Config.AwsBatch.Volumes, types.StringValue(v))
+					}
+					r.Launch.ComputeEnv.Config.AwsBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.AwsBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSBatchConfiguration.WorkDir)
 				}
-				if resp.Launch.ComputeEnv.Config.AWSCloudConfiguration != nil {
-					r.Launch.ComputeEnv.Config.AwsCloud = &tfTypes.AWSCloudConfiguration{}
-					r.Launch.ComputeEnv.Config.AwsCloud.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.AllowBuckets))
-					for _, v := range resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.AllowBuckets {
+				if resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration != nil {
+					r.Launch.ComputeEnv.Config.AwsCloud = &tfTypes.ComputeConfigAWSCloudConfiguration{}
+					r.Launch.ComputeEnv.Config.AwsCloud.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.AllowBuckets))
+					for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.AllowBuckets {
 						r.Launch.ComputeEnv.Config.AwsCloud.AllowBuckets = append(r.Launch.ComputeEnv.Config.AwsCloud.AllowBuckets, types.StringValue(v))
 					}
-					r.Launch.ComputeEnv.Config.AwsCloud.Region = types.StringValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Region)
-					r.Launch.ComputeEnv.Config.AwsCloud.InstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.InstanceType)
-					r.Launch.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
-					r.Launch.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.AwsCloud.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.Arm64Enabled)
+					r.Launch.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.EbsBootSize))
+					r.Launch.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.Ec2KeyPair)
 					r.Launch.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem1 := range resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Environment {
+					for _, environmentItem1 := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.Environment {
 						var environment1 tfTypes.ConfigEnvVariable
 
+						environment1.Compute = types.BoolPointerValue(environmentItem1.Compute)
+						environment1.Head = types.BoolPointerValue(environmentItem1.Head)
 						environment1.Name = types.StringPointerValue(environmentItem1.Name)
 						environment1.Value = types.StringPointerValue(environmentItem1.Value)
-						environment1.Head = types.BoolPointerValue(environmentItem1.Head)
-						environment1.Compute = types.BoolPointerValue(environmentItem1.Compute)
 
 						r.Launch.ComputeEnv.Config.AwsCloud.Environment = append(r.Launch.ComputeEnv.Config.AwsCloud.Environment, environment1)
 					}
-					r.Launch.ComputeEnv.Config.AwsCloud.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.WaveEnabled)
-					r.Launch.ComputeEnv.Config.AwsCloud.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Fusion2Enabled)
-					r.Launch.ComputeEnv.Config.AwsCloud.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.LogGroup)
-					r.Launch.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
-					r.Launch.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
-					r.Launch.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
-					r.Launch.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
-					r.Launch.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.InstanceProfileArn)
-					r.Launch.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.SubnetID)
-					r.Launch.ComputeEnv.Config.AwsCloud.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups))
-					for _, v := range resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.SecurityGroups {
+					r.Launch.ComputeEnv.Config.AwsCloud.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.GpuEnabled)
+					r.Launch.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.ImageID)
+					r.Launch.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.InstanceProfileArn)
+					r.Launch.ComputeEnv.Config.AwsCloud.InstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.InstanceType)
+					r.Launch.ComputeEnv.Config.AwsCloud.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.LogGroup)
+					r.Launch.ComputeEnv.Config.AwsCloud.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.AwsCloud.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.AwsCloud.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.AwsCloud.Region = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.Region)
+					r.Launch.ComputeEnv.Config.AwsCloud.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.SecurityGroups))
+					for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.SecurityGroups {
 						r.Launch.ComputeEnv.Config.AwsCloud.SecurityGroups = append(r.Launch.ComputeEnv.Config.AwsCloud.SecurityGroups, types.StringValue(v))
 					}
+					r.Launch.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.SubnetID)
+					r.Launch.ComputeEnv.Config.AwsCloud.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAWSCloudConfiguration.WorkDir)
 				}
-				if resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration != nil {
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform = &tfTypes.SeqeraComputeConfiguration{}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.StorageType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.StorageType)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.LustreID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.LustreID)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Volumes))
-					for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Volumes {
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Region)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.DragenQueue)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.DragenInstanceType)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeJobRole)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.ExecutionRole)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.HeadQueue)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobRole)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.CliPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.CliPath)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobCpus))
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobMemoryMb))
+				if resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration != nil {
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform = &tfTypes.ComputeConfigSeqeraComputeConfiguration{}
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.CliPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.CliPath)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.ComputeJobRole)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.ComputeQueue)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.DragenInstanceType)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.DragenQueue)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem2 := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Environment {
+					for _, environmentItem2 := range resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Environment {
 						var environment2 tfTypes.ConfigEnvVariable
 
+						environment2.Compute = types.BoolPointerValue(environmentItem2.Compute)
+						environment2.Head = types.BoolPointerValue(environmentItem2.Head)
 						environment2.Name = types.StringPointerValue(environmentItem2.Name)
 						environment2.Value = types.StringPointerValue(environmentItem2.Value)
-						environment2.Head = types.BoolPointerValue(environmentItem2.Head)
-						environment2.Compute = types.BoolPointerValue(environmentItem2.Compute)
 
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Environment = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Environment, environment2)
 					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.WaveEnabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Fusion2Enabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.NvnmeStorageEnabled)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.LogGroup)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.FusionSnapshots)
-					if resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge == nil {
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.ExecutionRole)
+					if resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge == nil {
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge = nil
 					} else {
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge = &tfTypes.ForgeConfig{}
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
-						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
-							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
-						}
-						if resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
-							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy))
+						if resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.AllocStrategy != nil {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.AllocStrategy))
 						} else {
 							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringNull()
 						}
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets))
-						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets {
-							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
-						}
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
-						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
-							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
-						}
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DisposeOnDeletion)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Ec2KeyPair)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets))
-						for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets {
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.AllowBuckets))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.AllowBuckets {
 							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets, types.StringValue(v))
 						}
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBlockSize))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FusionEnabled)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.BidPercentage))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsCreate)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsID)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsMount)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenEnabled)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenAmiID)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBootSize))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EcsConfig)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FargateHeadEnabled)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Arm64Enabled)
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenInstanceType)
-					}
-				}
-				if resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration != nil {
-					r.Launch.ComputeEnv.Config.GoogleLifesciences = &tfTypes.GoogleLifeSciencesConfiguration{}
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.Region = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Region)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.Zones = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Zones))
-					for _, v := range resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Zones {
-						r.Launch.ComputeEnv.Config.GoogleLifesciences.Zones = append(r.Launch.ComputeEnv.Config.GoogleLifesciences.Zones, types.StringValue(v))
-					}
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.Location = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Location)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.Preemptible = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Preemptible)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.BootDiskSizeGb))
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.ProjectID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.ProjectID)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.SSHDaemon = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.SSHDaemon)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.SSHImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.SSHImage)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.DebugMode))
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.CopyImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.CopyImage)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.UsePrivateAddress)
-					if len(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels) > 0 {
-						r.Launch.ComputeEnv.Config.GoogleLifesciences.Labels = make(map[string]types.String, len(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels))
-						for key, value := range resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Labels {
-							r.Launch.ComputeEnv.Config.GoogleLifesciences.Labels[key] = types.StringValue(value)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.Arm64Enabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.BidPercentage))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.DisposeOnDeletion)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.DragenAmiID)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.DragenEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.DragenInstanceType)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.EbsAutoScale)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.EbsBlockSize))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.EbsBootSize))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.Ec2KeyPair)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.EcsConfig)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.EfsCreate)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.EfsID)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.EfsMount)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.FargateHeadEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.FsxMount)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.FsxName)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.FsxSize))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.FusionEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.GpuEnabled)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.ImageID)
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.InstanceTypes))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.InstanceTypes {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
 						}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.MaxCpus))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.MinCpus))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.SecurityGroups))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.SecurityGroups {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.Subnets))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.Subnets {
+							r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.Type))
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Forge.VpcID)
 					}
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobCpus))
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.HeadJobMemoryMb))
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.NfsTarget = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NfsTarget)
-					r.Launch.ComputeEnv.Config.GoogleLifesciences.NfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.NfsMount)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.FusionSnapshots)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.HeadJobCpus))
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.HeadJobMemoryMb))
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.HeadJobRole)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.HeadQueue)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.LogGroup)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.LustreID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.LustreID)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.NvnmeStorageEnabled)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Region)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.StorageType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.StorageType)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Volumes))
+					for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.Volumes {
+						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes, types.StringValue(v))
+					}
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSeqeraComputeConfiguration.WorkDir)
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration != nil {
+					r.Launch.ComputeEnv.Config.GoogleLifesciences = &tfTypes.ComputeConfigGoogleLifeSciencesConfiguration{}
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.BootDiskSizeGb))
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.CopyImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.CopyImage)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.DebugMode))
 					r.Launch.ComputeEnv.Config.GoogleLifesciences.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem3 := range resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration.Environment {
+					for _, environmentItem3 := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Environment {
 						var environment3 tfTypes.ConfigEnvVariable
 
+						environment3.Compute = types.BoolPointerValue(environmentItem3.Compute)
+						environment3.Head = types.BoolPointerValue(environmentItem3.Head)
 						environment3.Name = types.StringPointerValue(environmentItem3.Name)
 						environment3.Value = types.StringPointerValue(environmentItem3.Value)
-						environment3.Head = types.BoolPointerValue(environmentItem3.Head)
-						environment3.Compute = types.BoolPointerValue(environmentItem3.Compute)
 
 						r.Launch.ComputeEnv.Config.GoogleLifesciences.Environment = append(r.Launch.ComputeEnv.Config.GoogleLifesciences.Environment, environment3)
 					}
-				}
-				if resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration != nil {
-					r.Launch.ComputeEnv.Config.GoogleBatch = &tfTypes.GoogleBatchServiceConfiguration{}
-					r.Launch.ComputeEnv.Config.GoogleBatch.Location = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Location)
-					r.Launch.ComputeEnv.Config.GoogleBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.GoogleBatch.Spot = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Spot)
-					r.Launch.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskSizeGb))
-					r.Launch.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
-					r.Launch.ComputeEnv.Config.GoogleBatch.MachineType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.MachineType)
-					r.Launch.ComputeEnv.Config.GoogleBatch.ProjectID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.ProjectID)
-					r.Launch.ComputeEnv.Config.GoogleBatch.SSHDaemon = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHDaemon)
-					r.Launch.ComputeEnv.Config.GoogleBatch.SSHImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHImage)
-					r.Launch.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
-					r.Launch.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
-					r.Launch.ComputeEnv.Config.GoogleBatch.UsePrivateAddress = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.UsePrivateAddress)
-					if len(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels) > 0 {
-						r.Launch.ComputeEnv.Config.GoogleBatch.Labels = make(map[string]types.String, len(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels))
-						for key1, value1 := range resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Labels {
-							r.Launch.ComputeEnv.Config.GoogleBatch.Labels[key1] = types.StringValue(value1)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.HeadJobCpus))
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.HeadJobMemoryMb))
+					if len(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Labels) > 0 {
+						r.Launch.ComputeEnv.Config.GoogleLifesciences.Labels = make(map[string]types.String, len(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Labels))
+						for key, value := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Labels {
+							r.Launch.ComputeEnv.Config.GoogleLifesciences.Labels[key] = types.StringValue(value)
 						}
 					}
-					r.Launch.ComputeEnv.Config.GoogleBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.GoogleBatch.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
-					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobMemoryMb))
-					r.Launch.ComputeEnv.Config.GoogleBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.GoogleBatch.NfsTarget = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsTarget)
-					r.Launch.ComputeEnv.Config.GoogleBatch.NfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsMount)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.Location = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Location)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.NfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.NfsMount)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.NfsTarget = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.NfsTarget)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.Preemptible = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Preemptible)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.ProjectID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.ProjectID)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.Region = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Region)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.SSHDaemon = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.SSHDaemon)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.SSHImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.SSHImage)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.UsePrivateAddress = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.UsePrivateAddress)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.WorkDir)
+					r.Launch.ComputeEnv.Config.GoogleLifesciences.Zones = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Zones))
+					for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleLifeSciencesConfiguration.Zones {
+						r.Launch.ComputeEnv.Config.GoogleLifesciences.Zones = append(r.Launch.ComputeEnv.Config.GoogleLifesciences.Zones, types.StringValue(v))
+					}
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration != nil {
+					r.Launch.ComputeEnv.Config.GoogleBatch = &tfTypes.ComputeConfigGoogleBatchServiceConfiguration{}
+					r.Launch.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.BootDiskSizeGb))
+					r.Launch.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.ComputeJobsInstanceTemplate)
+					r.Launch.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.CopyImage)
+					r.Launch.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.CPUPlatform)
+					r.Launch.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.DebugMode))
 					r.Launch.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem4 := range resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment {
+					for _, environmentItem4 := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Environment {
 						var environment4 tfTypes.ConfigEnvVariable
 
+						environment4.Compute = types.BoolPointerValue(environmentItem4.Compute)
+						environment4.Head = types.BoolPointerValue(environmentItem4.Head)
 						environment4.Name = types.StringPointerValue(environmentItem4.Name)
 						environment4.Value = types.StringPointerValue(environmentItem4.Value)
-						environment4.Head = types.BoolPointerValue(environmentItem4.Head)
-						environment4.Compute = types.BoolPointerValue(environmentItem4.Compute)
 
 						r.Launch.ComputeEnv.Config.GoogleBatch.Environment = append(r.Launch.ComputeEnv.Config.GoogleBatch.Environment, environment4)
 					}
-					r.Launch.ComputeEnv.Config.GoogleBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.WaveEnabled)
-					r.Launch.ComputeEnv.Config.GoogleBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Fusion2Enabled)
-					r.Launch.ComputeEnv.Config.GoogleBatch.ServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.ServiceAccount)
-					r.Launch.ComputeEnv.Config.GoogleBatch.Network = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Network)
-					r.Launch.ComputeEnv.Config.GoogleBatch.Subnetwork = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Subnetwork)
-					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
-					r.Launch.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsInstanceTemplate)
-				}
-				if resp.Launch.ComputeEnv.Config.AzureBatchConfiguration != nil {
-					r.Launch.ComputeEnv.Config.AzureBatch = &tfTypes.AzureBatchConfiguration{}
-					r.Launch.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Region)
-					r.Launch.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
-					r.Launch.ComputeEnv.Config.AzureBatch.AutoPoolMode = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.AutoPoolMode)
-					if resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge == nil {
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge = nil
-					} else {
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
-						r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
-						for _, v := range resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
-							r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+					r.Launch.ComputeEnv.Config.GoogleBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.HeadJobCpus))
+					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
+					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.HeadJobMemoryMb))
+					if len(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Labels) > 0 {
+						r.Launch.ComputeEnv.Config.GoogleBatch.Labels = make(map[string]types.String, len(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Labels))
+						for key1, value1 := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Labels {
+							r.Launch.ComputeEnv.Config.GoogleBatch.Labels[key1] = types.StringValue(value1)
 						}
 					}
-					r.Launch.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
-					if resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion != nil {
-						r.Launch.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringValue(string(*resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion))
+					r.Launch.ComputeEnv.Config.GoogleBatch.Location = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Location)
+					r.Launch.ComputeEnv.Config.GoogleBatch.MachineType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.MachineType)
+					r.Launch.ComputeEnv.Config.GoogleBatch.Network = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Network)
+					r.Launch.ComputeEnv.Config.GoogleBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.GoogleBatch.NfsMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.NfsMount)
+					r.Launch.ComputeEnv.Config.GoogleBatch.NfsTarget = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.NfsTarget)
+					r.Launch.ComputeEnv.Config.GoogleBatch.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.GoogleBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.GoogleBatch.ProjectID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.ProjectID)
+					r.Launch.ComputeEnv.Config.GoogleBatch.ServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.ServiceAccount)
+					r.Launch.ComputeEnv.Config.GoogleBatch.Spot = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Spot)
+					r.Launch.ComputeEnv.Config.GoogleBatch.SSHDaemon = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.SSHDaemon)
+					r.Launch.ComputeEnv.Config.GoogleBatch.SSHImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.SSHImage)
+					r.Launch.ComputeEnv.Config.GoogleBatch.Subnetwork = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.Subnetwork)
+					r.Launch.ComputeEnv.Config.GoogleBatch.UsePrivateAddress = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.UsePrivateAddress)
+					r.Launch.ComputeEnv.Config.GoogleBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.GoogleBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleBatchServiceConfiguration.WorkDir)
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration != nil {
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration = &tfTypes.ComputeConfigGoogleCloudConfiguration{}
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.Arm64Enabled)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.BootDiskSizeGb))
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem5 := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.Environment {
+						var environment5 tfTypes.ConfigEnvVariable
+
+						environment5.Compute = types.BoolPointerValue(environmentItem5.Compute)
+						environment5.Head = types.BoolPointerValue(environmentItem5.Head)
+						environment5.Name = types.StringPointerValue(environmentItem5.Name)
+						environment5.Value = types.StringPointerValue(environmentItem5.Value)
+
+						r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Environment = append(r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Environment, environment5)
+					}
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.ForgedResources = nil
+					for _, forgedResourcesItem := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.ForgedResources {
+						var forgedResources map[string]jsontypes.Normalized
+						if len(forgedResourcesItem) > 0 {
+							forgedResources = make(map[string]jsontypes.Normalized, len(forgedResourcesItem))
+							for key2, value2 := range forgedResourcesItem {
+								result, _ := json.Marshal(value2)
+								forgedResources[key2] = jsontypes.NewNormalizedValue(string(result))
+							}
+						}
+						r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.ForgedResources = append(r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.ForgedResources, forgedResources)
+					}
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.GpuEnabled)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.ImageID)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.InstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.InstanceType)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.ProjectID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.ProjectID)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Region = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.Region)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.ServiceAccountEmail = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.ServiceAccountEmail)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.WorkDir)
+					r.Launch.ComputeEnv.Config.GoogleCloudConfiguration.Zone = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleCloudConfiguration.Zone)
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration != nil {
+					r.Launch.ComputeEnv.Config.AzureBatch = &tfTypes.ComputeConfigAzureBatchConfiguration{}
+					r.Launch.ComputeEnv.Config.AzureBatch.AutoPoolMode = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.AutoPoolMode)
+					if resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.DeleteJobsOnCompletion != nil {
+						r.Launch.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringValue(string(*resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.DeleteJobsOnCompletion))
 					} else {
 						r.Launch.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringNull()
 					}
-					r.Launch.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
+					r.Launch.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.DeletePoolsOnCompletion)
 					r.Launch.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem5 := range resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Environment {
-						var environment5 tfTypes.ConfigEnvVariable
-
-						environment5.Name = types.StringPointerValue(environmentItem5.Name)
-						environment5.Value = types.StringPointerValue(environmentItem5.Value)
-						environment5.Head = types.BoolPointerValue(environmentItem5.Head)
-						environment5.Compute = types.BoolPointerValue(environmentItem5.Compute)
-
-						r.Launch.ComputeEnv.Config.AzureBatch.Environment = append(r.Launch.ComputeEnv.Config.AzureBatch.Environment, environment5)
-					}
-					r.Launch.ComputeEnv.Config.AzureBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.WaveEnabled)
-					r.Launch.ComputeEnv.Config.AzureBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Fusion2Enabled)
-					r.Launch.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
-				}
-				if resp.Launch.ComputeEnv.Config.IBMLSFConfiguration != nil {
-					r.Launch.ComputeEnv.Config.LsfPlatform = &tfTypes.IBMLSFConfiguration{}
-					r.Launch.ComputeEnv.Config.LsfPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.LsfPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.LsfPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.LsfPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.LsfPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.LaunchDir)
-					r.Launch.ComputeEnv.Config.LsfPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.UserName)
-					r.Launch.ComputeEnv.Config.LsfPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.HostName)
-					r.Launch.ComputeEnv.Config.LsfPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.Port))
-					r.Launch.ComputeEnv.Config.LsfPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.HeadQueue)
-					r.Launch.ComputeEnv.Config.LsfPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.LsfPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.MaxQueueSize))
-					r.Launch.ComputeEnv.Config.LsfPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.HeadJobOptions)
-					r.Launch.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.PropagateHeadJobOptions)
-					r.Launch.ComputeEnv.Config.LsfPlatform.UnitForLimits = types.StringPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.UnitForLimits)
-					r.Launch.ComputeEnv.Config.LsfPlatform.PerJobMemLimit = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.PerJobMemLimit)
-					r.Launch.ComputeEnv.Config.LsfPlatform.PerTaskReserve = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.PerTaskReserve)
-					r.Launch.ComputeEnv.Config.LsfPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem6 := range resp.Launch.ComputeEnv.Config.IBMLSFConfiguration.Environment {
+					for _, environmentItem6 := range resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Environment {
 						var environment6 tfTypes.ConfigEnvVariable
 
+						environment6.Compute = types.BoolPointerValue(environmentItem6.Compute)
+						environment6.Head = types.BoolPointerValue(environmentItem6.Head)
 						environment6.Name = types.StringPointerValue(environmentItem6.Name)
 						environment6.Value = types.StringPointerValue(environmentItem6.Value)
-						environment6.Head = types.BoolPointerValue(environmentItem6.Head)
-						environment6.Compute = types.BoolPointerValue(environmentItem6.Compute)
 
-						r.Launch.ComputeEnv.Config.LsfPlatform.Environment = append(r.Launch.ComputeEnv.Config.LsfPlatform.Environment, environment6)
+						r.Launch.ComputeEnv.Config.AzureBatch.Environment = append(r.Launch.ComputeEnv.Config.AzureBatch.Environment, environment6)
 					}
+					if resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Forge == nil {
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge = nil
+					} else {
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Forge.AutoScale)
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Forge.ContainerRegIds))
+						for _, v := range resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Forge.ContainerRegIds {
+							r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.Launch.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+						}
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Forge.DisposeOnDeletion)
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Forge.VMCount))
+						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Forge.VMType)
+					}
+					r.Launch.ComputeEnv.Config.AzureBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.HeadPool)
+					r.Launch.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.ManagedIdentityClientID)
+					r.Launch.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.Region)
+					r.Launch.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.TokenDuration)
+					r.Launch.ComputeEnv.Config.AzureBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureBatchConfiguration.WorkDir)
 				}
-				if resp.Launch.ComputeEnv.Config.SlurmConfiguration != nil {
-					r.Launch.ComputeEnv.Config.SlurmPlatform = &tfTypes.SlurmConfiguration{}
-					r.Launch.ComputeEnv.Config.SlurmPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.LaunchDir)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.UserName)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.HostName)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SlurmConfiguration.Port))
-					r.Launch.ComputeEnv.Config.SlurmPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.HeadQueue)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SlurmConfiguration.MaxQueueSize))
-					r.Launch.ComputeEnv.Config.SlurmPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.HeadJobOptions)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SlurmConfiguration.PropagateHeadJobOptions)
-					r.Launch.ComputeEnv.Config.SlurmPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration != nil {
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration = &tfTypes.ComputeConfigAzureCloudConfiguration{}
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionEndpoint = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.DataCollectionEndpoint)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionRuleID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.DataCollectionRuleID)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem7 := range resp.Launch.ComputeEnv.Config.SlurmConfiguration.Environment {
+					for _, environmentItem7 := range resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.Environment {
 						var environment7 tfTypes.ConfigEnvVariable
 
+						environment7.Compute = types.BoolPointerValue(environmentItem7.Compute)
+						environment7.Head = types.BoolPointerValue(environmentItem7.Head)
 						environment7.Name = types.StringPointerValue(environmentItem7.Name)
 						environment7.Value = types.StringPointerValue(environmentItem7.Value)
-						environment7.Head = types.BoolPointerValue(environmentItem7.Head)
-						environment7.Compute = types.BoolPointerValue(environmentItem7.Compute)
 
-						r.Launch.ComputeEnv.Config.SlurmPlatform.Environment = append(r.Launch.ComputeEnv.Config.SlurmPlatform.Environment, environment7)
+						r.Launch.ComputeEnv.Config.AzureCloudConfiguration.Environment = append(r.Launch.ComputeEnv.Config.AzureCloudConfiguration.Environment, environment7)
 					}
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.ForgedResources = []tfTypes.MapEntryStringString{}
+
+					for _, forgedResourcesItem1 := range resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.ForgedResources {
+						var forgedResources1 tfTypes.MapEntryStringString
+
+						forgedResources1.Key = types.StringPointerValue(forgedResourcesItem1.Key)
+						forgedResources1.Value = types.StringPointerValue(forgedResourcesItem1.Value)
+
+						r.Launch.ComputeEnv.Config.AzureCloudConfiguration.ForgedResources = append(r.Launch.ComputeEnv.Config.AzureCloudConfiguration.ForgedResources, forgedResources1)
+					}
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.InstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.InstanceType)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.LogTableName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.LogTableName)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.LogWorkspaceID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.LogWorkspaceID)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.ManagedIdentityClientID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.ManagedIdentityClientID)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.ManagedIdentityID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.ManagedIdentityID)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.NetworkID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.NetworkID)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.Region = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.Region)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.ResourceGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.ResourceGroup)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.SubscriptionID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.SubscriptionID)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.AzureCloudConfiguration.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAzureCloudConfiguration.WorkDir)
 				}
-				if resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration != nil {
-					r.Launch.ComputeEnv.Config.K8sPlatform = &tfTypes.KubernetesComputeConfiguration{}
-					r.Launch.ComputeEnv.Config.K8sPlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.K8sPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.K8sPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.K8sPlatform.Server = types.StringValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.Server)
-					r.Launch.ComputeEnv.Config.K8sPlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.SslCert)
-					r.Launch.ComputeEnv.Config.K8sPlatform.Namespace = types.StringValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.Namespace)
-					r.Launch.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.ComputeServiceAccount)
-					r.Launch.ComputeEnv.Config.K8sPlatform.HeadServiceAccount = types.StringValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.HeadServiceAccount)
-					r.Launch.ComputeEnv.Config.K8sPlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.StorageClaimName)
-					r.Launch.ComputeEnv.Config.K8sPlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.StorageMountPath)
-					if resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.PodCleanup != nil {
-						r.Launch.ComputeEnv.Config.K8sPlatform.PodCleanup = types.StringValue(string(*resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.PodCleanup))
+				if resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration != nil {
+					r.Launch.ComputeEnv.Config.LsfPlatform = &tfTypes.ComputeConfigIBMLSFConfiguration{}
+					r.Launch.ComputeEnv.Config.LsfPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.ComputeQueue)
+					r.Launch.ComputeEnv.Config.LsfPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem8 := range resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.Environment {
+						var environment8 tfTypes.ConfigEnvVariable
+
+						environment8.Compute = types.BoolPointerValue(environmentItem8.Compute)
+						environment8.Head = types.BoolPointerValue(environmentItem8.Head)
+						environment8.Name = types.StringPointerValue(environmentItem8.Name)
+						environment8.Value = types.StringPointerValue(environmentItem8.Value)
+
+						r.Launch.ComputeEnv.Config.LsfPlatform.Environment = append(r.Launch.ComputeEnv.Config.LsfPlatform.Environment, environment8)
+					}
+					r.Launch.ComputeEnv.Config.LsfPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.HeadJobOptions)
+					r.Launch.ComputeEnv.Config.LsfPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.HeadQueue)
+					r.Launch.ComputeEnv.Config.LsfPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.HostName)
+					r.Launch.ComputeEnv.Config.LsfPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.LaunchDir)
+					r.Launch.ComputeEnv.Config.LsfPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.MaxQueueSize))
+					r.Launch.ComputeEnv.Config.LsfPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.LsfPlatform.PerJobMemLimit = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.PerJobMemLimit)
+					r.Launch.ComputeEnv.Config.LsfPlatform.PerTaskReserve = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.PerTaskReserve)
+					r.Launch.ComputeEnv.Config.LsfPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.Port))
+					r.Launch.ComputeEnv.Config.LsfPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.LsfPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.LsfPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.PropagateHeadJobOptions)
+					r.Launch.ComputeEnv.Config.LsfPlatform.UnitForLimits = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.UnitForLimits)
+					r.Launch.ComputeEnv.Config.LsfPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.UserName)
+					r.Launch.ComputeEnv.Config.LsfPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigIBMLSFConfiguration.WorkDir)
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration != nil {
+					r.Launch.ComputeEnv.Config.SlurmPlatform = &tfTypes.ComputeConfigSlurmConfiguration{}
+					r.Launch.ComputeEnv.Config.SlurmPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.ComputeQueue)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem9 := range resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.Environment {
+						var environment9 tfTypes.ConfigEnvVariable
+
+						environment9.Compute = types.BoolPointerValue(environmentItem9.Compute)
+						environment9.Head = types.BoolPointerValue(environmentItem9.Head)
+						environment9.Name = types.StringPointerValue(environmentItem9.Name)
+						environment9.Value = types.StringPointerValue(environmentItem9.Value)
+
+						r.Launch.ComputeEnv.Config.SlurmPlatform.Environment = append(r.Launch.ComputeEnv.Config.SlurmPlatform.Environment, environment9)
+					}
+					r.Launch.ComputeEnv.Config.SlurmPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.HeadJobOptions)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.HeadQueue)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.HostName)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.LaunchDir)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.MaxQueueSize))
+					r.Launch.ComputeEnv.Config.SlurmPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.Port))
+					r.Launch.ComputeEnv.Config.SlurmPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.PropagateHeadJobOptions)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.UserName)
+					r.Launch.ComputeEnv.Config.SlurmPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigSlurmConfiguration.WorkDir)
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration != nil {
+					r.Launch.ComputeEnv.Config.K8sPlatform = &tfTypes.ComputeConfigKubernetesComputeConfiguration{}
+					r.Launch.ComputeEnv.Config.K8sPlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.ComputeServiceAccount)
+					r.Launch.ComputeEnv.Config.K8sPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem10 := range resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.Environment {
+						var environment10 tfTypes.ConfigEnvVariable
+
+						environment10.Compute = types.BoolPointerValue(environmentItem10.Compute)
+						environment10.Head = types.BoolPointerValue(environmentItem10.Head)
+						environment10.Name = types.StringPointerValue(environmentItem10.Name)
+						environment10.Value = types.StringPointerValue(environmentItem10.Value)
+
+						r.Launch.ComputeEnv.Config.K8sPlatform.Environment = append(r.Launch.ComputeEnv.Config.K8sPlatform.Environment, environment10)
+					}
+					r.Launch.ComputeEnv.Config.K8sPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.HeadJobCpus))
+					r.Launch.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.HeadJobMemoryMb))
+					r.Launch.ComputeEnv.Config.K8sPlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.HeadPodSpec)
+					r.Launch.ComputeEnv.Config.K8sPlatform.HeadServiceAccount = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.HeadServiceAccount)
+					r.Launch.ComputeEnv.Config.K8sPlatform.Namespace = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.Namespace)
+					r.Launch.ComputeEnv.Config.K8sPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.NextflowConfig)
+					if resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.PodCleanup != nil {
+						r.Launch.ComputeEnv.Config.K8sPlatform.PodCleanup = types.StringValue(string(*resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.PodCleanup))
 					} else {
 						r.Launch.ComputeEnv.Config.K8sPlatform.PodCleanup = types.StringNull()
 					}
-					r.Launch.ComputeEnv.Config.K8sPlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.HeadPodSpec)
-					r.Launch.ComputeEnv.Config.K8sPlatform.ServicePodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.ServicePodSpec)
-					r.Launch.ComputeEnv.Config.K8sPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem8 := range resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.Environment {
-						var environment8 tfTypes.ConfigEnvVariable
-
-						environment8.Name = types.StringPointerValue(environmentItem8.Name)
-						environment8.Value = types.StringPointerValue(environmentItem8.Value)
-						environment8.Head = types.BoolPointerValue(environmentItem8.Head)
-						environment8.Compute = types.BoolPointerValue(environmentItem8.Compute)
-
-						r.Launch.ComputeEnv.Config.K8sPlatform.Environment = append(r.Launch.ComputeEnv.Config.K8sPlatform.Environment, environment8)
-					}
-					r.Launch.ComputeEnv.Config.K8sPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobCpus))
-					r.Launch.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.HeadJobMemoryMb))
-					r.Launch.ComputeEnv.Config.K8sPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.KubernetesComputeConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.K8sPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.K8sPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.K8sPlatform.Server = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.Server)
+					r.Launch.ComputeEnv.Config.K8sPlatform.ServicePodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.ServicePodSpec)
+					r.Launch.ComputeEnv.Config.K8sPlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.SslCert)
+					r.Launch.ComputeEnv.Config.K8sPlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.StorageClaimName)
+					r.Launch.ComputeEnv.Config.K8sPlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.StorageMountPath)
+					r.Launch.ComputeEnv.Config.K8sPlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigKubernetesComputeConfiguration.WorkDir)
 				}
-				if resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration != nil {
-					r.Launch.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
-					r.Launch.ComputeEnv.Config.EksPlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.EksPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.EksPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.EksPlatform.Server = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Server)
-					r.Launch.ComputeEnv.Config.EksPlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.SslCert)
-					r.Launch.ComputeEnv.Config.EksPlatform.Namespace = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Namespace)
-					r.Launch.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
-					r.Launch.ComputeEnv.Config.EksPlatform.HeadServiceAccount = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadServiceAccount)
-					r.Launch.ComputeEnv.Config.EksPlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageClaimName)
-					r.Launch.ComputeEnv.Config.EksPlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageMountPath)
-					if resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup != nil {
-						r.Launch.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringValue(string(*resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup))
+				if resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration != nil {
+					r.Launch.ComputeEnv.Config.EksPlatform = &tfTypes.ComputeConfigAmazonEKSClusterConfiguration{}
+					r.Launch.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.ClusterName)
+					r.Launch.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.ComputeServiceAccount)
+					r.Launch.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem11 := range resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.Environment {
+						var environment11 tfTypes.ConfigEnvVariable
+
+						environment11.Compute = types.BoolPointerValue(environmentItem11.Compute)
+						environment11.Head = types.BoolPointerValue(environmentItem11.Head)
+						environment11.Name = types.StringPointerValue(environmentItem11.Name)
+						environment11.Value = types.StringPointerValue(environmentItem11.Value)
+
+						r.Launch.ComputeEnv.Config.EksPlatform.Environment = append(r.Launch.ComputeEnv.Config.EksPlatform.Environment, environment11)
+					}
+					r.Launch.ComputeEnv.Config.EksPlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.HeadJobCpus))
+					r.Launch.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.HeadJobMemoryMb))
+					r.Launch.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.HeadPodSpec)
+					r.Launch.ComputeEnv.Config.EksPlatform.HeadServiceAccount = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.HeadServiceAccount)
+					r.Launch.ComputeEnv.Config.EksPlatform.Namespace = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.Namespace)
+					r.Launch.ComputeEnv.Config.EksPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.NextflowConfig)
+					if resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.PodCleanup != nil {
+						r.Launch.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringValue(string(*resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.PodCleanup))
 					} else {
 						r.Launch.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringNull()
 					}
-					r.Launch.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadPodSpec)
-					r.Launch.ComputeEnv.Config.EksPlatform.ServicePodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.ServicePodSpec)
-					r.Launch.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem9 := range resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
-						var environment9 tfTypes.ConfigEnvVariable
-
-						environment9.Name = types.StringPointerValue(environmentItem9.Name)
-						environment9.Value = types.StringPointerValue(environmentItem9.Value)
-						environment9.Head = types.BoolPointerValue(environmentItem9.Head)
-						environment9.Compute = types.BoolPointerValue(environmentItem9.Compute)
-
-						r.Launch.ComputeEnv.Config.EksPlatform.Environment = append(r.Launch.ComputeEnv.Config.EksPlatform.Environment, environment9)
-					}
-					r.Launch.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
-					r.Launch.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobMemoryMb))
-					r.Launch.ComputeEnv.Config.EksPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.EksPlatform.Region = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Region)
-					r.Launch.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
-					r.Launch.ComputeEnv.Config.EksPlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.WaveEnabled)
-					r.Launch.ComputeEnv.Config.EksPlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.EksPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.EksPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.EksPlatform.Region = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.Region)
+					r.Launch.ComputeEnv.Config.EksPlatform.Server = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.Server)
+					r.Launch.ComputeEnv.Config.EksPlatform.ServicePodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.ServicePodSpec)
+					r.Launch.ComputeEnv.Config.EksPlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.SslCert)
+					r.Launch.ComputeEnv.Config.EksPlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.StorageClaimName)
+					r.Launch.ComputeEnv.Config.EksPlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.StorageMountPath)
+					r.Launch.ComputeEnv.Config.EksPlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.EksPlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAmazonEKSClusterConfiguration.WorkDir)
 				}
-				if resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration != nil {
-					r.Launch.ComputeEnv.Config.GkePlatform = &tfTypes.GoogleGKEClusterConfiguration{}
-					r.Launch.ComputeEnv.Config.GkePlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.GkePlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.GkePlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.GkePlatform.Server = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Server)
-					r.Launch.ComputeEnv.Config.GkePlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.SslCert)
-					r.Launch.ComputeEnv.Config.GkePlatform.Namespace = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Namespace)
-					r.Launch.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.ComputeServiceAccount)
-					r.Launch.ComputeEnv.Config.GkePlatform.HeadServiceAccount = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadServiceAccount)
-					r.Launch.ComputeEnv.Config.GkePlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageClaimName)
-					r.Launch.ComputeEnv.Config.GkePlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageMountPath)
-					if resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup != nil {
-						r.Launch.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringValue(string(*resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.PodCleanup))
+				if resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration != nil {
+					r.Launch.ComputeEnv.Config.GkePlatform = &tfTypes.ComputeConfigGoogleGKEClusterConfiguration{}
+					r.Launch.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.ClusterName)
+					r.Launch.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.ComputeServiceAccount)
+					r.Launch.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem12 := range resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.Environment {
+						var environment12 tfTypes.ConfigEnvVariable
+
+						environment12.Compute = types.BoolPointerValue(environmentItem12.Compute)
+						environment12.Head = types.BoolPointerValue(environmentItem12.Head)
+						environment12.Name = types.StringPointerValue(environmentItem12.Name)
+						environment12.Value = types.StringPointerValue(environmentItem12.Value)
+
+						r.Launch.ComputeEnv.Config.GkePlatform.Environment = append(r.Launch.ComputeEnv.Config.GkePlatform.Environment, environment12)
+					}
+					r.Launch.ComputeEnv.Config.GkePlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.GkePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.HeadJobCpus))
+					r.Launch.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.HeadJobMemoryMb))
+					r.Launch.ComputeEnv.Config.GkePlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.HeadPodSpec)
+					r.Launch.ComputeEnv.Config.GkePlatform.HeadServiceAccount = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.HeadServiceAccount)
+					r.Launch.ComputeEnv.Config.GkePlatform.Namespace = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.Namespace)
+					r.Launch.ComputeEnv.Config.GkePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.NextflowConfig)
+					if resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.PodCleanup != nil {
+						r.Launch.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringValue(string(*resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.PodCleanup))
 					} else {
 						r.Launch.ComputeEnv.Config.GkePlatform.PodCleanup = types.StringNull()
 					}
-					r.Launch.ComputeEnv.Config.GkePlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadPodSpec)
-					r.Launch.ComputeEnv.Config.GkePlatform.ServicePodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.ServicePodSpec)
-					r.Launch.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem10 := range resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment {
-						var environment10 tfTypes.ConfigEnvVariable
-
-						environment10.Name = types.StringPointerValue(environmentItem10.Name)
-						environment10.Value = types.StringPointerValue(environmentItem10.Value)
-						environment10.Head = types.BoolPointerValue(environmentItem10.Head)
-						environment10.Compute = types.BoolPointerValue(environmentItem10.Compute)
-
-						r.Launch.ComputeEnv.Config.GkePlatform.Environment = append(r.Launch.ComputeEnv.Config.GkePlatform.Environment, environment10)
-					}
-					r.Launch.ComputeEnv.Config.GkePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobCpus))
-					r.Launch.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobMemoryMb))
-					r.Launch.ComputeEnv.Config.GkePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.GkePlatform.Region = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Region)
-					r.Launch.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.ClusterName)
-					r.Launch.ComputeEnv.Config.GkePlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Fusion2Enabled)
-					r.Launch.ComputeEnv.Config.GkePlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.GkePlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.GkePlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.GkePlatform.Region = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.Region)
+					r.Launch.ComputeEnv.Config.GkePlatform.Server = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.Server)
+					r.Launch.ComputeEnv.Config.GkePlatform.ServicePodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.ServicePodSpec)
+					r.Launch.ComputeEnv.Config.GkePlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.SslCert)
+					r.Launch.ComputeEnv.Config.GkePlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.StorageClaimName)
+					r.Launch.ComputeEnv.Config.GkePlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.StorageMountPath)
+					r.Launch.ComputeEnv.Config.GkePlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.GkePlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigGoogleGKEClusterConfiguration.WorkDir)
 				}
-				if resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration != nil {
-					r.Launch.ComputeEnv.Config.UgePlatform = &tfTypes.UnivaGridEngineConfiguration{}
-					r.Launch.ComputeEnv.Config.UgePlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.UgePlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.UgePlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.UgePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.UgePlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.LaunchDir)
-					r.Launch.ComputeEnv.Config.UgePlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.UserName)
-					r.Launch.ComputeEnv.Config.UgePlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.HostName)
-					r.Launch.ComputeEnv.Config.UgePlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.Port))
-					r.Launch.ComputeEnv.Config.UgePlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadQueue)
-					r.Launch.ComputeEnv.Config.UgePlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.UgePlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.MaxQueueSize))
-					r.Launch.ComputeEnv.Config.UgePlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.HeadJobOptions)
-					r.Launch.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.PropagateHeadJobOptions)
+				if resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration != nil {
+					r.Launch.ComputeEnv.Config.UgePlatform = &tfTypes.ComputeConfigUnivaGridEngineConfiguration{}
+					r.Launch.ComputeEnv.Config.UgePlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.ComputeQueue)
 					r.Launch.ComputeEnv.Config.UgePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem11 := range resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration.Environment {
-						var environment11 tfTypes.ConfigEnvVariable
-
-						environment11.Name = types.StringPointerValue(environmentItem11.Name)
-						environment11.Value = types.StringPointerValue(environmentItem11.Value)
-						environment11.Head = types.BoolPointerValue(environmentItem11.Head)
-						environment11.Compute = types.BoolPointerValue(environmentItem11.Compute)
-
-						r.Launch.ComputeEnv.Config.UgePlatform.Environment = append(r.Launch.ComputeEnv.Config.UgePlatform.Environment, environment11)
-					}
-				}
-				if resp.Launch.ComputeEnv.Config.AltairPBSConfiguration != nil {
-					r.Launch.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
-					r.Launch.ComputeEnv.Config.AltairPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.AltairPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.AltairPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.AltairPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.AltairPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.LaunchDir)
-					r.Launch.ComputeEnv.Config.AltairPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.UserName)
-					r.Launch.ComputeEnv.Config.AltairPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.HostName)
-					r.Launch.ComputeEnv.Config.AltairPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.Port))
-					r.Launch.ComputeEnv.Config.AltairPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.HeadQueue)
-					r.Launch.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.AltairPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.MaxQueueSize))
-					r.Launch.ComputeEnv.Config.AltairPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.HeadJobOptions)
-					r.Launch.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.PropagateHeadJobOptions)
-					r.Launch.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem12 := range resp.Launch.ComputeEnv.Config.AltairPBSConfiguration.Environment {
-						var environment12 tfTypes.ConfigEnvVariable
-
-						environment12.Name = types.StringPointerValue(environmentItem12.Name)
-						environment12.Value = types.StringPointerValue(environmentItem12.Value)
-						environment12.Head = types.BoolPointerValue(environmentItem12.Head)
-						environment12.Compute = types.BoolPointerValue(environmentItem12.Compute)
-
-						r.Launch.ComputeEnv.Config.AltairPlatform.Environment = append(r.Launch.ComputeEnv.Config.AltairPlatform.Environment, environment12)
-					}
-				}
-				if resp.Launch.ComputeEnv.Config.MoabConfiguration != nil {
-					r.Launch.ComputeEnv.Config.MoabPlatform = &tfTypes.MoabConfiguration{}
-					r.Launch.ComputeEnv.Config.MoabPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.WorkDir)
-					r.Launch.ComputeEnv.Config.MoabPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.PreRunScript)
-					r.Launch.ComputeEnv.Config.MoabPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.PostRunScript)
-					r.Launch.ComputeEnv.Config.MoabPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.MoabPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.LaunchDir)
-					r.Launch.ComputeEnv.Config.MoabPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.UserName)
-					r.Launch.ComputeEnv.Config.MoabPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.HostName)
-					r.Launch.ComputeEnv.Config.MoabPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.MoabConfiguration.Port))
-					r.Launch.ComputeEnv.Config.MoabPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.HeadQueue)
-					r.Launch.ComputeEnv.Config.MoabPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.ComputeQueue)
-					r.Launch.ComputeEnv.Config.MoabPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.MoabConfiguration.MaxQueueSize))
-					r.Launch.ComputeEnv.Config.MoabPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.HeadJobOptions)
-					r.Launch.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.MoabConfiguration.PropagateHeadJobOptions)
-					r.Launch.ComputeEnv.Config.MoabPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem13 := range resp.Launch.ComputeEnv.Config.MoabConfiguration.Environment {
+					for _, environmentItem13 := range resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.Environment {
 						var environment13 tfTypes.ConfigEnvVariable
 
+						environment13.Compute = types.BoolPointerValue(environmentItem13.Compute)
+						environment13.Head = types.BoolPointerValue(environmentItem13.Head)
 						environment13.Name = types.StringPointerValue(environmentItem13.Name)
 						environment13.Value = types.StringPointerValue(environmentItem13.Value)
-						environment13.Head = types.BoolPointerValue(environmentItem13.Head)
-						environment13.Compute = types.BoolPointerValue(environmentItem13.Compute)
 
-						r.Launch.ComputeEnv.Config.MoabPlatform.Environment = append(r.Launch.ComputeEnv.Config.MoabPlatform.Environment, environment13)
+						r.Launch.ComputeEnv.Config.UgePlatform.Environment = append(r.Launch.ComputeEnv.Config.UgePlatform.Environment, environment13)
 					}
+					r.Launch.ComputeEnv.Config.UgePlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.HeadJobOptions)
+					r.Launch.ComputeEnv.Config.UgePlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.HeadQueue)
+					r.Launch.ComputeEnv.Config.UgePlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.HostName)
+					r.Launch.ComputeEnv.Config.UgePlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.LaunchDir)
+					r.Launch.ComputeEnv.Config.UgePlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.MaxQueueSize))
+					r.Launch.ComputeEnv.Config.UgePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.UgePlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.Port))
+					r.Launch.ComputeEnv.Config.UgePlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.UgePlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.UgePlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.PropagateHeadJobOptions)
+					r.Launch.ComputeEnv.Config.UgePlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.UserName)
+					r.Launch.ComputeEnv.Config.UgePlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigUnivaGridEngineConfiguration.WorkDir)
 				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration != nil {
+					r.Launch.ComputeEnv.Config.AltairPlatform = &tfTypes.ComputeConfigAltairPBSConfiguration{}
+					r.Launch.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.ComputeQueue)
+					r.Launch.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem14 := range resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.Environment {
+						var environment14 tfTypes.ConfigEnvVariable
+
+						environment14.Compute = types.BoolPointerValue(environmentItem14.Compute)
+						environment14.Head = types.BoolPointerValue(environmentItem14.Head)
+						environment14.Name = types.StringPointerValue(environmentItem14.Name)
+						environment14.Value = types.StringPointerValue(environmentItem14.Value)
+
+						r.Launch.ComputeEnv.Config.AltairPlatform.Environment = append(r.Launch.ComputeEnv.Config.AltairPlatform.Environment, environment14)
+					}
+					r.Launch.ComputeEnv.Config.AltairPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.HeadJobOptions)
+					r.Launch.ComputeEnv.Config.AltairPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.HeadQueue)
+					r.Launch.ComputeEnv.Config.AltairPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.HostName)
+					r.Launch.ComputeEnv.Config.AltairPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.LaunchDir)
+					r.Launch.ComputeEnv.Config.AltairPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.MaxQueueSize))
+					r.Launch.ComputeEnv.Config.AltairPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.AltairPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.Port))
+					r.Launch.ComputeEnv.Config.AltairPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.AltairPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.PropagateHeadJobOptions)
+					r.Launch.ComputeEnv.Config.AltairPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.UserName)
+					r.Launch.ComputeEnv.Config.AltairPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigAltairPBSConfiguration.WorkDir)
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration != nil {
+					r.Launch.ComputeEnv.Config.MoabPlatform = &tfTypes.ComputeConfigMoabConfiguration{}
+					r.Launch.ComputeEnv.Config.MoabPlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.ComputeQueue)
+					r.Launch.ComputeEnv.Config.MoabPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem15 := range resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.Environment {
+						var environment15 tfTypes.ConfigEnvVariable
+
+						environment15.Compute = types.BoolPointerValue(environmentItem15.Compute)
+						environment15.Head = types.BoolPointerValue(environmentItem15.Head)
+						environment15.Name = types.StringPointerValue(environmentItem15.Name)
+						environment15.Value = types.StringPointerValue(environmentItem15.Value)
+
+						r.Launch.ComputeEnv.Config.MoabPlatform.Environment = append(r.Launch.ComputeEnv.Config.MoabPlatform.Environment, environment15)
+					}
+					r.Launch.ComputeEnv.Config.MoabPlatform.HeadJobOptions = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.HeadJobOptions)
+					r.Launch.ComputeEnv.Config.MoabPlatform.HeadQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.HeadQueue)
+					r.Launch.ComputeEnv.Config.MoabPlatform.HostName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.HostName)
+					r.Launch.ComputeEnv.Config.MoabPlatform.LaunchDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.LaunchDir)
+					r.Launch.ComputeEnv.Config.MoabPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.MaxQueueSize))
+					r.Launch.ComputeEnv.Config.MoabPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.MoabPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.Port))
+					r.Launch.ComputeEnv.Config.MoabPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.MoabPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.MoabPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.PropagateHeadJobOptions)
+					r.Launch.ComputeEnv.Config.MoabPlatform.UserName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.UserName)
+					r.Launch.ComputeEnv.Config.MoabPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigMoabConfiguration.WorkDir)
+				}
+				if resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration != nil {
+					r.Launch.ComputeEnv.Config.LocalPlatform = &tfTypes.ComputeConfigLocalExecutionConfiguration{}
+					r.Launch.ComputeEnv.Config.LocalPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem16 := range resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration.Environment {
+						var environment16 tfTypes.ConfigEnvVariable
+
+						environment16.Compute = types.BoolPointerValue(environmentItem16.Compute)
+						environment16.Head = types.BoolPointerValue(environmentItem16.Head)
+						environment16.Name = types.StringPointerValue(environmentItem16.Name)
+						environment16.Value = types.StringPointerValue(environmentItem16.Value)
+
+						r.Launch.ComputeEnv.Config.LocalPlatform.Environment = append(r.Launch.ComputeEnv.Config.LocalPlatform.Environment, environment16)
+					}
+					r.Launch.ComputeEnv.Config.LocalPlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration.Fusion2Enabled)
+					r.Launch.ComputeEnv.Config.LocalPlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration.NextflowConfig)
+					r.Launch.ComputeEnv.Config.LocalPlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration.PostRunScript)
+					r.Launch.ComputeEnv.Config.LocalPlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration.PreRunScript)
+					r.Launch.ComputeEnv.Config.LocalPlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration.WaveEnabled)
+					r.Launch.ComputeEnv.Config.LocalPlatform.WorkDir = types.StringValue(resp.Launch.ComputeEnv.Config.ComputeConfigLocalExecutionConfiguration.WorkDir)
+				}
+				r.Launch.ComputeEnv.CredentialsID = types.StringValue(resp.Launch.ComputeEnv.CredentialsID)
 				r.Launch.ComputeEnv.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Launch.ComputeEnv.DateCreated))
+				r.Launch.ComputeEnv.Deleted = types.BoolPointerValue(resp.Launch.ComputeEnv.Deleted)
+				r.Launch.ComputeEnv.Description = types.StringPointerValue(resp.Launch.ComputeEnv.Description)
 				r.Launch.ComputeEnv.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Launch.ComputeEnv.LastUpdated))
 				r.Launch.ComputeEnv.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Launch.ComputeEnv.LastUsed))
-				r.Launch.ComputeEnv.Deleted = types.BoolPointerValue(resp.Launch.ComputeEnv.Deleted)
+				r.Launch.ComputeEnv.Message = types.StringPointerValue(resp.Launch.ComputeEnv.Message)
+				r.Launch.ComputeEnv.Name = types.StringValue(resp.Launch.ComputeEnv.Name)
+				r.Launch.ComputeEnv.OrgID = types.Int64PointerValue(resp.Launch.ComputeEnv.OrgID)
+				r.Launch.ComputeEnv.Platform = types.StringValue(string(resp.Launch.ComputeEnv.Platform))
+				r.Launch.ComputeEnv.Primary = types.BoolPointerValue(resp.Launch.ComputeEnv.Primary)
 				if resp.Launch.ComputeEnv.Status != nil {
 					r.Launch.ComputeEnv.Status = types.StringValue(string(*resp.Launch.ComputeEnv.Status))
 				} else {
 					r.Launch.ComputeEnv.Status = types.StringNull()
 				}
-				r.Launch.ComputeEnv.Message = types.StringPointerValue(resp.Launch.ComputeEnv.Message)
-				r.Launch.ComputeEnv.Primary = types.BoolPointerValue(resp.Launch.ComputeEnv.Primary)
+				r.Launch.ComputeEnv.WorkspaceID = types.Int64PointerValue(resp.Launch.ComputeEnv.WorkspaceID)
 			}
-			r.Launch.ComputeEnvID = launchPriorData.ComputeEnvID
 			r.Launch.ConfigProfiles = make([]types.String, 0, len(resp.Launch.ConfigProfiles))
 			for _, v := range resp.Launch.ConfigProfiles {
 				r.Launch.ConfigProfiles = append(r.Launch.ConfigProfiles, types.StringValue(v))
@@ -721,7 +828,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			r.Launch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobCpus))
 			r.Launch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.HeadJobMemoryMb))
 			r.Launch.ID = types.StringPointerValue(resp.Launch.ID)
-			r.Launch.LabelIds = launchPriorData.LabelIds
 			r.Launch.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Launch.LastUpdated))
 			r.Launch.LaunchContainer = types.StringPointerValue(resp.Launch.LaunchContainer)
 			r.Launch.MainScript = types.StringPointerValue(resp.Launch.MainScript)
@@ -749,6 +855,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			for _, v := range resp.Launch.WorkspaceSecrets {
 				r.Launch.WorkspaceSecrets = append(r.Launch.WorkspaceSecrets, types.StringValue(v))
 			}
+			r.Launch.ComputeEnvID = launchPriorData.ComputeEnvID
+			r.Launch.LabelIds = launchPriorData.LabelIds
 		}
 		r.Message = types.StringPointerValue(resp.Message)
 		r.Name = types.StringPointerValue(resp.Name)
@@ -772,6 +880,21 @@ func (r *ActionResourceModel) RefreshFromSharedCreateActionResponse(ctx context.
 
 	if resp != nil {
 		r.ActionID = types.StringPointerValue(resp.ActionID)
+	}
+
+	return diags
+}
+
+func (r *ActionResourceModel) RefreshFromSharedDescribeActionResponse(ctx context.Context, resp *shared.DescribeActionResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedActionResponseDto(ctx, resp.Action)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -845,9 +968,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	name = r.Name.ValueString()
 
 	source := shared.ActionSource(r.Source.ValueString())
-	var computeEnvID string
-	computeEnvID = r.Launch.ComputeEnvID.ValueString()
-
+	computeEnvID := new(string)
+	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
 	runName := new(string)
 	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
 		*runName = r.Launch.RunName.ValueString()
@@ -857,14 +983,23 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	var pipeline string
 	pipeline = r.Launch.Pipeline.ValueString()
 
-	var workDir string
-	workDir = r.Launch.WorkDir.ValueString()
-
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
 		*revision = r.Launch.Revision.ValueString()
 	} else {
 		revision = nil
+	}
+	commitID := new(string)
+	if !r.Launch.CommitID.IsUnknown() && !r.Launch.CommitID.IsNull() {
+		*commitID = r.Launch.CommitID.ValueString()
+	} else {
+		commitID = nil
 	}
 	sessionID := new(string)
 	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
@@ -996,6 +1131,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		Pipeline:            pipeline,
 		WorkDir:             workDir,
 		Revision:            revision,
+		CommitID:            commitID,
 		SessionID:           sessionID,
 		ConfigProfiles:      configProfiles,
 		UserSecrets:         userSecrets,

@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -243,14 +244,20 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 				},
 				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
 					"compute_env": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"compute_env_id": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(22),
-								},
 							},
 							"config": schema.SingleNestedAttribute{
 								Computed: true,
@@ -329,7 +336,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -337,6 +346,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("gke_platform"),
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -561,7 +571,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -570,6 +582,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -663,7 +676,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -672,6 +687,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -779,6 +795,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -787,6 +805,120 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
+											}...),
+										},
+									},
+									"azure_cloud_configuration": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"data_collection_endpoint": schema.StringAttribute{
+												Computed: true,
+											},
+											"data_collection_rule_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"forged_resources": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"key": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"instance_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_table_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_workspace_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"managed_identity_client_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"managed_identity_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"network_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"resource_group": schema.StringAttribute{
+												Computed: true,
+											},
+											"subscription_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+										Validators: []validator.Object{
+											objectvalidator.ConflictsWith(path.Expressions{
+												path.MatchRelative().AtParent().AtName("aws_batch"),
+												path.MatchRelative().AtParent().AtName("aws_cloud"),
+												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
+												path.MatchRelative().AtParent().AtName("google_lifesciences"),
+												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("lsf_platform"),
+												path.MatchRelative().AtParent().AtName("slurm_platform"),
+												path.MatchRelative().AtParent().AtName("k8s_platform"),
+												path.MatchRelative().AtParent().AtName("eks_platform"),
+												path.MatchRelative().AtParent().AtName("gke_platform"),
+												path.MatchRelative().AtParent().AtName("uge_platform"),
+												path.MatchRelative().AtParent().AtName("altair_platform"),
+												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -895,7 +1027,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -903,6 +1037,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1011,7 +1146,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -1019,6 +1156,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1138,7 +1276,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("aws_cloud"),
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -1147,6 +1287,107 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
+											}...),
+										},
+									},
+									"google_cloud_configuration": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"arm64_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"boot_disk_size_gb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"forged_resources": schema.ListAttribute{
+												Computed: true,
+												ElementType: types.MapType{
+													ElemType: jsontypes.NormalizedType{},
+												},
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"gpu_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"image_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"instance_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"project_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"service_account_email": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+											"zone": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+										Validators: []validator.Object{
+											objectvalidator.ConflictsWith(path.Expressions{
+												path.MatchRelative().AtParent().AtName("aws_batch"),
+												path.MatchRelative().AtParent().AtName("aws_cloud"),
+												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
+												path.MatchRelative().AtParent().AtName("google_lifesciences"),
+												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+												path.MatchRelative().AtParent().AtName("lsf_platform"),
+												path.MatchRelative().AtParent().AtName("slurm_platform"),
+												path.MatchRelative().AtParent().AtName("k8s_platform"),
+												path.MatchRelative().AtParent().AtName("eks_platform"),
+												path.MatchRelative().AtParent().AtName("gke_platform"),
+												path.MatchRelative().AtParent().AtName("uge_platform"),
+												path.MatchRelative().AtParent().AtName("altair_platform"),
+												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1246,7 +1487,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("aws_cloud"),
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -1255,6 +1498,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1349,9 +1593,79 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
+												path.MatchRelative().AtParent().AtName("eks_platform"),
+												path.MatchRelative().AtParent().AtName("gke_platform"),
+												path.MatchRelative().AtParent().AtName("uge_platform"),
+												path.MatchRelative().AtParent().AtName("altair_platform"),
+												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
+											}...),
+										},
+									},
+									"local_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+										Validators: []validator.Object{
+											objectvalidator.ConflictsWith(path.Expressions{
+												path.MatchRelative().AtParent().AtName("aws_batch"),
+												path.MatchRelative().AtParent().AtName("aws_cloud"),
+												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
+												path.MatchRelative().AtParent().AtName("google_lifesciences"),
+												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+												path.MatchRelative().AtParent().AtName("lsf_platform"),
+												path.MatchRelative().AtParent().AtName("slurm_platform"),
+												path.MatchRelative().AtParent().AtName("k8s_platform"),
 												path.MatchRelative().AtParent().AtName("eks_platform"),
 												path.MatchRelative().AtParent().AtName("gke_platform"),
 												path.MatchRelative().AtParent().AtName("uge_platform"),
@@ -1443,7 +1757,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
 												path.MatchRelative().AtParent().AtName("eks_platform"),
@@ -1451,6 +1767,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1528,7 +1845,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -1536,6 +1855,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("gke_platform"),
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1760,7 +2080,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("aws_cloud"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -1769,6 +2091,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1846,7 +2169,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
 												path.MatchRelative().AtParent().AtName("eks_platform"),
@@ -1854,6 +2179,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("uge_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1931,7 +2257,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 												path.MatchRelative().AtParent().AtName("google_lifesciences"),
 												path.MatchRelative().AtParent().AtName("google_batch"),
+												path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("azure_batch"),
+												path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
 												path.MatchRelative().AtParent().AtName("lsf_platform"),
 												path.MatchRelative().AtParent().AtName("slurm_platform"),
 												path.MatchRelative().AtParent().AtName("k8s_platform"),
@@ -1939,6 +2267,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												path.MatchRelative().AtParent().AtName("gke_platform"),
 												path.MatchRelative().AtParent().AtName("altair_platform"),
 												path.MatchRelative().AtParent().AtName("moab_platform"),
+												path.MatchRelative().AtParent().AtName("local_platform"),
 											}...),
 										},
 									},
@@ -1960,9 +2289,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"description": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(2000),
-								},
 							},
 							"last_updated": schema.StringAttribute{
 								Computed: true,
@@ -1978,15 +2304,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"message": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(4096),
-								},
 							},
 							"name": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(100),
-								},
 							},
 							"org_id": schema.Int64Attribute{
 								Computed: true,
@@ -2035,7 +2355,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"compute_env_id": schema.StringAttribute{
-						Required: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 						},
@@ -2080,9 +2400,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(80),
-						},
 					},
 					"head_job_cpus": schema.Int32Attribute{
 						Computed: true,
@@ -2104,9 +2421,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
 					},
 					"label_ids": schema.ListAttribute{
 						Optional: true,
@@ -2139,9 +2453,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(200),
-						},
 					},
 					"optimization_id": schema.StringAttribute{
 						Computed: true,
@@ -2151,9 +2462,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(32),
-						},
 					},
 					"optimization_targets": schema.StringAttribute{
 						Computed: true,
@@ -2180,9 +2488,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(200),
-						},
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed: true,
@@ -2191,7 +2496,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Description: `Requires replacement if changed.`,
 					},
 					"pre_run_script": schema.StringAttribute{
 						Computed: true,
@@ -2200,7 +2505,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+						Description: `Requires replacement if changed.`,
 					},
 					"pull_latest": schema.BoolAttribute{
 						Computed: true,
@@ -2222,9 +2527,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"resume_launch_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
 					},
 					"revision": schema.StringAttribute{
 						Computed: true,
@@ -2234,9 +2536,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
 					},
 					"run_name": schema.StringAttribute{
 						Computed: true,
@@ -2246,9 +2545,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(80),
-						},
 					},
 					"schema_name": schema.StringAttribute{
 						Computed: true,
@@ -2258,9 +2554,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
 					},
 					"session_id": schema.StringAttribute{
 						Computed: true,
@@ -2270,9 +2563,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(36),
-						},
 					},
 					"stub_run": schema.BoolAttribute{
 						Computed: true,
@@ -2303,7 +2593,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Requires replacement if changed.`,
 					},
 					"work_dir": schema.StringAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -2469,11 +2760,11 @@ func (r *ActionResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeActionResponse != nil && res1.DescribeActionResponse.Action != nil) {
+	if !(res1.DescribeActionResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedActionResponseDto(ctx, res1.DescribeActionResponse.Action)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeActionResponse(ctx, res1.DescribeActionResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -2533,11 +2824,11 @@ func (r *ActionResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeActionResponse != nil && res.DescribeActionResponse.Action != nil) {
+	if !(res.DescribeActionResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedActionResponseDto(ctx, res.DescribeActionResponse.Action)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeActionResponse(ctx, res.DescribeActionResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

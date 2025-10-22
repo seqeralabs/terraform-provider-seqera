@@ -59,7 +59,7 @@ data "seqera_workspace" "my_workspace" {
 ### Optional
 
 - `description` (String)
-- `id` (Number) Optional workspace numeric identifier
+- `id` (Number) Workspace numeric identifier
 - `org_id` (Number) Organization numeric identifier
 
 ### Read-Only

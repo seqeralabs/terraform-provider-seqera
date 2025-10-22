@@ -7,16 +7,16 @@ type UpdateDatasetRequest struct {
 	Description *string `json:"description,omitempty"`
 }
 
-func (o *UpdateDatasetRequest) GetName() *string {
-	if o == nil {
+func (u *UpdateDatasetRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateDatasetRequest) GetDescription() *string {
-	if o == nil {
+func (u *UpdateDatasetRequest) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }

@@ -106,6 +106,26 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 							},
 						},
 					},
+					"azure_cloud": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"batch_name": schema.StringAttribute{
+								Computed: true,
+							},
+							"client_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"storage_name": schema.StringAttribute{
+								Computed: true,
+							},
+							"subscription_id": schema.StringAttribute{
+								Computed: true,
+							},
+							"tenant_id": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
 					"azure_entra": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -126,6 +146,9 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"azurerepos": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
+							"token": schema.StringAttribute{
+								Computed: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -142,6 +165,9 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"codecommit": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
+							"token": schema.StringAttribute{
+								Computed: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -161,6 +187,9 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"gitea": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
+							"token": schema.StringAttribute{
+								Computed: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -169,6 +198,9 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 					"github": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
+							"token": schema.StringAttribute{
+								Computed: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 							},
@@ -189,6 +221,20 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"certificate": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"local": schema.SingleNestedAttribute{
+						Computed: true,
+					},
+					"s3": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"access_key": schema.StringAttribute{
+								Computed: true,
+							},
+							"path_style_access_enabled": schema.BoolAttribute{
 								Computed: true,
 							},
 						},
@@ -306,11 +352,11 @@ func (r *CredentialDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeCredentialsResponse != nil && res.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

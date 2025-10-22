@@ -10,35 +10,31 @@ import (
 type UpdateDataStudiosWorkspaceSettingsRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Workspace update request
 	UpdateWorkspaceRequest shared.UpdateWorkspaceRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateDataStudiosWorkspaceSettingsRequest) GetOrgID() int64 {
-	if o == nil {
+func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetOrgID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.OrgID
+	return u.OrgID
 }
 
-func (o *UpdateDataStudiosWorkspaceSettingsRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetWorkspaceID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateDataStudiosWorkspaceSettingsRequest) GetUpdateWorkspaceRequest() shared.UpdateWorkspaceRequest {
-	if o == nil {
+func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetUpdateWorkspaceRequest() shared.UpdateWorkspaceRequest {
+	if u == nil {
 		return shared.UpdateWorkspaceRequest{}
 	}
-	return o.UpdateWorkspaceRequest
-}
-
-// UpdateDataStudiosWorkspaceSettingsResponseBody - UpdateDataStudiosWorkspaceSettings 200 response
-type UpdateDataStudiosWorkspaceSettingsResponseBody struct {
+	return u.UpdateWorkspaceRequest
 }
 
 type UpdateDataStudiosWorkspaceSettingsResponse struct {
@@ -50,41 +46,32 @@ type UpdateDataStudiosWorkspaceSettingsResponse struct {
 	RawResponse *http.Response
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
-	// UpdateDataStudiosWorkspaceSettings 200 response
-	Object *UpdateDataStudiosWorkspaceSettingsResponseBody
 }
 
-func (o *UpdateDataStudiosWorkspaceSettingsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateDataStudiosWorkspaceSettingsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateDataStudiosWorkspaceSettingsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateDataStudiosWorkspaceSettingsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateDataStudiosWorkspaceSettingsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateDataStudiosWorkspaceSettingsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateDataStudiosWorkspaceSettingsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateDataStudiosWorkspaceSettingsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
-}
-
-func (o *UpdateDataStudiosWorkspaceSettingsResponse) GetObject() *UpdateDataStudiosWorkspaceSettingsResponseBody {
-	if o == nil {
-		return nil
-	}
-	return o.Object
+	return u.ErrorResponse
 }

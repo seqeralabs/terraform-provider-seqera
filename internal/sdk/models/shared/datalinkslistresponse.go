@@ -7,16 +7,16 @@ type DataLinksListResponse struct {
 	TotalSize *int64        `json:"totalSize,omitempty"`
 }
 
-func (o *DataLinksListResponse) GetDataLinks() []DataLinkDto {
-	if o == nil {
+func (d *DataLinksListResponse) GetDataLinks() []DataLinkDto {
+	if d == nil {
 		return nil
 	}
-	return o.DataLinks
+	return d.DataLinks
 }
 
-func (o *DataLinksListResponse) GetTotalSize() *int64 {
-	if o == nil {
+func (d *DataLinksListResponse) GetTotalSize() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.TotalSize
+	return d.TotalSize
 }

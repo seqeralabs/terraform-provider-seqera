@@ -5,6 +5,7 @@ package types
 type SecurityKeys struct {
 	TwAgent       *AgentSecurityKeys              `queryParam:"inline" tfsdk:"tw_agent" tfPlanOnly:"true"`
 	Aws           *SecurityKeysAwsSecurityKeys    `queryParam:"inline" tfsdk:"aws" tfPlanOnly:"true"`
+	AzureCloud    *AzureCloudKeys                 `queryParam:"inline" tfsdk:"azure_cloud" tfPlanOnly:"true"`
 	AzureEntra    *AzureEntraKeys                 `queryParam:"inline" tfsdk:"azure_entra" tfPlanOnly:"true"`
 	Azurerepos    *AzureReposSecurityKeys         `queryParam:"inline" tfsdk:"azurerepos" tfPlanOnly:"true"`
 	Azure         *SecurityKeysAzureSecurityKeys  `queryParam:"inline" tfsdk:"azure" tfPlanOnly:"true"`
@@ -16,6 +17,8 @@ type SecurityKeys struct {
 	Gitlab        *GitLabSecurityKeys             `queryParam:"inline" tfsdk:"gitlab" tfPlanOnly:"true"`
 	Google        *SecurityKeysGoogleSecurityKeys `queryParam:"inline" tfsdk:"google" tfPlanOnly:"true"`
 	K8s           *K8sSecurityKeys                `queryParam:"inline" tfsdk:"k8s" tfPlanOnly:"true"`
+	Local         *LocalSecurityKeys              `queryParam:"inline" tfsdk:"local" tfPlanOnly:"true"`
+	S3            *S3SecurityKeys                 `queryParam:"inline" tfsdk:"s3" tfPlanOnly:"true"`
 	Seqeracompute *SeqeraComputeSecurityKeys      `queryParam:"inline" tfsdk:"seqeracompute" tfPlanOnly:"true"`
 	SSH           *SSHSecurityKeys                `queryParam:"inline" tfsdk:"ssh" tfPlanOnly:"true"`
 }

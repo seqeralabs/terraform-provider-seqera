@@ -6,9 +6,9 @@ type GoogleSecurityKeysOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 
-func (o *GoogleSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (g *GoogleSecurityKeysOutput) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }

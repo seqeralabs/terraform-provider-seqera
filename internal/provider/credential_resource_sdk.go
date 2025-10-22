@@ -45,68 +45,85 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AssumeRoleArn)
 			r.Keys.Aws.SecretKey = awsPriorData.SecretKey
 		}
+		if resp.Keys.AzureCloudKeysOutput != nil {
+			r.Keys.AzureCloud = &tfTypes.AzureCloudKeys{}
+			azureCloudPriorData := r.Keys.AzureCloud
+			r.Keys.AzureCloud.BatchName = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.BatchName)
+			r.Keys.AzureCloud.ClientID = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.ClientID)
+			r.Keys.AzureCloud.StorageName = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.StorageName)
+			r.Keys.AzureCloud.SubscriptionID = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.SubscriptionID)
+			r.Keys.AzureCloud.TenantID = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.TenantID)
+			r.Keys.AzureCloud.BatchKey = azureCloudPriorData.BatchKey
+			r.Keys.AzureCloud.ClientSecret = azureCloudPriorData.ClientSecret
+			r.Keys.AzureCloud.StorageKey = azureCloudPriorData.StorageKey
+		}
 		if resp.Keys.AzureEntraKeysOutput != nil {
 			r.Keys.AzureEntra = &tfTypes.AzureEntraKeys{}
 			azureEntraPriorData := r.Keys.AzureEntra
-			r.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
 			r.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.BatchName)
 			r.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.ClientID)
-			r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
-			r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
 			r.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.StorageName)
 			r.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.TenantID)
+			r.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
+			r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
+			r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
 		}
 		if resp.Keys.AzureReposSecurityKeysOutput != nil {
 			r.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys{}
 			azurereposPriorData := r.Keys.Azurerepos
-			r.Keys.Azurerepos.Password = azurereposPriorData.Password
+			r.Keys.Azurerepos.Token = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Token)
 			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
+			r.Keys.Azurerepos.Password = azurereposPriorData.Password
 		}
 		if resp.Keys.SecurityKeysAzureSecurityKeysOutput != nil {
 			r.Keys.Azure = &tfTypes.SecurityKeysAzureSecurityKeys{}
 			azurePriorData := r.Keys.Azure
-			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
 			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.BatchName)
-			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
 			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.StorageName)
+			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
+			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
 		}
 		if resp.Keys.BitBucketSecurityKeysOutput != nil {
 			r.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys{}
 			bitbucketPriorData := r.Keys.Bitbucket
-			r.Keys.Bitbucket.Password = bitbucketPriorData.Password
 			r.Keys.Bitbucket.Username = types.StringPointerValue(resp.Keys.BitBucketSecurityKeysOutput.Username)
+			r.Keys.Bitbucket.Password = bitbucketPriorData.Password
+			r.Keys.Bitbucket.Token = bitbucketPriorData.Token
 		}
 		if resp.Keys.CodeCommitSecurityKeysOutput != nil {
 			r.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys{}
 			codecommitPriorData := r.Keys.Codecommit
-			r.Keys.Codecommit.Password = codecommitPriorData.Password
+			r.Keys.Codecommit.Token = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Token)
 			r.Keys.Codecommit.Username = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Username)
+			r.Keys.Codecommit.Password = codecommitPriorData.Password
 		}
 		if resp.Keys.ContainerRegistryKeysOutput != nil {
 			r.Keys.ContainerReg = &tfTypes.ContainerRegistryKeys{}
 			containerRegPriorData := r.Keys.ContainerReg
-			r.Keys.ContainerReg.Password = containerRegPriorData.Password
 			r.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.Registry)
 			r.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.UserName)
+			r.Keys.ContainerReg.Password = containerRegPriorData.Password
 		}
 		if resp.Keys.GiteaSecurityKeysOutput != nil {
 			r.Keys.Gitea = &tfTypes.GiteaSecurityKeys{}
 			giteaPriorData := r.Keys.Gitea
-			r.Keys.Gitea.Password = giteaPriorData.Password
+			r.Keys.Gitea.Token = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Token)
 			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Username)
+			r.Keys.Gitea.Password = giteaPriorData.Password
 		}
 		if resp.Keys.GitHubSecurityKeysOutput != nil {
 			r.Keys.Github = &tfTypes.GitHubSecurityKeys{}
 			githubPriorData := r.Keys.Github
-			r.Keys.Github.Password = githubPriorData.Password
+			r.Keys.Github.Token = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Token)
 			r.Keys.Github.Username = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Username)
+			r.Keys.Github.Password = githubPriorData.Password
 		}
 		if resp.Keys.GitLabSecurityKeysOutput != nil {
 			r.Keys.Gitlab = &tfTypes.GitLabSecurityKeys{}
 			gitlabPriorData := r.Keys.Gitlab
+			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
 			r.Keys.Gitlab.Password = gitlabPriorData.Password
 			r.Keys.Gitlab.Token = gitlabPriorData.Token
-			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
 		}
 		if resp.Keys.SecurityKeysGoogleSecurityKeysOutput != nil {
 			r.Keys.Google = &tfTypes.SecurityKeysGoogleSecurityKeys{}
@@ -119,6 +136,18 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.K8s.Certificate = types.StringPointerValue(resp.Keys.K8sSecurityKeysOutput.Certificate)
 			r.Keys.K8s.PrivateKey = k8sPriorData.PrivateKey
 			r.Keys.K8s.Token = k8sPriorData.Token
+		}
+		if resp.Keys.LocalSecurityKeysOutput != nil {
+			r.Keys.Local = &tfTypes.LocalSecurityKeys{}
+			localPriorData := r.Keys.Local
+			r.Keys.Local.Password = localPriorData.Password
+		}
+		if resp.Keys.S3SecurityKeysOutput != nil {
+			r.Keys.S3 = &tfTypes.S3SecurityKeys{}
+			s3PriorData := r.Keys.S3
+			r.Keys.S3.AccessKey = types.StringPointerValue(resp.Keys.S3SecurityKeysOutput.AccessKey)
+			r.Keys.S3.PathStyleAccessEnabled = types.BoolPointerValue(resp.Keys.S3SecurityKeysOutput.PathStyleAccessEnabled)
+			r.Keys.S3.SecretKey = s3PriorData.SecretKey
 		}
 		if resp.Keys.SeqeraComputeSecurityKeysOutput != nil {
 			r.Keys.Seqeracompute = &tfTypes.SeqeraComputeSecurityKeys{}
@@ -137,6 +166,21 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		r.ProviderType = types.StringValue(string(resp.ProviderType))
+	}
+
+	return diags
+}
+
+func (r *CredentialResourceModel) RefreshFromSharedDescribeCredentialsResponse(ctx context.Context, resp *shared.DescribeCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedCredentialsOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -337,6 +381,12 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var gitHubSecurityKeys *shared.GitHubSecurityKeys
 	if r.Keys.Github != nil {
+		token := new(string)
+		if !r.Keys.Github.Token.IsUnknown() && !r.Keys.Github.Token.IsNull() {
+			*token = r.Keys.Github.Token.ValueString()
+		} else {
+			token = nil
+		}
 		username := new(string)
 		if !r.Keys.Github.Username.IsUnknown() && !r.Keys.Github.Username.IsNull() {
 			*username = r.Keys.Github.Username.ValueString()
@@ -350,6 +400,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password = nil
 		}
 		gitHubSecurityKeys = &shared.GitHubSecurityKeys{
+			Token:    token,
 			Username: username,
 			Password: password,
 		}
@@ -373,16 +424,16 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			password1 = nil
 		}
-		token := new(string)
+		token1 := new(string)
 		if !r.Keys.Gitlab.Token.IsUnknown() && !r.Keys.Gitlab.Token.IsNull() {
-			*token = r.Keys.Gitlab.Token.ValueString()
+			*token1 = r.Keys.Gitlab.Token.ValueString()
 		} else {
-			token = nil
+			token1 = nil
 		}
 		gitLabSecurityKeys = &shared.GitLabSecurityKeys{
 			Username: username1,
 			Password: password1,
-			Token:    token,
+			Token:    token1,
 		}
 	}
 	if gitLabSecurityKeys != nil {
@@ -404,9 +455,16 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			password2 = nil
 		}
+		token2 := new(string)
+		if !r.Keys.Bitbucket.Token.IsUnknown() && !r.Keys.Bitbucket.Token.IsNull() {
+			*token2 = r.Keys.Bitbucket.Token.ValueString()
+		} else {
+			token2 = nil
+		}
 		bitBucketSecurityKeys = &shared.BitBucketSecurityKeys{
 			Username: username2,
 			Password: password2,
+			Token:    token2,
 		}
 	}
 	if bitBucketSecurityKeys != nil {
@@ -416,6 +474,12 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var giteaSecurityKeys *shared.GiteaSecurityKeys
 	if r.Keys.Gitea != nil {
+		token3 := new(string)
+		if !r.Keys.Gitea.Token.IsUnknown() && !r.Keys.Gitea.Token.IsNull() {
+			*token3 = r.Keys.Gitea.Token.ValueString()
+		} else {
+			token3 = nil
+		}
 		username3 := new(string)
 		if !r.Keys.Gitea.Username.IsUnknown() && !r.Keys.Gitea.Username.IsNull() {
 			*username3 = r.Keys.Gitea.Username.ValueString()
@@ -429,6 +493,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password3 = nil
 		}
 		giteaSecurityKeys = &shared.GiteaSecurityKeys{
+			Token:    token3,
 			Username: username3,
 			Password: password3,
 		}
@@ -476,16 +541,16 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		} else {
 			privateKey1 = nil
 		}
-		token1 := new(string)
+		token4 := new(string)
 		if !r.Keys.K8s.Token.IsUnknown() && !r.Keys.K8s.Token.IsNull() {
-			*token1 = r.Keys.K8s.Token.ValueString()
+			*token4 = r.Keys.K8s.Token.ValueString()
 		} else {
-			token1 = nil
+			token4 = nil
 		}
 		k8sSecurityKeys = &shared.K8sSecurityKeys{
 			Certificate: certificate,
 			PrivateKey:  privateKey1,
-			Token:       token1,
+			Token:       token4,
 		}
 	}
 	if k8sSecurityKeys != nil {
@@ -531,8 +596,80 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			SecurityKeysAzureSecurityKeys: securityKeysAzureSecurityKeys,
 		}
 	}
+	var azureCloudKeys *shared.AzureCloudKeys
+	if r.Keys.AzureCloud != nil {
+		batchName1 := new(string)
+		if !r.Keys.AzureCloud.BatchName.IsUnknown() && !r.Keys.AzureCloud.BatchName.IsNull() {
+			*batchName1 = r.Keys.AzureCloud.BatchName.ValueString()
+		} else {
+			batchName1 = nil
+		}
+		storageName1 := new(string)
+		if !r.Keys.AzureCloud.StorageName.IsUnknown() && !r.Keys.AzureCloud.StorageName.IsNull() {
+			*storageName1 = r.Keys.AzureCloud.StorageName.ValueString()
+		} else {
+			storageName1 = nil
+		}
+		batchKey1 := new(string)
+		if !r.Keys.AzureCloud.BatchKey.IsUnknown() && !r.Keys.AzureCloud.BatchKey.IsNull() {
+			*batchKey1 = r.Keys.AzureCloud.BatchKey.ValueString()
+		} else {
+			batchKey1 = nil
+		}
+		storageKey1 := new(string)
+		if !r.Keys.AzureCloud.StorageKey.IsUnknown() && !r.Keys.AzureCloud.StorageKey.IsNull() {
+			*storageKey1 = r.Keys.AzureCloud.StorageKey.ValueString()
+		} else {
+			storageKey1 = nil
+		}
+		subscriptionID := new(string)
+		if !r.Keys.AzureCloud.SubscriptionID.IsUnknown() && !r.Keys.AzureCloud.SubscriptionID.IsNull() {
+			*subscriptionID = r.Keys.AzureCloud.SubscriptionID.ValueString()
+		} else {
+			subscriptionID = nil
+		}
+		tenantID := new(string)
+		if !r.Keys.AzureCloud.TenantID.IsUnknown() && !r.Keys.AzureCloud.TenantID.IsNull() {
+			*tenantID = r.Keys.AzureCloud.TenantID.ValueString()
+		} else {
+			tenantID = nil
+		}
+		clientID := new(string)
+		if !r.Keys.AzureCloud.ClientID.IsUnknown() && !r.Keys.AzureCloud.ClientID.IsNull() {
+			*clientID = r.Keys.AzureCloud.ClientID.ValueString()
+		} else {
+			clientID = nil
+		}
+		clientSecret := new(string)
+		if !r.Keys.AzureCloud.ClientSecret.IsUnknown() && !r.Keys.AzureCloud.ClientSecret.IsNull() {
+			*clientSecret = r.Keys.AzureCloud.ClientSecret.ValueString()
+		} else {
+			clientSecret = nil
+		}
+		azureCloudKeys = &shared.AzureCloudKeys{
+			BatchName:      batchName1,
+			StorageName:    storageName1,
+			BatchKey:       batchKey1,
+			StorageKey:     storageKey1,
+			SubscriptionID: subscriptionID,
+			TenantID:       tenantID,
+			ClientID:       clientID,
+			ClientSecret:   clientSecret,
+		}
+	}
+	if azureCloudKeys != nil {
+		keys = shared.SecurityKeys{
+			AzureCloudKeys: azureCloudKeys,
+		}
+	}
 	var azureReposSecurityKeys *shared.AzureReposSecurityKeys
 	if r.Keys.Azurerepos != nil {
+		token5 := new(string)
+		if !r.Keys.Azurerepos.Token.IsUnknown() && !r.Keys.Azurerepos.Token.IsNull() {
+			*token5 = r.Keys.Azurerepos.Token.ValueString()
+		} else {
+			token5 = nil
+		}
 		username4 := new(string)
 		if !r.Keys.Azurerepos.Username.IsUnknown() && !r.Keys.Azurerepos.Username.IsNull() {
 			*username4 = r.Keys.Azurerepos.Username.ValueString()
@@ -546,6 +683,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password4 = nil
 		}
 		azureReposSecurityKeys = &shared.AzureReposSecurityKeys{
+			Token:    token5,
 			Username: username4,
 			Password: password4,
 		}
@@ -619,6 +757,12 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var codeCommitSecurityKeys *shared.CodeCommitSecurityKeys
 	if r.Keys.Codecommit != nil {
+		token6 := new(string)
+		if !r.Keys.Codecommit.Token.IsUnknown() && !r.Keys.Codecommit.Token.IsNull() {
+			*token6 = r.Keys.Codecommit.Token.ValueString()
+		} else {
+			token6 = nil
+		}
 		username5 := new(string)
 		if !r.Keys.Codecommit.Username.IsUnknown() && !r.Keys.Codecommit.Username.IsNull() {
 			*username5 = r.Keys.Codecommit.Username.ValueString()
@@ -632,6 +776,7 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 			password6 = nil
 		}
 		codeCommitSecurityKeys = &shared.CodeCommitSecurityKeys{
+			Token:    token6,
 			Username: username5,
 			Password: password6,
 		}
@@ -643,56 +788,56 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	}
 	var azureEntraKeys *shared.AzureEntraKeys
 	if r.Keys.AzureEntra != nil {
-		batchName1 := new(string)
+		batchName2 := new(string)
 		if !r.Keys.AzureEntra.BatchName.IsUnknown() && !r.Keys.AzureEntra.BatchName.IsNull() {
-			*batchName1 = r.Keys.AzureEntra.BatchName.ValueString()
+			*batchName2 = r.Keys.AzureEntra.BatchName.ValueString()
 		} else {
-			batchName1 = nil
+			batchName2 = nil
 		}
-		storageName1 := new(string)
+		storageName2 := new(string)
 		if !r.Keys.AzureEntra.StorageName.IsUnknown() && !r.Keys.AzureEntra.StorageName.IsNull() {
-			*storageName1 = r.Keys.AzureEntra.StorageName.ValueString()
+			*storageName2 = r.Keys.AzureEntra.StorageName.ValueString()
 		} else {
-			storageName1 = nil
+			storageName2 = nil
 		}
-		batchKey1 := new(string)
+		batchKey2 := new(string)
 		if !r.Keys.AzureEntra.BatchKey.IsUnknown() && !r.Keys.AzureEntra.BatchKey.IsNull() {
-			*batchKey1 = r.Keys.AzureEntra.BatchKey.ValueString()
+			*batchKey2 = r.Keys.AzureEntra.BatchKey.ValueString()
 		} else {
-			batchKey1 = nil
+			batchKey2 = nil
 		}
-		storageKey1 := new(string)
+		storageKey2 := new(string)
 		if !r.Keys.AzureEntra.StorageKey.IsUnknown() && !r.Keys.AzureEntra.StorageKey.IsNull() {
-			*storageKey1 = r.Keys.AzureEntra.StorageKey.ValueString()
+			*storageKey2 = r.Keys.AzureEntra.StorageKey.ValueString()
 		} else {
-			storageKey1 = nil
+			storageKey2 = nil
 		}
-		tenantID := new(string)
+		tenantId1 := new(string)
 		if !r.Keys.AzureEntra.TenantID.IsUnknown() && !r.Keys.AzureEntra.TenantID.IsNull() {
-			*tenantID = r.Keys.AzureEntra.TenantID.ValueString()
+			*tenantId1 = r.Keys.AzureEntra.TenantID.ValueString()
 		} else {
-			tenantID = nil
+			tenantId1 = nil
 		}
-		clientID := new(string)
+		clientId1 := new(string)
 		if !r.Keys.AzureEntra.ClientID.IsUnknown() && !r.Keys.AzureEntra.ClientID.IsNull() {
-			*clientID = r.Keys.AzureEntra.ClientID.ValueString()
+			*clientId1 = r.Keys.AzureEntra.ClientID.ValueString()
 		} else {
-			clientID = nil
+			clientId1 = nil
 		}
-		clientSecret := new(string)
+		clientSecret1 := new(string)
 		if !r.Keys.AzureEntra.ClientSecret.IsUnknown() && !r.Keys.AzureEntra.ClientSecret.IsNull() {
-			*clientSecret = r.Keys.AzureEntra.ClientSecret.ValueString()
+			*clientSecret1 = r.Keys.AzureEntra.ClientSecret.ValueString()
 		} else {
-			clientSecret = nil
+			clientSecret1 = nil
 		}
 		azureEntraKeys = &shared.AzureEntraKeys{
-			BatchName:    batchName1,
-			StorageName:  storageName1,
-			BatchKey:     batchKey1,
-			StorageKey:   storageKey1,
-			TenantID:     tenantID,
-			ClientID:     clientID,
-			ClientSecret: clientSecret,
+			BatchName:    batchName2,
+			StorageName:  storageName2,
+			BatchKey:     batchKey2,
+			StorageKey:   storageKey2,
+			TenantID:     tenantId1,
+			ClientID:     clientId1,
+			ClientSecret: clientSecret1,
 		}
 	}
 	if azureEntraKeys != nil {
@@ -729,6 +874,54 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 	if seqeraComputeSecurityKeys != nil {
 		keys = shared.SecurityKeys{
 			SeqeraComputeSecurityKeys: seqeraComputeSecurityKeys,
+		}
+	}
+	var s3SecurityKeys *shared.S3SecurityKeys
+	if r.Keys.S3 != nil {
+		accessKey2 := new(string)
+		if !r.Keys.S3.AccessKey.IsUnknown() && !r.Keys.S3.AccessKey.IsNull() {
+			*accessKey2 = r.Keys.S3.AccessKey.ValueString()
+		} else {
+			accessKey2 = nil
+		}
+		secretKey2 := new(string)
+		if !r.Keys.S3.SecretKey.IsUnknown() && !r.Keys.S3.SecretKey.IsNull() {
+			*secretKey2 = r.Keys.S3.SecretKey.ValueString()
+		} else {
+			secretKey2 = nil
+		}
+		pathStyleAccessEnabled := new(bool)
+		if !r.Keys.S3.PathStyleAccessEnabled.IsUnknown() && !r.Keys.S3.PathStyleAccessEnabled.IsNull() {
+			*pathStyleAccessEnabled = r.Keys.S3.PathStyleAccessEnabled.ValueBool()
+		} else {
+			pathStyleAccessEnabled = nil
+		}
+		s3SecurityKeys = &shared.S3SecurityKeys{
+			AccessKey:              accessKey2,
+			SecretKey:              secretKey2,
+			PathStyleAccessEnabled: pathStyleAccessEnabled,
+		}
+	}
+	if s3SecurityKeys != nil {
+		keys = shared.SecurityKeys{
+			S3SecurityKeys: s3SecurityKeys,
+		}
+	}
+	var localSecurityKeys *shared.LocalSecurityKeys
+	if r.Keys.Local != nil {
+		password7 := new(string)
+		if !r.Keys.Local.Password.IsUnknown() && !r.Keys.Local.Password.IsNull() {
+			*password7 = r.Keys.Local.Password.ValueString()
+		} else {
+			password7 = nil
+		}
+		localSecurityKeys = &shared.LocalSecurityKeys{
+			Password: password7,
+		}
+	}
+	if localSecurityKeys != nil {
+		keys = shared.SecurityKeys{
+			LocalSecurityKeys: localSecurityKeys,
 		}
 	}
 	out := shared.CredentialsInput{

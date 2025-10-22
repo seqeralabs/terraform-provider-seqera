@@ -7,16 +7,16 @@ type ComputeRegion struct {
 	Name *string `json:"name,omitempty"`
 }
 
-func (o *ComputeRegion) GetID() *string {
-	if o == nil {
+func (c *ComputeRegion) GetID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *ComputeRegion) GetName() *string {
-	if o == nil {
+func (c *ComputeRegion) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }

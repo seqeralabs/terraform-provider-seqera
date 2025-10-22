@@ -36,7 +36,7 @@ resource "seqera_studios" "my_studios" {
     cpu               = 2
     gpu               = 8
     lifespan_hours    = 2
-    memory            = 3
+    memory            = 8192
     mount_data = [
       "..."
     ]
@@ -48,7 +48,12 @@ resource "seqera_studios" "my_studios" {
   label_ids = [
     7
   ]
-  name         = "my-jupyter-studio"
+  name = "my-jupyter-studio"
+  remote_config = {
+    commit_id  = "...my_commit_id..."
+    repository = "...my_repository..."
+    revision   = "...my_revision..."
+  }
   spot         = true
   workspace_id = 9
 }
@@ -60,17 +65,18 @@ resource "seqera_studios" "my_studios" {
 ### Required
 
 - `compute_env_id` (String) Requires replacement if changed.
-- `data_studio_tool_url` (String) Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 
 ### Optional
 
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
 - `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
+- `data_studio_tool_url` (String) Requires replacement if changed.
 - `description` (String) Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
 - `is_private` (Boolean) Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
+- `remote_config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--remote_config))
 - `spot` (Boolean) Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
@@ -101,11 +107,21 @@ resource "seqera_studios" "my_studios" {
 Optional:
 
 - `conda_environment` (String) Requires replacement if changed.
-- `cpu` (Number) Requires replacement if changed.
-- `gpu` (Number) Requires replacement if changed.
-- `lifespan_hours` (Number) Requires replacement if changed.
-- `memory` (Number) Requires replacement if changed.
+- `cpu` (Number) Number of CPU cores to allocate to the data studio. Requires replacement if changed.
+- `gpu` (Number) Number of GPUs to allocate to the data studio. Requires replacement if changed.
+- `lifespan_hours` (Number) Maximum lifespan of the data studio session in hours. Requires replacement if changed.
+- `memory` (Number) Memory allocation for the data studio in megabytes (MB). Requires replacement if changed.
 - `mount_data` (List of String) Requires replacement if changed.
+
+
+<a id="nestedatt--remote_config"></a>
+### Nested Schema for `remote_config`
+
+Optional:
+
+- `commit_id` (String) Requires replacement if changed.
+- `repository` (String) Not Null; Requires replacement if changed.
+- `revision` (String) Requires replacement if changed.
 
 
 <a id="nestedatt--active_connections"></a>
@@ -204,6 +220,7 @@ Read-Only:
 - `last_update` (String)
 - `message` (String)
 - `status` (String) must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]
+- `stop_reason` (String) must be one of ["CREDITS_RUN_OUT", "LIFESPAN_EXPIRED", "SPOT_RECLAMATION"]
 
 
 <a id="nestedatt--template"></a>

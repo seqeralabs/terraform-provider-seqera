@@ -14,18 +14,18 @@ type CreateAWSComputeEnvRequest struct {
 	CreateAWSComputeEnvRequest shared.CreateAWSComputeEnvRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateAWSComputeEnvRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateAWSComputeEnvRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateAWSComputeEnvRequest) GetCreateAWSComputeEnvRequest() shared.CreateAWSComputeEnvRequest {
-	if o == nil {
+func (c *CreateAWSComputeEnvRequest) GetCreateAWSComputeEnvRequest() shared.CreateAWSComputeEnvRequest {
+	if c == nil {
 		return shared.CreateAWSComputeEnvRequest{}
 	}
-	return o.CreateAWSComputeEnvRequest
+	return c.CreateAWSComputeEnvRequest
 }
 
 type CreateAWSComputeEnvResponse struct {
@@ -41,37 +41,37 @@ type CreateAWSComputeEnvResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateAWSComputeEnvResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateAWSComputeEnvResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateAWSComputeEnvResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateAWSComputeEnvResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateAWSComputeEnvResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateAWSComputeEnvResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateAWSComputeEnvResponse) GetCreateAWSComputeEnvResponse() *shared.CreateAWSComputeEnvResponse {
-	if o == nil {
+func (c *CreateAWSComputeEnvResponse) GetCreateAWSComputeEnvResponse() *shared.CreateAWSComputeEnvResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateAWSComputeEnvResponse
+	return c.CreateAWSComputeEnvResponse
 }
 
-func (o *CreateAWSComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateAWSComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

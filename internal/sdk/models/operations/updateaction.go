@@ -16,25 +16,25 @@ type UpdateActionRequest struct {
 	UpdateActionRequest shared.UpdateActionRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateActionRequest) GetActionID() string {
-	if o == nil {
+func (u *UpdateActionRequest) GetActionID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ActionID
+	return u.ActionID
 }
 
-func (o *UpdateActionRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateActionRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateActionRequest) GetUpdateActionRequest() shared.UpdateActionRequest {
-	if o == nil {
+func (u *UpdateActionRequest) GetUpdateActionRequest() shared.UpdateActionRequest {
+	if u == nil {
 		return shared.UpdateActionRequest{}
 	}
-	return o.UpdateActionRequest
+	return u.UpdateActionRequest
 }
 
 type UpdateActionResponse struct {
@@ -48,30 +48,30 @@ type UpdateActionResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateActionResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateActionResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateActionResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateActionResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateActionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateActionResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateActionResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateActionResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

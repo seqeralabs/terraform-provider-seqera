@@ -7,6 +7,7 @@ import (
 )
 
 type Launch struct {
+	CommitID            types.String   `tfsdk:"commit_id"`
 	ComputeEnv          *ComputeEnv    `tfsdk:"compute_env"`
 	ConfigProfiles      []types.String `tfsdk:"config_profiles"`
 	ConfigText          types.String   `tfsdk:"config_text"`

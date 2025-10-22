@@ -12,51 +12,51 @@ type Log struct {
 	ExitCode  *int     `json:"exit_code,omitempty"`
 }
 
-func (o *Log) GetName() *string {
-	if o == nil {
+func (l *Log) GetName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *Log) GetCmd() []string {
-	if o == nil {
+func (l *Log) GetCmd() []string {
+	if l == nil {
 		return nil
 	}
-	return o.Cmd
+	return l.Cmd
 }
 
-func (o *Log) GetStartTime() *string {
-	if o == nil {
+func (l *Log) GetStartTime() *string {
+	if l == nil {
 		return nil
 	}
-	return o.StartTime
+	return l.StartTime
 }
 
-func (o *Log) GetEndTime() *string {
-	if o == nil {
+func (l *Log) GetEndTime() *string {
+	if l == nil {
 		return nil
 	}
-	return o.EndTime
+	return l.EndTime
 }
 
-func (o *Log) GetStdout() *string {
-	if o == nil {
+func (l *Log) GetStdout() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Stdout
+	return l.Stdout
 }
 
-func (o *Log) GetStderr() *string {
-	if o == nil {
+func (l *Log) GetStderr() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Stderr
+	return l.Stderr
 }
 
-func (o *Log) GetExitCode() *int {
-	if o == nil {
+func (l *Log) GetExitCode() *int {
+	if l == nil {
 		return nil
 	}
-	return o.ExitCode
+	return l.ExitCode
 }

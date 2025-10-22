@@ -57,6 +57,7 @@ Read-Only:
 
 - `aws` (Attributes) (see [below for nested schema](#nestedatt--keys--aws))
 - `azure` (Attributes) (see [below for nested schema](#nestedatt--keys--azure))
+- `azure_cloud` (Attributes) (see [below for nested schema](#nestedatt--keys--azure_cloud))
 - `azure_entra` (Attributes) (see [below for nested schema](#nestedatt--keys--azure_entra))
 - `azurerepos` (Attributes) (see [below for nested schema](#nestedatt--keys--azurerepos))
 - `bitbucket` (Attributes) (see [below for nested schema](#nestedatt--keys--bitbucket))
@@ -67,6 +68,8 @@ Read-Only:
 - `gitlab` (Attributes) (see [below for nested schema](#nestedatt--keys--gitlab))
 - `google` (Attributes) (see [below for nested schema](#nestedatt--keys--google))
 - `k8s` (Attributes) (see [below for nested schema](#nestedatt--keys--k8s))
+- `local` (Attributes) (see [below for nested schema](#nestedatt--keys--local))
+- `s3` (Attributes) (see [below for nested schema](#nestedatt--keys--s3))
 - `seqeracompute` (Attributes) (see [below for nested schema](#nestedatt--keys--seqeracompute))
 - `ssh` (Attributes) (see [below for nested schema](#nestedatt--keys--ssh))
 - `tw_agent` (Attributes) (see [below for nested schema](#nestedatt--keys--tw_agent))
@@ -89,6 +92,18 @@ Read-Only:
 - `storage_name` (String)
 
 
+<a id="nestedatt--keys--azure_cloud"></a>
+### Nested Schema for `keys.azure_cloud`
+
+Read-Only:
+
+- `batch_name` (String)
+- `client_id` (String)
+- `storage_name` (String)
+- `subscription_id` (String)
+- `tenant_id` (String)
+
+
 <a id="nestedatt--keys--azure_entra"></a>
 ### Nested Schema for `keys.azure_entra`
 
@@ -105,6 +120,7 @@ Read-Only:
 
 Read-Only:
 
+- `token` (String)
 - `username` (String)
 
 
@@ -121,6 +137,7 @@ Read-Only:
 
 Read-Only:
 
+- `token` (String)
 - `username` (String)
 
 
@@ -138,6 +155,7 @@ Read-Only:
 
 Read-Only:
 
+- `token` (String)
 - `username` (String)
 
 
@@ -146,6 +164,7 @@ Read-Only:
 
 Read-Only:
 
+- `token` (String)
 - `username` (String)
 
 
@@ -167,6 +186,19 @@ Read-Only:
 Read-Only:
 
 - `certificate` (String)
+
+
+<a id="nestedatt--keys--local"></a>
+### Nested Schema for `keys.local`
+
+
+<a id="nestedatt--keys--s3"></a>
+### Nested Schema for `keys.s3`
+
+Read-Only:
+
+- `access_key` (String)
+- `path_style_access_enabled` (Boolean)
 
 
 <a id="nestedatt--keys--seqeracompute"></a>

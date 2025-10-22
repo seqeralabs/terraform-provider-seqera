@@ -12,37 +12,37 @@ type DeleteDataLinkItemRequest struct {
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Credentials identifier
+	// Credentials string identifier
 	CredentialsID             *string                          `queryParam:"style=form,explode=true,name=credentialsId"`
 	DataLinkDeleteItemRequest shared.DataLinkDeleteItemRequest `request:"mediaType=application/json"`
 }
 
-func (o *DeleteDataLinkItemRequest) GetDataLinkID() string {
-	if o == nil {
+func (d *DeleteDataLinkItemRequest) GetDataLinkID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return d.DataLinkID
 }
 
-func (o *DeleteDataLinkItemRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteDataLinkItemRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DeleteDataLinkItemRequest) GetCredentialsID() *string {
-	if o == nil {
+func (d *DeleteDataLinkItemRequest) GetCredentialsID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DeleteDataLinkItemRequest) GetDataLinkDeleteItemRequest() shared.DataLinkDeleteItemRequest {
-	if o == nil {
+func (d *DeleteDataLinkItemRequest) GetDataLinkDeleteItemRequest() shared.DataLinkDeleteItemRequest {
+	if d == nil {
 		return shared.DataLinkDeleteItemRequest{}
 	}
-	return o.DataLinkDeleteItemRequest
+	return d.DataLinkDeleteItemRequest
 }
 
 type DeleteDataLinkItemResponse struct {
@@ -58,37 +58,37 @@ type DeleteDataLinkItemResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteDataLinkItemResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDataLinkItemResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDataLinkItemResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDataLinkItemResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDataLinkItemResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDataLinkItemResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDataLinkItemResponse) GetDataLinkDeleteItemResponse() *shared.DataLinkDeleteItemResponse {
-	if o == nil {
+func (d *DeleteDataLinkItemResponse) GetDataLinkDeleteItemResponse() *shared.DataLinkDeleteItemResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DataLinkDeleteItemResponse
+	return d.DataLinkDeleteItemResponse
 }
 
-func (o *DeleteDataLinkItemResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteDataLinkItemResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

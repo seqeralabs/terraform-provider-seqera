@@ -16,25 +16,25 @@ type UpdateOrganizationMemberRoleRequest struct {
 	UpdateMemberRoleRequest shared.UpdateMemberRoleRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateOrganizationMemberRoleRequest) GetOrgID() int64 {
-	if o == nil {
+func (u *UpdateOrganizationMemberRoleRequest) GetOrgID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.OrgID
+	return u.OrgID
 }
 
-func (o *UpdateOrganizationMemberRoleRequest) GetMemberID() int64 {
-	if o == nil {
+func (u *UpdateOrganizationMemberRoleRequest) GetMemberID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.MemberID
+	return u.MemberID
 }
 
-func (o *UpdateOrganizationMemberRoleRequest) GetUpdateMemberRoleRequest() shared.UpdateMemberRoleRequest {
-	if o == nil {
+func (u *UpdateOrganizationMemberRoleRequest) GetUpdateMemberRoleRequest() shared.UpdateMemberRoleRequest {
+	if u == nil {
 		return shared.UpdateMemberRoleRequest{}
 	}
-	return o.UpdateMemberRoleRequest
+	return u.UpdateMemberRoleRequest
 }
 
 type UpdateOrganizationMemberRoleResponse struct {
@@ -48,30 +48,30 @@ type UpdateOrganizationMemberRoleResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateOrganizationMemberRoleResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateOrganizationMemberRoleResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateOrganizationMemberRoleResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateOrganizationMemberRoleResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateOrganizationMemberRoleResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateOrganizationMemberRoleResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateOrganizationMemberRoleResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateOrganizationMemberRoleResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

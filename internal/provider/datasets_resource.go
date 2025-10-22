@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
@@ -14,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
@@ -35,14 +34,10 @@ type DatasetsResource struct {
 
 // DatasetsResourceModel describes the resource data model.
 type DatasetsResourceModel struct {
-	DateCreated types.String `tfsdk:"date_created"`
-	Deleted     types.Bool   `tfsdk:"deleted"`
-	Description types.String `tfsdk:"description"`
-	ID          types.String `tfsdk:"id"`
-	LastUpdated types.String `tfsdk:"last_updated"`
-	MediaType   types.String `tfsdk:"media_type"`
-	Name        types.String `tfsdk:"name"`
-	WorkspaceID types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Dataset     *tfTypes.DatasetDto `tfsdk:"dataset"`
+	Description types.String        `tfsdk:"description"`
+	Name        types.String        `tfsdk:"name"`
+	WorkspaceID types.Int64         `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *DatasetsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -51,60 +46,147 @@ func (r *DatasetsResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage datasets for storing and versioning research data.\n\nDatasets in Seqera are CSV (comma-separated values) and TSV\n(tab-separated values) files stored in a workspace.\n\nThey are used as inputs to pipelines to simplify data management,\nminimize user data-input errors, and facilitate reproducible workflows.\n",
+		MarkdownDescription: "Datasets Resource",
 		Attributes: map[string]schema.Attribute{
-			"date_created": schema.StringAttribute{
+			"dataset": schema.SingleNestedAttribute{
 				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
+				Attributes: map[string]schema.Attribute{
+					"date_created": schema.StringAttribute{
+						Computed: true,
+						Validators: []validator.String{
+							validators.IsRFC3339(),
+						},
+					},
+					"deleted": schema.BoolAttribute{
+						Computed: true,
+					},
+					"description": schema.StringAttribute{
+						Computed: true,
+					},
+					"hidden": schema.BoolAttribute{
+						Computed: true,
+					},
+					"id": schema.StringAttribute{
+						Computed: true,
+					},
+					"labels": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"date_created": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timestamp when the label was created`,
+									Validators: []validator.String{
+										validators.IsRFC3339(),
+									},
+								},
+								"id": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Unique numeric identifier for the label`,
+								},
+								"is_default": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Flag indicating if this is a default system label`,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name or key of the label`,
+								},
+								"resource": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Flag indicating if this is a resource-level label`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Value associated with the label`,
+								},
+							},
+						},
+					},
+					"last_updated": schema.StringAttribute{
+						Computed: true,
+						Validators: []validator.String{
+							validators.IsRFC3339(),
+						},
+					},
+					"last_updated_by": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"avatar": schema.StringAttribute{
+								Computed: true,
+							},
+							"email": schema.StringAttribute{
+								Computed: true,
+							},
+							"id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"user_name": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"media_type": schema.StringAttribute{
+						Computed: true,
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+					},
+					"organization_id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"runs_info": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"last_used": schema.StringAttribute{
+								Computed: true,
+								Validators: []validator.String{
+									validators.IsRFC3339(),
+								},
+							},
+							"runs_count": schema.Int64Attribute{
+								Computed: true,
+							},
+						},
+					},
+					"user": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"avatar": schema.StringAttribute{
+								Computed: true,
+							},
+							"email": schema.StringAttribute{
+								Computed: true,
+							},
+							"id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"user_name": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"version": schema.Int64Attribute{
+						Computed: true,
+					},
+					"workspace_id": schema.Int64Attribute{
+						Computed: true,
+					},
 				},
 			},
-			"deleted": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Read-only flag indicating if the dataset has been deleted`,
-			},
 			"description": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(1000),
-				},
-			},
-			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Unique identifier for the dataset (max 22 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"media_type": schema.StringAttribute{
-				Computed:    true,
-				Description: `MIME type or media type of the dataset content (max 80 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(80),
-				},
 			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,
@@ -177,11 +259,11 @@ func (r *DatasetsResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateDatasetResponse != nil && res.CreateDatasetResponse.Dataset != nil) {
+	if !(res.CreateDatasetResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataset(ctx, res.CreateDatasetResponse.Dataset)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateDatasetResponse(ctx, res.CreateDatasetResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

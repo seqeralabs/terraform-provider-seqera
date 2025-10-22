@@ -18,32 +18,32 @@ type UploadDatasetV2Request struct {
 	MultiRequestFileSchema shared.MultiRequestFileSchema `request:"mediaType=multipart/form-data"`
 }
 
-func (o *UploadDatasetV2Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UploadDatasetV2Request) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UploadDatasetV2Request) GetDatasetID() string {
-	if o == nil {
+func (u *UploadDatasetV2Request) GetDatasetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.DatasetID
+	return u.DatasetID
 }
 
-func (o *UploadDatasetV2Request) GetHeader() *bool {
-	if o == nil {
+func (u *UploadDatasetV2Request) GetHeader() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Header
+	return u.Header
 }
 
-func (o *UploadDatasetV2Request) GetMultiRequestFileSchema() shared.MultiRequestFileSchema {
-	if o == nil {
+func (u *UploadDatasetV2Request) GetMultiRequestFileSchema() shared.MultiRequestFileSchema {
+	if u == nil {
 		return shared.MultiRequestFileSchema{}
 	}
-	return o.MultiRequestFileSchema
+	return u.MultiRequestFileSchema
 }
 
 type UploadDatasetV2Response struct {
@@ -59,37 +59,37 @@ type UploadDatasetV2Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UploadDatasetV2Response) GetContentType() string {
-	if o == nil {
+func (u *UploadDatasetV2Response) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UploadDatasetV2Response) GetStatusCode() int {
-	if o == nil {
+func (u *UploadDatasetV2Response) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UploadDatasetV2Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UploadDatasetV2Response) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UploadDatasetV2Response) GetUploadDatasetVersionResponse() *shared.UploadDatasetVersionResponse {
-	if o == nil {
+func (u *UploadDatasetV2Response) GetUploadDatasetVersionResponse() *shared.UploadDatasetVersionResponse {
+	if u == nil {
 		return nil
 	}
-	return o.UploadDatasetVersionResponse
+	return u.UploadDatasetVersionResponse
 }
 
-func (o *UploadDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UploadDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

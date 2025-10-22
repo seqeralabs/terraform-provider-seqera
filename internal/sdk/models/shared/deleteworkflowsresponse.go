@@ -6,9 +6,9 @@ type DeleteWorkflowsResponse struct {
 	FailedWorkflowIds []string `json:"failedWorkflowIds,omitempty"`
 }
 
-func (o *DeleteWorkflowsResponse) GetFailedWorkflowIds() []string {
-	if o == nil {
+func (d *DeleteWorkflowsResponse) GetFailedWorkflowIds() []string {
+	if d == nil {
 		return nil
 	}
-	return o.FailedWorkflowIds
+	return d.FailedWorkflowIds
 }

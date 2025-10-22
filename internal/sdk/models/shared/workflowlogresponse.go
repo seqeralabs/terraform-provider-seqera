@@ -6,9 +6,9 @@ type WorkflowLogResponse struct {
 	Log *LogPage `json:"log,omitempty"`
 }
 
-func (o *WorkflowLogResponse) GetLog() *LogPage {
-	if o == nil {
+func (w *WorkflowLogResponse) GetLog() *LogPage {
+	if w == nil {
 		return nil
 	}
-	return o.Log
+	return w.Log
 }

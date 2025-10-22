@@ -12,11 +12,11 @@ type ListOrganizationsRequest struct {
 	Role *string `queryParam:"style=form,explode=true,name=role"`
 }
 
-func (o *ListOrganizationsRequest) GetRole() *string {
-	if o == nil {
+func (l *ListOrganizationsRequest) GetRole() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Role
+	return l.Role
 }
 
 type ListOrganizationsResponse struct {
@@ -32,37 +32,37 @@ type ListOrganizationsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListOrganizationsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListOrganizationsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListOrganizationsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListOrganizationsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListOrganizationsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListOrganizationsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListOrganizationsResponse) GetListOrganizationsResponse() *shared.ListOrganizationsResponse {
-	if o == nil {
+func (l *ListOrganizationsResponse) GetListOrganizationsResponse() *shared.ListOrganizationsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListOrganizationsResponse
+	return l.ListOrganizationsResponse
 }
 
-func (o *ListOrganizationsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListOrganizationsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

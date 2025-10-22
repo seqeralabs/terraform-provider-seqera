@@ -7,16 +7,16 @@ type UpdateActionRequest struct {
 	Launch *WorkflowLaunchRequest `json:"launch,omitempty"`
 }
 
-func (o *UpdateActionRequest) GetName() *string {
-	if o == nil {
+func (u *UpdateActionRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateActionRequest) GetLaunch() *WorkflowLaunchRequest {
-	if o == nil {
+func (u *UpdateActionRequest) GetLaunch() *WorkflowLaunchRequest {
+	if u == nil {
 		return nil
 	}
-	return o.Launch
+	return u.Launch
 }

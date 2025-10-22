@@ -5,6 +5,7 @@ resource "seqera_pipeline" "my_pipeline" {
     7
   ]
   launch = {
+    commit_id      = "...my_commit_id..."
     compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
       "docker",
@@ -12,7 +13,7 @@ resource "seqera_pipeline" "my_pipeline" {
     ]
     config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
     date_created       = "2024-07-23T10:30:00Z"
-    entry_name         = "main.nf"
+    entry_name         = "my_secondary_workflow"
     head_job_cpus      = 2
     head_job_memory_mb = 4096
     label_ids = [

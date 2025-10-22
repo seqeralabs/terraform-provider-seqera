@@ -14,18 +14,18 @@ type CreateCustomDataLinkRequest struct {
 	DataLinkCreateRequest shared.DataLinkCreateRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateCustomDataLinkRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateCustomDataLinkRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateCustomDataLinkRequest) GetDataLinkCreateRequest() shared.DataLinkCreateRequest {
-	if o == nil {
+func (c *CreateCustomDataLinkRequest) GetDataLinkCreateRequest() shared.DataLinkCreateRequest {
+	if c == nil {
 		return shared.DataLinkCreateRequest{}
 	}
-	return o.DataLinkCreateRequest
+	return c.DataLinkCreateRequest
 }
 
 type CreateCustomDataLinkResponse struct {
@@ -41,37 +41,37 @@ type CreateCustomDataLinkResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateCustomDataLinkResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateCustomDataLinkResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateCustomDataLinkResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateCustomDataLinkResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateCustomDataLinkResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateCustomDataLinkResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateCustomDataLinkResponse) GetDataLinkDto() *shared.DataLinkDto {
-	if o == nil {
+func (c *CreateCustomDataLinkResponse) GetDataLinkDto() *shared.DataLinkDto {
+	if c == nil {
 		return nil
 	}
-	return o.DataLinkDto
+	return c.DataLinkDto
 }
 
-func (o *CreateCustomDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateCustomDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

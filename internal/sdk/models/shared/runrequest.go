@@ -11,44 +11,44 @@ type RunRequest struct {
 	WorkflowURL              *string           `json:"workflow_url,omitempty" multipartForm:"name=workflow_url"`
 }
 
-func (o *RunRequest) GetWorkflowParams() *string {
-	if o == nil {
+func (r *RunRequest) GetWorkflowParams() *string {
+	if r == nil {
 		return nil
 	}
-	return o.WorkflowParams
+	return r.WorkflowParams
 }
 
-func (o *RunRequest) GetWorkflowType() *string {
-	if o == nil {
+func (r *RunRequest) GetWorkflowType() *string {
+	if r == nil {
 		return nil
 	}
-	return o.WorkflowType
+	return r.WorkflowType
 }
 
-func (o *RunRequest) GetWorkflowTypeVersion() *string {
-	if o == nil {
+func (r *RunRequest) GetWorkflowTypeVersion() *string {
+	if r == nil {
 		return nil
 	}
-	return o.WorkflowTypeVersion
+	return r.WorkflowTypeVersion
 }
 
-func (o *RunRequest) GetTags() map[string]string {
-	if o == nil {
+func (r *RunRequest) GetTags() map[string]string {
+	if r == nil {
 		return nil
 	}
-	return o.Tags
+	return r.Tags
 }
 
-func (o *RunRequest) GetWorkflowEngineParameters() map[string]string {
-	if o == nil {
+func (r *RunRequest) GetWorkflowEngineParameters() map[string]string {
+	if r == nil {
 		return nil
 	}
-	return o.WorkflowEngineParameters
+	return r.WorkflowEngineParameters
 }
 
-func (o *RunRequest) GetWorkflowURL() *string {
-	if o == nil {
+func (r *RunRequest) GetWorkflowURL() *string {
+	if r == nil {
 		return nil
 	}
-	return o.WorkflowURL
+	return r.WorkflowURL
 }

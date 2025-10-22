@@ -16,25 +16,25 @@ type DeleteWorkflowManyRequest struct {
 	DeleteWorkflowsRequest shared.DeleteWorkflowsRequest `request:"mediaType=application/json"`
 }
 
-func (o *DeleteWorkflowManyRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteWorkflowManyRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DeleteWorkflowManyRequest) GetForce() *bool {
-	if o == nil {
+func (d *DeleteWorkflowManyRequest) GetForce() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Force
+	return d.Force
 }
 
-func (o *DeleteWorkflowManyRequest) GetDeleteWorkflowsRequest() shared.DeleteWorkflowsRequest {
-	if o == nil {
+func (d *DeleteWorkflowManyRequest) GetDeleteWorkflowsRequest() shared.DeleteWorkflowsRequest {
+	if d == nil {
 		return shared.DeleteWorkflowsRequest{}
 	}
-	return o.DeleteWorkflowsRequest
+	return d.DeleteWorkflowsRequest
 }
 
 type DeleteWorkflowManyResponse struct {
@@ -50,37 +50,37 @@ type DeleteWorkflowManyResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteWorkflowManyResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteWorkflowManyResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteWorkflowManyResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteWorkflowManyResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteWorkflowManyResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteWorkflowManyResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteWorkflowManyResponse) GetDeleteWorkflowsResponse() *shared.DeleteWorkflowsResponse {
-	if o == nil {
+func (d *DeleteWorkflowManyResponse) GetDeleteWorkflowsResponse() *shared.DeleteWorkflowsResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DeleteWorkflowsResponse
+	return d.DeleteWorkflowsResponse
 }
 
-func (o *DeleteWorkflowManyResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteWorkflowManyResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

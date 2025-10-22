@@ -25,18 +25,18 @@ func (g *GithubActionConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GithubActionConfig) GetDiscriminator() *string {
-	if o == nil {
+func (g *GithubActionConfig) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GithubActionConfig) GetEvents() []string {
-	if o == nil {
+func (g *GithubActionConfig) GetEvents() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Events
+	return g.Events
 }
 
 type ActionTowerActionConfig struct {
@@ -54,11 +54,11 @@ func (a *ActionTowerActionConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ActionTowerActionConfig) GetDiscriminator() *string {
-	if o == nil {
+func (a *ActionTowerActionConfig) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
 type ActionConfigTypeType string
@@ -69,8 +69,8 @@ const (
 )
 
 type ActionConfigType struct {
-	ActionTowerActionConfig *ActionTowerActionConfig `queryParam:"inline"`
-	GithubActionConfig      *GithubActionConfig      `queryParam:"inline"`
+	ActionTowerActionConfig *ActionTowerActionConfig `queryParam:"inline,name=Action_ConfigType"`
+	GithubActionConfig      *GithubActionConfig      `queryParam:"inline,name=Action_ConfigType"`
 
 	Type ActionConfigTypeType
 }

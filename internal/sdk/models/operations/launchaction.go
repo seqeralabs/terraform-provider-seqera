@@ -16,25 +16,25 @@ type LaunchActionRequest struct {
 	LaunchActionRequest shared.LaunchActionRequest `request:"mediaType=application/json"`
 }
 
-func (o *LaunchActionRequest) GetActionID() string {
-	if o == nil {
+func (l *LaunchActionRequest) GetActionID() string {
+	if l == nil {
 		return ""
 	}
-	return o.ActionID
+	return l.ActionID
 }
 
-func (o *LaunchActionRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *LaunchActionRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *LaunchActionRequest) GetLaunchActionRequest() shared.LaunchActionRequest {
-	if o == nil {
+func (l *LaunchActionRequest) GetLaunchActionRequest() shared.LaunchActionRequest {
+	if l == nil {
 		return shared.LaunchActionRequest{}
 	}
-	return o.LaunchActionRequest
+	return l.LaunchActionRequest
 }
 
 type LaunchActionResponse struct {
@@ -50,37 +50,37 @@ type LaunchActionResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *LaunchActionResponse) GetContentType() string {
-	if o == nil {
+func (l *LaunchActionResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *LaunchActionResponse) GetStatusCode() int {
-	if o == nil {
+func (l *LaunchActionResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *LaunchActionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *LaunchActionResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *LaunchActionResponse) GetLaunchActionResponse() *shared.LaunchActionResponse {
-	if o == nil {
+func (l *LaunchActionResponse) GetLaunchActionResponse() *shared.LaunchActionResponse {
+	if l == nil {
 		return nil
 	}
-	return o.LaunchActionResponse
+	return l.LaunchActionResponse
 }
 
-func (o *LaunchActionResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *LaunchActionResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

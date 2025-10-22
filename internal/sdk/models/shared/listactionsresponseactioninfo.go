@@ -32,93 +32,93 @@ func (l *ListActionsResponseActionInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ListActionsResponseActionInfo) GetID() *string {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *ListActionsResponseActionInfo) GetName() *string {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *ListActionsResponseActionInfo) GetPipeline() *string {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetPipeline() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Pipeline
+	return l.Pipeline
 }
 
-func (o *ListActionsResponseActionInfo) GetSource() *ActionSource {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetSource() *ActionSource {
+	if l == nil {
 		return nil
 	}
-	return o.Source
+	return l.Source
 }
 
-func (o *ListActionsResponseActionInfo) GetStatus() *ActionStatus {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetStatus() *ActionStatus {
+	if l == nil {
 		return nil
 	}
-	return o.Status
+	return l.Status
 }
 
-func (o *ListActionsResponseActionInfo) GetLastSeen() *time.Time {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetLastSeen() *time.Time {
+	if l == nil {
 		return nil
 	}
-	return o.LastSeen
+	return l.LastSeen
 }
 
-func (o *ListActionsResponseActionInfo) GetDateCreated() *time.Time {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetDateCreated() *time.Time {
+	if l == nil {
 		return nil
 	}
-	return o.DateCreated
+	return l.DateCreated
 }
 
-func (o *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
+	if l == nil {
 		return nil
 	}
-	return o.Event
+	return l.Event
 }
 
-func (o *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
-	if v := o.GetEvent(); v != nil {
+func (l *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
+	if v := l.GetEvent(); v != nil {
 		return v.GithubActionEvent
 	}
 	return nil
 }
 
-func (o *ListActionsResponseActionInfo) GetEventTower() *ActionTowerActionEvent {
-	if v := o.GetEvent(); v != nil {
+func (l *ListActionsResponseActionInfo) GetEventTower() *ActionTowerActionEvent {
+	if v := l.GetEvent(); v != nil {
 		return v.ActionTowerActionEvent
 	}
 	return nil
 }
 
-func (o *ListActionsResponseActionInfo) GetEndpoint() *string {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetEndpoint() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Endpoint
+	return l.Endpoint
 }
 
-func (o *ListActionsResponseActionInfo) GetLabels() []LabelDbDto {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetLabels() []LabelDbDto {
+	if l == nil {
 		return nil
 	}
-	return o.Labels
+	return l.Labels
 }
 
-func (o *ListActionsResponseActionInfo) GetUsageCmd() *string {
-	if o == nil {
+func (l *ListActionsResponseActionInfo) GetUsageCmd() *string {
+	if l == nil {
 		return nil
 	}
-	return o.UsageCmd
+	return l.UsageCmd
 }

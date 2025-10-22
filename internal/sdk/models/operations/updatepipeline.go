@@ -16,25 +16,25 @@ type UpdatePipelineRequest struct {
 	UpdatePipelineRequest shared.UpdatePipelineRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdatePipelineRequest) GetPipelineID() int64 {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetPipelineID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.PipelineID
+	return u.PipelineID
 }
 
-func (o *UpdatePipelineRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdatePipelineRequest) GetUpdatePipelineRequest() shared.UpdatePipelineRequest {
-	if o == nil {
+func (u *UpdatePipelineRequest) GetUpdatePipelineRequest() shared.UpdatePipelineRequest {
+	if u == nil {
 		return shared.UpdatePipelineRequest{}
 	}
-	return o.UpdatePipelineRequest
+	return u.UpdatePipelineRequest
 }
 
 type UpdatePipelineResponse struct {
@@ -50,37 +50,37 @@ type UpdatePipelineResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdatePipelineResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdatePipelineResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdatePipelineResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdatePipelineResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdatePipelineResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdatePipelineResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdatePipelineResponse) GetUpdatePipelineResponse() *shared.UpdatePipelineResponse {
-	if o == nil {
+func (u *UpdatePipelineResponse) GetUpdatePipelineResponse() *shared.UpdatePipelineResponse {
+	if u == nil {
 		return nil
 	}
-	return o.UpdatePipelineResponse
+	return u.UpdatePipelineResponse
 }
 
-func (o *UpdatePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdatePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

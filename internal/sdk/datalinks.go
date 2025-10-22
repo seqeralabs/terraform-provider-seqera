@@ -62,7 +62,7 @@ func (s *DataLinks) ListDataLinks(ctx context.Context, request operations.ListDa
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDataLinks",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -222,7 +222,7 @@ func (s *DataLinks) CreateCustomDataLink(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateCustomDataLink",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkCreateRequest", "json", `request:"mediaType=application/json"`)
@@ -357,7 +357,7 @@ func (s *DataLinks) CreateCustomDataLink(ctx context.Context, request operations
 }
 
 // RefreshDataLinkCache - Refresh data-link cache
-// Refreshes the data-link cache for the given `workspaceId` or `credentialsId`.
+// Refreshes the data-link cache for the given `workspaceId` or `credentialsId`
 func (s *DataLinks) RefreshDataLinkCache(ctx context.Context, request operations.RefreshDataLinkCacheRequest, opts ...operations.Option) (*operations.RefreshDataLinkCacheResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -387,7 +387,7 @@ func (s *DataLinks) RefreshDataLinkCache(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "RefreshDataLinkCache",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -502,7 +502,7 @@ func (s *DataLinks) DescribeDataLink(ctx context.Context, request operations.Des
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeDataLink",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -660,7 +660,7 @@ func (s *DataLinks) UpdateCustomDataLink(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateCustomDataLink",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkUpdateRequest", "json", `request:"mediaType=application/json"`)
@@ -825,7 +825,7 @@ func (s *DataLinks) DeleteCustomDataLink(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteCustomDataLink",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -934,8 +934,8 @@ func (s *DataLinks) DeleteCustomDataLink(ctx context.Context, request operations
 
 }
 
-// ExploreDataLink - Explore data-link
-// Retrieves the content of the data-link associated with the given `dataLinkId`.
+// ExploreDataLink - Explore data-link path
+// Retrieves the content of the data-link associated with the given `dataLinkId`, at the given `path`.
 func (s *DataLinks) ExploreDataLink(ctx context.Context, request operations.ExploreDataLinkRequest, opts ...operations.Option) (*operations.ExploreDataLinkResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -965,7 +965,7 @@ func (s *DataLinks) ExploreDataLink(ctx context.Context, request operations.Expl
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExploreDataLink",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1123,7 +1123,7 @@ func (s *DataLinks) ExploreDataLinkTree(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExploreDataLinkTree",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1281,7 +1281,7 @@ func (s *DataLinks) ExploreDataLink1(ctx context.Context, request operations.Exp
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExploreDataLink_1",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1439,7 +1439,7 @@ func (s *DataLinks) DeleteDataLinkItem(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteDataLinkItem",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkDeleteItemRequest", "json", `request:"mediaType=application/json"`)
@@ -1593,7 +1593,7 @@ func (s *DataLinks) DownloadDataLink(ctx context.Context, request operations.Dow
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/data-links/{dataLinkId}/download/{filePath}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/data-links/{dataLinkId}/download", request, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -1604,7 +1604,7 @@ func (s *DataLinks) DownloadDataLink(ctx context.Context, request operations.Dow
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DownloadDataLink",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1757,7 +1757,7 @@ func (s *DataLinks) GenerateDownloadURLDataLink(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDownloadUrlDataLink",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1915,7 +1915,7 @@ func (s *DataLinks) GenerateDownloadScript(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDownloadScript",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2042,8 +2042,8 @@ func (s *DataLinks) GenerateDownloadScript(ctx context.Context, request operatio
 
 }
 
-// GenerateDataLinkUploadURL - Generate file upload URL
-// Creates a URL to upload files to the data-link associated with the given `dataLinkId`.
+// GenerateDataLinkUploadURL - Generate data-link file upload URL (to given path)
+// Creates a URL to upload files to the data-link associated with the given `dataLinkId`, specifying a file path (`dirPath`).
 // For AWS S3 data-links, an additional follow-up request must be sent after your file upload has completed (or encountered an error) to finalize the upload - see the `/upload/finish` endpoint.
 func (s *DataLinks) GenerateDataLinkUploadURL(ctx context.Context, request operations.GenerateDataLinkUploadURLRequest, opts ...operations.Option) (*operations.GenerateDataLinkUploadURLResponse, error) {
 	o := operations.Options{}
@@ -2074,7 +2074,7 @@ func (s *DataLinks) GenerateDataLinkUploadURL(ctx context.Context, request opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDataLinkUploadUrl",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)
@@ -2210,8 +2210,8 @@ func (s *DataLinks) GenerateDataLinkUploadURL(ctx context.Context, request opera
 
 }
 
-// FinishDataLinkUpload - Finish data-link file upload
-// Finish upload of a data-link file. This is necessary for AWS S3 data-links (`DataLinkProvider=aws`) to finalize a successful file upload, or abort an upload if an error was encountered while uploading a file using an upload URL from the `/upload` endpoint.
+// FinishDataLinkUpload - Finish data-link file upload to given path
+// Finish upload of a data-link file, specifying a file path (`dirPath`). This is necessary for AWS S3 data-links (`DataLinkProvider=aws`) to finalize a successful file upload, or abort an upload if an error was encountered while uploading a file using an upload URL from the `/upload` endpoint.
 func (s *DataLinks) FinishDataLinkUpload(ctx context.Context, request operations.FinishDataLinkUploadRequest, opts ...operations.Option) (*operations.FinishDataLinkUploadResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -2241,7 +2241,7 @@ func (s *DataLinks) FinishDataLinkUpload(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "FinishDataLinkUpload",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkFinishMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)
@@ -2407,7 +2407,7 @@ func (s *DataLinks) FinishDataLinkUpload1(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "FinishDataLinkUpload_1",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkFinishMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)
@@ -2574,7 +2574,7 @@ func (s *DataLinks) GenerateDataLinkUploadURL1(ctx context.Context, request oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateDataLinkUploadUrl_1",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataLinkMultiPartUploadRequest", "json", `request:"mediaType=application/json"`)

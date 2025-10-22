@@ -7,16 +7,16 @@ type CreateAWSComputeEnvRequest struct {
 	LabelIds   []int64                          `json:"labelIds,omitempty"`
 }
 
-func (o *CreateAWSComputeEnvRequest) GetComputeEnv() *AWSComputeEnvComputeConfigInput {
-	if o == nil {
+func (c *CreateAWSComputeEnvRequest) GetComputeEnv() *AWSComputeEnvComputeConfigInput {
+	if c == nil {
 		return nil
 	}
-	return o.ComputeEnv
+	return c.ComputeEnv
 }
 
-func (o *CreateAWSComputeEnvRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (c *CreateAWSComputeEnvRequest) GetLabelIds() []int64 {
+	if c == nil {
 		return nil
 	}
-	return o.LabelIds
+	return c.LabelIds
 }

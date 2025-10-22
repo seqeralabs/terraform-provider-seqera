@@ -16,25 +16,25 @@ type UpdatePipelineSecretRequest struct {
 	UpdatePipelineSecretRequest shared.UpdatePipelineSecretRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdatePipelineSecretRequest) GetSecretID() int64 {
-	if o == nil {
+func (u *UpdatePipelineSecretRequest) GetSecretID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.SecretID
+	return u.SecretID
 }
 
-func (o *UpdatePipelineSecretRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdatePipelineSecretRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdatePipelineSecretRequest) GetUpdatePipelineSecretRequest() shared.UpdatePipelineSecretRequest {
-	if o == nil {
+func (u *UpdatePipelineSecretRequest) GetUpdatePipelineSecretRequest() shared.UpdatePipelineSecretRequest {
+	if u == nil {
 		return shared.UpdatePipelineSecretRequest{}
 	}
-	return o.UpdatePipelineSecretRequest
+	return u.UpdatePipelineSecretRequest
 }
 
 type UpdatePipelineSecretResponse struct {
@@ -48,30 +48,30 @@ type UpdatePipelineSecretResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdatePipelineSecretResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdatePipelineSecretResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdatePipelineSecretResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdatePipelineSecretResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdatePipelineSecretResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdatePipelineSecretResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdatePipelineSecretResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdatePipelineSecretResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

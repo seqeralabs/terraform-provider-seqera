@@ -14,18 +14,18 @@ type DeleteComputeEnvRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DeleteComputeEnvRequest) GetComputeEnvID() string {
-	if o == nil {
+func (d *DeleteComputeEnvRequest) GetComputeEnvID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ComputeEnvID
+	return d.ComputeEnvID
 }
 
-func (o *DeleteComputeEnvRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteComputeEnvRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DeleteComputeEnvResponse struct {
@@ -39,30 +39,30 @@ type DeleteComputeEnvResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteComputeEnvResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteComputeEnvResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteComputeEnvResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteComputeEnvResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteComputeEnvResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteComputeEnvResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

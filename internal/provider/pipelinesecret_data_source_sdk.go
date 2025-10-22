@@ -11,6 +11,21 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *PipelineSecretDataSourceModel) RefreshFromSharedDescribePipelineSecretResponse(ctx context.Context, resp *shared.DescribePipelineSecretResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedPipelineSecret(ctx, resp.PipelineSecret)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *PipelineSecretDataSourceModel) RefreshFromSharedPipelineSecret(ctx context.Context, resp *shared.PipelineSecret) diag.Diagnostics {
 	var diags diag.Diagnostics
 

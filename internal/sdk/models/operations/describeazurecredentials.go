@@ -14,18 +14,18 @@ type DescribeAzureCredentialsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeAzureCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DescribeAzureCredentialsRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DescribeAzureCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeAzureCredentialsRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeAzureCredentialsResponse struct {
@@ -41,37 +41,37 @@ type DescribeAzureCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeAzureCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeAzureCredentialsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeAzureCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeAzureCredentialsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeAzureCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeAzureCredentialsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeAzureCredentialsResponse) GetDescribeAzureCredentialsResponse() *shared.DescribeAzureCredentialsResponse {
-	if o == nil {
+func (d *DescribeAzureCredentialsResponse) GetDescribeAzureCredentialsResponse() *shared.DescribeAzureCredentialsResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeAzureCredentialsResponse
+	return d.DescribeAzureCredentialsResponse
 }
 
-func (o *DescribeAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

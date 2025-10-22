@@ -6,9 +6,9 @@ type UpdatePipelineSecretRequest struct {
 	Value *string `json:"value,omitempty"`
 }
 
-func (o *UpdatePipelineSecretRequest) GetValue() *string {
-	if o == nil {
+func (u *UpdatePipelineSecretRequest) GetValue() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Value
+	return u.Value
 }

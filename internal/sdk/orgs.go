@@ -62,7 +62,7 @@ func (s *Orgs) ListOrganizations(ctx context.Context, request operations.ListOrg
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListOrganizations",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -218,7 +218,7 @@ func (s *Orgs) CreateOrganization(ctx context.Context, request shared.CreateOrga
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateOrganization",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
@@ -379,7 +379,7 @@ func (s *Orgs) ValidateOrganizationName(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateOrganizationName",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -517,7 +517,7 @@ func (s *Orgs) DescribeOrganization(ctx context.Context, request operations.Desc
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeOrganization",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -669,7 +669,7 @@ func (s *Orgs) UpdateOrganization(ctx context.Context, request operations.Update
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateOrganization",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateOrganizationRequest", "json", `request:"mediaType=application/json"`)
@@ -811,7 +811,7 @@ func (s *Orgs) DeleteOrganization(ctx context.Context, request operations.Delete
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteOrganization",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -943,7 +943,7 @@ func (s *Orgs) ListOrganizationCollaborators(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListOrganizationCollaborators",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1099,7 +1099,7 @@ func (s *Orgs) ListOrganizationMembers(ctx context.Context, request operations.L
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListOrganizationMembers",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1255,7 +1255,7 @@ func (s *Orgs) CreateOrganizationMember(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateOrganizationMember",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AddMemberRequest", "json", `request:"mediaType=application/json"`)
@@ -1416,7 +1416,7 @@ func (s *Orgs) LeaveOrganization(ctx context.Context, request operations.LeaveOr
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "LeaveOrganization",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1548,7 +1548,7 @@ func (s *Orgs) DeleteOrganizationMember(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteOrganizationMember",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1680,7 +1680,7 @@ func (s *Orgs) UpdateOrganizationMemberRole(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateOrganizationMemberRole",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateMemberRoleRequest", "json", `request:"mediaType=application/json"`)
@@ -1819,7 +1819,7 @@ func (s *Orgs) DescribeOrganizationQuotas(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeOrganizationQuotas",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

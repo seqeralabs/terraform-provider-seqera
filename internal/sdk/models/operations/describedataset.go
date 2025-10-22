@@ -12,20 +12,29 @@ type DescribeDatasetRequest struct {
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Dataset string identifier
 	DatasetID string `pathParam:"style=simple,explode=false,name=datasetId"`
+	// Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.
+	Attributes []shared.DatasetQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 }
 
-func (o *DescribeDatasetRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (d *DescribeDatasetRequest) GetWorkspaceID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribeDatasetRequest) GetDatasetID() string {
-	if o == nil {
+func (d *DescribeDatasetRequest) GetDatasetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DatasetID
+	return d.DatasetID
+}
+
+func (d *DescribeDatasetRequest) GetAttributes() []shared.DatasetQueryAttribute {
+	if d == nil {
+		return nil
+	}
+	return d.Attributes
 }
 
 type DescribeDatasetResponse struct {
@@ -41,37 +50,37 @@ type DescribeDatasetResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeDatasetResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeDatasetResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeDatasetResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeDatasetResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeDatasetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeDatasetResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeDatasetResponse) GetDescribeDatasetResponse() *shared.DescribeDatasetResponse {
-	if o == nil {
+func (d *DescribeDatasetResponse) GetDescribeDatasetResponse() *shared.DescribeDatasetResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeDatasetResponse
+	return d.DescribeDatasetResponse
 }
 
-func (o *DescribeDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

@@ -34,6 +34,7 @@ actions:
       - $ref: "#/components/schemas/AwsCloudPlatformMetainfo"
       - $ref: "#/components/schemas/GooglePlatformMetainfo"
       - $ref: "#/components/schemas/AzBatchPlatformMetainfo"
+      - $ref: "#/components/schemas/AzCloudPlatformMetaInfo"
       - $ref: "#/components/schemas/EksPlatformMetaInfo"
       - $ref: "#/components/schemas/GkePlatformMetaInfo"
       - $ref: "#/components/schemas/K8sPlatformMetaInfo"
@@ -61,19 +62,13 @@ actions:
         - $ref: "#/components/schemas/AwsBatchConfig"
 
   # Remove deprecated schemas
-  - target: $["components"]["schemas"]["AzCloudConfig"]
-    remove: true
   - target: $["components"]["schemas"]["GoogleBucket"]
-    remove: true
-  - target: $["components"]["schemas"]["GoogleCloudConfig"]
     remove: true
   - target: $["components"]["schemas"]["GoogleCloudPlatformMetaInfo"]
     remove: true
   - target: $["components"]["schemas"]["GoogleImage"]
     remove: true
   - target: $["components"]["schemas"]["GoogleInstanceType"]
-    remove: true
-  - target: $["components"]["schemas"]["Map.Entry_String.String_"]
     remove: true
   - target: $["components"]["schemas"]["SeqeraComputePlatformDescriber"]
     remove: true
@@ -88,6 +83,20 @@ actions:
   - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
     update:
       x-speakeasy-terraform-ignore: true
+
+  # Handle circular references in grid compute configs
+  # The circular reference is: ComputeConfig -> GridConfig -> AbstractGridConfig -> ComputeConfig
+  # Solution: Remove AbstractGridConfig from the allOf in grid configs to break the circular dependency
+  - target: $["components"]["schemas"]["LsfComputeConfig"]["allOf"][0]
+    remove: true
+  - target: $["components"]["schemas"]["SlurmComputeConfig"]["allOf"][0]
+    remove: true
+  - target: $["components"]["schemas"]["UnivaComputeConfig"]["allOf"][0]
+    remove: true
+  - target: $["components"]["schemas"]["AltairPbsComputeConfig"]["allOf"][0]
+    remove: true
+  - target: $["components"]["schemas"]["MoabComputeConfig"]["allOf"][0]
+    remove: true
 
   # Launch property configuration
   - target: $["components"]["schemas"]["Launch"]["properties"]["id"]

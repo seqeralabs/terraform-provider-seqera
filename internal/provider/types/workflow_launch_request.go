@@ -7,6 +7,7 @@ import (
 )
 
 type WorkflowLaunchRequest struct {
+	CommitID            types.String   `tfsdk:"commit_id"`
 	ComputeEnv          *ComputeEnv    `tfsdk:"compute_env"`
 	ComputeEnvID        types.String   `tfsdk:"compute_env_id"`
 	ConfigProfiles      []types.String `tfsdk:"config_profiles"`

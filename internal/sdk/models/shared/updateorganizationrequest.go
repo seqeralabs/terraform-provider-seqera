@@ -54,58 +54,58 @@ type UpdateOrganizationRequest struct {
 	Type   *UpdateOrganizationRequestType `json:"type,omitempty"`
 }
 
-func (o *UpdateOrganizationRequest) GetFullName() *string {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetFullName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.FullName
+	return u.FullName
 }
 
-func (o *UpdateOrganizationRequest) GetName() *string {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateOrganizationRequest) GetDescription() *string {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }
 
-func (o *UpdateOrganizationRequest) GetLocation() *string {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetLocation() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Location
+	return u.Location
 }
 
-func (o *UpdateOrganizationRequest) GetWebsite() *string {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetWebsite() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Website
+	return u.Website
 }
 
-func (o *UpdateOrganizationRequest) GetLogoID() *string {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetLogoID() *string {
+	if u == nil {
 		return nil
 	}
-	return o.LogoID
+	return u.LogoID
 }
 
-func (o *UpdateOrganizationRequest) GetPaying() *bool {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetPaying() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Paying
+	return u.Paying
 }
 
-func (o *UpdateOrganizationRequest) GetType() *UpdateOrganizationRequestType {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetType() *UpdateOrganizationRequestType {
+	if u == nil {
 		return nil
 	}
-	return o.Type
+	return u.Type
 }

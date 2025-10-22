@@ -3,16 +3,12 @@
 package shared
 
 type CreateDatasetResponse struct {
-	// Represents a dataset in the Seqera Platform.
-	// Contains dataset metadata, versioning information, and access
-	// controls for data management and sharing.
-	//
-	Dataset *Dataset `json:"dataset,omitempty"`
+	Dataset *DatasetDto `json:"dataset,omitempty"`
 }
 
-func (o *CreateDatasetResponse) GetDataset() *Dataset {
-	if o == nil {
+func (c *CreateDatasetResponse) GetDataset() *DatasetDto {
+	if c == nil {
 		return nil
 	}
-	return o.Dataset
+	return c.Dataset
 }

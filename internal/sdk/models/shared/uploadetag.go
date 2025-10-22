@@ -7,16 +7,16 @@ type UploadEtag struct {
 	ETag       *string `json:"eTag,omitempty"`
 }
 
-func (o *UploadEtag) GetPartNumber() *int {
-	if o == nil {
+func (u *UploadEtag) GetPartNumber() *int {
+	if u == nil {
 		return nil
 	}
-	return o.PartNumber
+	return u.PartNumber
 }
 
-func (o *UploadEtag) GetETag() *string {
-	if o == nil {
+func (u *UploadEtag) GetETag() *string {
+	if u == nil {
 		return nil
 	}
-	return o.ETag
+	return u.ETag
 }

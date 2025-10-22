@@ -21,6 +21,7 @@ information for computational workflows.
 
 ```terraform
 resource "seqera_workflows" "my_workflows" {
+  commit_id      = "...my_commit_id..."
   compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
   config_profiles = [
     "docker",
@@ -28,7 +29,7 @@ resource "seqera_workflows" "my_workflows" {
   ]
   config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
   date_created       = "2024-07-23T10:30:00Z"
-  entry_name         = "main.nf"
+  entry_name         = "my_secondary_workflow"
   force              = false
   head_job_cpus      = 2
   head_job_memory_mb = 4096
@@ -72,13 +73,13 @@ resource "seqera_workflows" "my_workflows" {
 
 ### Required
 
-- `compute_env_id` (String) Requires replacement if changed.
 - `pipeline` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
+- `commit_id` (String) Requires replacement if changed.
+- `compute_env_id` (String) Requires replacement if changed.
 - `config_profiles` (List of String) Requires replacement if changed.
 - `config_text` (String) Requires replacement if changed.
 - `date_created` (String) Requires replacement if changed.
@@ -92,18 +93,19 @@ resource "seqera_workflows" "my_workflows" {
 - `optimization_id` (String) Requires replacement if changed.
 - `optimization_targets` (String) Requires replacement if changed.
 - `params_text` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Requires replacement if changed.
+- `pre_run_script` (String) Requires replacement if changed.
 - `pull_latest` (Boolean) Requires replacement if changed.
 - `resume` (Boolean) Requires replacement if changed.
 - `revision` (String) Requires replacement if changed.
 - `run_name` (String) Requires replacement if changed.
 - `schema_name` (String) Requires replacement if changed.
 - `session_id` (String) Requires replacement if changed.
-- `source_workspace_id` (Number) Source Optional workspace numeric identifier. Requires replacement if changed.
+- `source_workspace_id` (Number) Source workspace numeric identifier. Requires replacement if changed.
 - `stub_run` (Boolean) Requires replacement if changed.
 - `tower_config` (String) Requires replacement if changed.
 - `user_secrets` (List of String) Requires replacement if changed.
+- `work_dir` (String) Requires replacement if changed.
 - `workspace_secrets` (List of String) Requires replacement if changed.
 
 ### Read-Only

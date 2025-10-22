@@ -41,7 +41,7 @@ data "seqera_pipeline" "my_pipeline" {
 ### Optional
 
 - `attributes` (List of String) Additional attribute values to include in the response (`labels`, `optimized` status, `computeEnv`). Returns an empty value (`labels: null`, etc.) if omitted.
-- `source_workspace_id` (Number) Source Optional workspace numeric identifier
+- `source_workspace_id` (Number) Source workspace numeric identifier
 
 ### Read-Only
 

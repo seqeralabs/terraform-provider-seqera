@@ -7,16 +7,16 @@ type DataLinkSimpleItem struct {
 	Size int64  `json:"size"`
 }
 
-func (o *DataLinkSimpleItem) GetPath() string {
-	if o == nil {
+func (d *DataLinkSimpleItem) GetPath() string {
+	if d == nil {
 		return ""
 	}
-	return o.Path
+	return d.Path
 }
 
-func (o *DataLinkSimpleItem) GetSize() int64 {
-	if o == nil {
+func (d *DataLinkSimpleItem) GetSize() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.Size
+	return d.Size
 }

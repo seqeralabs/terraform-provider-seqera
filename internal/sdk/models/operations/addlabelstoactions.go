@@ -14,18 +14,18 @@ type AddLabelsToActionsRequest struct {
 	AssociateActionLabelsRequest shared.AssociateActionLabelsRequest `request:"mediaType=application/json"`
 }
 
-func (o *AddLabelsToActionsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (a *AddLabelsToActionsRequest) GetWorkspaceID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return a.WorkspaceID
 }
 
-func (o *AddLabelsToActionsRequest) GetAssociateActionLabelsRequest() shared.AssociateActionLabelsRequest {
-	if o == nil {
+func (a *AddLabelsToActionsRequest) GetAssociateActionLabelsRequest() shared.AssociateActionLabelsRequest {
+	if a == nil {
 		return shared.AssociateActionLabelsRequest{}
 	}
-	return o.AssociateActionLabelsRequest
+	return a.AssociateActionLabelsRequest
 }
 
 type AddLabelsToActionsResponse struct {
@@ -37,23 +37,23 @@ type AddLabelsToActionsResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *AddLabelsToActionsResponse) GetContentType() string {
-	if o == nil {
+func (a *AddLabelsToActionsResponse) GetContentType() string {
+	if a == nil {
 		return ""
 	}
-	return o.ContentType
+	return a.ContentType
 }
 
-func (o *AddLabelsToActionsResponse) GetStatusCode() int {
-	if o == nil {
+func (a *AddLabelsToActionsResponse) GetStatusCode() int {
+	if a == nil {
 		return 0
 	}
-	return o.StatusCode
+	return a.StatusCode
 }
 
-func (o *AddLabelsToActionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (a *AddLabelsToActionsResponse) GetRawResponse() *http.Response {
+	if a == nil {
 		return nil
 	}
-	return o.RawResponse
+	return a.RawResponse
 }

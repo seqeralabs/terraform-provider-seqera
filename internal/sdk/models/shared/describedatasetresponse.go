@@ -3,16 +3,12 @@
 package shared
 
 type DescribeDatasetResponse struct {
-	// Represents a dataset in the Seqera Platform.
-	// Contains dataset metadata, versioning information, and access
-	// controls for data management and sharing.
-	//
-	Dataset *Dataset `json:"dataset,omitempty"`
+	Dataset *DatasetDto `json:"dataset,omitempty"`
 }
 
-func (o *DescribeDatasetResponse) GetDataset() *Dataset {
-	if o == nil {
+func (d *DescribeDatasetResponse) GetDataset() *DatasetDto {
+	if d == nil {
 		return nil
 	}
-	return o.Dataset
+	return d.Dataset
 }

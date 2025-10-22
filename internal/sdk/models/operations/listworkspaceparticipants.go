@@ -10,7 +10,7 @@ import (
 type ListWorkspaceParticipantsRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`
@@ -20,39 +20,39 @@ type ListWorkspaceParticipantsRequest struct {
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 
-func (o *ListWorkspaceParticipantsRequest) GetOrgID() int64 {
-	if o == nil {
+func (l *ListWorkspaceParticipantsRequest) GetOrgID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
-func (o *ListWorkspaceParticipantsRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (l *ListWorkspaceParticipantsRequest) GetWorkspaceID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListWorkspaceParticipantsRequest) GetMax() *int {
-	if o == nil {
+func (l *ListWorkspaceParticipantsRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListWorkspaceParticipantsRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListWorkspaceParticipantsRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListWorkspaceParticipantsRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListWorkspaceParticipantsRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
 type ListWorkspaceParticipantsResponse struct {
@@ -68,37 +68,37 @@ type ListWorkspaceParticipantsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListWorkspaceParticipantsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListWorkspaceParticipantsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListWorkspaceParticipantsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListWorkspaceParticipantsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListWorkspaceParticipantsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListWorkspaceParticipantsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListWorkspaceParticipantsResponse) GetListParticipantsResponse() *shared.ListParticipantsResponse {
-	if o == nil {
+func (l *ListWorkspaceParticipantsResponse) GetListParticipantsResponse() *shared.ListParticipantsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListParticipantsResponse
+	return l.ListParticipantsResponse
 }
 
-func (o *ListWorkspaceParticipantsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListWorkspaceParticipantsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

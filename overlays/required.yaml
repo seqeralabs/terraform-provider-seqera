@@ -35,14 +35,6 @@ actions:
     update:
       required:
           - pipeline
-          - computeEnvId
-          - workDir
-
-  # - target: $.components.schemas.ComputeEnv_ComputeConfig_
-  #   update:
-  #     required:
-  #     - workspaceId
-  #     - credentialsId
 
     # Compute config platform-specific schemas
   - target: $.components.schemas.AwsBatchConfig

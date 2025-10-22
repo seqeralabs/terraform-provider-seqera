@@ -24,30 +24,30 @@ func (i *Image) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Image) GetID() string {
-	if o == nil {
+func (i *Image) GetID() string {
+	if i == nil {
 		return ""
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *Image) GetName() string {
-	if o == nil {
+func (i *Image) GetName() string {
+	if i == nil {
 		return ""
 	}
-	return o.Name
+	return i.Name
 }
 
-func (o *Image) GetDescription() string {
-	if o == nil {
+func (i *Image) GetDescription() string {
+	if i == nil {
 		return ""
 	}
-	return o.Description
+	return i.Description
 }
 
-func (o *Image) GetArch() string {
-	if o == nil {
+func (i *Image) GetArch() string {
+	if i == nil {
 		return ""
 	}
-	return o.Arch
+	return i.Arch
 }

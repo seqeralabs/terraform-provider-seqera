@@ -23,23 +23,23 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			r.JobInfo = nil
 		} else {
 			r.JobInfo = &tfTypes.JobInfoDto{}
-			r.JobInfo.ID = types.Int64PointerValue(resp.JobInfo.ID)
-			r.JobInfo.OperationID = types.StringPointerValue(resp.JobInfo.OperationID)
-			r.JobInfo.Message = types.StringPointerValue(resp.JobInfo.Message)
-			r.JobInfo.Status = types.StringPointerValue(resp.JobInfo.Status)
 			r.JobInfo.ExitCode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.JobInfo.ExitCode))
+			r.JobInfo.ID = types.Int64PointerValue(resp.JobInfo.ID)
+			r.JobInfo.Message = types.StringPointerValue(resp.JobInfo.Message)
+			r.JobInfo.OperationID = types.StringPointerValue(resp.JobInfo.OperationID)
+			r.JobInfo.Status = types.StringPointerValue(resp.JobInfo.Status)
 		}
 		r.Labels = []tfTypes.LabelDbDto{}
 
 		for _, labelsItem := range resp.Labels {
 			var labels tfTypes.LabelDbDto
 
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
 			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+			labels.ID = types.Int64PointerValue(labelsItem.ID)
+			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+			labels.Name = types.StringPointerValue(labelsItem.Name)
+			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+			labels.Value = types.StringPointerValue(labelsItem.Value)
 
 			r.Labels = append(r.Labels, labels)
 		}
@@ -61,113 +61,131 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			r.Progress = nil
 		} else {
 			r.Progress = &tfTypes.ProgressData{}
-			if resp.Progress.WorkflowProgress == nil {
-				r.Progress.WorkflowProgress = nil
-			} else {
-				r.Progress.WorkflowProgress = &tfTypes.WorkflowLoad{}
-				r.Progress.WorkflowProgress.Pending = types.Int64Value(resp.Progress.WorkflowProgress.Pending)
-				r.Progress.WorkflowProgress.Submitted = types.Int64Value(resp.Progress.WorkflowProgress.Submitted)
-				r.Progress.WorkflowProgress.Running = types.Int64Value(resp.Progress.WorkflowProgress.Running)
-				r.Progress.WorkflowProgress.Succeeded = types.Int64Value(resp.Progress.WorkflowProgress.Succeeded)
-				r.Progress.WorkflowProgress.Failed = types.Int64Value(resp.Progress.WorkflowProgress.Failed)
-				r.Progress.WorkflowProgress.Cached = types.Int64Value(resp.Progress.WorkflowProgress.Cached)
-				r.Progress.WorkflowProgress.Aborted = types.Int64Value(resp.Progress.WorkflowProgress.Aborted)
-				r.Progress.WorkflowProgress.MemoryEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.MemoryEfficiency)
-				r.Progress.WorkflowProgress.CPUEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.CPUEfficiency)
-				r.Progress.WorkflowProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.DateCreated))
-				r.Progress.WorkflowProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.LastUpdated))
-				r.Progress.WorkflowProgress.Executors = make([]types.String, 0, len(resp.Progress.WorkflowProgress.Executors))
-				for _, v := range resp.Progress.WorkflowProgress.Executors {
-					r.Progress.WorkflowProgress.Executors = append(r.Progress.WorkflowProgress.Executors, types.StringValue(v))
-				}
-				r.Progress.WorkflowProgress.Cpus = types.Int64Value(resp.Progress.WorkflowProgress.Cpus)
-				r.Progress.WorkflowProgress.CPUTime = types.Int64Value(resp.Progress.WorkflowProgress.CPUTime)
-				r.Progress.WorkflowProgress.CPULoad = types.Int64Value(resp.Progress.WorkflowProgress.CPULoad)
-				r.Progress.WorkflowProgress.MemoryRss = types.Int64Value(resp.Progress.WorkflowProgress.MemoryRss)
-				r.Progress.WorkflowProgress.MemoryReq = types.Int64Value(resp.Progress.WorkflowProgress.MemoryReq)
-				r.Progress.WorkflowProgress.ReadBytes = types.Int64Value(resp.Progress.WorkflowProgress.ReadBytes)
-				r.Progress.WorkflowProgress.WriteBytes = types.Int64Value(resp.Progress.WorkflowProgress.WriteBytes)
-				r.Progress.WorkflowProgress.VolCtxSwitch = types.Int64Value(resp.Progress.WorkflowProgress.VolCtxSwitch)
-				r.Progress.WorkflowProgress.InvCtxSwitch = types.Int64Value(resp.Progress.WorkflowProgress.InvCtxSwitch)
-				r.Progress.WorkflowProgress.LoadTasks = types.Int64Value(resp.Progress.WorkflowProgress.LoadTasks)
-				r.Progress.WorkflowProgress.LoadCpus = types.Int64Value(resp.Progress.WorkflowProgress.LoadCpus)
-				r.Progress.WorkflowProgress.LoadMemory = types.Int64Value(resp.Progress.WorkflowProgress.LoadMemory)
-				r.Progress.WorkflowProgress.PeakCpus = types.Int64Value(resp.Progress.WorkflowProgress.PeakCpus)
-				r.Progress.WorkflowProgress.PeakTasks = types.Int64Value(resp.Progress.WorkflowProgress.PeakTasks)
-				r.Progress.WorkflowProgress.PeakMemory = types.Int64Value(resp.Progress.WorkflowProgress.PeakMemory)
-				r.Progress.WorkflowProgress.Cost = types.Float64PointerValue(resp.Progress.WorkflowProgress.Cost)
-			}
 			r.Progress.ProcessesProgress = []tfTypes.ProcessLoad{}
 
 			for _, processesProgressItem := range resp.Progress.ProcessesProgress {
 				var processesProgress tfTypes.ProcessLoad
 
-				processesProgress.Pending = types.Int64Value(processesProgressItem.Pending)
-				processesProgress.Submitted = types.Int64Value(processesProgressItem.Submitted)
-				processesProgress.Running = types.Int64Value(processesProgressItem.Running)
-				processesProgress.Succeeded = types.Int64Value(processesProgressItem.Succeeded)
-				processesProgress.Failed = types.Int64Value(processesProgressItem.Failed)
-				processesProgress.Cached = types.Int64Value(processesProgressItem.Cached)
 				processesProgress.Aborted = types.Int64Value(processesProgressItem.Aborted)
-				processesProgress.MemoryEfficiency = types.Float32PointerValue(processesProgressItem.MemoryEfficiency)
+				processesProgress.Cached = types.Int64Value(processesProgressItem.Cached)
 				processesProgress.CPUEfficiency = types.Float32PointerValue(processesProgressItem.CPUEfficiency)
-				processesProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.DateCreated))
-				processesProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.LastUpdated))
-				processesProgress.Process = types.StringValue(processesProgressItem.Process)
+				processesProgress.CPULoad = types.Int64Value(processesProgressItem.CPULoad)
 				processesProgress.Cpus = types.Int64Value(processesProgressItem.Cpus)
 				processesProgress.CPUTime = types.Int64Value(processesProgressItem.CPUTime)
-				processesProgress.CPULoad = types.Int64Value(processesProgressItem.CPULoad)
-				processesProgress.MemoryRss = types.Int64Value(processesProgressItem.MemoryRss)
-				processesProgress.MemoryReq = types.Int64Value(processesProgressItem.MemoryReq)
-				processesProgress.ReadBytes = types.Int64Value(processesProgressItem.ReadBytes)
-				processesProgress.WriteBytes = types.Int64Value(processesProgressItem.WriteBytes)
-				processesProgress.VolCtxSwitch = types.Int64Value(processesProgressItem.VolCtxSwitch)
+				processesProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.DateCreated))
+				processesProgress.Failed = types.Int64Value(processesProgressItem.Failed)
 				processesProgress.InvCtxSwitch = types.Int64Value(processesProgressItem.InvCtxSwitch)
-				processesProgress.LoadTasks = types.Int64Value(processesProgressItem.LoadTasks)
+				processesProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.LastUpdated))
 				processesProgress.LoadCpus = types.Int64Value(processesProgressItem.LoadCpus)
 				processesProgress.LoadMemory = types.Int64Value(processesProgressItem.LoadMemory)
+				processesProgress.LoadTasks = types.Int64Value(processesProgressItem.LoadTasks)
+				processesProgress.MemoryEfficiency = types.Float32PointerValue(processesProgressItem.MemoryEfficiency)
+				processesProgress.MemoryReq = types.Int64Value(processesProgressItem.MemoryReq)
+				processesProgress.MemoryRss = types.Int64Value(processesProgressItem.MemoryRss)
 				processesProgress.PeakCpus = types.Int64Value(processesProgressItem.PeakCpus)
-				processesProgress.PeakTasks = types.Int64Value(processesProgressItem.PeakTasks)
 				processesProgress.PeakMemory = types.Int64Value(processesProgressItem.PeakMemory)
+				processesProgress.PeakTasks = types.Int64Value(processesProgressItem.PeakTasks)
+				processesProgress.Pending = types.Int64Value(processesProgressItem.Pending)
+				processesProgress.Process = types.StringValue(processesProgressItem.Process)
+				processesProgress.ReadBytes = types.Int64Value(processesProgressItem.ReadBytes)
+				processesProgress.Running = types.Int64Value(processesProgressItem.Running)
+				processesProgress.Submitted = types.Int64Value(processesProgressItem.Submitted)
+				processesProgress.Succeeded = types.Int64Value(processesProgressItem.Succeeded)
+				processesProgress.VolCtxSwitch = types.Int64Value(processesProgressItem.VolCtxSwitch)
+				processesProgress.WriteBytes = types.Int64Value(processesProgressItem.WriteBytes)
 
 				r.Progress.ProcessesProgress = append(r.Progress.ProcessesProgress, processesProgress)
 			}
 			r.Progress.TotalProcesses = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Progress.TotalProcesses))
+			if resp.Progress.WorkflowProgress == nil {
+				r.Progress.WorkflowProgress = nil
+			} else {
+				r.Progress.WorkflowProgress = &tfTypes.WorkflowLoad{}
+				r.Progress.WorkflowProgress.Aborted = types.Int64Value(resp.Progress.WorkflowProgress.Aborted)
+				r.Progress.WorkflowProgress.Cached = types.Int64Value(resp.Progress.WorkflowProgress.Cached)
+				r.Progress.WorkflowProgress.Cost = types.Float64PointerValue(resp.Progress.WorkflowProgress.Cost)
+				r.Progress.WorkflowProgress.CPUEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.CPUEfficiency)
+				r.Progress.WorkflowProgress.CPULoad = types.Int64Value(resp.Progress.WorkflowProgress.CPULoad)
+				r.Progress.WorkflowProgress.Cpus = types.Int64Value(resp.Progress.WorkflowProgress.Cpus)
+				r.Progress.WorkflowProgress.CPUTime = types.Int64Value(resp.Progress.WorkflowProgress.CPUTime)
+				r.Progress.WorkflowProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.DateCreated))
+				r.Progress.WorkflowProgress.Executors = make([]types.String, 0, len(resp.Progress.WorkflowProgress.Executors))
+				for _, v := range resp.Progress.WorkflowProgress.Executors {
+					r.Progress.WorkflowProgress.Executors = append(r.Progress.WorkflowProgress.Executors, types.StringValue(v))
+				}
+				r.Progress.WorkflowProgress.Failed = types.Int64Value(resp.Progress.WorkflowProgress.Failed)
+				r.Progress.WorkflowProgress.InvCtxSwitch = types.Int64Value(resp.Progress.WorkflowProgress.InvCtxSwitch)
+				r.Progress.WorkflowProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.LastUpdated))
+				r.Progress.WorkflowProgress.LoadCpus = types.Int64Value(resp.Progress.WorkflowProgress.LoadCpus)
+				r.Progress.WorkflowProgress.LoadMemory = types.Int64Value(resp.Progress.WorkflowProgress.LoadMemory)
+				r.Progress.WorkflowProgress.LoadTasks = types.Int64Value(resp.Progress.WorkflowProgress.LoadTasks)
+				r.Progress.WorkflowProgress.MemoryEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.MemoryEfficiency)
+				r.Progress.WorkflowProgress.MemoryReq = types.Int64Value(resp.Progress.WorkflowProgress.MemoryReq)
+				r.Progress.WorkflowProgress.MemoryRss = types.Int64Value(resp.Progress.WorkflowProgress.MemoryRss)
+				r.Progress.WorkflowProgress.PeakCpus = types.Int64Value(resp.Progress.WorkflowProgress.PeakCpus)
+				r.Progress.WorkflowProgress.PeakMemory = types.Int64Value(resp.Progress.WorkflowProgress.PeakMemory)
+				r.Progress.WorkflowProgress.PeakTasks = types.Int64Value(resp.Progress.WorkflowProgress.PeakTasks)
+				r.Progress.WorkflowProgress.Pending = types.Int64Value(resp.Progress.WorkflowProgress.Pending)
+				r.Progress.WorkflowProgress.ReadBytes = types.Int64Value(resp.Progress.WorkflowProgress.ReadBytes)
+				r.Progress.WorkflowProgress.Running = types.Int64Value(resp.Progress.WorkflowProgress.Running)
+				r.Progress.WorkflowProgress.Submitted = types.Int64Value(resp.Progress.WorkflowProgress.Submitted)
+				r.Progress.WorkflowProgress.Succeeded = types.Int64Value(resp.Progress.WorkflowProgress.Succeeded)
+				r.Progress.WorkflowProgress.VolCtxSwitch = types.Int64Value(resp.Progress.WorkflowProgress.VolCtxSwitch)
+				r.Progress.WorkflowProgress.WriteBytes = types.Int64Value(resp.Progress.WorkflowProgress.WriteBytes)
+			}
 		}
 		if resp.Workflow == nil {
 			r.Workflow = nil
 		} else {
 			r.Workflow = &tfTypes.Workflow{}
-			r.Workflow.RequiresAttention = types.BoolPointerValue(resp.Workflow.RequiresAttention)
-			if resp.Workflow.Status != nil {
-				r.Workflow.Status = types.StringValue(string(*resp.Workflow.Status))
-			} else {
-				r.Workflow.Status = types.StringNull()
-			}
-			r.Workflow.OwnerID = types.Int64PointerValue(resp.Workflow.OwnerID)
-			r.Workflow.Repository = types.StringPointerValue(resp.Workflow.Repository)
-			r.Workflow.ID = types.StringPointerValue(resp.Workflow.ID)
-			r.Workflow.Submit = types.StringValue(typeconvert.TimeToString(resp.Workflow.Submit))
-			r.Workflow.Start = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Start))
-			r.Workflow.Complete = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Complete))
-			r.Workflow.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.DateCreated))
-			r.Workflow.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.LastUpdated))
-			r.Workflow.RunName = types.StringValue(resp.Workflow.RunName)
-			r.Workflow.SessionID = types.StringValue(resp.Workflow.SessionID)
-			r.Workflow.Profile = types.StringPointerValue(resp.Workflow.Profile)
-			r.Workflow.WorkDir = types.StringValue(resp.Workflow.WorkDir)
-			r.Workflow.CommitID = types.StringPointerValue(resp.Workflow.CommitID)
-			r.Workflow.UserName = types.StringValue(resp.Workflow.UserName)
-			r.Workflow.ScriptID = types.StringPointerValue(resp.Workflow.ScriptID)
-			r.Workflow.Revision = types.StringPointerValue(resp.Workflow.Revision)
 			r.Workflow.CommandLine = types.StringValue(resp.Workflow.CommandLine)
-			r.Workflow.ProjectName = types.StringValue(resp.Workflow.ProjectName)
-			r.Workflow.ScriptName = types.StringPointerValue(resp.Workflow.ScriptName)
-			r.Workflow.LaunchID = types.StringPointerValue(resp.Workflow.LaunchID)
+			r.Workflow.CommitID = types.StringPointerValue(resp.Workflow.CommitID)
+			r.Workflow.Complete = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Complete))
 			r.Workflow.ConfigFiles = make([]types.String, 0, len(resp.Workflow.ConfigFiles))
 			for _, v := range resp.Workflow.ConfigFiles {
 				r.Workflow.ConfigFiles = append(r.Workflow.ConfigFiles, types.StringValue(v))
 			}
+			r.Workflow.ConfigText = types.StringPointerValue(resp.Workflow.ConfigText)
+			r.Workflow.Container = types.StringPointerValue(resp.Workflow.Container)
+			r.Workflow.ContainerEngine = types.StringPointerValue(resp.Workflow.ContainerEngine)
+			r.Workflow.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.DateCreated))
+			r.Workflow.Deleted = types.BoolPointerValue(resp.Workflow.Deleted)
+			r.Workflow.Duration = types.Int64PointerValue(resp.Workflow.Duration)
+			r.Workflow.ErrorMessage = types.StringPointerValue(resp.Workflow.ErrorMessage)
+			r.Workflow.ErrorReport = types.StringPointerValue(resp.Workflow.ErrorReport)
+			r.Workflow.ExitStatus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.ExitStatus))
+			r.Workflow.HomeDir = types.StringPointerValue(resp.Workflow.HomeDir)
+			r.Workflow.ID = types.StringPointerValue(resp.Workflow.ID)
+			r.Workflow.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.LastUpdated))
+			r.Workflow.LaunchDir = types.StringPointerValue(resp.Workflow.LaunchDir)
+			r.Workflow.LaunchID = types.StringPointerValue(resp.Workflow.LaunchID)
+			r.Workflow.LogFile = types.StringPointerValue(resp.Workflow.LogFile)
+			if resp.Workflow.Manifest == nil {
+				r.Workflow.Manifest = nil
+			} else {
+				r.Workflow.Manifest = &tfTypes.WfManifest{}
+				r.Workflow.Manifest.Author = types.StringPointerValue(resp.Workflow.Manifest.Author)
+				r.Workflow.Manifest.DefaultBranch = types.StringPointerValue(resp.Workflow.Manifest.DefaultBranch)
+				r.Workflow.Manifest.Description = types.StringPointerValue(resp.Workflow.Manifest.Description)
+				r.Workflow.Manifest.Gitmodules = types.StringPointerValue(resp.Workflow.Manifest.Gitmodules)
+				r.Workflow.Manifest.HomePage = types.StringPointerValue(resp.Workflow.Manifest.HomePage)
+				r.Workflow.Manifest.Icon = types.StringPointerValue(resp.Workflow.Manifest.Icon)
+				r.Workflow.Manifest.MainScript = types.StringPointerValue(resp.Workflow.Manifest.MainScript)
+				r.Workflow.Manifest.Name = types.StringPointerValue(resp.Workflow.Manifest.Name)
+				r.Workflow.Manifest.NextflowVersion = types.StringPointerValue(resp.Workflow.Manifest.NextflowVersion)
+				r.Workflow.Manifest.Version = types.StringPointerValue(resp.Workflow.Manifest.Version)
+			}
+			if resp.Workflow.Nextflow == nil {
+				r.Workflow.Nextflow = nil
+			} else {
+				r.Workflow.Nextflow = &tfTypes.WfNextflow{}
+				r.Workflow.Nextflow.Build = types.StringPointerValue(resp.Workflow.Nextflow.Build)
+				r.Workflow.Nextflow.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Nextflow.Timestamp))
+				r.Workflow.Nextflow.Version = types.StringPointerValue(resp.Workflow.Nextflow.Version)
+			}
+			r.Workflow.OperationID = types.StringPointerValue(resp.Workflow.OperationID)
+			r.Workflow.OutFile = types.StringPointerValue(resp.Workflow.OutFile)
+			r.Workflow.OwnerID = types.Int64PointerValue(resp.Workflow.OwnerID)
 			if len(resp.Workflow.Params) > 0 {
 				r.Workflow.Params = make(map[string]jsontypes.Normalized, len(resp.Workflow.Params))
 				for key, value := range resp.Workflow.Params {
@@ -175,67 +193,49 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 					r.Workflow.Params[key] = jsontypes.NewNormalizedValue(string(result))
 				}
 			}
-			r.Workflow.ConfigText = types.StringPointerValue(resp.Workflow.ConfigText)
-			if resp.Workflow.Manifest == nil {
-				r.Workflow.Manifest = nil
-			} else {
-				r.Workflow.Manifest = &tfTypes.WfManifest{}
-				r.Workflow.Manifest.NextflowVersion = types.StringPointerValue(resp.Workflow.Manifest.NextflowVersion)
-				r.Workflow.Manifest.DefaultBranch = types.StringPointerValue(resp.Workflow.Manifest.DefaultBranch)
-				r.Workflow.Manifest.Version = types.StringPointerValue(resp.Workflow.Manifest.Version)
-				r.Workflow.Manifest.HomePage = types.StringPointerValue(resp.Workflow.Manifest.HomePage)
-				r.Workflow.Manifest.Gitmodules = types.StringPointerValue(resp.Workflow.Manifest.Gitmodules)
-				r.Workflow.Manifest.Description = types.StringPointerValue(resp.Workflow.Manifest.Description)
-				r.Workflow.Manifest.Name = types.StringPointerValue(resp.Workflow.Manifest.Name)
-				r.Workflow.Manifest.MainScript = types.StringPointerValue(resp.Workflow.Manifest.MainScript)
-				r.Workflow.Manifest.Author = types.StringPointerValue(resp.Workflow.Manifest.Author)
-				r.Workflow.Manifest.Icon = types.StringPointerValue(resp.Workflow.Manifest.Icon)
-			}
-			if resp.Workflow.Nextflow == nil {
-				r.Workflow.Nextflow = nil
-			} else {
-				r.Workflow.Nextflow = &tfTypes.WfNextflow{}
-				r.Workflow.Nextflow.Version = types.StringPointerValue(resp.Workflow.Nextflow.Version)
-				r.Workflow.Nextflow.Build = types.StringPointerValue(resp.Workflow.Nextflow.Build)
-				r.Workflow.Nextflow.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Nextflow.Timestamp))
-			}
+			r.Workflow.Profile = types.StringPointerValue(resp.Workflow.Profile)
+			r.Workflow.ProjectDir = types.StringPointerValue(resp.Workflow.ProjectDir)
+			r.Workflow.ProjectName = types.StringValue(resp.Workflow.ProjectName)
+			r.Workflow.Repository = types.StringPointerValue(resp.Workflow.Repository)
+			r.Workflow.RequiresAttention = types.BoolPointerValue(resp.Workflow.RequiresAttention)
+			r.Workflow.Resume = types.BoolPointerValue(resp.Workflow.Resume)
+			r.Workflow.Revision = types.StringPointerValue(resp.Workflow.Revision)
+			r.Workflow.RunName = types.StringValue(resp.Workflow.RunName)
+			r.Workflow.ScriptFile = types.StringPointerValue(resp.Workflow.ScriptFile)
+			r.Workflow.ScriptID = types.StringPointerValue(resp.Workflow.ScriptID)
+			r.Workflow.ScriptName = types.StringPointerValue(resp.Workflow.ScriptName)
+			r.Workflow.SessionID = types.StringValue(resp.Workflow.SessionID)
+			r.Workflow.Start = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Start))
 			if resp.Workflow.Stats == nil {
 				r.Workflow.Stats = nil
 			} else {
 				r.Workflow.Stats = &tfTypes.WfStats{}
-				r.Workflow.Stats.ComputeTimeFmt = types.StringPointerValue(resp.Workflow.Stats.ComputeTimeFmt)
 				r.Workflow.Stats.CachedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.CachedCount))
-				r.Workflow.Stats.FailedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.FailedCount))
-				r.Workflow.Stats.IgnoredCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.IgnoredCount))
-				r.Workflow.Stats.SucceedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.SucceedCount))
 				r.Workflow.Stats.CachedCountFmt = types.StringPointerValue(resp.Workflow.Stats.CachedCountFmt)
-				r.Workflow.Stats.SucceedCountFmt = types.StringPointerValue(resp.Workflow.Stats.SucceedCountFmt)
-				r.Workflow.Stats.FailedCountFmt = types.StringPointerValue(resp.Workflow.Stats.FailedCountFmt)
-				r.Workflow.Stats.IgnoredCountFmt = types.StringPointerValue(resp.Workflow.Stats.IgnoredCountFmt)
-				r.Workflow.Stats.CachedPct = types.Float32PointerValue(resp.Workflow.Stats.CachedPct)
-				r.Workflow.Stats.FailedPct = types.Float32PointerValue(resp.Workflow.Stats.FailedPct)
-				r.Workflow.Stats.SucceedPct = types.Float32PointerValue(resp.Workflow.Stats.SucceedPct)
-				r.Workflow.Stats.IgnoredPct = types.Float32PointerValue(resp.Workflow.Stats.IgnoredPct)
 				r.Workflow.Stats.CachedDuration = types.Int64PointerValue(resp.Workflow.Stats.CachedDuration)
+				r.Workflow.Stats.CachedPct = types.Float32PointerValue(resp.Workflow.Stats.CachedPct)
+				r.Workflow.Stats.ComputeTimeFmt = types.StringPointerValue(resp.Workflow.Stats.ComputeTimeFmt)
+				r.Workflow.Stats.FailedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.FailedCount))
+				r.Workflow.Stats.FailedCountFmt = types.StringPointerValue(resp.Workflow.Stats.FailedCountFmt)
 				r.Workflow.Stats.FailedDuration = types.Int64PointerValue(resp.Workflow.Stats.FailedDuration)
+				r.Workflow.Stats.FailedPct = types.Float32PointerValue(resp.Workflow.Stats.FailedPct)
+				r.Workflow.Stats.IgnoredCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.IgnoredCount))
+				r.Workflow.Stats.IgnoredCountFmt = types.StringPointerValue(resp.Workflow.Stats.IgnoredCountFmt)
+				r.Workflow.Stats.IgnoredPct = types.Float32PointerValue(resp.Workflow.Stats.IgnoredPct)
+				r.Workflow.Stats.SucceedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.SucceedCount))
+				r.Workflow.Stats.SucceedCountFmt = types.StringPointerValue(resp.Workflow.Stats.SucceedCountFmt)
 				r.Workflow.Stats.SucceedDuration = types.Int64PointerValue(resp.Workflow.Stats.SucceedDuration)
+				r.Workflow.Stats.SucceedPct = types.Float32PointerValue(resp.Workflow.Stats.SucceedPct)
 			}
-			r.Workflow.ErrorMessage = types.StringPointerValue(resp.Workflow.ErrorMessage)
-			r.Workflow.ErrorReport = types.StringPointerValue(resp.Workflow.ErrorReport)
-			r.Workflow.Deleted = types.BoolPointerValue(resp.Workflow.Deleted)
-			r.Workflow.ProjectDir = types.StringPointerValue(resp.Workflow.ProjectDir)
-			r.Workflow.HomeDir = types.StringPointerValue(resp.Workflow.HomeDir)
-			r.Workflow.Container = types.StringPointerValue(resp.Workflow.Container)
-			r.Workflow.ContainerEngine = types.StringPointerValue(resp.Workflow.ContainerEngine)
-			r.Workflow.ScriptFile = types.StringPointerValue(resp.Workflow.ScriptFile)
-			r.Workflow.LaunchDir = types.StringPointerValue(resp.Workflow.LaunchDir)
-			r.Workflow.Duration = types.Int64PointerValue(resp.Workflow.Duration)
-			r.Workflow.ExitStatus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.ExitStatus))
-			r.Workflow.Resume = types.BoolPointerValue(resp.Workflow.Resume)
+			if resp.Workflow.Status != nil {
+				r.Workflow.Status = types.StringValue(string(*resp.Workflow.Status))
+			} else {
+				r.Workflow.Status = types.StringNull()
+			}
+			r.Workflow.Submit = types.StringValue(typeconvert.TimeToString(resp.Workflow.Submit))
 			r.Workflow.Success = types.BoolPointerValue(resp.Workflow.Success)
-			r.Workflow.LogFile = types.StringPointerValue(resp.Workflow.LogFile)
-			r.Workflow.OutFile = types.StringPointerValue(resp.Workflow.OutFile)
-			r.Workflow.OperationID = types.StringPointerValue(resp.Workflow.OperationID)
+			r.Workflow.UserName = types.StringValue(resp.Workflow.UserName)
+			r.Workflow.WorkDir = types.StringValue(resp.Workflow.WorkDir)
 		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
@@ -349,9 +349,12 @@ func (r *WorkflowsResourceModel) ToSharedSubmitWorkflowLaunchRequest(ctx context
 func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Context) (*shared.WorkflowLaunchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var computeEnvID string
-	computeEnvID = r.ComputeEnvID.ValueString()
-
+	computeEnvID := new(string)
+	if !r.ComputeEnvID.IsUnknown() && !r.ComputeEnvID.IsNull() {
+		*computeEnvID = r.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
 	runName := new(string)
 	if !r.RunName.IsUnknown() && !r.RunName.IsNull() {
 		*runName = r.RunName.ValueString()
@@ -361,14 +364,23 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	var pipeline string
 	pipeline = r.Pipeline.ValueString()
 
-	var workDir string
-	workDir = r.WorkDir.ValueString()
-
+	workDir := new(string)
+	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
+		*workDir = r.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	revision := new(string)
 	if !r.Revision.IsUnknown() && !r.Revision.IsNull() {
 		*revision = r.Revision.ValueString()
 	} else {
 		revision = nil
+	}
+	commitID := new(string)
+	if !r.CommitID.IsUnknown() && !r.CommitID.IsNull() {
+		*commitID = r.CommitID.ValueString()
+	} else {
+		commitID = nil
 	}
 	sessionID := new(string)
 	if !r.SessionID.IsUnknown() && !r.SessionID.IsNull() {
@@ -500,6 +512,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		Pipeline:            pipeline,
 		WorkDir:             workDir,
 		Revision:            revision,
+		CommitID:            commitID,
 		SessionID:           sessionID,
 		ConfigProfiles:      configProfiles,
 		UserSecrets:         userSecrets,

@@ -8,12 +8,13 @@ import (
 )
 
 type DataStudioCheckpointDto struct {
-	ID          int64      `json:"id"`
-	Name        string     `json:"name"`
-	DateCreated time.Time  `json:"dateCreated"`
-	DateSaved   time.Time  `json:"dateSaved"`
-	Author      StudioUser `json:"author"`
-	Path        string     `json:"path"`
+	ID          int64                  `json:"id"`
+	Name        string                 `json:"name"`
+	DateCreated time.Time              `json:"dateCreated"`
+	DateSaved   time.Time              `json:"dateSaved"`
+	Author      UserInfo               `json:"author"`
+	Path        string                 `json:"path"`
+	Status      StudioCheckpointStatus `json:"status"`
 }
 
 func (d DataStudioCheckpointDto) MarshalJSON() ([]byte, error) {
@@ -21,50 +22,57 @@ func (d DataStudioCheckpointDto) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DataStudioCheckpointDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"id", "name", "dateCreated", "dateSaved", "author", "path"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"id", "name", "dateCreated", "dateSaved", "author", "path", "status"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *DataStudioCheckpointDto) GetID() int64 {
-	if o == nil {
+func (d *DataStudioCheckpointDto) GetID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DataStudioCheckpointDto) GetName() string {
-	if o == nil {
+func (d *DataStudioCheckpointDto) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataStudioCheckpointDto) GetDateCreated() time.Time {
-	if o == nil {
+func (d *DataStudioCheckpointDto) GetDateCreated() time.Time {
+	if d == nil {
 		return time.Time{}
 	}
-	return o.DateCreated
+	return d.DateCreated
 }
 
-func (o *DataStudioCheckpointDto) GetDateSaved() time.Time {
-	if o == nil {
+func (d *DataStudioCheckpointDto) GetDateSaved() time.Time {
+	if d == nil {
 		return time.Time{}
 	}
-	return o.DateSaved
+	return d.DateSaved
 }
 
-func (o *DataStudioCheckpointDto) GetAuthor() StudioUser {
-	if o == nil {
-		return StudioUser{}
+func (d *DataStudioCheckpointDto) GetAuthor() UserInfo {
+	if d == nil {
+		return UserInfo{}
 	}
-	return o.Author
+	return d.Author
 }
 
-func (o *DataStudioCheckpointDto) GetPath() string {
-	if o == nil {
+func (d *DataStudioCheckpointDto) GetPath() string {
+	if d == nil {
 		return ""
 	}
-	return o.Path
+	return d.Path
+}
+
+func (d *DataStudioCheckpointDto) GetStatus() StudioCheckpointStatus {
+	if d == nil {
+		return StudioCheckpointStatus("")
+	}
+	return d.Status
 }

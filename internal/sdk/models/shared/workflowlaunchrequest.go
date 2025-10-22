@@ -8,21 +8,20 @@ import (
 )
 
 type WorkflowLaunchRequest struct {
-	ComputeEnvID     string   `json:"computeEnvId"`
-	RunName          *string  `json:"runName,omitempty"`
-	Pipeline         string   `json:"pipeline"`
-	WorkDir          string   `json:"workDir"`
-	Revision         *string  `json:"revision,omitempty"`
-	SessionID        *string  `json:"sessionId,omitempty"`
-	ConfigProfiles   []string `json:"configProfiles,omitempty"`
-	UserSecrets      []string `json:"userSecrets,omitempty"`
-	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
-	ConfigText       *string  `json:"configText,omitempty"`
-	TowerConfig      *string  `json:"towerConfig,omitempty"`
-	ParamsText       *string  `json:"paramsText,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	ComputeEnvID        *string    `json:"computeEnvId,omitempty"`
+	RunName             *string    `json:"runName,omitempty"`
+	Pipeline            string     `json:"pipeline"`
+	WorkDir             *string    `json:"workDir,omitempty"`
+	Revision            *string    `json:"revision,omitempty"`
+	CommitID            *string    `json:"commitId,omitempty"`
+	SessionID           *string    `json:"sessionId,omitempty"`
+	ConfigProfiles      []string   `json:"configProfiles,omitempty"`
+	UserSecrets         []string   `json:"userSecrets,omitempty"`
+	WorkspaceSecrets    []string   `json:"workspaceSecrets,omitempty"`
+	ConfigText          *string    `json:"configText,omitempty"`
+	TowerConfig         *string    `json:"towerConfig,omitempty"`
+	ParamsText          *string    `json:"paramsText,omitempty"`
+	PreRunScript        *string    `json:"preRunScript,omitempty"`
 	PostRunScript       *string    `json:"postRunScript,omitempty"`
 	MainScript          *string    `json:"mainScript,omitempty"`
 	EntryName           *string    `json:"entryName,omitempty"`
@@ -44,197 +43,204 @@ func (w WorkflowLaunchRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (w *WorkflowLaunchRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"computeEnvId", "pipeline", "workDir"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"pipeline"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *WorkflowLaunchRequest) GetComputeEnvID() string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetComputeEnvID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.ComputeEnvID
+}
+
+func (w *WorkflowLaunchRequest) GetRunName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.RunName
+}
+
+func (w *WorkflowLaunchRequest) GetPipeline() string {
+	if w == nil {
 		return ""
 	}
-	return o.ComputeEnvID
+	return w.Pipeline
 }
 
-func (o *WorkflowLaunchRequest) GetRunName() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetWorkDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.RunName
+	return w.WorkDir
 }
 
-func (o *WorkflowLaunchRequest) GetPipeline() string {
-	if o == nil {
-		return ""
-	}
-	return o.Pipeline
-}
-
-func (o *WorkflowLaunchRequest) GetWorkDir() string {
-	if o == nil {
-		return ""
-	}
-	return o.WorkDir
-}
-
-func (o *WorkflowLaunchRequest) GetRevision() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetRevision() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Revision
+	return w.Revision
 }
 
-func (o *WorkflowLaunchRequest) GetSessionID() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetCommitID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.SessionID
+	return w.CommitID
 }
 
-func (o *WorkflowLaunchRequest) GetConfigProfiles() []string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetSessionID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ConfigProfiles
+	return w.SessionID
 }
 
-func (o *WorkflowLaunchRequest) GetUserSecrets() []string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetConfigProfiles() []string {
+	if w == nil {
 		return nil
 	}
-	return o.UserSecrets
+	return w.ConfigProfiles
 }
 
-func (o *WorkflowLaunchRequest) GetWorkspaceSecrets() []string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetUserSecrets() []string {
+	if w == nil {
 		return nil
 	}
-	return o.WorkspaceSecrets
+	return w.UserSecrets
 }
 
-func (o *WorkflowLaunchRequest) GetConfigText() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetWorkspaceSecrets() []string {
+	if w == nil {
 		return nil
 	}
-	return o.ConfigText
+	return w.WorkspaceSecrets
 }
 
-func (o *WorkflowLaunchRequest) GetTowerConfig() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetConfigText() *string {
+	if w == nil {
 		return nil
 	}
-	return o.TowerConfig
+	return w.ConfigText
 }
 
-func (o *WorkflowLaunchRequest) GetParamsText() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetTowerConfig() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ParamsText
+	return w.TowerConfig
 }
 
-func (o *WorkflowLaunchRequest) GetPreRunScript() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetParamsText() *string {
+	if w == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return w.ParamsText
 }
 
-func (o *WorkflowLaunchRequest) GetPostRunScript() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetPreRunScript() *string {
+	if w == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return w.PreRunScript
 }
 
-func (o *WorkflowLaunchRequest) GetMainScript() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetPostRunScript() *string {
+	if w == nil {
 		return nil
 	}
-	return o.MainScript
+	return w.PostRunScript
 }
 
-func (o *WorkflowLaunchRequest) GetEntryName() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetMainScript() *string {
+	if w == nil {
 		return nil
 	}
-	return o.EntryName
+	return w.MainScript
 }
 
-func (o *WorkflowLaunchRequest) GetSchemaName() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetEntryName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.SchemaName
+	return w.EntryName
 }
 
-func (o *WorkflowLaunchRequest) GetResume() *bool {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetSchemaName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Resume
+	return w.SchemaName
 }
 
-func (o *WorkflowLaunchRequest) GetPullLatest() *bool {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetResume() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.PullLatest
+	return w.Resume
 }
 
-func (o *WorkflowLaunchRequest) GetStubRun() *bool {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetPullLatest() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.StubRun
+	return w.PullLatest
 }
 
-func (o *WorkflowLaunchRequest) GetOptimizationID() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetStubRun() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.OptimizationID
+	return w.StubRun
 }
 
-func (o *WorkflowLaunchRequest) GetOptimizationTargets() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetOptimizationID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.OptimizationTargets
+	return w.OptimizationID
 }
 
-func (o *WorkflowLaunchRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetOptimizationTargets() *string {
+	if w == nil {
 		return nil
 	}
-	return o.LabelIds
+	return w.OptimizationTargets
 }
 
-func (o *WorkflowLaunchRequest) GetHeadJobCpus() *int {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetLabelIds() []int64 {
+	if w == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return w.LabelIds
 }
 
-func (o *WorkflowLaunchRequest) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetHeadJobCpus() *int {
+	if w == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return w.HeadJobCpus
 }
 
-func (o *WorkflowLaunchRequest) GetLaunchContainer() *string {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetHeadJobMemoryMb() *int {
+	if w == nil {
 		return nil
 	}
-	return o.LaunchContainer
+	return w.HeadJobMemoryMb
 }
 
-func (o *WorkflowLaunchRequest) GetDateCreated() *time.Time {
-	if o == nil {
+func (w *WorkflowLaunchRequest) GetLaunchContainer() *string {
+	if w == nil {
 		return nil
 	}
-	return o.DateCreated
+	return w.LaunchContainer
+}
+
+func (w *WorkflowLaunchRequest) GetDateCreated() *time.Time {
+	if w == nil {
+		return nil
+	}
+	return w.DateCreated
 }

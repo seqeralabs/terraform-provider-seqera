@@ -306,3 +306,79 @@ actions:
   - target: $.components.schemas.WorkspaceDbDto.properties.visibility
     update:
       description: Visibility level of the workspace (public, private, etc.)
+
+  # DataStudioConfiguration field descriptions
+  - target: $.components.schemas.DataStudioConfiguration.properties.memory
+    update:
+      description: Memory allocation for the data studio in megabytes (MB)
+  - target: $.components.schemas.DataStudioConfiguration.properties.cpu
+    update:
+      description: Number of CPU cores to allocate to the data studio
+  - target: $.components.schemas.DataStudioConfiguration.properties.gpu
+    update:
+      description: Number of GPUs to allocate to the data studio
+  - target: $.components.schemas.DataStudioConfiguration.properties.lifespanHours
+    update:
+      description: Maximum lifespan of the data studio session in hours
+
+  # Launch field descriptions
+  - target: $.components.schemas.Launch.properties.workDir
+    update:
+      description: Working directory for workflow execution
+  - target: $.components.schemas.Launch.properties.preRunScript
+    update:
+      description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+  - target: $.components.schemas.Launch.properties.postRunScript
+    update:
+      description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+  - target: $.components.schemas.Launch.properties.pipeline
+    update:
+      description: Repository URL or name of the Nextflow pipeline to execute
+  - target: $.components.schemas.Launch.properties.revision
+    update:
+      description: Git branch, tag, or commit hash to use for the pipeline
+  - target: $.components.schemas.Launch.properties.configText
+    update:
+      description: Nextflow configuration content to customize the pipeline execution
+  - target: $.components.schemas.Launch.properties.paramsText
+    update:
+      description: Pipeline parameters in JSON or YAML format
+  - target: $.components.schemas.Launch.properties.mainScript
+    update:
+      description: Main Nextflow script file to execute (defaults to main.nf)
+  - target: $.components.schemas.Launch.properties.entryName
+    update:
+      description: Name of the workflow entry point when using multiple workflows
+  - target: $.components.schemas.Launch.properties.schemaName
+    update:
+      description: Name of the pipeline schema file for parameter validation
+  - target: $.components.schemas.Launch.properties.resume
+    update:
+      description: Enable resuming workflow execution from the last successful step
+  - target: $.components.schemas.Launch.properties.pullLatest
+    update:
+      description: Pull the latest version of the pipeline before execution
+  - target: $.components.schemas.Launch.properties.stubRun
+    update:
+      description: Execute workflow in stub mode for testing without running actual processes
+  - target: $.components.schemas.Launch.properties.runName
+    update:
+      description: Custom name for the workflow run
+  - target: $.components.schemas.Launch.properties.configProfiles
+    update:
+      description: List of Nextflow configuration profiles to activate
+  - target: $.components.schemas.Launch.properties.userSecrets
+    update:
+      description: List of user-level secrets to make available to the workflow
+  - target: $.components.schemas.Launch.properties.workspaceSecrets
+    update:
+      description: List of workspace-level secrets to make available to the workflow
+  - target: $.components.schemas.Launch.properties.headJobCpus
+    update:
+      description: Number of CPUs to allocate for the head job
+  - target: $.components.schemas.Launch.properties.headJobMemoryMb
+    update:
+      description: Memory in megabytes (MB) to allocate for the head job
+  - target: $.components.schemas.Launch.properties.launchContainer
+    update:
+      description: Container image to use for launching the workflow

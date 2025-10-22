@@ -7,16 +7,16 @@ type ListWorkflowsResponse struct {
 	TotalSize *int64                                      `json:"totalSize,omitempty"`
 }
 
-func (o *ListWorkflowsResponse) GetWorkflows() []ListWorkflowsResponseListWorkflowsElement {
-	if o == nil {
+func (l *ListWorkflowsResponse) GetWorkflows() []ListWorkflowsResponseListWorkflowsElement {
+	if l == nil {
 		return nil
 	}
-	return o.Workflows
+	return l.Workflows
 }
 
-func (o *ListWorkflowsResponse) GetTotalSize() *int64 {
-	if o == nil {
+func (l *ListWorkflowsResponse) GetTotalSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.TotalSize
+	return l.TotalSize
 }

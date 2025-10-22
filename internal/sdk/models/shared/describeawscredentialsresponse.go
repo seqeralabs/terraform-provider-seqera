@@ -6,9 +6,9 @@ type DescribeAWSCredentialsResponse struct {
 	Credentials *AWSCredentialOutput `json:"credentials,omitempty"`
 }
 
-func (o *DescribeAWSCredentialsResponse) GetCredentials() *AWSCredentialOutput {
-	if o == nil {
+func (d *DescribeAWSCredentialsResponse) GetCredentials() *AWSCredentialOutput {
+	if d == nil {
 		return nil
 	}
-	return o.Credentials
+	return d.Credentials
 }

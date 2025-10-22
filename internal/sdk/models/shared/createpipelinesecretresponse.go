@@ -6,9 +6,9 @@ type CreatePipelineSecretResponse struct {
 	SecretID *int64 `json:"secretId,omitempty"`
 }
 
-func (o *CreatePipelineSecretResponse) GetSecretID() *int64 {
-	if o == nil {
+func (c *CreatePipelineSecretResponse) GetSecretID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.SecretID
+	return c.SecretID
 }

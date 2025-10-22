@@ -6,9 +6,9 @@ type TraceHeartbeatRequest struct {
 	Progress *TraceProgressData `json:"progress,omitempty"`
 }
 
-func (o *TraceHeartbeatRequest) GetProgress() *TraceProgressData {
-	if o == nil {
+func (t *TraceHeartbeatRequest) GetProgress() *TraceProgressData {
+	if t == nil {
 		return nil
 	}
-	return o.Progress
+	return t.Progress
 }

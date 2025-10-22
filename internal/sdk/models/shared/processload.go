@@ -58,191 +58,191 @@ func (p *ProcessLoad) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ProcessLoad) GetPending() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetPending() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Pending
+	return p.Pending
 }
 
-func (o *ProcessLoad) GetSubmitted() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetSubmitted() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Submitted
+	return p.Submitted
 }
 
-func (o *ProcessLoad) GetRunning() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetRunning() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Running
+	return p.Running
 }
 
-func (o *ProcessLoad) GetSucceeded() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetSucceeded() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Succeeded
+	return p.Succeeded
 }
 
-func (o *ProcessLoad) GetFailed() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetFailed() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Failed
+	return p.Failed
 }
 
-func (o *ProcessLoad) GetCached() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetCached() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Cached
+	return p.Cached
 }
 
-func (o *ProcessLoad) GetAborted() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetAborted() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Aborted
+	return p.Aborted
 }
 
-func (o *ProcessLoad) GetMemoryEfficiency() *float32 {
-	if o == nil {
+func (p *ProcessLoad) GetMemoryEfficiency() *float32 {
+	if p == nil {
 		return nil
 	}
-	return o.MemoryEfficiency
+	return p.MemoryEfficiency
 }
 
-func (o *ProcessLoad) GetCPUEfficiency() *float32 {
-	if o == nil {
+func (p *ProcessLoad) GetCPUEfficiency() *float32 {
+	if p == nil {
 		return nil
 	}
-	return o.CPUEfficiency
+	return p.CPUEfficiency
 }
 
-func (o *ProcessLoad) GetDateCreated() *time.Time {
-	if o == nil {
+func (p *ProcessLoad) GetDateCreated() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.DateCreated
+	return p.DateCreated
 }
 
-func (o *ProcessLoad) GetLastUpdated() *time.Time {
-	if o == nil {
+func (p *ProcessLoad) GetLastUpdated() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return p.LastUpdated
 }
 
-func (o *ProcessLoad) GetProcess() string {
-	if o == nil {
+func (p *ProcessLoad) GetProcess() string {
+	if p == nil {
 		return ""
 	}
-	return o.Process
+	return p.Process
 }
 
-func (o *ProcessLoad) GetCpus() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetCpus() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.Cpus
+	return p.Cpus
 }
 
-func (o *ProcessLoad) GetCPUTime() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetCPUTime() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.CPUTime
+	return p.CPUTime
 }
 
-func (o *ProcessLoad) GetCPULoad() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetCPULoad() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.CPULoad
+	return p.CPULoad
 }
 
-func (o *ProcessLoad) GetMemoryRss() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetMemoryRss() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.MemoryRss
+	return p.MemoryRss
 }
 
-func (o *ProcessLoad) GetMemoryReq() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetMemoryReq() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.MemoryReq
+	return p.MemoryReq
 }
 
-func (o *ProcessLoad) GetReadBytes() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetReadBytes() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.ReadBytes
+	return p.ReadBytes
 }
 
-func (o *ProcessLoad) GetWriteBytes() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetWriteBytes() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.WriteBytes
+	return p.WriteBytes
 }
 
-func (o *ProcessLoad) GetVolCtxSwitch() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetVolCtxSwitch() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.VolCtxSwitch
+	return p.VolCtxSwitch
 }
 
-func (o *ProcessLoad) GetInvCtxSwitch() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetInvCtxSwitch() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.InvCtxSwitch
+	return p.InvCtxSwitch
 }
 
-func (o *ProcessLoad) GetLoadTasks() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetLoadTasks() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.LoadTasks
+	return p.LoadTasks
 }
 
-func (o *ProcessLoad) GetLoadCpus() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetLoadCpus() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.LoadCpus
+	return p.LoadCpus
 }
 
-func (o *ProcessLoad) GetLoadMemory() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetLoadMemory() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.LoadMemory
+	return p.LoadMemory
 }
 
-func (o *ProcessLoad) GetPeakCpus() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetPeakCpus() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.PeakCpus
+	return p.PeakCpus
 }
 
-func (o *ProcessLoad) GetPeakTasks() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetPeakTasks() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.PeakTasks
+	return p.PeakTasks
 }
 
-func (o *ProcessLoad) GetPeakMemory() int64 {
-	if o == nil {
+func (p *ProcessLoad) GetPeakMemory() int64 {
+	if p == nil {
 		return 0
 	}
-	return o.PeakMemory
+	return p.PeakMemory
 }

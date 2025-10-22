@@ -3,28 +3,28 @@
 package shared
 
 type DataStudioWorkspaceSettingsResponse struct {
-	OrgID         int64 `json:"orgId"`
-	WspID         int64 `json:"wspId"`
-	LifespanHours int   `json:"lifespanHours"`
+	OrgID         *int64 `json:"orgId,omitempty"`
+	WspID         *int64 `json:"wspId,omitempty"`
+	LifespanHours *int   `json:"lifespanHours,omitempty"`
 }
 
-func (o *DataStudioWorkspaceSettingsResponse) GetOrgID() int64 {
-	if o == nil {
-		return 0
+func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() *int64 {
+	if d == nil {
+		return nil
 	}
-	return o.OrgID
+	return d.OrgID
 }
 
-func (o *DataStudioWorkspaceSettingsResponse) GetWspID() int64 {
-	if o == nil {
-		return 0
+func (d *DataStudioWorkspaceSettingsResponse) GetWspID() *int64 {
+	if d == nil {
+		return nil
 	}
-	return o.WspID
+	return d.WspID
 }
 
-func (o *DataStudioWorkspaceSettingsResponse) GetLifespanHours() int {
-	if o == nil {
-		return 0
+func (d *DataStudioWorkspaceSettingsResponse) GetLifespanHours() *int {
+	if d == nil {
+		return nil
 	}
-	return o.LifespanHours
+	return d.LifespanHours
 }

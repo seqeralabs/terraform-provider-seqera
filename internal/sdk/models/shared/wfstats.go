@@ -21,114 +21,114 @@ type WfStats struct {
 	SucceedDuration *int64   `json:"succeedDuration,omitempty"`
 }
 
-func (o *WfStats) GetComputeTimeFmt() *string {
-	if o == nil {
+func (w *WfStats) GetComputeTimeFmt() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ComputeTimeFmt
+	return w.ComputeTimeFmt
 }
 
-func (o *WfStats) GetCachedCount() *int {
-	if o == nil {
+func (w *WfStats) GetCachedCount() *int {
+	if w == nil {
 		return nil
 	}
-	return o.CachedCount
+	return w.CachedCount
 }
 
-func (o *WfStats) GetFailedCount() *int {
-	if o == nil {
+func (w *WfStats) GetFailedCount() *int {
+	if w == nil {
 		return nil
 	}
-	return o.FailedCount
+	return w.FailedCount
 }
 
-func (o *WfStats) GetIgnoredCount() *int {
-	if o == nil {
+func (w *WfStats) GetIgnoredCount() *int {
+	if w == nil {
 		return nil
 	}
-	return o.IgnoredCount
+	return w.IgnoredCount
 }
 
-func (o *WfStats) GetSucceedCount() *int {
-	if o == nil {
+func (w *WfStats) GetSucceedCount() *int {
+	if w == nil {
 		return nil
 	}
-	return o.SucceedCount
+	return w.SucceedCount
 }
 
-func (o *WfStats) GetCachedCountFmt() *string {
-	if o == nil {
+func (w *WfStats) GetCachedCountFmt() *string {
+	if w == nil {
 		return nil
 	}
-	return o.CachedCountFmt
+	return w.CachedCountFmt
 }
 
-func (o *WfStats) GetSucceedCountFmt() *string {
-	if o == nil {
+func (w *WfStats) GetSucceedCountFmt() *string {
+	if w == nil {
 		return nil
 	}
-	return o.SucceedCountFmt
+	return w.SucceedCountFmt
 }
 
-func (o *WfStats) GetFailedCountFmt() *string {
-	if o == nil {
+func (w *WfStats) GetFailedCountFmt() *string {
+	if w == nil {
 		return nil
 	}
-	return o.FailedCountFmt
+	return w.FailedCountFmt
 }
 
-func (o *WfStats) GetIgnoredCountFmt() *string {
-	if o == nil {
+func (w *WfStats) GetIgnoredCountFmt() *string {
+	if w == nil {
 		return nil
 	}
-	return o.IgnoredCountFmt
+	return w.IgnoredCountFmt
 }
 
-func (o *WfStats) GetCachedPct() *float32 {
-	if o == nil {
+func (w *WfStats) GetCachedPct() *float32 {
+	if w == nil {
 		return nil
 	}
-	return o.CachedPct
+	return w.CachedPct
 }
 
-func (o *WfStats) GetFailedPct() *float32 {
-	if o == nil {
+func (w *WfStats) GetFailedPct() *float32 {
+	if w == nil {
 		return nil
 	}
-	return o.FailedPct
+	return w.FailedPct
 }
 
-func (o *WfStats) GetSucceedPct() *float32 {
-	if o == nil {
+func (w *WfStats) GetSucceedPct() *float32 {
+	if w == nil {
 		return nil
 	}
-	return o.SucceedPct
+	return w.SucceedPct
 }
 
-func (o *WfStats) GetIgnoredPct() *float32 {
-	if o == nil {
+func (w *WfStats) GetIgnoredPct() *float32 {
+	if w == nil {
 		return nil
 	}
-	return o.IgnoredPct
+	return w.IgnoredPct
 }
 
-func (o *WfStats) GetCachedDuration() *int64 {
-	if o == nil {
+func (w *WfStats) GetCachedDuration() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.CachedDuration
+	return w.CachedDuration
 }
 
-func (o *WfStats) GetFailedDuration() *int64 {
-	if o == nil {
+func (w *WfStats) GetFailedDuration() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.FailedDuration
+	return w.FailedDuration
 }
 
-func (o *WfStats) GetSucceedDuration() *int64 {
-	if o == nil {
+func (w *WfStats) GetSucceedDuration() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.SucceedDuration
+	return w.SucceedDuration
 }

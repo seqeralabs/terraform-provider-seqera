@@ -27,8 +27,8 @@ resource "seqera_credential" "my_credential" {
   credentials_id = "...my_credentials_id.."
   description    = "Google Cloud credentials for production workloads"
   keys = {
-    google = {
-      data = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
+    local = {
+      password = "...my_password..."
     }
   }
   name          = "my-gcp-credentials"
@@ -69,6 +69,7 @@ Optional:
 
 - `aws` (Attributes) (see [below for nested schema](#nestedatt--keys--aws))
 - `azure` (Attributes) (see [below for nested schema](#nestedatt--keys--azure))
+- `azure_cloud` (Attributes) (see [below for nested schema](#nestedatt--keys--azure_cloud))
 - `azure_entra` (Attributes) (see [below for nested schema](#nestedatt--keys--azure_entra))
 - `azurerepos` (Attributes) (see [below for nested schema](#nestedatt--keys--azurerepos))
 - `bitbucket` (Attributes) (see [below for nested schema](#nestedatt--keys--bitbucket))
@@ -79,6 +80,8 @@ Optional:
 - `gitlab` (Attributes) (see [below for nested schema](#nestedatt--keys--gitlab))
 - `google` (Attributes) (see [below for nested schema](#nestedatt--keys--google))
 - `k8s` (Attributes) (see [below for nested schema](#nestedatt--keys--k8s))
+- `local` (Attributes) (see [below for nested schema](#nestedatt--keys--local))
+- `s3` (Attributes) (see [below for nested schema](#nestedatt--keys--s3))
 - `seqeracompute` (Attributes) (see [below for nested schema](#nestedatt--keys--seqeracompute))
 - `ssh` (Attributes) (see [below for nested schema](#nestedatt--keys--ssh))
 - `tw_agent` (Attributes) (see [below for nested schema](#nestedatt--keys--tw_agent))
@@ -104,6 +107,21 @@ Optional:
 - `storage_name` (String)
 
 
+<a id="nestedatt--keys--azure_cloud"></a>
+### Nested Schema for `keys.azure_cloud`
+
+Optional:
+
+- `batch_key` (String)
+- `batch_name` (String)
+- `client_id` (String)
+- `client_secret` (String)
+- `storage_key` (String)
+- `storage_name` (String)
+- `subscription_id` (String)
+- `tenant_id` (String)
+
+
 <a id="nestedatt--keys--azure_entra"></a>
 ### Nested Schema for `keys.azure_entra`
 
@@ -124,6 +142,7 @@ Optional:
 Optional:
 
 - `password` (String)
+- `token` (String)
 - `username` (String)
 
 
@@ -133,6 +152,7 @@ Optional:
 Optional:
 
 - `password` (String)
+- `token` (String)
 - `username` (String)
 
 
@@ -142,6 +162,7 @@ Optional:
 Optional:
 
 - `password` (String)
+- `token` (String)
 - `username` (String)
 
 
@@ -161,6 +182,7 @@ Optional:
 Optional:
 
 - `password` (String)
+- `token` (String)
 - `username` (String)
 
 
@@ -170,6 +192,7 @@ Optional:
 Optional:
 
 - `password` (String, Sensitive)
+- `token` (String)
 - `username` (String)
 
 
@@ -199,6 +222,24 @@ Optional:
 - `certificate` (String)
 - `private_key` (String)
 - `token` (String)
+
+
+<a id="nestedatt--keys--local"></a>
+### Nested Schema for `keys.local`
+
+Optional:
+
+- `password` (String)
+
+
+<a id="nestedatt--keys--s3"></a>
+### Nested Schema for `keys.s3`
+
+Optional:
+
+- `access_key` (String)
+- `path_style_access_enabled` (Boolean)
+- `secret_key` (String)
 
 
 <a id="nestedatt--keys--seqeracompute"></a>

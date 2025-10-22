@@ -14,18 +14,18 @@ type DescribePipelineSecretRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribePipelineSecretRequest) GetSecretID() int64 {
-	if o == nil {
+func (d *DescribePipelineSecretRequest) GetSecretID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.SecretID
+	return d.SecretID
 }
 
-func (o *DescribePipelineSecretRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribePipelineSecretRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribePipelineSecretResponse struct {
@@ -41,37 +41,37 @@ type DescribePipelineSecretResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribePipelineSecretResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribePipelineSecretResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribePipelineSecretResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribePipelineSecretResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribePipelineSecretResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribePipelineSecretResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribePipelineSecretResponse) GetDescribePipelineSecretResponse() *shared.DescribePipelineSecretResponse {
-	if o == nil {
+func (d *DescribePipelineSecretResponse) GetDescribePipelineSecretResponse() *shared.DescribePipelineSecretResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribePipelineSecretResponse
+	return d.DescribePipelineSecretResponse
 }
 
-func (o *DescribePipelineSecretResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribePipelineSecretResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

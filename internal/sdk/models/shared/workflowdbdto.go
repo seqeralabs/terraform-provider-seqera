@@ -72,296 +72,296 @@ func (w *WorkflowDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *WorkflowDbDto) GetMessages() []string {
-	if o == nil {
+func (w *WorkflowDbDto) GetMessages() []string {
+	if w == nil {
 		return nil
 	}
-	return o.Messages
+	return w.Messages
 }
 
-func (o *WorkflowDbDto) GetID() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ID
+	return w.ID
 }
 
-func (o *WorkflowDbDto) GetOwnerID() *int64 {
-	if o == nil {
+func (w *WorkflowDbDto) GetOwnerID() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.OwnerID
+	return w.OwnerID
 }
 
-func (o *WorkflowDbDto) GetSubmit() *time.Time {
-	if o == nil {
+func (w *WorkflowDbDto) GetSubmit() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.Submit
+	return w.Submit
 }
 
-func (o *WorkflowDbDto) GetStart() *time.Time {
-	if o == nil {
+func (w *WorkflowDbDto) GetStart() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.Start
+	return w.Start
 }
 
-func (o *WorkflowDbDto) GetComplete() *time.Time {
-	if o == nil {
+func (w *WorkflowDbDto) GetComplete() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.Complete
+	return w.Complete
 }
 
-func (o *WorkflowDbDto) GetDateCreated() *time.Time {
-	if o == nil {
+func (w *WorkflowDbDto) GetDateCreated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.DateCreated
+	return w.DateCreated
 }
 
-func (o *WorkflowDbDto) GetLastUpdated() *time.Time {
-	if o == nil {
+func (w *WorkflowDbDto) GetLastUpdated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return w.LastUpdated
 }
 
-func (o *WorkflowDbDto) GetRunName() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetRunName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.RunName
+	return w.RunName
 }
 
-func (o *WorkflowDbDto) GetSessionID() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetSessionID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.SessionID
+	return w.SessionID
 }
 
-func (o *WorkflowDbDto) GetProfile() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetProfile() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Profile
+	return w.Profile
 }
 
-func (o *WorkflowDbDto) GetWorkDir() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetWorkDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.WorkDir
+	return w.WorkDir
 }
 
-func (o *WorkflowDbDto) GetCommitID() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetCommitID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.CommitID
+	return w.CommitID
 }
 
-func (o *WorkflowDbDto) GetUserName() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetUserName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.UserName
+	return w.UserName
 }
 
-func (o *WorkflowDbDto) GetScriptID() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetScriptID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ScriptID
+	return w.ScriptID
 }
 
-func (o *WorkflowDbDto) GetRevision() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetRevision() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Revision
+	return w.Revision
 }
 
-func (o *WorkflowDbDto) GetCommandLine() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetCommandLine() *string {
+	if w == nil {
 		return nil
 	}
-	return o.CommandLine
+	return w.CommandLine
 }
 
-func (o *WorkflowDbDto) GetProjectName() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetProjectName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ProjectName
+	return w.ProjectName
 }
 
-func (o *WorkflowDbDto) GetScriptName() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetScriptName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ScriptName
+	return w.ScriptName
 }
 
-func (o *WorkflowDbDto) GetLaunchID() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetLaunchID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.LaunchID
+	return w.LaunchID
 }
 
-func (o *WorkflowDbDto) GetStatus() *WorkflowStatus {
-	if o == nil {
+func (w *WorkflowDbDto) GetStatus() *WorkflowStatus {
+	if w == nil {
 		return nil
 	}
-	return o.Status
+	return w.Status
 }
 
-func (o *WorkflowDbDto) GetRequiresAttention() *bool {
-	if o == nil {
+func (w *WorkflowDbDto) GetRequiresAttention() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.RequiresAttention
+	return w.RequiresAttention
 }
 
-func (o *WorkflowDbDto) GetConfigFiles() []string {
-	if o == nil {
+func (w *WorkflowDbDto) GetConfigFiles() []string {
+	if w == nil {
 		return nil
 	}
-	return o.ConfigFiles
+	return w.ConfigFiles
 }
 
-func (o *WorkflowDbDto) GetParams() map[string]any {
-	if o == nil {
+func (w *WorkflowDbDto) GetParams() map[string]any {
+	if w == nil {
 		return nil
 	}
-	return o.Params
+	return w.Params
 }
 
-func (o *WorkflowDbDto) GetConfigText() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetConfigText() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ConfigText
+	return w.ConfigText
 }
 
-func (o *WorkflowDbDto) GetManifest() *WfManifest {
-	if o == nil {
+func (w *WorkflowDbDto) GetManifest() *WfManifest {
+	if w == nil {
 		return nil
 	}
-	return o.Manifest
+	return w.Manifest
 }
 
-func (o *WorkflowDbDto) GetNextflow() *WfNextflow {
-	if o == nil {
+func (w *WorkflowDbDto) GetNextflow() *WfNextflow {
+	if w == nil {
 		return nil
 	}
-	return o.Nextflow
+	return w.Nextflow
 }
 
-func (o *WorkflowDbDto) GetStats() *WfStats {
-	if o == nil {
+func (w *WorkflowDbDto) GetStats() *WfStats {
+	if w == nil {
 		return nil
 	}
-	return o.Stats
+	return w.Stats
 }
 
-func (o *WorkflowDbDto) GetErrorMessage() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetErrorMessage() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ErrorMessage
+	return w.ErrorMessage
 }
 
-func (o *WorkflowDbDto) GetErrorReport() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetErrorReport() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ErrorReport
+	return w.ErrorReport
 }
 
-func (o *WorkflowDbDto) GetDeleted() *bool {
-	if o == nil {
+func (w *WorkflowDbDto) GetDeleted() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.Deleted
+	return w.Deleted
 }
 
-func (o *WorkflowDbDto) GetProjectDir() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetProjectDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ProjectDir
+	return w.ProjectDir
 }
 
-func (o *WorkflowDbDto) GetHomeDir() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetHomeDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.HomeDir
+	return w.HomeDir
 }
 
-func (o *WorkflowDbDto) GetContainer() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetContainer() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Container
+	return w.Container
 }
 
-func (o *WorkflowDbDto) GetRepository() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetRepository() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Repository
+	return w.Repository
 }
 
-func (o *WorkflowDbDto) GetContainerEngine() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetContainerEngine() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ContainerEngine
+	return w.ContainerEngine
 }
 
-func (o *WorkflowDbDto) GetScriptFile() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetScriptFile() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ScriptFile
+	return w.ScriptFile
 }
 
-func (o *WorkflowDbDto) GetLaunchDir() *string {
-	if o == nil {
+func (w *WorkflowDbDto) GetLaunchDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.LaunchDir
+	return w.LaunchDir
 }
 
-func (o *WorkflowDbDto) GetDuration() *int64 {
-	if o == nil {
+func (w *WorkflowDbDto) GetDuration() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.Duration
+	return w.Duration
 }
 
-func (o *WorkflowDbDto) GetExitStatus() *int {
-	if o == nil {
+func (w *WorkflowDbDto) GetExitStatus() *int {
+	if w == nil {
 		return nil
 	}
-	return o.ExitStatus
+	return w.ExitStatus
 }
 
-func (o *WorkflowDbDto) GetResume() *bool {
-	if o == nil {
+func (w *WorkflowDbDto) GetResume() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.Resume
+	return w.Resume
 }
 
-func (o *WorkflowDbDto) GetSuccess() *bool {
-	if o == nil {
+func (w *WorkflowDbDto) GetSuccess() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.Success
+	return w.Success
 }

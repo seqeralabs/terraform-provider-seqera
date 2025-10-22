@@ -6,9 +6,9 @@ type DescribeWorkspaceResponse struct {
 	Workspace *Workspace `json:"workspace,omitempty"`
 }
 
-func (o *DescribeWorkspaceResponse) GetWorkspace() *Workspace {
-	if o == nil {
+func (d *DescribeWorkspaceResponse) GetWorkspace() *Workspace {
+	if d == nil {
 		return nil
 	}
-	return o.Workspace
+	return d.Workspace
 }

@@ -53,3 +53,13 @@ actions:
       - azure
       - azure_entra
       - seqeracompute
+
+  # Fix path parameter location issues - change from 'path' to 'query'
+  - target: $["paths"]["/data-links/{dataLinkId}/browse"]["get"]["parameters"][?(@.name == 'path')]["in"]
+    update: query
+  - target: $["paths"]["/data-links/{dataLinkId}/download"]["get"]["parameters"][?(@.name == 'filePath')]["in"]
+    update: query
+  - target: $["paths"]["/data-links/{dataLinkId}/upload"]["post"]["parameters"][?(@.name == 'dirPath')]["in"]
+    update: query
+  - target: $["paths"]["/data-links/{dataLinkId}/upload/finish"]["post"]["parameters"][?(@.name == 'dirPath')]["in"]
+    update: query

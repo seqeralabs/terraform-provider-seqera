@@ -161,7 +161,7 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			},
 			"source_workspace_id": schema.Int64Attribute{
 				Optional:    true,
-				Description: `Source Optional workspace numeric identifier`,
+				Description: `Source workspace numeric identifier`,
 			},
 			"user_first_name": schema.StringAttribute{
 				Computed:    true,
@@ -252,11 +252,11 @@ func (r *PipelineDataSource) Read(ctx context.Context, req datasource.ReadReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribePipelineResponse != nil && res.DescribePipelineResponse.Pipeline != nil) {
+	if !(res.DescribePipelineResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res.DescribePipelineResponse.Pipeline)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineResponse(ctx, res.DescribePipelineResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -10,37 +10,37 @@ type JobInfoDto struct {
 	ExitCode    *int    `json:"exitCode,omitempty"`
 }
 
-func (o *JobInfoDto) GetID() *int64 {
-	if o == nil {
+func (j *JobInfoDto) GetID() *int64 {
+	if j == nil {
 		return nil
 	}
-	return o.ID
+	return j.ID
 }
 
-func (o *JobInfoDto) GetOperationID() *string {
-	if o == nil {
+func (j *JobInfoDto) GetOperationID() *string {
+	if j == nil {
 		return nil
 	}
-	return o.OperationID
+	return j.OperationID
 }
 
-func (o *JobInfoDto) GetMessage() *string {
-	if o == nil {
+func (j *JobInfoDto) GetMessage() *string {
+	if j == nil {
 		return nil
 	}
-	return o.Message
+	return j.Message
 }
 
-func (o *JobInfoDto) GetStatus() *string {
-	if o == nil {
+func (j *JobInfoDto) GetStatus() *string {
+	if j == nil {
 		return nil
 	}
-	return o.Status
+	return j.Status
 }
 
-func (o *JobInfoDto) GetExitCode() *int {
-	if o == nil {
+func (j *JobInfoDto) GetExitCode() *int {
+	if j == nil {
 		return nil
 	}
-	return o.ExitCode
+	return j.ExitCode
 }

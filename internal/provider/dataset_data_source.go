@@ -29,9 +29,10 @@ type DatasetDataSource struct {
 
 // DatasetDataSourceModel describes the data model.
 type DatasetDataSourceModel struct {
-	Dataset     *tfTypes.Dataset `tfsdk:"dataset"`
-	DatasetID   types.String     `tfsdk:"dataset_id"`
-	WorkspaceID types.Int64      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Attributes  []types.String      `queryParam:"style=form,explode=false,name=attributes" tfsdk:"attributes"`
+	Dataset     *tfTypes.DatasetDto `tfsdk:"dataset"`
+	DatasetID   types.String        `tfsdk:"dataset_id"`
+	WorkspaceID types.Int64         `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -45,6 +46,11 @@ func (r *DatasetDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 		MarkdownDescription: "Dataset DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"attributes": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `Additional attribute values to include in the response (` + "`" + `labels` + "`" + `). Returns an empty value (` + "`" + `labels: null` + "`" + `) if omitted.`,
+			},
 			"dataset": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
@@ -52,32 +58,112 @@ func (r *DatasetDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						Computed: true,
 					},
 					"deleted": schema.BoolAttribute{
-						Computed:    true,
-						Description: `Read-only flag indicating if the dataset has been deleted`,
+						Computed: true,
 					},
 					"description": schema.StringAttribute{
-						Computed:    true,
-						Description: `Detailed description of the dataset contents and purpose (max 1000 characters)`,
+						Computed: true,
+					},
+					"hidden": schema.BoolAttribute{
+						Computed: true,
 					},
 					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Unique identifier for the dataset (max 22 characters)`,
+						Computed: true,
+					},
+					"labels": schema.ListNestedAttribute{
+						Computed: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"date_created": schema.StringAttribute{
+									Computed:    true,
+									Description: `Timestamp when the label was created`,
+								},
+								"id": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Unique numeric identifier for the label`,
+								},
+								"is_default": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Flag indicating if this is a default system label`,
+								},
+								"name": schema.StringAttribute{
+									Computed:    true,
+									Description: `Name or key of the label`,
+								},
+								"resource": schema.BoolAttribute{
+									Computed:    true,
+									Description: `Flag indicating if this is a resource-level label`,
+								},
+								"value": schema.StringAttribute{
+									Computed:    true,
+									Description: `Value associated with the label`,
+								},
+							},
+						},
 					},
 					"last_updated": schema.StringAttribute{
 						Computed: true,
 					},
+					"last_updated_by": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"avatar": schema.StringAttribute{
+								Computed: true,
+							},
+							"email": schema.StringAttribute{
+								Computed: true,
+							},
+							"id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"user_name": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
 					"media_type": schema.StringAttribute{
-						Computed:    true,
-						Description: `MIME type or media type of the dataset content (max 80 characters)`,
+						Computed: true,
 					},
 					"name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Dataset name following naming conventions (1-100 characters)`,
+						Computed: true,
+					},
+					"organization_id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"runs_info": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"last_used": schema.StringAttribute{
+								Computed: true,
+							},
+							"runs_count": schema.Int64Attribute{
+								Computed: true,
+							},
+						},
+					},
+					"user": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"avatar": schema.StringAttribute{
+								Computed: true,
+							},
+							"email": schema.StringAttribute{
+								Computed: true,
+							},
+							"id": schema.Int64Attribute{
+								Computed: true,
+							},
+							"user_name": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"version": schema.Int64Attribute{
+						Computed: true,
+					},
+					"workspace_id": schema.Int64Attribute{
+						Computed: true,
 					},
 				},
-				MarkdownDescription: `Represents a dataset in the Seqera Platform.` + "\n" +
-					`Contains dataset metadata, versioning information, and access` + "\n" +
-					`controls for data management and sharing.`,
 			},
 			"dataset_id": schema.StringAttribute{
 				Required:    true,

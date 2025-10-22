@@ -18,65 +18,65 @@ type ListWorkflowsResponseListWorkflowsElement struct {
 	Optimized     *bool          `json:"optimized,omitempty"`
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowDbDto {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowDbDto {
+	if l == nil {
 		return nil
 	}
-	return o.Workflow
+	return l.Workflow
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetProgress() *ProgressData {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetProgress() *ProgressData {
+	if l == nil {
 		return nil
 	}
-	return o.Progress
+	return l.Progress
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetOrgID() *int64 {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetOrgID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetOrgName() *string {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetOrgName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.OrgName
+	return l.OrgName
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetWorkspaceName() *string {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkspaceName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceName
+	return l.WorkspaceName
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetLabels() []LabelDbDto {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetLabels() []LabelDbDto {
+	if l == nil {
 		return nil
 	}
-	return o.Labels
+	return l.Labels
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetStarred() *bool {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetStarred() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Starred
+	return l.Starred
 }
 
-func (o *ListWorkflowsResponseListWorkflowsElement) GetOptimized() *bool {
-	if o == nil {
+func (l *ListWorkflowsResponseListWorkflowsElement) GetOptimized() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Optimized
+	return l.Optimized
 }

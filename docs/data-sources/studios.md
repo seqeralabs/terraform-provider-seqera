@@ -3,12 +3,27 @@
 page_title: "seqera_studios Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Studios DataSource
+  Studios is a unified platform where you can host a combination of
+  container images and compute environments for interactive analysis using
+  your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
+  or Xpra remote desktops. Each Studio session is an individual interactive
+  environment that encapsulates the live environment for dynamic data analysis.
+  Note:
+  On Seqera Cloud, the free tier permits only one running Studio session at a time.
+  To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 ---
 
 # seqera_studios (Data Source)
 
-Studios DataSource
+Studios is a unified platform where you can host a combination of
+container images and compute environments for interactive analysis using
+your preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,
+or Xpra remote desktops. Each Studio session is an individual interactive
+environment that encapsulates the live environment for dynamic data analysis.
+
+Note:
+On Seqera Cloud, the free tier permits only one running Studio session at a time.
+To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 
 ## Example Usage
 
@@ -43,6 +58,7 @@ data "seqera_studios" "my_studios" {
 - `name` (String) Display name for the Studio session
 - `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--parent_checkpoint))
 - `progress` (Attributes List) (see [below for nested schema](#nestedatt--progress))
+- `remote_config` (Attributes) (see [below for nested schema](#nestedatt--remote_config))
 - `session_id` (String) Studio session numeric identifier
 - `status_info` (Attributes) (see [below for nested schema](#nestedatt--status_info))
 - `studio_url` (String) URL to access the running Studio instance
@@ -81,10 +97,10 @@ Read-Only:
 Read-Only:
 
 - `conda_environment` (String)
-- `cpu` (Number)
-- `gpu` (Number)
-- `lifespan_hours` (Number)
-- `memory` (Number)
+- `cpu` (Number) Number of CPU cores to allocate to the data studio
+- `gpu` (Number) Number of GPUs to allocate to the data studio
+- `lifespan_hours` (Number) Maximum lifespan of the data studio session in hours
+- `memory` (Number) Memory allocation for the data studio in megabytes (MB)
 - `mount_data` (List of String)
 
 
@@ -151,6 +167,16 @@ Read-Only:
 - `warnings` (List of String)
 
 
+<a id="nestedatt--remote_config"></a>
+### Nested Schema for `remote_config`
+
+Read-Only:
+
+- `commit_id` (String)
+- `repository` (String)
+- `revision` (String)
+
+
 <a id="nestedatt--status_info"></a>
 ### Nested Schema for `status_info`
 
@@ -159,6 +185,7 @@ Read-Only:
 - `last_update` (String)
 - `message` (String)
 - `status` (String)
+- `stop_reason` (String)
 
 
 <a id="nestedatt--template"></a>

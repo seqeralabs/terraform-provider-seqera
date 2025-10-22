@@ -63,7 +63,7 @@ func (s *Studios) ListDataStudios(ctx context.Context, request operations.ListDa
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDataStudios",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -222,7 +222,7 @@ func (s *Studios) CreateDataStudio(ctx context.Context, request operations.Creat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateDataStudio",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataStudioCreateRequest", "json", `request:"mediaType=application/json"`)
@@ -459,7 +459,7 @@ func (s *Studios) ListMountedDataLinkIds(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListMountedDataLinkIds",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -594,7 +594,7 @@ func (s *Studios) ListDataStudioTemplates(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDataStudioTemplates",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -752,7 +752,7 @@ func (s *Studios) ValidateDataStudioName(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateDataStudioName",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -871,7 +871,7 @@ func (s *Studios) DescribeDataStudio(ctx context.Context, request operations.Des
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeDataStudio",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1030,7 +1030,7 @@ func (s *Studios) DeleteDataStudio(ctx context.Context, request operations.Delet
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteDataStudio",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1204,7 +1204,7 @@ func (s *Studios) DeleteDataStudio(ctx context.Context, request operations.Delet
 }
 
 // ListDataStudioCheckpoints - List Studio checkpoints
-// Retrieves the list of checkpoints for the given Studio session ID.
+// Retrieves the list of checkpoints for the given Studio session ID, sorted by creation date in descending order.
 func (s *Studios) ListDataStudioCheckpoints(ctx context.Context, request operations.ListDataStudioCheckpointsRequest, opts ...operations.Option) (*operations.ListDataStudioCheckpointsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1234,7 +1234,7 @@ func (s *Studios) ListDataStudioCheckpoints(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListDataStudioCheckpoints",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1392,7 +1392,7 @@ func (s *Studios) GetDataStudioCheckpoint(ctx context.Context, request operation
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GetDataStudioCheckpoint",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1550,7 +1550,7 @@ func (s *Studios) UpdateDataStudioCheckpoint(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateDataStudioCheckpoint",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataStudioCheckpointUpdateRequest", "json", `request:"mediaType=application/json"`)
@@ -1716,7 +1716,7 @@ func (s *Studios) ExtendDataStudioLifespan(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ExtendDataStudioLifespan",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1843,7 +1843,7 @@ func (s *Studios) ExtendDataStudioLifespan(ctx context.Context, request operatio
 
 }
 
-// StartDataStudio - Start Studio
+// StartDataStudio - Starts a Studio
 // Starts the given Studio session ID.
 func (s *Studios) StartDataStudio(ctx context.Context, request operations.StartDataStudioRequest, opts ...operations.Option) (*operations.StartDataStudioResponse, error) {
 	o := operations.Options{}
@@ -1874,7 +1874,7 @@ func (s *Studios) StartDataStudio(ctx context.Context, request operations.StartD
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "StartDataStudio",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DataStudioStartRequest", "json", `request:"mediaType=application/json"`)
@@ -2037,7 +2037,7 @@ func (s *Studios) StopDataStudio(ctx context.Context, request operations.StopDat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "StopDataStudio",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

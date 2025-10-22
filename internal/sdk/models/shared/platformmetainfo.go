@@ -18,20 +18,23 @@ const (
 	PlatformMetainfoTypeGrid          PlatformMetainfoType = "grid"
 	PlatformMetainfoTypeAwsBatch      PlatformMetainfoType = "aws-batch"
 	PlatformMetainfoTypeLocalPlatform PlatformMetainfoType = "local-platform"
+	PlatformMetainfoTypeGoogle        PlatformMetainfoType = "google"
 	PlatformMetainfoTypeAzureBatch    PlatformMetainfoType = "azure-batch"
 	PlatformMetainfoTypeEksPlatform   PlatformMetainfoType = "eks-platform"
+	PlatformMetainfoTypeAzureCloud    PlatformMetainfoType = "azure-cloud"
 )
 
 type PlatformMetainfo struct {
-	AwsBatchPlatformMetainfo *AwsBatchPlatformMetainfo `queryParam:"inline"`
-	AwsCloudPlatformMetainfo *AwsCloudPlatformMetainfo `queryParam:"inline"`
-	GooglePlatformMetainfo   *GooglePlatformMetainfo   `queryParam:"inline"`
-	AzBatchPlatformMetainfo  *AzBatchPlatformMetainfo  `queryParam:"inline"`
-	EksPlatformMetaInfo      *EksPlatformMetaInfo      `queryParam:"inline"`
-	GkePlatformMetaInfo      *GkePlatformMetaInfo      `queryParam:"inline"`
-	K8sPlatformMetaInfo      *K8sPlatformMetaInfo      `queryParam:"inline"`
-	GridPlatformMetainfo     *GridPlatformMetainfo     `queryParam:"inline"`
-	LocalPlatformMetainfo    *LocalPlatformMetainfo    `queryParam:"inline"`
+	AwsBatchPlatformMetainfo *AwsBatchPlatformMetainfo `queryParam:"inline,name=PlatformMetainfo"`
+	AwsCloudPlatformMetainfo *AwsCloudPlatformMetainfo `queryParam:"inline,name=PlatformMetainfo"`
+	GooglePlatformMetainfo   *GooglePlatformMetainfo   `queryParam:"inline,name=PlatformMetainfo"`
+	AzBatchPlatformMetainfo  *AzBatchPlatformMetainfo  `queryParam:"inline,name=PlatformMetainfo"`
+	AzCloudPlatformMetaInfo  *AzCloudPlatformMetaInfo  `queryParam:"inline,name=PlatformMetainfo"`
+	EksPlatformMetaInfo      *EksPlatformMetaInfo      `queryParam:"inline,name=PlatformMetainfo"`
+	GkePlatformMetaInfo      *GkePlatformMetaInfo      `queryParam:"inline,name=PlatformMetainfo"`
+	K8sPlatformMetaInfo      *K8sPlatformMetaInfo      `queryParam:"inline,name=PlatformMetainfo"`
+	GridPlatformMetainfo     *GridPlatformMetainfo     `queryParam:"inline,name=PlatformMetainfo"`
+	LocalPlatformMetainfo    *LocalPlatformMetainfo    `queryParam:"inline,name=PlatformMetainfo"`
 
 	Type PlatformMetainfoType
 }
@@ -108,6 +111,18 @@ func CreatePlatformMetainfoLocalPlatform(localPlatform LocalPlatformMetainfo) Pl
 	}
 }
 
+func CreatePlatformMetainfoGoogle(google GooglePlatformMetainfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeGoogle
+
+	typStr := string(typ)
+	google.Discriminator = &typStr
+
+	return PlatformMetainfo{
+		GooglePlatformMetainfo: &google,
+		Type:                   typ,
+	}
+}
+
 func CreatePlatformMetainfoAzureBatch(azureBatch AzBatchPlatformMetainfo) PlatformMetainfo {
 	typ := PlatformMetainfoTypeAzureBatch
 
@@ -129,6 +144,18 @@ func CreatePlatformMetainfoEksPlatform(eksPlatform EksPlatformMetaInfo) Platform
 	return PlatformMetainfo{
 		EksPlatformMetaInfo: &eksPlatform,
 		Type:                typ,
+	}
+}
+
+func CreatePlatformMetainfoAzureCloud(azureCloud AzCloudPlatformMetaInfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeAzureCloud
+
+	typStr := string(typ)
+	azureCloud.Discriminator = &typStr
+
+	return PlatformMetainfo{
+		AzCloudPlatformMetaInfo: &azureCloud,
+		Type:                    typ,
 	}
 }
 
@@ -198,6 +225,15 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 		u.LocalPlatformMetainfo = localPlatformMetainfo
 		u.Type = PlatformMetainfoTypeLocalPlatform
 		return nil
+	case "google":
+		googlePlatformMetainfo := new(GooglePlatformMetainfo)
+		if err := utils.UnmarshalJSON(data, &googlePlatformMetainfo, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google) type GooglePlatformMetainfo within PlatformMetainfo: %w", string(data), err)
+		}
+
+		u.GooglePlatformMetainfo = googlePlatformMetainfo
+		u.Type = PlatformMetainfoTypeGoogle
+		return nil
 	case "azure-batch":
 		azBatchPlatformMetainfo := new(AzBatchPlatformMetainfo)
 		if err := utils.UnmarshalJSON(data, &azBatchPlatformMetainfo, "", true, nil); err != nil {
@@ -215,6 +251,15 @@ func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 
 		u.EksPlatformMetaInfo = eksPlatformMetaInfo
 		u.Type = PlatformMetainfoTypeEksPlatform
+		return nil
+	case "azure-cloud":
+		azCloudPlatformMetaInfo := new(AzCloudPlatformMetaInfo)
+		if err := utils.UnmarshalJSON(data, &azCloudPlatformMetaInfo, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzCloudPlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
+		}
+
+		u.AzCloudPlatformMetaInfo = azCloudPlatformMetaInfo
+		u.Type = PlatformMetainfoTypeAzureCloud
 		return nil
 	}
 
@@ -236,6 +281,10 @@ func (u PlatformMetainfo) MarshalJSON() ([]byte, error) {
 
 	if u.AzBatchPlatformMetainfo != nil {
 		return utils.MarshalJSON(u.AzBatchPlatformMetainfo, "", true)
+	}
+
+	if u.AzCloudPlatformMetaInfo != nil {
+		return utils.MarshalJSON(u.AzCloudPlatformMetaInfo, "", true)
 	}
 
 	if u.EksPlatformMetaInfo != nil {

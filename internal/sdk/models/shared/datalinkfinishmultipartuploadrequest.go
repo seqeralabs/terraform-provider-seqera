@@ -9,30 +9,30 @@ type DataLinkFinishMultiPartUploadRequest struct {
 	WithError *bool        `json:"withError,omitempty"`
 }
 
-func (o *DataLinkFinishMultiPartUploadRequest) GetUploadID() *string {
-	if o == nil {
+func (d *DataLinkFinishMultiPartUploadRequest) GetUploadID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.UploadID
+	return d.UploadID
 }
 
-func (o *DataLinkFinishMultiPartUploadRequest) GetFileName() *string {
-	if o == nil {
+func (d *DataLinkFinishMultiPartUploadRequest) GetFileName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.FileName
+	return d.FileName
 }
 
-func (o *DataLinkFinishMultiPartUploadRequest) GetTags() []UploadEtag {
-	if o == nil {
+func (d *DataLinkFinishMultiPartUploadRequest) GetTags() []UploadEtag {
+	if d == nil {
 		return nil
 	}
-	return o.Tags
+	return d.Tags
 }
 
-func (o *DataLinkFinishMultiPartUploadRequest) GetWithError() *bool {
-	if o == nil {
+func (d *DataLinkFinishMultiPartUploadRequest) GetWithError() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.WithError
+	return d.WithError
 }

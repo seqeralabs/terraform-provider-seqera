@@ -138,199 +138,222 @@ func (c *ComputeEnv) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ComputeEnv) GetCredentialsID() string {
-	if o == nil {
+func (c *ComputeEnv) GetCredentialsID() string {
+	if c == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return c.CredentialsID
 }
 
-func (o *ComputeEnv) GetOrgID() *int64 {
-	if o == nil {
+func (c *ComputeEnv) GetOrgID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *ComputeEnv) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *ComputeEnv) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *ComputeEnv) GetComputeEnvID() *string {
-	if o == nil {
+func (c *ComputeEnv) GetComputeEnvID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ComputeEnvID
+	return c.ComputeEnvID
 }
 
-func (o *ComputeEnv) GetName() string {
-	if o == nil {
+func (c *ComputeEnv) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ComputeEnv) GetDescription() *string {
-	if o == nil {
+func (c *ComputeEnv) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *ComputeEnv) GetPlatform() LaunchPlatform {
-	if o == nil {
+func (c *ComputeEnv) GetPlatform() LaunchPlatform {
+	if c == nil {
 		return LaunchPlatform("")
 	}
-	return o.Platform
+	return c.Platform
 }
 
-func (o *ComputeEnv) GetConfig() ComputeConfig {
-	if o == nil {
+func (c *ComputeEnv) GetConfig() ComputeConfig {
+	if c == nil {
 		return ComputeConfig{}
 	}
-	return o.Config
+	return c.Config
 }
 
-func (o *ComputeEnv) GetConfigMoabPlatform() *MoabConfiguration {
-	return o.GetConfig().MoabConfiguration
+func (c *ComputeEnv) GetConfigMoabPlatform() *ComputeConfigMoabConfiguration {
+	return c.GetConfig().ComputeConfigMoabConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return o.GetConfig().AWSBatchConfiguration
+func (c *ComputeEnv) GetConfigAwsBatch() *ComputeConfigAWSBatchConfiguration {
+	return c.GetConfig().ComputeConfigAWSBatchConfiguration
 }
 
-func (o *ComputeEnv) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return o.GetConfig().GoogleGKEClusterConfiguration
+func (c *ComputeEnv) GetConfigLocalPlatform() *ComputeConfigLocalExecutionConfiguration {
+	return c.GetConfig().ComputeConfigLocalExecutionConfiguration
 }
 
-func (o *ComputeEnv) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return o.GetConfig().GoogleBatchServiceConfiguration
+func (c *ComputeEnv) GetConfigGkePlatform() *ComputeConfigGoogleGKEClusterConfiguration {
+	return c.GetConfig().ComputeConfigGoogleGKEClusterConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return o.GetConfig().AWSCloudConfiguration
+func (c *ComputeEnv) GetConfigGoogleBatch() *ComputeConfigGoogleBatchServiceConfiguration {
+	return c.GetConfig().ComputeConfigGoogleBatchServiceConfiguration
 }
 
-func (o *ComputeEnv) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return o.GetConfig().SlurmConfiguration
+func (c *ComputeEnv) GetConfigAwsCloud() *ComputeConfigAWSCloudConfiguration {
+	return c.GetConfig().ComputeConfigAWSCloudConfiguration
 }
 
-func (o *ComputeEnv) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return o.GetConfig().KubernetesComputeConfiguration
+func (c *ComputeEnv) GetConfigSlurmPlatform() *ComputeConfigSlurmConfiguration {
+	return c.GetConfig().ComputeConfigSlurmConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return o.GetConfig().AltairPBSConfiguration
+func (c *ComputeEnv) GetConfigK8sPlatform() *ComputeConfigKubernetesComputeConfiguration {
+	return c.GetConfig().ComputeConfigKubernetesComputeConfiguration
 }
 
-func (o *ComputeEnv) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return o.GetConfig().IBMLSFConfiguration
+func (c *ComputeEnv) GetConfigAltairPlatform() *ComputeConfigAltairPBSConfiguration {
+	return c.GetConfig().ComputeConfigAltairPBSConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return o.GetConfig().AzureBatchConfiguration
+func (c *ComputeEnv) GetConfigLsfPlatform() *ComputeConfigIBMLSFConfiguration {
+	return c.GetConfig().ComputeConfigIBMLSFConfiguration
 }
 
-func (o *ComputeEnv) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return o.GetConfig().SeqeraComputeConfiguration
+func (c *ComputeEnv) GetConfigAzureBatch() *ComputeConfigAzureBatchConfiguration {
+	return c.GetConfig().ComputeConfigAzureBatchConfiguration
 }
 
-func (o *ComputeEnv) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return o.GetConfig().AmazonEKSClusterConfiguration
+func (c *ComputeEnv) GetConfigSeqeracomputePlatform() *ComputeConfigSeqeraComputeConfiguration {
+	return c.GetConfig().ComputeConfigSeqeraComputeConfiguration
 }
 
-func (o *ComputeEnv) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	return o.GetConfig().GoogleLifeSciencesConfiguration
+func (c *ComputeEnv) GetConfigEksPlatform() *ComputeConfigAmazonEKSClusterConfiguration {
+	return c.GetConfig().ComputeConfigAmazonEKSClusterConfiguration
 }
 
-func (o *ComputeEnv) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return o.GetConfig().UnivaGridEngineConfiguration
+func (c *ComputeEnv) GetConfigGoogleLifesciences() *ComputeConfigGoogleLifeSciencesConfiguration {
+	return c.GetConfig().ComputeConfigGoogleLifeSciencesConfiguration
 }
 
-func (o *ComputeEnv) GetDateCreated() *time.Time {
-	if o == nil {
+func (c *ComputeEnv) GetConfigUgePlatform() *ComputeConfigUnivaGridEngineConfiguration {
+	return c.GetConfig().ComputeConfigUnivaGridEngineConfiguration
+}
+
+func (c *ComputeEnv) GetDateCreated() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.DateCreated
+	return c.DateCreated
 }
 
-func (o *ComputeEnv) GetLastUpdated() *time.Time {
-	if o == nil {
+func (c *ComputeEnv) GetLastUpdated() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return c.LastUpdated
 }
 
-func (o *ComputeEnv) GetLastUsed() *time.Time {
-	if o == nil {
+func (c *ComputeEnv) GetLastUsed() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.LastUsed
+	return c.LastUsed
 }
 
-func (o *ComputeEnv) GetDeleted() *bool {
-	if o == nil {
+func (c *ComputeEnv) GetDeleted() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Deleted
+	return c.Deleted
 }
 
-func (o *ComputeEnv) GetStatus() *LaunchStatus {
-	if o == nil {
+func (c *ComputeEnv) GetStatus() *LaunchStatus {
+	if c == nil {
 		return nil
 	}
-	return o.Status
+	return c.Status
 }
 
-func (o *ComputeEnv) GetMessage() *string {
-	if o == nil {
+func (c *ComputeEnv) GetMessage() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Message
+	return c.Message
 }
 
-func (o *ComputeEnv) GetPrimary() *bool {
-	if o == nil {
+func (c *ComputeEnv) GetPrimary() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Primary
+	return c.Primary
 }
 
 type Launch struct {
-	ID          *string     `json:"id,omitempty"`
-	ComputeEnv  *ComputeEnv `json:"computeEnv,omitempty"`
-	Pipeline    string      `json:"pipeline"`
-	WorkDir     *string     `json:"workDir,omitempty"`
-	Revision    *string     `json:"revision,omitempty"`
-	ConfigText  *string     `json:"configText,omitempty"`
-	TowerConfig *string     `json:"towerConfig,omitempty"`
-	ParamsText  *string     `json:"paramsText,omitempty"`
+	ID         *string     `json:"id,omitempty"`
+	ComputeEnv *ComputeEnv `json:"computeEnv,omitempty"`
+	// Repository URL or name of the Nextflow pipeline to execute
+	Pipeline string `json:"pipeline"`
+	// Working directory for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Git branch, tag, or commit hash to use for the pipeline
+	Revision *string `json:"revision,omitempty"`
+	CommitID *string `json:"commitId,omitempty"`
+	// Nextflow configuration content to customize the pipeline execution
+	ConfigText  *string `json:"configText,omitempty"`
+	TowerConfig *string `json:"towerConfig,omitempty"`
+	// Pipeline parameters in JSON or YAML format
+	ParamsText *string `json:"paramsText,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript       *string    `json:"postRunScript,omitempty"`
-	MainScript          *string    `json:"mainScript,omitempty"`
-	EntryName           *string    `json:"entryName,omitempty"`
-	SchemaName          *string    `json:"schemaName,omitempty"`
-	Resume              *bool      `json:"resume,omitempty"`
-	ResumeLaunchID      *string    `json:"resumeLaunchId,omitempty"`
-	PullLatest          *bool      `json:"pullLatest,omitempty"`
-	StubRun             *bool      `json:"stubRun,omitempty"`
-	SessionID           *string    `json:"sessionId,omitempty"`
-	RunName             *string    `json:"runName,omitempty"`
-	ConfigProfiles      []string   `json:"configProfiles,omitempty"`
-	UserSecrets         []string   `json:"userSecrets,omitempty"`
-	WorkspaceSecrets    []string   `json:"workspaceSecrets,omitempty"`
-	OptimizationID      *string    `json:"optimizationId,omitempty"`
-	OptimizationTargets *string    `json:"optimizationTargets,omitempty"`
-	HeadJobCpus         *int       `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb     *int       `json:"headJobMemoryMb,omitempty"`
-	LaunchContainer     *string    `json:"launchContainer,omitempty"`
-	DateCreated         time.Time  `json:"dateCreated"`
-	LastUpdated         *time.Time `json:"lastUpdated,omitempty"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Main Nextflow script file to execute (defaults to main.nf)
+	MainScript *string `json:"mainScript,omitempty"`
+	// Name of the workflow entry point when using multiple workflows
+	EntryName *string `json:"entryName,omitempty"`
+	// Name of the pipeline schema file for parameter validation
+	SchemaName *string `json:"schemaName,omitempty"`
+	// Enable resuming workflow execution from the last successful step
+	Resume         *bool   `json:"resume,omitempty"`
+	ResumeLaunchID *string `json:"resumeLaunchId,omitempty"`
+	// Pull the latest version of the pipeline before execution
+	PullLatest *bool `json:"pullLatest,omitempty"`
+	// Execute workflow in stub mode for testing without running actual processes
+	StubRun   *bool   `json:"stubRun,omitempty"`
+	SessionID *string `json:"sessionId,omitempty"`
+	// Custom name for the workflow run
+	RunName *string `json:"runName,omitempty"`
+	// List of Nextflow configuration profiles to activate
+	ConfigProfiles []string `json:"configProfiles,omitempty"`
+	// List of user-level secrets to make available to the workflow
+	UserSecrets []string `json:"userSecrets,omitempty"`
+	// List of workspace-level secrets to make available to the workflow
+	WorkspaceSecrets    []string `json:"workspaceSecrets,omitempty"`
+	OptimizationID      *string  `json:"optimizationId,omitempty"`
+	OptimizationTargets *string  `json:"optimizationTargets,omitempty"`
+	// Number of CPUs to allocate for the head job
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory in megabytes (MB) to allocate for the head job
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
+	// Container image to use for launching the workflow
+	LaunchContainer *string    `json:"launchContainer,omitempty"`
+	DateCreated     time.Time  `json:"dateCreated"`
+	LastUpdated     *time.Time `json:"lastUpdated,omitempty"`
 }
 
 func (l Launch) MarshalJSON() ([]byte, error) {
@@ -344,205 +367,212 @@ func (l *Launch) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Launch) GetID() *string {
-	if o == nil {
+func (l *Launch) GetID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *Launch) GetComputeEnv() *ComputeEnv {
-	if o == nil {
+func (l *Launch) GetComputeEnv() *ComputeEnv {
+	if l == nil {
 		return nil
 	}
-	return o.ComputeEnv
+	return l.ComputeEnv
 }
 
-func (o *Launch) GetPipeline() string {
-	if o == nil {
+func (l *Launch) GetPipeline() string {
+	if l == nil {
 		return ""
 	}
-	return o.Pipeline
+	return l.Pipeline
 }
 
-func (o *Launch) GetWorkDir() *string {
-	if o == nil {
+func (l *Launch) GetWorkDir() *string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkDir
+	return l.WorkDir
 }
 
-func (o *Launch) GetRevision() *string {
-	if o == nil {
+func (l *Launch) GetRevision() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Revision
+	return l.Revision
 }
 
-func (o *Launch) GetConfigText() *string {
-	if o == nil {
+func (l *Launch) GetCommitID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ConfigText
+	return l.CommitID
 }
 
-func (o *Launch) GetTowerConfig() *string {
-	if o == nil {
+func (l *Launch) GetConfigText() *string {
+	if l == nil {
 		return nil
 	}
-	return o.TowerConfig
+	return l.ConfigText
 }
 
-func (o *Launch) GetParamsText() *string {
-	if o == nil {
+func (l *Launch) GetTowerConfig() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ParamsText
+	return l.TowerConfig
 }
 
-func (o *Launch) GetPreRunScript() *string {
-	if o == nil {
+func (l *Launch) GetParamsText() *string {
+	if l == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return l.ParamsText
 }
 
-func (o *Launch) GetPostRunScript() *string {
-	if o == nil {
+func (l *Launch) GetPreRunScript() *string {
+	if l == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return l.PreRunScript
 }
 
-func (o *Launch) GetMainScript() *string {
-	if o == nil {
+func (l *Launch) GetPostRunScript() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MainScript
+	return l.PostRunScript
 }
 
-func (o *Launch) GetEntryName() *string {
-	if o == nil {
+func (l *Launch) GetMainScript() *string {
+	if l == nil {
 		return nil
 	}
-	return o.EntryName
+	return l.MainScript
 }
 
-func (o *Launch) GetSchemaName() *string {
-	if o == nil {
+func (l *Launch) GetEntryName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.SchemaName
+	return l.EntryName
 }
 
-func (o *Launch) GetResume() *bool {
-	if o == nil {
+func (l *Launch) GetSchemaName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Resume
+	return l.SchemaName
 }
 
-func (o *Launch) GetResumeLaunchID() *string {
-	if o == nil {
+func (l *Launch) GetResume() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.ResumeLaunchID
+	return l.Resume
 }
 
-func (o *Launch) GetPullLatest() *bool {
-	if o == nil {
+func (l *Launch) GetResumeLaunchID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.PullLatest
+	return l.ResumeLaunchID
 }
 
-func (o *Launch) GetStubRun() *bool {
-	if o == nil {
+func (l *Launch) GetPullLatest() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.StubRun
+	return l.PullLatest
 }
 
-func (o *Launch) GetSessionID() *string {
-	if o == nil {
+func (l *Launch) GetStubRun() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.SessionID
+	return l.StubRun
 }
 
-func (o *Launch) GetRunName() *string {
-	if o == nil {
+func (l *Launch) GetSessionID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.RunName
+	return l.SessionID
 }
 
-func (o *Launch) GetConfigProfiles() []string {
-	if o == nil {
+func (l *Launch) GetRunName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ConfigProfiles
+	return l.RunName
 }
 
-func (o *Launch) GetUserSecrets() []string {
-	if o == nil {
+func (l *Launch) GetConfigProfiles() []string {
+	if l == nil {
 		return nil
 	}
-	return o.UserSecrets
+	return l.ConfigProfiles
 }
 
-func (o *Launch) GetWorkspaceSecrets() []string {
-	if o == nil {
+func (l *Launch) GetUserSecrets() []string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceSecrets
+	return l.UserSecrets
 }
 
-func (o *Launch) GetOptimizationID() *string {
-	if o == nil {
+func (l *Launch) GetWorkspaceSecrets() []string {
+	if l == nil {
 		return nil
 	}
-	return o.OptimizationID
+	return l.WorkspaceSecrets
 }
 
-func (o *Launch) GetOptimizationTargets() *string {
-	if o == nil {
+func (l *Launch) GetOptimizationID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.OptimizationTargets
+	return l.OptimizationID
 }
 
-func (o *Launch) GetHeadJobCpus() *int {
-	if o == nil {
+func (l *Launch) GetOptimizationTargets() *string {
+	if l == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return l.OptimizationTargets
 }
 
-func (o *Launch) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (l *Launch) GetHeadJobCpus() *int {
+	if l == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return l.HeadJobCpus
 }
 
-func (o *Launch) GetLaunchContainer() *string {
-	if o == nil {
+func (l *Launch) GetHeadJobMemoryMb() *int {
+	if l == nil {
 		return nil
 	}
-	return o.LaunchContainer
+	return l.HeadJobMemoryMb
 }
 
-func (o *Launch) GetDateCreated() time.Time {
-	if o == nil {
+func (l *Launch) GetLaunchContainer() *string {
+	if l == nil {
+		return nil
+	}
+	return l.LaunchContainer
+}
+
+func (l *Launch) GetDateCreated() time.Time {
+	if l == nil {
 		return time.Time{}
 	}
-	return o.DateCreated
+	return l.DateCreated
 }
 
-func (o *Launch) GetLastUpdated() *time.Time {
-	if o == nil {
+func (l *Launch) GetLastUpdated() *time.Time {
+	if l == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return l.LastUpdated
 }

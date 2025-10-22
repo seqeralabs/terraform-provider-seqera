@@ -10,4 +10,5 @@ type DataStudioStatusInfo struct {
 	LastUpdate types.String `tfsdk:"last_update"`
 	Message    types.String `tfsdk:"message"`
 	Status     types.String `tfsdk:"status"`
+	StopReason types.String `tfsdk:"stop_reason"`
 }

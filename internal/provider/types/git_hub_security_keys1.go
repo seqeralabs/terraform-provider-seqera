@@ -7,5 +7,6 @@ import (
 )
 
 type GitHubSecurityKeys1 struct {
+	Token    types.String `tfsdk:"token"`
 	Username types.String `tfsdk:"username"`
 }

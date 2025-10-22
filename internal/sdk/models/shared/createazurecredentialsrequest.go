@@ -6,9 +6,9 @@ type CreateAzureCredentialsRequest struct {
 	Credentials AzureCredential `json:"credentials"`
 }
 
-func (o *CreateAzureCredentialsRequest) GetCredentials() AzureCredential {
-	if o == nil {
+func (c *CreateAzureCredentialsRequest) GetCredentials() AzureCredential {
+	if c == nil {
 		return AzureCredential{}
 	}
-	return o.Credentials
+	return c.Credentials
 }

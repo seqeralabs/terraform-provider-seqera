@@ -14,18 +14,18 @@ type Ga4ghRunListRequest struct {
 	PageToken *string `queryParam:"style=form,explode=true,name=page_token"`
 }
 
-func (o *Ga4ghRunListRequest) GetPageSize() *int {
-	if o == nil {
+func (g *Ga4ghRunListRequest) GetPageSize() *int {
+	if g == nil {
 		return nil
 	}
-	return o.PageSize
+	return g.PageSize
 }
 
-func (o *Ga4ghRunListRequest) GetPageToken() *string {
-	if o == nil {
+func (g *Ga4ghRunListRequest) GetPageToken() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PageToken
+	return g.PageToken
 }
 
 type Ga4ghRunListResponse struct {
@@ -41,37 +41,37 @@ type Ga4ghRunListResponse struct {
 	WesErrorResponse *shared.WesErrorResponse
 }
 
-func (o *Ga4ghRunListResponse) GetContentType() string {
-	if o == nil {
+func (g *Ga4ghRunListResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *Ga4ghRunListResponse) GetStatusCode() int {
-	if o == nil {
+func (g *Ga4ghRunListResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *Ga4ghRunListResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *Ga4ghRunListResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *Ga4ghRunListResponse) GetRunListResponse() *shared.RunListResponse {
-	if o == nil {
+func (g *Ga4ghRunListResponse) GetRunListResponse() *shared.RunListResponse {
+	if g == nil {
 		return nil
 	}
-	return o.RunListResponse
+	return g.RunListResponse
 }
 
-func (o *Ga4ghRunListResponse) GetWesErrorResponse() *shared.WesErrorResponse {
-	if o == nil {
+func (g *Ga4ghRunListResponse) GetWesErrorResponse() *shared.WesErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.WesErrorResponse
+	return g.WesErrorResponse
 }

@@ -16,25 +16,25 @@ type UpdateDatasetRequest struct {
 	UpdateDatasetRequest shared.UpdateDatasetRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateDatasetRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (u *UpdateDatasetRequest) GetWorkspaceID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateDatasetRequest) GetDatasetID() string {
-	if o == nil {
+func (u *UpdateDatasetRequest) GetDatasetID() string {
+	if u == nil {
 		return ""
 	}
-	return o.DatasetID
+	return u.DatasetID
 }
 
-func (o *UpdateDatasetRequest) GetUpdateDatasetRequest() shared.UpdateDatasetRequest {
-	if o == nil {
+func (u *UpdateDatasetRequest) GetUpdateDatasetRequest() shared.UpdateDatasetRequest {
+	if u == nil {
 		return shared.UpdateDatasetRequest{}
 	}
-	return o.UpdateDatasetRequest
+	return u.UpdateDatasetRequest
 }
 
 type UpdateDatasetResponse struct {
@@ -48,30 +48,30 @@ type UpdateDatasetResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateDatasetResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateDatasetResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateDatasetResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateDatasetResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateDatasetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateDatasetResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

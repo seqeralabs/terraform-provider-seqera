@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -43,7 +44,7 @@ func (r *ComputeEnvDataSource) Metadata(ctx context.Context, req datasource.Meta
 // Schema defines the schema for the data source.
 func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "ComputeEnv DataSource",
+		MarkdownDescription: "Seqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and\non-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"attributes": schema.ListAttribute{
@@ -503,6 +504,99 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 									},
 								},
 							},
+							"azure_cloud_configuration": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"data_collection_endpoint": schema.StringAttribute{
+										Computed: true,
+									},
+									"data_collection_rule_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"environment": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"compute": schema.BoolAttribute{
+													Computed: true,
+												},
+												"head": schema.BoolAttribute{
+													Computed: true,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										Description: `Array of environment variables for the compute environment`,
+									},
+									"forged_resources": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"key": schema.StringAttribute{
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+									},
+									"fusion2_enabled": schema.BoolAttribute{
+										Computed: true,
+									},
+									"instance_type": schema.StringAttribute{
+										Computed: true,
+									},
+									"log_table_name": schema.StringAttribute{
+										Computed: true,
+									},
+									"log_workspace_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"managed_identity_client_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"managed_identity_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"network_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed:    true,
+										Description: `Nextflow configuration settings and parameters`,
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed:    true,
+										Description: `Shell script to execute after workflow completes`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed:    true,
+										Description: `Shell script to execute before workflow starts`,
+									},
+									"region": schema.StringAttribute{
+										Computed: true,
+									},
+									"resource_group": schema.StringAttribute{
+										Computed: true,
+									},
+									"subscription_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"wave_enabled": schema.BoolAttribute{
+										Computed: true,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed:    true,
+										Description: `Working directory path for workflow execution`,
+									},
+								},
+							},
 							"eks_platform": schema.SingleNestedAttribute{
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
@@ -796,6 +890,86 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 									},
 								},
 							},
+							"google_cloud_configuration": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"arm64_enabled": schema.BoolAttribute{
+										Computed: true,
+									},
+									"boot_disk_size_gb": schema.Int32Attribute{
+										Computed: true,
+									},
+									"environment": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"compute": schema.BoolAttribute{
+													Computed: true,
+												},
+												"head": schema.BoolAttribute{
+													Computed: true,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										Description: `Array of environment variables for the compute environment`,
+									},
+									"forged_resources": schema.ListAttribute{
+										Computed: true,
+										ElementType: types.MapType{
+											ElemType: jsontypes.NormalizedType{},
+										},
+									},
+									"fusion2_enabled": schema.BoolAttribute{
+										Computed: true,
+									},
+									"gpu_enabled": schema.BoolAttribute{
+										Computed: true,
+									},
+									"image_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"instance_type": schema.StringAttribute{
+										Computed: true,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed:    true,
+										Description: `Nextflow configuration settings and parameters`,
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed:    true,
+										Description: `Shell script to execute after workflow completes`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed:    true,
+										Description: `Shell script to execute before workflow starts`,
+									},
+									"project_id": schema.StringAttribute{
+										Computed: true,
+									},
+									"region": schema.StringAttribute{
+										Computed: true,
+									},
+									"service_account_email": schema.StringAttribute{
+										Computed: true,
+									},
+									"wave_enabled": schema.BoolAttribute{
+										Computed: true,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed:    true,
+										Description: `Working directory path for workflow execution`,
+									},
+									"zone": schema.StringAttribute{
+										Computed: true,
+									},
+								},
+							},
 							"google_lifesciences": schema.SingleNestedAttribute{
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
@@ -956,6 +1130,53 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 										Computed: true,
 									},
 									"storage_mount_path": schema.StringAttribute{
+										Computed: true,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed:    true,
+										Description: `Working directory path for workflow execution`,
+									},
+								},
+							},
+							"local_platform": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"environment": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"compute": schema.BoolAttribute{
+													Computed: true,
+												},
+												"head": schema.BoolAttribute{
+													Computed: true,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+												},
+											},
+										},
+										Description: `Array of environment variables for the compute environment`,
+									},
+									"fusion2_enabled": schema.BoolAttribute{
+										Computed: true,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed:    true,
+										Description: `Nextflow configuration settings and parameters`,
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed:    true,
+										Description: `Shell script to execute after workflow completes`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed:    true,
+										Description: `Shell script to execute before workflow starts`,
+									},
+									"wave_enabled": schema.BoolAttribute{
 										Computed: true,
 									},
 									"work_dir": schema.StringAttribute{
@@ -1515,6 +1736,29 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 					"primary": schema.BoolAttribute{
 						Computed: true,
+					},
+					"resources": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"cpus": schema.Int32Attribute{
+								Computed: true,
+							},
+							"disk_size": schema.Int32Attribute{
+								Computed: true,
+							},
+							"estimated_price": schema.Float32Attribute{
+								Computed: true,
+							},
+							"gpus": schema.Int32Attribute{
+								Computed: true,
+							},
+							"instance_type": schema.StringAttribute{
+								Computed: true,
+							},
+							"memory": schema.Int32Attribute{
+								Computed: true,
+							},
+						},
 					},
 					"status": schema.StringAttribute{
 						Computed: true,

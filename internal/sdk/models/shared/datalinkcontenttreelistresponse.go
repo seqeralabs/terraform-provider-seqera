@@ -6,9 +6,9 @@ type DataLinkContentTreeListResponse struct {
 	Items []DataLinkSimpleItem `json:"items"`
 }
 
-func (o *DataLinkContentTreeListResponse) GetItems() []DataLinkSimpleItem {
-	if o == nil {
+func (d *DataLinkContentTreeListResponse) GetItems() []DataLinkSimpleItem {
+	if d == nil {
 		return []DataLinkSimpleItem{}
 	}
-	return o.Items
+	return d.Items
 }

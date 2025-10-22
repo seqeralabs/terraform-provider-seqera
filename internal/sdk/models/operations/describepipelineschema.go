@@ -12,38 +12,38 @@ type DescribePipelineSchemaRequest struct {
 	PipelineID int64 `pathParam:"style=simple,explode=false,name=pipelineId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Source Optional workspace numeric identifier
+	// Source workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 	// Additional attribute values to include in the response: `schema` returns the pipeline schema, `params` returns the pipeline config. Returns all if `attributes` is omitted.
 	Attributes []shared.PipelineSchemaAttributes `queryParam:"style=form,explode=false,name=attributes"`
 }
 
-func (o *DescribePipelineSchemaRequest) GetPipelineID() int64 {
-	if o == nil {
+func (d *DescribePipelineSchemaRequest) GetPipelineID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.PipelineID
+	return d.PipelineID
 }
 
-func (o *DescribePipelineSchemaRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribePipelineSchemaRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribePipelineSchemaRequest) GetSourceWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribePipelineSchemaRequest) GetSourceWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.SourceWorkspaceID
+	return d.SourceWorkspaceID
 }
 
-func (o *DescribePipelineSchemaRequest) GetAttributes() []shared.PipelineSchemaAttributes {
-	if o == nil {
+func (d *DescribePipelineSchemaRequest) GetAttributes() []shared.PipelineSchemaAttributes {
+	if d == nil {
 		return nil
 	}
-	return o.Attributes
+	return d.Attributes
 }
 
 type DescribePipelineSchemaResponse struct {
@@ -59,37 +59,37 @@ type DescribePipelineSchemaResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribePipelineSchemaResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribePipelineSchemaResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribePipelineSchemaResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribePipelineSchemaResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribePipelineSchemaResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribePipelineSchemaResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribePipelineSchemaResponse) GetPipelineSchemaResponse() *shared.PipelineSchemaResponse {
-	if o == nil {
+func (d *DescribePipelineSchemaResponse) GetPipelineSchemaResponse() *shared.PipelineSchemaResponse {
+	if d == nil {
 		return nil
 	}
-	return o.PipelineSchemaResponse
+	return d.PipelineSchemaResponse
 }
 
-func (o *DescribePipelineSchemaResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribePipelineSchemaResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

@@ -7,16 +7,16 @@ type CreatePipelineSecretRequest struct {
 	Value string `json:"value"`
 }
 
-func (o *CreatePipelineSecretRequest) GetName() string {
-	if o == nil {
+func (c *CreatePipelineSecretRequest) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CreatePipelineSecretRequest) GetValue() string {
-	if o == nil {
+func (c *CreatePipelineSecretRequest) GetValue() string {
+	if c == nil {
 		return ""
 	}
-	return o.Value
+	return c.Value
 }

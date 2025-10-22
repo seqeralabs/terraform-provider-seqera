@@ -6,65 +6,79 @@ type DescribePlatformResponse struct {
 	Metainfo *PlatformMetainfo `json:"metainfo,omitempty"`
 }
 
-func (o *DescribePlatformResponse) GetMetainfo() *PlatformMetainfo {
-	if o == nil {
+func (d *DescribePlatformResponse) GetMetainfo() *PlatformMetainfo {
+	if d == nil {
 		return nil
 	}
-	return o.Metainfo
+	return d.Metainfo
 }
 
-func (o *DescribePlatformResponse) GetMetainfoGkePlatform() *GkePlatformMetaInfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoGkePlatform() *GkePlatformMetaInfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.GkePlatformMetaInfo
 	}
 	return nil
 }
 
-func (o *DescribePlatformResponse) GetMetainfoAwsCloud() *AwsCloudPlatformMetainfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoAwsCloud() *AwsCloudPlatformMetainfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.AwsCloudPlatformMetainfo
 	}
 	return nil
 }
 
-func (o *DescribePlatformResponse) GetMetainfoK8sPlatform() *K8sPlatformMetaInfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoK8sPlatform() *K8sPlatformMetaInfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.K8sPlatformMetaInfo
 	}
 	return nil
 }
 
-func (o *DescribePlatformResponse) GetMetainfoGrid() *GridPlatformMetainfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoGrid() *GridPlatformMetainfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.GridPlatformMetainfo
 	}
 	return nil
 }
 
-func (o *DescribePlatformResponse) GetMetainfoAwsBatch() *AwsBatchPlatformMetainfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoAwsBatch() *AwsBatchPlatformMetainfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.AwsBatchPlatformMetainfo
 	}
 	return nil
 }
 
-func (o *DescribePlatformResponse) GetMetainfoLocalPlatform() *LocalPlatformMetainfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoLocalPlatform() *LocalPlatformMetainfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.LocalPlatformMetainfo
 	}
 	return nil
 }
 
-func (o *DescribePlatformResponse) GetMetainfoAzureBatch() *AzBatchPlatformMetainfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoGoogle() *GooglePlatformMetainfo {
+	if v := d.GetMetainfo(); v != nil {
+		return v.GooglePlatformMetainfo
+	}
+	return nil
+}
+
+func (d *DescribePlatformResponse) GetMetainfoAzureBatch() *AzBatchPlatformMetainfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.AzBatchPlatformMetainfo
 	}
 	return nil
 }
 
-func (o *DescribePlatformResponse) GetMetainfoEksPlatform() *EksPlatformMetaInfo {
-	if v := o.GetMetainfo(); v != nil {
+func (d *DescribePlatformResponse) GetMetainfoEksPlatform() *EksPlatformMetaInfo {
+	if v := d.GetMetainfo(); v != nil {
 		return v.EksPlatformMetaInfo
+	}
+	return nil
+}
+
+func (d *DescribePlatformResponse) GetMetainfoAzureCloud() *AzCloudPlatformMetaInfo {
+	if v := d.GetMetainfo(); v != nil {
+		return v.AzCloudPlatformMetaInfo
 	}
 	return nil
 }

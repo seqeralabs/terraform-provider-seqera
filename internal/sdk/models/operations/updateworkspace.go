@@ -10,31 +10,31 @@ import (
 type UpdateWorkspaceRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	ID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Workspace update request
 	UpdateWorkspaceRequest shared.UpdateWorkspaceRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateWorkspaceRequest) GetOrgID() int64 {
-	if o == nil {
+func (u *UpdateWorkspaceRequest) GetOrgID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.OrgID
+	return u.OrgID
 }
 
-func (o *UpdateWorkspaceRequest) GetID() int64 {
-	if o == nil {
+func (u *UpdateWorkspaceRequest) GetID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateWorkspaceRequest) GetUpdateWorkspaceRequest() shared.UpdateWorkspaceRequest {
-	if o == nil {
+func (u *UpdateWorkspaceRequest) GetUpdateWorkspaceRequest() shared.UpdateWorkspaceRequest {
+	if u == nil {
 		return shared.UpdateWorkspaceRequest{}
 	}
-	return o.UpdateWorkspaceRequest
+	return u.UpdateWorkspaceRequest
 }
 
 type UpdateWorkspaceResponse struct {
@@ -50,37 +50,37 @@ type UpdateWorkspaceResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateWorkspaceResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateWorkspaceResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateWorkspaceResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateWorkspaceResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateWorkspaceResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateWorkspaceResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateWorkspaceResponse) GetDescribeWorkspaceResponse() *shared.DescribeWorkspaceResponse {
-	if o == nil {
+func (u *UpdateWorkspaceResponse) GetDescribeWorkspaceResponse() *shared.DescribeWorkspaceResponse {
+	if u == nil {
 		return nil
 	}
-	return o.DescribeWorkspaceResponse
+	return u.DescribeWorkspaceResponse
 }
 
-func (o *UpdateWorkspaceResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateWorkspaceResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

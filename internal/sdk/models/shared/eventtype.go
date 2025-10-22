@@ -9,30 +9,30 @@ type EventType struct {
 	Enabled     *bool   `json:"enabled,omitempty"`
 }
 
-func (o *EventType) GetSource() *string {
-	if o == nil {
+func (e *EventType) GetSource() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Source
+	return e.Source
 }
 
-func (o *EventType) GetDisplay() *string {
-	if o == nil {
+func (e *EventType) GetDisplay() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Display
+	return e.Display
 }
 
-func (o *EventType) GetDescription() *string {
-	if o == nil {
+func (e *EventType) GetDescription() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Description
+	return e.Description
 }
 
-func (o *EventType) GetEnabled() *bool {
-	if o == nil {
+func (e *EventType) GetEnabled() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Enabled
+	return e.Enabled
 }

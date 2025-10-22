@@ -83,7 +83,7 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"id": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Optional workspace numeric identifier`,
+				Description: `Workspace numeric identifier`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
@@ -181,11 +181,11 @@ func (r *WorkspaceResource) Create(ctx context.Context, req resource.CreateReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateWorkspaceResponse != nil && res.CreateWorkspaceResponse.Workspace != nil) {
+	if !(res.CreateWorkspaceResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedWorkspace(ctx, res.CreateWorkspaceResponse.Workspace)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateWorkspaceResponse(ctx, res.CreateWorkspaceResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -245,11 +245,11 @@ func (r *WorkspaceResource) Read(ctx context.Context, req resource.ReadRequest, 
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeWorkspaceResponse != nil && res.DescribeWorkspaceResponse.Workspace != nil) {
+	if !(res.DescribeWorkspaceResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedWorkspace(ctx, res.DescribeWorkspaceResponse.Workspace)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeWorkspaceResponse(ctx, res.DescribeWorkspaceResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -295,11 +295,11 @@ func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeWorkspaceResponse != nil && res.DescribeWorkspaceResponse.Workspace != nil) {
+	if !(res.DescribeWorkspaceResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedWorkspace(ctx, res.DescribeWorkspaceResponse.Workspace)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeWorkspaceResponse(ctx, res.DescribeWorkspaceResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

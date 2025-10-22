@@ -9,30 +9,30 @@ type DataStudioDtoParentCheckpoint struct {
 	StudioName     *string `json:"studioName,omitempty"`
 }
 
-func (o *DataStudioDtoParentCheckpoint) GetCheckpointID() *int64 {
-	if o == nil {
+func (d *DataStudioDtoParentCheckpoint) GetCheckpointID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.CheckpointID
+	return d.CheckpointID
 }
 
-func (o *DataStudioDtoParentCheckpoint) GetCheckpointName() *string {
-	if o == nil {
+func (d *DataStudioDtoParentCheckpoint) GetCheckpointName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CheckpointName
+	return d.CheckpointName
 }
 
-func (o *DataStudioDtoParentCheckpoint) GetSessionID() *string {
-	if o == nil {
+func (d *DataStudioDtoParentCheckpoint) GetSessionID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.SessionID
+	return d.SessionID
 }
 
-func (o *DataStudioDtoParentCheckpoint) GetStudioName() *string {
-	if o == nil {
+func (d *DataStudioDtoParentCheckpoint) GetStudioName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.StudioName
+	return d.StudioName
 }

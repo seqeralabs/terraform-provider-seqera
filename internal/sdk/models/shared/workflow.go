@@ -65,310 +65,310 @@ func (w *Workflow) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Workflow) GetRequiresAttention() *bool {
-	if o == nil {
+func (w *Workflow) GetRequiresAttention() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.RequiresAttention
+	return w.RequiresAttention
 }
 
-func (o *Workflow) GetStatus() *WorkflowStatus {
-	if o == nil {
+func (w *Workflow) GetStatus() *WorkflowStatus {
+	if w == nil {
 		return nil
 	}
-	return o.Status
+	return w.Status
 }
 
-func (o *Workflow) GetOwnerID() *int64 {
-	if o == nil {
+func (w *Workflow) GetOwnerID() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.OwnerID
+	return w.OwnerID
 }
 
-func (o *Workflow) GetRepository() *string {
-	if o == nil {
+func (w *Workflow) GetRepository() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Repository
+	return w.Repository
 }
 
-func (o *Workflow) GetID() *string {
-	if o == nil {
+func (w *Workflow) GetID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ID
+	return w.ID
 }
 
-func (o *Workflow) GetSubmit() time.Time {
-	if o == nil {
+func (w *Workflow) GetSubmit() time.Time {
+	if w == nil {
 		return time.Time{}
 	}
-	return o.Submit
+	return w.Submit
 }
 
-func (o *Workflow) GetStart() *time.Time {
-	if o == nil {
+func (w *Workflow) GetStart() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.Start
+	return w.Start
 }
 
-func (o *Workflow) GetComplete() *time.Time {
-	if o == nil {
+func (w *Workflow) GetComplete() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.Complete
+	return w.Complete
 }
 
-func (o *Workflow) GetDateCreated() *time.Time {
-	if o == nil {
+func (w *Workflow) GetDateCreated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.DateCreated
+	return w.DateCreated
 }
 
-func (o *Workflow) GetLastUpdated() *time.Time {
-	if o == nil {
+func (w *Workflow) GetLastUpdated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return w.LastUpdated
 }
 
-func (o *Workflow) GetRunName() string {
-	if o == nil {
+func (w *Workflow) GetRunName() string {
+	if w == nil {
 		return ""
 	}
-	return o.RunName
+	return w.RunName
 }
 
-func (o *Workflow) GetSessionID() string {
-	if o == nil {
+func (w *Workflow) GetSessionID() string {
+	if w == nil {
 		return ""
 	}
-	return o.SessionID
+	return w.SessionID
 }
 
-func (o *Workflow) GetProfile() *string {
-	if o == nil {
+func (w *Workflow) GetProfile() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Profile
+	return w.Profile
 }
 
-func (o *Workflow) GetWorkDir() string {
-	if o == nil {
+func (w *Workflow) GetWorkDir() string {
+	if w == nil {
 		return ""
 	}
-	return o.WorkDir
+	return w.WorkDir
 }
 
-func (o *Workflow) GetCommitID() *string {
-	if o == nil {
+func (w *Workflow) GetCommitID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.CommitID
+	return w.CommitID
 }
 
-func (o *Workflow) GetUserName() string {
-	if o == nil {
+func (w *Workflow) GetUserName() string {
+	if w == nil {
 		return ""
 	}
-	return o.UserName
+	return w.UserName
 }
 
-func (o *Workflow) GetScriptID() *string {
-	if o == nil {
+func (w *Workflow) GetScriptID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ScriptID
+	return w.ScriptID
 }
 
-func (o *Workflow) GetRevision() *string {
-	if o == nil {
+func (w *Workflow) GetRevision() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Revision
+	return w.Revision
 }
 
-func (o *Workflow) GetCommandLine() string {
-	if o == nil {
+func (w *Workflow) GetCommandLine() string {
+	if w == nil {
 		return ""
 	}
-	return o.CommandLine
+	return w.CommandLine
 }
 
-func (o *Workflow) GetProjectName() string {
-	if o == nil {
+func (w *Workflow) GetProjectName() string {
+	if w == nil {
 		return ""
 	}
-	return o.ProjectName
+	return w.ProjectName
 }
 
-func (o *Workflow) GetScriptName() *string {
-	if o == nil {
+func (w *Workflow) GetScriptName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ScriptName
+	return w.ScriptName
 }
 
-func (o *Workflow) GetLaunchID() *string {
-	if o == nil {
+func (w *Workflow) GetLaunchID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.LaunchID
+	return w.LaunchID
 }
 
-func (o *Workflow) GetConfigFiles() []string {
-	if o == nil {
+func (w *Workflow) GetConfigFiles() []string {
+	if w == nil {
 		return nil
 	}
-	return o.ConfigFiles
+	return w.ConfigFiles
 }
 
-func (o *Workflow) GetParams() map[string]any {
-	if o == nil {
+func (w *Workflow) GetParams() map[string]any {
+	if w == nil {
 		return nil
 	}
-	return o.Params
+	return w.Params
 }
 
-func (o *Workflow) GetConfigText() *string {
-	if o == nil {
+func (w *Workflow) GetConfigText() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ConfigText
+	return w.ConfigText
 }
 
-func (o *Workflow) GetManifest() *WfManifest {
-	if o == nil {
+func (w *Workflow) GetManifest() *WfManifest {
+	if w == nil {
 		return nil
 	}
-	return o.Manifest
+	return w.Manifest
 }
 
-func (o *Workflow) GetNextflow() *WfNextflow {
-	if o == nil {
+func (w *Workflow) GetNextflow() *WfNextflow {
+	if w == nil {
 		return nil
 	}
-	return o.Nextflow
+	return w.Nextflow
 }
 
-func (o *Workflow) GetStats() *WfStats {
-	if o == nil {
+func (w *Workflow) GetStats() *WfStats {
+	if w == nil {
 		return nil
 	}
-	return o.Stats
+	return w.Stats
 }
 
-func (o *Workflow) GetErrorMessage() *string {
-	if o == nil {
+func (w *Workflow) GetErrorMessage() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ErrorMessage
+	return w.ErrorMessage
 }
 
-func (o *Workflow) GetErrorReport() *string {
-	if o == nil {
+func (w *Workflow) GetErrorReport() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ErrorReport
+	return w.ErrorReport
 }
 
-func (o *Workflow) GetDeleted() *bool {
-	if o == nil {
+func (w *Workflow) GetDeleted() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.Deleted
+	return w.Deleted
 }
 
-func (o *Workflow) GetProjectDir() *string {
-	if o == nil {
+func (w *Workflow) GetProjectDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ProjectDir
+	return w.ProjectDir
 }
 
-func (o *Workflow) GetHomeDir() *string {
-	if o == nil {
+func (w *Workflow) GetHomeDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.HomeDir
+	return w.HomeDir
 }
 
-func (o *Workflow) GetContainer() *string {
-	if o == nil {
+func (w *Workflow) GetContainer() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Container
+	return w.Container
 }
 
-func (o *Workflow) GetContainerEngine() *string {
-	if o == nil {
+func (w *Workflow) GetContainerEngine() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ContainerEngine
+	return w.ContainerEngine
 }
 
-func (o *Workflow) GetScriptFile() *string {
-	if o == nil {
+func (w *Workflow) GetScriptFile() *string {
+	if w == nil {
 		return nil
 	}
-	return o.ScriptFile
+	return w.ScriptFile
 }
 
-func (o *Workflow) GetLaunchDir() *string {
-	if o == nil {
+func (w *Workflow) GetLaunchDir() *string {
+	if w == nil {
 		return nil
 	}
-	return o.LaunchDir
+	return w.LaunchDir
 }
 
-func (o *Workflow) GetDuration() *int64 {
-	if o == nil {
+func (w *Workflow) GetDuration() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.Duration
+	return w.Duration
 }
 
-func (o *Workflow) GetExitStatus() *int {
-	if o == nil {
+func (w *Workflow) GetExitStatus() *int {
+	if w == nil {
 		return nil
 	}
-	return o.ExitStatus
+	return w.ExitStatus
 }
 
-func (o *Workflow) GetResume() *bool {
-	if o == nil {
+func (w *Workflow) GetResume() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.Resume
+	return w.Resume
 }
 
-func (o *Workflow) GetSuccess() *bool {
-	if o == nil {
+func (w *Workflow) GetSuccess() *bool {
+	if w == nil {
 		return nil
 	}
-	return o.Success
+	return w.Success
 }
 
-func (o *Workflow) GetLogFile() *string {
-	if o == nil {
+func (w *Workflow) GetLogFile() *string {
+	if w == nil {
 		return nil
 	}
-	return o.LogFile
+	return w.LogFile
 }
 
-func (o *Workflow) GetOutFile() *string {
-	if o == nil {
+func (w *Workflow) GetOutFile() *string {
+	if w == nil {
 		return nil
 	}
-	return o.OutFile
+	return w.OutFile
 }
 
-func (o *Workflow) GetOperationID() *string {
-	if o == nil {
+func (w *Workflow) GetOperationID() *string {
+	if w == nil {
 		return nil
 	}
-	return o.OperationID
+	return w.OperationID
 }

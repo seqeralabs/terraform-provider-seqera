@@ -14,18 +14,18 @@ type CreateActionRequest struct {
 	CreateActionRequest shared.CreateActionRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateActionRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateActionRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateActionRequest) GetCreateActionRequest() shared.CreateActionRequest {
-	if o == nil {
+func (c *CreateActionRequest) GetCreateActionRequest() shared.CreateActionRequest {
+	if c == nil {
 		return shared.CreateActionRequest{}
 	}
-	return o.CreateActionRequest
+	return c.CreateActionRequest
 }
 
 type CreateActionResponse struct {
@@ -41,37 +41,37 @@ type CreateActionResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateActionResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateActionResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateActionResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateActionResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateActionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateActionResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateActionResponse) GetCreateActionResponse() *shared.CreateActionResponse {
-	if o == nil {
+func (c *CreateActionResponse) GetCreateActionResponse() *shared.CreateActionResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateActionResponse
+	return c.CreateActionResponse
 }
 
-func (o *CreateActionResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateActionResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

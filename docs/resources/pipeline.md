@@ -27,6 +27,7 @@ resource "seqera_pipeline" "my_pipeline" {
     7
   ]
   launch = {
+    commit_id      = "...my_commit_id..."
     compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
       "docker",
@@ -34,7 +35,7 @@ resource "seqera_pipeline" "my_pipeline" {
     ]
     config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
     date_created       = "2024-07-23T10:30:00Z"
-    entry_name         = "main.nf"
+    entry_name         = "my_secondary_workflow"
     head_job_cpus      = 2
     head_job_memory_mb = 4096
     label_ids = [
@@ -113,12 +114,12 @@ resource "seqera_pipeline" "my_pipeline" {
 
 Required:
 
-- `compute_env_id` (String)
 - `pipeline` (String)
-- `work_dir` (String)
 
 Optional:
 
+- `commit_id` (String)
+- `compute_env_id` (String)
 - `config_profiles` (List of String)
 - `config_text` (String)
 - `date_created` (String)
@@ -131,8 +132,8 @@ Optional:
 - `optimization_id` (String)
 - `optimization_targets` (String)
 - `params_text` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String)
+- `pre_run_script` (String)
 - `pull_latest` (Boolean)
 - `resume` (Boolean)
 - `revision` (String)
@@ -142,6 +143,7 @@ Optional:
 - `stub_run` (Boolean)
 - `tower_config` (String)
 - `user_secrets` (List of String)
+- `work_dir` (String)
 - `workspace_secrets` (List of String)
 
 

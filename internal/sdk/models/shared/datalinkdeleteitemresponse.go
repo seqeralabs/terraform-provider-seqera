@@ -6,9 +6,9 @@ type DataLinkDeleteItemResponse struct {
 	DeletionFailures []DataLinkItemDeletionFailure `json:"deletionFailures,omitempty"`
 }
 
-func (o *DataLinkDeleteItemResponse) GetDeletionFailures() []DataLinkItemDeletionFailure {
-	if o == nil {
+func (d *DataLinkDeleteItemResponse) GetDeletionFailures() []DataLinkItemDeletionFailure {
+	if d == nil {
 		return nil
 	}
-	return o.DeletionFailures
+	return d.DeletionFailures
 }

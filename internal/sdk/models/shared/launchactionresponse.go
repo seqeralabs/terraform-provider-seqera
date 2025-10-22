@@ -6,9 +6,9 @@ type LaunchActionResponse struct {
 	WorkflowID *string `json:"workflowId,omitempty"`
 }
 
-func (o *LaunchActionResponse) GetWorkflowID() *string {
-	if o == nil {
+func (l *LaunchActionResponse) GetWorkflowID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkflowID
+	return l.WorkflowID
 }

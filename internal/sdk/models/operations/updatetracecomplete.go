@@ -16,25 +16,25 @@ type UpdateTraceCompleteRequest struct {
 	TraceCompleteRequest shared.TraceCompleteRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateTraceCompleteRequest) GetWorkflowID() string {
-	if o == nil {
+func (u *UpdateTraceCompleteRequest) GetWorkflowID() string {
+	if u == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return u.WorkflowID
 }
 
-func (o *UpdateTraceCompleteRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateTraceCompleteRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateTraceCompleteRequest) GetTraceCompleteRequest() shared.TraceCompleteRequest {
-	if o == nil {
+func (u *UpdateTraceCompleteRequest) GetTraceCompleteRequest() shared.TraceCompleteRequest {
+	if u == nil {
 		return shared.TraceCompleteRequest{}
 	}
-	return o.TraceCompleteRequest
+	return u.TraceCompleteRequest
 }
 
 type UpdateTraceCompleteResponse struct {
@@ -50,37 +50,37 @@ type UpdateTraceCompleteResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateTraceCompleteResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateTraceCompleteResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateTraceCompleteResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateTraceCompleteResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateTraceCompleteResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateTraceCompleteResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateTraceCompleteResponse) GetTraceCompleteResponse() *shared.TraceCompleteResponse {
-	if o == nil {
+func (u *UpdateTraceCompleteResponse) GetTraceCompleteResponse() *shared.TraceCompleteResponse {
+	if u == nil {
 		return nil
 	}
-	return o.TraceCompleteResponse
+	return u.TraceCompleteResponse
 }
 
-func (o *UpdateTraceCompleteResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateTraceCompleteResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

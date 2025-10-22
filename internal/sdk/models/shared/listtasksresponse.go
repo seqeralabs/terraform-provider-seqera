@@ -7,16 +7,16 @@ type ListTasksResponse struct {
 	Total *int64                 `json:"total,omitempty"`
 }
 
-func (o *ListTasksResponse) GetTasks() []DescribeTaskResponse {
-	if o == nil {
+func (l *ListTasksResponse) GetTasks() []DescribeTaskResponse {
+	if l == nil {
 		return nil
 	}
-	return o.Tasks
+	return l.Tasks
 }
 
-func (o *ListTasksResponse) GetTotal() *int64 {
-	if o == nil {
+func (l *ListTasksResponse) GetTotal() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.Total
+	return l.Total
 }

@@ -6,7 +6,7 @@ resource "seqera_studios" "my_studios" {
     cpu               = 2
     gpu               = 8
     lifespan_hours    = 2
-    memory            = 3
+    memory            = 8192
     mount_data = [
       "..."
     ]
@@ -18,7 +18,12 @@ resource "seqera_studios" "my_studios" {
   label_ids = [
     7
   ]
-  name         = "my-jupyter-studio"
+  name = "my-jupyter-studio"
+  remote_config = {
+    commit_id  = "...my_commit_id..."
+    repository = "...my_repository..."
+    revision   = "...my_revision..."
+  }
   spot         = true
   workspace_id = 9
 }

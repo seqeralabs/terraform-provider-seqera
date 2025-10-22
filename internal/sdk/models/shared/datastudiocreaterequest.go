@@ -2,77 +2,112 @@
 
 package shared
 
+type RemoteConfig struct {
+	Repository string  `json:"repository"`
+	Revision   *string `json:"revision,omitempty"`
+	CommitID   *string `json:"commitId,omitempty"`
+}
+
+func (r *RemoteConfig) GetRepository() string {
+	if r == nil {
+		return ""
+	}
+	return r.Repository
+}
+
+func (r *RemoteConfig) GetRevision() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Revision
+}
+
+func (r *RemoteConfig) GetCommitID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.CommitID
+}
+
 type DataStudioCreateRequest struct {
 	Name                string                   `json:"name"`
 	Description         *string                  `json:"description,omitempty"`
-	DataStudioToolURL   string                   `json:"dataStudioToolUrl"`
+	DataStudioToolURL   *string                  `json:"dataStudioToolUrl,omitempty"`
 	ComputeEnvID        string                   `json:"computeEnvId"`
 	InitialCheckpointID *int64                   `json:"initialCheckpointId,omitempty"`
 	Configuration       *DataStudioConfiguration `json:"configuration,omitempty"`
+	RemoteConfig        *RemoteConfig            `json:"remoteConfig,omitempty"`
 	IsPrivate           *bool                    `json:"isPrivate,omitempty"`
 	LabelIds            []int64                  `json:"labelIds,omitempty"`
 	Spot                *bool                    `json:"spot,omitempty"`
 }
 
-func (o *DataStudioCreateRequest) GetName() string {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataStudioCreateRequest) GetDescription() *string {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataStudioCreateRequest) GetDataStudioToolURL() string {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetDataStudioToolURL() *string {
+	if d == nil {
+		return nil
+	}
+	return d.DataStudioToolURL
+}
+
+func (d *DataStudioCreateRequest) GetComputeEnvID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DataStudioToolURL
+	return d.ComputeEnvID
 }
 
-func (o *DataStudioCreateRequest) GetComputeEnvID() string {
-	if o == nil {
-		return ""
-	}
-	return o.ComputeEnvID
-}
-
-func (o *DataStudioCreateRequest) GetInitialCheckpointID() *int64 {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetInitialCheckpointID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.InitialCheckpointID
+	return d.InitialCheckpointID
 }
 
-func (o *DataStudioCreateRequest) GetConfiguration() *DataStudioConfiguration {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetConfiguration() *DataStudioConfiguration {
+	if d == nil {
 		return nil
 	}
-	return o.Configuration
+	return d.Configuration
 }
 
-func (o *DataStudioCreateRequest) GetIsPrivate() *bool {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetRemoteConfig() *RemoteConfig {
+	if d == nil {
 		return nil
 	}
-	return o.IsPrivate
+	return d.RemoteConfig
 }
 
-func (o *DataStudioCreateRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetIsPrivate() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.LabelIds
+	return d.IsPrivate
 }
 
-func (o *DataStudioCreateRequest) GetSpot() *bool {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetLabelIds() []int64 {
+	if d == nil {
 		return nil
 	}
-	return o.Spot
+	return d.LabelIds
+}
+
+func (d *DataStudioCreateRequest) GetSpot() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Spot
 }

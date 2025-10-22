@@ -14,18 +14,18 @@ type ValidatePipelineSecretNameRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *ValidatePipelineSecretNameRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (v *ValidatePipelineSecretNameRequest) GetWorkspaceID() *int64 {
+	if v == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return v.WorkspaceID
 }
 
-func (o *ValidatePipelineSecretNameRequest) GetName() *string {
-	if o == nil {
+func (v *ValidatePipelineSecretNameRequest) GetName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Name
+	return v.Name
 }
 
 type ValidatePipelineSecretNameResponse struct {
@@ -39,30 +39,30 @@ type ValidatePipelineSecretNameResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ValidatePipelineSecretNameResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidatePipelineSecretNameResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidatePipelineSecretNameResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidatePipelineSecretNameResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidatePipelineSecretNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidatePipelineSecretNameResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }
 
-func (o *ValidatePipelineSecretNameResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (v *ValidatePipelineSecretNameResponse) GetErrorResponse() *shared.ErrorResponse {
+	if v == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return v.ErrorResponse
 }

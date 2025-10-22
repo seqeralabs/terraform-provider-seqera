@@ -7,21 +7,22 @@ import (
 )
 
 type ComputeEnvResponseDto struct {
-	ComputeEnvID      types.String   `tfsdk:"compute_env_id"`
-	Config            *ComputeConfig `tfsdk:"config"`
-	CredentialsID     types.String   `tfsdk:"credentials_id"`
-	DateCreated       types.String   `tfsdk:"date_created"`
-	Deleted           types.Bool     `tfsdk:"deleted"`
-	Description       types.String   `tfsdk:"description"`
-	Labels            []LabelDbDto   `tfsdk:"labels"`
-	LastUpdated       types.String   `tfsdk:"last_updated"`
-	LastUsed          types.String   `tfsdk:"last_used"`
-	ManagedIdentityID types.String   `tfsdk:"managed_identity_id"`
-	Message           types.String   `tfsdk:"message"`
-	Name              types.String   `tfsdk:"name"`
-	OrgID             types.Int64    `tfsdk:"org_id"`
-	Platform          types.String   `tfsdk:"platform"`
-	Primary           types.Bool     `tfsdk:"primary"`
-	Status            types.String   `tfsdk:"status"`
-	WorkspaceID       types.Int64    `tfsdk:"workspace_id"`
+	ComputeEnvID      types.String                    `tfsdk:"compute_env_id"`
+	Config            *ComputeConfig                  `tfsdk:"config"`
+	CredentialsID     types.String                    `tfsdk:"credentials_id"`
+	DateCreated       types.String                    `tfsdk:"date_created"`
+	Deleted           types.Bool                      `tfsdk:"deleted"`
+	Description       types.String                    `tfsdk:"description"`
+	Labels            []LabelDbDto                    `tfsdk:"labels"`
+	LastUpdated       types.String                    `tfsdk:"last_updated"`
+	LastUsed          types.String                    `tfsdk:"last_used"`
+	ManagedIdentityID types.String                    `tfsdk:"managed_identity_id"`
+	Message           types.String                    `tfsdk:"message"`
+	Name              types.String                    `tfsdk:"name"`
+	OrgID             types.Int64                     `tfsdk:"org_id"`
+	Platform          types.String                    `tfsdk:"platform"`
+	Primary           types.Bool                      `tfsdk:"primary"`
+	Resources         *ComputeEnvResponseDtoResources `tfsdk:"resources"`
+	Status            types.String                    `tfsdk:"status"`
+	WorkspaceID       types.Int64                     `tfsdk:"workspace_id"`
 }

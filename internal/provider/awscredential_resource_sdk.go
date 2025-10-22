@@ -45,6 +45,21 @@ func (r *AWSCredentialResourceModel) RefreshFromSharedCreateAWSCredentialsRespon
 	return diags
 }
 
+func (r *AWSCredentialResourceModel) RefreshFromSharedDescribeAWSCredentialsResponse(ctx context.Context, resp *shared.DescribeAWSCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedAWSCredentialOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx context.Context) (*operations.CreateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

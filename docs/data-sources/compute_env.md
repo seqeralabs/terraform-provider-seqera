@@ -3,12 +3,23 @@
 page_title: "seqera_compute_env Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  ComputeEnv DataSource
+  Seqera Platform compute environments define the execution platform where a pipeline will run.
+  Compute environments enable users to launch pipelines on a growing number of cloud and
+  on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+  Compute environments define the computational resources and configuration needed
+  to run Nextflow workflows, including cloud provider settings, resource limits,
+  and execution parameters.
 ---
 
 # seqera_compute_env (Data Source)
 
-ComputeEnv DataSource
+Seqera Platform compute environments define the execution platform where a pipeline will run.
+Compute environments enable users to launch pipelines on a growing number of cloud and
+on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+
+Compute environments define the computational resources and configuration needed
+to run Nextflow workflows, including cloud provider settings, resource limits,
+and execution parameters.
 
 ## Example Usage
 
@@ -59,6 +70,7 @@ pre/post run scripts, and environment-specific parameters. (see [below for neste
 - `org_id` (Number)
 - `platform` (String)
 - `primary` (Boolean)
+- `resources` (Attributes) (see [below for nested schema](#nestedatt--compute_env--resources))
 - `status` (String)
 - `workspace_id` (Number)
 
@@ -71,11 +83,14 @@ Read-Only:
 - `aws_batch` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--aws_batch))
 - `aws_cloud` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud))
 - `azure_batch` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--azure_batch))
+- `azure_cloud_configuration` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud_configuration))
 - `eks_platform` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--eks_platform))
 - `gke_platform` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--gke_platform))
 - `google_batch` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--google_batch))
+- `google_cloud_configuration` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--google_cloud_configuration))
 - `google_lifesciences` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences))
 - `k8s_platform` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform))
+- `local_platform` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--local_platform))
 - `lsf_platform` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform))
 - `moab_platform` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--moab_platform))
 - `seqeracompute_platform` (Attributes) (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform))
@@ -276,6 +291,52 @@ Read-Only:
 
 
 
+<a id="nestedatt--compute_env--config--azure_cloud_configuration"></a>
+### Nested Schema for `compute_env.config.azure_cloud_configuration`
+
+Read-Only:
+
+- `data_collection_endpoint` (String)
+- `data_collection_rule_id` (String)
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud_configuration--environment))
+- `forged_resources` (Attributes List) (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud_configuration--forged_resources))
+- `fusion2_enabled` (Boolean)
+- `instance_type` (String)
+- `log_table_name` (String)
+- `log_workspace_id` (String)
+- `managed_identity_client_id` (String)
+- `managed_identity_id` (String)
+- `network_id` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
+- `region` (String)
+- `resource_group` (String)
+- `subscription_id` (String)
+- `wave_enabled` (Boolean)
+- `work_dir` (String) Working directory path for workflow execution
+
+<a id="nestedatt--compute_env--config--azure_cloud_configuration--environment"></a>
+### Nested Schema for `compute_env.config.azure_cloud_configuration.environment`
+
+Read-Only:
+
+- `compute` (Boolean)
+- `head` (Boolean)
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--compute_env--config--azure_cloud_configuration--forged_resources"></a>
+### Nested Schema for `compute_env.config.azure_cloud_configuration.forged_resources`
+
+Read-Only:
+
+- `key` (String)
+- `value` (String)
+
+
+
 <a id="nestedatt--compute_env--config--eks_platform"></a>
 ### Nested Schema for `compute_env.config.eks_platform`
 
@@ -400,6 +461,41 @@ Read-Only:
 
 
 
+<a id="nestedatt--compute_env--config--google_cloud_configuration"></a>
+### Nested Schema for `compute_env.config.google_cloud_configuration`
+
+Read-Only:
+
+- `arm64_enabled` (Boolean)
+- `boot_disk_size_gb` (Number)
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--google_cloud_configuration--environment))
+- `forged_resources` (List of Map of String)
+- `fusion2_enabled` (Boolean)
+- `gpu_enabled` (Boolean)
+- `image_id` (String)
+- `instance_type` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
+- `project_id` (String)
+- `region` (String)
+- `service_account_email` (String)
+- `wave_enabled` (Boolean)
+- `work_dir` (String) Working directory path for workflow execution
+- `zone` (String)
+
+<a id="nestedatt--compute_env--config--google_cloud_configuration--environment"></a>
+### Nested Schema for `compute_env.config.google_cloud_configuration.environment`
+
+Read-Only:
+
+- `compute` (Boolean)
+- `head` (Boolean)
+- `name` (String)
+- `value` (String)
+
+
+
 <a id="nestedatt--compute_env--config--google_lifesciences"></a>
 ### Nested Schema for `compute_env.config.google_lifesciences`
 
@@ -464,6 +560,31 @@ Read-Only:
 
 <a id="nestedatt--compute_env--config--k8s_platform--environment"></a>
 ### Nested Schema for `compute_env.config.k8s_platform.environment`
+
+Read-Only:
+
+- `compute` (Boolean)
+- `head` (Boolean)
+- `name` (String)
+- `value` (String)
+
+
+
+<a id="nestedatt--compute_env--config--local_platform"></a>
+### Nested Schema for `compute_env.config.local_platform`
+
+Read-Only:
+
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--compute_env--config--local_platform--environment))
+- `fusion2_enabled` (Boolean)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
+- `wave_enabled` (Boolean)
+- `work_dir` (String) Working directory path for workflow execution
+
+<a id="nestedatt--compute_env--config--local_platform--environment"></a>
+### Nested Schema for `compute_env.config.local_platform.environment`
 
 Read-Only:
 
@@ -697,3 +818,16 @@ Read-Only:
 - `name` (String) Name or key of the label
 - `resource` (Boolean) Flag indicating if this is a resource-level label
 - `value` (String) Value associated with the label
+
+
+<a id="nestedatt--compute_env--resources"></a>
+### Nested Schema for `compute_env.resources`
+
+Read-Only:
+
+- `cpus` (Number)
+- `disk_size` (Number)
+- `estimated_price` (Number)
+- `gpus` (Number)
+- `instance_type` (String)
+- `memory` (Number)

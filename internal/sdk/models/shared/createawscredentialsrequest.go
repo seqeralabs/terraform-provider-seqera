@@ -6,9 +6,9 @@ type CreateAWSCredentialsRequest struct {
 	Credentials *AWSCredential `json:"credentials,omitempty"`
 }
 
-func (o *CreateAWSCredentialsRequest) GetCredentials() *AWSCredential {
-	if o == nil {
+func (c *CreateAWSCredentialsRequest) GetCredentials() *AWSCredential {
+	if c == nil {
 		return nil
 	}
-	return o.Credentials
+	return c.Credentials
 }

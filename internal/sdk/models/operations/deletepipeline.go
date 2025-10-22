@@ -14,18 +14,18 @@ type DeletePipelineRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DeletePipelineRequest) GetPipelineID() int64 {
-	if o == nil {
+func (d *DeletePipelineRequest) GetPipelineID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.PipelineID
+	return d.PipelineID
 }
 
-func (o *DeletePipelineRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeletePipelineRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DeletePipelineResponse struct {
@@ -39,30 +39,30 @@ type DeletePipelineResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeletePipelineResponse) GetContentType() string {
-	if o == nil {
+func (d *DeletePipelineResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeletePipelineResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeletePipelineResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeletePipelineResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeletePipelineResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeletePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeletePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

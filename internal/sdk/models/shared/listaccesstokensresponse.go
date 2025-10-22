@@ -6,9 +6,9 @@ type ListAccessTokensResponse struct {
 	Tokens []AccessToken `json:"tokens,omitempty"`
 }
 
-func (o *ListAccessTokensResponse) GetTokens() []AccessToken {
-	if o == nil {
+func (l *ListAccessTokensResponse) GetTokens() []AccessToken {
+	if l == nil {
 		return nil
 	}
-	return o.Tokens
+	return l.Tokens
 }

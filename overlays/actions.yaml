@@ -38,3 +38,23 @@ actions:
 
         Seqera Platform currently offers support for native GitHub webhooks and a general
         Tower webhook that can be invoked programmatically.
+
+  # Add descriptions to Launch fields used in Action
+  - target: $.components.schemas.Launch.properties.postRunScript
+    update:
+      description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+  - target: $.components.schemas.Launch.properties.preRunScript
+    update:
+      description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+  - target: $.components.schemas.Launch.properties.workDir
+    update:
+      description: Working directory for workflow execution
+  - target: $.components.schemas.Launch.properties.pipeline
+    update:
+      description: Repository URL or name of the Nextflow pipeline to execute
+  - target: $.components.schemas.Launch.properties.configText
+    update:
+      description: Nextflow configuration content to customize the pipeline execution
+  - target: $.components.schemas.Launch.properties.paramsText
+    update:
+      description: Pipeline parameters in JSON or YAML format

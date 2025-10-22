@@ -29,65 +29,65 @@ func (a *AwsCloudPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AwsCloudPlatformMetainfo) GetDiscriminator() *string {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AwsCloudPlatformMetainfo) GetWarnings() []string {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetWarnings() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Warnings
+	return a.Warnings
 }
 
-func (o *AwsCloudPlatformMetainfo) GetBuckets() []Bucket {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetBuckets() []Bucket {
+	if a == nil {
 		return nil
 	}
-	return o.Buckets
+	return a.Buckets
 }
 
-func (o *AwsCloudPlatformMetainfo) GetKeyPairs() []string {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetKeyPairs() []string {
+	if a == nil {
 		return nil
 	}
-	return o.KeyPairs
+	return a.KeyPairs
 }
 
-func (o *AwsCloudPlatformMetainfo) GetVpcs() []Vpc {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetVpcs() []Vpc {
+	if a == nil {
 		return nil
 	}
-	return o.Vpcs
+	return a.Vpcs
 }
 
-func (o *AwsCloudPlatformMetainfo) GetImages() []Image {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetImages() []Image {
+	if a == nil {
 		return nil
 	}
-	return o.Images
+	return a.Images
 }
 
-func (o *AwsCloudPlatformMetainfo) GetSecurityGroups() []SecurityGroup {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetSecurityGroups() []SecurityGroup {
+	if a == nil {
 		return nil
 	}
-	return o.SecurityGroups
+	return a.SecurityGroups
 }
 
-func (o *AwsCloudPlatformMetainfo) GetSubnets() []Subnet {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetSubnets() []Subnet {
+	if a == nil {
 		return nil
 	}
-	return o.Subnets
+	return a.Subnets
 }
 
-func (o *AwsCloudPlatformMetainfo) GetInstanceTypes() []InstanceType {
-	if o == nil {
+func (a *AwsCloudPlatformMetainfo) GetInstanceTypes() []InstanceType {
+	if a == nil {
 		return nil
 	}
-	return o.InstanceTypes
+	return a.InstanceTypes
 }

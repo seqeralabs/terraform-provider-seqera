@@ -1,7 +1,7 @@
 # Seqera Platform Terraform Provider
 
 > [!CAUTION]
-> **Early Preview** - This provider is in early preview and subject to breaking changes. APIs and resource schemas may change without notice. Please use with caution in production environments and report any issues you encounter.
+ > **Early Preview** - This provider is in early preview and subject to breaking changes. APIs and resource schemas may change without notice. Please use with caution in production environments and report any issues you encounter.
 
 Terraform Provider for the Seqera Platform API.
 
@@ -23,6 +23,7 @@ Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-cod
 <!-- $toc-max-depth=2 -->
 * [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
   * [Installation](#installation)
+  * [Authentication](#authentication)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
   * [Best Practices](#best-practices)
   * [Examples](#examples)
@@ -52,6 +53,18 @@ provider "seqera" {
 }
 ```
 <!-- End Installation [installation] -->
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+This provider supports authentication configuration via provider configuration.
+
+Available configuration:
+
+| Provider Attribute | Description |
+|---|---|
+| `bearer_auth` | HTTP Bearer. |
+<!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
@@ -106,67 +119,68 @@ provider "seqera" {
 
 ### Prerequisites
 
-* **Terraform Knowledge**: Familiar with Terraform concepts, state management, and limitations
-* **Permissions**: Sufficient permissions in cloud provider and Seqera Platform
-* **Cost Management**: Infrastructure spend awareness and cost controls
-* **API Access**: Proper API access to Seqera Platform with authentication
+- **Terraform Knowledge**: Familiar with Terraform concepts, state management, and limitations
+- **Permissions**: Sufficient permissions in cloud provider and Seqera Platform
+- **Cost Management**: Infrastructure spend awareness and cost controls
+- **API Access**: Proper API access to Seqera Platform with authentication
 
 ### Security
 
 #### ✅ DO
 
-* **Secure Credentials**: Use environment variables, Terraform Cloud variables, or secret management systems
-* **Least Privilege**: Grant minimum necessary permissions to Terraform service accounts
-* **Secure State**: Store Terraform state in remote backends (Terraform Cloud, S3, Azure Storage)
-* **Encryption**: Ensure sensitive data is encrypted at rest and in transit
+- **Secure Credentials**: Use environment variables, Terraform Cloud variables, or secret management systems
+- **Least Privilege**: Grant minimum necessary permissions to Terraform service accounts
+- **Secure State**: Store Terraform state in remote backends (Terraform Cloud, S3, Azure Storage)
+- **Encryption**: Ensure sensitive data is encrypted at rest and in transit
 
 #### ❌ DON'T
 
-* **Plain Text Secrets**: Never pass secrets, API keys, or credentials in plain text
-* **Hardcoded Values**: Avoid hardcoding sensitive information in `.tf` files
-* **Public State**: Never commit Terraform state files to version control
+- **Plain Text Secrets**: Never pass secrets, API keys, or credentials in plain text
+- **Hardcoded Values**: Avoid hardcoding sensitive information in `.tf` files
+- **Public State**: Never commit Terraform state files to version control
 
 ### Resource Management
 
 #### ✅ DO
 
-* **Persistent Resources**: Use for persistent infrastructure resources on Seqera Platform
-* **State Management**: Always use Terraform state to track infrastructure
-* **Naming & Tagging**: Use consistent naming conventions and comprehensive tagging
-* **Modular Design**: Organize code into reusable modules
+- **Persistent Resources**: Use for persistent infrastructure resources on Seqera Platform
+- **State Management**: Always use Terraform state to track infrastructure
+- **Naming & Tagging**: Use consistent naming conventions and comprehensive tagging
+- **Modular Design**: Organize code into reusable modules
 
 #### ❌ DON'T
 
-* **Pipeline Orchestration**: Don't use for launching pipelines except as smoke tests for compute environments (use Seqera Platform APIs for routine pipeline launches)
-* **Cross Dependencies**: Avoid dependencies between Batch Forge and Terraform resources
-* **State Assumptions**: Do not assume the state reflects user-managed resources that may have been modified elsewhere.
+- **Pipeline Orchestration**: Don't use for launching pipelines except as smoke tests for compute environments (use Seqera Platform APIs for routine pipeline launches)
+- **Cross Dependencies**: Avoid dependencies between Batch Forge and Terraform resources
+- **State Assumptions**: Do not assume the state reflects user-managed resources that may have been modified elsewhere.
 
 ### Operations
 
 #### ✅ DO
 
-* **Version Control**: Store configurations in version control
-* **Code Review**: Implement review processes for infrastructure changes
-* **Environment Separation**: Use separate workspaces/configurations for environments
-* **Monitoring**: Set up monitoring and alerting
-* **Backup Strategy**: Maintain backups of state and configurations
+- **Version Control**: Store configurations in version control
+- **Code Review**: Implement review processes for infrastructure changes
+- **Environment Separation**: Use separate workspaces/configurations for environments
+- **Monitoring**: Set up monitoring and alerting
+- **Backup Strategy**: Maintain backups of state and configurations
 
 #### ❌ DON'T
 
-* **Manual Changes**: Avoid direct modifications to Terraform-managed resources
-* **Single Recovery**: Don't rely solely on Terraform for disaster recovery
-* **Resource Drift**: Don't allow resources to drift from Terraform state
+- **Manual Changes**: Avoid direct modifications to Terraform-managed resources
+- **Single Recovery**: Don't rely solely on Terraform for disaster recovery
+- **Resource Drift**: Don't allow resources to drift from Terraform state
 
 <!-- Start Examples [examples] -->
+
 ## Examples
 
 The `examples/terraform-examples` directory contains comprehensive Terraform configurations demonstrating how to use the Seqera Platform provider across different cloud platforms. Each example includes a complete setup from organization to running nf-core/rnaseq.
 
 ### Cloud Platform Examples
 
-* **[AWS Example (`examples/terraform-examples/aws/`)](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
-* **[Azure Example (`examples/terraform-examples/azure/`)](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline
-* **[GCP Example (`examples/terraform-examples/gcp/`)](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
+- **[AWS Example (`examples/terraform-examples/aws/`)](examples/terraform-examples/aws/README.md)** - Complete AWS Batch setup with nf-core/rnaseq pipeline
+- **[Azure Example (`examples/terraform-examples/azure/`)](examples/terraform-examples/azure/README.md)** - Complete Azure Batch setup with nf-core/rnaseq pipeline
+- **[GCP Example (`examples/terraform-examples/gcp/`)](examples/terraform-examples/gcp/README.md)** - Complete Google Batch setup with genomics-optimized instances
 
 ### Getting Started with Examples
 
@@ -174,11 +188,12 @@ The `examples/terraform-examples` directory contains comprehensive Terraform con
 2. **Copy the example tfvars**: `cp terraform.tfvars.example terraform.tfvars`
 3. **Configure your credentials** and settings in `terraform.tfvars`
 4. **Amend any variable/resource names or values** ,ensure you update your organization name as that has to be unique.
-4. **Initialize Terraform**: `terraform init`
-5. **Review the plan**: `terraform plan`
-6. **Apply when ready**: `terraform apply`
+5. **Initialize Terraform**: `terraform init`
+6. **Review the plan**: `terraform plan`
+7. **Apply when ready**: `terraform apply`
 
 Each example includes detailed variable descriptions and validation rules to help you configure the resources correctly for your environment.
+
 <!-- End Examples [examples] -->
 
 <!-- Start Testing the provider locally [usage] -->

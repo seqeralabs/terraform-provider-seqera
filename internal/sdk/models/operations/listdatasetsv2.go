@@ -10,13 +10,76 @@ import (
 type ListDatasetsV2Request struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Pagination max results
+	Max *int `queryParam:"style=form,explode=true,name=max"`
+	// Pagination offset
+	Offset *int `queryParam:"style=form,explode=true,name=offset"`
+	// Search query
+	Search *string `queryParam:"style=form,explode=true,name=search"`
+	// Sort field supports (`name`, `modified`), defaults to `name`
+	SortBy *string `queryParam:"style=form,explode=true,name=sortBy"`
+	// Sort direction supports (`asc`, `desc`), defaults to `asc`
+	SortDir *string `queryParam:"style=form,explode=true,name=sortDir"`
+	// Visibility option supports (`visible`, `hidden`, `all`), defaults to `visible`
+	Visibility *string `queryParam:"style=form,explode=true,name=visibility"`
+	// Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.
+	Attributes []shared.DatasetQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 }
 
-func (o *ListDatasetsV2Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListDatasetsV2Request) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
+}
+
+func (l *ListDatasetsV2Request) GetMax() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Max
+}
+
+func (l *ListDatasetsV2Request) GetOffset() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Offset
+}
+
+func (l *ListDatasetsV2Request) GetSearch() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Search
+}
+
+func (l *ListDatasetsV2Request) GetSortBy() *string {
+	if l == nil {
+		return nil
+	}
+	return l.SortBy
+}
+
+func (l *ListDatasetsV2Request) GetSortDir() *string {
+	if l == nil {
+		return nil
+	}
+	return l.SortDir
+}
+
+func (l *ListDatasetsV2Request) GetVisibility() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Visibility
+}
+
+func (l *ListDatasetsV2Request) GetAttributes() []shared.DatasetQueryAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.Attributes
 }
 
 type ListDatasetsV2Response struct {
@@ -32,37 +95,37 @@ type ListDatasetsV2Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListDatasetsV2Response) GetContentType() string {
-	if o == nil {
+func (l *ListDatasetsV2Response) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDatasetsV2Response) GetStatusCode() int {
-	if o == nil {
+func (l *ListDatasetsV2Response) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDatasetsV2Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDatasetsV2Response) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDatasetsV2Response) GetListDatasetsResponse() *shared.ListDatasetsResponse {
-	if o == nil {
+func (l *ListDatasetsV2Response) GetListDatasetsResponse() *shared.ListDatasetsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListDatasetsResponse
+	return l.ListDatasetsResponse
 }
 
-func (o *ListDatasetsV2Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListDatasetsV2Response) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

@@ -20,37 +20,37 @@ type TokenListResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *TokenListResponse) GetContentType() string {
-	if o == nil {
+func (t *TokenListResponse) GetContentType() string {
+	if t == nil {
 		return ""
 	}
-	return o.ContentType
+	return t.ContentType
 }
 
-func (o *TokenListResponse) GetStatusCode() int {
-	if o == nil {
+func (t *TokenListResponse) GetStatusCode() int {
+	if t == nil {
 		return 0
 	}
-	return o.StatusCode
+	return t.StatusCode
 }
 
-func (o *TokenListResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (t *TokenListResponse) GetRawResponse() *http.Response {
+	if t == nil {
 		return nil
 	}
-	return o.RawResponse
+	return t.RawResponse
 }
 
-func (o *TokenListResponse) GetListAccessTokensResponse() *shared.ListAccessTokensResponse {
-	if o == nil {
+func (t *TokenListResponse) GetListAccessTokensResponse() *shared.ListAccessTokensResponse {
+	if t == nil {
 		return nil
 	}
-	return o.ListAccessTokensResponse
+	return t.ListAccessTokensResponse
 }
 
-func (o *TokenListResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (t *TokenListResponse) GetErrorResponse() *shared.ErrorResponse {
+	if t == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return t.ErrorResponse
 }

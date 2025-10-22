@@ -144,8 +144,11 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			"launch": schema.SingleNestedAttribute{
 				Required: true,
 				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Optional: true,
+					},
 					"compute_env_id": schema.StringAttribute{
-						Required: true,
+						Optional: true,
 					},
 					"config_profiles": schema.ListAttribute{
 						Optional:    true,
@@ -192,12 +195,10 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Required: true,
 					},
 					"post_run_script": schema.StringAttribute{
-						Optional:    true,
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Optional: true,
 					},
 					"pre_run_script": schema.StringAttribute{
-						Optional:    true,
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Optional: true,
 					},
 					"pull_latest": schema.BoolAttribute{
 						Optional: true,
@@ -228,7 +229,7 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						ElementType: types.StringType,
 					},
 					"work_dir": schema.StringAttribute{
-						Required: true,
+						Optional: true,
 					},
 					"workspace_secrets": schema.ListAttribute{
 						Optional:    true,
@@ -363,11 +364,11 @@ func (r *PipelineResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreatePipelineResponse != nil && res.CreatePipelineResponse.Pipeline != nil) {
+	if !(res.CreatePipelineResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res.CreatePipelineResponse.Pipeline)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreatePipelineResponse(ctx, res.CreatePipelineResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -400,11 +401,11 @@ func (r *PipelineResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribePipelineResponse != nil && res1.DescribePipelineResponse.Pipeline != nil) {
+	if !(res1.DescribePipelineResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res1.DescribePipelineResponse.Pipeline)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineResponse(ctx, res1.DescribePipelineResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -464,11 +465,11 @@ func (r *PipelineResource) Read(ctx context.Context, req resource.ReadRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribePipelineResponse != nil && res.DescribePipelineResponse.Pipeline != nil) {
+	if !(res.DescribePipelineResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res.DescribePipelineResponse.Pipeline)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineResponse(ctx, res.DescribePipelineResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -514,11 +515,11 @@ func (r *PipelineResource) Update(ctx context.Context, req resource.UpdateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.UpdatePipelineResponse != nil && res.UpdatePipelineResponse.Pipeline != nil) {
+	if !(res.UpdatePipelineResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res.UpdatePipelineResponse.Pipeline)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedUpdatePipelineResponse(ctx, res.UpdatePipelineResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -551,11 +552,11 @@ func (r *PipelineResource) Update(ctx context.Context, req resource.UpdateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribePipelineResponse != nil && res1.DescribePipelineResponse.Pipeline != nil) {
+	if !(res1.DescribePipelineResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineDbDto(ctx, res1.DescribePipelineResponse.Pipeline)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineResponse(ctx, res1.DescribePipelineResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

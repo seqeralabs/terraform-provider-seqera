@@ -7,16 +7,16 @@ type Team struct {
 	Description *string `json:"description,omitempty"`
 }
 
-func (o *Team) GetName() string {
-	if o == nil {
+func (t *Team) GetName() string {
+	if t == nil {
 		return ""
 	}
-	return o.Name
+	return t.Name
 }
 
-func (o *Team) GetDescription() *string {
-	if o == nil {
+func (t *Team) GetDescription() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Description
+	return t.Description
 }

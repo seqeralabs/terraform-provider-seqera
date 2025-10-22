@@ -63,7 +63,7 @@ func (s *Workflows) ListWorkflows(ctx context.Context, request operations.ListWo
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListWorkflows",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -219,7 +219,7 @@ func (s *Workflows) DeleteWorkflowMany(ctx context.Context, request operations.D
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteWorkflowMany",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DeleteWorkflowsRequest", "json", `request:"mediaType=application/json"`)
@@ -383,7 +383,7 @@ func (s *Workflows) CreateWorkflowLaunch(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateWorkflowLaunch",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "SubmitWorkflowLaunchRequest", "json", `request:"mediaType=application/json"`)
@@ -613,7 +613,7 @@ func (s *Workflows) GenerateRandomWorkflowName(ctx context.Context, opts ...oper
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GenerateRandomWorkflowName",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -744,7 +744,7 @@ func (s *Workflows) ValidateWorkflowConstraints(ctx context.Context, request ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateWorkflowConstraints",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -882,7 +882,7 @@ func (s *Workflows) DescribeWorkflow(ctx context.Context, request operations.Des
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeWorkflow",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1037,7 +1037,7 @@ func (s *Workflows) DeleteWorkflow(ctx context.Context, request operations.Delet
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteWorkflow",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1173,7 +1173,7 @@ func (s *Workflows) CancelWorkflow(ctx context.Context, request operations.Cance
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CancelWorkflow",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
@@ -1316,7 +1316,7 @@ func (s *Workflows) DownloadWorkflowLog(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DownloadWorkflowLog",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1467,7 +1467,7 @@ func (s *Workflows) DownloadWorkflowTaskLog(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DownloadWorkflowTaskLog",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1618,7 +1618,7 @@ func (s *Workflows) DescribeWorkflowLaunch(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeWorkflowLaunch",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1745,9 +1745,9 @@ func (s *Workflows) DescribeWorkflowLaunch(ctx context.Context, request operatio
 
 }
 
-// WorkflowLogs - Get workflow logs
+// GetWorkflowLog - Get workflow logs
 // Retrieves the output logs for the Nextflow main job of the workflow identified by the given `workflowId`.
-func (s *Workflows) WorkflowLogs(ctx context.Context, request operations.WorkflowLogsRequest, opts ...operations.Option) (*operations.WorkflowLogsResponse, error) {
+func (s *Workflows) GetWorkflowLog(ctx context.Context, request operations.GetWorkflowLogRequest, opts ...operations.Option) (*operations.GetWorkflowLogResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1775,8 +1775,8 @@ func (s *Workflows) WorkflowLogs(ctx context.Context, request operations.Workflo
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "WorkflowLogs",
-		OAuth2Scopes:     []string{},
+		OperationID:      "GetWorkflowLog",
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1839,7 +1839,7 @@ func (s *Workflows) WorkflowLogs(ctx context.Context, request operations.Workflo
 		}
 	}
 
-	res := &operations.WorkflowLogsResponse{
+	res := &operations.GetWorkflowLogResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -1932,7 +1932,7 @@ func (s *Workflows) GetWorkflowTaskLog(ctx context.Context, request operations.G
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "GetWorkflowTaskLog",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2087,7 +2087,7 @@ func (s *Workflows) DescribeWorkflowMetrics(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeWorkflowMetrics",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2242,7 +2242,7 @@ func (s *Workflows) DescribeWorkflowProgress(ctx context.Context, request operat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeWorkflowProgress",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2397,7 +2397,7 @@ func (s *Workflows) DescribeWorkflowTask(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeWorkflowTask",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -2552,7 +2552,7 @@ func (s *Workflows) ListWorkflowTasks(ctx context.Context, request operations.Li
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListWorkflowTasks",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

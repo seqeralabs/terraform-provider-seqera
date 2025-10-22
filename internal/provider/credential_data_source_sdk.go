@@ -33,6 +33,14 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AccessKey)
 			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.SecurityKeysAwsSecurityKeysOutput.AssumeRoleArn)
 		}
+		if resp.Keys.AzureCloudKeysOutput != nil {
+			r.Keys.AzureCloud = &tfTypes.AzureCloudKeys1{}
+			r.Keys.AzureCloud.BatchName = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.BatchName)
+			r.Keys.AzureCloud.ClientID = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.ClientID)
+			r.Keys.AzureCloud.StorageName = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.StorageName)
+			r.Keys.AzureCloud.SubscriptionID = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.SubscriptionID)
+			r.Keys.AzureCloud.TenantID = types.StringPointerValue(resp.Keys.AzureCloudKeysOutput.TenantID)
+		}
 		if resp.Keys.AzureEntraKeysOutput != nil {
 			r.Keys.AzureEntra = &tfTypes.AzureEntraKeys1{}
 			r.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.BatchName)
@@ -42,6 +50,7 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 		}
 		if resp.Keys.AzureReposSecurityKeysOutput != nil {
 			r.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys1{}
+			r.Keys.Azurerepos.Token = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Token)
 			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
 		}
 		if resp.Keys.SecurityKeysAzureSecurityKeysOutput != nil {
@@ -55,6 +64,7 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 		}
 		if resp.Keys.CodeCommitSecurityKeysOutput != nil {
 			r.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys1{}
+			r.Keys.Codecommit.Token = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Token)
 			r.Keys.Codecommit.Username = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Username)
 		}
 		if resp.Keys.ContainerRegistryKeysOutput != nil {
@@ -64,10 +74,12 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 		}
 		if resp.Keys.GiteaSecurityKeysOutput != nil {
 			r.Keys.Gitea = &tfTypes.GiteaSecurityKeys1{}
+			r.Keys.Gitea.Token = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Token)
 			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Username)
 		}
 		if resp.Keys.GitHubSecurityKeysOutput != nil {
 			r.Keys.Github = &tfTypes.GitHubSecurityKeys1{}
+			r.Keys.Github.Token = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Token)
 			r.Keys.Github.Username = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Username)
 		}
 		if resp.Keys.GitLabSecurityKeysOutput != nil {
@@ -81,6 +93,14 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 			r.Keys.K8s = &tfTypes.K8sSecurityKeys1{}
 			r.Keys.K8s.Certificate = types.StringPointerValue(resp.Keys.K8sSecurityKeysOutput.Certificate)
 		}
+		if resp.Keys.LocalSecurityKeysOutput != nil {
+			r.Keys.Local = &tfTypes.LocalSecurityKeys1{}
+		}
+		if resp.Keys.S3SecurityKeysOutput != nil {
+			r.Keys.S3 = &tfTypes.S3SecurityKeys1{}
+			r.Keys.S3.AccessKey = types.StringPointerValue(resp.Keys.S3SecurityKeysOutput.AccessKey)
+			r.Keys.S3.PathStyleAccessEnabled = types.BoolPointerValue(resp.Keys.S3SecurityKeysOutput.PathStyleAccessEnabled)
+		}
 		if resp.Keys.SeqeraComputeSecurityKeysOutput != nil {
 			r.Keys.Seqeracompute = &tfTypes.SeqeraComputeSecurityKeys1{}
 			r.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Keys.SeqeraComputeSecurityKeysOutput.AccessKey)
@@ -93,6 +113,21 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		r.ProviderType = types.StringValue(string(resp.ProviderType))
+	}
+
+	return diags
+}
+
+func (r *CredentialDataSourceModel) RefreshFromSharedDescribeCredentialsResponse(ctx context.Context, resp *shared.DescribeCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedCredentialsOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags

@@ -8,9 +8,10 @@ import (
 )
 
 type DataStudioStatusInfo struct {
-	Status     *DataStudioStatus `json:"status,omitempty"`
-	Message    *string           `json:"message,omitempty"`
-	LastUpdate *time.Time        `json:"lastUpdate,omitempty"`
+	Status     *DataStudioStatus     `json:"status,omitempty"`
+	Message    *string               `json:"message,omitempty"`
+	LastUpdate *time.Time            `json:"lastUpdate,omitempty"`
+	StopReason *DataStudioStopReason `json:"stopReason,omitempty"`
 }
 
 func (d DataStudioStatusInfo) MarshalJSON() ([]byte, error) {
@@ -24,23 +25,30 @@ func (d *DataStudioStatusInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DataStudioStatusInfo) GetStatus() *DataStudioStatus {
-	if o == nil {
+func (d *DataStudioStatusInfo) GetStatus() *DataStudioStatus {
+	if d == nil {
 		return nil
 	}
-	return o.Status
+	return d.Status
 }
 
-func (o *DataStudioStatusInfo) GetMessage() *string {
-	if o == nil {
+func (d *DataStudioStatusInfo) GetMessage() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Message
+	return d.Message
 }
 
-func (o *DataStudioStatusInfo) GetLastUpdate() *time.Time {
-	if o == nil {
+func (d *DataStudioStatusInfo) GetLastUpdate() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.LastUpdate
+	return d.LastUpdate
+}
+
+func (d *DataStudioStatusInfo) GetStopReason() *DataStudioStopReason {
+	if d == nil {
+		return nil
+	}
+	return d.StopReason
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type UpdateTraceBeginRequest struct {
-	// Workflow string identifier.
+	// Workflow string identifier
 	WorkflowID string `pathParam:"style=simple,explode=false,name=workflowId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
@@ -16,25 +16,25 @@ type UpdateTraceBeginRequest struct {
 	TraceBeginRequest shared.TraceBeginRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateTraceBeginRequest) GetWorkflowID() string {
-	if o == nil {
+func (u *UpdateTraceBeginRequest) GetWorkflowID() string {
+	if u == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return u.WorkflowID
 }
 
-func (o *UpdateTraceBeginRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateTraceBeginRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateTraceBeginRequest) GetTraceBeginRequest() shared.TraceBeginRequest {
-	if o == nil {
+func (u *UpdateTraceBeginRequest) GetTraceBeginRequest() shared.TraceBeginRequest {
+	if u == nil {
 		return shared.TraceBeginRequest{}
 	}
-	return o.TraceBeginRequest
+	return u.TraceBeginRequest
 }
 
 type UpdateTraceBeginResponse struct {
@@ -50,37 +50,37 @@ type UpdateTraceBeginResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateTraceBeginResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateTraceBeginResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateTraceBeginResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateTraceBeginResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateTraceBeginResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateTraceBeginResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateTraceBeginResponse) GetTraceBeginResponse() *shared.TraceBeginResponse {
-	if o == nil {
+func (u *UpdateTraceBeginResponse) GetTraceBeginResponse() *shared.TraceBeginResponse {
+	if u == nil {
 		return nil
 	}
-	return o.TraceBeginResponse
+	return u.TraceBeginResponse
 }
 
-func (o *UpdateTraceBeginResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateTraceBeginResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

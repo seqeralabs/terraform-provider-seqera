@@ -18,37 +18,37 @@ type TeamDbDto struct {
 	MembersCount *int64 `json:"membersCount,omitempty"`
 }
 
-func (o *TeamDbDto) GetTeamID() *int64 {
-	if o == nil {
+func (t *TeamDbDto) GetTeamID() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.TeamID
+	return t.TeamID
 }
 
-func (o *TeamDbDto) GetName() *string {
-	if o == nil {
+func (t *TeamDbDto) GetName() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Name
+	return t.Name
 }
 
-func (o *TeamDbDto) GetDescription() *string {
-	if o == nil {
+func (t *TeamDbDto) GetDescription() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Description
+	return t.Description
 }
 
-func (o *TeamDbDto) GetAvatarURL() *string {
-	if o == nil {
+func (t *TeamDbDto) GetAvatarURL() *string {
+	if t == nil {
 		return nil
 	}
-	return o.AvatarURL
+	return t.AvatarURL
 }
 
-func (o *TeamDbDto) GetMembersCount() *int64 {
-	if o == nil {
+func (t *TeamDbDto) GetMembersCount() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.MembersCount
+	return t.MembersCount
 }

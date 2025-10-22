@@ -7,16 +7,16 @@ type NavbarConfigNavbarMenu struct {
 	URL   *string `json:"url,omitempty"`
 }
 
-func (o *NavbarConfigNavbarMenu) GetLabel() *string {
-	if o == nil {
+func (n *NavbarConfigNavbarMenu) GetLabel() *string {
+	if n == nil {
 		return nil
 	}
-	return o.Label
+	return n.Label
 }
 
-func (o *NavbarConfigNavbarMenu) GetURL() *string {
-	if o == nil {
+func (n *NavbarConfigNavbarMenu) GetURL() *string {
+	if n == nil {
 		return nil
 	}
-	return o.URL
+	return n.URL
 }

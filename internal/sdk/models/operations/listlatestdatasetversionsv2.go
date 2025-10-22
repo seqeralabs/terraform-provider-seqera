@@ -12,20 +12,47 @@ type ListLatestDatasetVersionsV2Request struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Dataset MIME type
 	MimeType *string `queryParam:"style=form,explode=true,name=mimeType"`
+	// Pagination max results
+	Max *int `queryParam:"style=form,explode=true,name=max"`
+	// Pagination offset
+	Offset *int `queryParam:"style=form,explode=true,name=offset"`
+	// Search query
+	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 
-func (o *ListLatestDatasetVersionsV2Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Request) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListLatestDatasetVersionsV2Request) GetMimeType() *string {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Request) GetMimeType() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MimeType
+	return l.MimeType
+}
+
+func (l *ListLatestDatasetVersionsV2Request) GetMax() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Max
+}
+
+func (l *ListLatestDatasetVersionsV2Request) GetOffset() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Offset
+}
+
+func (l *ListLatestDatasetVersionsV2Request) GetSearch() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Search
 }
 
 type ListLatestDatasetVersionsV2Response struct {
@@ -41,37 +68,37 @@ type ListLatestDatasetVersionsV2Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetContentType() string {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetStatusCode() int {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetListDatasetVersionsResponse() *shared.ListDatasetVersionsResponse {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetListDatasetVersionsResponse() *shared.ListDatasetVersionsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListDatasetVersionsResponse
+	return l.ListDatasetVersionsResponse
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

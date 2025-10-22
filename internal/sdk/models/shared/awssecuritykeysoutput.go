@@ -8,23 +8,23 @@ type AwsSecurityKeysOutput struct {
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 }
 
-func (o *AwsSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (a *AwsSecurityKeysOutput) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AwsSecurityKeysOutput) GetAccessKey() *string {
-	if o == nil {
+func (a *AwsSecurityKeysOutput) GetAccessKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.AccessKey
+	return a.AccessKey
 }
 
-func (o *AwsSecurityKeysOutput) GetAssumeRoleArn() *string {
-	if o == nil {
+func (a *AwsSecurityKeysOutput) GetAssumeRoleArn() *string {
+	if a == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return a.AssumeRoleArn
 }

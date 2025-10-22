@@ -8,24 +8,24 @@ import (
 )
 
 type DeleteCustomDataLinkRequest struct {
-	// Data-link identifier
+	// Data-link string identifier
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DeleteCustomDataLinkRequest) GetDataLinkID() string {
-	if o == nil {
+func (d *DeleteCustomDataLinkRequest) GetDataLinkID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return d.DataLinkID
 }
 
-func (o *DeleteCustomDataLinkRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteCustomDataLinkRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DeleteCustomDataLinkResponse struct {
@@ -39,30 +39,30 @@ type DeleteCustomDataLinkResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteCustomDataLinkResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteCustomDataLinkResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteCustomDataLinkResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteCustomDataLinkResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteCustomDataLinkResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteCustomDataLinkResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteCustomDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteCustomDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

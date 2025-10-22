@@ -14,18 +14,18 @@ type CreateAzureCredentialsRequest struct {
 	CreateAzureCredentialsRequest shared.CreateAzureCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateAzureCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreateAzureCredentialsRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateAzureCredentialsRequest) GetCreateAzureCredentialsRequest() shared.CreateAzureCredentialsRequest {
-	if o == nil {
+func (c *CreateAzureCredentialsRequest) GetCreateAzureCredentialsRequest() shared.CreateAzureCredentialsRequest {
+	if c == nil {
 		return shared.CreateAzureCredentialsRequest{}
 	}
-	return o.CreateAzureCredentialsRequest
+	return c.CreateAzureCredentialsRequest
 }
 
 type CreateAzureCredentialsResponse struct {
@@ -41,37 +41,37 @@ type CreateAzureCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateAzureCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateAzureCredentialsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateAzureCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateAzureCredentialsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateAzureCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateAzureCredentialsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateAzureCredentialsResponse) GetCreateAzureCredentialsResponse() *shared.CreateAzureCredentialsResponse {
-	if o == nil {
+func (c *CreateAzureCredentialsResponse) GetCreateAzureCredentialsResponse() *shared.CreateAzureCredentialsResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateAzureCredentialsResponse
+	return c.CreateAzureCredentialsResponse
 }
 
-func (o *CreateAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

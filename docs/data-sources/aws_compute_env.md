@@ -75,8 +75,8 @@ Read-Only:
 - `lustre_id` (String, Deprecated)
 - `nextflow_config` (String)
 - `nvnme_storage_enabled` (Boolean)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String)
+- `pre_run_script` (String)
 - `region` (String)
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)

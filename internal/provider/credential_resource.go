@@ -131,6 +131,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Validators: []validator.Object{
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -142,6 +143,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -169,6 +172,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
@@ -179,6 +183,63 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
+								path.MatchRelative().AtParent().AtName("seqeracompute"),
+								path.MatchRelative().AtParent().AtName("ssh"),
+							}...),
+						},
+					},
+					"azure_cloud": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"batch_key": schema.StringAttribute{
+								Optional: true,
+							},
+							"batch_name": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"client_id": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"client_secret": schema.StringAttribute{
+								Optional: true,
+							},
+							"storage_key": schema.StringAttribute{
+								Optional: true,
+							},
+							"storage_name": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"subscription_id": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"tenant_id": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+						},
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_entra"),
+								path.MatchRelative().AtParent().AtName("azurerepos"),
+								path.MatchRelative().AtParent().AtName("azure"),
+								path.MatchRelative().AtParent().AtName("bitbucket"),
+								path.MatchRelative().AtParent().AtName("codecommit"),
+								path.MatchRelative().AtParent().AtName("container_reg"),
+								path.MatchRelative().AtParent().AtName("gitea"),
+								path.MatchRelative().AtParent().AtName("github"),
+								path.MatchRelative().AtParent().AtName("gitlab"),
+								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -217,6 +278,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
@@ -227,6 +289,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -238,6 +302,10 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
+							"token": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -247,6 +315,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
@@ -257,6 +326,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -268,6 +339,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
+							"token": schema.StringAttribute{
+								Optional: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -277,6 +351,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -287,6 +362,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -298,6 +375,10 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
+							"token": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -307,6 +388,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -317,6 +399,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -341,6 +425,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -351,6 +436,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -362,6 +449,10 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
+							"token": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -371,6 +462,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -381,6 +473,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -393,6 +487,10 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional:  true,
 								Sensitive: true,
 							},
+							"token": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
 							"username": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
@@ -402,6 +500,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -412,6 +511,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -435,6 +536,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -445,6 +547,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -462,6 +566,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -472,6 +577,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -496,6 +603,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -506,6 +614,74 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
+								path.MatchRelative().AtParent().AtName("seqeracompute"),
+								path.MatchRelative().AtParent().AtName("ssh"),
+							}...),
+						},
+					},
+					"local": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"password": schema.StringAttribute{
+								Optional: true,
+							},
+						},
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
+								path.MatchRelative().AtParent().AtName("azure_entra"),
+								path.MatchRelative().AtParent().AtName("azurerepos"),
+								path.MatchRelative().AtParent().AtName("azure"),
+								path.MatchRelative().AtParent().AtName("bitbucket"),
+								path.MatchRelative().AtParent().AtName("codecommit"),
+								path.MatchRelative().AtParent().AtName("container_reg"),
+								path.MatchRelative().AtParent().AtName("gitea"),
+								path.MatchRelative().AtParent().AtName("github"),
+								path.MatchRelative().AtParent().AtName("gitlab"),
+								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("s3"),
+								path.MatchRelative().AtParent().AtName("seqeracompute"),
+								path.MatchRelative().AtParent().AtName("ssh"),
+							}...),
+						},
+					},
+					"s3": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"access_key": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"path_style_access_enabled": schema.BoolAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"secret_key": schema.StringAttribute{
+								Optional: true,
+							},
+						},
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
+								path.MatchRelative().AtParent().AtName("azure_entra"),
+								path.MatchRelative().AtParent().AtName("azurerepos"),
+								path.MatchRelative().AtParent().AtName("azure"),
+								path.MatchRelative().AtParent().AtName("bitbucket"),
+								path.MatchRelative().AtParent().AtName("codecommit"),
+								path.MatchRelative().AtParent().AtName("container_reg"),
+								path.MatchRelative().AtParent().AtName("gitea"),
+								path.MatchRelative().AtParent().AtName("github"),
+								path.MatchRelative().AtParent().AtName("gitlab"),
+								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -530,6 +706,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -541,6 +718,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
 						},
@@ -559,6 +738,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -570,6 +750,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 							}...),
 						},
@@ -593,6 +775,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Validators: []validator.Object{
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -604,6 +787,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -766,11 +951,11 @@ func (r *CredentialResource) Create(ctx context.Context, req resource.CreateRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeCredentialsResponse != nil && res1.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res1.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res1.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -830,11 +1015,11 @@ func (r *CredentialResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeCredentialsResponse != nil && res.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -908,11 +1093,11 @@ func (r *CredentialResource) Update(ctx context.Context, req resource.UpdateRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeCredentialsResponse != nil && res1.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res1.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res1.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

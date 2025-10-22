@@ -12,6 +12,21 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *StudiosResourceModel) RefreshFromSharedDataStudioCreateResponse(ctx context.Context, resp *shared.DataStudioCreateResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedDataStudioDto(ctx, resp.Studio)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Context, resp *shared.DataStudioDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -21,11 +36,11 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		for _, activeConnectionsItem := range resp.ActiveConnections {
 			var activeConnections tfTypes.ActiveConnection
 
-			activeConnections.Avatar = types.StringValue(activeConnectionsItem.Avatar)
-			activeConnections.Email = types.StringValue(activeConnectionsItem.Email)
-			activeConnections.ID = types.Int64Value(activeConnectionsItem.ID)
-			activeConnections.LastActive = types.StringValue(typeconvert.TimeToString(activeConnectionsItem.LastActive))
-			activeConnections.UserName = types.StringValue(activeConnectionsItem.UserName)
+			activeConnections.Avatar = types.StringPointerValue(activeConnectionsItem.Avatar)
+			activeConnections.Email = types.StringPointerValue(activeConnectionsItem.Email)
+			activeConnections.ID = types.Int64PointerValue(activeConnectionsItem.ID)
+			activeConnections.LastActive = types.StringPointerValue(typeconvert.TimePointerToStringPointer(activeConnectionsItem.LastActive))
+			activeConnections.UserName = types.StringPointerValue(activeConnectionsItem.UserName)
 
 			r.ActiveConnections = append(r.ActiveConnections, activeConnections)
 		}
@@ -148,6 +163,14 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 
 			r.Progress = append(r.Progress, progress)
 		}
+		if resp.RemoteConfig == nil {
+			r.RemoteConfig = nil
+		} else {
+			r.RemoteConfig = &tfTypes.RemoteConfig{}
+			r.RemoteConfig.CommitID = types.StringPointerValue(resp.RemoteConfig.CommitID)
+			r.RemoteConfig.Repository = types.StringValue(resp.RemoteConfig.Repository)
+			r.RemoteConfig.Revision = types.StringPointerValue(resp.RemoteConfig.Revision)
+		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
 		if resp.StatusInfo == nil {
 			r.StatusInfo = nil
@@ -159,6 +182,11 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 				r.StatusInfo.Status = types.StringValue(string(*resp.StatusInfo.Status))
 			} else {
 				r.StatusInfo.Status = types.StringNull()
+			}
+			if resp.StatusInfo.StopReason != nil {
+				r.StatusInfo.StopReason = types.StringValue(string(*resp.StatusInfo.StopReason))
+			} else {
+				r.StatusInfo.StopReason = types.StringNull()
 			}
 		}
 		r.StudioURL = types.StringPointerValue(resp.StudioURL)
@@ -178,11 +206,11 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		if resp.User == nil {
 			r.User = nil
 		} else {
-			r.User = &tfTypes.StudioUser{}
-			r.User.Avatar = types.StringValue(resp.User.Avatar)
-			r.User.Email = types.StringValue(resp.User.Email)
-			r.User.ID = types.Int64Value(resp.User.ID)
-			r.User.UserName = types.StringValue(resp.User.UserName)
+			r.User = &tfTypes.UserInfo{}
+			r.User.Avatar = types.StringPointerValue(resp.User.Avatar)
+			r.User.Email = types.StringPointerValue(resp.User.Email)
+			r.User.ID = types.Int64PointerValue(resp.User.ID)
+			r.User.UserName = types.StringPointerValue(resp.User.UserName)
 		}
 		r.WaveBuildURL = types.StringPointerValue(resp.WaveBuildURL)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
@@ -274,9 +302,12 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	} else {
 		description = nil
 	}
-	var dataStudioToolURL string
-	dataStudioToolURL = r.DataStudioToolURL.ValueString()
-
+	dataStudioToolURL := new(string)
+	if !r.DataStudioToolURL.IsUnknown() && !r.DataStudioToolURL.IsNull() {
+		*dataStudioToolURL = r.DataStudioToolURL.ValueString()
+	} else {
+		dataStudioToolURL = nil
+	}
 	var computeEnvID string
 	computeEnvID = r.ComputeEnvID.ValueString()
 
@@ -331,6 +362,29 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 			LifespanHours:    lifespanHours,
 		}
 	}
+	var remoteConfig *shared.RemoteConfig
+	if r.RemoteConfig != nil {
+		var repository string
+		repository = r.RemoteConfig.Repository.ValueString()
+
+		revision := new(string)
+		if !r.RemoteConfig.Revision.IsUnknown() && !r.RemoteConfig.Revision.IsNull() {
+			*revision = r.RemoteConfig.Revision.ValueString()
+		} else {
+			revision = nil
+		}
+		commitID := new(string)
+		if !r.RemoteConfig.CommitID.IsUnknown() && !r.RemoteConfig.CommitID.IsNull() {
+			*commitID = r.RemoteConfig.CommitID.ValueString()
+		} else {
+			commitID = nil
+		}
+		remoteConfig = &shared.RemoteConfig{
+			Repository: repository,
+			Revision:   revision,
+			CommitID:   commitID,
+		}
+	}
 	isPrivate := new(bool)
 	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {
 		*isPrivate = r.IsPrivate.ValueBool()
@@ -357,6 +411,7 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		ComputeEnvID:        computeEnvID,
 		InitialCheckpointID: initialCheckpointID,
 		Configuration:       configuration,
+		RemoteConfig:        remoteConfig,
 		IsPrivate:           isPrivate,
 		LabelIds:            labelIds,
 		Spot:                spot,

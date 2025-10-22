@@ -6,9 +6,9 @@ type ListActionsResponse struct {
 	Actions []ListActionsResponseActionInfo `json:"actions,omitempty"`
 }
 
-func (o *ListActionsResponse) GetActions() []ListActionsResponseActionInfo {
-	if o == nil {
+func (l *ListActionsResponse) GetActions() []ListActionsResponseActionInfo {
+	if l == nil {
 		return nil
 	}
-	return o.Actions
+	return l.Actions
 }

@@ -14,18 +14,18 @@ type UpdateOrganizationRequest struct {
 	UpdateOrganizationRequest shared.UpdateOrganizationRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateOrganizationRequest) GetOrgID() int64 {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetOrgID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.OrgID
+	return u.OrgID
 }
 
-func (o *UpdateOrganizationRequest) GetUpdateOrganizationRequest() shared.UpdateOrganizationRequest {
-	if o == nil {
+func (u *UpdateOrganizationRequest) GetUpdateOrganizationRequest() shared.UpdateOrganizationRequest {
+	if u == nil {
 		return shared.UpdateOrganizationRequest{}
 	}
-	return o.UpdateOrganizationRequest
+	return u.UpdateOrganizationRequest
 }
 
 type UpdateOrganizationResponse struct {
@@ -39,30 +39,30 @@ type UpdateOrganizationResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateOrganizationResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateOrganizationResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateOrganizationResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateOrganizationResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateOrganizationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateOrganizationResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

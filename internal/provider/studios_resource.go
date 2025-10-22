@@ -28,6 +28,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
+	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -67,12 +68,13 @@ type StudiosResourceModel struct {
 	Name                   types.String                           `tfsdk:"name"`
 	ParentCheckpoint       *tfTypes.DataStudioDtoParentCheckpoint `tfsdk:"parent_checkpoint"`
 	Progress               []tfTypes.DataStudioProgressStep       `tfsdk:"progress"`
+	RemoteConfig           *tfTypes.RemoteConfig                  `tfsdk:"remote_config"`
 	SessionID              types.String                           `tfsdk:"session_id"`
 	Spot                   types.Bool                             `tfsdk:"spot"`
 	StatusInfo             *tfTypes.DataStudioStatusInfo          `tfsdk:"status_info"`
 	StudioURL              types.String                           `tfsdk:"studio_url"`
 	Template               *tfTypes.DataStudioTemplate            `tfsdk:"template"`
-	User                   *tfTypes.StudioUser                    `tfsdk:"user"`
+	User                   *tfTypes.UserInfo                      `tfsdk:"user"`
 	WaveBuildURL           types.String                           `tfsdk:"wave_build_url"`
 	WorkspaceID            types.Int64                            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
@@ -180,7 +182,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Number of CPU cores to allocate to the data studio. Requires replacement if changed.`,
 					},
 					"gpu": schema.Int32Attribute{
 						Computed: true,
@@ -189,7 +191,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Number of GPUs to allocate to the data studio. Requires replacement if changed.`,
 					},
 					"lifespan_hours": schema.Int32Attribute{
 						Computed: true,
@@ -198,7 +200,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Maximum lifespan of the data studio session in hours. Requires replacement if changed.`,
 					},
 					"memory": schema.Int32Attribute{
 						Computed: true,
@@ -207,7 +209,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Memory allocation for the data studio in megabytes (MB). Requires replacement if changed.`,
 					},
 					"mount_data": schema.ListAttribute{
 						Computed: true,
@@ -226,14 +228,11 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Computed: true,
 			},
 			"data_studio_tool_url": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtLeast(1),
-				},
 			},
 			"date_created": schema.StringAttribute{
 				Computed: true,
@@ -473,6 +472,47 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					},
 				},
 			},
+			"remote_config": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"revision": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+				},
+				Description: `Requires replacement if changed.`,
+			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the Studio session`,
@@ -508,6 +548,17 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 								"errored",
 								"building",
 								"buildFailed",
+							),
+						},
+					},
+					"stop_reason": schema.StringAttribute{
+						Computed:    true,
+						Description: `must be one of ["CREDITS_RUN_OUT", "LIFESPAN_EXPIRED", "SPOT_RECLAMATION"]`,
+						Validators: []validator.String{
+							stringvalidator.OneOf(
+								"CREDITS_RUN_OUT",
+								"LIFESPAN_EXPIRED",
+								"SPOT_RECLAMATION",
 							),
 						},
 					},
@@ -639,11 +690,11 @@ func (r *StudiosResource) Create(ctx context.Context, req resource.CreateRequest
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DataStudioCreateResponse != nil && res.DataStudioCreateResponse.Studio != nil) {
+	if !(res.DataStudioCreateResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioDto(ctx, res.DataStudioCreateResponse.Studio)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioCreateResponse(ctx, res.DataStudioCreateResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

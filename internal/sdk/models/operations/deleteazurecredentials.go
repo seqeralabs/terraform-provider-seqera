@@ -16,25 +16,25 @@ type DeleteAzureCredentialsRequest struct {
 	Checked *bool `queryParam:"style=form,explode=true,name=checked"`
 }
 
-func (o *DeleteAzureCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DeleteAzureCredentialsRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DeleteAzureCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteAzureCredentialsRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DeleteAzureCredentialsRequest) GetChecked() *bool {
-	if o == nil {
+func (d *DeleteAzureCredentialsRequest) GetChecked() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Checked
+	return d.Checked
 }
 
 type DeleteAzureCredentialsResponse struct {
@@ -50,37 +50,37 @@ type DeleteAzureCredentialsResponse struct {
 	DeleteCredentialsConflictResponse *shared.DeleteCredentialsConflictResponse
 }
 
-func (o *DeleteAzureCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteAzureCredentialsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteAzureCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteAzureCredentialsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteAzureCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteAzureCredentialsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }
 
-func (o *DeleteAzureCredentialsResponse) GetDeleteCredentialsConflictResponse() *shared.DeleteCredentialsConflictResponse {
-	if o == nil {
+func (d *DeleteAzureCredentialsResponse) GetDeleteCredentialsConflictResponse() *shared.DeleteCredentialsConflictResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DeleteCredentialsConflictResponse
+	return d.DeleteCredentialsConflictResponse
 }

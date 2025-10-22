@@ -14,18 +14,18 @@ type DescribeAWSCredentialsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeAWSCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DescribeAWSCredentialsRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DescribeAWSCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeAWSCredentialsRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeAWSCredentialsResponse struct {
@@ -41,37 +41,37 @@ type DescribeAWSCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeAWSCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeAWSCredentialsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeAWSCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeAWSCredentialsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeAWSCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeAWSCredentialsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeAWSCredentialsResponse) GetDescribeAWSCredentialsResponse() *shared.DescribeAWSCredentialsResponse {
-	if o == nil {
+func (d *DescribeAWSCredentialsResponse) GetDescribeAWSCredentialsResponse() *shared.DescribeAWSCredentialsResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeAWSCredentialsResponse
+	return d.DescribeAWSCredentialsResponse
 }
 
-func (o *DescribeAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

@@ -6,9 +6,9 @@ type DataLinkDownloadURLResponse struct {
 	URL *string `json:"url,omitempty"`
 }
 
-func (o *DataLinkDownloadURLResponse) GetURL() *string {
-	if o == nil {
+func (d *DataLinkDownloadURLResponse) GetURL() *string {
+	if d == nil {
 		return nil
 	}
-	return o.URL
+	return d.URL
 }

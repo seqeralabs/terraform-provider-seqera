@@ -8,23 +8,23 @@ type DataStudioProgressStep struct {
 	Warnings []string                      `json:"warnings,omitempty"`
 }
 
-func (o *DataStudioProgressStep) GetStatus() *DataStudioProgressStepStatus {
-	if o == nil {
+func (d *DataStudioProgressStep) GetStatus() *DataStudioProgressStepStatus {
+	if d == nil {
 		return nil
 	}
-	return o.Status
+	return d.Status
 }
 
-func (o *DataStudioProgressStep) GetMessage() *string {
-	if o == nil {
+func (d *DataStudioProgressStep) GetMessage() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Message
+	return d.Message
 }
 
-func (o *DataStudioProgressStep) GetWarnings() []string {
-	if o == nil {
+func (d *DataStudioProgressStep) GetWarnings() []string {
+	if d == nil {
 		return nil
 	}
-	return o.Warnings
+	return d.Warnings
 }

@@ -182,11 +182,11 @@ func (r *UserDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeUserResponse != nil && res.DescribeUserResponse.User != nil) {
+	if !(res.DescribeUserResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedUserDbDto(ctx, res.DescribeUserResponse.User)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeUserResponse(ctx, res.DescribeUserResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

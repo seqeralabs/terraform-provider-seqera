@@ -6,9 +6,9 @@ type DescribePipelineInfoResponse struct {
 	PipelineInfo *PipelineInfo `json:"pipelineInfo,omitempty"`
 }
 
-func (o *DescribePipelineInfoResponse) GetPipelineInfo() *PipelineInfo {
-	if o == nil {
+func (d *DescribePipelineInfoResponse) GetPipelineInfo() *PipelineInfo {
+	if d == nil {
 		return nil
 	}
-	return o.PipelineInfo
+	return d.PipelineInfo
 }

@@ -62,7 +62,7 @@ func (s *Actions) ListActions(ctx context.Context, request operations.ListAction
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListActions",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -218,7 +218,7 @@ func (s *Actions) CreateAction(ctx context.Context, request operations.CreateAct
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateAction",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateActionRequest", "json", `request:"mediaType=application/json"`)
@@ -381,7 +381,7 @@ func (s *Actions) ListActionTypes(ctx context.Context, request operations.ListAc
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListActionTypes",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -537,7 +537,7 @@ func (s *Actions) ValidateActionName(ctx context.Context, request operations.Val
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateActionName",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -675,7 +675,7 @@ func (s *Actions) DescribeAction(ctx context.Context, request operations.Describ
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeAction",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -831,7 +831,7 @@ func (s *Actions) UpdateAction(ctx context.Context, request operations.UpdateAct
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateAction",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateActionRequest", "json", `request:"mediaType=application/json"`)
@@ -974,7 +974,7 @@ func (s *Actions) DeleteAction(ctx context.Context, request operations.DeleteAct
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAction",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1110,7 +1110,7 @@ func (s *Actions) LaunchAction(ctx context.Context, request operations.LaunchAct
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "LaunchAction",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "LaunchActionRequest", "json", `request:"mediaType=application/json"`)
@@ -1273,7 +1273,7 @@ func (s *Actions) PauseAction(ctx context.Context, request operations.PauseActio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "PauseAction",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)

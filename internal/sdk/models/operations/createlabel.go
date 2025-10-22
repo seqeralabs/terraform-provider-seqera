@@ -10,22 +10,22 @@ import (
 type CreateLabelRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` â€” if `resource: true`, include a `value`. Else, omit `value` from your request body.
+	// Provide a label `name`. Set `resource: true` for resource labels. Only resource labels have a `value` — if `resource: true`, include a `value`. Else, omit `value` from your request body.
 	CreateLabelRequest shared.CreateLabelRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateLabelRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreateLabelRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateLabelRequest) GetCreateLabelRequest() shared.CreateLabelRequest {
-	if o == nil {
+func (c *CreateLabelRequest) GetCreateLabelRequest() shared.CreateLabelRequest {
+	if c == nil {
 		return shared.CreateLabelRequest{}
 	}
-	return o.CreateLabelRequest
+	return c.CreateLabelRequest
 }
 
 type CreateLabelResponse struct {
@@ -41,37 +41,37 @@ type CreateLabelResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateLabelResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateLabelResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateLabelResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateLabelResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateLabelResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateLabelResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateLabelResponse) GetCreateLabelResponse() *shared.CreateLabelResponse {
-	if o == nil {
+func (c *CreateLabelResponse) GetCreateLabelResponse() *shared.CreateLabelResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateLabelResponse
+	return c.CreateLabelResponse
 }
 
-func (o *CreateLabelResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateLabelResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

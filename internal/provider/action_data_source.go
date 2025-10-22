@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -193,6 +194,9 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"launch": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+					},
 					"compute_env": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -645,6 +649,99 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											},
 										},
 									},
+									"azure_cloud_configuration": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"data_collection_endpoint": schema.StringAttribute{
+												Computed: true,
+											},
+											"data_collection_rule_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"forged_resources": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"key": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"instance_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_table_name": schema.StringAttribute{
+												Computed: true,
+											},
+											"log_workspace_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"managed_identity_client_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"managed_identity_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"network_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"resource_group": schema.StringAttribute{
+												Computed: true,
+											},
+											"subscription_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
 									"eks_platform": schema.SingleNestedAttribute{
 										Computed: true,
 										Attributes: map[string]schema.Attribute{
@@ -938,6 +1035,86 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											},
 										},
 									},
+									"google_cloud_configuration": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"arm64_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"boot_disk_size_gb": schema.Int32Attribute{
+												Computed: true,
+											},
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"forged_resources": schema.ListAttribute{
+												Computed: true,
+												ElementType: types.MapType{
+													ElemType: jsontypes.NormalizedType{},
+												},
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"gpu_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"image_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"instance_type": schema.StringAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"project_id": schema.StringAttribute{
+												Computed: true,
+											},
+											"region": schema.StringAttribute{
+												Computed: true,
+											},
+											"service_account_email": schema.StringAttribute{
+												Computed: true,
+											},
+											"wave_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+											"zone": schema.StringAttribute{
+												Computed: true,
+											},
+										},
+									},
 									"google_lifesciences": schema.SingleNestedAttribute{
 										Computed: true,
 										Attributes: map[string]schema.Attribute{
@@ -1098,6 +1275,53 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												Computed: true,
 											},
 											"storage_mount_path": schema.StringAttribute{
+												Computed: true,
+											},
+											"work_dir": schema.StringAttribute{
+												Computed:    true,
+												Description: `Working directory path for workflow execution`,
+											},
+										},
+									},
+									"local_platform": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"environment": schema.ListNestedAttribute{
+												Computed: true,
+												NestedObject: schema.NestedAttributeObject{
+													Attributes: map[string]schema.Attribute{
+														"compute": schema.BoolAttribute{
+															Computed: true,
+														},
+														"head": schema.BoolAttribute{
+															Computed: true,
+														},
+														"name": schema.StringAttribute{
+															Computed: true,
+														},
+														"value": schema.StringAttribute{
+															Computed: true,
+														},
+													},
+												},
+												Description: `Array of environment variables for the compute environment`,
+											},
+											"fusion2_enabled": schema.BoolAttribute{
+												Computed: true,
+											},
+											"nextflow_config": schema.StringAttribute{
+												Computed:    true,
+												Description: `Nextflow configuration settings and parameters`,
+											},
+											"post_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute after workflow completes`,
+											},
+											"pre_run_script": schema.StringAttribute{
+												Computed:    true,
+												Description: `Shell script to execute before workflow starts`,
+											},
+											"wave_enabled": schema.BoolAttribute{
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
@@ -1635,21 +1859,26 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					"config_profiles": schema.ListAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
+						Description: `List of Nextflow configuration profiles to activate`,
 					},
 					"config_text": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Nextflow configuration content to customize the pipeline execution`,
 					},
 					"date_created": schema.StringAttribute{
 						Computed: true,
 					},
 					"entry_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Name of the workflow entry point when using multiple workflows`,
 					},
 					"head_job_cpus": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Number of CPUs to allocate for the head job`,
 					},
 					"head_job_memory_mb": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Memory in megabytes (MB) to allocate for the head job`,
 					},
 					"id": schema.StringAttribute{
 						Computed: true,
@@ -1658,10 +1887,12 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed: true,
 					},
 					"launch_container": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Container image to use for launching the workflow`,
 					},
 					"main_script": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Main Nextflow script file to execute (defaults to main.nf)`,
 					},
 					"optimization_id": schema.StringAttribute{
 						Computed: true,
@@ -1670,10 +1901,12 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Computed: true,
 					},
 					"params_text": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Pipeline parameters in JSON or YAML format`,
 					},
 					"pipeline": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Repository URL or name of the Nextflow pipeline to execute`,
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed:    true,
@@ -1684,28 +1917,34 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
 					},
 					"pull_latest": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Pull the latest version of the pipeline before execution`,
 					},
 					"resume": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Enable resuming workflow execution from the last successful step`,
 					},
 					"resume_launch_id": schema.StringAttribute{
 						Computed: true,
 					},
 					"revision": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Git branch, tag, or commit hash to use for the pipeline`,
 					},
 					"run_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Custom name for the workflow run`,
 					},
 					"schema_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Name of the pipeline schema file for parameter validation`,
 					},
 					"session_id": schema.StringAttribute{
 						Computed: true,
 					},
 					"stub_run": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Execute workflow in stub mode for testing without running actual processes`,
 					},
 					"tower_config": schema.StringAttribute{
 						Computed: true,
@@ -1713,13 +1952,16 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					"user_secrets": schema.ListAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
+						Description: `List of user-level secrets to make available to the workflow`,
 					},
 					"work_dir": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Working directory for workflow execution`,
 					},
 					"workspace_secrets": schema.ListAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
+						Description: `List of workspace-level secrets to make available to the workflow`,
 					},
 				},
 			},
@@ -1805,11 +2047,11 @@ func (r *ActionDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeActionResponse != nil && res.DescribeActionResponse.Action != nil) {
+	if !(res.DescribeActionResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedActionResponseDto(ctx, res.DescribeActionResponse.Action)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeActionResponse(ctx, res.DescribeActionResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

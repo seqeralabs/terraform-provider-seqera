@@ -10,9 +10,9 @@ type DescribePipelineSecretResponse struct {
 	PipelineSecret *PipelineSecret `json:"pipelineSecret,omitempty"`
 }
 
-func (o *DescribePipelineSecretResponse) GetPipelineSecret() *PipelineSecret {
-	if o == nil {
+func (d *DescribePipelineSecretResponse) GetPipelineSecret() *PipelineSecret {
+	if d == nil {
 		return nil
 	}
-	return o.PipelineSecret
+	return d.PipelineSecret
 }

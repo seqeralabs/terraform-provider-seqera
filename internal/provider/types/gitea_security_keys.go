@@ -8,5 +8,6 @@ import (
 
 type GiteaSecurityKeys struct {
 	Password types.String `tfsdk:"password"`
+	Token    types.String `tfsdk:"token"`
 	Username types.String `tfsdk:"username"`
 }

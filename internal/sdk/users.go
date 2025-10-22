@@ -61,7 +61,7 @@ func (s *Users) UserInfo(ctx context.Context, opts ...operations.Option) (*opera
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UserInfo",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -212,7 +212,7 @@ func (s *Users) ValidateUserName(ctx context.Context, request operations.Validat
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ValidateUserName",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -351,7 +351,7 @@ func (s *Users) DescribeUser(ctx context.Context, request operations.DescribeUse
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DescribeUser",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -502,7 +502,7 @@ func (s *Users) UpdateUser(ctx context.Context, request operations.UpdateUserReq
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateUser",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UserDbDto", "json", `request:"mediaType=application/json"`)
@@ -640,7 +640,7 @@ func (s *Users) DeleteUser(ctx context.Context, request operations.DeleteUserReq
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteUser",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

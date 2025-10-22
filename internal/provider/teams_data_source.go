@@ -136,11 +136,11 @@ func (r *TeamsDataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeTeamResponse != nil && res.DescribeTeamResponse.Team != nil) {
+	if !(res.DescribeTeamResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedTeamDbDto(ctx, res.DescribeTeamResponse.Team)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeTeamResponse(ctx, res.DescribeTeamResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

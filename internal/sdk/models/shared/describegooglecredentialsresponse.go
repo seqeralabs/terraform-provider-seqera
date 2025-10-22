@@ -6,9 +6,9 @@ type DescribeGoogleCredentialsResponse struct {
 	Credentials *GoogleCredentialOutput `json:"credentials,omitempty"`
 }
 
-func (o *DescribeGoogleCredentialsResponse) GetCredentials() *GoogleCredentialOutput {
-	if o == nil {
+func (d *DescribeGoogleCredentialsResponse) GetCredentials() *GoogleCredentialOutput {
+	if d == nil {
 		return nil
 	}
-	return o.Credentials
+	return d.Credentials
 }

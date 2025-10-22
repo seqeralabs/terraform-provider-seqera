@@ -20,37 +20,37 @@ type CreateOrganizationResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateOrganizationResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrganizationResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrganizationResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrganizationResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrganizationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrganizationResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrganizationResponse) GetCreateOrganizationResponse() *shared.CreateOrganizationResponse {
-	if o == nil {
+func (c *CreateOrganizationResponse) GetCreateOrganizationResponse() *shared.CreateOrganizationResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateOrganizationResponse
+	return c.CreateOrganizationResponse
 }
 
-func (o *CreateOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

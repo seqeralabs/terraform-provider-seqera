@@ -8,23 +8,23 @@ type TraceProgressRequest struct {
 	Containers []ContainerData    `json:"containers,omitempty"`
 }
 
-func (o *TraceProgressRequest) GetTasks() []Task {
-	if o == nil {
+func (t *TraceProgressRequest) GetTasks() []Task {
+	if t == nil {
 		return nil
 	}
-	return o.Tasks
+	return t.Tasks
 }
 
-func (o *TraceProgressRequest) GetProgress() *TraceProgressData {
-	if o == nil {
+func (t *TraceProgressRequest) GetProgress() *TraceProgressData {
+	if t == nil {
 		return nil
 	}
-	return o.Progress
+	return t.Progress
 }
 
-func (o *TraceProgressRequest) GetContainers() []ContainerData {
-	if o == nil {
+func (t *TraceProgressRequest) GetContainers() []ContainerData {
+	if t == nil {
 		return nil
 	}
-	return o.Containers
+	return t.Containers
 }

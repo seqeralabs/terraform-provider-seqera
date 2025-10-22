@@ -1,31 +1,30 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 2365da89c6fbd7f7d1db4ac1f839ce38
-  docVersion: 1.56.0
-  speakeasyVersion: 1.606.9
-  generationVersion: 2.687.13
+  docChecksum: 035b15a017aedf4285cbb97768f07403
+  docVersion: 1.85.0
+  speakeasyVersion: 1.638.0
+  generationVersion: 2.728.0
   releaseVersion: 0.25.4
-  configChecksum: 51ecc8a1d3a520de84637939a012f093
+  configChecksum: 82407cfee73f39a7ed1fabfae13d6385
 features:
   terraform:
     additionalDependencies: 0.1.0
-    core: 3.44.1
+    core: 3.46.2
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
-    globalSecurity: 2.81.12
+    globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
-    groups: 2.81.2
+    groups: 2.81.3
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     nullables: 0.0.0
     retries: 2.81.4
-    unions: 2.81.17
+    unions: 2.81.18
 generatedFiles:
   - .gitattributes
   - USAGE.md
-  - examples/README.md
   - examples/data-sources/seqera_action/data-source.tf
   - examples/data-sources/seqera_aws_compute_env/data-source.tf
   - examples/data-sources/seqera_aws_credential/data-source.tf
@@ -202,15 +201,12 @@ generatedFiles:
   - internal/provider/types/action_tower_action_event.go
   - internal/provider/types/active_connection.go
   - internal/provider/types/agent_security_keys.go
-  - internal/provider/types/altair_pbs_configuration.go
-  - internal/provider/types/amazon_eks_cluster_configuration.go
   - internal/provider/types/aws_batch_config.go
-  - internal/provider/types/aws_batch_configuration.go
-  - internal/provider/types/aws_cloud_configuration.go
   - internal/provider/types/aws_security_keys.go
   - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
-  - internal/provider/types/azure_batch_configuration.go
+  - internal/provider/types/azure_cloud_keys.go
+  - internal/provider/types/azure_cloud_keys1.go
   - internal/provider/types/azure_entra_keys.go
   - internal/provider/types/azure_entra_keys1.go
   - internal/provider/types/azure_repos_security_keys.go
@@ -222,10 +218,28 @@ generatedFiles:
   - internal/provider/types/code_commit_security_keys.go
   - internal/provider/types/code_commit_security_keys1.go
   - internal/provider/types/compute_config.go
+  - internal/provider/types/compute_config_altair_pbs_configuration.go
+  - internal/provider/types/compute_config_amazon_eks_cluster_configuration.go
+  - internal/provider/types/compute_config_aws_batch_configuration.go
+  - internal/provider/types/compute_config_aws_cloud_configuration.go
+  - internal/provider/types/compute_config_azure_batch_configuration.go
+  - internal/provider/types/compute_config_azure_cloud_configuration.go
+  - internal/provider/types/compute_config_google_batch_service_configuration.go
+  - internal/provider/types/compute_config_google_cloud_configuration.go
+  - internal/provider/types/compute_config_google_gke_cluster_configuration.go
+  - internal/provider/types/compute_config_google_life_sciences_configuration.go
+  - internal/provider/types/compute_config_ibmlsf_configuration.go
+  - internal/provider/types/compute_config_kubernetes_compute_configuration.go
+  - internal/provider/types/compute_config_local_execution_configuration.go
+  - internal/provider/types/compute_config_moab_configuration.go
+  - internal/provider/types/compute_config_seqera_compute_configuration.go
+  - internal/provider/types/compute_config_slurm_configuration.go
+  - internal/provider/types/compute_config_univa_grid_engine_configuration.go
   - internal/provider/types/compute_env.go
   - internal/provider/types/compute_env_compute_config.go
   - internal/provider/types/compute_env_db_dto.go
   - internal/provider/types/compute_env_response_dto.go
+  - internal/provider/types/compute_env_response_dto_resources.go
   - internal/provider/types/compute_platform_dto.go
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
@@ -238,7 +252,8 @@ generatedFiles:
   - internal/provider/types/data_studio_progress_step.go
   - internal/provider/types/data_studio_status_info.go
   - internal/provider/types/data_studio_template.go
-  - internal/provider/types/dataset.go
+  - internal/provider/types/dataset_dto.go
+  - internal/provider/types/dataset_runs_info.go
   - internal/provider/types/forge_config.go
   - internal/provider/types/git_hub_security_keys.go
   - internal/provider/types/git_hub_security_keys1.go
@@ -248,22 +263,22 @@ generatedFiles:
   - internal/provider/types/gitea_security_keys1.go
   - internal/provider/types/github_action_config.go
   - internal/provider/types/github_action_event.go
-  - internal/provider/types/google_batch_service_configuration.go
-  - internal/provider/types/google_gke_cluster_configuration.go
-  - internal/provider/types/google_life_sciences_configuration.go
   - internal/provider/types/google_security_keys.go
   - internal/provider/types/google_security_keys1.go
-  - internal/provider/types/ibmlsf_configuration.go
   - internal/provider/types/job_info_dto.go
   - internal/provider/types/k8s_security_keys.go
   - internal/provider/types/k8s_security_keys1.go
-  - internal/provider/types/kubernetes_compute_configuration.go
   - internal/provider/types/label_db_dto.go
   - internal/provider/types/launch.go
-  - internal/provider/types/moab_configuration.go
+  - internal/provider/types/local_security_keys.go
+  - internal/provider/types/local_security_keys1.go
+  - internal/provider/types/map_entry_string_string.go
   - internal/provider/types/org_and_workspace_dto.go
   - internal/provider/types/process_load.go
   - internal/provider/types/progress_data.go
+  - internal/provider/types/remote_config.go
+  - internal/provider/types/s3_security_keys.go
+  - internal/provider/types/s3_security_keys1.go
   - internal/provider/types/security_keys.go
   - internal/provider/types/security_keys_aws_security_keys.go
   - internal/provider/types/security_keys_aws_security_keys1.go
@@ -272,14 +287,12 @@ generatedFiles:
   - internal/provider/types/security_keys_google_security_keys.go
   - internal/provider/types/security_keys_google_security_keys1.go
   - internal/provider/types/security_keys_output.go
-  - internal/provider/types/seqera_compute_configuration.go
   - internal/provider/types/seqera_compute_security_keys.go
   - internal/provider/types/seqera_compute_security_keys1.go
-  - internal/provider/types/slurm_configuration.go
   - internal/provider/types/ssh_security_keys.go
   - internal/provider/types/ssh_security_keys1.go
-  - internal/provider/types/studio_user.go
-  - internal/provider/types/univa_grid_engine_configuration.go
+  - internal/provider/types/studio_remote_configuration.go
+  - internal/provider/types/user_info.go
   - internal/provider/types/wf_manifest.go
   - internal/provider/types/wf_nextflow.go
   - internal/provider/types/wf_stats.go
@@ -312,6 +325,7 @@ generatedFiles:
   - internal/sdk/datasets.go
   - internal/sdk/docs/models/operations/option.md
   - internal/sdk/ga4gh.go
+  - internal/sdk/identities.go
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/hooks/hooks.go
   - internal/sdk/internal/utils/contenttype.go
@@ -329,9 +343,11 @@ generatedFiles:
   - internal/sdk/launch.go
   - internal/sdk/models/errors/apierror.go
   - internal/sdk/models/operations/addlabelstoactions.go
+  - internal/sdk/models/operations/addlabelstodatasets.go
   - internal/sdk/models/operations/addlabelstopipelines.go
   - internal/sdk/models/operations/addlabelstoworkflows.go
   - internal/sdk/models/operations/applylabelstoactions.go
+  - internal/sdk/models/operations/applylabelstodatasets.go
   - internal/sdk/models/operations/applylabelstopipelines.go
   - internal/sdk/models/operations/applylabelstoworkflows.go
   - internal/sdk/models/operations/cancelworkflow.go
@@ -347,6 +363,8 @@ generatedFiles:
   - internal/sdk/models/operations/createdatastudio.go
   - internal/sdk/models/operations/creategooglecredentials.go
   - internal/sdk/models/operations/createlabel.go
+  - internal/sdk/models/operations/createmanagedcredentials.go
+  - internal/sdk/models/operations/createmanagedidentity.go
   - internal/sdk/models/operations/createorganization.go
   - internal/sdk/models/operations/createorganizationmember.go
   - internal/sdk/models/operations/createorganizationteam.go
@@ -369,10 +387,13 @@ generatedFiles:
   - internal/sdk/models/operations/deletecustomdatalink.go
   - internal/sdk/models/operations/deletedatalinkitem.go
   - internal/sdk/models/operations/deletedataset.go
+  - internal/sdk/models/operations/deletedatasets.go
   - internal/sdk/models/operations/deletedatasetv2.go
   - internal/sdk/models/operations/deletedatastudio.go
   - internal/sdk/models/operations/deletegooglecredentials.go
   - internal/sdk/models/operations/deletelabel.go
+  - internal/sdk/models/operations/deletemanagedcredentials.go
+  - internal/sdk/models/operations/deletemanagedidentity.go
   - internal/sdk/models/operations/deleteorganization.go
   - internal/sdk/models/operations/deleteorganizationmember.go
   - internal/sdk/models/operations/deleteorganizationteam.go
@@ -398,6 +419,7 @@ generatedFiles:
   - internal/sdk/models/operations/describedatastudio.go
   - internal/sdk/models/operations/describegooglecredentials.go
   - internal/sdk/models/operations/describelaunch.go
+  - internal/sdk/models/operations/describemanagedidentity.go
   - internal/sdk/models/operations/describeorganization.go
   - internal/sdk/models/operations/describeorganizationquotas.go
   - internal/sdk/models/operations/describeorganizationteam.go
@@ -415,6 +437,7 @@ generatedFiles:
   - internal/sdk/models/operations/describeworkflowstar.go
   - internal/sdk/models/operations/describeworkflowtask.go
   - internal/sdk/models/operations/describeworkspace.go
+  - internal/sdk/models/operations/disabledatasetversion.go
   - internal/sdk/models/operations/downloadavatar.go
   - internal/sdk/models/operations/downloaddatalink.go
   - internal/sdk/models/operations/downloaddataset.go
@@ -440,7 +463,9 @@ generatedFiles:
   - internal/sdk/models/operations/generatedownloadurldatalink.go
   - internal/sdk/models/operations/generaterandomworkflowname.go
   - internal/sdk/models/operations/getdatastudiocheckpoint.go
+  - internal/sdk/models/operations/getworkflowlog.go
   - internal/sdk/models/operations/getworkflowtasklog.go
+  - internal/sdk/models/operations/hidedatasets.go
   - internal/sdk/models/operations/info.go
   - internal/sdk/models/operations/launchaction.go
   - internal/sdk/models/operations/leaveorganization.go
@@ -460,6 +485,8 @@ generatedFiles:
   - internal/sdk/models/operations/listlabels.go
   - internal/sdk/models/operations/listlatestdatasetversionsv2.go
   - internal/sdk/models/operations/listlaunchdatasetversions.go
+  - internal/sdk/models/operations/listmanagedcredentials.go
+  - internal/sdk/models/operations/listmanagedidentities.go
   - internal/sdk/models/operations/listmounteddatalinkids.go
   - internal/sdk/models/operations/listorganizationcollaborators.go
   - internal/sdk/models/operations/listorganizationmembers.go
@@ -482,8 +509,10 @@ generatedFiles:
   - internal/sdk/models/operations/pauseaction.go
   - internal/sdk/models/operations/refreshdatalinkcache.go
   - internal/sdk/models/operations/removelabelsfromactions.go
+  - internal/sdk/models/operations/removelabelsfromdatasets.go
   - internal/sdk/models/operations/removelabelsfrompipelines.go
   - internal/sdk/models/operations/removelabelsfromworkflows.go
+  - internal/sdk/models/operations/showdatasets.go
   - internal/sdk/models/operations/startdatastudio.go
   - internal/sdk/models/operations/stopdatastudio.go
   - internal/sdk/models/operations/tokenlist.go
@@ -501,6 +530,8 @@ generatedFiles:
   - internal/sdk/models/operations/updatedatastudiosworkspacesettings.go
   - internal/sdk/models/operations/updategooglecredentials.go
   - internal/sdk/models/operations/updatelabel.go
+  - internal/sdk/models/operations/updatemanagedcredentials.go
+  - internal/sdk/models/operations/updatemanagedidentity.go
   - internal/sdk/models/operations/updateorganization.go
   - internal/sdk/models/operations/updateorganizationmemberrole.go
   - internal/sdk/models/operations/updateorganizationteam.go
@@ -526,8 +557,8 @@ generatedFiles:
   - internal/sdk/models/operations/validateteamname.go
   - internal/sdk/models/operations/validateusername.go
   - internal/sdk/models/operations/validateworkflowconstraints.go
-  - internal/sdk/models/operations/workflowlogs.go
-  - internal/sdk/models/operations/workspacevalidate.go
+  - internal/sdk/models/operations/validateworkspacename.go
+  - internal/sdk/models/shared/abstractgridconfig.go
   - internal/sdk/models/shared/accesstoken.go
   - internal/sdk/models/shared/actionconfigtype.go
   - internal/sdk/models/shared/actioneventtype.go
@@ -543,6 +574,7 @@ generatedFiles:
   - internal/sdk/models/shared/addteammemberresponse.go
   - internal/sdk/models/shared/analytics.go
   - internal/sdk/models/shared/associateactionlabelsrequest.go
+  - internal/sdk/models/shared/associatedatasetslabelsrequest.go
   - internal/sdk/models/shared/associatepipelinelabelsrequest.go
   - internal/sdk/models/shared/associateworkflowlabelsrequest.go
   - internal/sdk/models/shared/awsbatchconfig.go
@@ -554,10 +586,12 @@ generatedFiles:
   - internal/sdk/models/shared/awssecuritykeysoutput.go
   - internal/sdk/models/shared/azbatchforgeconfig.go
   - internal/sdk/models/shared/azbatchplatformmetainfo.go
+  - internal/sdk/models/shared/azcloudplatformmetainfo.go
   - internal/sdk/models/shared/azurecredential.go
   - internal/sdk/models/shared/azuresecuritykeys.go
   - internal/sdk/models/shared/azuresecuritykeysoutput.go
   - internal/sdk/models/shared/bucket.go
+  - internal/sdk/models/shared/changedatasetvisibilityrequest.go
   - internal/sdk/models/shared/cloudpricemodel.go
   - internal/sdk/models/shared/computeconfig.go
   - internal/sdk/models/shared/computeenvcomputeconfiginput.go
@@ -590,6 +624,10 @@ generatedFiles:
   - internal/sdk/models/shared/creategooglecredentialsresponse.go
   - internal/sdk/models/shared/createlabelrequest.go
   - internal/sdk/models/shared/createlabelresponse.go
+  - internal/sdk/models/shared/createmanagedcredentialsrequest.go
+  - internal/sdk/models/shared/createmanagedcredentialsresponse.go
+  - internal/sdk/models/shared/createmanagedidentityrequest.go
+  - internal/sdk/models/shared/createmanagedidentityresponse.go
   - internal/sdk/models/shared/createorganizationrequest.go
   - internal/sdk/models/shared/createorganizationresponse.go
   - internal/sdk/models/shared/createpipelinerequest.go
@@ -623,8 +661,10 @@ generatedFiles:
   - internal/sdk/models/shared/datalinkslistresponse.go
   - internal/sdk/models/shared/datalinktype.go
   - internal/sdk/models/shared/datalinkupdaterequest.go
-  - internal/sdk/models/shared/dataset.go
-  - internal/sdk/models/shared/datasetversiondbdto.go
+  - internal/sdk/models/shared/datasetdto.go
+  - internal/sdk/models/shared/datasetqueryattribute.go
+  - internal/sdk/models/shared/datasetrunsinfo.go
+  - internal/sdk/models/shared/datasetversiondto.go
   - internal/sdk/models/shared/datastudiocheckpointdto.go
   - internal/sdk/models/shared/datastudiocheckpointupdaterequest.go
   - internal/sdk/models/shared/datastudiocomputeenvdto.go
@@ -643,6 +683,7 @@ generatedFiles:
   - internal/sdk/models/shared/datastudiostartresponse.go
   - internal/sdk/models/shared/datastudiostatus.go
   - internal/sdk/models/shared/datastudiostatusinfo.go
+  - internal/sdk/models/shared/datastudiostopreason.go
   - internal/sdk/models/shared/datastudiostopresponse.go
   - internal/sdk/models/shared/datastudiotemplate.go
   - internal/sdk/models/shared/datastudiotemplateslistresponse.go
@@ -650,6 +691,10 @@ generatedFiles:
   - internal/sdk/models/shared/datastudioworkspacesettingsresponse.go
   - internal/sdk/models/shared/deletecredentialsconflictresponse.go
   - internal/sdk/models/shared/deletecredentialsconflictresponseconflict.go
+  - internal/sdk/models/shared/deletedatasetsrequest.go
+  - internal/sdk/models/shared/deletedatasetsresponse.go
+  - internal/sdk/models/shared/deletemanagedcredentialsconflictresponse.go
+  - internal/sdk/models/shared/deletemanagedcredentialsconflictresponseconflict.go
   - internal/sdk/models/shared/deleteworkflowsrequest.go
   - internal/sdk/models/shared/deleteworkflowsresponse.go
   - internal/sdk/models/shared/describeactionresponse.go
@@ -712,6 +757,9 @@ generatedFiles:
   - internal/sdk/models/shared/listdatasetversionsresponse.go
   - internal/sdk/models/shared/listeventtypesresponse.go
   - internal/sdk/models/shared/listlabelsresponse.go
+  - internal/sdk/models/shared/listmanagedcredentialsrespdto.go
+  - internal/sdk/models/shared/listmanagedcredentialsresponse.go
+  - internal/sdk/models/shared/listmanagedidentitiesresponse.go
   - internal/sdk/models/shared/listmembersresponse.go
   - internal/sdk/models/shared/listorganizationsresponse.go
   - internal/sdk/models/shared/listparticipantsresponse.go
@@ -730,9 +778,13 @@ generatedFiles:
   - internal/sdk/models/shared/log.go
   - internal/sdk/models/shared/logpage.go
   - internal/sdk/models/shared/logpagedownload.go
+  - internal/sdk/models/shared/managedcredentialsdbdto.go
+  - internal/sdk/models/shared/managedcredentialsmetadata.go
+  - internal/sdk/models/shared/managedcredentialsmetadatainput.go
+  - internal/sdk/models/shared/managedidentitydbdtoabstractgridconfig.go
+  - internal/sdk/models/shared/mapentrystringstring.go
   - internal/sdk/models/shared/memberdbdto.go
   - internal/sdk/models/shared/multirequestfileschema.go
-  - internal/sdk/models/shared/navbarconfig.go
   - internal/sdk/models/shared/navbarconfignavbarmenu.go
   - internal/sdk/models/shared/organdworkspacedto.go
   - internal/sdk/models/shared/organization.go
@@ -744,6 +796,8 @@ generatedFiles:
   - internal/sdk/models/shared/participanttype.go
   - internal/sdk/models/shared/pipelinedbdto.go
   - internal/sdk/models/shared/pipelineinfo.go
+  - internal/sdk/models/shared/pipelinelistparamssortby.go
+  - internal/sdk/models/shared/pipelinelistparamssortdir.go
   - internal/sdk/models/shared/pipelineoptimizationstatus.go
   - internal/sdk/models/shared/pipelinequeryattribute.go
   - internal/sdk/models/shared/pipelineschemaattributes.go
@@ -767,7 +821,8 @@ generatedFiles:
   - internal/sdk/models/shared/serviceinfo.go
   - internal/sdk/models/shared/serviceinforesponse.go
   - internal/sdk/models/shared/state.go
-  - internal/sdk/models/shared/studiouser.go
+  - internal/sdk/models/shared/studiocheckpointstatus.go
+  - internal/sdk/models/shared/studioremoteconfiguration.go
   - internal/sdk/models/shared/submitworkflowlaunchrequest.go
   - internal/sdk/models/shared/submitworkflowlaunchresponse.go
   - internal/sdk/models/shared/subnet.go
@@ -798,6 +853,8 @@ generatedFiles:
   - internal/sdk/models/shared/updategooglecredentialsrequest.go
   - internal/sdk/models/shared/updatelabelrequest.go
   - internal/sdk/models/shared/updatelabelresponse.go
+  - internal/sdk/models/shared/updatemanagedcredentialsrequest.go
+  - internal/sdk/models/shared/updatemanagedidentityrequest.go
   - internal/sdk/models/shared/updatememberrolerequest.go
   - internal/sdk/models/shared/updateorganizationrequest.go
   - internal/sdk/models/shared/updateparticipantrolerequest.go
@@ -809,6 +866,7 @@ generatedFiles:
   - internal/sdk/models/shared/uploaddatasetversionresponse.go
   - internal/sdk/models/shared/uploadetag.go
   - internal/sdk/models/shared/userdbdto.go
+  - internal/sdk/models/shared/userinfo.go
   - internal/sdk/models/shared/visibility.go
   - internal/sdk/models/shared/vpc.go
   - internal/sdk/models/shared/weserrorresponse.go
@@ -828,6 +886,8 @@ generatedFiles:
   - internal/sdk/models/shared/workspace.go
   - internal/sdk/models/shared/workspacedbdto.go
   - internal/sdk/models/shared/wsprole.go
+  - internal/sdk/optionalnullable/optionalnullable.go
+  - internal/sdk/optionalnullable/optionalnullable_test.go
   - internal/sdk/orgs.go
   - internal/sdk/pipelines.go
   - internal/sdk/pipelinesecrets.go
@@ -842,7 +902,6 @@ generatedFiles:
   - internal/sdk/types/bigint.go
   - internal/sdk/types/date.go
   - internal/sdk/types/datetime.go
-  - internal/sdk/types/decimal.go
   - internal/sdk/types/pointers.go
   - internal/sdk/users.go
   - internal/sdk/workflows.go
@@ -880,7 +939,7 @@ examples:
         query:
           workspaceId: 547784
       requestBody:
-        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "my_secondary_workflow", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -914,7 +973,7 @@ examples:
         path:
           actionId: "<id>"
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "my_secondary_workflow", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -1201,6 +1260,8 @@ examples:
       parameters:
         path:
           dataLinkId: "<id>"
+        query:
+          path: "/mnt"
       responses:
         "200":
           application/json: {}
@@ -1245,6 +1306,8 @@ examples:
         path:
           dataLinkId: "<id>"
           filePath: "/etc/yowza_into.mid"
+        query:
+          filePath: "/etc/yowza_into.mid"
       responses:
         "200":
           application/json: "0xaaA09d62eD"
@@ -1275,6 +1338,8 @@ examples:
       parameters:
         path:
           dataLinkId: "<id>"
+        query:
+          dirPath: "<value>"
       requestBody:
         application/json: {}
       responses:
@@ -1287,6 +1352,8 @@ examples:
       parameters:
         path:
           dataLinkId: "<id>"
+        query:
+          dirPath: "<value>"
       requestBody:
         application/json: {}
       responses:
@@ -1931,7 +1998,7 @@ examples:
           workspaceId: 952424
       responses:
         "200":
-          application/json: {"orgId": 959967, "wspId": 518999, "lifespanHours": 75905}
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
   UpdateDataStudiosWorkspaceSettings:
@@ -2016,7 +2083,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "my_secondary_workflow", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -2059,7 +2126,7 @@ examples:
         path:
           pipelineId: 936263
       requestBody:
-        application/json: {"name": "my-pipeline", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "my-pipeline", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "my_secondary_workflow", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -2140,10 +2207,10 @@ examples:
   CreateDataStudio:
     speakeasy-default-create-data-studio:
       requestBody:
-        application/json: {"name": "my-jupyter-studio", "description": "Jupyter studio for data analysis and visualization", "dataStudioToolUrl": "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8", "computeEnvId": "compute-env-id"}
+        application/json: {"name": "my-jupyter-studio", "description": "Jupyter studio for data analysis and visualization", "dataStudioToolUrl": "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8", "computeEnvId": "compute-env-id", "configuration": {"memory": 8192}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"studio": {"configuration": {"memory": 8192}}}
         "400":
           application/json: {"message": "<value>"}
   ListMountedDataLinkIds:
@@ -2166,7 +2233,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"configuration": {"memory": 8192}}
         "404":
           application/json: {"message": "<value>"}
   DeleteDataStudio:
@@ -2195,7 +2262,7 @@ examples:
           checkpointId: 674924
       responses:
         "200":
-          application/json: {"id": 650158, "name": "<value>", "dateCreated": "2023-09-09T23:15:18.409Z", "dateSaved": "2025-08-27T11:46:26.393Z", "author": {"id": 209321, "userName": "Marcel.Fadel", "email": "Dawn65@gmail.com", "avatar": "https://picsum.photos/seed/7YoAI/592/3800"}, "path": "/usr/src"}
+          application/json: {"id": 650158, "name": "<value>", "dateCreated": "2023-09-09T23:15:18.409Z", "dateSaved": "2025-08-27T11:46:26.393Z", "author": {}, "path": "/usr/src", "status": "finalized"}
         "400":
           application/json: {"message": "<value>"}
   UpdateDataStudioCheckpoint:
@@ -2208,7 +2275,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"id": 30064, "name": "<value>", "dateCreated": "2024-08-15T11:49:05.950Z", "dateSaved": "2024-07-04T01:04:00.041Z", "author": {"id": 361514, "userName": "Reese.Murphy", "email": "Roosevelt_Kuhic@hotmail.com", "avatar": "https://loremflickr.com/3378/1110?lock=4186109938868485"}, "path": "/opt/lib"}
+          application/json: {"id": 30064, "name": "<value>", "dateCreated": "2024-08-15T11:49:05.950Z", "dateSaved": "2024-07-04T01:04:00.041Z", "author": {}, "path": "/opt/lib", "status": "finalized"}
         "400":
           application/json: {"message": "<value>"}
   ExtendDataStudioLifespan:
@@ -2218,7 +2285,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"configuration": {"memory": 8192}}
         "400":
           application/json: {"message": "<value>"}
   StartDataStudio:
@@ -2227,7 +2294,7 @@ examples:
         path:
           sessionId: "<id>"
       requestBody:
-        application/json: {}
+        application/json: {"configuration": {"memory": 8192}}
       responses:
         "200":
           application/json: {"jobSubmitted": true, "sessionId": "<id>", "statusInfo": {}}
@@ -2391,7 +2458,7 @@ examples:
         query:
           workspaceId: 714137
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "my_secondary_workflow", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
       responses:
         "200":
           application/json: {}
@@ -2713,6 +2780,158 @@ examples:
         path:
           computeEnvId: "<id>"
       responses:
+        "400":
+          application/json: {"message": "<value>"}
+  AddLabelsToDatasets:
+    speakeasy-default-add-labels-to-datasets:
+      requestBody:
+        application/json: {}
+  ApplyLabelsToDatasets:
+    speakeasy-default-apply-labels-to-datasets:
+      requestBody:
+        application/json: {}
+  RemoveLabelsFromDatasets:
+    speakeasy-default-remove-labels-from-datasets:
+      requestBody:
+        application/json: {}
+  DeleteDatasets:
+    speakeasy-default-delete-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  HideDatasets:
+    speakeasy-default-hide-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ShowDatasets:
+    speakeasy-default-show-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DisableDatasetVersion:
+    speakeasy-default-disable-dataset-version:
+      parameters:
+        path:
+          datasetId: "<id>"
+          version: 656549
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListManagedIdentities:
+    speakeasy-default-list-managed-identities:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedIdentity:
+    speakeasy-default-create-managed-identity:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeManagedIdentity:
+    speakeasy-default-describe-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 934481
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateManagedIdentity:
+    speakeasy-default-update-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 255440
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedIdentity:
+    speakeasy-default-delete-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 510937
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  ListManagedCredentials:
+    speakeasy-default-list-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 552174
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedCredentials:
+    speakeasy-default-create-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 540701
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "container-reg"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateManagedCredentials:
+    speakeasy-default-update-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 221555
+          managedCredentialsId: 485576
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure-cloud"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedCredentials:
+    speakeasy-default-delete-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 64238
+          managedCredentialsId: 728918
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  ValidateWorkspaceName:
+    speakeasy-default-validate-workspace-name:
+      parameters:
+        path:
+          orgId: 741883
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  GetWorkflowLog:
+    speakeasy-default-get-workflow-log:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

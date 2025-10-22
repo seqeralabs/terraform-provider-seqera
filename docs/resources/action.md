@@ -24,6 +24,7 @@ Tower webhook that can be invoked programmatically.
 ```terraform
 resource "seqera_action" "my_action" {
   launch = {
+    commit_id      = "...my_commit_id..."
     compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
       "docker",
@@ -31,7 +32,7 @@ resource "seqera_action" "my_action" {
     ]
     config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
     date_created       = "2024-07-23T10:30:00Z"
-    entry_name         = "main.nf"
+    entry_name         = "my_secondary_workflow"
     head_job_cpus      = 2
     head_job_memory_mb = 4096
     label_ids = [
@@ -101,12 +102,12 @@ resource "seqera_action" "my_action" {
 
 Required:
 
-- `compute_env_id` (String) Requires replacement if changed.
 - `pipeline` (String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
 
 Optional:
 
+- `commit_id` (String) Requires replacement if changed.
+- `compute_env_id` (String) Requires replacement if changed.
 - `config_profiles` (List of String) Requires replacement if changed.
 - `config_text` (String) Requires replacement if changed.
 - `date_created` (String) Requires replacement if changed.
@@ -119,8 +120,8 @@ Optional:
 - `optimization_id` (String) Requires replacement if changed.
 - `optimization_targets` (String) Requires replacement if changed.
 - `params_text` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Requires replacement if changed.
+- `pre_run_script` (String) Requires replacement if changed.
 - `pull_latest` (Boolean) Requires replacement if changed.
 - `resume` (Boolean) Requires replacement if changed.
 - `revision` (String) Requires replacement if changed.
@@ -130,6 +131,7 @@ Optional:
 - `stub_run` (Boolean) Requires replacement if changed.
 - `tower_config` (String) Requires replacement if changed.
 - `user_secrets` (List of String) Requires replacement if changed.
+- `work_dir` (String) Requires replacement if changed.
 - `workspace_secrets` (List of String) Requires replacement if changed.
 
 Read-Only:
@@ -170,11 +172,14 @@ Read-Only:
 - `aws_batch` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_batch))
 - `aws_cloud` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_cloud))
 - `azure_batch` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_batch))
+- `azure_cloud_configuration` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_cloud_configuration))
 - `eks_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--eks_platform))
 - `gke_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--gke_platform))
 - `google_batch` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--google_batch))
+- `google_cloud_configuration` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--google_cloud_configuration))
 - `google_lifesciences` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--google_lifesciences))
 - `k8s_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--k8s_platform))
+- `local_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--local_platform))
 - `lsf_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--lsf_platform))
 - `moab_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--moab_platform))
 - `seqeracompute_platform` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform))
@@ -375,6 +380,52 @@ Read-Only:
 
 
 
+<a id="nestedatt--launch--compute_env--config--azure_cloud_configuration"></a>
+### Nested Schema for `launch.compute_env.config.azure_cloud_configuration`
+
+Read-Only:
+
+- `data_collection_endpoint` (String)
+- `data_collection_rule_id` (String)
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_cloud_configuration--environment))
+- `forged_resources` (Attributes List) (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_cloud_configuration--forged_resources))
+- `fusion2_enabled` (Boolean)
+- `instance_type` (String)
+- `log_table_name` (String)
+- `log_workspace_id` (String)
+- `managed_identity_client_id` (String)
+- `managed_identity_id` (String)
+- `network_id` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
+- `region` (String)
+- `resource_group` (String)
+- `subscription_id` (String)
+- `wave_enabled` (Boolean)
+- `work_dir` (String) Working directory path for workflow execution
+
+<a id="nestedatt--launch--compute_env--config--azure_cloud_configuration--environment"></a>
+### Nested Schema for `launch.compute_env.config.azure_cloud_configuration.environment`
+
+Read-Only:
+
+- `compute` (Boolean)
+- `head` (Boolean)
+- `name` (String)
+- `value` (String)
+
+
+<a id="nestedatt--launch--compute_env--config--azure_cloud_configuration--forged_resources"></a>
+### Nested Schema for `launch.compute_env.config.azure_cloud_configuration.forged_resources`
+
+Read-Only:
+
+- `key` (String)
+- `value` (String)
+
+
+
 <a id="nestedatt--launch--compute_env--config--eks_platform"></a>
 ### Nested Schema for `launch.compute_env.config.eks_platform`
 
@@ -499,6 +550,41 @@ Read-Only:
 
 
 
+<a id="nestedatt--launch--compute_env--config--google_cloud_configuration"></a>
+### Nested Schema for `launch.compute_env.config.google_cloud_configuration`
+
+Read-Only:
+
+- `arm64_enabled` (Boolean)
+- `boot_disk_size_gb` (Number)
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--google_cloud_configuration--environment))
+- `forged_resources` (List of Map of String)
+- `fusion2_enabled` (Boolean)
+- `gpu_enabled` (Boolean)
+- `image_id` (String)
+- `instance_type` (String)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
+- `project_id` (String)
+- `region` (String)
+- `service_account_email` (String)
+- `wave_enabled` (Boolean)
+- `work_dir` (String) Working directory path for workflow execution
+- `zone` (String)
+
+<a id="nestedatt--launch--compute_env--config--google_cloud_configuration--environment"></a>
+### Nested Schema for `launch.compute_env.config.google_cloud_configuration.environment`
+
+Read-Only:
+
+- `compute` (Boolean)
+- `head` (Boolean)
+- `name` (String)
+- `value` (String)
+
+
+
 <a id="nestedatt--launch--compute_env--config--google_lifesciences"></a>
 ### Nested Schema for `launch.compute_env.config.google_lifesciences`
 
@@ -563,6 +649,31 @@ Read-Only:
 
 <a id="nestedatt--launch--compute_env--config--k8s_platform--environment"></a>
 ### Nested Schema for `launch.compute_env.config.k8s_platform.environment`
+
+Read-Only:
+
+- `compute` (Boolean)
+- `head` (Boolean)
+- `name` (String)
+- `value` (String)
+
+
+
+<a id="nestedatt--launch--compute_env--config--local_platform"></a>
+### Nested Schema for `launch.compute_env.config.local_platform`
+
+Read-Only:
+
+- `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--local_platform--environment))
+- `fusion2_enabled` (Boolean)
+- `nextflow_config` (String) Nextflow configuration settings and parameters
+- `post_run_script` (String) Shell script to execute after workflow completes
+- `pre_run_script` (String) Shell script to execute before workflow starts
+- `wave_enabled` (Boolean)
+- `work_dir` (String) Working directory path for workflow execution
+
+<a id="nestedatt--launch--compute_env--config--local_platform--environment"></a>
+### Nested Schema for `launch.compute_env.config.local_platform.environment`
 
 Read-Only:
 

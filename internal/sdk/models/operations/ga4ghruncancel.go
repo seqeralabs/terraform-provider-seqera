@@ -13,18 +13,18 @@ type Ga4ghRunCancelRequest struct {
 	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
 }
 
-func (o *Ga4ghRunCancelRequest) GetRunID() string {
-	if o == nil {
+func (g *Ga4ghRunCancelRequest) GetRunID() string {
+	if g == nil {
 		return ""
 	}
-	return o.RunID
+	return g.RunID
 }
 
-func (o *Ga4ghRunCancelRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
-	if o == nil {
+func (g *Ga4ghRunCancelRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
+	if g == nil {
 		return nil
 	}
-	return o.EmptyBodyRequest
+	return g.EmptyBodyRequest
 }
 
 type Ga4ghRunCancelResponse struct {
@@ -40,37 +40,37 @@ type Ga4ghRunCancelResponse struct {
 	WesErrorResponse *shared.WesErrorResponse
 }
 
-func (o *Ga4ghRunCancelResponse) GetContentType() string {
-	if o == nil {
+func (g *Ga4ghRunCancelResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *Ga4ghRunCancelResponse) GetStatusCode() int {
-	if o == nil {
+func (g *Ga4ghRunCancelResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *Ga4ghRunCancelResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *Ga4ghRunCancelResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *Ga4ghRunCancelResponse) GetRunID() *shared.RunID {
-	if o == nil {
+func (g *Ga4ghRunCancelResponse) GetRunID() *shared.RunID {
+	if g == nil {
 		return nil
 	}
-	return o.RunID
+	return g.RunID
 }
 
-func (o *Ga4ghRunCancelResponse) GetWesErrorResponse() *shared.WesErrorResponse {
-	if o == nil {
+func (g *Ga4ghRunCancelResponse) GetWesErrorResponse() *shared.WesErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.WesErrorResponse
+	return g.WesErrorResponse
 }

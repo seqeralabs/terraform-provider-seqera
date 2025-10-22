@@ -45,11 +45,12 @@ type StudiosDataSourceModel struct {
 	Name                   types.String                           `tfsdk:"name"`
 	ParentCheckpoint       *tfTypes.DataStudioDtoParentCheckpoint `tfsdk:"parent_checkpoint"`
 	Progress               []tfTypes.DataStudioProgressStep       `tfsdk:"progress"`
+	RemoteConfig           *tfTypes.StudioRemoteConfiguration     `tfsdk:"remote_config"`
 	SessionID              types.String                           `tfsdk:"session_id"`
 	StatusInfo             *tfTypes.DataStudioStatusInfo          `tfsdk:"status_info"`
 	StudioURL              types.String                           `tfsdk:"studio_url"`
 	Template               *tfTypes.DataStudioTemplate            `tfsdk:"template"`
-	User                   *tfTypes.StudioUser                    `tfsdk:"user"`
+	User                   *tfTypes.UserInfo                      `tfsdk:"user"`
 	WaveBuildURL           types.String                           `tfsdk:"wave_build_url"`
 	WorkspaceID            types.Int64                            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
@@ -62,7 +63,7 @@ func (r *StudiosDataSource) Metadata(ctx context.Context, req datasource.Metadat
 // Schema defines the schema for the data source.
 func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Studios DataSource",
+		MarkdownDescription: "Studios is a unified platform where you can host a combination of\ncontainer images and compute environments for interactive analysis using\nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive\nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote:\nOn Seqera Cloud, the free tier permits only one running Studio session at a time.\nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"active_connections": schema.ListNestedAttribute{
@@ -120,16 +121,20 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						Computed: true,
 					},
 					"cpu": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Number of CPU cores to allocate to the data studio`,
 					},
 					"gpu": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Number of GPUs to allocate to the data studio`,
 					},
 					"lifespan_hours": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Maximum lifespan of the data studio session in hours`,
 					},
 					"memory": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Memory allocation for the data studio in megabytes (MB)`,
 					},
 					"mount_data": schema.ListAttribute{
 						Computed:    true,
@@ -290,6 +295,20 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 				},
 			},
+			"remote_config": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+					},
+					"revision": schema.StringAttribute{
+						Computed: true,
+					},
+				},
+			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Studio session numeric identifier`,
@@ -304,6 +323,9 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						Computed: true,
 					},
 					"status": schema.StringAttribute{
+						Computed: true,
+					},
+					"stop_reason": schema.StringAttribute{
 						Computed: true,
 					},
 				},

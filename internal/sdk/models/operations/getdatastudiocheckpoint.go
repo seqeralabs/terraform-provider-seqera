@@ -16,25 +16,25 @@ type GetDataStudioCheckpointRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *GetDataStudioCheckpointRequest) GetSessionID() string {
-	if o == nil {
+func (g *GetDataStudioCheckpointRequest) GetSessionID() string {
+	if g == nil {
 		return ""
 	}
-	return o.SessionID
+	return g.SessionID
 }
 
-func (o *GetDataStudioCheckpointRequest) GetCheckpointID() int64 {
-	if o == nil {
+func (g *GetDataStudioCheckpointRequest) GetCheckpointID() int64 {
+	if g == nil {
 		return 0
 	}
-	return o.CheckpointID
+	return g.CheckpointID
 }
 
-func (o *GetDataStudioCheckpointRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (g *GetDataStudioCheckpointRequest) GetWorkspaceID() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return g.WorkspaceID
 }
 
 type GetDataStudioCheckpointResponse struct {
@@ -50,37 +50,37 @@ type GetDataStudioCheckpointResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *GetDataStudioCheckpointResponse) GetContentType() string {
-	if o == nil {
+func (g *GetDataStudioCheckpointResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetDataStudioCheckpointResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetDataStudioCheckpointResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetDataStudioCheckpointResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetDataStudioCheckpointResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetDataStudioCheckpointResponse) GetDataStudioCheckpointDto() *shared.DataStudioCheckpointDto {
-	if o == nil {
+func (g *GetDataStudioCheckpointResponse) GetDataStudioCheckpointDto() *shared.DataStudioCheckpointDto {
+	if g == nil {
 		return nil
 	}
-	return o.DataStudioCheckpointDto
+	return g.DataStudioCheckpointDto
 }
 
-func (o *GetDataStudioCheckpointResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (g *GetDataStudioCheckpointResponse) GetErrorResponse() *shared.ErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return g.ErrorResponse
 }

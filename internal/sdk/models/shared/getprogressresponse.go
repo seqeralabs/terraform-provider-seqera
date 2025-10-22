@@ -6,9 +6,9 @@ type GetProgressResponse struct {
 	Progress *ProgressData `json:"progress,omitempty"`
 }
 
-func (o *GetProgressResponse) GetProgress() *ProgressData {
-	if o == nil {
+func (g *GetProgressResponse) GetProgress() *ProgressData {
+	if g == nil {
 		return nil
 	}
-	return o.Progress
+	return g.Progress
 }

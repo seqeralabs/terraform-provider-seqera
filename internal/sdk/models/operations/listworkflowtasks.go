@@ -24,53 +24,53 @@ type ListWorkflowTasksRequest struct {
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 
-func (o *ListWorkflowTasksRequest) GetWorkflowID() string {
-	if o == nil {
+func (l *ListWorkflowTasksRequest) GetWorkflowID() string {
+	if l == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return l.WorkflowID
 }
 
-func (o *ListWorkflowTasksRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListWorkflowTasksRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListWorkflowTasksRequest) GetMax() *int {
-	if o == nil {
+func (l *ListWorkflowTasksRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListWorkflowTasksRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListWorkflowTasksRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListWorkflowTasksRequest) GetSortBy() *string {
-	if o == nil {
+func (l *ListWorkflowTasksRequest) GetSortBy() *string {
+	if l == nil {
 		return nil
 	}
-	return o.SortBy
+	return l.SortBy
 }
 
-func (o *ListWorkflowTasksRequest) GetSortDir() *string {
-	if o == nil {
+func (l *ListWorkflowTasksRequest) GetSortDir() *string {
+	if l == nil {
 		return nil
 	}
-	return o.SortDir
+	return l.SortDir
 }
 
-func (o *ListWorkflowTasksRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListWorkflowTasksRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
 type ListWorkflowTasksResponse struct {
@@ -86,37 +86,37 @@ type ListWorkflowTasksResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListWorkflowTasksResponse) GetContentType() string {
-	if o == nil {
+func (l *ListWorkflowTasksResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListWorkflowTasksResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListWorkflowTasksResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListWorkflowTasksResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListWorkflowTasksResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListWorkflowTasksResponse) GetListTasksResponse() *shared.ListTasksResponse {
-	if o == nil {
+func (l *ListWorkflowTasksResponse) GetListTasksResponse() *shared.ListTasksResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListTasksResponse
+	return l.ListTasksResponse
 }
 
-func (o *ListWorkflowTasksResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListWorkflowTasksResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

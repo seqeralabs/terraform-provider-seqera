@@ -6,9 +6,9 @@ type UpdateParticipantRoleRequest struct {
 	Role *WspRole `json:"role,omitempty"`
 }
 
-func (o *UpdateParticipantRoleRequest) GetRole() *WspRole {
-	if o == nil {
+func (u *UpdateParticipantRoleRequest) GetRole() *WspRole {
+	if u == nil {
 		return nil
 	}
-	return o.Role
+	return u.Role
 }

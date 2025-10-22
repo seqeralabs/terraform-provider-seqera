@@ -16,29 +16,30 @@ type DataStudioDto struct {
 	// Numeric identifier of the workspace containing the Studio
 	WorkspaceID      *int64                         `json:"workspaceId,omitempty"`
 	ParentCheckpoint *DataStudioDtoParentCheckpoint `json:"parentCheckpoint,omitempty"`
-	User             *StudioUser                    `json:"user,omitempty"`
+	User             *UserInfo                      `json:"user,omitempty"`
 	// Display name for the Studio session
 	Name *string `json:"name,omitempty"`
 	// Description of the Studio session's purpose
 	Description *string `json:"description,omitempty"`
 	// URL to access the running Studio instance
-	StudioURL              *string                  `json:"studioUrl,omitempty"`
-	ComputeEnv             *DataStudioComputeEnvDto `json:"computeEnv,omitempty"`
-	Template               *DataStudioTemplate      `json:"template,omitempty"`
-	Configuration          *DataStudioConfiguration `json:"configuration,omitempty"`
-	DateCreated            *time.Time               `json:"dateCreated,omitempty"`
-	LastUpdated            *time.Time               `json:"lastUpdated,omitempty"`
-	LastStarted            *time.Time               `json:"lastStarted,omitempty"`
-	EffectiveLifespanHours *int                     `json:"effectiveLifespanHours,omitempty"`
-	ActiveConnections      []ActiveConnection       `json:"activeConnections,omitempty"`
-	StatusInfo             *DataStudioStatusInfo    `json:"statusInfo,omitempty"`
-	WaveBuildURL           *string                  `json:"waveBuildUrl,omitempty"`
-	BaseImage              *string                  `json:"baseImage,omitempty"`
-	CustomImage            *bool                    `json:"customImage,omitempty"`
-	IsPrivate              *bool                    `json:"isPrivate,omitempty"`
-	MountedDataLinks       []DataLinkDto            `json:"mountedDataLinks,omitempty"`
-	Progress               []DataStudioProgressStep `json:"progress,omitempty"`
-	Labels                 []LabelDbDto             `json:"labels,omitempty"`
+	StudioURL              *string                    `json:"studioUrl,omitempty"`
+	ComputeEnv             *DataStudioComputeEnvDto   `json:"computeEnv,omitempty"`
+	Template               *DataStudioTemplate        `json:"template,omitempty"`
+	RemoteConfig           *StudioRemoteConfiguration `json:"remoteConfig,omitempty"`
+	Configuration          *DataStudioConfiguration   `json:"configuration,omitempty"`
+	DateCreated            *time.Time                 `json:"dateCreated,omitempty"`
+	LastUpdated            *time.Time                 `json:"lastUpdated,omitempty"`
+	LastStarted            *time.Time                 `json:"lastStarted,omitempty"`
+	EffectiveLifespanHours *int                       `json:"effectiveLifespanHours,omitempty"`
+	ActiveConnections      []ActiveConnection         `json:"activeConnections,omitempty"`
+	StatusInfo             *DataStudioStatusInfo      `json:"statusInfo,omitempty"`
+	WaveBuildURL           *string                    `json:"waveBuildUrl,omitempty"`
+	BaseImage              *string                    `json:"baseImage,omitempty"`
+	CustomImage            *bool                      `json:"customImage,omitempty"`
+	IsPrivate              *bool                      `json:"isPrivate,omitempty"`
+	MountedDataLinks       []DataLinkDto              `json:"mountedDataLinks,omitempty"`
+	Progress               []DataStudioProgressStep   `json:"progress,omitempty"`
+	Labels                 []LabelDbDto               `json:"labels,omitempty"`
 }
 
 func (d DataStudioDto) MarshalJSON() ([]byte, error) {
@@ -52,163 +53,170 @@ func (d *DataStudioDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DataStudioDto) GetSessionID() *string {
-	if o == nil {
+func (d *DataStudioDto) GetSessionID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.SessionID
+	return d.SessionID
 }
 
-func (o *DataStudioDto) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DataStudioDto) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DataStudioDto) GetParentCheckpoint() *DataStudioDtoParentCheckpoint {
-	if o == nil {
+func (d *DataStudioDto) GetParentCheckpoint() *DataStudioDtoParentCheckpoint {
+	if d == nil {
 		return nil
 	}
-	return o.ParentCheckpoint
+	return d.ParentCheckpoint
 }
 
-func (o *DataStudioDto) GetUser() *StudioUser {
-	if o == nil {
+func (d *DataStudioDto) GetUser() *UserInfo {
+	if d == nil {
 		return nil
 	}
-	return o.User
+	return d.User
 }
 
-func (o *DataStudioDto) GetName() *string {
-	if o == nil {
+func (d *DataStudioDto) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataStudioDto) GetDescription() *string {
-	if o == nil {
+func (d *DataStudioDto) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataStudioDto) GetStudioURL() *string {
-	if o == nil {
+func (d *DataStudioDto) GetStudioURL() *string {
+	if d == nil {
 		return nil
 	}
-	return o.StudioURL
+	return d.StudioURL
 }
 
-func (o *DataStudioDto) GetComputeEnv() *DataStudioComputeEnvDto {
-	if o == nil {
+func (d *DataStudioDto) GetComputeEnv() *DataStudioComputeEnvDto {
+	if d == nil {
 		return nil
 	}
-	return o.ComputeEnv
+	return d.ComputeEnv
 }
 
-func (o *DataStudioDto) GetTemplate() *DataStudioTemplate {
-	if o == nil {
+func (d *DataStudioDto) GetTemplate() *DataStudioTemplate {
+	if d == nil {
 		return nil
 	}
-	return o.Template
+	return d.Template
 }
 
-func (o *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
-	if o == nil {
+func (d *DataStudioDto) GetRemoteConfig() *StudioRemoteConfiguration {
+	if d == nil {
 		return nil
 	}
-	return o.Configuration
+	return d.RemoteConfig
 }
 
-func (o *DataStudioDto) GetDateCreated() *time.Time {
-	if o == nil {
+func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
+	if d == nil {
 		return nil
 	}
-	return o.DateCreated
+	return d.Configuration
 }
 
-func (o *DataStudioDto) GetLastUpdated() *time.Time {
-	if o == nil {
+func (d *DataStudioDto) GetDateCreated() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return d.DateCreated
 }
 
-func (o *DataStudioDto) GetLastStarted() *time.Time {
-	if o == nil {
+func (d *DataStudioDto) GetLastUpdated() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.LastStarted
+	return d.LastUpdated
 }
 
-func (o *DataStudioDto) GetEffectiveLifespanHours() *int {
-	if o == nil {
+func (d *DataStudioDto) GetLastStarted() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.EffectiveLifespanHours
+	return d.LastStarted
 }
 
-func (o *DataStudioDto) GetActiveConnections() []ActiveConnection {
-	if o == nil {
+func (d *DataStudioDto) GetEffectiveLifespanHours() *int {
+	if d == nil {
 		return nil
 	}
-	return o.ActiveConnections
+	return d.EffectiveLifespanHours
 }
 
-func (o *DataStudioDto) GetStatusInfo() *DataStudioStatusInfo {
-	if o == nil {
+func (d *DataStudioDto) GetActiveConnections() []ActiveConnection {
+	if d == nil {
 		return nil
 	}
-	return o.StatusInfo
+	return d.ActiveConnections
 }
 
-func (o *DataStudioDto) GetWaveBuildURL() *string {
-	if o == nil {
+func (d *DataStudioDto) GetStatusInfo() *DataStudioStatusInfo {
+	if d == nil {
 		return nil
 	}
-	return o.WaveBuildURL
+	return d.StatusInfo
 }
 
-func (o *DataStudioDto) GetBaseImage() *string {
-	if o == nil {
+func (d *DataStudioDto) GetWaveBuildURL() *string {
+	if d == nil {
 		return nil
 	}
-	return o.BaseImage
+	return d.WaveBuildURL
 }
 
-func (o *DataStudioDto) GetCustomImage() *bool {
-	if o == nil {
+func (d *DataStudioDto) GetBaseImage() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CustomImage
+	return d.BaseImage
 }
 
-func (o *DataStudioDto) GetIsPrivate() *bool {
-	if o == nil {
+func (d *DataStudioDto) GetCustomImage() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.IsPrivate
+	return d.CustomImage
 }
 
-func (o *DataStudioDto) GetMountedDataLinks() []DataLinkDto {
-	if o == nil {
+func (d *DataStudioDto) GetIsPrivate() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.MountedDataLinks
+	return d.IsPrivate
 }
 
-func (o *DataStudioDto) GetProgress() []DataStudioProgressStep {
-	if o == nil {
+func (d *DataStudioDto) GetMountedDataLinks() []DataLinkDto {
+	if d == nil {
 		return nil
 	}
-	return o.Progress
+	return d.MountedDataLinks
 }
 
-func (o *DataStudioDto) GetLabels() []LabelDbDto {
-	if o == nil {
+func (d *DataStudioDto) GetProgress() []DataStudioProgressStep {
+	if d == nil {
 		return nil
 	}
-	return o.Labels
+	return d.Progress
+}
+
+func (d *DataStudioDto) GetLabels() []LabelDbDto {
+	if d == nil {
+		return nil
+	}
+	return d.Labels
 }

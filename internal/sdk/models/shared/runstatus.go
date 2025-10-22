@@ -7,16 +7,16 @@ type RunStatus struct {
 	State *State  `json:"state,omitempty"`
 }
 
-func (o *RunStatus) GetRunID() *string {
-	if o == nil {
+func (r *RunStatus) GetRunID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.RunID
+	return r.RunID
 }
 
-func (o *RunStatus) GetState() *State {
-	if o == nil {
+func (r *RunStatus) GetState() *State {
+	if r == nil {
 		return nil
 	}
-	return o.State
+	return r.State
 }

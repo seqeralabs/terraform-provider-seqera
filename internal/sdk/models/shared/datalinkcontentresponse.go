@@ -8,23 +8,23 @@ type DataLinkContentResponse struct {
 	NextPageToken *string        `json:"nextPageToken,omitempty"`
 }
 
-func (o *DataLinkContentResponse) GetOriginalPath() *string {
-	if o == nil {
+func (d *DataLinkContentResponse) GetOriginalPath() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OriginalPath
+	return d.OriginalPath
 }
 
-func (o *DataLinkContentResponse) GetObjects() []DataLinkItem {
-	if o == nil {
+func (d *DataLinkContentResponse) GetObjects() []DataLinkItem {
+	if d == nil {
 		return nil
 	}
-	return o.Objects
+	return d.Objects
 }
 
-func (o *DataLinkContentResponse) GetNextPageToken() *string {
-	if o == nil {
+func (d *DataLinkContentResponse) GetNextPageToken() *string {
+	if d == nil {
 		return nil
 	}
-	return o.NextPageToken
+	return d.NextPageToken
 }

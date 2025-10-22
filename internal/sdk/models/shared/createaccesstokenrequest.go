@@ -6,9 +6,9 @@ type CreateAccessTokenRequest struct {
 	Name *string `json:"name,omitempty"`
 }
 
-func (o *CreateAccessTokenRequest) GetName() *string {
-	if o == nil {
+func (c *CreateAccessTokenRequest) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }

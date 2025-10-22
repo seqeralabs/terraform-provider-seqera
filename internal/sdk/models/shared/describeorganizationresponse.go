@@ -10,9 +10,9 @@ type DescribeOrganizationResponse struct {
 	Organization *OrganizationDbDto `json:"organization,omitempty"`
 }
 
-func (o *DescribeOrganizationResponse) GetOrganization() *OrganizationDbDto {
-	if o == nil {
+func (d *DescribeOrganizationResponse) GetOrganization() *OrganizationDbDto {
+	if d == nil {
 		return nil
 	}
-	return o.Organization
+	return d.Organization
 }

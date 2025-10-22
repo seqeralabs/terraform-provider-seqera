@@ -6,9 +6,9 @@ type UpdateGoogleCredentialsRequest struct {
 	Credentials GoogleCredential `json:"credentials"`
 }
 
-func (o *UpdateGoogleCredentialsRequest) GetCredentials() GoogleCredential {
-	if o == nil {
+func (u *UpdateGoogleCredentialsRequest) GetCredentials() GoogleCredential {
+	if u == nil {
 		return GoogleCredential{}
 	}
-	return o.Credentials
+	return u.Credentials
 }

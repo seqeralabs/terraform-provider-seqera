@@ -23,10 +23,10 @@ func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialOutput(ct
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
 		keysPriorData := r.Keys
-		r.Keys.BatchKey = keysPriorData.BatchKey
 		r.Keys.BatchName = types.StringPointerValue(resp.Keys.BatchName)
-		r.Keys.StorageKey = keysPriorData.StorageKey
 		r.Keys.StorageName = types.StringPointerValue(resp.Keys.StorageName)
+		r.Keys.BatchKey = keysPriorData.BatchKey
+		r.Keys.StorageKey = keysPriorData.StorageKey
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
@@ -41,6 +41,21 @@ func (r *AzureCredentialResourceModel) RefreshFromSharedCreateAzureCredentialsRe
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+	}
+
+	return diags
+}
+
+func (r *AzureCredentialResourceModel) RefreshFromSharedDescribeAzureCredentialsResponse(ctx context.Context, resp *shared.DescribeAzureCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedAzureCredentialOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags

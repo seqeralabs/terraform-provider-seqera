@@ -12,11 +12,11 @@ type DeleteOrganizationRequest struct {
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 }
 
-func (o *DeleteOrganizationRequest) GetOrgID() int64 {
-	if o == nil {
+func (d *DeleteOrganizationRequest) GetOrgID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.OrgID
+	return d.OrgID
 }
 
 type DeleteOrganizationResponse struct {
@@ -30,30 +30,30 @@ type DeleteOrganizationResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteOrganizationResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteOrganizationResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteOrganizationResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteOrganizationResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteOrganizationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteOrganizationResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

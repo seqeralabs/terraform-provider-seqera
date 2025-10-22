@@ -236,12 +236,10 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 						Computed: true,
 					},
 					"post_run_script": schema.StringAttribute{
-						Computed:    true,
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Computed: true,
 					},
 					"pre_run_script": schema.StringAttribute{
-						Computed:    true,
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Computed: true,
 					},
 					"region": schema.StringAttribute{
 						Computed: true,
@@ -369,11 +367,11 @@ func (r *AWSComputeEnvDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAWSComputeEnvResponse != nil && res.DescribeAWSComputeEnvResponse.ComputeEnv != nil) {
+	if !(res.DescribeAWSComputeEnvResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSComputeEnvComputeConfig(ctx, res.DescribeAWSComputeEnvResponse.ComputeEnv)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, res.DescribeAWSComputeEnvResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
