@@ -242,7 +242,8 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 						Computed: true,
 					},
 					"region": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `AWS region where the compute environment will be deployed. This field is required and must be provided`,
 					},
 					"storage_type": schema.StringAttribute{
 						Computed:           true,

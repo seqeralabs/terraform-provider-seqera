@@ -1383,7 +1383,7 @@ paths:
           schema:
             type: string
         - name: path
-          in: path
+          in: query
           description: Content path
           required: true
           schema:
@@ -1632,7 +1632,7 @@ paths:
           schema:
             type: string
         - name: filePath
-          in: path
+          in: query
           description: File path to download
           required: true
           schema:
@@ -1809,7 +1809,7 @@ paths:
           schema:
             type: string
         - name: dirPath
-          in: path
+          in: query
           description: Path to the destination directory
           required: true
           schema:
@@ -1874,7 +1874,7 @@ paths:
           schema:
             type: string
         - name: dirPath
-          in: path
+          in: query
           description: Path to the destination directory
           required: true
           schema:
@@ -9592,6 +9592,7 @@ components:
           x-speakeasy-terraform-ignore: true
         region:
           type: string
+          description: AWS region where the compute environment will be deployed. This field is required and must be provided
         computeQueue:
           type: string
         dragenQueue:
@@ -9712,6 +9713,7 @@ components:
             type: string
         region:
           type: string
+          description: AWS region where the compute environment will be deployed. This field is required and must be provided
         instanceType:
           type: string
         imageId:
@@ -9831,6 +9833,7 @@ components:
           type: string
         region:
           type: string
+          description: Azure region where the compute environment will be deployed. This field is required and must be provided
         headPool:
           type: string
         autoPoolMode:
@@ -11775,7 +11778,7 @@ components:
               x-speakeasy-terraform-ignore: true
             region:
               type: string
-              description: AWS region
+              description: AWS region where the EKS cluster is located. This field is required and must be provided
             clusterName:
               type: string
               description: The AWS EKS cluster name
@@ -12014,7 +12017,7 @@ components:
               x-speakeasy-terraform-ignore: true
             region:
               type: string
-              description: The GKE cluster region - or - zone
+              description: GCP region or zone where the GKE cluster is located. This field is required and must be provided
             clusterName:
               type: string
               description: The GKE cluster name

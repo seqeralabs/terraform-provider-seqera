@@ -590,7 +590,7 @@ type AbstractGridConfigGoogleGKEClusterConfiguration struct {
 	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
 	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
 	NextflowConfig  *string             `json:"nextflowConfig,omitempty"`
-	// The GKE cluster region - or - zone
+	// GCP region or zone where the GKE cluster is located. This field is required and must be provided
 	Region string `json:"region"`
 	// The GKE cluster name
 	ClusterName             string  `json:"clusterName"`
@@ -856,7 +856,7 @@ type AbstractGridConfigAmazonEKSClusterConfiguration struct {
 	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
 	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
 	NextflowConfig  *string             `json:"nextflowConfig,omitempty"`
-	// AWS region
+	// AWS region where the EKS cluster is located. This field is required and must be provided
 	Region string `json:"region"`
 	// The AWS EKS cluster name
 	ClusterName             string  `json:"clusterName"`
@@ -1883,8 +1883,9 @@ type AbstractGridConfigAzureBatchConfiguration struct {
 	WorkDir       *string `json:"workDir,omitempty"`
 	PreRunScript  *string `json:"preRunScript,omitempty"`
 	PostRunScript *string `json:"postRunScript,omitempty"`
-	Region        string  `json:"region"`
-	HeadPool      *string `json:"headPool,omitempty"`
+	// Azure region where the compute environment will be deployed. This field is required and must be provided
+	Region   string  `json:"region"`
+	HeadPool *string `json:"headPool,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	AutoPoolMode            *bool               `json:"autoPoolMode,omitempty"`
 	Forge                   *AzBatchForgeConfig `json:"forge,omitempty"`
@@ -2917,7 +2918,8 @@ type AbstractGridConfigSeqeraComputeConfiguration struct {
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator      *string `json:"discriminator,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// AWS region where the compute environment will be deployed. This field is required and must be provided
 	Region             string  `json:"region"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`
@@ -3202,15 +3204,16 @@ func (a *AbstractGridConfigSeqeraComputeConfiguration) GetPropagateHeadJobOption
 
 type AbstractGridConfigAWSCloudConfiguration struct {
 	// Read-only property identifying the compute platform type
-	Discriminator  *string  `json:"discriminator,omitempty"`
-	AllowBuckets   []string `json:"allowBuckets,omitempty"`
-	Region         string   `json:"region"`
-	InstanceType   *string  `json:"instanceType,omitempty"`
-	ImageID        *string  `json:"imageId,omitempty"`
-	WorkDir        *string  `json:"workDir,omitempty"`
-	PreRunScript   *string  `json:"preRunScript,omitempty"`
-	PostRunScript  *string  `json:"postRunScript,omitempty"`
-	NextflowConfig *string  `json:"nextflowConfig,omitempty"`
+	Discriminator *string  `json:"discriminator,omitempty"`
+	AllowBuckets  []string `json:"allowBuckets,omitempty"`
+	// AWS region where the compute environment will be deployed. This field is required and must be provided
+	Region         string  `json:"region"`
+	InstanceType   *string `json:"instanceType,omitempty"`
+	ImageID        *string `json:"imageId,omitempty"`
+	WorkDir        *string `json:"workDir,omitempty"`
+	PreRunScript   *string `json:"preRunScript,omitempty"`
+	PostRunScript  *string `json:"postRunScript,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment             []ConfigEnvVariable `json:"environment,omitempty"`
 	WaveEnabled             *bool               `json:"waveEnabled,omitempty"`
@@ -3463,7 +3466,8 @@ type AbstractGridConfigAWSBatchConfiguration struct {
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator      *string `json:"discriminator,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// AWS region where the compute environment will be deployed. This field is required and must be provided
 	Region             string  `json:"region"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`

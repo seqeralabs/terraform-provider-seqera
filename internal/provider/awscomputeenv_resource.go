@@ -328,7 +328,8 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 						Optional: true,
 					},
 					"region": schema.StringAttribute{
-						Required: true,
+						Required:    true,
+						Description: `AWS region where the compute environment will be deployed. This field is required and must be provided`,
 					},
 					"storage_type": schema.StringAttribute{
 						Computed:           true,

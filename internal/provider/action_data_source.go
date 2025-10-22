@@ -455,7 +455,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												Description: `Shell script to execute before workflow starts`,
 											},
 											"region": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `AWS region where the compute environment will be deployed. This field is required and must be provided`,
 											},
 											"storage_type": schema.StringAttribute{
 												Computed:           true,
@@ -541,7 +542,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												Description: `Shell script to execute before workflow starts`,
 											},
 											"region": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `AWS region where the compute environment will be deployed. This field is required and must be provided`,
 											},
 											"security_groups": schema.ListAttribute{
 												Computed:    true,
@@ -635,7 +637,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												Description: `Shell script to execute before workflow starts`,
 											},
 											"region": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Azure region where the compute environment will be deployed. This field is required and must be provided`,
 											},
 											"token_duration": schema.StringAttribute{
 												Computed: true,
@@ -807,7 +810,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											},
 											"region": schema.StringAttribute{
 												Computed:    true,
-												Description: `AWS region`,
+												Description: `AWS region where the EKS cluster is located. This field is required and must be provided`,
 											},
 											"server": schema.StringAttribute{
 												Computed: true,
@@ -898,7 +901,7 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 											},
 											"region": schema.StringAttribute{
 												Computed:    true,
-												Description: `The GKE cluster region - or - zone`,
+												Description: `GCP region or zone where the GKE cluster is located. This field is required and must be provided`,
 											},
 											"server": schema.StringAttribute{
 												Computed: true,
@@ -1656,7 +1659,8 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 												Description: `Shell script to execute before workflow starts`,
 											},
 											"region": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `AWS region where the compute environment will be deployed. This field is required and must be provided`,
 											},
 											"storage_type": schema.StringAttribute{
 												Computed:           true,

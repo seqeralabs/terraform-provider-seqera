@@ -3,9 +3,9 @@
 page_title: "seqera_compute_env Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
+  This resource allows the management of Seqera compute environments.
   Seqera Platform compute environments define the execution platform where a pipeline will run.
-  Compute environments enable users to launch pipelines on a growing number of cloud and
-  on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+  Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
   Compute environments define the computational resources and configuration needed
   to run Nextflow workflows, including cloud provider settings, resource limits,
   and execution parameters.
@@ -13,9 +13,10 @@ description: |-
 
 # seqera_compute_env (Resource)
 
+This resource allows the management of Seqera compute environments.
+
 Seqera Platform compute environments define the execution platform where a pipeline will run.
-Compute environments enable users to launch pipelines on a growing number of cloud and
-on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
 
 Compute environments define the computational resources and configuration needed
 to run Nextflow workflows, including cloud provider settings, resource limits,
@@ -170,7 +171,7 @@ Optional:
 - `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
@@ -244,7 +245,7 @@ Optional:
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
 - `subnet_id` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
@@ -278,7 +279,7 @@ Optional:
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
+- `region` (String) Azure region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
@@ -371,7 +372,7 @@ Optional:
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) AWS region. Not Null; Requires replacement if changed.
+- `region` (String) AWS region where the EKS cluster is located. This field is required and must be provided. Not Null; Requires replacement if changed.
 - `server` (String) Not Null; Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
@@ -410,7 +411,7 @@ Optional:
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) The GKE cluster region - or - zone. Not Null; Requires replacement if changed.
+- `region` (String) GCP region or zone where the GKE cluster is located. This field is required and must be provided. Not Null; Requires replacement if changed.
 - `server` (String) Not Null; Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
@@ -703,7 +704,7 @@ Optional:
 - `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
 - `wave_enabled` (Boolean) Requires replacement if changed.

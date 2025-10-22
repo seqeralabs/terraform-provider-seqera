@@ -136,7 +136,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
 
 Required:
 
-- `region` (String)
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided
 
 Optional:
 

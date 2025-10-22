@@ -69,7 +69,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Seqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and\non-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
+		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,
@@ -838,7 +838,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										Description: `AWS region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -1094,7 +1094,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										Description: `AWS region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -1379,7 +1379,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										Description: `Azure region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -1907,7 +1907,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `AWS region. Not Null; Requires replacement if changed.`,
+										Description: `AWS region where the EKS cluster is located. This field is required and must be provided. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -2202,7 +2202,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The GKE cluster region - or - zone. Not Null; Requires replacement if changed.`,
+										Description: `GCP region or zone where the GKE cluster is located. This field is required and must be provided. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -4514,7 +4514,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										Description: `AWS region where the compute environment will be deployed. This field is required and must be provided. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},

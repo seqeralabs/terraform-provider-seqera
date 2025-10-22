@@ -77,7 +77,7 @@ Read-Only:
 - `nvnme_storage_enabled` (Boolean)
 - `post_run_script` (String)
 - `pre_run_script` (String)
-- `region` (String)
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
 - `wave_enabled` (Boolean)

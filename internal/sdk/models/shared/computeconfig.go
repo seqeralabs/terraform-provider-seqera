@@ -538,7 +538,7 @@ type ComputeConfigGoogleGKEClusterConfiguration struct {
 	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	// The GKE cluster region - or - zone
+	// GCP region or zone where the GKE cluster is located. This field is required and must be provided
 	Region string `json:"region"`
 	// The GKE cluster name
 	ClusterName    string `json:"clusterName"`
@@ -736,7 +736,7 @@ type ComputeConfigAmazonEKSClusterConfiguration struct {
 	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	// AWS region
+	// AWS region where the EKS cluster is located. This field is required and must be provided
 	Region string `json:"region"`
 	// The AWS EKS cluster name
 	ClusterName    string `json:"clusterName"`
@@ -1566,8 +1566,9 @@ type ComputeConfigAzureBatchConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
-	Region        string  `json:"region"`
-	HeadPool      *string `json:"headPool,omitempty"`
+	// Azure region where the compute environment will be deployed. This field is required and must be provided
+	Region   string  `json:"region"`
+	HeadPool *string `json:"headPool,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	AutoPoolMode            *bool               `json:"autoPoolMode,omitempty"`
 	Forge                   *AzBatchForgeConfig `json:"forge,omitempty"`
@@ -2325,7 +2326,8 @@ type ComputeConfigSeqeraComputeConfiguration struct {
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator      *string `json:"discriminator,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// AWS region where the compute environment will be deployed. This field is required and must be provided
 	Region             string  `json:"region"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`
@@ -2560,9 +2562,10 @@ type ComputeConfigAWSCloudConfiguration struct {
 	// Read-only property identifying the compute platform type
 	Discriminator *string  `json:"discriminator,omitempty"`
 	AllowBuckets  []string `json:"allowBuckets,omitempty"`
-	Region        string   `json:"region"`
-	InstanceType  *string  `json:"instanceType,omitempty"`
-	ImageID       *string  `json:"imageId,omitempty"`
+	// AWS region where the compute environment will be deployed. This field is required and must be provided
+	Region       string  `json:"region"`
+	InstanceType *string `json:"instanceType,omitempty"`
+	ImageID      *string `json:"imageId,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
@@ -2751,7 +2754,8 @@ type ComputeConfigAWSBatchConfiguration struct {
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator      *string `json:"discriminator,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// AWS region where the compute environment will be deployed. This field is required and must be provided
 	Region             string  `json:"region"`
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`

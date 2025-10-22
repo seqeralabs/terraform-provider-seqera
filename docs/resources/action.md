@@ -243,7 +243,7 @@ Read-Only:
 - `nvnme_storage_enabled` (Boolean)
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String)
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
 - `wave_enabled` (Boolean)
@@ -317,7 +317,7 @@ Read-Only:
 - `nextflow_config` (String) Nextflow configuration settings and parameters
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String)
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided
 - `security_groups` (List of String)
 - `subnet_id` (String)
 - `wave_enabled` (Boolean)
@@ -351,7 +351,7 @@ Read-Only:
 - `nextflow_config` (String) Nextflow configuration settings and parameters
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String)
+- `region` (String) Azure region where the compute environment will be deployed. This field is required and must be provided
 - `token_duration` (String)
 - `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
@@ -444,7 +444,7 @@ Read-Only:
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String) AWS region
+- `region` (String) AWS region where the EKS cluster is located. This field is required and must be provided
 - `server` (String)
 - `service_pod_spec` (String)
 - `ssl_cert` (String)
@@ -483,7 +483,7 @@ Read-Only:
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String) The GKE cluster region - or - zone
+- `region` (String) GCP region or zone where the GKE cluster is located. This field is required and must be provided
 - `server` (String)
 - `service_pod_spec` (String)
 - `ssl_cert` (String)
@@ -776,7 +776,7 @@ Read-Only:
 - `nvnme_storage_enabled` (Boolean)
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String)
+- `region` (String) AWS region where the compute environment will be deployed. This field is required and must be provided
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
 - `wave_enabled` (Boolean)

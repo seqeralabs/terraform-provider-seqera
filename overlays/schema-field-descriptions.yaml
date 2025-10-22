@@ -321,6 +321,36 @@ actions:
     update:
       description: Maximum lifespan of the data studio session in hours
 
+  # AWS Batch Config field descriptions
+  - target: $.components.schemas.AwsBatchConfig.properties.region
+    update:
+      description: AWS region where the compute environment will be deployed. This field is required and must be provided
+
+  # AWS Cloud Config field descriptions
+  - target: $.components.schemas.AwsCloudConfig.properties.region
+    update:
+      description: AWS region where the compute environment will be deployed. This field is required and must be provided
+
+  # Azure Batch Config field descriptions
+  - target: $.components.schemas.AzBatchConfig.properties.region
+    update:
+      description: Azure region where the compute environment will be deployed. This field is required and must be provided
+
+  # EKS Config field descriptions (allOf structure)
+  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.region
+    update:
+      description: AWS region where the EKS cluster is located. This field is required and must be provided
+
+  # GKE Config field descriptions (allOf structure)
+  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.region
+    update:
+      description: GCP region or zone where the GKE cluster is located. This field is required and must be provided
+
+  # Seqera Compute Config field descriptions
+  - target: $.components.schemas.SeqeraComputeConfig.properties.region
+    update:
+      description: AWS region where the Seqera compute environment will be deployed. This field is required and must be provided
+
   # Launch field descriptions
   - target: $.components.schemas.Launch.properties.workDir
     update:

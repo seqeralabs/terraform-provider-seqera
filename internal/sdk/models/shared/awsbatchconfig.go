@@ -6,9 +6,10 @@ type AwsBatchConfig struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LustreID            *string             `json:"lustreId,omitempty"`
-	Volumes             []string            `json:"volumes,omitempty"`
-	Discriminator       *string             `json:"discriminator,omitempty"`
+	LustreID      *string  `json:"lustreId,omitempty"`
+	Volumes       []string `json:"volumes,omitempty"`
+	Discriminator *string  `json:"discriminator,omitempty"`
+	// AWS region where the compute environment will be deployed. This field is required and must be provided
 	Region              string              `json:"region"`
 	ComputeQueue        *string             `json:"computeQueue,omitempty"`
 	DragenQueue         *string             `json:"dragenQueue,omitempty"`
