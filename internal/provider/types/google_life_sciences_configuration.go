@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigGoogleLifeSciencesConfiguration struct {
+type GoogleLifeSciencesConfiguration struct {
 	BootDiskSizeGb    types.Int32             `tfsdk:"boot_disk_size_gb"`
 	CopyImage         types.String            `tfsdk:"copy_image"`
 	DebugMode         types.Int32             `tfsdk:"debug_mode"`

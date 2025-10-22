@@ -9,7 +9,7 @@ import (
 
 type ListManagedIdentitiesRequest struct {
 	// Organization numeric identifier
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// Optional search criteria, allowing free text search on name and keywords: `platform:`
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Pagination max results
@@ -18,9 +18,9 @@ type ListManagedIdentitiesRequest struct {
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
 }
 
-func (l *ListManagedIdentitiesRequest) GetOrgID() *int64 {
+func (l *ListManagedIdentitiesRequest) GetOrgID() int64 {
 	if l == nil {
-		return nil
+		return 0
 	}
 	return l.OrgID
 }
@@ -54,7 +54,7 @@ type ListManagedIdentitiesResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	ListManagedIdentitiesResponse *shared.ListManagedIdentitiesResponse
+	ListGridManagedIdentitiesResponse *shared.ListGridManagedIdentitiesResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -80,11 +80,11 @@ func (l *ListManagedIdentitiesResponse) GetRawResponse() *http.Response {
 	return l.RawResponse
 }
 
-func (l *ListManagedIdentitiesResponse) GetListManagedIdentitiesResponse() *shared.ListManagedIdentitiesResponse {
+func (l *ListManagedIdentitiesResponse) GetListGridManagedIdentitiesResponse() *shared.ListGridManagedIdentitiesResponse {
 	if l == nil {
 		return nil
 	}
-	return l.ListManagedIdentitiesResponse
+	return l.ListGridManagedIdentitiesResponse
 }
 
 func (l *ListManagedIdentitiesResponse) GetErrorResponse() *shared.ErrorResponse {

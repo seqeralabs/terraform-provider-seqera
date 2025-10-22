@@ -140,12 +140,12 @@ func (s *Identities) List(ctx context.Context, request operations.ListManagedIde
 				return nil, err
 			}
 
-			var out shared.ListManagedIdentitiesResponse
+			var out shared.ListGridManagedIdentitiesResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListManagedIdentitiesResponse = &out
+			res.ListGridManagedIdentitiesResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -221,7 +221,7 @@ func (s *Identities) Create(ctx context.Context, request operations.CreateManage
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateManagedIdentityRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGridManagedIdentityRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -303,12 +303,12 @@ func (s *Identities) Create(ctx context.Context, request operations.CreateManage
 				return nil, err
 			}
 
-			var out shared.CreateManagedIdentityResponse
+			var out shared.CreateGridManagedIdentityResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateManagedIdentityResponse = &out
+			res.CreateGridManagedIdentityResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -459,12 +459,12 @@ func (s *Identities) Get(ctx context.Context, request operations.DescribeManaged
 				return nil, err
 			}
 
-			var out shared.CreateManagedIdentityResponse
+			var out shared.DescribeGridManagedIdentityResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateManagedIdentityResponse = &out
+			res.DescribeGridManagedIdentityResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -540,7 +540,7 @@ func (s *Identities) Update(ctx context.Context, request operations.UpdateManage
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateManagedIdentityRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGridManagedIdentityRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}

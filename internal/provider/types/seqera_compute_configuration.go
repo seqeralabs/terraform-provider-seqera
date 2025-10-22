@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigSeqeraComputeConfiguration struct {
+type SeqeraComputeConfiguration struct {
 	CliPath             types.String        `tfsdk:"cli_path"`
 	ComputeJobRole      types.String        `tfsdk:"compute_job_role"`
 	ComputeQueue        types.String        `tfsdk:"compute_queue"`

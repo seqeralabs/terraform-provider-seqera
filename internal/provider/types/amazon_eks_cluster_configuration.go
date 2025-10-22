@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigGoogleGKEClusterConfiguration struct {
+type AmazonEKSClusterConfiguration struct {
 	ClusterName           types.String        `tfsdk:"cluster_name"`
 	ComputeServiceAccount types.String        `tfsdk:"compute_service_account"`
 	Environment           []ConfigEnvVariable `tfsdk:"environment"`

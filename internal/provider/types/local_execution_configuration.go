@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigLocalExecutionConfiguration struct {
+type LocalExecutionConfiguration struct {
 	Environment    []ConfigEnvVariable `tfsdk:"environment"`
 	Fusion2Enabled types.Bool          `tfsdk:"fusion2_enabled"`
 	NextflowConfig types.String        `tfsdk:"nextflow_config"`

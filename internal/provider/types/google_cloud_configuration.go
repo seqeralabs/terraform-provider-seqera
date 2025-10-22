@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigGoogleCloudConfiguration struct {
+type GoogleCloudConfiguration struct {
 	Arm64Enabled        types.Bool                        `tfsdk:"arm64_enabled"`
 	BootDiskSizeGb      types.Int32                       `tfsdk:"boot_disk_size_gb"`
 	Environment         []ConfigEnvVariable               `tfsdk:"environment"`

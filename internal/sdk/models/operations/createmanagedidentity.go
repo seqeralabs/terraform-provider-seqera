@@ -9,23 +9,23 @@ import (
 
 type CreateManagedIdentityRequest struct {
 	// Organization numeric identifier
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 	// Managed Identity create request
-	CreateManagedIdentityRequest shared.CreateManagedIdentityRequest `request:"mediaType=application/json"`
+	CreateGridManagedIdentityRequest shared.CreateGridManagedIdentityRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateManagedIdentityRequest) GetOrgID() *int64 {
+func (c *CreateManagedIdentityRequest) GetOrgID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.OrgID
 }
 
-func (c *CreateManagedIdentityRequest) GetCreateManagedIdentityRequest() shared.CreateManagedIdentityRequest {
+func (c *CreateManagedIdentityRequest) GetCreateGridManagedIdentityRequest() shared.CreateGridManagedIdentityRequest {
 	if c == nil {
-		return shared.CreateManagedIdentityRequest{}
+		return shared.CreateGridManagedIdentityRequest{}
 	}
-	return c.CreateManagedIdentityRequest
+	return c.CreateGridManagedIdentityRequest
 }
 
 type CreateManagedIdentityResponse struct {
@@ -36,7 +36,7 @@ type CreateManagedIdentityResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	CreateManagedIdentityResponse *shared.CreateManagedIdentityResponse
+	CreateGridManagedIdentityResponse *shared.CreateGridManagedIdentityResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -62,11 +62,11 @@ func (c *CreateManagedIdentityResponse) GetRawResponse() *http.Response {
 	return c.RawResponse
 }
 
-func (c *CreateManagedIdentityResponse) GetCreateManagedIdentityResponse() *shared.CreateManagedIdentityResponse {
+func (c *CreateManagedIdentityResponse) GetCreateGridManagedIdentityResponse() *shared.CreateGridManagedIdentityResponse {
 	if c == nil {
 		return nil
 	}
-	return c.CreateManagedIdentityResponse
+	return c.CreateGridManagedIdentityResponse
 }
 
 func (c *CreateManagedIdentityResponse) GetErrorResponse() *shared.ErrorResponse {

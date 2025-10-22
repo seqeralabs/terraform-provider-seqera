@@ -2920,6 +2920,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: search
           in: query
           description: "Optional search criteria, allowing free text search on name and keywords: `platform:`"
@@ -2946,7 +2947,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListManagedIdentitiesResponse"
+                $ref: "#/components/schemas/ListGridManagedIdentitiesResponse"
         "400":
           description: Bad request
           content:
@@ -2971,12 +2972,13 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Managed Identity create request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateManagedIdentityRequest"
+              $ref: "#/components/schemas/CreateGridManagedIdentityRequest"
         required: true
       responses:
         "200":
@@ -2984,7 +2986,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateManagedIdentityResponse"
+                $ref: "#/components/schemas/CreateGridManagedIdentityResponse"
         "400":
           description: Bad request
           content:
@@ -2995,6 +2997,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#create
       x-speakeasy-name-override: create
   /identities/{managedIdentityId}:
     get:
@@ -3017,13 +3020,14 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateManagedIdentityResponse"
+                $ref: "#/components/schemas/DescribeGridManagedIdentityResponse"
         "400":
           description: Bad request
           content:
@@ -3034,6 +3038,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#read
       x-speakeasy-name-override: get
     put:
       tags:
@@ -3048,6 +3053,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: managedIdentityId
           in: path
           description: Managed Identity numeric identifier
@@ -3055,12 +3061,13 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Managed Identity update request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateManagedIdentityRequest"
+              $ref: "#/components/schemas/UpdateGridManagedIdentityRequest"
         required: true
       responses:
         "204":
@@ -3075,6 +3082,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#update
       x-speakeasy-name-override: update
     delete:
       tags:
@@ -3090,6 +3098,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: orgId
           in: query
           description: Organization numeric identifier
@@ -3121,6 +3130,7 @@ paths:
                 $ref: "#/components/schemas/DeleteManagedCredentialsConflictResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#delete
       x-speakeasy-name-override: delete
   /identities/{managedIdentityId}/credentials:
     get:
@@ -15881,6 +15891,95 @@ components:
         totalSize:
           type: integer
           format: int64
+    GridManagedIdentity:
+      x-speakeasy-entity: ManagedIdentity
+      x-speakeasy-entity-description: |
+        Manage Managed Identities in Seqera Platform using this resource.
+
+        Managed Identities provide a way to securely authenticate and authorize
+        access to grid computing platforms (Altair, LSF, Moab, Slurm, UGE) within
+        the Seqera Platform. Each identity encapsulates platform-specific
+        configuration required for job submission and management.
+      required:
+        - name
+        - platform
+        - hostName
+        - port
+        - orgId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          x-speakeasy-name-override: managedIdentityId
+          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-ordering: 6
+        name:
+          type: string
+          description: Display name for the managed identity
+          example: my-slurm-cluster
+          x-speakeasy-param-ordering: 1
+        platform:
+          $ref: "#/components/schemas/GridPlatform"
+          x-speakeasy-plan-validators: ManagedIdentityPlatformValidator
+          example: slurm-platform
+          x-speakeasy-param-ordering: 2
+        hostName:
+          type: string
+          description: Grid host name or IP address
+          example: slurm.example.com
+          x-speakeasy-param-ordering: 3
+        port:
+          type: integer
+          format: int32
+          description: Grid connection port
+          example: 22
+          x-speakeasy-param-ordering: 4
+        orgId:
+          type: integer
+          format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-ordering: 5
+    CreateGridManagedIdentityRequest:
+      type: object
+      required:
+        - managedIdentity
+      properties:
+        managedIdentity:
+          $ref: '#/components/schemas/GridManagedIdentity'
+    CreateGridManagedIdentityResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          x-speakeasy-name-override: managedIdentityId
+    # Response for describe/read operations
+    DescribeGridManagedIdentityResponse:
+      type: object
+      properties:
+        managedIdentity:
+          $ref: '#/components/schemas/GridManagedIdentity'
+    UpdateGridManagedIdentityRequest:
+      type: object
+      required:
+        - managedIdentity
+      properties:
+        managedIdentity:
+          $ref: '#/components/schemas/GridManagedIdentity'
+    ListGridManagedIdentitiesResponse:
+      type: object
+      properties:
+        managedIdentities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GridManagedIdentity'
+          x-speakeasy-param-readonly: true
+        totalSize:
+          type: integer
+          format: int64
+          x-speakeasy-param-readonly: true
     # AWS-specific credential schema
     AWSCredential:
       x-speakeasy-entity: AWSCredential

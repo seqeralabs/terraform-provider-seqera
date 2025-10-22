@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigAzureBatchConfiguration struct {
+type AzureBatchConfiguration struct {
 	AutoPoolMode            types.Bool          `tfsdk:"auto_pool_mode"`
 	DeleteJobsOnCompletion  types.String        `tfsdk:"delete_jobs_on_completion"`
 	DeletePoolsOnCompletion types.Bool          `tfsdk:"delete_pools_on_completion"`

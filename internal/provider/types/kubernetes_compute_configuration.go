@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigKubernetesComputeConfiguration struct {
+type KubernetesComputeConfiguration struct {
 	ComputeServiceAccount types.String        `tfsdk:"compute_service_account"`
 	Environment           []ConfigEnvVariable `tfsdk:"environment"`
 	HeadJobCpus           types.Int32         `tfsdk:"head_job_cpus"`

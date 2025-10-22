@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: cc6018e92feffe466ddae8dffc750606
+  docChecksum: cf1d83442f66444007b767c2b263da2c
   docVersion: 1.85.0
   speakeasyVersion: 1.638.0
   generationVersion: 2.728.0
@@ -34,6 +34,7 @@ generatedFiles:
   - examples/data-sources/seqera_dataset/data-source.tf
   - examples/data-sources/seqera_google_credential/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
+  - examples/data-sources/seqera_managed_identity/data-source.tf
   - examples/data-sources/seqera_orgs/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
@@ -72,6 +73,9 @@ generatedFiles:
   - examples/resources/seqera_google_credential/import.sh
   - examples/resources/seqera_google_credential/resource.tf
   - examples/resources/seqera_labels/resource.tf
+  - examples/resources/seqera_managed_identity/import-by-string-id.tf
+  - examples/resources/seqera_managed_identity/import.sh
+  - examples/resources/seqera_managed_identity/resource.tf
   - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
   - examples/resources/seqera_orgs/resource.tf
@@ -149,6 +153,10 @@ generatedFiles:
   - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
   - internal/provider/labels_resource_sdk.go
+  - internal/provider/managedidentity_data_source.go
+  - internal/provider/managedidentity_data_source_sdk.go
+  - internal/provider/managedidentity_resource.go
+  - internal/provider/managedidentity_resource_sdk.go
   - internal/provider/orgs_data_source.go
   - internal/provider/orgs_data_source_sdk.go
   - internal/provider/orgs_resource.go
@@ -200,10 +208,16 @@ generatedFiles:
   - internal/provider/types/action_tower_action_event.go
   - internal/provider/types/active_connection.go
   - internal/provider/types/agent_security_keys.go
+  - internal/provider/types/altair_pbs_configuration.go
+  - internal/provider/types/amazon_eks_cluster_configuration.go
   - internal/provider/types/aws_batch_config.go
+  - internal/provider/types/aws_batch_configuration.go
+  - internal/provider/types/aws_cloud_configuration.go
   - internal/provider/types/aws_security_keys.go
   - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
+  - internal/provider/types/azure_batch_configuration.go
+  - internal/provider/types/azure_cloud_configuration.go
   - internal/provider/types/azure_cloud_keys.go
   - internal/provider/types/azure_cloud_keys1.go
   - internal/provider/types/azure_entra_keys.go
@@ -217,23 +231,6 @@ generatedFiles:
   - internal/provider/types/code_commit_security_keys.go
   - internal/provider/types/code_commit_security_keys1.go
   - internal/provider/types/compute_config.go
-  - internal/provider/types/compute_config_altair_pbs_configuration.go
-  - internal/provider/types/compute_config_amazon_eks_cluster_configuration.go
-  - internal/provider/types/compute_config_aws_batch_configuration.go
-  - internal/provider/types/compute_config_aws_cloud_configuration.go
-  - internal/provider/types/compute_config_azure_batch_configuration.go
-  - internal/provider/types/compute_config_azure_cloud_configuration.go
-  - internal/provider/types/compute_config_google_batch_service_configuration.go
-  - internal/provider/types/compute_config_google_cloud_configuration.go
-  - internal/provider/types/compute_config_google_gke_cluster_configuration.go
-  - internal/provider/types/compute_config_google_life_sciences_configuration.go
-  - internal/provider/types/compute_config_ibmlsf_configuration.go
-  - internal/provider/types/compute_config_kubernetes_compute_configuration.go
-  - internal/provider/types/compute_config_local_execution_configuration.go
-  - internal/provider/types/compute_config_moab_configuration.go
-  - internal/provider/types/compute_config_seqera_compute_configuration.go
-  - internal/provider/types/compute_config_slurm_configuration.go
-  - internal/provider/types/compute_config_univa_grid_engine_configuration.go
   - internal/provider/types/compute_env.go
   - internal/provider/types/compute_env_compute_config.go
   - internal/provider/types/compute_env_db_dto.go
@@ -262,16 +259,24 @@ generatedFiles:
   - internal/provider/types/gitea_security_keys1.go
   - internal/provider/types/github_action_config.go
   - internal/provider/types/github_action_event.go
+  - internal/provider/types/google_batch_service_configuration.go
+  - internal/provider/types/google_cloud_configuration.go
+  - internal/provider/types/google_gke_cluster_configuration.go
+  - internal/provider/types/google_life_sciences_configuration.go
   - internal/provider/types/google_security_keys.go
   - internal/provider/types/google_security_keys1.go
+  - internal/provider/types/ibmlsf_configuration.go
   - internal/provider/types/job_info_dto.go
   - internal/provider/types/k8s_security_keys.go
   - internal/provider/types/k8s_security_keys1.go
+  - internal/provider/types/kubernetes_compute_configuration.go
   - internal/provider/types/label_db_dto.go
   - internal/provider/types/launch.go
+  - internal/provider/types/local_execution_configuration.go
   - internal/provider/types/local_security_keys.go
   - internal/provider/types/local_security_keys1.go
   - internal/provider/types/map_entry_string_string.go
+  - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
   - internal/provider/types/process_load.go
   - internal/provider/types/progress_data.go
@@ -286,11 +291,14 @@ generatedFiles:
   - internal/provider/types/security_keys_google_security_keys.go
   - internal/provider/types/security_keys_google_security_keys1.go
   - internal/provider/types/security_keys_output.go
+  - internal/provider/types/seqera_compute_configuration.go
   - internal/provider/types/seqera_compute_security_keys.go
   - internal/provider/types/seqera_compute_security_keys1.go
+  - internal/provider/types/slurm_configuration.go
   - internal/provider/types/ssh_security_keys.go
   - internal/provider/types/ssh_security_keys1.go
   - internal/provider/types/studio_remote_configuration.go
+  - internal/provider/types/univa_grid_engine_configuration.go
   - internal/provider/types/user_info.go
   - internal/provider/types/wf_manifest.go
   - internal/provider/types/wf_nextflow.go
@@ -557,7 +565,6 @@ generatedFiles:
   - internal/sdk/models/operations/validateusername.go
   - internal/sdk/models/operations/validateworkflowconstraints.go
   - internal/sdk/models/operations/validateworkspacename.go
-  - internal/sdk/models/shared/abstractgridconfig.go
   - internal/sdk/models/shared/accesstoken.go
   - internal/sdk/models/shared/actionconfigtype.go
   - internal/sdk/models/shared/actioneventtype.go
@@ -621,12 +628,12 @@ generatedFiles:
   - internal/sdk/models/shared/createdatasetresponse.go
   - internal/sdk/models/shared/creategooglecredentialsrequest.go
   - internal/sdk/models/shared/creategooglecredentialsresponse.go
+  - internal/sdk/models/shared/creategridmanagedidentityrequest.go
+  - internal/sdk/models/shared/creategridmanagedidentityresponse.go
   - internal/sdk/models/shared/createlabelrequest.go
   - internal/sdk/models/shared/createlabelresponse.go
   - internal/sdk/models/shared/createmanagedcredentialsrequest.go
   - internal/sdk/models/shared/createmanagedcredentialsresponse.go
-  - internal/sdk/models/shared/createmanagedidentityrequest.go
-  - internal/sdk/models/shared/createmanagedidentityresponse.go
   - internal/sdk/models/shared/createorganizationrequest.go
   - internal/sdk/models/shared/createorganizationresponse.go
   - internal/sdk/models/shared/createpipelinerequest.go
@@ -704,6 +711,7 @@ generatedFiles:
   - internal/sdk/models/shared/describecredentialsresponse.go
   - internal/sdk/models/shared/describedatasetresponse.go
   - internal/sdk/models/shared/describegooglecredentialsresponse.go
+  - internal/sdk/models/shared/describegridmanagedidentityresponse.go
   - internal/sdk/models/shared/describelaunchresponse.go
   - internal/sdk/models/shared/describeorganizationquotasresponse.go
   - internal/sdk/models/shared/describeorganizationresponse.go
@@ -732,6 +740,7 @@ generatedFiles:
   - internal/sdk/models/shared/googleplatformmetainfofilestore.go
   - internal/sdk/models/shared/googlesecuritykeys.go
   - internal/sdk/models/shared/googlesecuritykeysoutput.go
+  - internal/sdk/models/shared/gridmanagedidentity.go
   - internal/sdk/models/shared/gridplatform.go
   - internal/sdk/models/shared/gridplatformmetainfo.go
   - internal/sdk/models/shared/image.go
@@ -755,10 +764,10 @@ generatedFiles:
   - internal/sdk/models/shared/listdatasetsresponse.go
   - internal/sdk/models/shared/listdatasetversionsresponse.go
   - internal/sdk/models/shared/listeventtypesresponse.go
+  - internal/sdk/models/shared/listgridmanagedidentitiesresponse.go
   - internal/sdk/models/shared/listlabelsresponse.go
   - internal/sdk/models/shared/listmanagedcredentialsrespdto.go
   - internal/sdk/models/shared/listmanagedcredentialsresponse.go
-  - internal/sdk/models/shared/listmanagedidentitiesresponse.go
   - internal/sdk/models/shared/listmembersresponse.go
   - internal/sdk/models/shared/listorganizationsresponse.go
   - internal/sdk/models/shared/listparticipantsresponse.go
@@ -780,7 +789,6 @@ generatedFiles:
   - internal/sdk/models/shared/managedcredentialsdbdto.go
   - internal/sdk/models/shared/managedcredentialsmetadata.go
   - internal/sdk/models/shared/managedcredentialsmetadatainput.go
-  - internal/sdk/models/shared/managedidentitydbdtoabstractgridconfig.go
   - internal/sdk/models/shared/mapentrystringstring.go
   - internal/sdk/models/shared/memberdbdto.go
   - internal/sdk/models/shared/multirequestfileschema.go
@@ -850,10 +858,10 @@ generatedFiles:
   - internal/sdk/models/shared/updatecredentialsrequest.go
   - internal/sdk/models/shared/updatedatasetrequest.go
   - internal/sdk/models/shared/updategooglecredentialsrequest.go
+  - internal/sdk/models/shared/updategridmanagedidentityrequest.go
   - internal/sdk/models/shared/updatelabelrequest.go
   - internal/sdk/models/shared/updatelabelresponse.go
   - internal/sdk/models/shared/updatemanagedcredentialsrequest.go
-  - internal/sdk/models/shared/updatemanagedidentityrequest.go
   - internal/sdk/models/shared/updatememberrolerequest.go
   - internal/sdk/models/shared/updateorganizationrequest.go
   - internal/sdk/models/shared/updateparticipantrolerequest.go
@@ -2827,15 +2835,21 @@ examples:
           application/json: {"message": "<value>"}
   ListManagedIdentities:
     speakeasy-default-list-managed-identities:
+      parameters:
+        query:
+          orgId: 319180
       responses:
         "200":
-          application/json: {}
+          application/json: {"managedIdentities": [{"name": "my-slurm-cluster", "platform": "slurm-platform", "hostName": "slurm.example.com", "port": 22, "orgId": 319180}]}
         "400":
           application/json: {"message": "<value>"}
   CreateManagedIdentity:
     speakeasy-default-create-managed-identity:
+      parameters:
+        query:
+          orgId: 436987
       requestBody:
-        application/json: {}
+        application/json: {"managedIdentity": {"name": "my-slurm-cluster", "platform": "moab-platform", "hostName": "slurm.example.com", "port": 22, "orgId": 436987}}
       responses:
         "200":
           application/json: {}
@@ -2846,9 +2860,11 @@ examples:
       parameters:
         path:
           managedIdentityId: 934481
+        query:
+          orgId: 934481
       responses:
         "200":
-          application/json: {}
+          application/json: {"managedIdentity": {"name": "my-slurm-cluster", "platform": "uge-platform", "hostName": "slurm.example.com", "port": 22, "orgId": 934481}}
         "400":
           application/json: {"message": "<value>"}
   UpdateManagedIdentity:
@@ -2857,7 +2873,7 @@ examples:
         path:
           managedIdentityId: 255440
       requestBody:
-        application/json: {}
+        application/json: {"managedIdentity": {"name": "my-slurm-cluster", "platform": "lsf-platform", "hostName": "slurm.example.com", "port": 22, "orgId": 255440}}
       responses:
         "400":
           application/json: {"message": "<value>"}

@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigAltairPBSConfiguration struct {
+type MoabConfiguration struct {
 	ComputeQueue            types.String        `tfsdk:"compute_queue"`
 	Environment             []ConfigEnvVariable `tfsdk:"environment"`
 	HeadJobOptions          types.String        `tfsdk:"head_job_options"`

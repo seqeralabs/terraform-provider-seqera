@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type ComputeConfigAWSCloudConfiguration struct {
+type AWSCloudConfiguration struct {
 	AllowBuckets       []types.String      `tfsdk:"allow_buckets"`
 	Arm64Enabled       types.Bool          `tfsdk:"arm64_enabled"`
 	EbsBootSize        types.Int32         `tfsdk:"ebs_boot_size"`
