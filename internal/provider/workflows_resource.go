@@ -94,7 +94,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 		MarkdownDescription: "Manage workflow executions and pipeline runs.\n\nWorkflows represent individual executions of Nextflow pipelines,\ncontaining execution status, parameters, results, and monitoring\ninformation for computational workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -572,7 +572,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Requires replacement if changed.`,
 			},
 			"work_dir": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},

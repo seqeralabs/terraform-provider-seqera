@@ -175,8 +175,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		icon = nil
 	}
-	var computeEnvID string
-	computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	computeEnvID := new(string)
+	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
 
 	runName := new(string)
 	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
@@ -187,8 +191,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	var pipeline string
 	pipeline = r.Launch.Pipeline.ValueString()
 
-	var workDir string
-	workDir = r.Launch.WorkDir.ValueString()
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
@@ -386,8 +394,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		icon = nil
 	}
 	var launch *shared.WorkflowLaunchRequest
-	var computeEnvID string
-	computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	computeEnvID := new(string)
+	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
 
 	runName := new(string)
 	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
@@ -398,8 +410,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	var pipeline string
 	pipeline = r.Launch.Pipeline.ValueString()
 
-	var workDir string
-	workDir = r.Launch.WorkDir.ValueString()
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {

@@ -349,8 +349,12 @@ func (r *WorkflowsResourceModel) ToSharedSubmitWorkflowLaunchRequest(ctx context
 func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Context) (*shared.WorkflowLaunchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var computeEnvID string
-	computeEnvID = r.ComputeEnvID.ValueString()
+	computeEnvID := new(string)
+	if !r.ComputeEnvID.IsUnknown() && !r.ComputeEnvID.IsNull() {
+		*computeEnvID = r.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
 
 	runName := new(string)
 	if !r.RunName.IsUnknown() && !r.RunName.IsNull() {
@@ -361,8 +365,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	var pipeline string
 	pipeline = r.Pipeline.ValueString()
 
-	var workDir string
-	workDir = r.WorkDir.ValueString()
+	workDir := new(string)
+	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
+		*workDir = r.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 
 	revision := new(string)
 	if !r.Revision.IsUnknown() && !r.Revision.IsNull() {

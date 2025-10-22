@@ -2035,7 +2035,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"compute_env_id": schema.StringAttribute{
-						Required: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 						},
@@ -2303,7 +2303,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Requires replacement if changed.`,
 					},
 					"work_dir": schema.StringAttribute{
-						Required: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
