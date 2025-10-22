@@ -113,6 +113,9 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewDatasetsResource,
 		NewGoogleCredentialResource,
 		NewLabelsResource,
+		NewManagedCredentialsResource,
+		NewManagedIdentityResource,
+		NewOrganizationMemberResource,
 		NewOrgsResource,
 		NewPipelineResource,
 		NewPipelineSecretResource,
@@ -122,6 +125,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewTokensResource,
 		NewWorkflowsResource,
 		NewWorkspaceResource,
+		NewWorkspaceParticipantResource,
 	}
 }
 
@@ -137,6 +141,9 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewDatasetDataSource,
 		NewGoogleCredentialDataSource,
 		NewLabelsDataSource,
+		NewManagedCredentialsDataSource,
+		NewManagedIdentityDataSource,
+		NewOrganizationMemberDataSource,
 		NewOrgsDataSource,
 		NewPipelineDataSource,
 		NewPipelineSecretDataSource,
@@ -147,6 +154,7 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewUserWorkspacesDataSource,
 		NewWorkflowsDataSource,
 		NewWorkspaceDataSource,
+		NewWorkspaceParticipantDataSource,
 		NewWorkspacesDataSource,
 	}
 }

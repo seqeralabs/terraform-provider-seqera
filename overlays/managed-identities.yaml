@@ -1,0 +1,187 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Managed Identities Overlay
+  version: 0.0.0
+actions:
+  # Create custom Managed Identity schema with flattened structure
+  - target: $.components.schemas
+    update:
+      GridManagedIdentity:
+        x-speakeasy-entity: ManagedIdentity
+        x-speakeasy-entity-description: |
+          Manage Managed Identities for HPC environments in Seqera Platform.
+
+          Managed Identities are organization-level credentials for HPC/grid computing
+          platforms that enable granular access control for individual workspace users.
+          Unlike shared SSH credentials where all activities appear under one account,
+          managed identities link multiple user credentials to a single identity,
+          preserving each user's identity in system logs and enabling fair resource
+          allocation through HPC queue policies.
+
+          Supported platforms: Altair PBS, IBM LSF, Moab, Slurm, and Univa Grid Engine.
+        required:
+          - name
+          - platform
+          - hostName
+          - port
+          - orgId
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            x-speakeasy-name-override: managedIdentityId
+            x-speakeasy-param-suppress-computed-diff: true
+            x-speakeasy-param-computed: true
+            x-speakeasy-param-ordering: 6
+          name:
+            type: string
+            description: Display name for the managed identity
+            example: my-slurm-cluster
+            x-speakeasy-param-ordering: 1
+          platform:
+            $ref: "#/components/schemas/GridPlatform"
+            x-speakeasy-plan-validators: ManagedIdentityPlatformValidator
+            example: slurm-platform
+            x-speakeasy-param-ordering: 2
+          hostName:
+            type: string
+            description: Grid host name or IP address
+            example: slurm.example.com
+            x-speakeasy-param-ordering: 3
+          port:
+            type: integer
+            format: int32
+            description: Grid connection port
+            example: 22
+            x-speakeasy-param-ordering: 4
+          orgId:
+            type: integer
+            format: int64
+            description: Organization numeric identifier
+            x-speakeasy-param-ordering: 5
+
+  # Managed Identity entity operations
+  - target: $["paths"]["/identities"]["post"]
+    update:
+      x-speakeasy-entity-operation: ManagedIdentity#create
+  - target: $["paths"]["/identities/{managedIdentityId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: ManagedIdentity#read
+  - target: $["paths"]["/identities/{managedIdentityId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: ManagedIdentity#update
+  - target: $["paths"]["/identities/{managedIdentityId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: ManagedIdentity#delete
+
+  # Managed Identity parameter configurations
+  # List endpoint (GET /identities) - requires orgId
+  - target: $["paths"]["/identities"]["get"]["parameters"][0]
+    update:
+      required: true
+
+  # Create endpoint (POST /identities) - requires orgId
+  - target: $["paths"]["/identities"]["post"]["parameters"][0]
+    update:
+      required: true
+
+  # Read/Get endpoint (GET /identities/{managedIdentityId}) - requires both managedIdentityId and orgId for data source
+  # managedIdentityId is a path parameter and must be required (no x-speakeasy-param-optional)
+
+  - target: $["paths"]["/identities/{managedIdentityId}"]["get"]["parameters"][?(@.name == "orgId")]
+    update:
+      name: orgId
+      in: query
+      description: Organization numeric identifier
+      required: true
+      schema:
+        type: integer
+        format: int64
+
+  # Update endpoint parameters
+  - target: $["paths"]["/identities/{managedIdentityId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+  - target: $["paths"]["/identities/{managedIdentityId}"]["put"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Delete endpoint parameters
+  - target: $["paths"]["/identities/{managedIdentityId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Update request/response schemas to use new GridManagedIdentity schema
+  - target: $.components.schemas
+    update:
+      CreateGridManagedIdentityRequest:
+        type: object
+        required:
+          - managedIdentity
+        properties:
+          managedIdentity:
+            $ref: '#/components/schemas/GridManagedIdentity'
+
+      CreateGridManagedIdentityResponse:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+            x-speakeasy-name-override: managedIdentityId
+
+      # Response for describe/read operations
+      DescribeGridManagedIdentityResponse:
+        type: object
+        properties:
+          managedIdentity:
+            $ref: '#/components/schemas/GridManagedIdentity'
+
+      UpdateGridManagedIdentityRequest:
+        type: object
+        required:
+          - managedIdentity
+        properties:
+          managedIdentity:
+            $ref: '#/components/schemas/GridManagedIdentity'
+
+      ListGridManagedIdentitiesResponse:
+        type: object
+        properties:
+          managedIdentities:
+            type: array
+            items:
+              $ref: '#/components/schemas/GridManagedIdentity'
+            x-speakeasy-param-readonly: true
+          totalSize:
+            type: integer
+            format: int64
+            x-speakeasy-param-readonly: true
+
+  # Update the API paths to use new schemas
+  - target: $["paths"]["/identities"]["post"]["requestBody"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/CreateGridManagedIdentityRequest"
+
+  - target: $["paths"]["/identities"]["post"]["responses"]["200"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/CreateGridManagedIdentityResponse"
+
+  - target: $["paths"]["/identities/{managedIdentityId}"]["get"]["responses"]["200"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/DescribeGridManagedIdentityResponse"
+
+  - target: $["paths"]["/identities/{managedIdentityId}"]["put"]["requestBody"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/UpdateGridManagedIdentityRequest"
+
+  - target: $["paths"]["/identities"]["get"]["responses"]["200"]["content"]["application/json"]
+    update:
+      schema:
+        $ref: "#/components/schemas/ListGridManagedIdentitiesResponse"

@@ -81,6 +81,9 @@ Available configuration:
 * [seqera_datasets](docs/resources/datasets.md)
 * [seqera_google_credential](docs/resources/google_credential.md)
 * [seqera_labels](docs/resources/labels.md)
+* [seqera_managed_credentials](docs/resources/managed_credentials.md)
+* [seqera_managed_identity](docs/resources/managed_identity.md)
+* [seqera_organization_member](docs/resources/organization_member.md)
 * [seqera_orgs](docs/resources/orgs.md)
 * [seqera_pipeline](docs/resources/pipeline.md)
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)
@@ -90,6 +93,7 @@ Available configuration:
 * [seqera_tokens](docs/resources/tokens.md)
 * [seqera_workflows](docs/resources/workflows.md)
 * [seqera_workspace](docs/resources/workspace.md)
+* [seqera_workspace_participant](docs/resources/workspace_participant.md)
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
@@ -102,6 +106,9 @@ Available configuration:
 * [seqera_dataset](docs/data-sources/dataset.md)
 * [seqera_google_credential](docs/data-sources/google_credential.md)
 * [seqera_labels](docs/data-sources/labels.md)
+* [seqera_managed_credentials](docs/data-sources/managed_credentials.md)
+* [seqera_managed_identity](docs/data-sources/managed_identity.md)
+* [seqera_organization_member](docs/data-sources/organization_member.md)
 * [seqera_orgs](docs/data-sources/orgs.md)
 * [seqera_pipeline](docs/data-sources/pipeline.md)
 * [seqera_pipeline_secret](docs/data-sources/pipeline_secret.md)
@@ -112,6 +119,7 @@ Available configuration:
 * [seqera_user_workspaces](docs/data-sources/user_workspaces.md)
 * [seqera_workflows](docs/data-sources/workflows.md)
 * [seqera_workspace](docs/data-sources/workspace.md)
+* [seqera_workspace_participant](docs/data-sources/workspace_participant.md)
 * [seqera_workspaces](docs/data-sources/workspaces.md)
 <!-- End Available Resources and Data Sources [operations] -->
 

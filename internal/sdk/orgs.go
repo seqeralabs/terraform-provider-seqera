@@ -1177,12 +1177,12 @@ func (s *Orgs) ListOrganizationMembers(ctx context.Context, request operations.L
 				return nil, err
 			}
 
-			var out shared.ListMembersResponse
+			var out shared.ListOrganizationMembersResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListMembersResponse = &out
+			res.ListOrganizationMembersResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1258,7 +1258,7 @@ func (s *Orgs) CreateOrganizationMember(ctx context.Context, request operations.
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AddMemberRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AddOrganizationMemberRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -1336,12 +1336,12 @@ func (s *Orgs) CreateOrganizationMember(ctx context.Context, request operations.
 				return nil, err
 			}
 
-			var out shared.AddMemberResponse
+			var out shared.AddOrganizationMemberResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.AddMemberResponse = &out
+			res.AddOrganizationMemberResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1683,7 +1683,7 @@ func (s *Orgs) UpdateOrganizationMemberRole(ctx context.Context, request operati
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateMemberRoleRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateOrganizationMemberRoleRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}

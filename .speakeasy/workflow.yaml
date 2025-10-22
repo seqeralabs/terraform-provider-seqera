@@ -32,6 +32,10 @@ sources:
             - location: overlays/studios.yaml
             - location: overlays/teams.yaml
             - location: overlays/tokens.yaml
+            - location: overlays/managed-identities.yaml
+            - location: overlays/managed-credentials.yaml
+            - location: overlays/organization-member.yaml
+            - location: overlays/workspace-participant.yaml
             - location: overlays/workflows-resource.yaml
             - location: overlays/workspaces.yaml
             - location: overlays/users.yaml

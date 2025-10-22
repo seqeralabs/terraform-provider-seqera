@@ -13,7 +13,7 @@ type UpdateManagedIdentityRequest struct {
 	// Managed Identity numeric identifier
 	ManagedIdentityID int64 `pathParam:"style=simple,explode=false,name=managedIdentityId"`
 	// Managed Identity update request
-	UpdateManagedIdentityRequest shared.UpdateManagedIdentityRequest `request:"mediaType=application/json"`
+	UpdateGridManagedIdentityRequest shared.UpdateGridManagedIdentityRequest `request:"mediaType=application/json"`
 }
 
 func (u *UpdateManagedIdentityRequest) GetOrgID() *int64 {
@@ -30,11 +30,11 @@ func (u *UpdateManagedIdentityRequest) GetManagedIdentityID() int64 {
 	return u.ManagedIdentityID
 }
 
-func (u *UpdateManagedIdentityRequest) GetUpdateManagedIdentityRequest() shared.UpdateManagedIdentityRequest {
+func (u *UpdateManagedIdentityRequest) GetUpdateGridManagedIdentityRequest() shared.UpdateGridManagedIdentityRequest {
 	if u == nil {
-		return shared.UpdateManagedIdentityRequest{}
+		return shared.UpdateGridManagedIdentityRequest{}
 	}
-	return u.UpdateManagedIdentityRequest
+	return u.UpdateGridManagedIdentityRequest
 }
 
 type UpdateManagedIdentityResponse struct {

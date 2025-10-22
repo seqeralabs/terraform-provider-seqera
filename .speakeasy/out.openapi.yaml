@@ -2920,6 +2920,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: search
           in: query
           description: "Optional search criteria, allowing free text search on name and keywords: `platform:`"
@@ -2946,7 +2947,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListManagedIdentitiesResponse"
+                $ref: "#/components/schemas/ListGridManagedIdentitiesResponse"
         "400":
           description: Bad request
           content:
@@ -2971,12 +2972,13 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Managed Identity create request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateManagedIdentityRequest"
+              $ref: "#/components/schemas/CreateGridManagedIdentityRequest"
         required: true
       responses:
         "200":
@@ -2984,7 +2986,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateManagedIdentityResponse"
+                $ref: "#/components/schemas/CreateGridManagedIdentityResponse"
         "400":
           description: Bad request
           content:
@@ -2995,6 +2997,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#create
       x-speakeasy-name-override: create
   /identities/{managedIdentityId}:
     get:
@@ -3017,13 +3020,14 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateManagedIdentityResponse"
+                $ref: "#/components/schemas/DescribeGridManagedIdentityResponse"
         "400":
           description: Bad request
           content:
@@ -3034,6 +3038,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#read
       x-speakeasy-name-override: get
     put:
       tags:
@@ -3048,6 +3053,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: managedIdentityId
           in: path
           description: Managed Identity numeric identifier
@@ -3055,12 +3061,13 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
       requestBody:
         description: Managed Identity update request
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateManagedIdentityRequest"
+              $ref: "#/components/schemas/UpdateGridManagedIdentityRequest"
         required: true
       responses:
         "204":
@@ -3075,6 +3082,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#update
       x-speakeasy-name-override: update
     delete:
       tags:
@@ -3090,6 +3098,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-optional: true
         - name: orgId
           in: query
           description: Organization numeric identifier
@@ -3121,6 +3130,7 @@ paths:
                 $ref: "#/components/schemas/DeleteManagedCredentialsConflictResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedIdentity#delete
       x-speakeasy-name-override: delete
   /identities/{managedIdentityId}/credentials:
     get:
@@ -3132,7 +3142,7 @@ paths:
       parameters:
         - name: managedIdentityId
           in: path
-          description: Managed Identity numeric identifier
+          description: Parent Managed Identity numeric identifier
           required: true
           schema:
             type: integer
@@ -3143,6 +3153,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: userId
           in: query
           description: User numeric identifier to filter records by
@@ -3173,7 +3184,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListManagedCredentialsResponse"
+                $ref: "#/components/schemas/ListGridManagedCredentialsResponse"
         "400":
           description: Bad request
           content:
@@ -3184,6 +3195,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedCredentials#read
     post:
       tags:
         - identities
@@ -3193,7 +3205,7 @@ paths:
       parameters:
         - name: managedIdentityId
           in: path
-          description: Managed Identity numeric identifier
+          description: Parent Managed Identity numeric identifier
           required: true
           schema:
             type: integer
@@ -3204,6 +3216,7 @@ paths:
           schema:
             type: integer
             format: int64
+          required: true
         - name: userId
           in: query
           description: User numeric identifier
@@ -3216,7 +3229,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateManagedCredentialsRequest"
+              $ref: "#/components/schemas/CreateGridManagedCredentialsRequest"
         required: true
       responses:
         "200":
@@ -3224,7 +3237,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateManagedCredentialsResponse"
+                $ref: "#/components/schemas/CreateGridManagedCredentialsResponse"
         "400":
           description: Bad request
           content:
@@ -3235,6 +3248,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedCredentials#create
   /identities/{managedIdentityId}/credentials/{managedCredentialsId}:
     put:
       tags:
@@ -3268,7 +3282,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateManagedCredentialsRequest"
+              $ref: "#/components/schemas/UpdateGridManagedCredentialsRequest"
         required: true
       responses:
         "204":
@@ -3283,6 +3297,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedCredentials#update
     delete:
       tags:
         - identities
@@ -3336,6 +3351,7 @@ paths:
                 $ref: "#/components/schemas/DeleteManagedCredentialsConflictResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ManagedCredentials#delete
   /labels:
     get:
       tags:
@@ -3878,7 +3894,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListMembersResponse"
+                $ref: "#/components/schemas/ListOrganizationMembersResponse"
         "400":
           description: Bad request
           content:
@@ -3889,6 +3905,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: OrganizationMember#read
   /orgs/{orgId}/members/add:
     put:
       tags:
@@ -3909,7 +3926,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddMemberRequest"
+              $ref: "#/components/schemas/AddOrganizationMemberRequest"
         required: true
       responses:
         "200":
@@ -3917,7 +3934,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AddMemberResponse"
+                $ref: "#/components/schemas/AddOrganizationMemberResponse"
         "400":
           description: Bad request
           content:
@@ -3934,6 +3951,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: OrganizationMember#create
   /orgs/{orgId}/members/leave:
     delete:
       tags:
@@ -3997,6 +4015,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: OrganizationMember#delete
   /orgs/{orgId}/members/{memberId}/role:
     put:
       tags:
@@ -4024,7 +4043,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateMemberRoleRequest"
+              $ref: "#/components/schemas/UpdateOrganizationMemberRoleRequest"
         required: true
       responses:
         "204":
@@ -4039,6 +4058,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: OrganizationMember#update
   /orgs/{orgId}/quotas:
     get:
       tags:
@@ -4849,7 +4869,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListParticipantsResponse"
+                $ref: "#/components/schemas/ListWorkspaceParticipantsResponse"
         "400":
           description: Bad request
           content:
@@ -4860,6 +4880,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceParticipant#read
     delete:
       tags:
         - workspaces
@@ -4923,7 +4944,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddParticipantRequest"
+              $ref: "#/components/schemas/AddWorkspaceParticipantRequest"
         required: true
       responses:
         "200":
@@ -4931,7 +4952,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AddParticipantResponse"
+                $ref: "#/components/schemas/AddWorkspaceParticipantResponse"
         "400":
           description: Bad request
           content:
@@ -4948,6 +4969,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceParticipant#create
   /orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}:
     delete:
       tags:
@@ -4991,6 +5013,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceParticipant#delete
   /orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role:
     put:
       tags:
@@ -5026,7 +5049,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateParticipantRoleRequest"
+              $ref: "#/components/schemas/UpdateWorkspaceParticipantRoleRequest"
         required: true
       responses:
         "204":
@@ -5041,6 +5064,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: WorkspaceParticipant#update
   /orgs/{orgId}/workspaces/{workspaceId}/settings/studios:
     get:
       tags:
@@ -15881,6 +15905,371 @@ components:
         totalSize:
           type: integer
           format: int64
+    GridManagedIdentity:
+      x-speakeasy-entity: ManagedIdentity
+      x-speakeasy-entity-description: |
+        Manage Managed Identities for HPC environments in Seqera Platform.
+
+        Managed Identities are organization-level credentials for HPC/grid computing
+        platforms that enable granular access control for individual workspace users.
+        Unlike shared SSH credentials where all activities appear under one account,
+        managed identities link multiple user credentials to a single identity,
+        preserving each user's identity in system logs and enabling fair resource
+        allocation through HPC queue policies.
+
+        Supported platforms: Altair PBS, IBM LSF, Moab, Slurm, and Univa Grid Engine.
+      required:
+        - name
+        - platform
+        - hostName
+        - port
+        - orgId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          x-speakeasy-name-override: managedIdentityId
+          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-ordering: 6
+        name:
+          type: string
+          description: Display name for the managed identity
+          example: my-slurm-cluster
+          x-speakeasy-param-ordering: 1
+        platform:
+          $ref: "#/components/schemas/GridPlatform"
+          x-speakeasy-plan-validators: ManagedIdentityPlatformValidator
+          example: slurm-platform
+          x-speakeasy-param-ordering: 2
+        hostName:
+          type: string
+          description: Grid host name or IP address
+          example: slurm.example.com
+          x-speakeasy-param-ordering: 3
+        port:
+          type: integer
+          format: int32
+          description: Grid connection port
+          example: 22
+          x-speakeasy-param-ordering: 4
+        orgId:
+          type: integer
+          format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-ordering: 5
+    CreateGridManagedIdentityRequest:
+      type: object
+      required:
+        - managedIdentity
+      properties:
+        managedIdentity:
+          $ref: '#/components/schemas/GridManagedIdentity'
+    CreateGridManagedIdentityResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          x-speakeasy-name-override: managedIdentityId
+    # Response for describe/read operations
+    DescribeGridManagedIdentityResponse:
+      type: object
+      properties:
+        managedIdentity:
+          $ref: '#/components/schemas/GridManagedIdentity'
+    UpdateGridManagedIdentityRequest:
+      type: object
+      required:
+        - managedIdentity
+      properties:
+        managedIdentity:
+          $ref: '#/components/schemas/GridManagedIdentity'
+    ListGridManagedIdentitiesResponse:
+      type: object
+      properties:
+        managedIdentities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GridManagedIdentity'
+          x-speakeasy-param-readonly: true
+        totalSize:
+          type: integer
+          format: int64
+          x-speakeasy-param-readonly: true
+    GridManagedCredentials:
+      x-speakeasy-entity: ManagedCredentials
+      x-speakeasy-entity-description: |
+        Manage individual user SSH credentials for HPC Managed Identities.
+
+        Managed Credentials are user-specific SSH credentials that link to a
+        parent Managed Identity. Each credential contains a Linux username and
+        SSH private key, enabling individual user authentication to HPC systems
+        while maintaining separate user identity in system logs.
+
+        This allows workspace users to access HPC environments with their own
+        credentials rather than shared SSH keys, ensuring proper activity tracking,
+        fair resource allocation through HPC queue policies, and appropriate
+        access control based on individual Linux user permissions.
+
+        Note: All users must belong to the same Linux group with access to the
+        HPC work directory for proper file sharing and permissions.
+      required:
+        - managedIdentityId
+      type: object
+      properties:
+        managedCredentialsId:
+          type: integer
+          format: int64
+          description: Managed Credentials numeric identifier
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-ordering: 1
+        managedIdentityId:
+          type: integer
+          format: int64
+          description: Parent Managed Identity numeric identifier
+          x-speakeasy-param-ordering: 2
+        userId:
+          type: integer
+          format: int64
+          description: User numeric identifier
+          x-speakeasy-param-ordering: 3
+        userName:
+          type: string
+          description: Username for SSH authentication
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-ordering: 4
+        provider:
+          type: string
+          enum:
+            - ssh
+          default: ssh
+          description: Credential provider type (currently only SSH)
+          example: ssh
+          x-speakeasy-name-override: credentialProvider
+          x-speakeasy-plan-validators: SSHCredentialValidator
+          x-speakeasy-param-ordering: 5
+        orgId:
+          type: integer
+          format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-ordering: 6
+    CreateGridManagedCredentialsRequest:
+      type: object
+      required:
+        - managedCredentials
+      properties:
+        managedCredentials:
+          $ref: '#/components/schemas/GridManagedCredentials'
+    CreateGridManagedCredentialsResponse:
+      type: object
+      properties:
+        managedCredentialsId:
+          type: integer
+          format: int64
+    ListGridManagedCredentialsResponse:
+      type: object
+      properties:
+        managedCredentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/GridManagedCredentials'
+          x-speakeasy-param-readonly: true
+        totalSize:
+          type: integer
+          format: int64
+          x-speakeasy-param-readonly: true
+    UpdateGridManagedCredentialsRequest:
+      type: object
+      required:
+        - managedCredentials
+      properties:
+        managedCredentials:
+          $ref: '#/components/schemas/GridManagedCredentials'
+    OrganizationMember:
+      x-speakeasy-entity: OrganizationMember
+      x-speakeasy-entity-description: |
+        Manage organization membership in Seqera Platform.
+
+        Organization members are users who have been granted access to an
+        organization. Members can have different roles (owner, member, collaborator)
+        that determine their permissions and access levels within the organization.
+
+        Adding a member to an organization grants them the ability to access
+        organization resources based on their assigned role. Members can be added
+        by username or email address.
+      required:
+        - orgId
+        - user
+      type: object
+      properties:
+        memberId:
+          type: integer
+          format: int64
+          description: Organization member numeric identifier
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-ordering: 1
+        orgId:
+          type: integer
+          format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-ordering: 2
+        user:
+          type: string
+          description: Username or email address of the user to add as a member
+          example: user@example.com
+          x-speakeasy-param-ordering: 3
+        role:
+          $ref: "#/components/schemas/OrgRole"
+          description: Organization role
+          example: member
+          x-speakeasy-plan-validators: OrgRoleValidator
+          x-speakeasy-param-ordering: 4
+        userName:
+          type: string
+          description: Member username
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-ordering: 5
+        email:
+          type: string
+          description: Member email address
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-ordering: 6
+    AddOrganizationMemberRequest:
+      type: object
+      required:
+        - member
+      properties:
+        member:
+          $ref: '#/components/schemas/OrganizationMember'
+    AddOrganizationMemberResponse:
+      type: object
+      properties:
+        member:
+          $ref: '#/components/schemas/OrganizationMember'
+    ListOrganizationMembersResponse:
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationMember'
+          x-speakeasy-param-readonly: true
+        totalSize:
+          type: integer
+          format: int64
+          x-speakeasy-param-readonly: true
+    UpdateOrganizationMemberRoleRequest:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          $ref: '#/components/schemas/OrgRole'
+    WorkspaceParticipant:
+      x-speakeasy-entity: WorkspaceParticipant
+      x-speakeasy-entity-description: |
+        Manage workspace participant access in Seqera Platform.
+
+        Workspace participants are users or teams who have been granted access to a
+        specific workspace within an organization. Participants can have granular
+        roles (owner, admin, maintain, launch, connect, view) that determine their
+        permissions within the workspace.
+
+        Participants can be added by username/email, or by referencing an existing
+        organization member ID or team ID. This enables flexible access control at
+        the workspace level.
+      required:
+        - orgId
+        - workspaceId
+      type: object
+      properties:
+        participantId:
+          type: integer
+          format: int64
+          description: Workspace participant numeric identifier
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-ordering: 1
+        orgId:
+          type: integer
+          format: int64
+          description: Organization numeric identifier
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-ordering: 2
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+          x-speakeasy-param-ordering: 3
+        memberId:
+          type: integer
+          format: int64
+          description: Organization member numeric identifier (use this OR userNameOrEmail)
+          x-speakeasy-param-ordering: 4
+        teamId:
+          type: integer
+          format: int64
+          description: Team numeric identifier (for adding entire teams)
+          x-speakeasy-param-ordering: 5
+        userNameOrEmail:
+          type: string
+          description: Username or email address (use this OR memberId)
+          example: user@example.com
+          x-speakeasy-param-ordering: 6
+        role:
+          $ref: "#/components/schemas/WspRole"
+          description: Workspace role
+          example: maintain
+          x-speakeasy-plan-validators: WspRoleValidator
+          x-speakeasy-param-ordering: 7
+        userName:
+          type: string
+          description: Participant username
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-ordering: 8
+        email:
+          type: string
+          description: Participant email address
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-ordering: 9
+        participantType:
+          type: string
+          description: Type of participant (MEMBER or TEAM)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-ordering: 10
+    AddWorkspaceParticipantRequest:
+      type: object
+      required:
+        - participant
+      properties:
+        participant:
+          $ref: '#/components/schemas/WorkspaceParticipant'
+    AddWorkspaceParticipantResponse:
+      type: object
+      properties:
+        participant:
+          $ref: '#/components/schemas/WorkspaceParticipant'
+    ListWorkspaceParticipantsResponse:
+      type: object
+      properties:
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceParticipant'
+          x-speakeasy-param-readonly: true
+        totalSize:
+          type: integer
+          format: int64
+          x-speakeasy-param-readonly: true
+    UpdateWorkspaceParticipantRoleRequest:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          $ref: '#/components/schemas/WspRole'
     # AWS-specific credential schema
     AWSCredential:
       x-speakeasy-entity: AWSCredential

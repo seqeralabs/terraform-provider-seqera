@@ -1,0 +1,1 @@
+terraform import seqera_organization_member.my_seqera_organization_member 0

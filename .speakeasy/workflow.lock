@@ -2,8 +2,8 @@ speakeasyVersion: 1.638.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:b897ddb2a0de26fee419f1e3c06eaf70b4424e0c0c7f2dd02b3f08def8cf2698
-        sourceBlobDigest: sha256:a5c0a16a1b7d9aab1957641a5b17c41553cdf4c8c68ac9ece8b711e499ffd065
+        sourceRevisionDigest: sha256:4526a13078880c4fb34228724acee873a23f84cfb0d91f678a7de5444a68fed6
+        sourceBlobDigest: sha256:478680fe9257518d741bd27d0ab54436f2b2e93924e506fdcf9d88cfbe58f78f
         tags:
             - latest
             - 1.85.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:b897ddb2a0de26fee419f1e3c06eaf70b4424e0c0c7f2dd02b3f08def8cf2698
-        sourceBlobDigest: sha256:a5c0a16a1b7d9aab1957641a5b17c41553cdf4c8c68ac9ece8b711e499ffd065
+        sourceRevisionDigest: sha256:4526a13078880c4fb34228724acee873a23f84cfb0d91f678a7de5444a68fed6
+        sourceBlobDigest: sha256:478680fe9257518d741bd27d0ab54436f2b2e93924e506fdcf9d88cfbe58f78f
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -48,6 +48,10 @@ workflow:
                 - location: overlays/studios.yaml
                 - location: overlays/teams.yaml
                 - location: overlays/tokens.yaml
+                - location: overlays/managed-identities.yaml
+                - location: overlays/managed-credentials.yaml
+                - location: overlays/organization-member.yaml
+                - location: overlays/workspace-participant.yaml
                 - location: overlays/workflows-resource.yaml
                 - location: overlays/workspaces.yaml
                 - location: overlays/users.yaml

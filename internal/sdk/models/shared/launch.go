@@ -194,64 +194,64 @@ func (c *ComputeEnv) GetConfig() ComputeConfig {
 	return c.Config
 }
 
-func (c *ComputeEnv) GetConfigMoabPlatform() *ComputeConfigMoabConfiguration {
-	return c.GetConfig().ComputeConfigMoabConfiguration
+func (c *ComputeEnv) GetConfigMoabPlatform() *MoabConfiguration {
+	return c.GetConfig().MoabConfiguration
 }
 
-func (c *ComputeEnv) GetConfigAwsBatch() *ComputeConfigAWSBatchConfiguration {
-	return c.GetConfig().ComputeConfigAWSBatchConfiguration
+func (c *ComputeEnv) GetConfigAwsBatch() *AWSBatchConfiguration {
+	return c.GetConfig().AWSBatchConfiguration
 }
 
-func (c *ComputeEnv) GetConfigLocalPlatform() *ComputeConfigLocalExecutionConfiguration {
-	return c.GetConfig().ComputeConfigLocalExecutionConfiguration
+func (c *ComputeEnv) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	return c.GetConfig().LocalExecutionConfiguration
 }
 
-func (c *ComputeEnv) GetConfigGkePlatform() *ComputeConfigGoogleGKEClusterConfiguration {
-	return c.GetConfig().ComputeConfigGoogleGKEClusterConfiguration
+func (c *ComputeEnv) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	return c.GetConfig().GoogleGKEClusterConfiguration
 }
 
-func (c *ComputeEnv) GetConfigGoogleBatch() *ComputeConfigGoogleBatchServiceConfiguration {
-	return c.GetConfig().ComputeConfigGoogleBatchServiceConfiguration
+func (c *ComputeEnv) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	return c.GetConfig().GoogleBatchServiceConfiguration
 }
 
-func (c *ComputeEnv) GetConfigAwsCloud() *ComputeConfigAWSCloudConfiguration {
-	return c.GetConfig().ComputeConfigAWSCloudConfiguration
+func (c *ComputeEnv) GetConfigAwsCloud() *AWSCloudConfiguration {
+	return c.GetConfig().AWSCloudConfiguration
 }
 
-func (c *ComputeEnv) GetConfigSlurmPlatform() *ComputeConfigSlurmConfiguration {
-	return c.GetConfig().ComputeConfigSlurmConfiguration
+func (c *ComputeEnv) GetConfigSlurmPlatform() *SlurmConfiguration {
+	return c.GetConfig().SlurmConfiguration
 }
 
-func (c *ComputeEnv) GetConfigK8sPlatform() *ComputeConfigKubernetesComputeConfiguration {
-	return c.GetConfig().ComputeConfigKubernetesComputeConfiguration
+func (c *ComputeEnv) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	return c.GetConfig().KubernetesComputeConfiguration
 }
 
-func (c *ComputeEnv) GetConfigAltairPlatform() *ComputeConfigAltairPBSConfiguration {
-	return c.GetConfig().ComputeConfigAltairPBSConfiguration
+func (c *ComputeEnv) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	return c.GetConfig().AltairPBSConfiguration
 }
 
-func (c *ComputeEnv) GetConfigLsfPlatform() *ComputeConfigIBMLSFConfiguration {
-	return c.GetConfig().ComputeConfigIBMLSFConfiguration
+func (c *ComputeEnv) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	return c.GetConfig().IBMLSFConfiguration
 }
 
-func (c *ComputeEnv) GetConfigAzureBatch() *ComputeConfigAzureBatchConfiguration {
-	return c.GetConfig().ComputeConfigAzureBatchConfiguration
+func (c *ComputeEnv) GetConfigAzureBatch() *AzureBatchConfiguration {
+	return c.GetConfig().AzureBatchConfiguration
 }
 
-func (c *ComputeEnv) GetConfigSeqeracomputePlatform() *ComputeConfigSeqeraComputeConfiguration {
-	return c.GetConfig().ComputeConfigSeqeraComputeConfiguration
+func (c *ComputeEnv) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	return c.GetConfig().SeqeraComputeConfiguration
 }
 
-func (c *ComputeEnv) GetConfigEksPlatform() *ComputeConfigAmazonEKSClusterConfiguration {
-	return c.GetConfig().ComputeConfigAmazonEKSClusterConfiguration
+func (c *ComputeEnv) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	return c.GetConfig().AmazonEKSClusterConfiguration
 }
 
-func (c *ComputeEnv) GetConfigGoogleLifesciences() *ComputeConfigGoogleLifeSciencesConfiguration {
-	return c.GetConfig().ComputeConfigGoogleLifeSciencesConfiguration
+func (c *ComputeEnv) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
+	return c.GetConfig().GoogleLifeSciencesConfiguration
 }
 
-func (c *ComputeEnv) GetConfigUgePlatform() *ComputeConfigUnivaGridEngineConfiguration {
-	return c.GetConfig().ComputeConfigUnivaGridEngineConfiguration
+func (c *ComputeEnv) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	return c.GetConfig().UnivaGridEngineConfiguration
 }
 
 func (c *ComputeEnv) GetDateCreated() *time.Time {

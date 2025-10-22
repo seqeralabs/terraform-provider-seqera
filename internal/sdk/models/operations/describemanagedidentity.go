@@ -11,7 +11,7 @@ type DescribeManagedIdentityRequest struct {
 	// Managed Identity numeric identifier
 	ManagedIdentityID int64 `pathParam:"style=simple,explode=false,name=managedIdentityId"`
 	// Organization numeric identifier
-	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
+	OrgID int64 `queryParam:"style=form,explode=true,name=orgId"`
 }
 
 func (d *DescribeManagedIdentityRequest) GetManagedIdentityID() int64 {
@@ -21,9 +21,9 @@ func (d *DescribeManagedIdentityRequest) GetManagedIdentityID() int64 {
 	return d.ManagedIdentityID
 }
 
-func (d *DescribeManagedIdentityRequest) GetOrgID() *int64 {
+func (d *DescribeManagedIdentityRequest) GetOrgID() int64 {
 	if d == nil {
-		return nil
+		return 0
 	}
 	return d.OrgID
 }
@@ -36,7 +36,7 @@ type DescribeManagedIdentityResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	CreateManagedIdentityResponse *shared.CreateManagedIdentityResponse
+	DescribeGridManagedIdentityResponse *shared.DescribeGridManagedIdentityResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -62,11 +62,11 @@ func (d *DescribeManagedIdentityResponse) GetRawResponse() *http.Response {
 	return d.RawResponse
 }
 
-func (d *DescribeManagedIdentityResponse) GetCreateManagedIdentityResponse() *shared.CreateManagedIdentityResponse {
+func (d *DescribeManagedIdentityResponse) GetDescribeGridManagedIdentityResponse() *shared.DescribeGridManagedIdentityResponse {
 	if d == nil {
 		return nil
 	}
-	return d.CreateManagedIdentityResponse
+	return d.DescribeGridManagedIdentityResponse
 }
 
 func (d *DescribeManagedIdentityResponse) GetErrorResponse() *shared.ErrorResponse {
