@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -45,7 +44,7 @@ func (v ObjectGoogleKeysCrdentialValidatorValidator) ValidateObject(ctx context.
 	}
 
 	// Get the string value
-	var dataValue attr.Value = dataAttr
+	dataValue := dataAttr
 	stringValue, ok := dataValue.(basetypes.StringValue)
 	if !ok {
 		resp.Diagnostics.AddAttributeError(
