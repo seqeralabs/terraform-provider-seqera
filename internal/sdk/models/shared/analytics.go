@@ -8,23 +8,23 @@ type Analytics struct {
 	PosthogAPIHost *string `json:"posthogApiHost,omitempty"`
 }
 
-func (o *Analytics) GetHubspotID() *string {
-	if o == nil {
+func (a *Analytics) GetHubspotID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HubspotID
+	return a.HubspotID
 }
 
-func (o *Analytics) GetPosthogAPIKey() *string {
-	if o == nil {
+func (a *Analytics) GetPosthogAPIKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PosthogAPIKey
+	return a.PosthogAPIKey
 }
 
-func (o *Analytics) GetPosthogAPIHost() *string {
-	if o == nil {
+func (a *Analytics) GetPosthogAPIHost() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PosthogAPIHost
+	return a.PosthogAPIHost
 }

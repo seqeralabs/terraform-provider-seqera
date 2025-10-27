@@ -12,11 +12,11 @@ type LeaveOrganizationRequest struct {
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 }
 
-func (o *LeaveOrganizationRequest) GetOrgID() int64 {
-	if o == nil {
+func (l *LeaveOrganizationRequest) GetOrgID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
 type LeaveOrganizationResponse struct {
@@ -30,30 +30,30 @@ type LeaveOrganizationResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *LeaveOrganizationResponse) GetContentType() string {
-	if o == nil {
+func (l *LeaveOrganizationResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *LeaveOrganizationResponse) GetStatusCode() int {
-	if o == nil {
+func (l *LeaveOrganizationResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *LeaveOrganizationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *LeaveOrganizationResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *LeaveOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *LeaveOrganizationResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

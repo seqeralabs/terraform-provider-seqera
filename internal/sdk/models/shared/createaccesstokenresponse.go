@@ -11,16 +11,16 @@ type CreateAccessTokenResponse struct {
 	Token *AccessToken `json:"token,omitempty"`
 }
 
-func (o *CreateAccessTokenResponse) GetAccessKey() *string {
-	if o == nil {
+func (c *CreateAccessTokenResponse) GetAccessKey() *string {
+	if c == nil {
 		return nil
 	}
-	return o.AccessKey
+	return c.AccessKey
 }
 
-func (o *CreateAccessTokenResponse) GetToken() *AccessToken {
-	if o == nil {
+func (c *CreateAccessTokenResponse) GetToken() *AccessToken {
+	if c == nil {
 		return nil
 	}
-	return o.Token
+	return c.Token
 }

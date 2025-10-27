@@ -16,25 +16,25 @@ type UpdateLabelRequest struct {
 	UpdateLabelRequest shared.UpdateLabelRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateLabelRequest) GetLabelID() int64 {
-	if o == nil {
+func (u *UpdateLabelRequest) GetLabelID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.LabelID
+	return u.LabelID
 }
 
-func (o *UpdateLabelRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateLabelRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateLabelRequest) GetUpdateLabelRequest() shared.UpdateLabelRequest {
-	if o == nil {
+func (u *UpdateLabelRequest) GetUpdateLabelRequest() shared.UpdateLabelRequest {
+	if u == nil {
 		return shared.UpdateLabelRequest{}
 	}
-	return o.UpdateLabelRequest
+	return u.UpdateLabelRequest
 }
 
 type UpdateLabelResponse struct {
@@ -50,37 +50,37 @@ type UpdateLabelResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateLabelResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateLabelResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateLabelResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateLabelResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateLabelResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateLabelResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateLabelResponse) GetUpdateLabelResponse() *shared.UpdateLabelResponse {
-	if o == nil {
+func (u *UpdateLabelResponse) GetUpdateLabelResponse() *shared.UpdateLabelResponse {
+	if u == nil {
 		return nil
 	}
-	return o.UpdateLabelResponse
+	return u.UpdateLabelResponse
 }
 
-func (o *UpdateLabelResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateLabelResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

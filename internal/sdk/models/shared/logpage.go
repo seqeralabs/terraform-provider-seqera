@@ -12,51 +12,51 @@ type LogPage struct {
 	Downloads    []LogPageDownload `json:"downloads,omitempty"`
 }
 
-func (o *LogPage) GetTruncated() *bool {
-	if o == nil {
+func (l *LogPage) GetTruncated() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Truncated
+	return l.Truncated
 }
 
-func (o *LogPage) GetEntries() *IteratorString {
-	if o == nil {
+func (l *LogPage) GetEntries() *IteratorString {
+	if l == nil {
 		return nil
 	}
-	return o.Entries
+	return l.Entries
 }
 
-func (o *LogPage) GetRewindToken() *string {
-	if o == nil {
+func (l *LogPage) GetRewindToken() *string {
+	if l == nil {
 		return nil
 	}
-	return o.RewindToken
+	return l.RewindToken
 }
 
-func (o *LogPage) GetForwardToken() *string {
-	if o == nil {
+func (l *LogPage) GetForwardToken() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ForwardToken
+	return l.ForwardToken
 }
 
-func (o *LogPage) GetPending() *bool {
-	if o == nil {
+func (l *LogPage) GetPending() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Pending
+	return l.Pending
 }
 
-func (o *LogPage) GetMessage() *string {
-	if o == nil {
+func (l *LogPage) GetMessage() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Message
+	return l.Message
 }
 
-func (o *LogPage) GetDownloads() []LogPageDownload {
-	if o == nil {
+func (l *LogPage) GetDownloads() []LogPageDownload {
+	if l == nil {
 		return nil
 	}
-	return o.Downloads
+	return l.Downloads
 }

@@ -12,11 +12,11 @@ type DescribeUserRequest struct {
 	UserID int64 `pathParam:"style=simple,explode=false,name=userId"`
 }
 
-func (o *DescribeUserRequest) GetUserID() int64 {
-	if o == nil {
+func (d *DescribeUserRequest) GetUserID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.UserID
+	return d.UserID
 }
 
 type DescribeUserResponse struct {
@@ -32,37 +32,37 @@ type DescribeUserResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeUserResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeUserResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeUserResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeUserResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeUserResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeUserResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeUserResponse) GetDescribeUserResponse() *shared.DescribeUserResponse {
-	if o == nil {
+func (d *DescribeUserResponse) GetDescribeUserResponse() *shared.DescribeUserResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeUserResponse
+	return d.DescribeUserResponse
 }
 
-func (o *DescribeUserResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeUserResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

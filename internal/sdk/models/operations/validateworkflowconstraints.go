@@ -14,18 +14,18 @@ type ValidateWorkflowConstraintsRequest struct {
 	SessionID *string `queryParam:"style=form,explode=true,name=sessionId"`
 }
 
-func (o *ValidateWorkflowConstraintsRequest) GetRunName() *string {
-	if o == nil {
+func (v *ValidateWorkflowConstraintsRequest) GetRunName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.RunName
+	return v.RunName
 }
 
-func (o *ValidateWorkflowConstraintsRequest) GetSessionID() *string {
-	if o == nil {
+func (v *ValidateWorkflowConstraintsRequest) GetSessionID() *string {
+	if v == nil {
 		return nil
 	}
-	return o.SessionID
+	return v.SessionID
 }
 
 type ValidateWorkflowConstraintsResponse struct {
@@ -39,30 +39,30 @@ type ValidateWorkflowConstraintsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ValidateWorkflowConstraintsResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidateWorkflowConstraintsResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidateWorkflowConstraintsResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidateWorkflowConstraintsResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidateWorkflowConstraintsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidateWorkflowConstraintsResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }
 
-func (o *ValidateWorkflowConstraintsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (v *ValidateWorkflowConstraintsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if v == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return v.ErrorResponse
 }

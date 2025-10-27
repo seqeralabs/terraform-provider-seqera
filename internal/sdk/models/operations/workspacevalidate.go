@@ -14,18 +14,18 @@ type WorkspaceValidateRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *WorkspaceValidateRequest) GetOrgID() int64 {
-	if o == nil {
+func (w *WorkspaceValidateRequest) GetOrgID() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.OrgID
+	return w.OrgID
 }
 
-func (o *WorkspaceValidateRequest) GetName() *string {
-	if o == nil {
+func (w *WorkspaceValidateRequest) GetName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Name
+	return w.Name
 }
 
 type WorkspaceValidateResponse struct {
@@ -39,30 +39,30 @@ type WorkspaceValidateResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *WorkspaceValidateResponse) GetContentType() string {
-	if o == nil {
+func (w *WorkspaceValidateResponse) GetContentType() string {
+	if w == nil {
 		return ""
 	}
-	return o.ContentType
+	return w.ContentType
 }
 
-func (o *WorkspaceValidateResponse) GetStatusCode() int {
-	if o == nil {
+func (w *WorkspaceValidateResponse) GetStatusCode() int {
+	if w == nil {
 		return 0
 	}
-	return o.StatusCode
+	return w.StatusCode
 }
 
-func (o *WorkspaceValidateResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (w *WorkspaceValidateResponse) GetRawResponse() *http.Response {
+	if w == nil {
 		return nil
 	}
-	return o.RawResponse
+	return w.RawResponse
 }
 
-func (o *WorkspaceValidateResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (w *WorkspaceValidateResponse) GetErrorResponse() *shared.ErrorResponse {
+	if w == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return w.ErrorResponse
 }

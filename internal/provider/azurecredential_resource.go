@@ -262,11 +262,11 @@ func (r *AzureCredentialResource) Create(ctx context.Context, req resource.Creat
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeAzureCredentialsResponse != nil && res1.DescribeAzureCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeAzureCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredentialOutput(ctx, res1.DescribeAzureCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAzureCredentialsResponse(ctx, res1.DescribeAzureCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -326,11 +326,11 @@ func (r *AzureCredentialResource) Read(ctx context.Context, req resource.ReadReq
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAzureCredentialsResponse != nil && res.DescribeAzureCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeAzureCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredentialOutput(ctx, res.DescribeAzureCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAzureCredentialsResponse(ctx, res.DescribeAzureCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -404,11 +404,11 @@ func (r *AzureCredentialResource) Update(ctx context.Context, req resource.Updat
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeAzureCredentialsResponse != nil && res1.DescribeAzureCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeAzureCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAzureCredentialOutput(ctx, res1.DescribeAzureCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAzureCredentialsResponse(ctx, res1.DescribeAzureCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

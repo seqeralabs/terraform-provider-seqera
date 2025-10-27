@@ -16,79 +16,79 @@ type PipelineInfo struct {
 	Warnings           []string    `json:"warnings,omitempty"`
 }
 
-func (o *PipelineInfo) GetProjectName() *string {
-	if o == nil {
+func (p *PipelineInfo) GetProjectName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.ProjectName
+	return p.ProjectName
 }
 
-func (o *PipelineInfo) GetSimpleName() *string {
-	if o == nil {
+func (p *PipelineInfo) GetSimpleName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.SimpleName
+	return p.SimpleName
 }
 
-func (o *PipelineInfo) GetRepositoryURL() *string {
-	if o == nil {
+func (p *PipelineInfo) GetRepositoryURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.RepositoryURL
+	return p.RepositoryURL
 }
 
-func (o *PipelineInfo) GetCloneURL() *string {
-	if o == nil {
+func (p *PipelineInfo) GetCloneURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.CloneURL
+	return p.CloneURL
 }
 
-func (o *PipelineInfo) GetRepositoryProvider() *string {
-	if o == nil {
+func (p *PipelineInfo) GetRepositoryProvider() *string {
+	if p == nil {
 		return nil
 	}
-	return o.RepositoryProvider
+	return p.RepositoryProvider
 }
 
-func (o *PipelineInfo) GetConfigFiles() []string {
-	if o == nil {
+func (p *PipelineInfo) GetConfigFiles() []string {
+	if p == nil {
 		return nil
 	}
-	return o.ConfigFiles
+	return p.ConfigFiles
 }
 
-func (o *PipelineInfo) GetWorkDirs() []string {
-	if o == nil {
+func (p *PipelineInfo) GetWorkDirs() []string {
+	if p == nil {
 		return nil
 	}
-	return o.WorkDirs
+	return p.WorkDirs
 }
 
-func (o *PipelineInfo) GetRevisions() []string {
-	if o == nil {
+func (p *PipelineInfo) GetRevisions() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Revisions
+	return p.Revisions
 }
 
-func (o *PipelineInfo) GetProfiles() []string {
-	if o == nil {
+func (p *PipelineInfo) GetProfiles() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Profiles
+	return p.Profiles
 }
 
-func (o *PipelineInfo) GetManifest() *WfManifest {
-	if o == nil {
+func (p *PipelineInfo) GetManifest() *WfManifest {
+	if p == nil {
 		return nil
 	}
-	return o.Manifest
+	return p.Manifest
 }
 
-func (o *PipelineInfo) GetWarnings() []string {
-	if o == nil {
+func (p *PipelineInfo) GetWarnings() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Warnings
+	return p.Warnings
 }

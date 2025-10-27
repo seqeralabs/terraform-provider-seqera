@@ -7,16 +7,16 @@ type ListParticipantsResponse struct {
 	TotalSize    *int64             `json:"totalSize,omitempty"`
 }
 
-func (o *ListParticipantsResponse) GetParticipants() []ParticipantDbDto {
-	if o == nil {
+func (l *ListParticipantsResponse) GetParticipants() []ParticipantDbDto {
+	if l == nil {
 		return nil
 	}
-	return o.Participants
+	return l.Participants
 }
 
-func (o *ListParticipantsResponse) GetTotalSize() *int64 {
-	if o == nil {
+func (l *ListParticipantsResponse) GetTotalSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.TotalSize
+	return l.TotalSize
 }

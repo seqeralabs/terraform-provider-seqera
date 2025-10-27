@@ -14,18 +14,18 @@ type DeleteLabelRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DeleteLabelRequest) GetLabelID() int64 {
-	if o == nil {
+func (d *DeleteLabelRequest) GetLabelID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.LabelID
+	return d.LabelID
 }
 
-func (o *DeleteLabelRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteLabelRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DeleteLabelResponse struct {
@@ -39,30 +39,30 @@ type DeleteLabelResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteLabelResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteLabelResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteLabelResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteLabelResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteLabelResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteLabelResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteLabelResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteLabelResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

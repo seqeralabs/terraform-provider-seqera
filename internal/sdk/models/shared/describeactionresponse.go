@@ -10,9 +10,9 @@ type DescribeActionResponse struct {
 	Action *ActionResponseDto `json:"action,omitempty"`
 }
 
-func (o *DescribeActionResponse) GetAction() *ActionResponseDto {
-	if o == nil {
+func (d *DescribeActionResponse) GetAction() *ActionResponseDto {
+	if d == nil {
 		return nil
 	}
-	return o.Action
+	return d.Action
 }

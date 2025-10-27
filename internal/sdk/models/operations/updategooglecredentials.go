@@ -16,25 +16,25 @@ type UpdateGoogleCredentialsRequest struct {
 	UpdateGoogleCredentialsRequest shared.UpdateGoogleCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateGoogleCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (u *UpdateGoogleCredentialsRequest) GetCredentialsID() string {
+	if u == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return u.CredentialsID
 }
 
-func (o *UpdateGoogleCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateGoogleCredentialsRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateGoogleCredentialsRequest) GetUpdateGoogleCredentialsRequest() shared.UpdateGoogleCredentialsRequest {
-	if o == nil {
+func (u *UpdateGoogleCredentialsRequest) GetUpdateGoogleCredentialsRequest() shared.UpdateGoogleCredentialsRequest {
+	if u == nil {
 		return shared.UpdateGoogleCredentialsRequest{}
 	}
-	return o.UpdateGoogleCredentialsRequest
+	return u.UpdateGoogleCredentialsRequest
 }
 
 type UpdateGoogleCredentialsResponse struct {
@@ -48,30 +48,30 @@ type UpdateGoogleCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateGoogleCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateGoogleCredentialsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateGoogleCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateGoogleCredentialsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateGoogleCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateGoogleCredentialsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

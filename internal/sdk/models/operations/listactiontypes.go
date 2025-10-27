@@ -12,11 +12,11 @@ type ListActionTypesRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *ListActionTypesRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListActionTypesRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
 type ListActionTypesResponse struct {
@@ -32,37 +32,37 @@ type ListActionTypesResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListActionTypesResponse) GetContentType() string {
-	if o == nil {
+func (l *ListActionTypesResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListActionTypesResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListActionTypesResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListActionTypesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListActionTypesResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListActionTypesResponse) GetListEventTypesResponse() *shared.ListEventTypesResponse {
-	if o == nil {
+func (l *ListActionTypesResponse) GetListEventTypesResponse() *shared.ListEventTypesResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListEventTypesResponse
+	return l.ListEventTypesResponse
 }
 
-func (o *ListActionTypesResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListActionTypesResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

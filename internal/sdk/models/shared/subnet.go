@@ -23,23 +23,23 @@ func (s *Subnet) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Subnet) GetID() *string {
-	if o == nil {
+func (s *Subnet) GetID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *Subnet) GetZone() *string {
-	if o == nil {
+func (s *Subnet) GetZone() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Zone
+	return s.Zone
 }
 
-func (o *Subnet) GetVpcID() *string {
-	if o == nil {
+func (s *Subnet) GetVpcID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.VpcID
+	return s.VpcID
 }

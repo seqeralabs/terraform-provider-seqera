@@ -7,16 +7,16 @@ type CreateTeamRequest struct {
 	AvatarID *string `json:"avatarId,omitempty"`
 }
 
-func (o *CreateTeamRequest) GetTeam() *Team {
-	if o == nil {
+func (c *CreateTeamRequest) GetTeam() *Team {
+	if c == nil {
 		return nil
 	}
-	return o.Team
+	return c.Team
 }
 
-func (o *CreateTeamRequest) GetAvatarID() *string {
-	if o == nil {
+func (c *CreateTeamRequest) GetAvatarID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.AvatarID
+	return c.AvatarID
 }

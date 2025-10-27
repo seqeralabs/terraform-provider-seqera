@@ -8,23 +8,23 @@ type DataLinkCredentials struct {
 	ProviderType ProviderType `json:"provider"`
 }
 
-func (o *DataLinkCredentials) GetID() string {
-	if o == nil {
+func (d *DataLinkCredentials) GetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DataLinkCredentials) GetName() string {
-	if o == nil {
+func (d *DataLinkCredentials) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataLinkCredentials) GetProviderType() ProviderType {
-	if o == nil {
+func (d *DataLinkCredentials) GetProviderType() ProviderType {
+	if d == nil {
 		return ProviderType("")
 	}
-	return o.ProviderType
+	return d.ProviderType
 }

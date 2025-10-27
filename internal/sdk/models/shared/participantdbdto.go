@@ -18,93 +18,93 @@ type ParticipantDbDto struct {
 	UserAvatarURL *string          `json:"userAvatarUrl,omitempty"`
 }
 
-func (o *ParticipantDbDto) GetParticipantID() *int64 {
-	if o == nil {
+func (p *ParticipantDbDto) GetParticipantID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.ParticipantID
+	return p.ParticipantID
 }
 
-func (o *ParticipantDbDto) GetMemberID() *int64 {
-	if o == nil {
+func (p *ParticipantDbDto) GetMemberID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.MemberID
+	return p.MemberID
 }
 
-func (o *ParticipantDbDto) GetUserName() *string {
-	if o == nil {
+func (p *ParticipantDbDto) GetUserName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.UserName
+	return p.UserName
 }
 
-func (o *ParticipantDbDto) GetFirstName() *string {
-	if o == nil {
+func (p *ParticipantDbDto) GetFirstName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.FirstName
+	return p.FirstName
 }
 
-func (o *ParticipantDbDto) GetLastName() *string {
-	if o == nil {
+func (p *ParticipantDbDto) GetLastName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.LastName
+	return p.LastName
 }
 
-func (o *ParticipantDbDto) GetEmail() *string {
-	if o == nil {
+func (p *ParticipantDbDto) GetEmail() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Email
+	return p.Email
 }
 
-func (o *ParticipantDbDto) GetOrgRole() *OrgRole {
-	if o == nil {
+func (p *ParticipantDbDto) GetOrgRole() *OrgRole {
+	if p == nil {
 		return nil
 	}
-	return o.OrgRole
+	return p.OrgRole
 }
 
-func (o *ParticipantDbDto) GetTeamID() *int64 {
-	if o == nil {
+func (p *ParticipantDbDto) GetTeamID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.TeamID
+	return p.TeamID
 }
 
-func (o *ParticipantDbDto) GetTeamName() *string {
-	if o == nil {
+func (p *ParticipantDbDto) GetTeamName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.TeamName
+	return p.TeamName
 }
 
-func (o *ParticipantDbDto) GetWspRole() *WspRole {
-	if o == nil {
+func (p *ParticipantDbDto) GetWspRole() *WspRole {
+	if p == nil {
 		return nil
 	}
-	return o.WspRole
+	return p.WspRole
 }
 
-func (o *ParticipantDbDto) GetType() *ParticipantType {
-	if o == nil {
+func (p *ParticipantDbDto) GetType() *ParticipantType {
+	if p == nil {
 		return nil
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *ParticipantDbDto) GetTeamAvatarURL() *string {
-	if o == nil {
+func (p *ParticipantDbDto) GetTeamAvatarURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.TeamAvatarURL
+	return p.TeamAvatarURL
 }
 
-func (o *ParticipantDbDto) GetUserAvatarURL() *string {
-	if o == nil {
+func (p *ParticipantDbDto) GetUserAvatarURL() *string {
+	if p == nil {
 		return nil
 	}
-	return o.UserAvatarURL
+	return p.UserAvatarURL
 }

@@ -7,16 +7,16 @@ type DataStudioListCheckpointsResponse struct {
 	TotalSize   int64                     `json:"totalSize"`
 }
 
-func (o *DataStudioListCheckpointsResponse) GetCheckpoints() []DataStudioCheckpointDto {
-	if o == nil {
+func (d *DataStudioListCheckpointsResponse) GetCheckpoints() []DataStudioCheckpointDto {
+	if d == nil {
 		return []DataStudioCheckpointDto{}
 	}
-	return o.Checkpoints
+	return d.Checkpoints
 }
 
-func (o *DataStudioListCheckpointsResponse) GetTotalSize() int64 {
-	if o == nil {
+func (d *DataStudioListCheckpointsResponse) GetTotalSize() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.TotalSize
+	return d.TotalSize
 }

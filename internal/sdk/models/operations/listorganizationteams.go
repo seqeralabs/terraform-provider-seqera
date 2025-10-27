@@ -18,32 +18,32 @@ type ListOrganizationTeamsRequest struct {
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 
-func (o *ListOrganizationTeamsRequest) GetOrgID() int64 {
-	if o == nil {
+func (l *ListOrganizationTeamsRequest) GetOrgID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
-func (o *ListOrganizationTeamsRequest) GetMax() *int {
-	if o == nil {
+func (l *ListOrganizationTeamsRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListOrganizationTeamsRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListOrganizationTeamsRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListOrganizationTeamsRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListOrganizationTeamsRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
 type ListOrganizationTeamsResponse struct {
@@ -59,37 +59,37 @@ type ListOrganizationTeamsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListOrganizationTeamsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListOrganizationTeamsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListOrganizationTeamsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListOrganizationTeamsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListOrganizationTeamsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListOrganizationTeamsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListOrganizationTeamsResponse) GetListTeamResponse() *shared.ListTeamResponse {
-	if o == nil {
+func (l *ListOrganizationTeamsResponse) GetListTeamResponse() *shared.ListTeamResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListTeamResponse
+	return l.ListTeamResponse
 }
 
-func (o *ListOrganizationTeamsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListOrganizationTeamsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

@@ -10,23 +10,23 @@ type UpdateLabelRequest struct {
 	IsDefault *bool   `json:"isDefault,omitempty"`
 }
 
-func (o *UpdateLabelRequest) GetName() *string {
-	if o == nil {
+func (u *UpdateLabelRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateLabelRequest) GetValue() *string {
-	if o == nil {
+func (u *UpdateLabelRequest) GetValue() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Value
+	return u.Value
 }
 
-func (o *UpdateLabelRequest) GetIsDefault() *bool {
-	if o == nil {
+func (u *UpdateLabelRequest) GetIsDefault() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.IsDefault
+	return u.IsDefault
 }

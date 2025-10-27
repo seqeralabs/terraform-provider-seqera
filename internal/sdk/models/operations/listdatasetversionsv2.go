@@ -16,25 +16,25 @@ type ListDatasetVersionsV2Request struct {
 	MimeType *string `queryParam:"style=form,explode=true,name=mimeType"`
 }
 
-func (o *ListDatasetVersionsV2Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListDatasetVersionsV2Request) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListDatasetVersionsV2Request) GetDatasetID() string {
-	if o == nil {
+func (l *ListDatasetVersionsV2Request) GetDatasetID() string {
+	if l == nil {
 		return ""
 	}
-	return o.DatasetID
+	return l.DatasetID
 }
 
-func (o *ListDatasetVersionsV2Request) GetMimeType() *string {
-	if o == nil {
+func (l *ListDatasetVersionsV2Request) GetMimeType() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MimeType
+	return l.MimeType
 }
 
 type ListDatasetVersionsV2Response struct {
@@ -50,37 +50,37 @@ type ListDatasetVersionsV2Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListDatasetVersionsV2Response) GetContentType() string {
-	if o == nil {
+func (l *ListDatasetVersionsV2Response) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDatasetVersionsV2Response) GetStatusCode() int {
-	if o == nil {
+func (l *ListDatasetVersionsV2Response) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDatasetVersionsV2Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDatasetVersionsV2Response) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDatasetVersionsV2Response) GetListDatasetVersionsResponse() *shared.ListDatasetVersionsResponse {
-	if o == nil {
+func (l *ListDatasetVersionsV2Response) GetListDatasetVersionsResponse() *shared.ListDatasetVersionsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListDatasetVersionsResponse
+	return l.ListDatasetVersionsResponse
 }
 
-func (o *ListDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

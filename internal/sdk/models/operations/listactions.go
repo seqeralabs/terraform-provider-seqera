@@ -14,18 +14,18 @@ type ListActionsRequest struct {
 	Attributes []shared.ActionQueryAttribute `queryParam:"style=form,explode=true,name=attributes"`
 }
 
-func (o *ListActionsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListActionsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListActionsRequest) GetAttributes() []shared.ActionQueryAttribute {
-	if o == nil {
+func (l *ListActionsRequest) GetAttributes() []shared.ActionQueryAttribute {
+	if l == nil {
 		return nil
 	}
-	return o.Attributes
+	return l.Attributes
 }
 
 type ListActionsResponse struct {
@@ -41,37 +41,37 @@ type ListActionsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListActionsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListActionsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListActionsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListActionsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListActionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListActionsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListActionsResponse) GetListActionsResponse() *shared.ListActionsResponse {
-	if o == nil {
+func (l *ListActionsResponse) GetListActionsResponse() *shared.ListActionsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListActionsResponse
+	return l.ListActionsResponse
 }
 
-func (o *ListActionsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListActionsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

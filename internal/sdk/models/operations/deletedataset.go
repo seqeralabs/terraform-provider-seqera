@@ -14,18 +14,18 @@ type DeleteDatasetRequest struct {
 	DatasetID string `pathParam:"style=simple,explode=false,name=datasetId"`
 }
 
-func (o *DeleteDatasetRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (d *DeleteDatasetRequest) GetWorkspaceID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DeleteDatasetRequest) GetDatasetID() string {
-	if o == nil {
+func (d *DeleteDatasetRequest) GetDatasetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DatasetID
+	return d.DatasetID
 }
 
 type DeleteDatasetResponse struct {
@@ -39,30 +39,30 @@ type DeleteDatasetResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteDatasetResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDatasetResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDatasetResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDatasetResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDatasetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDatasetResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

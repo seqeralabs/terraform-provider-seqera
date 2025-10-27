@@ -6,9 +6,9 @@ type ListRegionsResponse struct {
 	Regions []ComputeRegion `json:"regions,omitempty"`
 }
 
-func (o *ListRegionsResponse) GetRegions() []ComputeRegion {
-	if o == nil {
+func (l *ListRegionsResponse) GetRegions() []ComputeRegion {
+	if l == nil {
 		return nil
 	}
-	return o.Regions
+	return l.Regions
 }

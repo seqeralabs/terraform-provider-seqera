@@ -27,25 +27,25 @@ func (a *ActionTowerActionEvent) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ActionTowerActionEvent) GetDiscriminator() *string {
-	if o == nil {
+func (a *ActionTowerActionEvent) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *ActionTowerActionEvent) GetTimestamp() *time.Time {
-	if o == nil {
+func (a *ActionTowerActionEvent) GetTimestamp() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.Timestamp
+	return a.Timestamp
 }
 
-func (o *ActionTowerActionEvent) GetWorkflowID() *string {
-	if o == nil {
+func (a *ActionTowerActionEvent) GetWorkflowID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkflowID
+	return a.WorkflowID
 }
 
 type GithubActionEvent struct {
@@ -69,53 +69,53 @@ func (g *GithubActionEvent) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GithubActionEvent) GetDiscriminator() *string {
-	if o == nil {
+func (g *GithubActionEvent) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GithubActionEvent) GetRef() *string {
-	if o == nil {
+func (g *GithubActionEvent) GetRef() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Ref
+	return g.Ref
 }
 
-func (o *GithubActionEvent) GetCommitID() *string {
-	if o == nil {
+func (g *GithubActionEvent) GetCommitID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CommitID
+	return g.CommitID
 }
 
-func (o *GithubActionEvent) GetCommitMessage() *string {
-	if o == nil {
+func (g *GithubActionEvent) GetCommitMessage() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CommitMessage
+	return g.CommitMessage
 }
 
-func (o *GithubActionEvent) GetPusherName() *string {
-	if o == nil {
+func (g *GithubActionEvent) GetPusherName() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PusherName
+	return g.PusherName
 }
 
-func (o *GithubActionEvent) GetPusherEmail() *string {
-	if o == nil {
+func (g *GithubActionEvent) GetPusherEmail() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PusherEmail
+	return g.PusherEmail
 }
 
-func (o *GithubActionEvent) GetTimestamp() *time.Time {
-	if o == nil {
+func (g *GithubActionEvent) GetTimestamp() *time.Time {
+	if g == nil {
 		return nil
 	}
-	return o.Timestamp
+	return g.Timestamp
 }
 
 type ActionEventTypeType string
@@ -126,8 +126,8 @@ const (
 )
 
 type ActionEventType struct {
-	GithubActionEvent      *GithubActionEvent      `queryParam:"inline"`
-	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline"`
+	GithubActionEvent      *GithubActionEvent      `queryParam:"inline,name=Action_EventType"`
+	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline,name=Action_EventType"`
 
 	Type ActionEventTypeType
 }

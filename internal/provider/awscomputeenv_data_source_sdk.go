@@ -122,6 +122,21 @@ func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedAWSComputeEnvComputeConf
 	return diags
 }
 
+func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedDescribeAWSComputeEnvResponse(ctx context.Context, resp *shared.DescribeAWSComputeEnvResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedAWSComputeEnvComputeConfig(ctx, resp.ComputeEnv)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *AWSComputeEnvDataSourceModel) ToOperationsDescribeAWSComputeEnvRequest(ctx context.Context) (*operations.DescribeAWSComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

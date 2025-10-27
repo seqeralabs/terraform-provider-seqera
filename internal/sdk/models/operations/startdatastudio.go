@@ -16,25 +16,25 @@ type StartDataStudioRequest struct {
 	DataStudioStartRequest shared.DataStudioStartRequest `request:"mediaType=application/json"`
 }
 
-func (o *StartDataStudioRequest) GetSessionID() string {
-	if o == nil {
+func (s *StartDataStudioRequest) GetSessionID() string {
+	if s == nil {
 		return ""
 	}
-	return o.SessionID
+	return s.SessionID
 }
 
-func (o *StartDataStudioRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (s *StartDataStudioRequest) GetWorkspaceID() *int64 {
+	if s == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return s.WorkspaceID
 }
 
-func (o *StartDataStudioRequest) GetDataStudioStartRequest() shared.DataStudioStartRequest {
-	if o == nil {
+func (s *StartDataStudioRequest) GetDataStudioStartRequest() shared.DataStudioStartRequest {
+	if s == nil {
 		return shared.DataStudioStartRequest{}
 	}
-	return o.DataStudioStartRequest
+	return s.DataStudioStartRequest
 }
 
 type StartDataStudioResponse struct {
@@ -50,37 +50,37 @@ type StartDataStudioResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *StartDataStudioResponse) GetContentType() string {
-	if o == nil {
+func (s *StartDataStudioResponse) GetContentType() string {
+	if s == nil {
 		return ""
 	}
-	return o.ContentType
+	return s.ContentType
 }
 
-func (o *StartDataStudioResponse) GetStatusCode() int {
-	if o == nil {
+func (s *StartDataStudioResponse) GetStatusCode() int {
+	if s == nil {
 		return 0
 	}
-	return o.StatusCode
+	return s.StatusCode
 }
 
-func (o *StartDataStudioResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (s *StartDataStudioResponse) GetRawResponse() *http.Response {
+	if s == nil {
 		return nil
 	}
-	return o.RawResponse
+	return s.RawResponse
 }
 
-func (o *StartDataStudioResponse) GetDataStudioStartResponse() *shared.DataStudioStartResponse {
-	if o == nil {
+func (s *StartDataStudioResponse) GetDataStudioStartResponse() *shared.DataStudioStartResponse {
+	if s == nil {
 		return nil
 	}
-	return o.DataStudioStartResponse
+	return s.DataStudioStartResponse
 }
 
-func (o *StartDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (s *StartDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
+	if s == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return s.ErrorResponse
 }

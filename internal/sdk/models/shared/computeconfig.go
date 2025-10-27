@@ -44,109 +44,109 @@ func (m *MoabConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *MoabConfiguration) GetWorkDir() string {
-	if o == nil {
+func (m *MoabConfiguration) GetWorkDir() string {
+	if m == nil {
 		return ""
 	}
-	return o.WorkDir
+	return m.WorkDir
 }
 
-func (o *MoabConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetPreRunScript() *string {
+	if m == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return m.PreRunScript
 }
 
-func (o *MoabConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetPostRunScript() *string {
+	if m == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return m.PostRunScript
 }
 
-func (o *MoabConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetNextflowConfig() *string {
+	if m == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return m.NextflowConfig
 }
 
-func (o *MoabConfiguration) GetLaunchDir() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetLaunchDir() *string {
+	if m == nil {
 		return nil
 	}
-	return o.LaunchDir
+	return m.LaunchDir
 }
 
-func (o *MoabConfiguration) GetUserName() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetUserName() *string {
+	if m == nil {
 		return nil
 	}
-	return o.UserName
+	return m.UserName
 }
 
-func (o *MoabConfiguration) GetHostName() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetHostName() *string {
+	if m == nil {
 		return nil
 	}
-	return o.HostName
+	return m.HostName
 }
 
-func (o *MoabConfiguration) GetPort() *int {
-	if o == nil {
+func (m *MoabConfiguration) GetPort() *int {
+	if m == nil {
 		return nil
 	}
-	return o.Port
+	return m.Port
 }
 
-func (o *MoabConfiguration) GetHeadQueue() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetHeadQueue() *string {
+	if m == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return m.HeadQueue
 }
 
-func (o *MoabConfiguration) GetComputeQueue() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetComputeQueue() *string {
+	if m == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return m.ComputeQueue
 }
 
-func (o *MoabConfiguration) GetMaxQueueSize() *int {
-	if o == nil {
+func (m *MoabConfiguration) GetMaxQueueSize() *int {
+	if m == nil {
 		return nil
 	}
-	return o.MaxQueueSize
+	return m.MaxQueueSize
 }
 
-func (o *MoabConfiguration) GetHeadJobOptions() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetHeadJobOptions() *string {
+	if m == nil {
 		return nil
 	}
-	return o.HeadJobOptions
+	return m.HeadJobOptions
 }
 
-func (o *MoabConfiguration) GetPropagateHeadJobOptions() *bool {
-	if o == nil {
+func (m *MoabConfiguration) GetPropagateHeadJobOptions() *bool {
+	if m == nil {
 		return nil
 	}
-	return o.PropagateHeadJobOptions
+	return m.PropagateHeadJobOptions
 }
 
-func (o *MoabConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (m *MoabConfiguration) GetDiscriminator() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Discriminator
+	return m.Discriminator
 }
 
-func (o *MoabConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (m *MoabConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if m == nil {
 		return nil
 	}
-	return o.Environment
+	return m.Environment
 }
 
 type AltairPBSConfiguration struct {
@@ -184,109 +184,109 @@ func (a *AltairPBSConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AltairPBSConfiguration) GetWorkDir() string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetWorkDir() string {
+	if a == nil {
 		return ""
 	}
-	return o.WorkDir
+	return a.WorkDir
 }
 
-func (o *AltairPBSConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetPreRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return a.PreRunScript
 }
 
-func (o *AltairPBSConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetPostRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return a.PostRunScript
 }
 
-func (o *AltairPBSConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetNextflowConfig() *string {
+	if a == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return a.NextflowConfig
 }
 
-func (o *AltairPBSConfiguration) GetLaunchDir() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetLaunchDir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.LaunchDir
+	return a.LaunchDir
 }
 
-func (o *AltairPBSConfiguration) GetUserName() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetUserName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.UserName
+	return a.UserName
 }
 
-func (o *AltairPBSConfiguration) GetHostName() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetHostName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HostName
+	return a.HostName
 }
 
-func (o *AltairPBSConfiguration) GetPort() *int {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetPort() *int {
+	if a == nil {
 		return nil
 	}
-	return o.Port
+	return a.Port
 }
 
-func (o *AltairPBSConfiguration) GetHeadQueue() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetHeadQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return a.HeadQueue
 }
 
-func (o *AltairPBSConfiguration) GetComputeQueue() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetComputeQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return a.ComputeQueue
 }
 
-func (o *AltairPBSConfiguration) GetMaxQueueSize() *int {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetMaxQueueSize() *int {
+	if a == nil {
 		return nil
 	}
-	return o.MaxQueueSize
+	return a.MaxQueueSize
 }
 
-func (o *AltairPBSConfiguration) GetHeadJobOptions() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetHeadJobOptions() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobOptions
+	return a.HeadJobOptions
 }
 
-func (o *AltairPBSConfiguration) GetPropagateHeadJobOptions() *bool {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetPropagateHeadJobOptions() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.PropagateHeadJobOptions
+	return a.PropagateHeadJobOptions
 }
 
-func (o *AltairPBSConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AltairPBSConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (a *AltairPBSConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
 		return nil
 	}
-	return o.Environment
+	return a.Environment
 }
 
 type UnivaGridEngineConfiguration struct {
@@ -324,109 +324,109 @@ func (u *UnivaGridEngineConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *UnivaGridEngineConfiguration) GetWorkDir() string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetWorkDir() string {
+	if u == nil {
 		return ""
 	}
-	return o.WorkDir
+	return u.WorkDir
 }
 
-func (o *UnivaGridEngineConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetPreRunScript() *string {
+	if u == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return u.PreRunScript
 }
 
-func (o *UnivaGridEngineConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetPostRunScript() *string {
+	if u == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return u.PostRunScript
 }
 
-func (o *UnivaGridEngineConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetNextflowConfig() *string {
+	if u == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return u.NextflowConfig
 }
 
-func (o *UnivaGridEngineConfiguration) GetLaunchDir() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetLaunchDir() *string {
+	if u == nil {
 		return nil
 	}
-	return o.LaunchDir
+	return u.LaunchDir
 }
 
-func (o *UnivaGridEngineConfiguration) GetUserName() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetUserName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.UserName
+	return u.UserName
 }
 
-func (o *UnivaGridEngineConfiguration) GetHostName() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetHostName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.HostName
+	return u.HostName
 }
 
-func (o *UnivaGridEngineConfiguration) GetPort() *int {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetPort() *int {
+	if u == nil {
 		return nil
 	}
-	return o.Port
+	return u.Port
 }
 
-func (o *UnivaGridEngineConfiguration) GetHeadQueue() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetHeadQueue() *string {
+	if u == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return u.HeadQueue
 }
 
-func (o *UnivaGridEngineConfiguration) GetComputeQueue() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetComputeQueue() *string {
+	if u == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return u.ComputeQueue
 }
 
-func (o *UnivaGridEngineConfiguration) GetMaxQueueSize() *int {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetMaxQueueSize() *int {
+	if u == nil {
 		return nil
 	}
-	return o.MaxQueueSize
+	return u.MaxQueueSize
 }
 
-func (o *UnivaGridEngineConfiguration) GetHeadJobOptions() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetHeadJobOptions() *string {
+	if u == nil {
 		return nil
 	}
-	return o.HeadJobOptions
+	return u.HeadJobOptions
 }
 
-func (o *UnivaGridEngineConfiguration) GetPropagateHeadJobOptions() *bool {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetPropagateHeadJobOptions() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.PropagateHeadJobOptions
+	return u.PropagateHeadJobOptions
 }
 
-func (o *UnivaGridEngineConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetDiscriminator() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Discriminator
+	return u.Discriminator
 }
 
-func (o *UnivaGridEngineConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (u *UnivaGridEngineConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if u == nil {
 		return nil
 	}
-	return o.Environment
+	return u.Environment
 }
 
 type GoogleGKEClusterConfiguration struct {
@@ -473,158 +473,158 @@ func (g *GoogleGKEClusterConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GoogleGKEClusterConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GoogleGKEClusterConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetWorkDir() *string {
+	if g == nil {
 		return nil
 	}
-	return o.WorkDir
+	return g.WorkDir
 }
 
-func (o *GoogleGKEClusterConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetPreRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return g.PreRunScript
 }
 
-func (o *GoogleGKEClusterConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetPostRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return g.PostRunScript
 }
 
-func (o *GoogleGKEClusterConfiguration) GetServer() string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetServer() string {
+	if g == nil {
 		return ""
 	}
-	return o.Server
+	return g.Server
 }
 
-func (o *GoogleGKEClusterConfiguration) GetSslCert() string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetSslCert() string {
+	if g == nil {
 		return ""
 	}
-	return o.SslCert
+	return g.SslCert
 }
 
-func (o *GoogleGKEClusterConfiguration) GetNamespace() string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetNamespace() string {
+	if g == nil {
 		return ""
 	}
-	return o.Namespace
+	return g.Namespace
 }
 
-func (o *GoogleGKEClusterConfiguration) GetComputeServiceAccount() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetComputeServiceAccount() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ComputeServiceAccount
+	return g.ComputeServiceAccount
 }
 
-func (o *GoogleGKEClusterConfiguration) GetHeadServiceAccount() string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetHeadServiceAccount() string {
+	if g == nil {
 		return ""
 	}
-	return o.HeadServiceAccount
+	return g.HeadServiceAccount
 }
 
-func (o *GoogleGKEClusterConfiguration) GetStorageClaimName() string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetStorageClaimName() string {
+	if g == nil {
 		return ""
 	}
-	return o.StorageClaimName
+	return g.StorageClaimName
 }
 
-func (o *GoogleGKEClusterConfiguration) GetStorageMountPath() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetStorageMountPath() *string {
+	if g == nil {
 		return nil
 	}
-	return o.StorageMountPath
+	return g.StorageMountPath
 }
 
-func (o *GoogleGKEClusterConfiguration) GetPodCleanup() *PodCleanupPolicy {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetPodCleanup() *PodCleanupPolicy {
+	if g == nil {
 		return nil
 	}
-	return o.PodCleanup
+	return g.PodCleanup
 }
 
-func (o *GoogleGKEClusterConfiguration) GetHeadPodSpec() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetHeadPodSpec() *string {
+	if g == nil {
 		return nil
 	}
-	return o.HeadPodSpec
+	return g.HeadPodSpec
 }
 
-func (o *GoogleGKEClusterConfiguration) GetServicePodSpec() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetServicePodSpec() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ServicePodSpec
+	return g.ServicePodSpec
 }
 
-func (o *GoogleGKEClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if g == nil {
 		return nil
 	}
-	return o.Environment
+	return g.Environment
 }
 
-func (o *GoogleGKEClusterConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetHeadJobCpus() *int {
+	if g == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return g.HeadJobCpus
 }
 
-func (o *GoogleGKEClusterConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetHeadJobMemoryMb() *int {
+	if g == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return g.HeadJobMemoryMb
 }
 
-func (o *GoogleGKEClusterConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetNextflowConfig() *string {
+	if g == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return g.NextflowConfig
 }
 
-func (o *GoogleGKEClusterConfiguration) GetRegion() string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetRegion() string {
+	if g == nil {
 		return ""
 	}
-	return o.Region
+	return g.Region
 }
 
-func (o *GoogleGKEClusterConfiguration) GetClusterName() string {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetClusterName() string {
+	if g == nil {
 		return ""
 	}
-	return o.ClusterName
+	return g.ClusterName
 }
 
-func (o *GoogleGKEClusterConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetFusion2Enabled() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return g.Fusion2Enabled
 }
 
-func (o *GoogleGKEClusterConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
+func (g *GoogleGKEClusterConfiguration) GetWaveEnabled() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return g.WaveEnabled
 }
 
 type AmazonEKSClusterConfiguration struct {
@@ -671,158 +671,158 @@ func (a *AmazonEKSClusterConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AmazonEKSClusterConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AmazonEKSClusterConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetWorkDir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkDir
+	return a.WorkDir
 }
 
-func (o *AmazonEKSClusterConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetPreRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return a.PreRunScript
 }
 
-func (o *AmazonEKSClusterConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetPostRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return a.PostRunScript
 }
 
-func (o *AmazonEKSClusterConfiguration) GetServer() string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetServer() string {
+	if a == nil {
 		return ""
 	}
-	return o.Server
+	return a.Server
 }
 
-func (o *AmazonEKSClusterConfiguration) GetSslCert() string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetSslCert() string {
+	if a == nil {
 		return ""
 	}
-	return o.SslCert
+	return a.SslCert
 }
 
-func (o *AmazonEKSClusterConfiguration) GetNamespace() string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetNamespace() string {
+	if a == nil {
 		return ""
 	}
-	return o.Namespace
+	return a.Namespace
 }
 
-func (o *AmazonEKSClusterConfiguration) GetComputeServiceAccount() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetComputeServiceAccount() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeServiceAccount
+	return a.ComputeServiceAccount
 }
 
-func (o *AmazonEKSClusterConfiguration) GetHeadServiceAccount() string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetHeadServiceAccount() string {
+	if a == nil {
 		return ""
 	}
-	return o.HeadServiceAccount
+	return a.HeadServiceAccount
 }
 
-func (o *AmazonEKSClusterConfiguration) GetStorageClaimName() string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetStorageClaimName() string {
+	if a == nil {
 		return ""
 	}
-	return o.StorageClaimName
+	return a.StorageClaimName
 }
 
-func (o *AmazonEKSClusterConfiguration) GetStorageMountPath() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetStorageMountPath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageMountPath
+	return a.StorageMountPath
 }
 
-func (o *AmazonEKSClusterConfiguration) GetPodCleanup() *PodCleanupPolicy {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetPodCleanup() *PodCleanupPolicy {
+	if a == nil {
 		return nil
 	}
-	return o.PodCleanup
+	return a.PodCleanup
 }
 
-func (o *AmazonEKSClusterConfiguration) GetHeadPodSpec() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetHeadPodSpec() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadPodSpec
+	return a.HeadPodSpec
 }
 
-func (o *AmazonEKSClusterConfiguration) GetServicePodSpec() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetServicePodSpec() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ServicePodSpec
+	return a.ServicePodSpec
 }
 
-func (o *AmazonEKSClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
 		return nil
 	}
-	return o.Environment
+	return a.Environment
 }
 
-func (o *AmazonEKSClusterConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetHeadJobCpus() *int {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return a.HeadJobCpus
 }
 
-func (o *AmazonEKSClusterConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetHeadJobMemoryMb() *int {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return a.HeadJobMemoryMb
 }
 
-func (o *AmazonEKSClusterConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetNextflowConfig() *string {
+	if a == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return a.NextflowConfig
 }
 
-func (o *AmazonEKSClusterConfiguration) GetRegion() string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetRegion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Region
+	return a.Region
 }
 
-func (o *AmazonEKSClusterConfiguration) GetClusterName() string {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetClusterName() string {
+	if a == nil {
 		return ""
 	}
-	return o.ClusterName
+	return a.ClusterName
 }
 
-func (o *AmazonEKSClusterConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetWaveEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return a.WaveEnabled
 }
 
-func (o *AmazonEKSClusterConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
+func (a *AmazonEKSClusterConfiguration) GetFusion2Enabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return a.Fusion2Enabled
 }
 
 type KubernetesComputeConfiguration struct {
@@ -863,130 +863,130 @@ func (k *KubernetesComputeConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *KubernetesComputeConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetDiscriminator() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Discriminator
+	return k.Discriminator
 }
 
-func (o *KubernetesComputeConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetWorkDir() *string {
+	if k == nil {
 		return nil
 	}
-	return o.WorkDir
+	return k.WorkDir
 }
 
-func (o *KubernetesComputeConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetPreRunScript() *string {
+	if k == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return k.PreRunScript
 }
 
-func (o *KubernetesComputeConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetPostRunScript() *string {
+	if k == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return k.PostRunScript
 }
 
-func (o *KubernetesComputeConfiguration) GetServer() string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetServer() string {
+	if k == nil {
 		return ""
 	}
-	return o.Server
+	return k.Server
 }
 
-func (o *KubernetesComputeConfiguration) GetSslCert() string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetSslCert() string {
+	if k == nil {
 		return ""
 	}
-	return o.SslCert
+	return k.SslCert
 }
 
-func (o *KubernetesComputeConfiguration) GetNamespace() string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetNamespace() string {
+	if k == nil {
 		return ""
 	}
-	return o.Namespace
+	return k.Namespace
 }
 
-func (o *KubernetesComputeConfiguration) GetComputeServiceAccount() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetComputeServiceAccount() *string {
+	if k == nil {
 		return nil
 	}
-	return o.ComputeServiceAccount
+	return k.ComputeServiceAccount
 }
 
-func (o *KubernetesComputeConfiguration) GetHeadServiceAccount() string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetHeadServiceAccount() string {
+	if k == nil {
 		return ""
 	}
-	return o.HeadServiceAccount
+	return k.HeadServiceAccount
 }
 
-func (o *KubernetesComputeConfiguration) GetStorageClaimName() string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetStorageClaimName() string {
+	if k == nil {
 		return ""
 	}
-	return o.StorageClaimName
+	return k.StorageClaimName
 }
 
-func (o *KubernetesComputeConfiguration) GetStorageMountPath() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetStorageMountPath() *string {
+	if k == nil {
 		return nil
 	}
-	return o.StorageMountPath
+	return k.StorageMountPath
 }
 
-func (o *KubernetesComputeConfiguration) GetPodCleanup() *PodCleanupPolicy {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetPodCleanup() *PodCleanupPolicy {
+	if k == nil {
 		return nil
 	}
-	return o.PodCleanup
+	return k.PodCleanup
 }
 
-func (o *KubernetesComputeConfiguration) GetHeadPodSpec() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetHeadPodSpec() *string {
+	if k == nil {
 		return nil
 	}
-	return o.HeadPodSpec
+	return k.HeadPodSpec
 }
 
-func (o *KubernetesComputeConfiguration) GetServicePodSpec() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetServicePodSpec() *string {
+	if k == nil {
 		return nil
 	}
-	return o.ServicePodSpec
+	return k.ServicePodSpec
 }
 
-func (o *KubernetesComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if k == nil {
 		return nil
 	}
-	return o.Environment
+	return k.Environment
 }
 
-func (o *KubernetesComputeConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetHeadJobCpus() *int {
+	if k == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return k.HeadJobCpus
 }
 
-func (o *KubernetesComputeConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetHeadJobMemoryMb() *int {
+	if k == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return k.HeadJobMemoryMb
 }
 
-func (o *KubernetesComputeConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (k *KubernetesComputeConfiguration) GetNextflowConfig() *string {
+	if k == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return k.NextflowConfig
 }
 
 type SlurmConfiguration struct {
@@ -1024,109 +1024,109 @@ func (s *SlurmConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SlurmConfiguration) GetWorkDir() string {
-	if o == nil {
+func (s *SlurmConfiguration) GetWorkDir() string {
+	if s == nil {
 		return ""
 	}
-	return o.WorkDir
+	return s.WorkDir
 }
 
-func (o *SlurmConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetPreRunScript() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return s.PreRunScript
 }
 
-func (o *SlurmConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetPostRunScript() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return s.PostRunScript
 }
 
-func (o *SlurmConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetNextflowConfig() *string {
+	if s == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return s.NextflowConfig
 }
 
-func (o *SlurmConfiguration) GetLaunchDir() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetLaunchDir() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LaunchDir
+	return s.LaunchDir
 }
 
-func (o *SlurmConfiguration) GetUserName() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetUserName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.UserName
+	return s.UserName
 }
 
-func (o *SlurmConfiguration) GetHostName() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetHostName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.HostName
+	return s.HostName
 }
 
-func (o *SlurmConfiguration) GetPort() *int {
-	if o == nil {
+func (s *SlurmConfiguration) GetPort() *int {
+	if s == nil {
 		return nil
 	}
-	return o.Port
+	return s.Port
 }
 
-func (o *SlurmConfiguration) GetHeadQueue() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetHeadQueue() *string {
+	if s == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return s.HeadQueue
 }
 
-func (o *SlurmConfiguration) GetComputeQueue() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetComputeQueue() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return s.ComputeQueue
 }
 
-func (o *SlurmConfiguration) GetMaxQueueSize() *int {
-	if o == nil {
+func (s *SlurmConfiguration) GetMaxQueueSize() *int {
+	if s == nil {
 		return nil
 	}
-	return o.MaxQueueSize
+	return s.MaxQueueSize
 }
 
-func (o *SlurmConfiguration) GetHeadJobOptions() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetHeadJobOptions() *string {
+	if s == nil {
 		return nil
 	}
-	return o.HeadJobOptions
+	return s.HeadJobOptions
 }
 
-func (o *SlurmConfiguration) GetPropagateHeadJobOptions() *bool {
-	if o == nil {
+func (s *SlurmConfiguration) GetPropagateHeadJobOptions() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.PropagateHeadJobOptions
+	return s.PropagateHeadJobOptions
 }
 
-func (o *SlurmConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (s *SlurmConfiguration) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SlurmConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (s *SlurmConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if s == nil {
 		return nil
 	}
-	return o.Environment
+	return s.Environment
 }
 
 type IBMLSFConfiguration struct {
@@ -1167,130 +1167,130 @@ func (i *IBMLSFConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *IBMLSFConfiguration) GetWorkDir() string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetWorkDir() string {
+	if i == nil {
 		return ""
 	}
-	return o.WorkDir
+	return i.WorkDir
 }
 
-func (o *IBMLSFConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetPreRunScript() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return i.PreRunScript
 }
 
-func (o *IBMLSFConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetPostRunScript() *string {
+	if i == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return i.PostRunScript
 }
 
-func (o *IBMLSFConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetNextflowConfig() *string {
+	if i == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return i.NextflowConfig
 }
 
-func (o *IBMLSFConfiguration) GetLaunchDir() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetLaunchDir() *string {
+	if i == nil {
 		return nil
 	}
-	return o.LaunchDir
+	return i.LaunchDir
 }
 
-func (o *IBMLSFConfiguration) GetUserName() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetUserName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.UserName
+	return i.UserName
 }
 
-func (o *IBMLSFConfiguration) GetHostName() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetHostName() *string {
+	if i == nil {
 		return nil
 	}
-	return o.HostName
+	return i.HostName
 }
 
-func (o *IBMLSFConfiguration) GetPort() *int {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetPort() *int {
+	if i == nil {
 		return nil
 	}
-	return o.Port
+	return i.Port
 }
 
-func (o *IBMLSFConfiguration) GetHeadQueue() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetHeadQueue() *string {
+	if i == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return i.HeadQueue
 }
 
-func (o *IBMLSFConfiguration) GetComputeQueue() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetComputeQueue() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return i.ComputeQueue
 }
 
-func (o *IBMLSFConfiguration) GetMaxQueueSize() *int {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetMaxQueueSize() *int {
+	if i == nil {
 		return nil
 	}
-	return o.MaxQueueSize
+	return i.MaxQueueSize
 }
 
-func (o *IBMLSFConfiguration) GetHeadJobOptions() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetHeadJobOptions() *string {
+	if i == nil {
 		return nil
 	}
-	return o.HeadJobOptions
+	return i.HeadJobOptions
 }
 
-func (o *IBMLSFConfiguration) GetPropagateHeadJobOptions() *bool {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetPropagateHeadJobOptions() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PropagateHeadJobOptions
+	return i.PropagateHeadJobOptions
 }
 
-func (o *IBMLSFConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetDiscriminator() *string {
+	if i == nil {
 		return nil
 	}
-	return o.Discriminator
+	return i.Discriminator
 }
 
-func (o *IBMLSFConfiguration) GetUnitForLimits() *string {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetUnitForLimits() *string {
+	if i == nil {
 		return nil
 	}
-	return o.UnitForLimits
+	return i.UnitForLimits
 }
 
-func (o *IBMLSFConfiguration) GetPerJobMemLimit() *bool {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetPerJobMemLimit() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerJobMemLimit
+	return i.PerJobMemLimit
 }
 
-func (o *IBMLSFConfiguration) GetPerTaskReserve() *bool {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetPerTaskReserve() *bool {
+	if i == nil {
 		return nil
 	}
-	return o.PerTaskReserve
+	return i.PerTaskReserve
 }
 
-func (o *IBMLSFConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (i *IBMLSFConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if i == nil {
 		return nil
 	}
-	return o.Environment
+	return i.Environment
 }
 
 type AzureBatchConfiguration struct {
@@ -1330,116 +1330,116 @@ func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureBatchConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzureBatchConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetWorkDir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkDir
+	return a.WorkDir
 }
 
-func (o *AzureBatchConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetPreRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return a.PreRunScript
 }
 
-func (o *AzureBatchConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetPostRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return a.PostRunScript
 }
 
-func (o *AzureBatchConfiguration) GetRegion() string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetRegion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Region
+	return a.Region
 }
 
-func (o *AzureBatchConfiguration) GetHeadPool() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetHeadPool() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadPool
+	return a.HeadPool
 }
 
-func (o *AzureBatchConfiguration) GetAutoPoolMode() *bool {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetAutoPoolMode() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.AutoPoolMode
+	return a.AutoPoolMode
 }
 
-func (o *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetForge() *AzBatchForgeConfig {
+	if a == nil {
 		return nil
 	}
-	return o.Forge
+	return a.Forge
 }
 
-func (o *AzureBatchConfiguration) GetTokenDuration() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetTokenDuration() *string {
+	if a == nil {
 		return nil
 	}
-	return o.TokenDuration
+	return a.TokenDuration
 }
 
-func (o *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *JobCleanupPolicy {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetDeleteJobsOnCompletion() *JobCleanupPolicy {
+	if a == nil {
 		return nil
 	}
-	return o.DeleteJobsOnCompletion
+	return a.DeleteJobsOnCompletion
 }
 
-func (o *AzureBatchConfiguration) GetDeletePoolsOnCompletion() *bool {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetDeletePoolsOnCompletion() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.DeletePoolsOnCompletion
+	return a.DeletePoolsOnCompletion
 }
 
-func (o *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
 		return nil
 	}
-	return o.Environment
+	return a.Environment
 }
 
-func (o *AzureBatchConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetWaveEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return a.WaveEnabled
 }
 
-func (o *AzureBatchConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetFusion2Enabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return a.Fusion2Enabled
 }
 
-func (o *AzureBatchConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
+	if a == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return a.NextflowConfig
 }
 
-func (o *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
-	if o == nil {
+func (a *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ManagedIdentityClientID
+	return a.ManagedIdentityClientID
 }
 
 type GoogleBatchServiceConfiguration struct {
@@ -1491,207 +1491,207 @@ func (g *GoogleBatchServiceConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GoogleBatchServiceConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GoogleBatchServiceConfiguration) GetLocation() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetLocation() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Location
+	return g.Location
 }
 
-func (o *GoogleBatchServiceConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetWorkDir() *string {
+	if g == nil {
 		return nil
 	}
-	return o.WorkDir
+	return g.WorkDir
 }
 
-func (o *GoogleBatchServiceConfiguration) GetSpot() *bool {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetSpot() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Spot
+	return g.Spot
 }
 
-func (o *GoogleBatchServiceConfiguration) GetBootDiskSizeGb() *int {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetBootDiskSizeGb() *int {
+	if g == nil {
 		return nil
 	}
-	return o.BootDiskSizeGb
+	return g.BootDiskSizeGb
 }
 
-func (o *GoogleBatchServiceConfiguration) GetCPUPlatform() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetCPUPlatform() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CPUPlatform
+	return g.CPUPlatform
 }
 
-func (o *GoogleBatchServiceConfiguration) GetMachineType() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetMachineType() *string {
+	if g == nil {
 		return nil
 	}
-	return o.MachineType
+	return g.MachineType
 }
 
-func (o *GoogleBatchServiceConfiguration) GetProjectID() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetProjectID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
-func (o *GoogleBatchServiceConfiguration) GetSSHDaemon() *bool {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetSSHDaemon() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.SSHDaemon
+	return g.SSHDaemon
 }
 
-func (o *GoogleBatchServiceConfiguration) GetSSHImage() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetSSHImage() *string {
+	if g == nil {
 		return nil
 	}
-	return o.SSHImage
+	return g.SSHImage
 }
 
-func (o *GoogleBatchServiceConfiguration) GetDebugMode() *int {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetDebugMode() *int {
+	if g == nil {
 		return nil
 	}
-	return o.DebugMode
+	return g.DebugMode
 }
 
-func (o *GoogleBatchServiceConfiguration) GetCopyImage() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetCopyImage() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CopyImage
+	return g.CopyImage
 }
 
-func (o *GoogleBatchServiceConfiguration) GetUsePrivateAddress() *bool {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetUsePrivateAddress() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.UsePrivateAddress
+	return g.UsePrivateAddress
 }
 
-func (o *GoogleBatchServiceConfiguration) GetLabels() map[string]string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetLabels() map[string]string {
+	if g == nil {
 		return nil
 	}
-	return o.Labels
+	return g.Labels
 }
 
-func (o *GoogleBatchServiceConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetPreRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return g.PreRunScript
 }
 
-func (o *GoogleBatchServiceConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetPostRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return g.PostRunScript
 }
 
-func (o *GoogleBatchServiceConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetHeadJobCpus() *int {
+	if g == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return g.HeadJobCpus
 }
 
-func (o *GoogleBatchServiceConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetHeadJobMemoryMb() *int {
+	if g == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return g.HeadJobMemoryMb
 }
 
-func (o *GoogleBatchServiceConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetNextflowConfig() *string {
+	if g == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return g.NextflowConfig
 }
 
-func (o *GoogleBatchServiceConfiguration) GetNfsTarget() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetNfsTarget() *string {
+	if g == nil {
 		return nil
 	}
-	return o.NfsTarget
+	return g.NfsTarget
 }
 
-func (o *GoogleBatchServiceConfiguration) GetNfsMount() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetNfsMount() *string {
+	if g == nil {
 		return nil
 	}
-	return o.NfsMount
+	return g.NfsMount
 }
 
-func (o *GoogleBatchServiceConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if g == nil {
 		return nil
 	}
-	return o.Environment
+	return g.Environment
 }
 
-func (o *GoogleBatchServiceConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetWaveEnabled() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return g.WaveEnabled
 }
 
-func (o *GoogleBatchServiceConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetFusion2Enabled() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return g.Fusion2Enabled
 }
 
-func (o *GoogleBatchServiceConfiguration) GetServiceAccount() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetServiceAccount() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ServiceAccount
+	return g.ServiceAccount
 }
 
-func (o *GoogleBatchServiceConfiguration) GetNetwork() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetNetwork() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Network
+	return g.Network
 }
 
-func (o *GoogleBatchServiceConfiguration) GetSubnetwork() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetSubnetwork() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Subnetwork
+	return g.Subnetwork
 }
 
-func (o *GoogleBatchServiceConfiguration) GetHeadJobInstanceTemplate() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetHeadJobInstanceTemplate() *string {
+	if g == nil {
 		return nil
 	}
-	return o.HeadJobInstanceTemplate
+	return g.HeadJobInstanceTemplate
 }
 
-func (o *GoogleBatchServiceConfiguration) GetComputeJobsInstanceTemplate() *string {
-	if o == nil {
+func (g *GoogleBatchServiceConfiguration) GetComputeJobsInstanceTemplate() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ComputeJobsInstanceTemplate
+	return g.ComputeJobsInstanceTemplate
 }
 
 type GoogleLifeSciencesConfiguration struct {
@@ -1736,158 +1736,158 @@ func (g *GoogleLifeSciencesConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetRegion() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetRegion() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Region
+	return g.Region
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetZones() []string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetZones() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Zones
+	return g.Zones
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetLocation() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetLocation() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Location
+	return g.Location
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetWorkDir() *string {
+	if g == nil {
 		return nil
 	}
-	return o.WorkDir
+	return g.WorkDir
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetPreemptible() *bool {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetPreemptible() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Preemptible
+	return g.Preemptible
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetBootDiskSizeGb() *int {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetBootDiskSizeGb() *int {
+	if g == nil {
 		return nil
 	}
-	return o.BootDiskSizeGb
+	return g.BootDiskSizeGb
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetProjectID() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetProjectID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.ProjectID
+	return g.ProjectID
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetSSHDaemon() *bool {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetSSHDaemon() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.SSHDaemon
+	return g.SSHDaemon
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetSSHImage() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetSSHImage() *string {
+	if g == nil {
 		return nil
 	}
-	return o.SSHImage
+	return g.SSHImage
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetDebugMode() *int {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetDebugMode() *int {
+	if g == nil {
 		return nil
 	}
-	return o.DebugMode
+	return g.DebugMode
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetCopyImage() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetCopyImage() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CopyImage
+	return g.CopyImage
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetUsePrivateAddress() *bool {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetUsePrivateAddress() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.UsePrivateAddress
+	return g.UsePrivateAddress
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetLabels() map[string]string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetLabels() map[string]string {
+	if g == nil {
 		return nil
 	}
-	return o.Labels
+	return g.Labels
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetPreRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return g.PreRunScript
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetPostRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return g.PostRunScript
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetHeadJobCpus() *int {
+	if g == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return g.HeadJobCpus
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetHeadJobMemoryMb() *int {
+	if g == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return g.HeadJobMemoryMb
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetNextflowConfig() *string {
+	if g == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return g.NextflowConfig
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetNfsTarget() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetNfsTarget() *string {
+	if g == nil {
 		return nil
 	}
-	return o.NfsTarget
+	return g.NfsTarget
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetNfsMount() *string {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetNfsMount() *string {
+	if g == nil {
 		return nil
 	}
-	return o.NfsMount
+	return g.NfsMount
 }
 
-func (o *GoogleLifeSciencesConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (g *GoogleLifeSciencesConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if g == nil {
 		return nil
 	}
-	return o.Environment
+	return g.Environment
 }
 
 type SeqeraComputeConfiguration struct {
@@ -1939,193 +1939,193 @@ func (s *SeqeraComputeConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SeqeraComputeConfiguration) GetStorageType() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetStorageType() *string {
+	if s == nil {
 		return nil
 	}
-	return o.StorageType
+	return s.StorageType
 }
 
-func (o *SeqeraComputeConfiguration) GetLustreID() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetLustreID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LustreID
+	return s.LustreID
 }
 
-func (o *SeqeraComputeConfiguration) GetVolumes() []string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetVolumes() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Volumes
+	return s.Volumes
 }
 
-func (o *SeqeraComputeConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SeqeraComputeConfiguration) GetRegion() string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetRegion() string {
+	if s == nil {
 		return ""
 	}
-	return o.Region
+	return s.Region
 }
 
-func (o *SeqeraComputeConfiguration) GetComputeQueue() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetComputeQueue() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return s.ComputeQueue
 }
 
-func (o *SeqeraComputeConfiguration) GetDragenQueue() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetDragenQueue() *string {
+	if s == nil {
 		return nil
 	}
-	return o.DragenQueue
+	return s.DragenQueue
 }
 
-func (o *SeqeraComputeConfiguration) GetDragenInstanceType() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetDragenInstanceType() *string {
+	if s == nil {
 		return nil
 	}
-	return o.DragenInstanceType
+	return s.DragenInstanceType
 }
 
-func (o *SeqeraComputeConfiguration) GetComputeJobRole() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetComputeJobRole() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ComputeJobRole
+	return s.ComputeJobRole
 }
 
-func (o *SeqeraComputeConfiguration) GetExecutionRole() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetExecutionRole() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ExecutionRole
+	return s.ExecutionRole
 }
 
-func (o *SeqeraComputeConfiguration) GetHeadQueue() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetHeadQueue() *string {
+	if s == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return s.HeadQueue
 }
 
-func (o *SeqeraComputeConfiguration) GetHeadJobRole() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetHeadJobRole() *string {
+	if s == nil {
 		return nil
 	}
-	return o.HeadJobRole
+	return s.HeadJobRole
 }
 
-func (o *SeqeraComputeConfiguration) GetCliPath() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetCliPath() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CliPath
+	return s.CliPath
 }
 
-func (o *SeqeraComputeConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetWorkDir() *string {
+	if s == nil {
 		return nil
 	}
-	return o.WorkDir
+	return s.WorkDir
 }
 
-func (o *SeqeraComputeConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetPreRunScript() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return s.PreRunScript
 }
 
-func (o *SeqeraComputeConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetPostRunScript() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return s.PostRunScript
 }
 
-func (o *SeqeraComputeConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetHeadJobCpus() *int {
+	if s == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return s.HeadJobCpus
 }
 
-func (o *SeqeraComputeConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetHeadJobMemoryMb() *int {
+	if s == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return s.HeadJobMemoryMb
 }
 
-func (o *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if s == nil {
 		return nil
 	}
-	return o.Environment
+	return s.Environment
 }
 
-func (o *SeqeraComputeConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetWaveEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return s.WaveEnabled
 }
 
-func (o *SeqeraComputeConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetFusion2Enabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return s.Fusion2Enabled
 }
 
-func (o *SeqeraComputeConfiguration) GetNvnmeStorageEnabled() *bool {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetNvnmeStorageEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.NvnmeStorageEnabled
+	return s.NvnmeStorageEnabled
 }
 
-func (o *SeqeraComputeConfiguration) GetLogGroup() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetLogGroup() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LogGroup
+	return s.LogGroup
 }
 
-func (o *SeqeraComputeConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetNextflowConfig() *string {
+	if s == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return s.NextflowConfig
 }
 
-func (o *SeqeraComputeConfiguration) GetFusionSnapshots() *bool {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetFusionSnapshots() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.FusionSnapshots
+	return s.FusionSnapshots
 }
 
-func (o *SeqeraComputeConfiguration) GetForge() *ForgeConfig {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetForge() *ForgeConfig {
+	if s == nil {
 		return nil
 	}
-	return o.Forge
+	return s.Forge
 }
 
-func (o *SeqeraComputeConfiguration) GetForgedResources() []map[string]any {
-	if o == nil {
+func (s *SeqeraComputeConfiguration) GetForgedResources() []map[string]any {
+	if s == nil {
 		return nil
 	}
-	return o.ForgedResources
+	return s.ForgedResources
 }
 
 type AWSCloudConfiguration struct {
@@ -2169,151 +2169,151 @@ func (a *AWSCloudConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AWSCloudConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AWSCloudConfiguration) GetAllowBuckets() []string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetAllowBuckets() []string {
+	if a == nil {
 		return nil
 	}
-	return o.AllowBuckets
+	return a.AllowBuckets
 }
 
-func (o *AWSCloudConfiguration) GetRegion() string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetRegion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Region
+	return a.Region
 }
 
-func (o *AWSCloudConfiguration) GetInstanceType() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetInstanceType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.InstanceType
+	return a.InstanceType
 }
 
-func (o *AWSCloudConfiguration) GetImageID() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetImageID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ImageID
+	return a.ImageID
 }
 
-func (o *AWSCloudConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetWorkDir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkDir
+	return a.WorkDir
 }
 
-func (o *AWSCloudConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetPreRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return a.PreRunScript
 }
 
-func (o *AWSCloudConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetPostRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return a.PostRunScript
 }
 
-func (o *AWSCloudConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetNextflowConfig() *string {
+	if a == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return a.NextflowConfig
 }
 
-func (o *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
 		return nil
 	}
-	return o.Environment
+	return a.Environment
 }
 
-func (o *AWSCloudConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetWaveEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return a.WaveEnabled
 }
 
-func (o *AWSCloudConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetFusion2Enabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return a.Fusion2Enabled
 }
 
-func (o *AWSCloudConfiguration) GetLogGroup() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetLogGroup() *string {
+	if a == nil {
 		return nil
 	}
-	return o.LogGroup
+	return a.LogGroup
 }
 
-func (o *AWSCloudConfiguration) GetArm64Enabled() *bool {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetArm64Enabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Arm64Enabled
+	return a.Arm64Enabled
 }
 
-func (o *AWSCloudConfiguration) GetGpuEnabled() *bool {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetGpuEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.GpuEnabled
+	return a.GpuEnabled
 }
 
-func (o *AWSCloudConfiguration) GetEc2KeyPair() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetEc2KeyPair() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Ec2KeyPair
+	return a.Ec2KeyPair
 }
 
-func (o *AWSCloudConfiguration) GetEbsBootSize() *int {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetEbsBootSize() *int {
+	if a == nil {
 		return nil
 	}
-	return o.EbsBootSize
+	return a.EbsBootSize
 }
 
-func (o *AWSCloudConfiguration) GetInstanceProfileArn() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetInstanceProfileArn() *string {
+	if a == nil {
 		return nil
 	}
-	return o.InstanceProfileArn
+	return a.InstanceProfileArn
 }
 
-func (o *AWSCloudConfiguration) GetSubnetID() *string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetSubnetID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.SubnetID
+	return a.SubnetID
 }
 
-func (o *AWSCloudConfiguration) GetSecurityGroups() []string {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetSecurityGroups() []string {
+	if a == nil {
 		return nil
 	}
-	return o.SecurityGroups
+	return a.SecurityGroups
 }
 
-func (o *AWSCloudConfiguration) GetForgedResources() []map[string]any {
-	if o == nil {
+func (a *AWSCloudConfiguration) GetForgedResources() []map[string]any {
+	if a == nil {
 		return nil
 	}
-	return o.ForgedResources
+	return a.ForgedResources
 }
 
 type AWSBatchConfiguration struct {
@@ -2365,193 +2365,193 @@ func (a *AWSBatchConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AWSBatchConfiguration) GetStorageType() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetStorageType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageType
+	return a.StorageType
 }
 
-func (o *AWSBatchConfiguration) GetLustreID() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetLustreID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.LustreID
+	return a.LustreID
 }
 
-func (o *AWSBatchConfiguration) GetVolumes() []string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetVolumes() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Volumes
+	return a.Volumes
 }
 
-func (o *AWSBatchConfiguration) GetDiscriminator() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AWSBatchConfiguration) GetRegion() string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetRegion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Region
+	return a.Region
 }
 
-func (o *AWSBatchConfiguration) GetComputeQueue() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetComputeQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return a.ComputeQueue
 }
 
-func (o *AWSBatchConfiguration) GetDragenQueue() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetDragenQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.DragenQueue
+	return a.DragenQueue
 }
 
-func (o *AWSBatchConfiguration) GetDragenInstanceType() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetDragenInstanceType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.DragenInstanceType
+	return a.DragenInstanceType
 }
 
-func (o *AWSBatchConfiguration) GetComputeJobRole() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetComputeJobRole() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeJobRole
+	return a.ComputeJobRole
 }
 
-func (o *AWSBatchConfiguration) GetExecutionRole() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetExecutionRole() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ExecutionRole
+	return a.ExecutionRole
 }
 
-func (o *AWSBatchConfiguration) GetHeadQueue() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetHeadQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return a.HeadQueue
 }
 
-func (o *AWSBatchConfiguration) GetHeadJobRole() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetHeadJobRole() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobRole
+	return a.HeadJobRole
 }
 
-func (o *AWSBatchConfiguration) GetCliPath() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetCliPath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CliPath
+	return a.CliPath
 }
 
-func (o *AWSBatchConfiguration) GetWorkDir() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetWorkDir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkDir
+	return a.WorkDir
 }
 
-func (o *AWSBatchConfiguration) GetPreRunScript() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetPreRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return a.PreRunScript
 }
 
-func (o *AWSBatchConfiguration) GetPostRunScript() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetPostRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return a.PostRunScript
 }
 
-func (o *AWSBatchConfiguration) GetHeadJobCpus() *int {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetHeadJobCpus() *int {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return a.HeadJobCpus
 }
 
-func (o *AWSBatchConfiguration) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetHeadJobMemoryMb() *int {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return a.HeadJobMemoryMb
 }
 
-func (o *AWSBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
 		return nil
 	}
-	return o.Environment
+	return a.Environment
 }
 
-func (o *AWSBatchConfiguration) GetWaveEnabled() *bool {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetWaveEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return a.WaveEnabled
 }
 
-func (o *AWSBatchConfiguration) GetFusion2Enabled() *bool {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetFusion2Enabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return a.Fusion2Enabled
 }
 
-func (o *AWSBatchConfiguration) GetNvnmeStorageEnabled() *bool {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetNvnmeStorageEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.NvnmeStorageEnabled
+	return a.NvnmeStorageEnabled
 }
 
-func (o *AWSBatchConfiguration) GetLogGroup() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetLogGroup() *string {
+	if a == nil {
 		return nil
 	}
-	return o.LogGroup
+	return a.LogGroup
 }
 
-func (o *AWSBatchConfiguration) GetNextflowConfig() *string {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetNextflowConfig() *string {
+	if a == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return a.NextflowConfig
 }
 
-func (o *AWSBatchConfiguration) GetFusionSnapshots() *bool {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetFusionSnapshots() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.FusionSnapshots
+	return a.FusionSnapshots
 }
 
-func (o *AWSBatchConfiguration) GetForge() *ForgeConfig {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetForge() *ForgeConfig {
+	if a == nil {
 		return nil
 	}
-	return o.Forge
+	return a.Forge
 }
 
-func (o *AWSBatchConfiguration) GetForgedResources() []map[string]any {
-	if o == nil {
+func (a *AWSBatchConfiguration) GetForgedResources() []map[string]any {
+	if a == nil {
 		return nil
 	}
-	return o.ForgedResources
+	return a.ForgedResources
 }
 
 type ComputeConfigType string
@@ -2576,20 +2576,20 @@ const (
 // ComputeConfig - Configuration settings for compute environments including work directories,
 // pre/post run scripts, and environment-specific parameters.
 type ComputeConfig struct {
-	AWSBatchConfiguration           *AWSBatchConfiguration           `queryParam:"inline"`
-	AWSCloudConfiguration           *AWSCloudConfiguration           `queryParam:"inline"`
-	SeqeraComputeConfiguration      *SeqeraComputeConfiguration      `queryParam:"inline"`
-	GoogleLifeSciencesConfiguration *GoogleLifeSciencesConfiguration `queryParam:"inline"`
-	GoogleBatchServiceConfiguration *GoogleBatchServiceConfiguration `queryParam:"inline"`
-	AzureBatchConfiguration         *AzureBatchConfiguration         `queryParam:"inline"`
-	IBMLSFConfiguration             *IBMLSFConfiguration             `queryParam:"inline"`
-	SlurmConfiguration              *SlurmConfiguration              `queryParam:"inline"`
-	KubernetesComputeConfiguration  *KubernetesComputeConfiguration  `queryParam:"inline"`
-	AmazonEKSClusterConfiguration   *AmazonEKSClusterConfiguration   `queryParam:"inline"`
-	GoogleGKEClusterConfiguration   *GoogleGKEClusterConfiguration   `queryParam:"inline"`
-	UnivaGridEngineConfiguration    *UnivaGridEngineConfiguration    `queryParam:"inline"`
-	AltairPBSConfiguration          *AltairPBSConfiguration          `queryParam:"inline"`
-	MoabConfiguration               *MoabConfiguration               `queryParam:"inline"`
+	AWSBatchConfiguration           *AWSBatchConfiguration           `queryParam:"inline,name=ComputeConfig"`
+	AWSCloudConfiguration           *AWSCloudConfiguration           `queryParam:"inline,name=ComputeConfig"`
+	SeqeraComputeConfiguration      *SeqeraComputeConfiguration      `queryParam:"inline,name=ComputeConfig"`
+	GoogleLifeSciencesConfiguration *GoogleLifeSciencesConfiguration `queryParam:"inline,name=ComputeConfig"`
+	GoogleBatchServiceConfiguration *GoogleBatchServiceConfiguration `queryParam:"inline,name=ComputeConfig"`
+	AzureBatchConfiguration         *AzureBatchConfiguration         `queryParam:"inline,name=ComputeConfig"`
+	IBMLSFConfiguration             *IBMLSFConfiguration             `queryParam:"inline,name=ComputeConfig"`
+	SlurmConfiguration              *SlurmConfiguration              `queryParam:"inline,name=ComputeConfig"`
+	KubernetesComputeConfiguration  *KubernetesComputeConfiguration  `queryParam:"inline,name=ComputeConfig"`
+	AmazonEKSClusterConfiguration   *AmazonEKSClusterConfiguration   `queryParam:"inline,name=ComputeConfig"`
+	GoogleGKEClusterConfiguration   *GoogleGKEClusterConfiguration   `queryParam:"inline,name=ComputeConfig"`
+	UnivaGridEngineConfiguration    *UnivaGridEngineConfiguration    `queryParam:"inline,name=ComputeConfig"`
+	AltairPBSConfiguration          *AltairPBSConfiguration          `queryParam:"inline,name=ComputeConfig"`
+	MoabConfiguration               *MoabConfiguration               `queryParam:"inline,name=ComputeConfig"`
 
 	Type ComputeConfigType
 }

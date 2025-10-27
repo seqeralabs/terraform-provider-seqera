@@ -16,79 +16,79 @@ type WorkflowMetrics struct {
 	TimeUsage *ResourceData `json:"timeUsage,omitempty"`
 }
 
-func (o *WorkflowMetrics) GetID() *int64 {
-	if o == nil {
+func (w *WorkflowMetrics) GetID() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.ID
+	return w.ID
 }
 
-func (o *WorkflowMetrics) GetProcess() string {
-	if o == nil {
+func (w *WorkflowMetrics) GetProcess() string {
+	if w == nil {
 		return ""
 	}
-	return o.Process
+	return w.Process
 }
 
-func (o *WorkflowMetrics) GetCPU() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetCPU() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.CPU
+	return w.CPU
 }
 
-func (o *WorkflowMetrics) GetMem() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetMem() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.Mem
+	return w.Mem
 }
 
-func (o *WorkflowMetrics) GetVmem() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetVmem() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.Vmem
+	return w.Vmem
 }
 
-func (o *WorkflowMetrics) GetTime() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetTime() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.Time
+	return w.Time
 }
 
-func (o *WorkflowMetrics) GetReads() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetReads() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.Reads
+	return w.Reads
 }
 
-func (o *WorkflowMetrics) GetWrites() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetWrites() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.Writes
+	return w.Writes
 }
 
-func (o *WorkflowMetrics) GetCPUUsage() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetCPUUsage() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.CPUUsage
+	return w.CPUUsage
 }
 
-func (o *WorkflowMetrics) GetMemUsage() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetMemUsage() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.MemUsage
+	return w.MemUsage
 }
 
-func (o *WorkflowMetrics) GetTimeUsage() *ResourceData {
-	if o == nil {
+func (w *WorkflowMetrics) GetTimeUsage() *ResourceData {
+	if w == nil {
 		return nil
 	}
-	return o.TimeUsage
+	return w.TimeUsage
 }

@@ -12,44 +12,44 @@ type TraceCreateRequest struct {
 	WorkflowID  *string `json:"workflowId,omitempty"`
 }
 
-func (o *TraceCreateRequest) GetLaunchID() *string {
-	if o == nil {
+func (t *TraceCreateRequest) GetLaunchID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.LaunchID
+	return t.LaunchID
 }
 
-func (o *TraceCreateRequest) GetSessionID() *string {
-	if o == nil {
+func (t *TraceCreateRequest) GetSessionID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.SessionID
+	return t.SessionID
 }
 
-func (o *TraceCreateRequest) GetRunName() *string {
-	if o == nil {
+func (t *TraceCreateRequest) GetRunName() *string {
+	if t == nil {
 		return nil
 	}
-	return o.RunName
+	return t.RunName
 }
 
-func (o *TraceCreateRequest) GetProjectName() *string {
-	if o == nil {
+func (t *TraceCreateRequest) GetProjectName() *string {
+	if t == nil {
 		return nil
 	}
-	return o.ProjectName
+	return t.ProjectName
 }
 
-func (o *TraceCreateRequest) GetRepository() *string {
-	if o == nil {
+func (t *TraceCreateRequest) GetRepository() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Repository
+	return t.Repository
 }
 
-func (o *TraceCreateRequest) GetWorkflowID() *string {
-	if o == nil {
+func (t *TraceCreateRequest) GetWorkflowID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.WorkflowID
+	return t.WorkflowID
 }

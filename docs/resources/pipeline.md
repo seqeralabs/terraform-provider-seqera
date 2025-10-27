@@ -113,12 +113,11 @@ resource "seqera_pipeline" "my_pipeline" {
 
 Required:
 
-- `compute_env_id` (String)
-- `pipeline` (String)
 - `work_dir` (String)
 
 Optional:
 
+- `compute_env_id` (String)
 - `config_profiles` (List of String)
 - `config_text` (String)
 - `date_created` (String)
@@ -131,6 +130,7 @@ Optional:
 - `optimization_id` (String)
 - `optimization_targets` (String)
 - `params_text` (String)
+- `pipeline` (String)
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 - `pull_latest` (Boolean)

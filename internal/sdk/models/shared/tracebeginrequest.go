@@ -13,30 +13,30 @@ type TraceBeginRequest struct {
 	TowerLaunch  *bool          `json:"towerLaunch,omitempty"`
 }
 
-func (o *TraceBeginRequest) GetLaunchID() *string {
-	if o == nil {
+func (t *TraceBeginRequest) GetLaunchID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.LaunchID
+	return t.LaunchID
 }
 
-func (o *TraceBeginRequest) GetWorkflow() *WorkflowInput {
-	if o == nil {
+func (t *TraceBeginRequest) GetWorkflow() *WorkflowInput {
+	if t == nil {
 		return nil
 	}
-	return o.Workflow
+	return t.Workflow
 }
 
-func (o *TraceBeginRequest) GetProcessNames() []string {
-	if o == nil {
+func (t *TraceBeginRequest) GetProcessNames() []string {
+	if t == nil {
 		return nil
 	}
-	return o.ProcessNames
+	return t.ProcessNames
 }
 
-func (o *TraceBeginRequest) GetTowerLaunch() *bool {
-	if o == nil {
+func (t *TraceBeginRequest) GetTowerLaunch() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.TowerLaunch
+	return t.TowerLaunch
 }

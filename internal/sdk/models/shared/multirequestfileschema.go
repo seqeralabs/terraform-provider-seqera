@@ -7,27 +7,27 @@ type File struct {
 	Content  []byte `multipartForm:"content"`
 }
 
-func (o *File) GetFileName() string {
-	if o == nil {
+func (f *File) GetFileName() string {
+	if f == nil {
 		return ""
 	}
-	return o.FileName
+	return f.FileName
 }
 
-func (o *File) GetContent() []byte {
-	if o == nil {
+func (f *File) GetContent() []byte {
+	if f == nil {
 		return []byte{}
 	}
-	return o.Content
+	return f.Content
 }
 
 type MultiRequestFileSchema struct {
 	File *File `multipartForm:"file,name=file"`
 }
 
-func (o *MultiRequestFileSchema) GetFile() *File {
-	if o == nil {
+func (m *MultiRequestFileSchema) GetFile() *File {
+	if m == nil {
 		return nil
 	}
-	return o.File
+	return m.File
 }

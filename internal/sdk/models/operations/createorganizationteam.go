@@ -14,18 +14,18 @@ type CreateOrganizationTeamRequest struct {
 	CreateTeamRequest shared.CreateTeamRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateOrganizationTeamRequest) GetOrgID() int64 {
-	if o == nil {
+func (c *CreateOrganizationTeamRequest) GetOrgID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *CreateOrganizationTeamRequest) GetCreateTeamRequest() shared.CreateTeamRequest {
-	if o == nil {
+func (c *CreateOrganizationTeamRequest) GetCreateTeamRequest() shared.CreateTeamRequest {
+	if c == nil {
 		return shared.CreateTeamRequest{}
 	}
-	return o.CreateTeamRequest
+	return c.CreateTeamRequest
 }
 
 type CreateOrganizationTeamResponse struct {
@@ -41,37 +41,37 @@ type CreateOrganizationTeamResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateOrganizationTeamResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrganizationTeamResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrganizationTeamResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrganizationTeamResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrganizationTeamResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrganizationTeamResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrganizationTeamResponse) GetCreateTeamResponse() *shared.CreateTeamResponse {
-	if o == nil {
+func (c *CreateOrganizationTeamResponse) GetCreateTeamResponse() *shared.CreateTeamResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateTeamResponse
+	return c.CreateTeamResponse
 }
 
-func (o *CreateOrganizationTeamResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateOrganizationTeamResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

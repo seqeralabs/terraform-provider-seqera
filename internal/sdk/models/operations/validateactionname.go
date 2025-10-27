@@ -14,18 +14,18 @@ type ValidateActionNameRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *ValidateActionNameRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (v *ValidateActionNameRequest) GetWorkspaceID() *int64 {
+	if v == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return v.WorkspaceID
 }
 
-func (o *ValidateActionNameRequest) GetName() *string {
-	if o == nil {
+func (v *ValidateActionNameRequest) GetName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Name
+	return v.Name
 }
 
 type ValidateActionNameResponse struct {
@@ -39,30 +39,30 @@ type ValidateActionNameResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ValidateActionNameResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidateActionNameResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidateActionNameResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidateActionNameResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidateActionNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidateActionNameResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }
 
-func (o *ValidateActionNameResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (v *ValidateActionNameResponse) GetErrorResponse() *shared.ErrorResponse {
+	if v == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return v.ErrorResponse
 }

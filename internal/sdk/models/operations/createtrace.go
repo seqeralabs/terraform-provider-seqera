@@ -14,18 +14,18 @@ type CreateTraceRequest struct {
 	TraceCreateRequest shared.TraceCreateRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateTraceRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreateTraceRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateTraceRequest) GetTraceCreateRequest() shared.TraceCreateRequest {
-	if o == nil {
+func (c *CreateTraceRequest) GetTraceCreateRequest() shared.TraceCreateRequest {
+	if c == nil {
 		return shared.TraceCreateRequest{}
 	}
-	return o.TraceCreateRequest
+	return c.TraceCreateRequest
 }
 
 type CreateTraceResponse struct {
@@ -41,37 +41,37 @@ type CreateTraceResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateTraceResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateTraceResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateTraceResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateTraceResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateTraceResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateTraceResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateTraceResponse) GetTraceCreateResponse() *shared.TraceCreateResponse {
-	if o == nil {
+func (c *CreateTraceResponse) GetTraceCreateResponse() *shared.TraceCreateResponse {
+	if c == nil {
 		return nil
 	}
-	return o.TraceCreateResponse
+	return c.TraceCreateResponse
 }
 
-func (o *CreateTraceResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateTraceResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

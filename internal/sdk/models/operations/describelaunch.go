@@ -14,18 +14,18 @@ type DescribeLaunchRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeLaunchRequest) GetLaunchID() string {
-	if o == nil {
+func (d *DescribeLaunchRequest) GetLaunchID() string {
+	if d == nil {
 		return ""
 	}
-	return o.LaunchID
+	return d.LaunchID
 }
 
-func (o *DescribeLaunchRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeLaunchRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeLaunchResponse struct {
@@ -41,37 +41,37 @@ type DescribeLaunchResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeLaunchResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeLaunchResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeLaunchResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeLaunchResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeLaunchResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeLaunchResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeLaunchResponse) GetDescribeLaunchResponse() *shared.DescribeLaunchResponse {
-	if o == nil {
+func (d *DescribeLaunchResponse) GetDescribeLaunchResponse() *shared.DescribeLaunchResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeLaunchResponse
+	return d.DescribeLaunchResponse
 }
 
-func (o *DescribeLaunchResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeLaunchResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

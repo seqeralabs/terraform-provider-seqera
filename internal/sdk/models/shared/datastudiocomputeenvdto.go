@@ -11,44 +11,44 @@ type DataStudioComputeEnvDto struct {
 	WorkDir       *string `json:"workDir,omitempty"`
 }
 
-func (o *DataStudioComputeEnvDto) GetID() *string {
-	if o == nil {
+func (d *DataStudioComputeEnvDto) GetID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DataStudioComputeEnvDto) GetName() *string {
-	if o == nil {
+func (d *DataStudioComputeEnvDto) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataStudioComputeEnvDto) GetPlatform() *string {
-	if o == nil {
+func (d *DataStudioComputeEnvDto) GetPlatform() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Platform
+	return d.Platform
 }
 
-func (o *DataStudioComputeEnvDto) GetRegion() *string {
-	if o == nil {
+func (d *DataStudioComputeEnvDto) GetRegion() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Region
+	return d.Region
 }
 
-func (o *DataStudioComputeEnvDto) GetCredentialsID() *string {
-	if o == nil {
+func (d *DataStudioComputeEnvDto) GetCredentialsID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DataStudioComputeEnvDto) GetWorkDir() *string {
-	if o == nil {
+func (d *DataStudioComputeEnvDto) GetWorkDir() *string {
+	if d == nil {
 		return nil
 	}
-	return o.WorkDir
+	return d.WorkDir
 }

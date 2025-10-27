@@ -16,25 +16,25 @@ type UpdateAzureCredentialsRequest struct {
 	UpdateAzureCredentialsRequest shared.UpdateAzureCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateAzureCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (u *UpdateAzureCredentialsRequest) GetCredentialsID() string {
+	if u == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return u.CredentialsID
 }
 
-func (o *UpdateAzureCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateAzureCredentialsRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateAzureCredentialsRequest) GetUpdateAzureCredentialsRequest() shared.UpdateAzureCredentialsRequest {
-	if o == nil {
+func (u *UpdateAzureCredentialsRequest) GetUpdateAzureCredentialsRequest() shared.UpdateAzureCredentialsRequest {
+	if u == nil {
 		return shared.UpdateAzureCredentialsRequest{}
 	}
-	return o.UpdateAzureCredentialsRequest
+	return u.UpdateAzureCredentialsRequest
 }
 
 type UpdateAzureCredentialsResponse struct {
@@ -48,30 +48,30 @@ type UpdateAzureCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateAzureCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateAzureCredentialsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateAzureCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateAzureCredentialsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateAzureCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateAzureCredentialsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateAzureCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

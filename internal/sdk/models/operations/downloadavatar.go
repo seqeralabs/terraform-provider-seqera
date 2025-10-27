@@ -12,11 +12,11 @@ type DownloadAvatarRequest struct {
 	AvatarID string `pathParam:"style=simple,explode=false,name=avatarId"`
 }
 
-func (o *DownloadAvatarRequest) GetAvatarID() string {
-	if o == nil {
+func (d *DownloadAvatarRequest) GetAvatarID() string {
+	if d == nil {
 		return ""
 	}
-	return o.AvatarID
+	return d.AvatarID
 }
 
 type DownloadAvatarResponse struct {
@@ -32,37 +32,37 @@ type DownloadAvatarResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DownloadAvatarResponse) GetContentType() string {
-	if o == nil {
+func (d *DownloadAvatarResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DownloadAvatarResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DownloadAvatarResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DownloadAvatarResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DownloadAvatarResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DownloadAvatarResponse) GetBytes() []byte {
-	if o == nil {
+func (d *DownloadAvatarResponse) GetBytes() []byte {
+	if d == nil {
 		return nil
 	}
-	return o.Bytes
+	return d.Bytes
 }
 
-func (o *DownloadAvatarResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DownloadAvatarResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

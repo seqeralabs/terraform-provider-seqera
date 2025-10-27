@@ -6,9 +6,9 @@ type NavbarConfig struct {
 	Menus []NavbarConfigNavbarMenu `json:"menus,omitempty"`
 }
 
-func (o *NavbarConfig) GetMenus() []NavbarConfigNavbarMenu {
-	if o == nil {
+func (n *NavbarConfig) GetMenus() []NavbarConfigNavbarMenu {
+	if n == nil {
 		return nil
 	}
-	return o.Menus
+	return n.Menus
 }

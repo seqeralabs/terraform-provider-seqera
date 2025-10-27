@@ -11,44 +11,44 @@ type DataStudioConfiguration struct {
 	LifespanHours    *int     `json:"lifespanHours,omitempty"`
 }
 
-func (o *DataStudioConfiguration) GetGpu() *int {
-	if o == nil {
+func (d *DataStudioConfiguration) GetGpu() *int {
+	if d == nil {
 		return nil
 	}
-	return o.Gpu
+	return d.Gpu
 }
 
-func (o *DataStudioConfiguration) GetCPU() *int {
-	if o == nil {
+func (d *DataStudioConfiguration) GetCPU() *int {
+	if d == nil {
 		return nil
 	}
-	return o.CPU
+	return d.CPU
 }
 
-func (o *DataStudioConfiguration) GetMemory() *int {
-	if o == nil {
+func (d *DataStudioConfiguration) GetMemory() *int {
+	if d == nil {
 		return nil
 	}
-	return o.Memory
+	return d.Memory
 }
 
-func (o *DataStudioConfiguration) GetMountData() []string {
-	if o == nil {
+func (d *DataStudioConfiguration) GetMountData() []string {
+	if d == nil {
 		return nil
 	}
-	return o.MountData
+	return d.MountData
 }
 
-func (o *DataStudioConfiguration) GetCondaEnvironment() *string {
-	if o == nil {
+func (d *DataStudioConfiguration) GetCondaEnvironment() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CondaEnvironment
+	return d.CondaEnvironment
 }
 
-func (o *DataStudioConfiguration) GetLifespanHours() *int {
-	if o == nil {
+func (d *DataStudioConfiguration) GetLifespanHours() *int {
+	if d == nil {
 		return nil
 	}
-	return o.LifespanHours
+	return d.LifespanHours
 }

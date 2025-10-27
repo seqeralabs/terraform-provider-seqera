@@ -16,25 +16,25 @@ type DescribeActionRequest struct {
 	Attributes []shared.ActionQueryAttribute `queryParam:"style=form,explode=true,name=attributes"`
 }
 
-func (o *DescribeActionRequest) GetActionID() string {
-	if o == nil {
+func (d *DescribeActionRequest) GetActionID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ActionID
+	return d.ActionID
 }
 
-func (o *DescribeActionRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeActionRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribeActionRequest) GetAttributes() []shared.ActionQueryAttribute {
-	if o == nil {
+func (d *DescribeActionRequest) GetAttributes() []shared.ActionQueryAttribute {
+	if d == nil {
 		return nil
 	}
-	return o.Attributes
+	return d.Attributes
 }
 
 type DescribeActionResponse struct {
@@ -50,37 +50,37 @@ type DescribeActionResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeActionResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeActionResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeActionResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeActionResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeActionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeActionResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeActionResponse) GetDescribeActionResponse() *shared.DescribeActionResponse {
-	if o == nil {
+func (d *DescribeActionResponse) GetDescribeActionResponse() *shared.DescribeActionResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeActionResponse
+	return d.DescribeActionResponse
 }
 
-func (o *DescribeActionResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeActionResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

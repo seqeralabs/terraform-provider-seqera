@@ -20,37 +20,37 @@ type InfoResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *InfoResponse) GetContentType() string {
-	if o == nil {
+func (i *InfoResponse) GetContentType() string {
+	if i == nil {
 		return ""
 	}
-	return o.ContentType
+	return i.ContentType
 }
 
-func (o *InfoResponse) GetStatusCode() int {
-	if o == nil {
+func (i *InfoResponse) GetStatusCode() int {
+	if i == nil {
 		return 0
 	}
-	return o.StatusCode
+	return i.StatusCode
 }
 
-func (o *InfoResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (i *InfoResponse) GetRawResponse() *http.Response {
+	if i == nil {
 		return nil
 	}
-	return o.RawResponse
+	return i.RawResponse
 }
 
-func (o *InfoResponse) GetServiceInfoResponse() *shared.ServiceInfoResponse {
-	if o == nil {
+func (i *InfoResponse) GetServiceInfoResponse() *shared.ServiceInfoResponse {
+	if i == nil {
 		return nil
 	}
-	return o.ServiceInfoResponse
+	return i.ServiceInfoResponse
 }
 
-func (o *InfoResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (i *InfoResponse) GetErrorResponse() *shared.ErrorResponse {
+	if i == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return i.ErrorResponse
 }

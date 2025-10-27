@@ -10,9 +10,9 @@ type CreateTeamResponse struct {
 	Team *TeamDbDto `json:"team,omitempty"`
 }
 
-func (o *CreateTeamResponse) GetTeam() *TeamDbDto {
-	if o == nil {
+func (c *CreateTeamResponse) GetTeam() *TeamDbDto {
+	if c == nil {
 		return nil
 	}
-	return o.Team
+	return c.Team
 }

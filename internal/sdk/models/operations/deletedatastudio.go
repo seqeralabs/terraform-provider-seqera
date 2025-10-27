@@ -14,18 +14,18 @@ type DeleteDataStudioRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DeleteDataStudioRequest) GetSessionID() string {
-	if o == nil {
+func (d *DeleteDataStudioRequest) GetSessionID() string {
+	if d == nil {
 		return ""
 	}
-	return o.SessionID
+	return d.SessionID
 }
 
-func (o *DeleteDataStudioRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteDataStudioRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DeleteDataStudioResponse struct {
@@ -39,30 +39,30 @@ type DeleteDataStudioResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteDataStudioResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteDataStudioResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteDataStudioResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteDataStudioResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteDataStudioResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteDataStudioResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

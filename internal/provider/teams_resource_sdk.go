@@ -10,6 +10,36 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *TeamsResourceModel) RefreshFromSharedCreateTeamResponse(ctx context.Context, resp *shared.CreateTeamResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedTeamDbDto(ctx, resp.Team)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *TeamsResourceModel) RefreshFromSharedDescribeTeamResponse(ctx context.Context, resp *shared.DescribeTeamResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedTeamDbDto(ctx, resp.Team)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *TeamsResourceModel) RefreshFromSharedTeamDbDto(ctx context.Context, resp *shared.TeamDbDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 

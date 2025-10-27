@@ -13,18 +13,18 @@ type ValidateDataStudioNameRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *ValidateDataStudioNameRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (v *ValidateDataStudioNameRequest) GetWorkspaceID() *int64 {
+	if v == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return v.WorkspaceID
 }
 
-func (o *ValidateDataStudioNameRequest) GetName() *string {
-	if o == nil {
+func (v *ValidateDataStudioNameRequest) GetName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Name
+	return v.Name
 }
 
 type ValidateDataStudioNameResponse struct {
@@ -36,23 +36,23 @@ type ValidateDataStudioNameResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *ValidateDataStudioNameResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidateDataStudioNameResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidateDataStudioNameResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidateDataStudioNameResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidateDataStudioNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidateDataStudioNameResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }

@@ -6,9 +6,9 @@ type DescribeWorkflowLaunchResponse struct {
 	Launch *WorkflowLaunchResponse `json:"launch,omitempty"`
 }
 
-func (o *DescribeWorkflowLaunchResponse) GetLaunch() *WorkflowLaunchResponse {
-	if o == nil {
+func (d *DescribeWorkflowLaunchResponse) GetLaunch() *WorkflowLaunchResponse {
+	if d == nil {
 		return nil
 	}
-	return o.Launch
+	return d.Launch
 }

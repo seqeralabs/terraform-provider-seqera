@@ -26,25 +26,25 @@ func (s *SeqeraComputeSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SeqeraComputeSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (s *SeqeraComputeSecurityKeysOutput) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SeqeraComputeSecurityKeysOutput) GetAccessKey() *string {
-	if o == nil {
+func (s *SeqeraComputeSecurityKeysOutput) GetAccessKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AccessKey
+	return s.AccessKey
 }
 
-func (o *SeqeraComputeSecurityKeysOutput) GetAssumeRoleArn() *string {
-	if o == nil {
+func (s *SeqeraComputeSecurityKeysOutput) GetAssumeRoleArn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return s.AssumeRoleArn
 }
 
 type AzureEntraKeysOutput struct {
@@ -66,39 +66,39 @@ func (a *AzureEntraKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureEntraKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzureEntraKeysOutput) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzureEntraKeysOutput) GetBatchName() *string {
-	if o == nil {
+func (a *AzureEntraKeysOutput) GetBatchName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BatchName
+	return a.BatchName
 }
 
-func (o *AzureEntraKeysOutput) GetStorageName() *string {
-	if o == nil {
+func (a *AzureEntraKeysOutput) GetStorageName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageName
+	return a.StorageName
 }
 
-func (o *AzureEntraKeysOutput) GetTenantID() *string {
-	if o == nil {
+func (a *AzureEntraKeysOutput) GetTenantID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.TenantID
+	return a.TenantID
 }
 
-func (o *AzureEntraKeysOutput) GetClientID() *string {
-	if o == nil {
+func (a *AzureEntraKeysOutput) GetClientID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ClientID
+	return a.ClientID
 }
 
 type CodeCommitSecurityKeysOutput struct {
@@ -117,18 +117,18 @@ func (c *CodeCommitSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CodeCommitSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (c *CodeCommitSecurityKeysOutput) GetDiscriminator() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Discriminator
+	return c.Discriminator
 }
 
-func (o *CodeCommitSecurityKeysOutput) GetUsername() *string {
-	if o == nil {
+func (c *CodeCommitSecurityKeysOutput) GetUsername() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Username
+	return c.Username
 }
 
 type AgentSecurityKeys struct {
@@ -149,32 +149,32 @@ func (a *AgentSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AgentSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (a *AgentSecurityKeys) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AgentSecurityKeys) GetConnectionID() *string {
-	if o == nil {
+func (a *AgentSecurityKeys) GetConnectionID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ConnectionID
+	return a.ConnectionID
 }
 
-func (o *AgentSecurityKeys) GetWorkDir() *string {
-	if o == nil {
+func (a *AgentSecurityKeys) GetWorkDir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkDir
+	return a.WorkDir
 }
 
-func (o *AgentSecurityKeys) GetShared() *bool {
-	if o == nil {
+func (a *AgentSecurityKeys) GetShared() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Shared
+	return a.Shared
 }
 
 type ContainerRegistryKeysOutput struct {
@@ -194,25 +194,25 @@ func (c *ContainerRegistryKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ContainerRegistryKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (c *ContainerRegistryKeysOutput) GetDiscriminator() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Discriminator
+	return c.Discriminator
 }
 
-func (o *ContainerRegistryKeysOutput) GetUserName() *string {
-	if o == nil {
+func (c *ContainerRegistryKeysOutput) GetUserName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UserName
+	return c.UserName
 }
 
-func (o *ContainerRegistryKeysOutput) GetRegistry() *string {
-	if o == nil {
+func (c *ContainerRegistryKeysOutput) GetRegistry() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Registry
+	return c.Registry
 }
 
 type AzureReposSecurityKeysOutput struct {
@@ -231,18 +231,18 @@ func (a *AzureReposSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureReposSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzureReposSecurityKeysOutput) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzureReposSecurityKeysOutput) GetUsername() *string {
-	if o == nil {
+func (a *AzureReposSecurityKeysOutput) GetUsername() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Username
+	return a.Username
 }
 
 type SecurityKeysAzureSecurityKeysOutput struct {
@@ -262,25 +262,25 @@ func (s *SecurityKeysAzureSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SecurityKeysAzureSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeysOutput) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SecurityKeysAzureSecurityKeysOutput) GetBatchName() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeysOutput) GetBatchName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BatchName
+	return s.BatchName
 }
 
-func (o *SecurityKeysAzureSecurityKeysOutput) GetStorageName() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeysOutput) GetStorageName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.StorageName
+	return s.StorageName
 }
 
 type K8sSecurityKeysOutput struct {
@@ -299,18 +299,18 @@ func (k *K8sSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *K8sSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (k *K8sSecurityKeysOutput) GetDiscriminator() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Discriminator
+	return k.Discriminator
 }
 
-func (o *K8sSecurityKeysOutput) GetCertificate() *string {
-	if o == nil {
+func (k *K8sSecurityKeysOutput) GetCertificate() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Certificate
+	return k.Certificate
 }
 
 type SSHSecurityKeysOutput struct {
@@ -328,11 +328,11 @@ func (s *SSHSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SSHSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (s *SSHSecurityKeysOutput) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
 type GiteaSecurityKeysOutput struct {
@@ -351,18 +351,18 @@ func (g *GiteaSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GiteaSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (g *GiteaSecurityKeysOutput) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GiteaSecurityKeysOutput) GetUsername() *string {
-	if o == nil {
+func (g *GiteaSecurityKeysOutput) GetUsername() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Username
+	return g.Username
 }
 
 type BitBucketSecurityKeysOutput struct {
@@ -381,18 +381,18 @@ func (b *BitBucketSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *BitBucketSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (b *BitBucketSecurityKeysOutput) GetDiscriminator() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Discriminator
+	return b.Discriminator
 }
 
-func (o *BitBucketSecurityKeysOutput) GetUsername() *string {
-	if o == nil {
+func (b *BitBucketSecurityKeysOutput) GetUsername() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Username
+	return b.Username
 }
 
 type GitLabSecurityKeysOutput struct {
@@ -411,18 +411,18 @@ func (g *GitLabSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GitLabSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (g *GitLabSecurityKeysOutput) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GitLabSecurityKeysOutput) GetUsername() *string {
-	if o == nil {
+func (g *GitLabSecurityKeysOutput) GetUsername() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Username
+	return g.Username
 }
 
 type GitHubSecurityKeysOutput struct {
@@ -441,18 +441,18 @@ func (g *GitHubSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GitHubSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (g *GitHubSecurityKeysOutput) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GitHubSecurityKeysOutput) GetUsername() *string {
-	if o == nil {
+func (g *GitHubSecurityKeysOutput) GetUsername() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Username
+	return g.Username
 }
 
 type SecurityKeysGoogleSecurityKeysOutput struct {
@@ -470,11 +470,11 @@ func (s *SecurityKeysGoogleSecurityKeysOutput) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
-func (o *SecurityKeysGoogleSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (s *SecurityKeysGoogleSecurityKeysOutput) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
 type SecurityKeysAwsSecurityKeysOutput struct {
@@ -494,25 +494,25 @@ func (s *SecurityKeysAwsSecurityKeysOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SecurityKeysAwsSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (s *SecurityKeysAwsSecurityKeysOutput) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SecurityKeysAwsSecurityKeysOutput) GetAccessKey() *string {
-	if o == nil {
+func (s *SecurityKeysAwsSecurityKeysOutput) GetAccessKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AccessKey
+	return s.AccessKey
 }
 
-func (o *SecurityKeysAwsSecurityKeysOutput) GetAssumeRoleArn() *string {
-	if o == nil {
+func (s *SecurityKeysAwsSecurityKeysOutput) GetAssumeRoleArn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return s.AssumeRoleArn
 }
 
 type SecurityKeysOutputType string
@@ -536,21 +536,21 @@ const (
 )
 
 type SecurityKeysOutput struct {
-	SecurityKeysAwsSecurityKeysOutput    *SecurityKeysAwsSecurityKeysOutput    `queryParam:"inline"`
-	SecurityKeysGoogleSecurityKeysOutput *SecurityKeysGoogleSecurityKeysOutput `queryParam:"inline"`
-	GitHubSecurityKeysOutput             *GitHubSecurityKeysOutput             `queryParam:"inline"`
-	GitLabSecurityKeysOutput             *GitLabSecurityKeysOutput             `queryParam:"inline"`
-	BitBucketSecurityKeysOutput          *BitBucketSecurityKeysOutput          `queryParam:"inline"`
-	GiteaSecurityKeysOutput              *GiteaSecurityKeysOutput              `queryParam:"inline"`
-	SSHSecurityKeysOutput                *SSHSecurityKeysOutput                `queryParam:"inline"`
-	K8sSecurityKeysOutput                *K8sSecurityKeysOutput                `queryParam:"inline"`
-	SecurityKeysAzureSecurityKeysOutput  *SecurityKeysAzureSecurityKeysOutput  `queryParam:"inline"`
-	AzureReposSecurityKeysOutput         *AzureReposSecurityKeysOutput         `queryParam:"inline"`
-	ContainerRegistryKeysOutput          *ContainerRegistryKeysOutput          `queryParam:"inline"`
-	AgentSecurityKeys                    *AgentSecurityKeys                    `queryParam:"inline"`
-	CodeCommitSecurityKeysOutput         *CodeCommitSecurityKeysOutput         `queryParam:"inline"`
-	AzureEntraKeysOutput                 *AzureEntraKeysOutput                 `queryParam:"inline"`
-	SeqeraComputeSecurityKeysOutput      *SeqeraComputeSecurityKeysOutput      `queryParam:"inline"`
+	SecurityKeysAwsSecurityKeysOutput    *SecurityKeysAwsSecurityKeysOutput    `queryParam:"inline,name=SecurityKeys"`
+	SecurityKeysGoogleSecurityKeysOutput *SecurityKeysGoogleSecurityKeysOutput `queryParam:"inline,name=SecurityKeys"`
+	GitHubSecurityKeysOutput             *GitHubSecurityKeysOutput             `queryParam:"inline,name=SecurityKeys"`
+	GitLabSecurityKeysOutput             *GitLabSecurityKeysOutput             `queryParam:"inline,name=SecurityKeys"`
+	BitBucketSecurityKeysOutput          *BitBucketSecurityKeysOutput          `queryParam:"inline,name=SecurityKeys"`
+	GiteaSecurityKeysOutput              *GiteaSecurityKeysOutput              `queryParam:"inline,name=SecurityKeys"`
+	SSHSecurityKeysOutput                *SSHSecurityKeysOutput                `queryParam:"inline,name=SecurityKeys"`
+	K8sSecurityKeysOutput                *K8sSecurityKeysOutput                `queryParam:"inline,name=SecurityKeys"`
+	SecurityKeysAzureSecurityKeysOutput  *SecurityKeysAzureSecurityKeysOutput  `queryParam:"inline,name=SecurityKeys"`
+	AzureReposSecurityKeysOutput         *AzureReposSecurityKeysOutput         `queryParam:"inline,name=SecurityKeys"`
+	ContainerRegistryKeysOutput          *ContainerRegistryKeysOutput          `queryParam:"inline,name=SecurityKeys"`
+	AgentSecurityKeys                    *AgentSecurityKeys                    `queryParam:"inline,name=SecurityKeys"`
+	CodeCommitSecurityKeysOutput         *CodeCommitSecurityKeysOutput         `queryParam:"inline,name=SecurityKeys"`
+	AzureEntraKeysOutput                 *AzureEntraKeysOutput                 `queryParam:"inline,name=SecurityKeys"`
+	SeqeraComputeSecurityKeysOutput      *SeqeraComputeSecurityKeysOutput      `queryParam:"inline,name=SecurityKeys"`
 
 	Type SecurityKeysOutputType
 }
@@ -969,32 +969,32 @@ func (s *SeqeraComputeSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SeqeraComputeSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (s *SeqeraComputeSecurityKeys) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SeqeraComputeSecurityKeys) GetAccessKey() *string {
-	if o == nil {
+func (s *SeqeraComputeSecurityKeys) GetAccessKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AccessKey
+	return s.AccessKey
 }
 
-func (o *SeqeraComputeSecurityKeys) GetSecretKey() *string {
-	if o == nil {
+func (s *SeqeraComputeSecurityKeys) GetSecretKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.SecretKey
+	return s.SecretKey
 }
 
-func (o *SeqeraComputeSecurityKeys) GetAssumeRoleArn() *string {
-	if o == nil {
+func (s *SeqeraComputeSecurityKeys) GetAssumeRoleArn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return s.AssumeRoleArn
 }
 
 type AzureEntraKeys struct {
@@ -1019,60 +1019,60 @@ func (a *AzureEntraKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureEntraKeys) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzureEntraKeys) GetBatchName() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetBatchName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BatchName
+	return a.BatchName
 }
 
-func (o *AzureEntraKeys) GetStorageName() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetStorageName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageName
+	return a.StorageName
 }
 
-func (o *AzureEntraKeys) GetBatchKey() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetBatchKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BatchKey
+	return a.BatchKey
 }
 
-func (o *AzureEntraKeys) GetStorageKey() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetStorageKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageKey
+	return a.StorageKey
 }
 
-func (o *AzureEntraKeys) GetTenantID() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetTenantID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.TenantID
+	return a.TenantID
 }
 
-func (o *AzureEntraKeys) GetClientID() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetClientID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ClientID
+	return a.ClientID
 }
 
-func (o *AzureEntraKeys) GetClientSecret() *string {
-	if o == nil {
+func (a *AzureEntraKeys) GetClientSecret() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ClientSecret
+	return a.ClientSecret
 }
 
 type CodeCommitSecurityKeys struct {
@@ -1092,25 +1092,25 @@ func (c *CodeCommitSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CodeCommitSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (c *CodeCommitSecurityKeys) GetDiscriminator() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Discriminator
+	return c.Discriminator
 }
 
-func (o *CodeCommitSecurityKeys) GetUsername() *string {
-	if o == nil {
+func (c *CodeCommitSecurityKeys) GetUsername() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Username
+	return c.Username
 }
 
-func (o *CodeCommitSecurityKeys) GetPassword() *string {
-	if o == nil {
+func (c *CodeCommitSecurityKeys) GetPassword() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Password
+	return c.Password
 }
 
 type ContainerRegistryKeys struct {
@@ -1131,32 +1131,32 @@ func (c *ContainerRegistryKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ContainerRegistryKeys) GetDiscriminator() *string {
-	if o == nil {
+func (c *ContainerRegistryKeys) GetDiscriminator() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Discriminator
+	return c.Discriminator
 }
 
-func (o *ContainerRegistryKeys) GetUserName() *string {
-	if o == nil {
+func (c *ContainerRegistryKeys) GetUserName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UserName
+	return c.UserName
 }
 
-func (o *ContainerRegistryKeys) GetPassword() *string {
-	if o == nil {
+func (c *ContainerRegistryKeys) GetPassword() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Password
+	return c.Password
 }
 
-func (o *ContainerRegistryKeys) GetRegistry() *string {
-	if o == nil {
+func (c *ContainerRegistryKeys) GetRegistry() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Registry
+	return c.Registry
 }
 
 type AzureReposSecurityKeys struct {
@@ -1176,25 +1176,25 @@ func (a *AzureReposSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureReposSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzureReposSecurityKeys) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzureReposSecurityKeys) GetUsername() *string {
-	if o == nil {
+func (a *AzureReposSecurityKeys) GetUsername() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Username
+	return a.Username
 }
 
-func (o *AzureReposSecurityKeys) GetPassword() *string {
-	if o == nil {
+func (a *AzureReposSecurityKeys) GetPassword() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Password
+	return a.Password
 }
 
 type SecurityKeysAzureSecurityKeys struct {
@@ -1216,39 +1216,39 @@ func (s *SecurityKeysAzureSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SecurityKeysAzureSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeys) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SecurityKeysAzureSecurityKeys) GetBatchName() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeys) GetBatchName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BatchName
+	return s.BatchName
 }
 
-func (o *SecurityKeysAzureSecurityKeys) GetStorageName() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeys) GetStorageName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.StorageName
+	return s.StorageName
 }
 
-func (o *SecurityKeysAzureSecurityKeys) GetBatchKey() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeys) GetBatchKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BatchKey
+	return s.BatchKey
 }
 
-func (o *SecurityKeysAzureSecurityKeys) GetStorageKey() *string {
-	if o == nil {
+func (s *SecurityKeysAzureSecurityKeys) GetStorageKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.StorageKey
+	return s.StorageKey
 }
 
 type K8sSecurityKeys struct {
@@ -1269,32 +1269,32 @@ func (k *K8sSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *K8sSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (k *K8sSecurityKeys) GetDiscriminator() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Discriminator
+	return k.Discriminator
 }
 
-func (o *K8sSecurityKeys) GetCertificate() *string {
-	if o == nil {
+func (k *K8sSecurityKeys) GetCertificate() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Certificate
+	return k.Certificate
 }
 
-func (o *K8sSecurityKeys) GetPrivateKey() *string {
-	if o == nil {
+func (k *K8sSecurityKeys) GetPrivateKey() *string {
+	if k == nil {
 		return nil
 	}
-	return o.PrivateKey
+	return k.PrivateKey
 }
 
-func (o *K8sSecurityKeys) GetToken() *string {
-	if o == nil {
+func (k *K8sSecurityKeys) GetToken() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Token
+	return k.Token
 }
 
 type SSHSecurityKeys struct {
@@ -1314,25 +1314,25 @@ func (s *SSHSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SSHSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (s *SSHSecurityKeys) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SSHSecurityKeys) GetPrivateKey() *string {
-	if o == nil {
+func (s *SSHSecurityKeys) GetPrivateKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PrivateKey
+	return s.PrivateKey
 }
 
-func (o *SSHSecurityKeys) GetPassphrase() *string {
-	if o == nil {
+func (s *SSHSecurityKeys) GetPassphrase() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Passphrase
+	return s.Passphrase
 }
 
 type GiteaSecurityKeys struct {
@@ -1352,25 +1352,25 @@ func (g *GiteaSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GiteaSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (g *GiteaSecurityKeys) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GiteaSecurityKeys) GetUsername() *string {
-	if o == nil {
+func (g *GiteaSecurityKeys) GetUsername() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Username
+	return g.Username
 }
 
-func (o *GiteaSecurityKeys) GetPassword() *string {
-	if o == nil {
+func (g *GiteaSecurityKeys) GetPassword() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Password
+	return g.Password
 }
 
 type BitBucketSecurityKeys struct {
@@ -1390,25 +1390,25 @@ func (b *BitBucketSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *BitBucketSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (b *BitBucketSecurityKeys) GetDiscriminator() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Discriminator
+	return b.Discriminator
 }
 
-func (o *BitBucketSecurityKeys) GetUsername() *string {
-	if o == nil {
+func (b *BitBucketSecurityKeys) GetUsername() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Username
+	return b.Username
 }
 
-func (o *BitBucketSecurityKeys) GetPassword() *string {
-	if o == nil {
+func (b *BitBucketSecurityKeys) GetPassword() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Password
+	return b.Password
 }
 
 type GitLabSecurityKeys struct {
@@ -1429,32 +1429,32 @@ func (g *GitLabSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GitLabSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (g *GitLabSecurityKeys) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GitLabSecurityKeys) GetUsername() *string {
-	if o == nil {
+func (g *GitLabSecurityKeys) GetUsername() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Username
+	return g.Username
 }
 
-func (o *GitLabSecurityKeys) GetPassword() *string {
-	if o == nil {
+func (g *GitLabSecurityKeys) GetPassword() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Password
+	return g.Password
 }
 
-func (o *GitLabSecurityKeys) GetToken() *string {
-	if o == nil {
+func (g *GitLabSecurityKeys) GetToken() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Token
+	return g.Token
 }
 
 type GitHubSecurityKeys struct {
@@ -1474,25 +1474,25 @@ func (g *GitHubSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GitHubSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (g *GitHubSecurityKeys) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GitHubSecurityKeys) GetUsername() *string {
-	if o == nil {
+func (g *GitHubSecurityKeys) GetUsername() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Username
+	return g.Username
 }
 
-func (o *GitHubSecurityKeys) GetPassword() *string {
-	if o == nil {
+func (g *GitHubSecurityKeys) GetPassword() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Password
+	return g.Password
 }
 
 type SecurityKeysGoogleSecurityKeys struct {
@@ -1511,18 +1511,18 @@ func (s *SecurityKeysGoogleSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SecurityKeysGoogleSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (s *SecurityKeysGoogleSecurityKeys) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SecurityKeysGoogleSecurityKeys) GetData() *string {
-	if o == nil {
+func (s *SecurityKeysGoogleSecurityKeys) GetData() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Data
+	return s.Data
 }
 
 type SecurityKeysAwsSecurityKeys struct {
@@ -1543,32 +1543,32 @@ func (s *SecurityKeysAwsSecurityKeys) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SecurityKeysAwsSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (s *SecurityKeysAwsSecurityKeys) GetDiscriminator() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Discriminator
+	return s.Discriminator
 }
 
-func (o *SecurityKeysAwsSecurityKeys) GetAccessKey() *string {
-	if o == nil {
+func (s *SecurityKeysAwsSecurityKeys) GetAccessKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AccessKey
+	return s.AccessKey
 }
 
-func (o *SecurityKeysAwsSecurityKeys) GetSecretKey() *string {
-	if o == nil {
+func (s *SecurityKeysAwsSecurityKeys) GetSecretKey() *string {
+	if s == nil {
 		return nil
 	}
-	return o.SecretKey
+	return s.SecretKey
 }
 
-func (o *SecurityKeysAwsSecurityKeys) GetAssumeRoleArn() *string {
-	if o == nil {
+func (s *SecurityKeysAwsSecurityKeys) GetAssumeRoleArn() *string {
+	if s == nil {
 		return nil
 	}
-	return o.AssumeRoleArn
+	return s.AssumeRoleArn
 }
 
 type SecurityKeysType string
@@ -1592,21 +1592,21 @@ const (
 )
 
 type SecurityKeys struct {
-	SecurityKeysAwsSecurityKeys    *SecurityKeysAwsSecurityKeys    `queryParam:"inline"`
-	SecurityKeysGoogleSecurityKeys *SecurityKeysGoogleSecurityKeys `queryParam:"inline"`
-	GitHubSecurityKeys             *GitHubSecurityKeys             `queryParam:"inline"`
-	GitLabSecurityKeys             *GitLabSecurityKeys             `queryParam:"inline"`
-	BitBucketSecurityKeys          *BitBucketSecurityKeys          `queryParam:"inline"`
-	GiteaSecurityKeys              *GiteaSecurityKeys              `queryParam:"inline"`
-	SSHSecurityKeys                *SSHSecurityKeys                `queryParam:"inline"`
-	K8sSecurityKeys                *K8sSecurityKeys                `queryParam:"inline"`
-	SecurityKeysAzureSecurityKeys  *SecurityKeysAzureSecurityKeys  `queryParam:"inline"`
-	AzureReposSecurityKeys         *AzureReposSecurityKeys         `queryParam:"inline"`
-	ContainerRegistryKeys          *ContainerRegistryKeys          `queryParam:"inline"`
-	AgentSecurityKeys              *AgentSecurityKeys              `queryParam:"inline"`
-	CodeCommitSecurityKeys         *CodeCommitSecurityKeys         `queryParam:"inline"`
-	AzureEntraKeys                 *AzureEntraKeys                 `queryParam:"inline"`
-	SeqeraComputeSecurityKeys      *SeqeraComputeSecurityKeys      `queryParam:"inline"`
+	SecurityKeysAwsSecurityKeys    *SecurityKeysAwsSecurityKeys    `queryParam:"inline,name=SecurityKeys"`
+	SecurityKeysGoogleSecurityKeys *SecurityKeysGoogleSecurityKeys `queryParam:"inline,name=SecurityKeys"`
+	GitHubSecurityKeys             *GitHubSecurityKeys             `queryParam:"inline,name=SecurityKeys"`
+	GitLabSecurityKeys             *GitLabSecurityKeys             `queryParam:"inline,name=SecurityKeys"`
+	BitBucketSecurityKeys          *BitBucketSecurityKeys          `queryParam:"inline,name=SecurityKeys"`
+	GiteaSecurityKeys              *GiteaSecurityKeys              `queryParam:"inline,name=SecurityKeys"`
+	SSHSecurityKeys                *SSHSecurityKeys                `queryParam:"inline,name=SecurityKeys"`
+	K8sSecurityKeys                *K8sSecurityKeys                `queryParam:"inline,name=SecurityKeys"`
+	SecurityKeysAzureSecurityKeys  *SecurityKeysAzureSecurityKeys  `queryParam:"inline,name=SecurityKeys"`
+	AzureReposSecurityKeys         *AzureReposSecurityKeys         `queryParam:"inline,name=SecurityKeys"`
+	ContainerRegistryKeys          *ContainerRegistryKeys          `queryParam:"inline,name=SecurityKeys"`
+	AgentSecurityKeys              *AgentSecurityKeys              `queryParam:"inline,name=SecurityKeys"`
+	CodeCommitSecurityKeys         *CodeCommitSecurityKeys         `queryParam:"inline,name=SecurityKeys"`
+	AzureEntraKeys                 *AzureEntraKeys                 `queryParam:"inline,name=SecurityKeys"`
+	SeqeraComputeSecurityKeys      *SeqeraComputeSecurityKeys      `queryParam:"inline,name=SecurityKeys"`
 
 	Type SecurityKeysType
 }

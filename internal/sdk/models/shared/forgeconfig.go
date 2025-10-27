@@ -110,212 +110,212 @@ func (f *ForgeConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ForgeConfig) GetType() ForgeConfigType {
-	if o == nil {
+func (f *ForgeConfig) GetType() ForgeConfigType {
+	if f == nil {
 		return ForgeConfigType("")
 	}
-	return o.Type
+	return f.Type
 }
 
-func (o *ForgeConfig) GetMinCpus() int {
-	if o == nil {
+func (f *ForgeConfig) GetMinCpus() int {
+	if f == nil {
 		return 0
 	}
-	return o.MinCpus
+	return f.MinCpus
 }
 
-func (o *ForgeConfig) GetMaxCpus() int {
-	if o == nil {
+func (f *ForgeConfig) GetMaxCpus() int {
+	if f == nil {
 		return 0
 	}
-	return o.MaxCpus
+	return f.MaxCpus
 }
 
-func (o *ForgeConfig) GetGpuEnabled() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetGpuEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.GpuEnabled
+	return f.GpuEnabled
 }
 
-func (o *ForgeConfig) GetEbsAutoScale() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetEbsAutoScale() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.EbsAutoScale
+	return f.EbsAutoScale
 }
 
-func (o *ForgeConfig) GetInstanceTypes() []string {
-	if o == nil {
+func (f *ForgeConfig) GetInstanceTypes() []string {
+	if f == nil {
 		return nil
 	}
-	return o.InstanceTypes
+	return f.InstanceTypes
 }
 
-func (o *ForgeConfig) GetAllocStrategy() *AllocStrategy {
-	if o == nil {
+func (f *ForgeConfig) GetAllocStrategy() *AllocStrategy {
+	if f == nil {
 		return nil
 	}
-	return o.AllocStrategy
+	return f.AllocStrategy
 }
 
-func (o *ForgeConfig) GetImageID() *string {
-	if o == nil {
+func (f *ForgeConfig) GetImageID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.ImageID
+	return f.ImageID
 }
 
-func (o *ForgeConfig) GetVpcID() *string {
-	if o == nil {
+func (f *ForgeConfig) GetVpcID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.VpcID
+	return f.VpcID
 }
 
-func (o *ForgeConfig) GetSubnets() []string {
-	if o == nil {
+func (f *ForgeConfig) GetSubnets() []string {
+	if f == nil {
 		return nil
 	}
-	return o.Subnets
+	return f.Subnets
 }
 
-func (o *ForgeConfig) GetSecurityGroups() []string {
-	if o == nil {
+func (f *ForgeConfig) GetSecurityGroups() []string {
+	if f == nil {
 		return nil
 	}
-	return o.SecurityGroups
+	return f.SecurityGroups
 }
 
-func (o *ForgeConfig) GetFsxMount() *string {
-	if o == nil {
+func (f *ForgeConfig) GetFsxMount() *string {
+	if f == nil {
 		return nil
 	}
-	return o.FsxMount
+	return f.FsxMount
 }
 
-func (o *ForgeConfig) GetFsxName() *string {
-	if o == nil {
+func (f *ForgeConfig) GetFsxName() *string {
+	if f == nil {
 		return nil
 	}
-	return o.FsxName
+	return f.FsxName
 }
 
-func (o *ForgeConfig) GetFsxSize() *int {
-	if o == nil {
+func (f *ForgeConfig) GetFsxSize() *int {
+	if f == nil {
 		return nil
 	}
-	return o.FsxSize
+	return f.FsxSize
 }
 
-func (o *ForgeConfig) GetDisposeOnDeletion() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetDisposeOnDeletion() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.DisposeOnDeletion
+	return f.DisposeOnDeletion
 }
 
-func (o *ForgeConfig) GetEc2KeyPair() *string {
-	if o == nil {
+func (f *ForgeConfig) GetEc2KeyPair() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Ec2KeyPair
+	return f.Ec2KeyPair
 }
 
-func (o *ForgeConfig) GetAllowBuckets() []string {
-	if o == nil {
+func (f *ForgeConfig) GetAllowBuckets() []string {
+	if f == nil {
 		return nil
 	}
-	return o.AllowBuckets
+	return f.AllowBuckets
 }
 
-func (o *ForgeConfig) GetEbsBlockSize() *int {
-	if o == nil {
+func (f *ForgeConfig) GetEbsBlockSize() *int {
+	if f == nil {
 		return nil
 	}
-	return o.EbsBlockSize
+	return f.EbsBlockSize
 }
 
-func (o *ForgeConfig) GetFusionEnabled() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetFusionEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.FusionEnabled
+	return f.FusionEnabled
 }
 
-func (o *ForgeConfig) GetBidPercentage() *int {
-	if o == nil {
+func (f *ForgeConfig) GetBidPercentage() *int {
+	if f == nil {
 		return nil
 	}
-	return o.BidPercentage
+	return f.BidPercentage
 }
 
-func (o *ForgeConfig) GetEfsCreate() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetEfsCreate() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.EfsCreate
+	return f.EfsCreate
 }
 
-func (o *ForgeConfig) GetEfsID() *string {
-	if o == nil {
+func (f *ForgeConfig) GetEfsID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.EfsID
+	return f.EfsID
 }
 
-func (o *ForgeConfig) GetEfsMount() *string {
-	if o == nil {
+func (f *ForgeConfig) GetEfsMount() *string {
+	if f == nil {
 		return nil
 	}
-	return o.EfsMount
+	return f.EfsMount
 }
 
-func (o *ForgeConfig) GetDragenEnabled() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetDragenEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.DragenEnabled
+	return f.DragenEnabled
 }
 
-func (o *ForgeConfig) GetDragenAmiID() *string {
-	if o == nil {
+func (f *ForgeConfig) GetDragenAmiID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.DragenAmiID
+	return f.DragenAmiID
 }
 
-func (o *ForgeConfig) GetEbsBootSize() *int {
-	if o == nil {
+func (f *ForgeConfig) GetEbsBootSize() *int {
+	if f == nil {
 		return nil
 	}
-	return o.EbsBootSize
+	return f.EbsBootSize
 }
 
-func (o *ForgeConfig) GetEcsConfig() *string {
-	if o == nil {
+func (f *ForgeConfig) GetEcsConfig() *string {
+	if f == nil {
 		return nil
 	}
-	return o.EcsConfig
+	return f.EcsConfig
 }
 
-func (o *ForgeConfig) GetFargateHeadEnabled() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetFargateHeadEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.FargateHeadEnabled
+	return f.FargateHeadEnabled
 }
 
-func (o *ForgeConfig) GetArm64Enabled() *bool {
-	if o == nil {
+func (f *ForgeConfig) GetArm64Enabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.Arm64Enabled
+	return f.Arm64Enabled
 }
 
-func (o *ForgeConfig) GetDragenInstanceType() *string {
-	if o == nil {
+func (f *ForgeConfig) GetDragenInstanceType() *string {
+	if f == nil {
 		return nil
 	}
-	return o.DragenInstanceType
+	return f.DragenInstanceType
 }

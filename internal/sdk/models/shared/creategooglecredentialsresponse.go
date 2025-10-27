@@ -6,9 +6,9 @@ type CreateGoogleCredentialsResponse struct {
 	CredentialsID *string `json:"credentialsId,omitempty"`
 }
 
-func (o *CreateGoogleCredentialsResponse) GetCredentialsID() *string {
-	if o == nil {
+func (c *CreateGoogleCredentialsResponse) GetCredentialsID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return c.CredentialsID
 }

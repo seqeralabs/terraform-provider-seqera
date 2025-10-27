@@ -35,12 +35,12 @@ func (r *LabelsResourceModel) RefreshFromSharedListLabelsResponse(ctx context.Co
 		for _, labelsItem := range resp.Labels {
 			var labels tfTypes.LabelDbDto
 
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
 			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+			labels.ID = types.Int64PointerValue(labelsItem.ID)
+			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+			labels.Name = types.StringPointerValue(labelsItem.Name)
+			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+			labels.Value = types.StringPointerValue(labelsItem.Value)
 
 			r.Labels = append(r.Labels, labels)
 		}

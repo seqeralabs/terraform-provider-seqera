@@ -11,6 +11,23 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *UserDataSourceModel) RefreshFromSharedDescribeUserResponse(ctx context.Context, resp *shared.DescribeUserResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		r.DefaultWorkspaceID = types.Int64PointerValue(resp.DefaultWorkspaceID)
+		r.NeedConsent = types.BoolPointerValue(resp.NeedConsent)
+		diags.Append(r.RefreshFromSharedUserDbDto(ctx, resp.User)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *UserDataSourceModel) RefreshFromSharedUserDbDto(ctx context.Context, resp *shared.UserDbDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 

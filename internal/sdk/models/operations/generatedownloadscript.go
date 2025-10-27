@@ -26,39 +26,39 @@ type GenerateDownloadScriptRequest struct {
 	Files []File `queryParam:"style=form,explode=true,name=files"`
 }
 
-func (o *GenerateDownloadScriptRequest) GetDataLinkID() string {
-	if o == nil {
+func (g *GenerateDownloadScriptRequest) GetDataLinkID() string {
+	if g == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return g.DataLinkID
 }
 
-func (o *GenerateDownloadScriptRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (g *GenerateDownloadScriptRequest) GetWorkspaceID() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return g.WorkspaceID
 }
 
-func (o *GenerateDownloadScriptRequest) GetCredentialsID() *string {
-	if o == nil {
+func (g *GenerateDownloadScriptRequest) GetCredentialsID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return g.CredentialsID
 }
 
-func (o *GenerateDownloadScriptRequest) GetDirs() []Dir {
-	if o == nil {
+func (g *GenerateDownloadScriptRequest) GetDirs() []Dir {
+	if g == nil {
 		return nil
 	}
-	return o.Dirs
+	return g.Dirs
 }
 
-func (o *GenerateDownloadScriptRequest) GetFiles() []File {
-	if o == nil {
+func (g *GenerateDownloadScriptRequest) GetFiles() []File {
+	if g == nil {
 		return nil
 	}
-	return o.Files
+	return g.Files
 }
 
 type GenerateDownloadScriptResponse struct {
@@ -74,37 +74,37 @@ type GenerateDownloadScriptResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *GenerateDownloadScriptResponse) GetContentType() string {
-	if o == nil {
+func (g *GenerateDownloadScriptResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GenerateDownloadScriptResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GenerateDownloadScriptResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GenerateDownloadScriptResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GenerateDownloadScriptResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GenerateDownloadScriptResponse) GetDataLinkDownloadScriptResponse() *shared.DataLinkDownloadScriptResponse {
-	if o == nil {
+func (g *GenerateDownloadScriptResponse) GetDataLinkDownloadScriptResponse() *shared.DataLinkDownloadScriptResponse {
+	if g == nil {
 		return nil
 	}
-	return o.DataLinkDownloadScriptResponse
+	return g.DataLinkDownloadScriptResponse
 }
 
-func (o *GenerateDownloadScriptResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (g *GenerateDownloadScriptResponse) GetErrorResponse() *shared.ErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return g.ErrorResponse
 }

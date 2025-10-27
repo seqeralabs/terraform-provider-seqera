@@ -12,11 +12,11 @@ type ValidateOrganizationNameRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *ValidateOrganizationNameRequest) GetName() *string {
-	if o == nil {
+func (v *ValidateOrganizationNameRequest) GetName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Name
+	return v.Name
 }
 
 type ValidateOrganizationNameResponse struct {
@@ -30,30 +30,30 @@ type ValidateOrganizationNameResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ValidateOrganizationNameResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidateOrganizationNameResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidateOrganizationNameResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidateOrganizationNameResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidateOrganizationNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidateOrganizationNameResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }
 
-func (o *ValidateOrganizationNameResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (v *ValidateOrganizationNameResponse) GetErrorResponse() *shared.ErrorResponse {
+	if v == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return v.ErrorResponse
 }

@@ -7,16 +7,16 @@ type TraceCompleteResponse struct {
 	WorkflowID *string                `json:"workflowId,omitempty"`
 }
 
-func (o *TraceCompleteResponse) GetStatus() *TraceProcessingStatus {
-	if o == nil {
+func (t *TraceCompleteResponse) GetStatus() *TraceProcessingStatus {
+	if t == nil {
 		return nil
 	}
-	return o.Status
+	return t.Status
 }
 
-func (o *TraceCompleteResponse) GetWorkflowID() *string {
-	if o == nil {
+func (t *TraceCompleteResponse) GetWorkflowID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.WorkflowID
+	return t.WorkflowID
 }

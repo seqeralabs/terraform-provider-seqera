@@ -17,37 +17,37 @@ type WorkspaceDbDto struct {
 	Visibility  *Visibility `json:"visibility,omitempty"`
 }
 
-func (o *WorkspaceDbDto) GetID() *int64 {
-	if o == nil {
+func (w *WorkspaceDbDto) GetID() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.ID
+	return w.ID
 }
 
-func (o *WorkspaceDbDto) GetName() *string {
-	if o == nil {
+func (w *WorkspaceDbDto) GetName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Name
+	return w.Name
 }
 
-func (o *WorkspaceDbDto) GetFullName() *string {
-	if o == nil {
+func (w *WorkspaceDbDto) GetFullName() *string {
+	if w == nil {
 		return nil
 	}
-	return o.FullName
+	return w.FullName
 }
 
-func (o *WorkspaceDbDto) GetDescription() *string {
-	if o == nil {
+func (w *WorkspaceDbDto) GetDescription() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Description
+	return w.Description
 }
 
-func (o *WorkspaceDbDto) GetVisibility() *Visibility {
-	if o == nil {
+func (w *WorkspaceDbDto) GetVisibility() *Visibility {
+	if w == nil {
 		return nil
 	}
-	return o.Visibility
+	return w.Visibility
 }

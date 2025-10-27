@@ -7,16 +7,16 @@ type ListPipelinesResponse struct {
 	TotalSize *int64          `json:"totalSize,omitempty"`
 }
 
-func (o *ListPipelinesResponse) GetPipelines() []PipelineDbDto {
-	if o == nil {
+func (l *ListPipelinesResponse) GetPipelines() []PipelineDbDto {
+	if l == nil {
 		return nil
 	}
-	return o.Pipelines
+	return l.Pipelines
 }
 
-func (o *ListPipelinesResponse) GetTotalSize() *int64 {
-	if o == nil {
+func (l *ListPipelinesResponse) GetTotalSize() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.TotalSize
+	return l.TotalSize
 }

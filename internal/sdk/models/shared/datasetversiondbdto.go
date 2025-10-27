@@ -30,65 +30,65 @@ func (d *DatasetVersionDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DatasetVersionDbDto) GetDatasetID() *string {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetDatasetID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.DatasetID
+	return d.DatasetID
 }
 
-func (o *DatasetVersionDbDto) GetDatasetName() *string {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetDatasetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.DatasetName
+	return d.DatasetName
 }
 
-func (o *DatasetVersionDbDto) GetDatasetDescription() *string {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetDatasetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.DatasetDescription
+	return d.DatasetDescription
 }
 
-func (o *DatasetVersionDbDto) GetHasHeader() *bool {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetHasHeader() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.HasHeader
+	return d.HasHeader
 }
 
-func (o *DatasetVersionDbDto) GetVersion() *int64 {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetVersion() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.Version
+	return d.Version
 }
 
-func (o *DatasetVersionDbDto) GetLastUpdated() *time.Time {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetLastUpdated() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return d.LastUpdated
 }
 
-func (o *DatasetVersionDbDto) GetFileName() *string {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetFileName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.FileName
+	return d.FileName
 }
 
-func (o *DatasetVersionDbDto) GetMediaType() *string {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetMediaType() *string {
+	if d == nil {
 		return nil
 	}
-	return o.MediaType
+	return d.MediaType
 }
 
-func (o *DatasetVersionDbDto) GetURL() *string {
-	if o == nil {
+func (d *DatasetVersionDbDto) GetURL() *string {
+	if d == nil {
 		return nil
 	}
-	return o.URL
+	return d.URL
 }

@@ -22,46 +22,46 @@ type ExploreDataLinkRequest struct {
 	PageSize *int `queryParam:"style=form,explode=true,name=pageSize"`
 }
 
-func (o *ExploreDataLinkRequest) GetDataLinkID() string {
-	if o == nil {
+func (e *ExploreDataLinkRequest) GetDataLinkID() string {
+	if e == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return e.DataLinkID
 }
 
-func (o *ExploreDataLinkRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (e *ExploreDataLinkRequest) GetWorkspaceID() *int64 {
+	if e == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return e.WorkspaceID
 }
 
-func (o *ExploreDataLinkRequest) GetCredentialsID() *string {
-	if o == nil {
+func (e *ExploreDataLinkRequest) GetCredentialsID() *string {
+	if e == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return e.CredentialsID
 }
 
-func (o *ExploreDataLinkRequest) GetSearch() *string {
-	if o == nil {
+func (e *ExploreDataLinkRequest) GetSearch() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Search
+	return e.Search
 }
 
-func (o *ExploreDataLinkRequest) GetNextPageToken() *string {
-	if o == nil {
+func (e *ExploreDataLinkRequest) GetNextPageToken() *string {
+	if e == nil {
 		return nil
 	}
-	return o.NextPageToken
+	return e.NextPageToken
 }
 
-func (o *ExploreDataLinkRequest) GetPageSize() *int {
-	if o == nil {
+func (e *ExploreDataLinkRequest) GetPageSize() *int {
+	if e == nil {
 		return nil
 	}
-	return o.PageSize
+	return e.PageSize
 }
 
 type ExploreDataLinkResponse struct {
@@ -77,37 +77,37 @@ type ExploreDataLinkResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ExploreDataLinkResponse) GetContentType() string {
-	if o == nil {
+func (e *ExploreDataLinkResponse) GetContentType() string {
+	if e == nil {
 		return ""
 	}
-	return o.ContentType
+	return e.ContentType
 }
 
-func (o *ExploreDataLinkResponse) GetStatusCode() int {
-	if o == nil {
+func (e *ExploreDataLinkResponse) GetStatusCode() int {
+	if e == nil {
 		return 0
 	}
-	return o.StatusCode
+	return e.StatusCode
 }
 
-func (o *ExploreDataLinkResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (e *ExploreDataLinkResponse) GetRawResponse() *http.Response {
+	if e == nil {
 		return nil
 	}
-	return o.RawResponse
+	return e.RawResponse
 }
 
-func (o *ExploreDataLinkResponse) GetDataLinkContentResponse() *shared.DataLinkContentResponse {
-	if o == nil {
+func (e *ExploreDataLinkResponse) GetDataLinkContentResponse() *shared.DataLinkContentResponse {
+	if e == nil {
 		return nil
 	}
-	return o.DataLinkContentResponse
+	return e.DataLinkContentResponse
 }
 
-func (o *ExploreDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (e *ExploreDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
+	if e == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return e.ErrorResponse
 }

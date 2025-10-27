@@ -524,11 +524,11 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeAWSComputeEnvResponse != nil && res1.DescribeAWSComputeEnvResponse.ComputeEnv != nil) {
+	if !(res1.DescribeAWSComputeEnvResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSComputeEnvComputeConfig(ctx, res1.DescribeAWSComputeEnvResponse.ComputeEnv)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, res1.DescribeAWSComputeEnvResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -588,11 +588,11 @@ func (r *AWSComputeEnvResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAWSComputeEnvResponse != nil && res.DescribeAWSComputeEnvResponse.ComputeEnv != nil) {
+	if !(res.DescribeAWSComputeEnvResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSComputeEnvComputeConfig(ctx, res.DescribeAWSComputeEnvResponse.ComputeEnv)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, res.DescribeAWSComputeEnvResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

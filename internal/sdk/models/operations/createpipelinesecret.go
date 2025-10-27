@@ -14,18 +14,18 @@ type CreatePipelineSecretRequest struct {
 	CreatePipelineSecretRequest shared.CreatePipelineSecretRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreatePipelineSecretRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreatePipelineSecretRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreatePipelineSecretRequest) GetCreatePipelineSecretRequest() shared.CreatePipelineSecretRequest {
-	if o == nil {
+func (c *CreatePipelineSecretRequest) GetCreatePipelineSecretRequest() shared.CreatePipelineSecretRequest {
+	if c == nil {
 		return shared.CreatePipelineSecretRequest{}
 	}
-	return o.CreatePipelineSecretRequest
+	return c.CreatePipelineSecretRequest
 }
 
 type CreatePipelineSecretResponse struct {
@@ -41,37 +41,37 @@ type CreatePipelineSecretResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreatePipelineSecretResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePipelineSecretResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePipelineSecretResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePipelineSecretResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePipelineSecretResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePipelineSecretResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePipelineSecretResponse) GetCreatePipelineSecretResponse() *shared.CreatePipelineSecretResponse {
-	if o == nil {
+func (c *CreatePipelineSecretResponse) GetCreatePipelineSecretResponse() *shared.CreatePipelineSecretResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreatePipelineSecretResponse
+	return c.CreatePipelineSecretResponse
 }
 
-func (o *CreatePipelineSecretResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreatePipelineSecretResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

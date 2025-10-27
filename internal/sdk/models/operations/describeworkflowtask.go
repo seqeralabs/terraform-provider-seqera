@@ -16,25 +16,25 @@ type DescribeWorkflowTaskRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeWorkflowTaskRequest) GetWorkflowID() string {
-	if o == nil {
+func (d *DescribeWorkflowTaskRequest) GetWorkflowID() string {
+	if d == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return d.WorkflowID
 }
 
-func (o *DescribeWorkflowTaskRequest) GetTaskID() int64 {
-	if o == nil {
+func (d *DescribeWorkflowTaskRequest) GetTaskID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.TaskID
+	return d.TaskID
 }
 
-func (o *DescribeWorkflowTaskRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeWorkflowTaskRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeWorkflowTaskResponse struct {
@@ -50,37 +50,37 @@ type DescribeWorkflowTaskResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeWorkflowTaskResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeWorkflowTaskResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeWorkflowTaskResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeWorkflowTaskResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeWorkflowTaskResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeWorkflowTaskResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeWorkflowTaskResponse) GetDescribeTaskResponse() *shared.DescribeTaskResponse {
-	if o == nil {
+func (d *DescribeWorkflowTaskResponse) GetDescribeTaskResponse() *shared.DescribeTaskResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeTaskResponse
+	return d.DescribeTaskResponse
 }
 
-func (o *DescribeWorkflowTaskResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeWorkflowTaskResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

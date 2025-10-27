@@ -8,23 +8,23 @@ type DataStudioWorkspaceSettingsResponse struct {
 	LifespanHours int   `json:"lifespanHours"`
 }
 
-func (o *DataStudioWorkspaceSettingsResponse) GetOrgID() int64 {
-	if o == nil {
+func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.OrgID
+	return d.OrgID
 }
 
-func (o *DataStudioWorkspaceSettingsResponse) GetWspID() int64 {
-	if o == nil {
+func (d *DataStudioWorkspaceSettingsResponse) GetWspID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.WspID
+	return d.WspID
 }
 
-func (o *DataStudioWorkspaceSettingsResponse) GetLifespanHours() int {
-	if o == nil {
+func (d *DataStudioWorkspaceSettingsResponse) GetLifespanHours() int {
+	if d == nil {
 		return 0
 	}
-	return o.LifespanHours
+	return d.LifespanHours
 }

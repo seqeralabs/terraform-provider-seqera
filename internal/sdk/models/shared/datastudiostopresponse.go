@@ -8,23 +8,23 @@ type DataStudioStopResponse struct {
 	StatusInfo   DataStudioStatusInfo `json:"statusInfo"`
 }
 
-func (o *DataStudioStopResponse) GetJobSubmitted() bool {
-	if o == nil {
+func (d *DataStudioStopResponse) GetJobSubmitted() bool {
+	if d == nil {
 		return false
 	}
-	return o.JobSubmitted
+	return d.JobSubmitted
 }
 
-func (o *DataStudioStopResponse) GetSessionID() string {
-	if o == nil {
+func (d *DataStudioStopResponse) GetSessionID() string {
+	if d == nil {
 		return ""
 	}
-	return o.SessionID
+	return d.SessionID
 }
 
-func (o *DataStudioStopResponse) GetStatusInfo() DataStudioStatusInfo {
-	if o == nil {
+func (d *DataStudioStopResponse) GetStatusInfo() DataStudioStatusInfo {
+	if d == nil {
 		return DataStudioStatusInfo{}
 	}
-	return o.StatusInfo
+	return d.StatusInfo
 }

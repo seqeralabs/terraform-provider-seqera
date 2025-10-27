@@ -23,6 +23,7 @@ Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-cod
 <!-- $toc-max-depth=2 -->
 * [Seqera Platform Terraform Provider](#seqera-platform-terraform-provider)
   * [Installation](#installation)
+  * [Authentication](#authentication)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
   * [Best Practices](#best-practices)
   * [Examples](#examples)
@@ -52,6 +53,18 @@ provider "seqera" {
 }
 ```
 <!-- End Installation [installation] -->
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+This provider supports authentication configuration via provider configuration.
+
+Available configuration:
+
+| Provider Attribute | Description |
+|---|---|
+| `bearer_auth` | HTTP Bearer. |
+<!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources

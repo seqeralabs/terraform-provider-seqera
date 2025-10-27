@@ -33,93 +33,93 @@ func (a *AwsBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AwsBatchPlatformMetainfo) GetDiscriminator() *string {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AwsBatchPlatformMetainfo) GetWarnings() []string {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetWarnings() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Warnings
+	return a.Warnings
 }
 
-func (o *AwsBatchPlatformMetainfo) GetJobQueues() []JobQueue {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetJobQueues() []JobQueue {
+	if a == nil {
 		return nil
 	}
-	return o.JobQueues
+	return a.JobQueues
 }
 
-func (o *AwsBatchPlatformMetainfo) GetBuckets() []Bucket {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetBuckets() []Bucket {
+	if a == nil {
 		return nil
 	}
-	return o.Buckets
+	return a.Buckets
 }
 
-func (o *AwsBatchPlatformMetainfo) GetFileSystems() []FsxFileSystem {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetFileSystems() []FsxFileSystem {
+	if a == nil {
 		return nil
 	}
-	return o.FileSystems
+	return a.FileSystems
 }
 
-func (o *AwsBatchPlatformMetainfo) GetEfsFileSystems() []EfsFileSystem {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetEfsFileSystems() []EfsFileSystem {
+	if a == nil {
 		return nil
 	}
-	return o.EfsFileSystems
+	return a.EfsFileSystems
 }
 
-func (o *AwsBatchPlatformMetainfo) GetKeyPairs() []string {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetKeyPairs() []string {
+	if a == nil {
 		return nil
 	}
-	return o.KeyPairs
+	return a.KeyPairs
 }
 
-func (o *AwsBatchPlatformMetainfo) GetVpcs() []Vpc {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetVpcs() []Vpc {
+	if a == nil {
 		return nil
 	}
-	return o.Vpcs
+	return a.Vpcs
 }
 
-func (o *AwsBatchPlatformMetainfo) GetImages() []Image {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetImages() []Image {
+	if a == nil {
 		return nil
 	}
-	return o.Images
+	return a.Images
 }
 
-func (o *AwsBatchPlatformMetainfo) GetSecurityGroups() []SecurityGroup {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetSecurityGroups() []SecurityGroup {
+	if a == nil {
 		return nil
 	}
-	return o.SecurityGroups
+	return a.SecurityGroups
 }
 
-func (o *AwsBatchPlatformMetainfo) GetSubnets() []Subnet {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetSubnets() []Subnet {
+	if a == nil {
 		return nil
 	}
-	return o.Subnets
+	return a.Subnets
 }
 
-func (o *AwsBatchPlatformMetainfo) GetInstanceFamilies() []string {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetInstanceFamilies() []string {
+	if a == nil {
 		return nil
 	}
-	return o.InstanceFamilies
+	return a.InstanceFamilies
 }
 
-func (o *AwsBatchPlatformMetainfo) GetAllocStrategy() []string {
-	if o == nil {
+func (a *AwsBatchPlatformMetainfo) GetAllocStrategy() []string {
+	if a == nil {
 		return nil
 	}
-	return o.AllocStrategy
+	return a.AllocStrategy
 }

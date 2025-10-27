@@ -6,9 +6,9 @@ type DataStudioCheckpointUpdateRequest struct {
 	Name *string `json:"name,omitempty"`
 }
 
-func (o *DataStudioCheckpointUpdateRequest) GetName() *string {
-	if o == nil {
+func (d *DataStudioCheckpointUpdateRequest) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }

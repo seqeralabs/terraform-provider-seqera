@@ -6,9 +6,9 @@ type DescribeAzureCredentialsResponse struct {
 	Credentials *AzureCredentialOutput `json:"credentials,omitempty"`
 }
 
-func (o *DescribeAzureCredentialsResponse) GetCredentials() *AzureCredentialOutput {
-	if o == nil {
+func (d *DescribeAzureCredentialsResponse) GetCredentials() *AzureCredentialOutput {
+	if d == nil {
 		return nil
 	}
-	return o.Credentials
+	return d.Credentials
 }

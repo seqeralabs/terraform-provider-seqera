@@ -23,23 +23,23 @@ func (e *EksPlatformMetaInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EksPlatformMetaInfo) GetDiscriminator() *string {
-	if o == nil {
+func (e *EksPlatformMetaInfo) GetDiscriminator() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Discriminator
+	return e.Discriminator
 }
 
-func (o *EksPlatformMetaInfo) GetWarnings() []string {
-	if o == nil {
+func (e *EksPlatformMetaInfo) GetWarnings() []string {
+	if e == nil {
 		return nil
 	}
-	return o.Warnings
+	return e.Warnings
 }
 
-func (o *EksPlatformMetaInfo) GetClusters() []string {
-	if o == nil {
+func (e *EksPlatformMetaInfo) GetClusters() []string {
+	if e == nil {
 		return nil
 	}
-	return o.Clusters
+	return e.Clusters
 }

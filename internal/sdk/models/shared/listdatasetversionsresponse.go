@@ -6,9 +6,9 @@ type ListDatasetVersionsResponse struct {
 	Versions []DatasetVersionDbDto `json:"versions,omitempty"`
 }
 
-func (o *ListDatasetVersionsResponse) GetVersions() []DatasetVersionDbDto {
-	if o == nil {
+func (l *ListDatasetVersionsResponse) GetVersions() []DatasetVersionDbDto {
+	if l == nil {
 		return nil
 	}
-	return o.Versions
+	return l.Versions
 }

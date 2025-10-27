@@ -6,9 +6,9 @@ type ServiceInfoResponse struct {
 	ServiceInfo *ServiceInfo `json:"serviceInfo,omitempty"`
 }
 
-func (o *ServiceInfoResponse) GetServiceInfo() *ServiceInfo {
-	if o == nil {
+func (s *ServiceInfoResponse) GetServiceInfo() *ServiceInfo {
+	if s == nil {
 		return nil
 	}
-	return o.ServiceInfo
+	return s.ServiceInfo
 }

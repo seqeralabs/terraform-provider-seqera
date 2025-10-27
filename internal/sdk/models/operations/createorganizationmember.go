@@ -14,18 +14,18 @@ type CreateOrganizationMemberRequest struct {
 	AddMemberRequest shared.AddMemberRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateOrganizationMemberRequest) GetOrgID() int64 {
-	if o == nil {
+func (c *CreateOrganizationMemberRequest) GetOrgID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *CreateOrganizationMemberRequest) GetAddMemberRequest() shared.AddMemberRequest {
-	if o == nil {
+func (c *CreateOrganizationMemberRequest) GetAddMemberRequest() shared.AddMemberRequest {
+	if c == nil {
 		return shared.AddMemberRequest{}
 	}
-	return o.AddMemberRequest
+	return c.AddMemberRequest
 }
 
 type CreateOrganizationMemberResponse struct {
@@ -41,37 +41,37 @@ type CreateOrganizationMemberResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateOrganizationMemberResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrganizationMemberResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrganizationMemberResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrganizationMemberResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrganizationMemberResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrganizationMemberResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrganizationMemberResponse) GetAddMemberResponse() *shared.AddMemberResponse {
-	if o == nil {
+func (c *CreateOrganizationMemberResponse) GetAddMemberResponse() *shared.AddMemberResponse {
+	if c == nil {
 		return nil
 	}
-	return o.AddMemberResponse
+	return c.AddMemberResponse
 }
 
-func (o *CreateOrganizationMemberResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateOrganizationMemberResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

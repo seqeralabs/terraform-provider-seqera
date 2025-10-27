@@ -8,23 +8,23 @@ type UpdateTeamRequest struct {
 	AvatarID    *string `json:"avatarId,omitempty"`
 }
 
-func (o *UpdateTeamRequest) GetName() *string {
-	if o == nil {
+func (u *UpdateTeamRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateTeamRequest) GetDescription() *string {
-	if o == nil {
+func (u *UpdateTeamRequest) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }
 
-func (o *UpdateTeamRequest) GetAvatarID() *string {
-	if o == nil {
+func (u *UpdateTeamRequest) GetAvatarID() *string {
+	if u == nil {
 		return nil
 	}
-	return o.AvatarID
+	return u.AvatarID
 }

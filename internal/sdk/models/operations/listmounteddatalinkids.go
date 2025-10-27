@@ -18,32 +18,32 @@ type ListMountedDataLinkIdsRequest struct {
 	Exclude *string `queryParam:"style=form,explode=true,name=exclude"`
 }
 
-func (o *ListMountedDataLinkIdsRequest) GetOrgID() *int64 {
-	if o == nil {
+func (l *ListMountedDataLinkIdsRequest) GetOrgID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
-func (o *ListMountedDataLinkIdsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListMountedDataLinkIdsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListMountedDataLinkIdsRequest) GetStatus() *string {
-	if o == nil {
+func (l *ListMountedDataLinkIdsRequest) GetStatus() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Status
+	return l.Status
 }
 
-func (o *ListMountedDataLinkIdsRequest) GetExclude() *string {
-	if o == nil {
+func (l *ListMountedDataLinkIdsRequest) GetExclude() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Exclude
+	return l.Exclude
 }
 
 type ListMountedDataLinkIdsResponse struct {
@@ -57,30 +57,30 @@ type ListMountedDataLinkIdsResponse struct {
 	DataStudioMountedLinksResponse *shared.DataStudioMountedLinksResponse
 }
 
-func (o *ListMountedDataLinkIdsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListMountedDataLinkIdsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListMountedDataLinkIdsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListMountedDataLinkIdsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListMountedDataLinkIdsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListMountedDataLinkIdsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListMountedDataLinkIdsResponse) GetDataStudioMountedLinksResponse() *shared.DataStudioMountedLinksResponse {
-	if o == nil {
+func (l *ListMountedDataLinkIdsResponse) GetDataStudioMountedLinksResponse() *shared.DataStudioMountedLinksResponse {
+	if l == nil {
 		return nil
 	}
-	return o.DataStudioMountedLinksResponse
+	return l.DataStudioMountedLinksResponse
 }

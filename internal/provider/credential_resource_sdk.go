@@ -48,65 +48,65 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		if resp.Keys.AzureEntraKeysOutput != nil {
 			r.Keys.AzureEntra = &tfTypes.AzureEntraKeys{}
 			azureEntraPriorData := r.Keys.AzureEntra
-			r.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
 			r.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.BatchName)
 			r.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.ClientID)
-			r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
-			r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
 			r.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.StorageName)
 			r.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Keys.AzureEntraKeysOutput.TenantID)
+			r.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
+			r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
+			r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
 		}
 		if resp.Keys.AzureReposSecurityKeysOutput != nil {
 			r.Keys.Azurerepos = &tfTypes.AzureReposSecurityKeys{}
 			azurereposPriorData := r.Keys.Azurerepos
-			r.Keys.Azurerepos.Password = azurereposPriorData.Password
 			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposSecurityKeysOutput.Username)
+			r.Keys.Azurerepos.Password = azurereposPriorData.Password
 		}
 		if resp.Keys.SecurityKeysAzureSecurityKeysOutput != nil {
 			r.Keys.Azure = &tfTypes.SecurityKeysAzureSecurityKeys{}
 			azurePriorData := r.Keys.Azure
-			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
 			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.BatchName)
-			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
 			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.SecurityKeysAzureSecurityKeysOutput.StorageName)
+			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
+			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
 		}
 		if resp.Keys.BitBucketSecurityKeysOutput != nil {
 			r.Keys.Bitbucket = &tfTypes.BitBucketSecurityKeys{}
 			bitbucketPriorData := r.Keys.Bitbucket
-			r.Keys.Bitbucket.Password = bitbucketPriorData.Password
 			r.Keys.Bitbucket.Username = types.StringPointerValue(resp.Keys.BitBucketSecurityKeysOutput.Username)
+			r.Keys.Bitbucket.Password = bitbucketPriorData.Password
 		}
 		if resp.Keys.CodeCommitSecurityKeysOutput != nil {
 			r.Keys.Codecommit = &tfTypes.CodeCommitSecurityKeys{}
 			codecommitPriorData := r.Keys.Codecommit
-			r.Keys.Codecommit.Password = codecommitPriorData.Password
 			r.Keys.Codecommit.Username = types.StringPointerValue(resp.Keys.CodeCommitSecurityKeysOutput.Username)
+			r.Keys.Codecommit.Password = codecommitPriorData.Password
 		}
 		if resp.Keys.ContainerRegistryKeysOutput != nil {
 			r.Keys.ContainerReg = &tfTypes.ContainerRegistryKeys{}
 			containerRegPriorData := r.Keys.ContainerReg
-			r.Keys.ContainerReg.Password = containerRegPriorData.Password
 			r.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.Registry)
 			r.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Keys.ContainerRegistryKeysOutput.UserName)
+			r.Keys.ContainerReg.Password = containerRegPriorData.Password
 		}
 		if resp.Keys.GiteaSecurityKeysOutput != nil {
 			r.Keys.Gitea = &tfTypes.GiteaSecurityKeys{}
 			giteaPriorData := r.Keys.Gitea
-			r.Keys.Gitea.Password = giteaPriorData.Password
 			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaSecurityKeysOutput.Username)
+			r.Keys.Gitea.Password = giteaPriorData.Password
 		}
 		if resp.Keys.GitHubSecurityKeysOutput != nil {
 			r.Keys.Github = &tfTypes.GitHubSecurityKeys{}
 			githubPriorData := r.Keys.Github
-			r.Keys.Github.Password = githubPriorData.Password
 			r.Keys.Github.Username = types.StringPointerValue(resp.Keys.GitHubSecurityKeysOutput.Username)
+			r.Keys.Github.Password = githubPriorData.Password
 		}
 		if resp.Keys.GitLabSecurityKeysOutput != nil {
 			r.Keys.Gitlab = &tfTypes.GitLabSecurityKeys{}
 			gitlabPriorData := r.Keys.Gitlab
+			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
 			r.Keys.Gitlab.Password = gitlabPriorData.Password
 			r.Keys.Gitlab.Token = gitlabPriorData.Token
-			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabSecurityKeysOutput.Username)
 		}
 		if resp.Keys.SecurityKeysGoogleSecurityKeysOutput != nil {
 			r.Keys.Google = &tfTypes.SecurityKeysGoogleSecurityKeys{}
@@ -137,6 +137,21 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		r.ProviderType = types.StringValue(string(resp.ProviderType))
+	}
+
+	return diags
+}
+
+func (r *CredentialResourceModel) RefreshFromSharedDescribeCredentialsResponse(ctx context.Context, resp *shared.DescribeCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedCredentialsOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags

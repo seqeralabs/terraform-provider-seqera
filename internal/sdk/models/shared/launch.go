@@ -138,165 +138,165 @@ func (c *ComputeEnv) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ComputeEnv) GetCredentialsID() string {
-	if o == nil {
+func (c *ComputeEnv) GetCredentialsID() string {
+	if c == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return c.CredentialsID
 }
 
-func (o *ComputeEnv) GetOrgID() *int64 {
-	if o == nil {
+func (c *ComputeEnv) GetOrgID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *ComputeEnv) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *ComputeEnv) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *ComputeEnv) GetComputeEnvID() *string {
-	if o == nil {
+func (c *ComputeEnv) GetComputeEnvID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ComputeEnvID
+	return c.ComputeEnvID
 }
 
-func (o *ComputeEnv) GetName() string {
-	if o == nil {
+func (c *ComputeEnv) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ComputeEnv) GetDescription() *string {
-	if o == nil {
+func (c *ComputeEnv) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *ComputeEnv) GetPlatform() LaunchPlatform {
-	if o == nil {
+func (c *ComputeEnv) GetPlatform() LaunchPlatform {
+	if c == nil {
 		return LaunchPlatform("")
 	}
-	return o.Platform
+	return c.Platform
 }
 
-func (o *ComputeEnv) GetConfig() ComputeConfig {
-	if o == nil {
+func (c *ComputeEnv) GetConfig() ComputeConfig {
+	if c == nil {
 		return ComputeConfig{}
 	}
-	return o.Config
+	return c.Config
 }
 
-func (o *ComputeEnv) GetConfigMoabPlatform() *MoabConfiguration {
-	return o.GetConfig().MoabConfiguration
+func (c *ComputeEnv) GetConfigMoabPlatform() *MoabConfiguration {
+	return c.GetConfig().MoabConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return o.GetConfig().AWSBatchConfiguration
+func (c *ComputeEnv) GetConfigAwsBatch() *AWSBatchConfiguration {
+	return c.GetConfig().AWSBatchConfiguration
 }
 
-func (o *ComputeEnv) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return o.GetConfig().GoogleGKEClusterConfiguration
+func (c *ComputeEnv) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	return c.GetConfig().GoogleGKEClusterConfiguration
 }
 
-func (o *ComputeEnv) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return o.GetConfig().GoogleBatchServiceConfiguration
+func (c *ComputeEnv) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	return c.GetConfig().GoogleBatchServiceConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return o.GetConfig().AWSCloudConfiguration
+func (c *ComputeEnv) GetConfigAwsCloud() *AWSCloudConfiguration {
+	return c.GetConfig().AWSCloudConfiguration
 }
 
-func (o *ComputeEnv) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return o.GetConfig().SlurmConfiguration
+func (c *ComputeEnv) GetConfigSlurmPlatform() *SlurmConfiguration {
+	return c.GetConfig().SlurmConfiguration
 }
 
-func (o *ComputeEnv) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return o.GetConfig().KubernetesComputeConfiguration
+func (c *ComputeEnv) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	return c.GetConfig().KubernetesComputeConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return o.GetConfig().AltairPBSConfiguration
+func (c *ComputeEnv) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	return c.GetConfig().AltairPBSConfiguration
 }
 
-func (o *ComputeEnv) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return o.GetConfig().IBMLSFConfiguration
+func (c *ComputeEnv) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	return c.GetConfig().IBMLSFConfiguration
 }
 
-func (o *ComputeEnv) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return o.GetConfig().AzureBatchConfiguration
+func (c *ComputeEnv) GetConfigAzureBatch() *AzureBatchConfiguration {
+	return c.GetConfig().AzureBatchConfiguration
 }
 
-func (o *ComputeEnv) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return o.GetConfig().SeqeraComputeConfiguration
+func (c *ComputeEnv) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	return c.GetConfig().SeqeraComputeConfiguration
 }
 
-func (o *ComputeEnv) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return o.GetConfig().AmazonEKSClusterConfiguration
+func (c *ComputeEnv) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	return c.GetConfig().AmazonEKSClusterConfiguration
 }
 
-func (o *ComputeEnv) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	return o.GetConfig().GoogleLifeSciencesConfiguration
+func (c *ComputeEnv) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
+	return c.GetConfig().GoogleLifeSciencesConfiguration
 }
 
-func (o *ComputeEnv) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return o.GetConfig().UnivaGridEngineConfiguration
+func (c *ComputeEnv) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	return c.GetConfig().UnivaGridEngineConfiguration
 }
 
-func (o *ComputeEnv) GetDateCreated() *time.Time {
-	if o == nil {
+func (c *ComputeEnv) GetDateCreated() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.DateCreated
+	return c.DateCreated
 }
 
-func (o *ComputeEnv) GetLastUpdated() *time.Time {
-	if o == nil {
+func (c *ComputeEnv) GetLastUpdated() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return c.LastUpdated
 }
 
-func (o *ComputeEnv) GetLastUsed() *time.Time {
-	if o == nil {
+func (c *ComputeEnv) GetLastUsed() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.LastUsed
+	return c.LastUsed
 }
 
-func (o *ComputeEnv) GetDeleted() *bool {
-	if o == nil {
+func (c *ComputeEnv) GetDeleted() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Deleted
+	return c.Deleted
 }
 
-func (o *ComputeEnv) GetStatus() *LaunchStatus {
-	if o == nil {
+func (c *ComputeEnv) GetStatus() *LaunchStatus {
+	if c == nil {
 		return nil
 	}
-	return o.Status
+	return c.Status
 }
 
-func (o *ComputeEnv) GetMessage() *string {
-	if o == nil {
+func (c *ComputeEnv) GetMessage() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Message
+	return c.Message
 }
 
-func (o *ComputeEnv) GetPrimary() *bool {
-	if o == nil {
+func (c *ComputeEnv) GetPrimary() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Primary
+	return c.Primary
 }
 
 type Launch struct {
@@ -344,205 +344,205 @@ func (l *Launch) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Launch) GetID() *string {
-	if o == nil {
+func (l *Launch) GetID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *Launch) GetComputeEnv() *ComputeEnv {
-	if o == nil {
+func (l *Launch) GetComputeEnv() *ComputeEnv {
+	if l == nil {
 		return nil
 	}
-	return o.ComputeEnv
+	return l.ComputeEnv
 }
 
-func (o *Launch) GetPipeline() string {
-	if o == nil {
+func (l *Launch) GetPipeline() string {
+	if l == nil {
 		return ""
 	}
-	return o.Pipeline
+	return l.Pipeline
 }
 
-func (o *Launch) GetWorkDir() *string {
-	if o == nil {
+func (l *Launch) GetWorkDir() *string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkDir
+	return l.WorkDir
 }
 
-func (o *Launch) GetRevision() *string {
-	if o == nil {
+func (l *Launch) GetRevision() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Revision
+	return l.Revision
 }
 
-func (o *Launch) GetConfigText() *string {
-	if o == nil {
+func (l *Launch) GetConfigText() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ConfigText
+	return l.ConfigText
 }
 
-func (o *Launch) GetTowerConfig() *string {
-	if o == nil {
+func (l *Launch) GetTowerConfig() *string {
+	if l == nil {
 		return nil
 	}
-	return o.TowerConfig
+	return l.TowerConfig
 }
 
-func (o *Launch) GetParamsText() *string {
-	if o == nil {
+func (l *Launch) GetParamsText() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ParamsText
+	return l.ParamsText
 }
 
-func (o *Launch) GetPreRunScript() *string {
-	if o == nil {
+func (l *Launch) GetPreRunScript() *string {
+	if l == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return l.PreRunScript
 }
 
-func (o *Launch) GetPostRunScript() *string {
-	if o == nil {
+func (l *Launch) GetPostRunScript() *string {
+	if l == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return l.PostRunScript
 }
 
-func (o *Launch) GetMainScript() *string {
-	if o == nil {
+func (l *Launch) GetMainScript() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MainScript
+	return l.MainScript
 }
 
-func (o *Launch) GetEntryName() *string {
-	if o == nil {
+func (l *Launch) GetEntryName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.EntryName
+	return l.EntryName
 }
 
-func (o *Launch) GetSchemaName() *string {
-	if o == nil {
+func (l *Launch) GetSchemaName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.SchemaName
+	return l.SchemaName
 }
 
-func (o *Launch) GetResume() *bool {
-	if o == nil {
+func (l *Launch) GetResume() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Resume
+	return l.Resume
 }
 
-func (o *Launch) GetResumeLaunchID() *string {
-	if o == nil {
+func (l *Launch) GetResumeLaunchID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ResumeLaunchID
+	return l.ResumeLaunchID
 }
 
-func (o *Launch) GetPullLatest() *bool {
-	if o == nil {
+func (l *Launch) GetPullLatest() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.PullLatest
+	return l.PullLatest
 }
 
-func (o *Launch) GetStubRun() *bool {
-	if o == nil {
+func (l *Launch) GetStubRun() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.StubRun
+	return l.StubRun
 }
 
-func (o *Launch) GetSessionID() *string {
-	if o == nil {
+func (l *Launch) GetSessionID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.SessionID
+	return l.SessionID
 }
 
-func (o *Launch) GetRunName() *string {
-	if o == nil {
+func (l *Launch) GetRunName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.RunName
+	return l.RunName
 }
 
-func (o *Launch) GetConfigProfiles() []string {
-	if o == nil {
+func (l *Launch) GetConfigProfiles() []string {
+	if l == nil {
 		return nil
 	}
-	return o.ConfigProfiles
+	return l.ConfigProfiles
 }
 
-func (o *Launch) GetUserSecrets() []string {
-	if o == nil {
+func (l *Launch) GetUserSecrets() []string {
+	if l == nil {
 		return nil
 	}
-	return o.UserSecrets
+	return l.UserSecrets
 }
 
-func (o *Launch) GetWorkspaceSecrets() []string {
-	if o == nil {
+func (l *Launch) GetWorkspaceSecrets() []string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceSecrets
+	return l.WorkspaceSecrets
 }
 
-func (o *Launch) GetOptimizationID() *string {
-	if o == nil {
+func (l *Launch) GetOptimizationID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.OptimizationID
+	return l.OptimizationID
 }
 
-func (o *Launch) GetOptimizationTargets() *string {
-	if o == nil {
+func (l *Launch) GetOptimizationTargets() *string {
+	if l == nil {
 		return nil
 	}
-	return o.OptimizationTargets
+	return l.OptimizationTargets
 }
 
-func (o *Launch) GetHeadJobCpus() *int {
-	if o == nil {
+func (l *Launch) GetHeadJobCpus() *int {
+	if l == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return l.HeadJobCpus
 }
 
-func (o *Launch) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (l *Launch) GetHeadJobMemoryMb() *int {
+	if l == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return l.HeadJobMemoryMb
 }
 
-func (o *Launch) GetLaunchContainer() *string {
-	if o == nil {
+func (l *Launch) GetLaunchContainer() *string {
+	if l == nil {
 		return nil
 	}
-	return o.LaunchContainer
+	return l.LaunchContainer
 }
 
-func (o *Launch) GetDateCreated() time.Time {
-	if o == nil {
+func (l *Launch) GetDateCreated() time.Time {
+	if l == nil {
 		return time.Time{}
 	}
-	return o.DateCreated
+	return l.DateCreated
 }
 
-func (o *Launch) GetLastUpdated() *time.Time {
-	if o == nil {
+func (l *Launch) GetLastUpdated() *time.Time {
+	if l == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return l.LastUpdated
 }

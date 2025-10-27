@@ -70,88 +70,88 @@ func (a *AWSComputeEnvComputeConfigInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetCredentialsID() string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetCredentialsID() string {
+	if a == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return a.CredentialsID
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetWorkspaceID() *int64 {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetWorkspaceID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return a.WorkspaceID
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetComputeEnvID() *string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetComputeEnvID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeEnvID
+	return a.ComputeEnvID
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetName() string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetDescription() *string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetPlatform() AWSComputeEnvComputeConfigPlatform {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetPlatform() AWSComputeEnvComputeConfigPlatform {
+	if a == nil {
 		return AWSComputeEnvComputeConfigPlatform("")
 	}
-	return o.Platform
+	return a.Platform
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetStatus() *string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetStatus() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Status
+	return a.Status
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetLastUpdated() *time.Time {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetLastUpdated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return a.LastUpdated
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetLastUsed() *time.Time {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetLastUsed() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUsed
+	return a.LastUsed
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetDeleted() *bool {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetDeleted() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Deleted
+	return a.Deleted
 }
 
-func (o *AWSComputeEnvComputeConfigInput) GetConfig() AwsBatchConfig {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfigInput) GetConfig() AwsBatchConfig {
+	if a == nil {
 		return AwsBatchConfig{}
 	}
-	return o.Config
+	return a.Config
 }
 
 type AWSComputeEnvComputeConfig struct {
@@ -192,93 +192,93 @@ func (a *AWSComputeEnvComputeConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AWSComputeEnvComputeConfig) GetCredentialsID() string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetCredentialsID() string {
+	if a == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return a.CredentialsID
 }
 
-func (o *AWSComputeEnvComputeConfig) GetOrgID() *int64 {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetOrgID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.OrgID
+	return a.OrgID
 }
 
-func (o *AWSComputeEnvComputeConfig) GetWorkspaceID() *int64 {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetWorkspaceID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return a.WorkspaceID
 }
 
-func (o *AWSComputeEnvComputeConfig) GetComputeEnvID() *string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetComputeEnvID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeEnvID
+	return a.ComputeEnvID
 }
 
-func (o *AWSComputeEnvComputeConfig) GetName() string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AWSComputeEnvComputeConfig) GetDescription() *string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AWSComputeEnvComputeConfig) GetPlatform() AWSComputeEnvComputeConfigPlatform {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetPlatform() AWSComputeEnvComputeConfigPlatform {
+	if a == nil {
 		return AWSComputeEnvComputeConfigPlatform("")
 	}
-	return o.Platform
+	return a.Platform
 }
 
-func (o *AWSComputeEnvComputeConfig) GetStatus() *string {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetStatus() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Status
+	return a.Status
 }
 
-func (o *AWSComputeEnvComputeConfig) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }
 
-func (o *AWSComputeEnvComputeConfig) GetLastUpdated() *time.Time {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetLastUpdated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return a.LastUpdated
 }
 
-func (o *AWSComputeEnvComputeConfig) GetLastUsed() *time.Time {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetLastUsed() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUsed
+	return a.LastUsed
 }
 
-func (o *AWSComputeEnvComputeConfig) GetDeleted() *bool {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetDeleted() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Deleted
+	return a.Deleted
 }
 
-func (o *AWSComputeEnvComputeConfig) GetConfig() AwsBatchConfig {
-	if o == nil {
+func (a *AWSComputeEnvComputeConfig) GetConfig() AwsBatchConfig {
+	if a == nil {
 		return AwsBatchConfig{}
 	}
-	return o.Config
+	return a.Config
 }

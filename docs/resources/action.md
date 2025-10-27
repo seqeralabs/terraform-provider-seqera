@@ -101,12 +101,11 @@ resource "seqera_action" "my_action" {
 
 Required:
 
-- `compute_env_id` (String) Requires replacement if changed.
-- `pipeline` (String) Requires replacement if changed.
 - `work_dir` (String) Requires replacement if changed.
 
 Optional:
 
+- `compute_env_id` (String) Requires replacement if changed.
 - `config_profiles` (List of String) Requires replacement if changed.
 - `config_text` (String) Requires replacement if changed.
 - `date_created` (String) Requires replacement if changed.
@@ -119,6 +118,7 @@ Optional:
 - `optimization_id` (String) Requires replacement if changed.
 - `optimization_targets` (String) Requires replacement if changed.
 - `params_text` (String) Requires replacement if changed.
+- `pipeline` (String) Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
 - `pull_latest` (Boolean) Requires replacement if changed.

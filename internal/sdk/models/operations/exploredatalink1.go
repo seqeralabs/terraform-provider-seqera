@@ -24,53 +24,53 @@ type ExploreDataLink1Request struct {
 	PageSize *int `queryParam:"style=form,explode=true,name=pageSize"`
 }
 
-func (o *ExploreDataLink1Request) GetDataLinkID() string {
-	if o == nil {
+func (e *ExploreDataLink1Request) GetDataLinkID() string {
+	if e == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return e.DataLinkID
 }
 
-func (o *ExploreDataLink1Request) GetPath() string {
-	if o == nil {
+func (e *ExploreDataLink1Request) GetPath() string {
+	if e == nil {
 		return ""
 	}
-	return o.Path
+	return e.Path
 }
 
-func (o *ExploreDataLink1Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (e *ExploreDataLink1Request) GetWorkspaceID() *int64 {
+	if e == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return e.WorkspaceID
 }
 
-func (o *ExploreDataLink1Request) GetCredentialsID() *string {
-	if o == nil {
+func (e *ExploreDataLink1Request) GetCredentialsID() *string {
+	if e == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return e.CredentialsID
 }
 
-func (o *ExploreDataLink1Request) GetSearch() *string {
-	if o == nil {
+func (e *ExploreDataLink1Request) GetSearch() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Search
+	return e.Search
 }
 
-func (o *ExploreDataLink1Request) GetNextPageToken() *string {
-	if o == nil {
+func (e *ExploreDataLink1Request) GetNextPageToken() *string {
+	if e == nil {
 		return nil
 	}
-	return o.NextPageToken
+	return e.NextPageToken
 }
 
-func (o *ExploreDataLink1Request) GetPageSize() *int {
-	if o == nil {
+func (e *ExploreDataLink1Request) GetPageSize() *int {
+	if e == nil {
 		return nil
 	}
-	return o.PageSize
+	return e.PageSize
 }
 
 type ExploreDataLink1Response struct {
@@ -86,37 +86,37 @@ type ExploreDataLink1Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ExploreDataLink1Response) GetContentType() string {
-	if o == nil {
+func (e *ExploreDataLink1Response) GetContentType() string {
+	if e == nil {
 		return ""
 	}
-	return o.ContentType
+	return e.ContentType
 }
 
-func (o *ExploreDataLink1Response) GetStatusCode() int {
-	if o == nil {
+func (e *ExploreDataLink1Response) GetStatusCode() int {
+	if e == nil {
 		return 0
 	}
-	return o.StatusCode
+	return e.StatusCode
 }
 
-func (o *ExploreDataLink1Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (e *ExploreDataLink1Response) GetRawResponse() *http.Response {
+	if e == nil {
 		return nil
 	}
-	return o.RawResponse
+	return e.RawResponse
 }
 
-func (o *ExploreDataLink1Response) GetDataLinkContentResponse() *shared.DataLinkContentResponse {
-	if o == nil {
+func (e *ExploreDataLink1Response) GetDataLinkContentResponse() *shared.DataLinkContentResponse {
+	if e == nil {
 		return nil
 	}
-	return o.DataLinkContentResponse
+	return e.DataLinkContentResponse
 }
 
-func (o *ExploreDataLink1Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (e *ExploreDataLink1Response) GetErrorResponse() *shared.ErrorResponse {
+	if e == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return e.ErrorResponse
 }

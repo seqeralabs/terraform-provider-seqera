@@ -16,25 +16,25 @@ type DeleteAWSCredentialsRequest struct {
 	Checked *bool `queryParam:"style=form,explode=true,name=checked"`
 }
 
-func (o *DeleteAWSCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DeleteAWSCredentialsRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DeleteAWSCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteAWSCredentialsRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DeleteAWSCredentialsRequest) GetChecked() *bool {
-	if o == nil {
+func (d *DeleteAWSCredentialsRequest) GetChecked() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Checked
+	return d.Checked
 }
 
 type DeleteAWSCredentialsResponse struct {
@@ -50,37 +50,37 @@ type DeleteAWSCredentialsResponse struct {
 	DeleteCredentialsConflictResponse *shared.DeleteCredentialsConflictResponse
 }
 
-func (o *DeleteAWSCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteAWSCredentialsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteAWSCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteAWSCredentialsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteAWSCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteAWSCredentialsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }
 
-func (o *DeleteAWSCredentialsResponse) GetDeleteCredentialsConflictResponse() *shared.DeleteCredentialsConflictResponse {
-	if o == nil {
+func (d *DeleteAWSCredentialsResponse) GetDeleteCredentialsConflictResponse() *shared.DeleteCredentialsConflictResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DeleteCredentialsConflictResponse
+	return d.DeleteCredentialsConflictResponse
 }

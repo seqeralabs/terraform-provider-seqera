@@ -248,9 +248,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Attributes: map[string]schema.Attribute{
 							"compute_env_id": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(22),
-								},
 							},
 							"config": schema.SingleNestedAttribute{
 								Computed: true,
@@ -1960,9 +1957,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"description": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(2000),
-								},
 							},
 							"last_updated": schema.StringAttribute{
 								Computed: true,
@@ -1978,15 +1972,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"message": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(4096),
-								},
 							},
 							"name": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(100),
-								},
 							},
 							"org_id": schema.Int64Attribute{
 								Computed: true,
@@ -2035,7 +2023,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"compute_env_id": schema.StringAttribute{
-						Required: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 						},
@@ -2080,9 +2068,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(80),
-						},
 					},
 					"head_job_cpus": schema.Int32Attribute{
 						Computed: true,
@@ -2104,9 +2089,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
 					},
 					"label_ids": schema.ListAttribute{
 						Optional: true,
@@ -2139,9 +2121,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(200),
-						},
 					},
 					"optimization_id": schema.StringAttribute{
 						Computed: true,
@@ -2151,9 +2130,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(32),
-						},
 					},
 					"optimization_targets": schema.StringAttribute{
 						Computed: true,
@@ -2174,15 +2150,13 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Requires replacement if changed.`,
 					},
 					"pipeline": schema.StringAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(200),
-						},
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed: true,
@@ -2222,9 +2196,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"resume_launch_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
 					},
 					"revision": schema.StringAttribute{
 						Computed: true,
@@ -2234,9 +2205,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
 					},
 					"run_name": schema.StringAttribute{
 						Computed: true,
@@ -2246,9 +2214,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(80),
-						},
 					},
 					"schema_name": schema.StringAttribute{
 						Computed: true,
@@ -2258,9 +2223,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
 					},
 					"session_id": schema.StringAttribute{
 						Computed: true,
@@ -2270,9 +2232,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(36),
-						},
 					},
 					"stub_run": schema.BoolAttribute{
 						Computed: true,
@@ -2469,11 +2428,11 @@ func (r *ActionResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeActionResponse != nil && res1.DescribeActionResponse.Action != nil) {
+	if !(res1.DescribeActionResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedActionResponseDto(ctx, res1.DescribeActionResponse.Action)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeActionResponse(ctx, res1.DescribeActionResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -2533,11 +2492,11 @@ func (r *ActionResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeActionResponse != nil && res.DescribeActionResponse.Action != nil) {
+	if !(res.DescribeActionResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedActionResponseDto(ctx, res.DescribeActionResponse.Action)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeActionResponse(ctx, res.DescribeActionResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

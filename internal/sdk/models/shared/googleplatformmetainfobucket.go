@@ -21,9 +21,9 @@ func (g *GooglePlatformMetainfoBucket) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GooglePlatformMetainfoBucket) GetPath() *string {
-	if o == nil {
+func (g *GooglePlatformMetainfoBucket) GetPath() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Path
+	return g.Path
 }

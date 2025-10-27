@@ -87,9 +87,6 @@ func (r *TokensResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(1, 50),
-				},
 			},
 			"token": schema.SingleNestedAttribute{
 				Computed: true,
@@ -228,11 +225,11 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.ListAccessTokensResponse != nil && res1.ListAccessTokensResponse.Tokens != nil && len(res1.ListAccessTokensResponse.Tokens) > 0) {
+	if !(res1.ListAccessTokensResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAccessToken(ctx, &res1.ListAccessTokensResponse.Tokens[0])...)
+	resp.Diagnostics.Append(data.RefreshFromSharedListAccessTokensResponse(ctx, res1.ListAccessTokensResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -280,11 +277,11 @@ func (r *TokensResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.ListAccessTokensResponse != nil && res.ListAccessTokensResponse.Tokens != nil && len(res.ListAccessTokensResponse.Tokens) > 0) {
+	if !(res.ListAccessTokensResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAccessToken(ctx, &res.ListAccessTokensResponse.Tokens[0])...)
+	resp.Diagnostics.Append(data.RefreshFromSharedListAccessTokensResponse(ctx, res.ListAccessTokensResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

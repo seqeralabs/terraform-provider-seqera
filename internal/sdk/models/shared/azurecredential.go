@@ -68,81 +68,81 @@ func (a *AzureCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureCredential) GetCredentialsID() *string {
-	if o == nil {
+func (a *AzureCredential) GetCredentialsID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return a.CredentialsID
 }
 
-func (o *AzureCredential) GetName() string {
-	if o == nil {
+func (a *AzureCredential) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AzureCredential) GetDescription() *string {
-	if o == nil {
+func (a *AzureCredential) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AzureCredential) GetProviderType() AzureCredentialProviderType {
-	if o == nil {
+func (a *AzureCredential) GetProviderType() AzureCredentialProviderType {
+	if a == nil {
 		return AzureCredentialProviderType("")
 	}
-	return o.ProviderType
+	return a.ProviderType
 }
 
-func (o *AzureCredential) GetBaseURL() *string {
-	if o == nil {
+func (a *AzureCredential) GetBaseURL() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BaseURL
+	return a.BaseURL
 }
 
-func (o *AzureCredential) GetCategory() *string {
-	if o == nil {
+func (a *AzureCredential) GetCategory() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Category
+	return a.Category
 }
 
-func (o *AzureCredential) GetDeleted() *bool {
-	if o == nil {
+func (a *AzureCredential) GetDeleted() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Deleted
+	return a.Deleted
 }
 
-func (o *AzureCredential) GetLastUsed() *time.Time {
-	if o == nil {
+func (a *AzureCredential) GetLastUsed() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUsed
+	return a.LastUsed
 }
 
-func (o *AzureCredential) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *AzureCredential) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }
 
-func (o *AzureCredential) GetLastUpdated() *time.Time {
-	if o == nil {
+func (a *AzureCredential) GetLastUpdated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return a.LastUpdated
 }
 
-func (o *AzureCredential) GetKeys() AzureSecurityKeys {
-	if o == nil {
+func (a *AzureCredential) GetKeys() AzureSecurityKeys {
+	if a == nil {
 		return AzureSecurityKeys{}
 	}
-	return o.Keys
+	return a.Keys
 }
 
 type AzureCredentialOutput struct {
@@ -180,79 +180,79 @@ func (a *AzureCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzureCredentialOutput) GetCredentialsID() *string {
-	if o == nil {
+func (a *AzureCredentialOutput) GetCredentialsID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return a.CredentialsID
 }
 
-func (o *AzureCredentialOutput) GetName() string {
-	if o == nil {
+func (a *AzureCredentialOutput) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AzureCredentialOutput) GetDescription() *string {
-	if o == nil {
+func (a *AzureCredentialOutput) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AzureCredentialOutput) GetProviderType() AzureCredentialProviderType {
-	if o == nil {
+func (a *AzureCredentialOutput) GetProviderType() AzureCredentialProviderType {
+	if a == nil {
 		return AzureCredentialProviderType("")
 	}
-	return o.ProviderType
+	return a.ProviderType
 }
 
-func (o *AzureCredentialOutput) GetBaseURL() *string {
-	if o == nil {
+func (a *AzureCredentialOutput) GetBaseURL() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BaseURL
+	return a.BaseURL
 }
 
-func (o *AzureCredentialOutput) GetCategory() *string {
-	if o == nil {
+func (a *AzureCredentialOutput) GetCategory() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Category
+	return a.Category
 }
 
-func (o *AzureCredentialOutput) GetDeleted() *bool {
-	if o == nil {
+func (a *AzureCredentialOutput) GetDeleted() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Deleted
+	return a.Deleted
 }
 
-func (o *AzureCredentialOutput) GetLastUsed() *time.Time {
-	if o == nil {
+func (a *AzureCredentialOutput) GetLastUsed() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUsed
+	return a.LastUsed
 }
 
-func (o *AzureCredentialOutput) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *AzureCredentialOutput) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }
 
-func (o *AzureCredentialOutput) GetLastUpdated() *time.Time {
-	if o == nil {
+func (a *AzureCredentialOutput) GetLastUpdated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return a.LastUpdated
 }
 
-func (o *AzureCredentialOutput) GetKeys() AzureSecurityKeysOutput {
-	if o == nil {
+func (a *AzureCredentialOutput) GetKeys() AzureSecurityKeysOutput {
+	if a == nil {
 		return AzureSecurityKeysOutput{}
 	}
-	return o.Keys
+	return a.Keys
 }

@@ -24,23 +24,23 @@ func (d *DataStudioStatusInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DataStudioStatusInfo) GetStatus() *DataStudioStatus {
-	if o == nil {
+func (d *DataStudioStatusInfo) GetStatus() *DataStudioStatus {
+	if d == nil {
 		return nil
 	}
-	return o.Status
+	return d.Status
 }
 
-func (o *DataStudioStatusInfo) GetMessage() *string {
-	if o == nil {
+func (d *DataStudioStatusInfo) GetMessage() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Message
+	return d.Message
 }
 
-func (o *DataStudioStatusInfo) GetLastUpdate() *time.Time {
-	if o == nil {
+func (d *DataStudioStatusInfo) GetLastUpdate() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.LastUpdate
+	return d.LastUpdate
 }

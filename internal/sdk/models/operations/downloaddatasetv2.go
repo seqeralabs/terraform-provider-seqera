@@ -18,32 +18,32 @@ type DownloadDatasetV2Request struct {
 	FileName string `pathParam:"style=simple,explode=false,name=fileName"`
 }
 
-func (o *DownloadDatasetV2Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DownloadDatasetV2Request) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DownloadDatasetV2Request) GetDatasetID() string {
-	if o == nil {
+func (d *DownloadDatasetV2Request) GetDatasetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DatasetID
+	return d.DatasetID
 }
 
-func (o *DownloadDatasetV2Request) GetVersion() string {
-	if o == nil {
+func (d *DownloadDatasetV2Request) GetVersion() string {
+	if d == nil {
 		return ""
 	}
-	return o.Version
+	return d.Version
 }
 
-func (o *DownloadDatasetV2Request) GetFileName() string {
-	if o == nil {
+func (d *DownloadDatasetV2Request) GetFileName() string {
+	if d == nil {
 		return ""
 	}
-	return o.FileName
+	return d.FileName
 }
 
 type DownloadDatasetV2Response struct {
@@ -59,37 +59,37 @@ type DownloadDatasetV2Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DownloadDatasetV2Response) GetContentType() string {
-	if o == nil {
+func (d *DownloadDatasetV2Response) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DownloadDatasetV2Response) GetStatusCode() int {
-	if o == nil {
+func (d *DownloadDatasetV2Response) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DownloadDatasetV2Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DownloadDatasetV2Response) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DownloadDatasetV2Response) GetBytes() []byte {
-	if o == nil {
+func (d *DownloadDatasetV2Response) GetBytes() []byte {
+	if d == nil {
 		return nil
 	}
-	return o.Bytes
+	return d.Bytes
 }
 
-func (o *DownloadDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DownloadDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

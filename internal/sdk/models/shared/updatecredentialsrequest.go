@@ -10,9 +10,9 @@ type UpdateCredentialsRequest struct {
 	Credentials *CredentialsInput `json:"credentials,omitempty"`
 }
 
-func (o *UpdateCredentialsRequest) GetCredentials() *CredentialsInput {
-	if o == nil {
+func (u *UpdateCredentialsRequest) GetCredentials() *CredentialsInput {
+	if u == nil {
 		return nil
 	}
-	return o.Credentials
+	return u.Credentials
 }

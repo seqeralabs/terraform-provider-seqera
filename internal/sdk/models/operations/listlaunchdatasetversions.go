@@ -14,18 +14,18 @@ type ListLaunchDatasetVersionsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *ListLaunchDatasetVersionsRequest) GetLaunchID() string {
-	if o == nil {
+func (l *ListLaunchDatasetVersionsRequest) GetLaunchID() string {
+	if l == nil {
 		return ""
 	}
-	return o.LaunchID
+	return l.LaunchID
 }
 
-func (o *ListLaunchDatasetVersionsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListLaunchDatasetVersionsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
 type ListLaunchDatasetVersionsResponse struct {
@@ -39,30 +39,30 @@ type ListLaunchDatasetVersionsResponse struct {
 	DescribeLaunchResponse *shared.DescribeLaunchResponse
 }
 
-func (o *ListLaunchDatasetVersionsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListLaunchDatasetVersionsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLaunchDatasetVersionsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListLaunchDatasetVersionsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLaunchDatasetVersionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLaunchDatasetVersionsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLaunchDatasetVersionsResponse) GetDescribeLaunchResponse() *shared.DescribeLaunchResponse {
-	if o == nil {
+func (l *ListLaunchDatasetVersionsResponse) GetDescribeLaunchResponse() *shared.DescribeLaunchResponse {
+	if l == nil {
 		return nil
 	}
-	return o.DescribeLaunchResponse
+	return l.DescribeLaunchResponse
 }

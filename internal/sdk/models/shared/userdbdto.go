@@ -37,114 +37,114 @@ func (u *UserDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *UserDbDto) GetID() *int64 {
-	if o == nil {
+func (u *UserDbDto) GetID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UserDbDto) GetUserName() string {
-	if o == nil {
+func (u *UserDbDto) GetUserName() string {
+	if u == nil {
 		return ""
 	}
-	return o.UserName
+	return u.UserName
 }
 
-func (o *UserDbDto) GetEmail() string {
-	if o == nil {
+func (u *UserDbDto) GetEmail() string {
+	if u == nil {
 		return ""
 	}
-	return o.Email
+	return u.Email
 }
 
-func (o *UserDbDto) GetFirstName() *string {
-	if o == nil {
+func (u *UserDbDto) GetFirstName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.FirstName
+	return u.FirstName
 }
 
-func (o *UserDbDto) GetLastName() *string {
-	if o == nil {
+func (u *UserDbDto) GetLastName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.LastName
+	return u.LastName
 }
 
-func (o *UserDbDto) GetOrganization() *string {
-	if o == nil {
+func (u *UserDbDto) GetOrganization() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Organization
+	return u.Organization
 }
 
-func (o *UserDbDto) GetDescription() *string {
-	if o == nil {
+func (u *UserDbDto) GetDescription() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Description
+	return u.Description
 }
 
-func (o *UserDbDto) GetAvatar() *string {
-	if o == nil {
+func (u *UserDbDto) GetAvatar() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Avatar
+	return u.Avatar
 }
 
-func (o *UserDbDto) GetAvatarID() *string {
-	if o == nil {
+func (u *UserDbDto) GetAvatarID() *string {
+	if u == nil {
 		return nil
 	}
-	return o.AvatarID
+	return u.AvatarID
 }
 
-func (o *UserDbDto) GetNotification() *bool {
-	if o == nil {
+func (u *UserDbDto) GetNotification() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Notification
+	return u.Notification
 }
 
-func (o *UserDbDto) GetTermsOfUseConsent() *bool {
-	if o == nil {
+func (u *UserDbDto) GetTermsOfUseConsent() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.TermsOfUseConsent
+	return u.TermsOfUseConsent
 }
 
-func (o *UserDbDto) GetMarketingConsent() *bool {
-	if o == nil {
+func (u *UserDbDto) GetMarketingConsent() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.MarketingConsent
+	return u.MarketingConsent
 }
 
-func (o *UserDbDto) GetLastAccess() *time.Time {
-	if o == nil {
+func (u *UserDbDto) GetLastAccess() *time.Time {
+	if u == nil {
 		return nil
 	}
-	return o.LastAccess
+	return u.LastAccess
 }
 
-func (o *UserDbDto) GetDateCreated() *time.Time {
-	if o == nil {
+func (u *UserDbDto) GetDateCreated() *time.Time {
+	if u == nil {
 		return nil
 	}
-	return o.DateCreated
+	return u.DateCreated
 }
 
-func (o *UserDbDto) GetLastUpdated() *time.Time {
-	if o == nil {
+func (u *UserDbDto) GetLastUpdated() *time.Time {
+	if u == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return u.LastUpdated
 }
 
-func (o *UserDbDto) GetDeleted() *bool {
-	if o == nil {
+func (u *UserDbDto) GetDeleted() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.Deleted
+	return u.Deleted
 }

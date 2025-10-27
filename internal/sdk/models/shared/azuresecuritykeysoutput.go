@@ -8,23 +8,23 @@ type AzureSecurityKeysOutput struct {
 	StorageName   *string `json:"storageName,omitempty"`
 }
 
-func (o *AzureSecurityKeysOutput) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzureSecurityKeysOutput) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzureSecurityKeysOutput) GetBatchName() *string {
-	if o == nil {
+func (a *AzureSecurityKeysOutput) GetBatchName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BatchName
+	return a.BatchName
 }
 
-func (o *AzureSecurityKeysOutput) GetStorageName() *string {
-	if o == nil {
+func (a *AzureSecurityKeysOutput) GetStorageName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageName
+	return a.StorageName
 }

@@ -14,18 +14,18 @@ type ExtendDataStudioLifespanRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *ExtendDataStudioLifespanRequest) GetSessionID() string {
-	if o == nil {
+func (e *ExtendDataStudioLifespanRequest) GetSessionID() string {
+	if e == nil {
 		return ""
 	}
-	return o.SessionID
+	return e.SessionID
 }
 
-func (o *ExtendDataStudioLifespanRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (e *ExtendDataStudioLifespanRequest) GetWorkspaceID() *int64 {
+	if e == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return e.WorkspaceID
 }
 
 type ExtendDataStudioLifespanResponse struct {
@@ -41,37 +41,37 @@ type ExtendDataStudioLifespanResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ExtendDataStudioLifespanResponse) GetContentType() string {
-	if o == nil {
+func (e *ExtendDataStudioLifespanResponse) GetContentType() string {
+	if e == nil {
 		return ""
 	}
-	return o.ContentType
+	return e.ContentType
 }
 
-func (o *ExtendDataStudioLifespanResponse) GetStatusCode() int {
-	if o == nil {
+func (e *ExtendDataStudioLifespanResponse) GetStatusCode() int {
+	if e == nil {
 		return 0
 	}
-	return o.StatusCode
+	return e.StatusCode
 }
 
-func (o *ExtendDataStudioLifespanResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (e *ExtendDataStudioLifespanResponse) GetRawResponse() *http.Response {
+	if e == nil {
 		return nil
 	}
-	return o.RawResponse
+	return e.RawResponse
 }
 
-func (o *ExtendDataStudioLifespanResponse) GetDataStudioDto() *shared.DataStudioDto {
-	if o == nil {
+func (e *ExtendDataStudioLifespanResponse) GetDataStudioDto() *shared.DataStudioDto {
+	if e == nil {
 		return nil
 	}
-	return o.DataStudioDto
+	return e.DataStudioDto
 }
 
-func (o *ExtendDataStudioLifespanResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (e *ExtendDataStudioLifespanResponse) GetErrorResponse() *shared.ErrorResponse {
+	if e == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return e.ErrorResponse
 }

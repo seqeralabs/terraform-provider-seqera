@@ -18,32 +18,32 @@ type GetWorkflowTaskLogRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *GetWorkflowTaskLogRequest) GetWorkflowID() string {
-	if o == nil {
+func (g *GetWorkflowTaskLogRequest) GetWorkflowID() string {
+	if g == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return g.WorkflowID
 }
 
-func (o *GetWorkflowTaskLogRequest) GetTaskID() int64 {
-	if o == nil {
+func (g *GetWorkflowTaskLogRequest) GetTaskID() int64 {
+	if g == nil {
 		return 0
 	}
-	return o.TaskID
+	return g.TaskID
 }
 
-func (o *GetWorkflowTaskLogRequest) GetNext() *string {
-	if o == nil {
+func (g *GetWorkflowTaskLogRequest) GetNext() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Next
+	return g.Next
 }
 
-func (o *GetWorkflowTaskLogRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (g *GetWorkflowTaskLogRequest) GetWorkspaceID() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return g.WorkspaceID
 }
 
 type GetWorkflowTaskLogResponse struct {
@@ -59,37 +59,37 @@ type GetWorkflowTaskLogResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *GetWorkflowTaskLogResponse) GetContentType() string {
-	if o == nil {
+func (g *GetWorkflowTaskLogResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetWorkflowTaskLogResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetWorkflowTaskLogResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetWorkflowTaskLogResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetWorkflowTaskLogResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetWorkflowTaskLogResponse) GetWorkflowLogResponse() *shared.WorkflowLogResponse {
-	if o == nil {
+func (g *GetWorkflowTaskLogResponse) GetWorkflowLogResponse() *shared.WorkflowLogResponse {
+	if g == nil {
 		return nil
 	}
-	return o.WorkflowLogResponse
+	return g.WorkflowLogResponse
 }
 
-func (o *GetWorkflowTaskLogResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (g *GetWorkflowTaskLogResponse) GetErrorResponse() *shared.ErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return g.ErrorResponse
 }

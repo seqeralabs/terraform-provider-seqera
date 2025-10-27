@@ -173,11 +173,11 @@ func (r *AWSCredentialDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAWSCredentialsResponse != nil && res.DescribeAWSCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeAWSCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res.DescribeAWSCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res.DescribeAWSCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

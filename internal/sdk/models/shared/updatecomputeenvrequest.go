@@ -7,16 +7,16 @@ type UpdateComputeEnvRequest struct {
 	CredentialsID *string `json:"credentialsId,omitempty"`
 }
 
-func (o *UpdateComputeEnvRequest) GetName() *string {
-	if o == nil {
+func (u *UpdateComputeEnvRequest) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateComputeEnvRequest) GetCredentialsID() *string {
-	if o == nil {
+func (u *UpdateComputeEnvRequest) GetCredentialsID() *string {
+	if u == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return u.CredentialsID
 }

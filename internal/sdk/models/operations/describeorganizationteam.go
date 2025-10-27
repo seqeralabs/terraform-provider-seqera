@@ -14,18 +14,18 @@ type DescribeOrganizationTeamRequest struct {
 	TeamID int64 `pathParam:"style=simple,explode=false,name=teamId"`
 }
 
-func (o *DescribeOrganizationTeamRequest) GetOrgID() int64 {
-	if o == nil {
+func (d *DescribeOrganizationTeamRequest) GetOrgID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.OrgID
+	return d.OrgID
 }
 
-func (o *DescribeOrganizationTeamRequest) GetTeamID() int64 {
-	if o == nil {
+func (d *DescribeOrganizationTeamRequest) GetTeamID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.TeamID
+	return d.TeamID
 }
 
 type DescribeOrganizationTeamResponse struct {
@@ -41,37 +41,37 @@ type DescribeOrganizationTeamResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeOrganizationTeamResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeOrganizationTeamResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeOrganizationTeamResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeOrganizationTeamResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeOrganizationTeamResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeOrganizationTeamResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeOrganizationTeamResponse) GetDescribeTeamResponse() *shared.DescribeTeamResponse {
-	if o == nil {
+func (d *DescribeOrganizationTeamResponse) GetDescribeTeamResponse() *shared.DescribeTeamResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeTeamResponse
+	return d.DescribeTeamResponse
 }
 
-func (o *DescribeOrganizationTeamResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeOrganizationTeamResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

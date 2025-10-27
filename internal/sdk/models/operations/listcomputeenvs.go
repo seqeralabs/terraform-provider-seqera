@@ -14,18 +14,18 @@ type ListComputeEnvsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *ListComputeEnvsRequest) GetStatus() *string {
-	if o == nil {
+func (l *ListComputeEnvsRequest) GetStatus() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Status
+	return l.Status
 }
 
-func (o *ListComputeEnvsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListComputeEnvsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
 type ListComputeEnvsResponse struct {
@@ -41,37 +41,37 @@ type ListComputeEnvsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListComputeEnvsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListComputeEnvsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListComputeEnvsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListComputeEnvsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListComputeEnvsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListComputeEnvsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListComputeEnvsResponse) GetListComputeEnvsResponse() *shared.ListComputeEnvsResponse {
-	if o == nil {
+func (l *ListComputeEnvsResponse) GetListComputeEnvsResponse() *shared.ListComputeEnvsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListComputeEnvsResponse
+	return l.ListComputeEnvsResponse
 }
 
-func (o *ListComputeEnvsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListComputeEnvsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

@@ -25,37 +25,37 @@ func (a *AzBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzBatchPlatformMetainfo) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzBatchPlatformMetainfo) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzBatchPlatformMetainfo) GetWarnings() []string {
-	if o == nil {
+func (a *AzBatchPlatformMetainfo) GetWarnings() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Warnings
+	return a.Warnings
 }
 
-func (o *AzBatchPlatformMetainfo) GetPools() []string {
-	if o == nil {
+func (a *AzBatchPlatformMetainfo) GetPools() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Pools
+	return a.Pools
 }
 
-func (o *AzBatchPlatformMetainfo) GetContainers() []string {
-	if o == nil {
+func (a *AzBatchPlatformMetainfo) GetContainers() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Containers
+	return a.Containers
 }
 
-func (o *AzBatchPlatformMetainfo) GetVMTypes() []string {
-	if o == nil {
+func (a *AzBatchPlatformMetainfo) GetVMTypes() []string {
+	if a == nil {
 		return nil
 	}
-	return o.VMTypes
+	return a.VMTypes
 }

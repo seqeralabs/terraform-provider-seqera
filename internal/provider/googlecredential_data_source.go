@@ -165,11 +165,11 @@ func (r *GoogleCredentialDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeGoogleCredentialsResponse != nil && res.DescribeGoogleCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeGoogleCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedGoogleCredentialOutput(ctx, res.DescribeGoogleCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGoogleCredentialsResponse(ctx, res.DescribeGoogleCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

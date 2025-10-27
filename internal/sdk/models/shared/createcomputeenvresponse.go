@@ -6,9 +6,9 @@ type CreateComputeEnvResponse struct {
 	ComputeEnvID *string `json:"computeEnvId,omitempty"`
 }
 
-func (o *CreateComputeEnvResponse) GetComputeEnvID() *string {
-	if o == nil {
+func (c *CreateComputeEnvResponse) GetComputeEnvID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ComputeEnvID
+	return c.ComputeEnvID
 }

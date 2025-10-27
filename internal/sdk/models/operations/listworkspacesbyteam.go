@@ -20,39 +20,39 @@ type ListWorkspacesByTeamRequest struct {
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 
-func (o *ListWorkspacesByTeamRequest) GetOrgID() int64 {
-	if o == nil {
+func (l *ListWorkspacesByTeamRequest) GetOrgID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
-func (o *ListWorkspacesByTeamRequest) GetTeamID() int64 {
-	if o == nil {
+func (l *ListWorkspacesByTeamRequest) GetTeamID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.TeamID
+	return l.TeamID
 }
 
-func (o *ListWorkspacesByTeamRequest) GetMax() *int {
-	if o == nil {
+func (l *ListWorkspacesByTeamRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListWorkspacesByTeamRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListWorkspacesByTeamRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListWorkspacesByTeamRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListWorkspacesByTeamRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
 type ListWorkspacesByTeamResponse struct {
@@ -68,37 +68,37 @@ type ListWorkspacesByTeamResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListWorkspacesByTeamResponse) GetContentType() string {
-	if o == nil {
+func (l *ListWorkspacesByTeamResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListWorkspacesByTeamResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListWorkspacesByTeamResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListWorkspacesByTeamResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListWorkspacesByTeamResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListWorkspacesByTeamResponse) GetListWorkspacesResponse() *shared.ListWorkspacesResponse {
-	if o == nil {
+func (l *ListWorkspacesByTeamResponse) GetListWorkspacesResponse() *shared.ListWorkspacesResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListWorkspacesResponse
+	return l.ListWorkspacesResponse
 }
 
-func (o *ListWorkspacesByTeamResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListWorkspacesByTeamResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

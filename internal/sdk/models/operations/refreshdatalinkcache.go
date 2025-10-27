@@ -13,18 +13,18 @@ type RefreshDataLinkCacheRequest struct {
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
 }
 
-func (o *RefreshDataLinkCacheRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (r *RefreshDataLinkCacheRequest) GetWorkspaceID() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return r.WorkspaceID
 }
 
-func (o *RefreshDataLinkCacheRequest) GetCredentialsID() *string {
-	if o == nil {
+func (r *RefreshDataLinkCacheRequest) GetCredentialsID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return r.CredentialsID
 }
 
 type RefreshDataLinkCacheResponse struct {
@@ -36,23 +36,23 @@ type RefreshDataLinkCacheResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *RefreshDataLinkCacheResponse) GetContentType() string {
-	if o == nil {
+func (r *RefreshDataLinkCacheResponse) GetContentType() string {
+	if r == nil {
 		return ""
 	}
-	return o.ContentType
+	return r.ContentType
 }
 
-func (o *RefreshDataLinkCacheResponse) GetStatusCode() int {
-	if o == nil {
+func (r *RefreshDataLinkCacheResponse) GetStatusCode() int {
+	if r == nil {
 		return 0
 	}
-	return o.StatusCode
+	return r.StatusCode
 }
 
-func (o *RefreshDataLinkCacheResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (r *RefreshDataLinkCacheResponse) GetRawResponse() *http.Response {
+	if r == nil {
 		return nil
 	}
-	return o.RawResponse
+	return r.RawResponse
 }

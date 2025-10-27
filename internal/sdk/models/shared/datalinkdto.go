@@ -57,86 +57,86 @@ type DataLinkDto struct {
 	Message          *string               `json:"message,omitempty"`
 }
 
-func (o *DataLinkDto) GetDataLinkID() *string {
-	if o == nil {
+func (d *DataLinkDto) GetDataLinkID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.DataLinkID
+	return d.DataLinkID
 }
 
-func (o *DataLinkDto) GetName() *string {
-	if o == nil {
+func (d *DataLinkDto) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataLinkDto) GetDescription() *string {
-	if o == nil {
+func (d *DataLinkDto) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataLinkDto) GetResourceRef() *string {
-	if o == nil {
+func (d *DataLinkDto) GetResourceRef() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ResourceRef
+	return d.ResourceRef
 }
 
-func (o *DataLinkDto) GetType() *DataLinkType {
-	if o == nil {
+func (d *DataLinkDto) GetType() *DataLinkType {
+	if d == nil {
 		return nil
 	}
-	return o.Type
+	return d.Type
 }
 
-func (o *DataLinkDto) GetProviderType() *ProviderType {
-	if o == nil {
+func (d *DataLinkDto) GetProviderType() *ProviderType {
+	if d == nil {
 		return nil
 	}
-	return o.ProviderType
+	return d.ProviderType
 }
 
-func (o *DataLinkDto) GetRegion() *string {
-	if o == nil {
+func (d *DataLinkDto) GetRegion() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Region
+	return d.Region
 }
 
-func (o *DataLinkDto) GetCredentials() []DataLinkCredentials {
-	if o == nil {
+func (d *DataLinkDto) GetCredentials() []DataLinkCredentials {
+	if d == nil {
 		return nil
 	}
-	return o.Credentials
+	return d.Credentials
 }
 
-func (o *DataLinkDto) GetPublicAccessible() *bool {
-	if o == nil {
+func (d *DataLinkDto) GetPublicAccessible() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.PublicAccessible
+	return d.PublicAccessible
 }
 
-func (o *DataLinkDto) GetHidden() *bool {
-	if o == nil {
+func (d *DataLinkDto) GetHidden() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Hidden
+	return d.Hidden
 }
 
-func (o *DataLinkDto) GetStatus() *DataLinkDtoStatus {
-	if o == nil {
+func (d *DataLinkDto) GetStatus() *DataLinkDtoStatus {
+	if d == nil {
 		return nil
 	}
-	return o.Status
+	return d.Status
 }
 
-func (o *DataLinkDto) GetMessage() *string {
-	if o == nil {
+func (d *DataLinkDto) GetMessage() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Message
+	return d.Message
 }

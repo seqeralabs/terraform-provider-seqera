@@ -21,114 +21,114 @@ type TraceProgressData struct {
 	Processes   []TraceProgressDetail `json:"processes,omitempty"`
 }
 
-func (o *TraceProgressData) GetPending() *int {
-	if o == nil {
+func (t *TraceProgressData) GetPending() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Pending
+	return t.Pending
 }
 
-func (o *TraceProgressData) GetSubmitted() *int {
-	if o == nil {
+func (t *TraceProgressData) GetSubmitted() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Submitted
+	return t.Submitted
 }
 
-func (o *TraceProgressData) GetRunning() *int {
-	if o == nil {
+func (t *TraceProgressData) GetRunning() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Running
+	return t.Running
 }
 
-func (o *TraceProgressData) GetSucceeded() *int {
-	if o == nil {
+func (t *TraceProgressData) GetSucceeded() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Succeeded
+	return t.Succeeded
 }
 
-func (o *TraceProgressData) GetCached() *int {
-	if o == nil {
+func (t *TraceProgressData) GetCached() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Cached
+	return t.Cached
 }
 
-func (o *TraceProgressData) GetFailed() *int {
-	if o == nil {
+func (t *TraceProgressData) GetFailed() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Failed
+	return t.Failed
 }
 
-func (o *TraceProgressData) GetAborted() *int {
-	if o == nil {
+func (t *TraceProgressData) GetAborted() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Aborted
+	return t.Aborted
 }
 
-func (o *TraceProgressData) GetStored() *int {
-	if o == nil {
+func (t *TraceProgressData) GetStored() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Stored
+	return t.Stored
 }
 
-func (o *TraceProgressData) GetIgnored() *int {
-	if o == nil {
+func (t *TraceProgressData) GetIgnored() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Ignored
+	return t.Ignored
 }
 
-func (o *TraceProgressData) GetRetries() *int {
-	if o == nil {
+func (t *TraceProgressData) GetRetries() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Retries
+	return t.Retries
 }
 
-func (o *TraceProgressData) GetLoadCpus() *int64 {
-	if o == nil {
+func (t *TraceProgressData) GetLoadCpus() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.LoadCpus
+	return t.LoadCpus
 }
 
-func (o *TraceProgressData) GetLoadMemory() *int64 {
-	if o == nil {
+func (t *TraceProgressData) GetLoadMemory() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.LoadMemory
+	return t.LoadMemory
 }
 
-func (o *TraceProgressData) GetPeakRunning() *int {
-	if o == nil {
+func (t *TraceProgressData) GetPeakRunning() *int {
+	if t == nil {
 		return nil
 	}
-	return o.PeakRunning
+	return t.PeakRunning
 }
 
-func (o *TraceProgressData) GetPeakCpus() *int64 {
-	if o == nil {
+func (t *TraceProgressData) GetPeakCpus() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.PeakCpus
+	return t.PeakCpus
 }
 
-func (o *TraceProgressData) GetPeakMemory() *int64 {
-	if o == nil {
+func (t *TraceProgressData) GetPeakMemory() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.PeakMemory
+	return t.PeakMemory
 }
 
-func (o *TraceProgressData) GetProcesses() []TraceProgressDetail {
-	if o == nil {
+func (t *TraceProgressData) GetProcesses() []TraceProgressDetail {
+	if t == nil {
 		return nil
 	}
-	return o.Processes
+	return t.Processes
 }

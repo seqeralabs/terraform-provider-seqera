@@ -60,7 +60,7 @@ func (s *Avatars) DownloadAvatar(ctx context.Context, request operations.Downloa
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DownloadAvatar",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

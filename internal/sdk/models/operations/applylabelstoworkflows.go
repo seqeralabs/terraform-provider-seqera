@@ -14,18 +14,18 @@ type ApplyLabelsToWorkflowsRequest struct {
 	AssociateWorkflowLabelsRequest shared.AssociateWorkflowLabelsRequest `request:"mediaType=application/json"`
 }
 
-func (o *ApplyLabelsToWorkflowsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (a *ApplyLabelsToWorkflowsRequest) GetWorkspaceID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return a.WorkspaceID
 }
 
-func (o *ApplyLabelsToWorkflowsRequest) GetAssociateWorkflowLabelsRequest() shared.AssociateWorkflowLabelsRequest {
-	if o == nil {
+func (a *ApplyLabelsToWorkflowsRequest) GetAssociateWorkflowLabelsRequest() shared.AssociateWorkflowLabelsRequest {
+	if a == nil {
 		return shared.AssociateWorkflowLabelsRequest{}
 	}
-	return o.AssociateWorkflowLabelsRequest
+	return a.AssociateWorkflowLabelsRequest
 }
 
 type ApplyLabelsToWorkflowsResponse struct {
@@ -37,23 +37,23 @@ type ApplyLabelsToWorkflowsResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *ApplyLabelsToWorkflowsResponse) GetContentType() string {
-	if o == nil {
+func (a *ApplyLabelsToWorkflowsResponse) GetContentType() string {
+	if a == nil {
 		return ""
 	}
-	return o.ContentType
+	return a.ContentType
 }
 
-func (o *ApplyLabelsToWorkflowsResponse) GetStatusCode() int {
-	if o == nil {
+func (a *ApplyLabelsToWorkflowsResponse) GetStatusCode() int {
+	if a == nil {
 		return 0
 	}
-	return o.StatusCode
+	return a.StatusCode
 }
 
-func (o *ApplyLabelsToWorkflowsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (a *ApplyLabelsToWorkflowsResponse) GetRawResponse() *http.Response {
+	if a == nil {
 		return nil
 	}
-	return o.RawResponse
+	return a.RawResponse
 }

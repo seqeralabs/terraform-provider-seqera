@@ -7,16 +7,16 @@ type TraceCreateResponse struct {
 	WorkflowID *string `json:"workflowId,omitempty"`
 }
 
-func (o *TraceCreateResponse) GetMessage() *string {
-	if o == nil {
+func (t *TraceCreateResponse) GetMessage() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Message
+	return t.Message
 }
 
-func (o *TraceCreateResponse) GetWorkflowID() *string {
-	if o == nil {
+func (t *TraceCreateResponse) GetWorkflowID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.WorkflowID
+	return t.WorkflowID
 }

@@ -6,9 +6,9 @@ type RunID struct {
 	RunID *string `json:"run_id,omitempty"`
 }
 
-func (o *RunID) GetRunID() *string {
-	if o == nil {
+func (r *RunID) GetRunID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.RunID
+	return r.RunID
 }

@@ -7,16 +7,16 @@ type PipelineSchemaResponse struct {
 	Params *string `json:"params,omitempty"`
 }
 
-func (o *PipelineSchemaResponse) GetSchema() string {
-	if o == nil {
+func (p *PipelineSchemaResponse) GetSchema() string {
+	if p == nil {
 		return ""
 	}
-	return o.Schema
+	return p.Schema
 }
 
-func (o *PipelineSchemaResponse) GetParams() *string {
-	if o == nil {
+func (p *PipelineSchemaResponse) GetParams() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Params
+	return p.Params
 }

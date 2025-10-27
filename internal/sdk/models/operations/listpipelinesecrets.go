@@ -12,11 +12,11 @@ type ListPipelineSecretsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *ListPipelineSecretsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListPipelineSecretsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
 type ListPipelineSecretsResponse struct {
@@ -32,37 +32,37 @@ type ListPipelineSecretsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListPipelineSecretsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListPipelineSecretsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListPipelineSecretsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListPipelineSecretsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListPipelineSecretsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListPipelineSecretsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListPipelineSecretsResponse) GetListPipelineSecretsResponse() *shared.ListPipelineSecretsResponse {
-	if o == nil {
+func (l *ListPipelineSecretsResponse) GetListPipelineSecretsResponse() *shared.ListPipelineSecretsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListPipelineSecretsResponse
+	return l.ListPipelineSecretsResponse
 }
 
-func (o *ListPipelineSecretsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListPipelineSecretsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

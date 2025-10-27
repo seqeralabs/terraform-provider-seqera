@@ -11,6 +11,21 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *DatasetsResourceModel) RefreshFromSharedCreateDatasetResponse(ctx context.Context, resp *shared.CreateDatasetResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedDataset(ctx, resp.Dataset)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *DatasetsResourceModel) RefreshFromSharedDataset(ctx context.Context, resp *shared.Dataset) diag.Diagnostics {
 	var diags diag.Diagnostics
 

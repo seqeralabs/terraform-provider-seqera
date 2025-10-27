@@ -8,23 +8,23 @@ type ProgressData struct {
 	TotalProcesses    *int          `json:"totalProcesses,omitempty"`
 }
 
-func (o *ProgressData) GetWorkflowProgress() *WorkflowLoad {
-	if o == nil {
+func (p *ProgressData) GetWorkflowProgress() *WorkflowLoad {
+	if p == nil {
 		return nil
 	}
-	return o.WorkflowProgress
+	return p.WorkflowProgress
 }
 
-func (o *ProgressData) GetProcessesProgress() []ProcessLoad {
-	if o == nil {
+func (p *ProgressData) GetProcessesProgress() []ProcessLoad {
+	if p == nil {
 		return nil
 	}
-	return o.ProcessesProgress
+	return p.ProcessesProgress
 }
 
-func (o *ProgressData) GetTotalProcesses() *int {
-	if o == nil {
+func (p *ProgressData) GetTotalProcesses() *int {
+	if p == nil {
 		return nil
 	}
-	return o.TotalProcesses
+	return p.TotalProcesses
 }

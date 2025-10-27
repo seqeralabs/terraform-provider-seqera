@@ -13741,8 +13741,6 @@ components:
           format: date-time
           example: "2024-07-23T10:30:00Z"
       required:
-        - pipeline
-        - computeEnvId
         - workDir
         # - target: $.components.schemas.ComputeEnv_ComputeConfig_
         #   update:

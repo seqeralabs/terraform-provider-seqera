@@ -6,9 +6,9 @@ type CreateTeamMemberRequest struct {
 	UserNameOrEmail *string `json:"userNameOrEmail,omitempty"`
 }
 
-func (o *CreateTeamMemberRequest) GetUserNameOrEmail() *string {
-	if o == nil {
+func (c *CreateTeamMemberRequest) GetUserNameOrEmail() *string {
+	if c == nil {
 		return nil
 	}
-	return o.UserNameOrEmail
+	return c.UserNameOrEmail
 }

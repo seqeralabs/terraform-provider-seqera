@@ -16,25 +16,25 @@ type DeleteWorkflowRequest struct {
 	Force *bool `queryParam:"style=form,explode=true,name=force"`
 }
 
-func (o *DeleteWorkflowRequest) GetWorkflowID() string {
-	if o == nil {
+func (d *DeleteWorkflowRequest) GetWorkflowID() string {
+	if d == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return d.WorkflowID
 }
 
-func (o *DeleteWorkflowRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteWorkflowRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DeleteWorkflowRequest) GetForce() *bool {
-	if o == nil {
+func (d *DeleteWorkflowRequest) GetForce() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Force
+	return d.Force
 }
 
 type DeleteWorkflowResponse struct {
@@ -48,30 +48,30 @@ type DeleteWorkflowResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteWorkflowResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteWorkflowResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteWorkflowResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteWorkflowResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteWorkflowResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteWorkflowResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteWorkflowResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteWorkflowResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

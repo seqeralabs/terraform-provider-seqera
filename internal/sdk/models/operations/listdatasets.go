@@ -12,11 +12,11 @@ type ListDatasetsRequest struct {
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 }
 
-func (o *ListDatasetsRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (l *ListDatasetsRequest) GetWorkspaceID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
 type ListDatasetsResponse struct {
@@ -32,37 +32,37 @@ type ListDatasetsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListDatasetsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListDatasetsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDatasetsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListDatasetsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDatasetsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDatasetsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDatasetsResponse) GetListDatasetsResponse() *shared.ListDatasetsResponse {
-	if o == nil {
+func (l *ListDatasetsResponse) GetListDatasetsResponse() *shared.ListDatasetsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListDatasetsResponse
+	return l.ListDatasetsResponse
 }
 
-func (o *ListDatasetsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListDatasetsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

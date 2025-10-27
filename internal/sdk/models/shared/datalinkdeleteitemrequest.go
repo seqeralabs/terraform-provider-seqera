@@ -7,16 +7,16 @@ type DataLinkDeleteItemRequest struct {
 	Dirs  []string `json:"dirs,omitempty"`
 }
 
-func (o *DataLinkDeleteItemRequest) GetFiles() []string {
-	if o == nil {
+func (d *DataLinkDeleteItemRequest) GetFiles() []string {
+	if d == nil {
 		return nil
 	}
-	return o.Files
+	return d.Files
 }
 
-func (o *DataLinkDeleteItemRequest) GetDirs() []string {
-	if o == nil {
+func (d *DataLinkDeleteItemRequest) GetDirs() []string {
+	if d == nil {
 		return nil
 	}
-	return o.Dirs
+	return d.Dirs
 }

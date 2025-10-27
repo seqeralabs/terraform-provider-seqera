@@ -6,9 +6,9 @@ type DescribeOrganizationQuotasResponse struct {
 	Quotas *OrganizationQuotas `json:"quotas,omitempty"`
 }
 
-func (o *DescribeOrganizationQuotasResponse) GetQuotas() *OrganizationQuotas {
-	if o == nil {
+func (d *DescribeOrganizationQuotasResponse) GetQuotas() *OrganizationQuotas {
+	if d == nil {
 		return nil
 	}
-	return o.Quotas
+	return d.Quotas
 }

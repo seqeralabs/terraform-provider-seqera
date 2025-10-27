@@ -62,7 +62,7 @@ func (s *Labels) AddLabelsToActions(ctx context.Context, request operations.AddL
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "AddLabelsToActions",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateActionLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -184,7 +184,7 @@ func (s *Labels) ApplyLabelsToActions(ctx context.Context, request operations.Ap
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ApplyLabelsToActions",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateActionLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -306,7 +306,7 @@ func (s *Labels) RemoveLabelsFromActions(ctx context.Context, request operations
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "RemoveLabelsFromActions",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateActionLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -428,7 +428,7 @@ func (s *Labels) ListLabels(ctx context.Context, request operations.ListLabelsRe
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ListLabels",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -584,7 +584,7 @@ func (s *Labels) CreateLabel(ctx context.Context, request operations.CreateLabel
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateLabel",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateLabelRequest", "json", `request:"mediaType=application/json"`)
@@ -747,7 +747,7 @@ func (s *Labels) UpdateLabel(ctx context.Context, request operations.UpdateLabel
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "UpdateLabel",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateLabelRequest", "json", `request:"mediaType=application/json"`)
@@ -910,7 +910,7 @@ func (s *Labels) DeleteLabel(ctx context.Context, request operations.DeleteLabel
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteLabel",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -1046,7 +1046,7 @@ func (s *Labels) AddLabelsToPipelines(ctx context.Context, request operations.Ad
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "AddLabelsToPipelines",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociatePipelineLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -1168,7 +1168,7 @@ func (s *Labels) ApplyLabelsToPipelines(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ApplyLabelsToPipelines",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociatePipelineLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -1290,7 +1290,7 @@ func (s *Labels) RemoveLabelsFromPipelines(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "RemoveLabelsFromPipelines",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociatePipelineLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -1412,7 +1412,7 @@ func (s *Labels) AddLabelsToWorkflows(ctx context.Context, request operations.Ad
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "AddLabelsToWorkflows",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateWorkflowLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -1534,7 +1534,7 @@ func (s *Labels) ApplyLabelsToWorkflows(ctx context.Context, request operations.
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "ApplyLabelsToWorkflows",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateWorkflowLabelsRequest", "json", `request:"mediaType=application/json"`)
@@ -1656,7 +1656,7 @@ func (s *Labels) RemoveLabelsFromWorkflows(ctx context.Context, request operatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "RemoveLabelsFromWorkflows",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "AssociateWorkflowLabelsRequest", "json", `request:"mediaType=application/json"`)

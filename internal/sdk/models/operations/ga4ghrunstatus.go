@@ -12,11 +12,11 @@ type Ga4ghRunStatusRequest struct {
 	RunID string `pathParam:"style=simple,explode=false,name=run_id"`
 }
 
-func (o *Ga4ghRunStatusRequest) GetRunID() string {
-	if o == nil {
+func (g *Ga4ghRunStatusRequest) GetRunID() string {
+	if g == nil {
 		return ""
 	}
-	return o.RunID
+	return g.RunID
 }
 
 type Ga4ghRunStatusResponse struct {
@@ -32,37 +32,37 @@ type Ga4ghRunStatusResponse struct {
 	WesErrorResponse *shared.WesErrorResponse
 }
 
-func (o *Ga4ghRunStatusResponse) GetContentType() string {
-	if o == nil {
+func (g *Ga4ghRunStatusResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *Ga4ghRunStatusResponse) GetStatusCode() int {
-	if o == nil {
+func (g *Ga4ghRunStatusResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *Ga4ghRunStatusResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *Ga4ghRunStatusResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *Ga4ghRunStatusResponse) GetRunStatus() *shared.RunStatus {
-	if o == nil {
+func (g *Ga4ghRunStatusResponse) GetRunStatus() *shared.RunStatus {
+	if g == nil {
 		return nil
 	}
-	return o.RunStatus
+	return g.RunStatus
 }
 
-func (o *Ga4ghRunStatusResponse) GetWesErrorResponse() *shared.WesErrorResponse {
-	if o == nil {
+func (g *Ga4ghRunStatusResponse) GetWesErrorResponse() *shared.WesErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.WesErrorResponse
+	return g.WesErrorResponse
 }

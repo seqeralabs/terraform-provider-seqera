@@ -6,9 +6,9 @@ type LaunchActionRequest struct {
 	Params map[string]any `json:"params,omitempty"`
 }
 
-func (o *LaunchActionRequest) GetParams() map[string]any {
-	if o == nil {
+func (l *LaunchActionRequest) GetParams() map[string]any {
+	if l == nil {
 		return nil
 	}
-	return o.Params
+	return l.Params
 }

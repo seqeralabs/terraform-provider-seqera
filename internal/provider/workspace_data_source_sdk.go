@@ -11,6 +11,21 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+func (r *WorkspaceDataSourceModel) RefreshFromSharedDescribeWorkspaceResponse(ctx context.Context, resp *shared.DescribeWorkspaceResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedWorkspace(ctx, resp.Workspace)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *WorkspaceDataSourceModel) RefreshFromSharedWorkspace(ctx context.Context, resp *shared.Workspace) diag.Diagnostics {
 	var diags diag.Diagnostics
 

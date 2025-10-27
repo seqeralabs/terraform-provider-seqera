@@ -10,9 +10,9 @@ type DataStudioCreateResponse struct {
 	Studio *DataStudioDto `json:"studio,omitempty"`
 }
 
-func (o *DataStudioCreateResponse) GetStudio() *DataStudioDto {
-	if o == nil {
+func (d *DataStudioCreateResponse) GetStudio() *DataStudioDto {
+	if d == nil {
 		return nil
 	}
-	return o.Studio
+	return d.Studio
 }

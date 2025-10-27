@@ -7,16 +7,16 @@ type AssociateWorkflowLabelsRequest struct {
 	LabelIds    []int64  `json:"labelIds,omitempty"`
 }
 
-func (o *AssociateWorkflowLabelsRequest) GetWorkflowIds() []string {
-	if o == nil {
+func (a *AssociateWorkflowLabelsRequest) GetWorkflowIds() []string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkflowIds
+	return a.WorkflowIds
 }
 
-func (o *AssociateWorkflowLabelsRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (a *AssociateWorkflowLabelsRequest) GetLabelIds() []int64 {
+	if a == nil {
 		return nil
 	}
-	return o.LabelIds
+	return a.LabelIds
 }

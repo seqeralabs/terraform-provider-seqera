@@ -16,25 +16,25 @@ type ListDataStudioTemplatesRequest struct {
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
 }
 
-func (o *ListDataStudioTemplatesRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListDataStudioTemplatesRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListDataStudioTemplatesRequest) GetMax() *int {
-	if o == nil {
+func (l *ListDataStudioTemplatesRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListDataStudioTemplatesRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListDataStudioTemplatesRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
 type ListDataStudioTemplatesResponse struct {
@@ -50,37 +50,37 @@ type ListDataStudioTemplatesResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListDataStudioTemplatesResponse) GetContentType() string {
-	if o == nil {
+func (l *ListDataStudioTemplatesResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDataStudioTemplatesResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListDataStudioTemplatesResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDataStudioTemplatesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDataStudioTemplatesResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDataStudioTemplatesResponse) GetDataStudioTemplatesListResponse() *shared.DataStudioTemplatesListResponse {
-	if o == nil {
+func (l *ListDataStudioTemplatesResponse) GetDataStudioTemplatesListResponse() *shared.DataStudioTemplatesListResponse {
+	if l == nil {
 		return nil
 	}
-	return o.DataStudioTemplatesListResponse
+	return l.DataStudioTemplatesListResponse
 }
 
-func (o *ListDataStudioTemplatesResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListDataStudioTemplatesResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

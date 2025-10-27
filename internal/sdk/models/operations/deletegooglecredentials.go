@@ -16,25 +16,25 @@ type DeleteGoogleCredentialsRequest struct {
 	Checked *bool `queryParam:"style=form,explode=true,name=checked"`
 }
 
-func (o *DeleteGoogleCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DeleteGoogleCredentialsRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DeleteGoogleCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DeleteGoogleCredentialsRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DeleteGoogleCredentialsRequest) GetChecked() *bool {
-	if o == nil {
+func (d *DeleteGoogleCredentialsRequest) GetChecked() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Checked
+	return d.Checked
 }
 
 type DeleteGoogleCredentialsResponse struct {
@@ -50,37 +50,37 @@ type DeleteGoogleCredentialsResponse struct {
 	DeleteCredentialsConflictResponse *shared.DeleteCredentialsConflictResponse
 }
 
-func (o *DeleteGoogleCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteGoogleCredentialsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteGoogleCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteGoogleCredentialsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteGoogleCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteGoogleCredentialsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }
 
-func (o *DeleteGoogleCredentialsResponse) GetDeleteCredentialsConflictResponse() *shared.DeleteCredentialsConflictResponse {
-	if o == nil {
+func (d *DeleteGoogleCredentialsResponse) GetDeleteCredentialsConflictResponse() *shared.DeleteCredentialsConflictResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DeleteCredentialsConflictResponse
+	return d.DeleteCredentialsConflictResponse
 }

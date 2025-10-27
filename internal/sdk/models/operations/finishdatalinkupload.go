@@ -17,32 +17,32 @@ type FinishDataLinkUploadRequest struct {
 	DataLinkFinishMultiPartUploadRequest shared.DataLinkFinishMultiPartUploadRequest `request:"mediaType=application/json"`
 }
 
-func (o *FinishDataLinkUploadRequest) GetDataLinkID() string {
-	if o == nil {
+func (f *FinishDataLinkUploadRequest) GetDataLinkID() string {
+	if f == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return f.DataLinkID
 }
 
-func (o *FinishDataLinkUploadRequest) GetCredentialsID() *string {
-	if o == nil {
+func (f *FinishDataLinkUploadRequest) GetCredentialsID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return f.CredentialsID
 }
 
-func (o *FinishDataLinkUploadRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (f *FinishDataLinkUploadRequest) GetWorkspaceID() *int64 {
+	if f == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return f.WorkspaceID
 }
 
-func (o *FinishDataLinkUploadRequest) GetDataLinkFinishMultiPartUploadRequest() shared.DataLinkFinishMultiPartUploadRequest {
-	if o == nil {
+func (f *FinishDataLinkUploadRequest) GetDataLinkFinishMultiPartUploadRequest() shared.DataLinkFinishMultiPartUploadRequest {
+	if f == nil {
 		return shared.DataLinkFinishMultiPartUploadRequest{}
 	}
-	return o.DataLinkFinishMultiPartUploadRequest
+	return f.DataLinkFinishMultiPartUploadRequest
 }
 
 // FinishDataLinkUploadResponseBody - FinishDataLinkUpload 200 response
@@ -62,37 +62,37 @@ type FinishDataLinkUploadResponse struct {
 	Object *FinishDataLinkUploadResponseBody
 }
 
-func (o *FinishDataLinkUploadResponse) GetContentType() string {
-	if o == nil {
+func (f *FinishDataLinkUploadResponse) GetContentType() string {
+	if f == nil {
 		return ""
 	}
-	return o.ContentType
+	return f.ContentType
 }
 
-func (o *FinishDataLinkUploadResponse) GetStatusCode() int {
-	if o == nil {
+func (f *FinishDataLinkUploadResponse) GetStatusCode() int {
+	if f == nil {
 		return 0
 	}
-	return o.StatusCode
+	return f.StatusCode
 }
 
-func (o *FinishDataLinkUploadResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (f *FinishDataLinkUploadResponse) GetRawResponse() *http.Response {
+	if f == nil {
 		return nil
 	}
-	return o.RawResponse
+	return f.RawResponse
 }
 
-func (o *FinishDataLinkUploadResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (f *FinishDataLinkUploadResponse) GetErrorResponse() *shared.ErrorResponse {
+	if f == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return f.ErrorResponse
 }
 
-func (o *FinishDataLinkUploadResponse) GetObject() *FinishDataLinkUploadResponseBody {
-	if o == nil {
+func (f *FinishDataLinkUploadResponse) GetObject() *FinishDataLinkUploadResponseBody {
+	if f == nil {
 		return nil
 	}
-	return o.Object
+	return f.Object
 }

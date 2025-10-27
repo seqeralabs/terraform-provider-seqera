@@ -177,11 +177,11 @@ func (r *DatasetsResource) Create(ctx context.Context, req resource.CreateReques
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateDatasetResponse != nil && res.CreateDatasetResponse.Dataset != nil) {
+	if !(res.CreateDatasetResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataset(ctx, res.CreateDatasetResponse.Dataset)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateDatasetResponse(ctx, res.CreateDatasetResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

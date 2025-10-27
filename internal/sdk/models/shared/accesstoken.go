@@ -36,37 +36,37 @@ func (a *AccessToken) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AccessToken) GetBasicAuth() *string {
-	if o == nil {
+func (a *AccessToken) GetBasicAuth() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BasicAuth
+	return a.BasicAuth
 }
 
-func (o *AccessToken) GetID() *int64 {
-	if o == nil {
+func (a *AccessToken) GetID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *AccessToken) GetName() string {
-	if o == nil {
+func (a *AccessToken) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AccessToken) GetLastUsed() *time.Time {
-	if o == nil {
+func (a *AccessToken) GetLastUsed() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUsed
+	return a.LastUsed
 }
 
-func (o *AccessToken) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *AccessToken) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }

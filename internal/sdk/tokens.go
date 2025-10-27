@@ -62,7 +62,7 @@ func (s *Tokens) TokenList(ctx context.Context, opts ...operations.Option) (*ope
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "TokenList",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -214,7 +214,7 @@ func (s *Tokens) CreateToken(ctx context.Context, request shared.CreateAccessTok
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "CreateToken",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
@@ -375,7 +375,7 @@ func (s *Tokens) DeleteAllTokens(ctx context.Context, opts ...operations.Option)
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteAllTokens",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -507,7 +507,7 @@ func (s *Tokens) DeleteToken(ctx context.Context, request operations.DeleteToken
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "DeleteToken",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

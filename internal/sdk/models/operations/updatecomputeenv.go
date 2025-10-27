@@ -16,25 +16,25 @@ type UpdateComputeEnvRequest struct {
 	UpdateComputeEnvRequest shared.UpdateComputeEnvRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateComputeEnvRequest) GetComputeEnvID() string {
-	if o == nil {
+func (u *UpdateComputeEnvRequest) GetComputeEnvID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ComputeEnvID
+	return u.ComputeEnvID
 }
 
-func (o *UpdateComputeEnvRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateComputeEnvRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateComputeEnvRequest) GetUpdateComputeEnvRequest() shared.UpdateComputeEnvRequest {
-	if o == nil {
+func (u *UpdateComputeEnvRequest) GetUpdateComputeEnvRequest() shared.UpdateComputeEnvRequest {
+	if u == nil {
 		return shared.UpdateComputeEnvRequest{}
 	}
-	return o.UpdateComputeEnvRequest
+	return u.UpdateComputeEnvRequest
 }
 
 type UpdateComputeEnvResponse struct {
@@ -48,30 +48,30 @@ type UpdateComputeEnvResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateComputeEnvResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateComputeEnvResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateComputeEnvResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateComputeEnvResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateComputeEnvResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateComputeEnvResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

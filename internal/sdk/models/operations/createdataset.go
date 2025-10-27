@@ -14,18 +14,18 @@ type CreateDatasetRequest struct {
 	CreateDatasetRequest shared.CreateDatasetRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateDatasetRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateDatasetRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateDatasetRequest) GetCreateDatasetRequest() shared.CreateDatasetRequest {
-	if o == nil {
+func (c *CreateDatasetRequest) GetCreateDatasetRequest() shared.CreateDatasetRequest {
+	if c == nil {
 		return shared.CreateDatasetRequest{}
 	}
-	return o.CreateDatasetRequest
+	return c.CreateDatasetRequest
 }
 
 type CreateDatasetResponse struct {
@@ -41,37 +41,37 @@ type CreateDatasetResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateDatasetResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateDatasetResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateDatasetResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateDatasetResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateDatasetResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateDatasetResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateDatasetResponse) GetCreateDatasetResponse() *shared.CreateDatasetResponse {
-	if o == nil {
+func (c *CreateDatasetResponse) GetCreateDatasetResponse() *shared.CreateDatasetResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateDatasetResponse
+	return c.CreateDatasetResponse
 }
 
-func (o *CreateDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateDatasetResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

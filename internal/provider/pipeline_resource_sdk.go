@@ -13,6 +13,36 @@ import (
 	"time"
 )
 
+func (r *PipelineResourceModel) RefreshFromSharedCreatePipelineResponse(ctx context.Context, resp *shared.CreatePipelineResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedPipelineDbDto(ctx, resp.Pipeline)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *PipelineResourceModel) RefreshFromSharedDescribePipelineResponse(ctx context.Context, resp *shared.DescribePipelineResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedPipelineDbDto(ctx, resp.Pipeline)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Context, resp *shared.PipelineDbDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -63,6 +93,21 @@ func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Conte
 		r.Visibility = types.StringPointerValue(resp.Visibility)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
+	}
+
+	return diags
+}
+
+func (r *PipelineResourceModel) RefreshFromSharedUpdatePipelineResponse(ctx context.Context, resp *shared.UpdatePipelineResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedPipelineDbDto(ctx, resp.Pipeline)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 	}
 
 	return diags
@@ -175,18 +220,24 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		icon = nil
 	}
-	var computeEnvID string
-	computeEnvID = r.Launch.ComputeEnvID.ValueString()
-
+	computeEnvID := new(string)
+	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
 	runName := new(string)
 	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
 		*runName = r.Launch.RunName.ValueString()
 	} else {
 		runName = nil
 	}
-	var pipeline string
-	pipeline = r.Launch.Pipeline.ValueString()
-
+	pipeline := new(string)
+	if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
+		*pipeline = r.Launch.Pipeline.ValueString()
+	} else {
+		pipeline = nil
+	}
 	var workDir string
 	workDir = r.Launch.WorkDir.ValueString()
 
@@ -386,18 +437,24 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		icon = nil
 	}
 	var launch *shared.WorkflowLaunchRequest
-	var computeEnvID string
-	computeEnvID = r.Launch.ComputeEnvID.ValueString()
-
+	computeEnvID := new(string)
+	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
+		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
+	} else {
+		computeEnvID = nil
+	}
 	runName := new(string)
 	if !r.Launch.RunName.IsUnknown() && !r.Launch.RunName.IsNull() {
 		*runName = r.Launch.RunName.ValueString()
 	} else {
 		runName = nil
 	}
-	var pipeline string
-	pipeline = r.Launch.Pipeline.ValueString()
-
+	pipeline := new(string)
+	if !r.Launch.Pipeline.IsUnknown() && !r.Launch.Pipeline.IsNull() {
+		*pipeline = r.Launch.Pipeline.ValueString()
+	} else {
+		pipeline = nil
+	}
 	var workDir string
 	workDir = r.Launch.WorkDir.ValueString()
 

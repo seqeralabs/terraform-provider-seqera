@@ -6,6 +6,7 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
 func (r *PrimaryComputeEnvResourceModel) ToOperationsUpdateComputeEnvPrimaryRequest(ctx context.Context) (*operations.UpdateComputeEnvPrimaryRequest, diag.Diagnostics) {
@@ -17,10 +18,26 @@ func (r *PrimaryComputeEnvResourceModel) ToOperationsUpdateComputeEnvPrimaryRequ
 	var workspaceID int64
 	workspaceID = r.WorkspaceID.ValueInt64()
 
-	out := operations.UpdateComputeEnvPrimaryRequest{
-		ComputeEnvID: computeEnvID,
-		WorkspaceID:  workspaceID,
+	emptyBodyRequest, emptyBodyRequestDiags := r.ToSharedEmptyBodyRequest(ctx)
+	diags.Append(emptyBodyRequestDiags...)
+
+	if diags.HasError() {
+		return nil, diags
 	}
+
+	out := operations.UpdateComputeEnvPrimaryRequest{
+		ComputeEnvID:     computeEnvID,
+		WorkspaceID:      workspaceID,
+		EmptyBodyRequest: emptyBodyRequest,
+	}
+
+	return &out, diags
+}
+
+func (r *PrimaryComputeEnvResourceModel) ToSharedEmptyBodyRequest(ctx context.Context) (*shared.EmptyBodyRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	out := shared.EmptyBodyRequest{}
 
 	return &out, diags
 }

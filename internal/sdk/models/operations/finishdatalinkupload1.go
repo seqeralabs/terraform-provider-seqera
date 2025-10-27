@@ -19,39 +19,39 @@ type FinishDataLinkUpload1Request struct {
 	DataLinkFinishMultiPartUploadRequest shared.DataLinkFinishMultiPartUploadRequest `request:"mediaType=application/json"`
 }
 
-func (o *FinishDataLinkUpload1Request) GetDataLinkID() string {
-	if o == nil {
+func (f *FinishDataLinkUpload1Request) GetDataLinkID() string {
+	if f == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return f.DataLinkID
 }
 
-func (o *FinishDataLinkUpload1Request) GetDirPath() string {
-	if o == nil {
+func (f *FinishDataLinkUpload1Request) GetDirPath() string {
+	if f == nil {
 		return ""
 	}
-	return o.DirPath
+	return f.DirPath
 }
 
-func (o *FinishDataLinkUpload1Request) GetCredentialsID() *string {
-	if o == nil {
+func (f *FinishDataLinkUpload1Request) GetCredentialsID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return f.CredentialsID
 }
 
-func (o *FinishDataLinkUpload1Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (f *FinishDataLinkUpload1Request) GetWorkspaceID() *int64 {
+	if f == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return f.WorkspaceID
 }
 
-func (o *FinishDataLinkUpload1Request) GetDataLinkFinishMultiPartUploadRequest() shared.DataLinkFinishMultiPartUploadRequest {
-	if o == nil {
+func (f *FinishDataLinkUpload1Request) GetDataLinkFinishMultiPartUploadRequest() shared.DataLinkFinishMultiPartUploadRequest {
+	if f == nil {
 		return shared.DataLinkFinishMultiPartUploadRequest{}
 	}
-	return o.DataLinkFinishMultiPartUploadRequest
+	return f.DataLinkFinishMultiPartUploadRequest
 }
 
 // FinishDataLinkUpload1ResponseBody - FinishDataLinkUpload_1 200 response
@@ -71,37 +71,37 @@ type FinishDataLinkUpload1Response struct {
 	Object *FinishDataLinkUpload1ResponseBody
 }
 
-func (o *FinishDataLinkUpload1Response) GetContentType() string {
-	if o == nil {
+func (f *FinishDataLinkUpload1Response) GetContentType() string {
+	if f == nil {
 		return ""
 	}
-	return o.ContentType
+	return f.ContentType
 }
 
-func (o *FinishDataLinkUpload1Response) GetStatusCode() int {
-	if o == nil {
+func (f *FinishDataLinkUpload1Response) GetStatusCode() int {
+	if f == nil {
 		return 0
 	}
-	return o.StatusCode
+	return f.StatusCode
 }
 
-func (o *FinishDataLinkUpload1Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (f *FinishDataLinkUpload1Response) GetRawResponse() *http.Response {
+	if f == nil {
 		return nil
 	}
-	return o.RawResponse
+	return f.RawResponse
 }
 
-func (o *FinishDataLinkUpload1Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (f *FinishDataLinkUpload1Response) GetErrorResponse() *shared.ErrorResponse {
+	if f == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return f.ErrorResponse
 }
 
-func (o *FinishDataLinkUpload1Response) GetObject() *FinishDataLinkUpload1ResponseBody {
-	if o == nil {
+func (f *FinishDataLinkUpload1Response) GetObject() *FinishDataLinkUpload1ResponseBody {
+	if f == nil {
 		return nil
 	}
-	return o.Object
+	return f.Object
 }

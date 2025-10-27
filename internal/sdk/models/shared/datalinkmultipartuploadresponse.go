@@ -7,16 +7,16 @@ type DataLinkMultiPartUploadResponse struct {
 	UploadUrls []string `json:"uploadUrls,omitempty"`
 }
 
-func (o *DataLinkMultiPartUploadResponse) GetUploadID() *string {
-	if o == nil {
+func (d *DataLinkMultiPartUploadResponse) GetUploadID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.UploadID
+	return d.UploadID
 }
 
-func (o *DataLinkMultiPartUploadResponse) GetUploadUrls() []string {
-	if o == nil {
+func (d *DataLinkMultiPartUploadResponse) GetUploadUrls() []string {
+	if d == nil {
 		return nil
 	}
-	return o.UploadUrls
+	return d.UploadUrls
 }

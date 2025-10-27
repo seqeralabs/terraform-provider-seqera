@@ -14,18 +14,18 @@ type DescribeWorkflowProgressRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeWorkflowProgressRequest) GetWorkflowID() string {
-	if o == nil {
+func (d *DescribeWorkflowProgressRequest) GetWorkflowID() string {
+	if d == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return d.WorkflowID
 }
 
-func (o *DescribeWorkflowProgressRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeWorkflowProgressRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeWorkflowProgressResponse struct {
@@ -41,37 +41,37 @@ type DescribeWorkflowProgressResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeWorkflowProgressResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeWorkflowProgressResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeWorkflowProgressResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeWorkflowProgressResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeWorkflowProgressResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeWorkflowProgressResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeWorkflowProgressResponse) GetGetProgressResponse() *shared.GetProgressResponse {
-	if o == nil {
+func (d *DescribeWorkflowProgressResponse) GetGetProgressResponse() *shared.GetProgressResponse {
+	if d == nil {
 		return nil
 	}
-	return o.GetProgressResponse
+	return d.GetProgressResponse
 }
 
-func (o *DescribeWorkflowProgressResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeWorkflowProgressResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

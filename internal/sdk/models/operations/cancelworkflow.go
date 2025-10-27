@@ -15,25 +15,25 @@ type CancelWorkflowRequest struct {
 	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
 }
 
-func (o *CancelWorkflowRequest) GetWorkflowID() string {
-	if o == nil {
+func (c *CancelWorkflowRequest) GetWorkflowID() string {
+	if c == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return c.WorkflowID
 }
 
-func (o *CancelWorkflowRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CancelWorkflowRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CancelWorkflowRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
-	if o == nil {
+func (c *CancelWorkflowRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
+	if c == nil {
 		return nil
 	}
-	return o.EmptyBodyRequest
+	return c.EmptyBodyRequest
 }
 
 type CancelWorkflowResponse struct {
@@ -47,30 +47,30 @@ type CancelWorkflowResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CancelWorkflowResponse) GetContentType() string {
-	if o == nil {
+func (c *CancelWorkflowResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CancelWorkflowResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CancelWorkflowResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CancelWorkflowResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CancelWorkflowResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CancelWorkflowResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CancelWorkflowResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

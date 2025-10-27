@@ -163,11 +163,11 @@ func (r *OrgsDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeOrganizationResponse != nil && res.DescribeOrganizationResponse.Organization != nil) {
+	if !(res.DescribeOrganizationResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedOrganizationDbDto(ctx, res.DescribeOrganizationResponse.Organization)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeOrganizationResponse(ctx, res.DescribeOrganizationResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

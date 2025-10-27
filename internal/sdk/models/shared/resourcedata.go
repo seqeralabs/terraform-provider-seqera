@@ -17,86 +17,86 @@ type ResourceData struct {
 	Q3Label  *string  `json:"q3Label,omitempty"`
 }
 
-func (o *ResourceData) GetWarnings() []string {
-	if o == nil {
+func (r *ResourceData) GetWarnings() []string {
+	if r == nil {
 		return nil
 	}
-	return o.Warnings
+	return r.Warnings
 }
 
-func (o *ResourceData) GetMean() *float32 {
-	if o == nil {
+func (r *ResourceData) GetMean() *float32 {
+	if r == nil {
 		return nil
 	}
-	return o.Mean
+	return r.Mean
 }
 
-func (o *ResourceData) GetMin() *float32 {
-	if o == nil {
+func (r *ResourceData) GetMin() *float32 {
+	if r == nil {
 		return nil
 	}
-	return o.Min
+	return r.Min
 }
 
-func (o *ResourceData) GetQ1() *float32 {
-	if o == nil {
+func (r *ResourceData) GetQ1() *float32 {
+	if r == nil {
 		return nil
 	}
-	return o.Q1
+	return r.Q1
 }
 
-func (o *ResourceData) GetQ2() *float32 {
-	if o == nil {
+func (r *ResourceData) GetQ2() *float32 {
+	if r == nil {
 		return nil
 	}
-	return o.Q2
+	return r.Q2
 }
 
-func (o *ResourceData) GetQ3() *float32 {
-	if o == nil {
+func (r *ResourceData) GetQ3() *float32 {
+	if r == nil {
 		return nil
 	}
-	return o.Q3
+	return r.Q3
 }
 
-func (o *ResourceData) GetMax() *float32 {
-	if o == nil {
+func (r *ResourceData) GetMax() *float32 {
+	if r == nil {
 		return nil
 	}
-	return o.Max
+	return r.Max
 }
 
-func (o *ResourceData) GetMinLabel() *string {
-	if o == nil {
+func (r *ResourceData) GetMinLabel() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MinLabel
+	return r.MinLabel
 }
 
-func (o *ResourceData) GetMaxLabel() *string {
-	if o == nil {
+func (r *ResourceData) GetMaxLabel() *string {
+	if r == nil {
 		return nil
 	}
-	return o.MaxLabel
+	return r.MaxLabel
 }
 
-func (o *ResourceData) GetQ1Label() *string {
-	if o == nil {
+func (r *ResourceData) GetQ1Label() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Q1Label
+	return r.Q1Label
 }
 
-func (o *ResourceData) GetQ2Label() *string {
-	if o == nil {
+func (r *ResourceData) GetQ2Label() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Q2Label
+	return r.Q2Label
 }
 
-func (o *ResourceData) GetQ3Label() *string {
-	if o == nil {
+func (r *ResourceData) GetQ3Label() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Q3Label
+	return r.Q3Label
 }

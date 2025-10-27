@@ -14,18 +14,18 @@ type ListCredentialsRequest struct {
 	PlatformID *string `queryParam:"style=form,explode=true,name=platformId"`
 }
 
-func (o *ListCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListCredentialsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListCredentialsRequest) GetPlatformID() *string {
-	if o == nil {
+func (l *ListCredentialsRequest) GetPlatformID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.PlatformID
+	return l.PlatformID
 }
 
 type ListCredentialsResponse struct {
@@ -41,37 +41,37 @@ type ListCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListCredentialsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListCredentialsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListCredentialsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListCredentialsResponse) GetListCredentialsResponse() *shared.ListCredentialsResponse {
-	if o == nil {
+func (l *ListCredentialsResponse) GetListCredentialsResponse() *shared.ListCredentialsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListCredentialsResponse
+	return l.ListCredentialsResponse
 }
 
-func (o *ListCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

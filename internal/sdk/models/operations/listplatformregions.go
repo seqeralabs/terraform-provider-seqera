@@ -14,18 +14,18 @@ type ListPlatformRegionsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *ListPlatformRegionsRequest) GetPlatformID() string {
-	if o == nil {
+func (l *ListPlatformRegionsRequest) GetPlatformID() string {
+	if l == nil {
 		return ""
 	}
-	return o.PlatformID
+	return l.PlatformID
 }
 
-func (o *ListPlatformRegionsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListPlatformRegionsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
 type ListPlatformRegionsResponse struct {
@@ -41,37 +41,37 @@ type ListPlatformRegionsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListPlatformRegionsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListPlatformRegionsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListPlatformRegionsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListPlatformRegionsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListPlatformRegionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListPlatformRegionsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListPlatformRegionsResponse) GetListRegionsResponse() *shared.ListRegionsResponse {
-	if o == nil {
+func (l *ListPlatformRegionsResponse) GetListRegionsResponse() *shared.ListRegionsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListRegionsResponse
+	return l.ListRegionsResponse
 }
 
-func (o *ListPlatformRegionsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListPlatformRegionsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

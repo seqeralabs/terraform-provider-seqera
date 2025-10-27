@@ -24,30 +24,30 @@ func (c *ConfigEnvVariable) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ConfigEnvVariable) GetName() *string {
-	if o == nil {
+func (c *ConfigEnvVariable) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ConfigEnvVariable) GetValue() *string {
-	if o == nil {
+func (c *ConfigEnvVariable) GetValue() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Value
+	return c.Value
 }
 
-func (o *ConfigEnvVariable) GetHead() *bool {
-	if o == nil {
+func (c *ConfigEnvVariable) GetHead() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Head
+	return c.Head
 }
 
-func (o *ConfigEnvVariable) GetCompute() *bool {
-	if o == nil {
+func (c *ConfigEnvVariable) GetCompute() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Compute
+	return c.Compute
 }

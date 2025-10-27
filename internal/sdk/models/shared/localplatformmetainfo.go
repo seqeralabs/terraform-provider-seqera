@@ -21,9 +21,9 @@ func (l *LocalPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LocalPlatformMetainfo) GetDiscriminator() *string {
-	if o == nil {
+func (l *LocalPlatformMetainfo) GetDiscriminator() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Discriminator
+	return l.Discriminator
 }

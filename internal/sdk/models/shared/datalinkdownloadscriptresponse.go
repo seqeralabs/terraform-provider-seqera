@@ -6,9 +6,9 @@ type DataLinkDownloadScriptResponse struct {
 	Script *string `json:"script,omitempty"`
 }
 
-func (o *DataLinkDownloadScriptResponse) GetScript() *string {
-	if o == nil {
+func (d *DataLinkDownloadScriptResponse) GetScript() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Script
+	return d.Script
 }

@@ -22,46 +22,46 @@ type ListDataLinksRequest struct {
 	Visibility *string `queryParam:"style=form,explode=true,name=visibility"`
 }
 
-func (o *ListDataLinksRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListDataLinksRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListDataLinksRequest) GetCredentialsID() *string {
-	if o == nil {
+func (l *ListDataLinksRequest) GetCredentialsID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return l.CredentialsID
 }
 
-func (o *ListDataLinksRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListDataLinksRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
-func (o *ListDataLinksRequest) GetMax() *int {
-	if o == nil {
+func (l *ListDataLinksRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListDataLinksRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListDataLinksRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListDataLinksRequest) GetVisibility() *string {
-	if o == nil {
+func (l *ListDataLinksRequest) GetVisibility() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Visibility
+	return l.Visibility
 }
 
 type ListDataLinksResponse struct {
@@ -77,37 +77,37 @@ type ListDataLinksResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListDataLinksResponse) GetContentType() string {
-	if o == nil {
+func (l *ListDataLinksResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDataLinksResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListDataLinksResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDataLinksResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDataLinksResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDataLinksResponse) GetDataLinksListResponse() *shared.DataLinksListResponse {
-	if o == nil {
+func (l *ListDataLinksResponse) GetDataLinksListResponse() *shared.DataLinksListResponse {
+	if l == nil {
 		return nil
 	}
-	return o.DataLinksListResponse
+	return l.DataLinksListResponse
 }
 
-func (o *ListDataLinksResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListDataLinksResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

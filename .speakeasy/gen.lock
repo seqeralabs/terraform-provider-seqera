@@ -1,31 +1,30 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 2365da89c6fbd7f7d1db4ac1f839ce38
+  docChecksum: d8970612b206bbb73fc3252702a46fb9
   docVersion: 1.56.0
-  speakeasyVersion: 1.606.9
-  generationVersion: 2.687.13
+  speakeasyVersion: 1.640.0
+  generationVersion: 2.730.5
   releaseVersion: 0.25.4
-  configChecksum: 51ecc8a1d3a520de84637939a012f093
+  configChecksum: 853d1b859009f3eb0de1df23d43a5fac
 features:
   terraform:
     additionalDependencies: 0.1.0
-    core: 3.44.1
+    core: 3.46.3
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
-    globalSecurity: 2.81.12
+    globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
-    groups: 2.81.2
+    groups: 2.81.3
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     nullables: 0.0.0
     retries: 2.81.4
-    unions: 2.81.17
+    unions: 2.82.1
 generatedFiles:
   - .gitattributes
   - USAGE.md
-  - examples/README.md
   - examples/data-sources/seqera_action/data-source.tf
   - examples/data-sources/seqera_aws_compute_env/data-source.tf
   - examples/data-sources/seqera_aws_credential/data-source.tf
@@ -828,6 +827,8 @@ generatedFiles:
   - internal/sdk/models/shared/workspace.go
   - internal/sdk/models/shared/workspacedbdto.go
   - internal/sdk/models/shared/wsprole.go
+  - internal/sdk/optionalnullable/optionalnullable.go
+  - internal/sdk/optionalnullable/optionalnullable_test.go
   - internal/sdk/orgs.go
   - internal/sdk/pipelines.go
   - internal/sdk/pipelinesecrets.go
@@ -842,7 +843,6 @@ generatedFiles:
   - internal/sdk/types/bigint.go
   - internal/sdk/types/date.go
   - internal/sdk/types/datetime.go
-  - internal/sdk/types/decimal.go
   - internal/sdk/types/pointers.go
   - internal/sdk/users.go
   - internal/sdk/workflows.go

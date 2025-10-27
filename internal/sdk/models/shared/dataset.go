@@ -36,51 +36,51 @@ func (d *Dataset) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Dataset) GetID() *string {
-	if o == nil {
+func (d *Dataset) GetID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *Dataset) GetName() string {
-	if o == nil {
+func (d *Dataset) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *Dataset) GetDescription() *string {
-	if o == nil {
+func (d *Dataset) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *Dataset) GetMediaType() *string {
-	if o == nil {
+func (d *Dataset) GetMediaType() *string {
+	if d == nil {
 		return nil
 	}
-	return o.MediaType
+	return d.MediaType
 }
 
-func (o *Dataset) GetDeleted() *bool {
-	if o == nil {
+func (d *Dataset) GetDeleted() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Deleted
+	return d.Deleted
 }
 
-func (o *Dataset) GetDateCreated() *time.Time {
-	if o == nil {
+func (d *Dataset) GetDateCreated() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.DateCreated
+	return d.DateCreated
 }
 
-func (o *Dataset) GetLastUpdated() *time.Time {
-	if o == nil {
+func (d *Dataset) GetLastUpdated() *time.Time {
+	if d == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return d.LastUpdated
 }

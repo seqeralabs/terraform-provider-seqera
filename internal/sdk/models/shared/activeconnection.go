@@ -26,37 +26,37 @@ func (a *ActiveConnection) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ActiveConnection) GetID() int64 {
-	if o == nil {
+func (a *ActiveConnection) GetID() int64 {
+	if a == nil {
 		return 0
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *ActiveConnection) GetUserName() string {
-	if o == nil {
+func (a *ActiveConnection) GetUserName() string {
+	if a == nil {
 		return ""
 	}
-	return o.UserName
+	return a.UserName
 }
 
-func (o *ActiveConnection) GetEmail() string {
-	if o == nil {
+func (a *ActiveConnection) GetEmail() string {
+	if a == nil {
 		return ""
 	}
-	return o.Email
+	return a.Email
 }
 
-func (o *ActiveConnection) GetAvatar() string {
-	if o == nil {
+func (a *ActiveConnection) GetAvatar() string {
+	if a == nil {
 		return ""
 	}
-	return o.Avatar
+	return a.Avatar
 }
 
-func (o *ActiveConnection) GetLastActive() time.Time {
-	if o == nil {
+func (a *ActiveConnection) GetLastActive() time.Time {
+	if a == nil {
 		return time.Time{}
 	}
-	return o.LastActive
+	return a.LastActive
 }

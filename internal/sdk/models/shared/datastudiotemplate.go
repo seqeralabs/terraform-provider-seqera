@@ -9,30 +9,30 @@ type DataStudioTemplate struct {
 	Tool       *string                  `json:"tool,omitempty"`
 }
 
-func (o *DataStudioTemplate) GetRepository() *string {
-	if o == nil {
+func (d *DataStudioTemplate) GetRepository() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Repository
+	return d.Repository
 }
 
-func (o *DataStudioTemplate) GetIcon() *string {
-	if o == nil {
+func (d *DataStudioTemplate) GetIcon() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Icon
+	return d.Icon
 }
 
-func (o *DataStudioTemplate) GetStatus() *DataStudioVersionStatus {
-	if o == nil {
+func (d *DataStudioTemplate) GetStatus() *DataStudioVersionStatus {
+	if d == nil {
 		return nil
 	}
-	return o.Status
+	return d.Status
 }
 
-func (o *DataStudioTemplate) GetTool() *string {
-	if o == nil {
+func (d *DataStudioTemplate) GetTool() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Tool
+	return d.Tool
 }

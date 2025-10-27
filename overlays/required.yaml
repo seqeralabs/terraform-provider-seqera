@@ -34,8 +34,6 @@ actions:
   - target: $.components.schemas.WorkflowLaunchRequest
     update:
       required:
-          - pipeline
-          - computeEnvId
           - workDir
 
   # - target: $.components.schemas.ComputeEnv_ComputeConfig_

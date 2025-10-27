@@ -12,6 +12,36 @@ import (
 	"time"
 )
 
+func (r *WorkspaceResourceModel) RefreshFromSharedCreateWorkspaceResponse(ctx context.Context, resp *shared.CreateWorkspaceResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedWorkspace(ctx, resp.Workspace)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
+func (r *WorkspaceResourceModel) RefreshFromSharedDescribeWorkspaceResponse(ctx context.Context, resp *shared.DescribeWorkspaceResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedWorkspace(ctx, resp.Workspace)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *WorkspaceResourceModel) RefreshFromSharedWorkspace(ctx context.Context, resp *shared.Workspace) diag.Diagnostics {
 	var diags diag.Diagnostics
 

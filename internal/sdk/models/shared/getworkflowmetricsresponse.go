@@ -6,9 +6,9 @@ type GetWorkflowMetricsResponse struct {
 	Metrics []WorkflowMetrics `json:"metrics,omitempty"`
 }
 
-func (o *GetWorkflowMetricsResponse) GetMetrics() []WorkflowMetrics {
-	if o == nil {
+func (g *GetWorkflowMetricsResponse) GetMetrics() []WorkflowMetrics {
+	if g == nil {
 		return nil
 	}
-	return o.Metrics
+	return g.Metrics
 }

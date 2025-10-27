@@ -7,16 +7,16 @@ type GoogleSecurityKeys struct {
 	Data          *string `json:"data,omitempty"`
 }
 
-func (o *GoogleSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (g *GoogleSecurityKeys) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GoogleSecurityKeys) GetData() *string {
-	if o == nil {
+func (g *GoogleSecurityKeys) GetData() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Data
+	return g.Data
 }
