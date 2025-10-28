@@ -67,12 +67,15 @@ speakeasy run --skip-versioning
   - `gen.yaml` - Generation configuration
   - `workflow.yaml` - Workflow definition
   - `out.openapi.yaml` - Processed OpenAPI specification
-- `schemas/` - OpenAPI specifications and overlays
+- `overlays/` - Speakeasy overlay files for customizing resource generation
+- `schemas/` - OpenAPI specifications
 
 ### Documentation and Examples
 - `docs/` - Generated Terraform provider documentation
 - `examples/` - Example Terraform configurations for testing
 - `examples/tests/` - Test configurations
+- `.genignore` - Files to protect from Speakeasy regeneration
+- `OVERLAY_GUIDE.md` - **Best practices for overlays, validators, and resource documentation**
 
 ## Available Resources and Data Sources
 
@@ -92,13 +95,24 @@ speakeasy run --skip-versioning
 
 ## Development Guidelines
 
+### Overlay and Resource Best Practices
+**IMPORTANT**: When working with overlays, resource documentation, or custom validators, always consult `OVERLAY_GUIDE.md` for:
+- Overlay file structure and organization patterns
+- Field cleanup guidelines (removing unmanageable/internal fields)
+- Resource example best practices
+- Custom validator patterns and implementation
+- Documentation verification steps
+
 ### Code Generation Workflow
 1. Only modify the OpenAPI specifications in `schemas/seqera-final.yaml` to add speakeasy annotations.
-2. Generate the overlay file from the edited specifiecation using `speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml`.
-3. You can run `speakeasy run --skip-versioning ` to test your changes generate new code. 
-4. Test changes with local provider builds, do not apply only use terraform plan for now.
-5. Update documentation and examples as needed. 
-6. You can run `speakeasy lint openapi -s seqera-final.yaml` to check for schema errors.
+2. Generate the overlay file from the edited specification using `speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml`.
+3. Edit overlay files in `overlays/` directory following patterns in `OVERLAY_GUIDE.md`
+4. Create custom examples in `examples/resources/seqera_[resource]/resource.tf` and protect them with `.genignore`
+5. Run `speakeasy run --skip-versioning` to regenerate provider code
+6. Verify generated documentation in `docs/resources/[resource].md`
+7. Test changes with local provider builds: `go build -o terraform-provider-seqera`
+8. Test with `terraform plan` in `examples/tests/` (do not apply)
+9. You can run `speakeasy lint openapi -s seqera-final.yaml` to check for schema errors
 
 ### Testing
 - Use `examples/tests` directory for integration testing
