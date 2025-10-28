@@ -4,7 +4,104 @@ info:
   title: Actions Overlay
   version: 0.0.0
 actions:
-  # Remove readOnly from discriminator fields
+  ####################################################################
+  ####                   Action Entity Operations                 ####
+  ####################################################################
+  - target: $.paths["/actions"].post
+    update:
+      x-speakeasy-entity-operation: Action#create
+  - target: $.paths["/actions/{actionId}"].get
+    update:
+      x-speakeasy-entity-operation: Action#read
+  - target: $.paths["/actions/{actionId}"].delete
+    update:
+      x-speakeasy-entity-operation: Action#delete
+
+  ####################################################################
+  ####                   Action Entity Schema                     ####
+  ####################################################################
+  - target: $.components.schemas.ActionResponseDto
+    update:
+      x-speakeasy-entity: Action
+      x-speakeasy-entity-description: |
+        Manage pipeline actions for event-based workflow automation.
+
+        This resource allows the management of pipeline actions. Actions enable event-based
+        pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
+        the pipeline repository is updated.
+
+        Seqera Platform currently offers support for native GitHub webhooks and a general
+        Tower webhook that can be invoked programmatically.
+      description: |
+        Represents a pipeline action in the Seqera Platform.
+        Contains action configuration, triggers, and execution settings
+        for automated pipeline workflows.
+
+  ####################################################################
+  ####              Action Field Descriptions & Ordering          ####
+  ####################################################################
+  # Field descriptions and ordering for ActionResponseDto
+  - target: $.components.schemas.ActionResponseDto.properties.id
+    update:
+      description: Unique identifier for the action
+      x-speakeasy-param-ordering: 1
+  - target: $.components.schemas.ActionResponseDto.properties.name
+    update:
+      description: Human-readable name for the action
+      x-speakeasy-param-ordering: 2
+  - target: $.components.schemas.ActionResponseDto.properties.source
+    update:
+      description: Source system or trigger that initiated the action
+      x-speakeasy-param-ordering: 3
+  - target: $.components.schemas.ActionResponseDto.properties.status
+    update:
+      description: Current execution status of the action
+      x-speakeasy-param-ordering: 4
+  - target: $.components.schemas.ActionResponseDto.properties.launch
+    update:
+      description: Launch configuration and parameters for the action
+      x-speakeasy-param-ordering: 5
+  - target: $.components.schemas.ActionResponseDto.properties.config
+    update:
+      description: Configuration type and settings for the action
+      x-speakeasy-param-ordering: 6
+  - target: $.components.schemas.ActionResponseDto.properties.hookId
+    update:
+      description: Identifier for the webhook associated with this action
+      x-speakeasy-param-ordering: 7
+  - target: $.components.schemas.ActionResponseDto.properties.hookUrl
+    update:
+      description: URL endpoint for the webhook that triggers this action
+      x-speakeasy-param-ordering: 8
+  - target: $.components.schemas.ActionResponseDto.properties.message
+    update:
+      description: Status or informational message about the action
+      x-speakeasy-param-ordering: 9
+
+  ####################################################################
+  ####              Server-Managed Read-Only Fields               ####
+  ####################################################################
+  # Mark server-managed fields as read-only in ActionResponseDto
+  - target: $.components.schemas.ActionResponseDto.properties.id
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ActionResponseDto.properties.hookId
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ActionResponseDto.properties.hookUrl
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ActionResponseDto.properties.message
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.ActionResponseDto.properties.status
+    update:
+      x-speakeasy-param-readonly: true
+
+  ####################################################################
+  ####              Discriminator Field Fixes                     ####
+  ####################################################################
+  # Remove readOnly from discriminator fields to allow setting them
   - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["Action.EventType"]["properties"]["discriminator"]["readOnly"]
@@ -17,24 +114,3 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["GithubActionEvent"]["properties"]["discriminator"]["readOnly"]
     remove: true
-
-  # Action entity operations
-  - target: $.paths["/actions"].post
-    update:
-      x-speakeasy-entity-operation: Action#create
-  - target: $.paths["/actions/{actionId}"].get
-    update:
-      x-speakeasy-entity-operation: Action#read
-  - target: $.paths["/actions/{actionId}"].delete
-    update:
-      x-speakeasy-entity-operation: Action#delete
-  - target: $.components.schemas.ActionResponseDto
-    update:
-      x-speakeasy-entity: Action
-      x-speakeasy-entity-description: |
-        This resource allows the management of pipeline actions. Actions enable event-based
-        pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
-        the pipeline repository is updated.
-
-        Seqera Platform currently offers support for native GitHub webhooks and a general
-        Tower webhook that can be invoked programmatically.

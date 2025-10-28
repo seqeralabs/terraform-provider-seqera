@@ -3,6 +3,7 @@
 page_title: "seqera_action Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
+  Manage pipeline actions for event-based workflow automation.
   This resource allows the management of pipeline actions. Actions enable event-based
   pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
   the pipeline repository is updated.
@@ -11,6 +12,8 @@ description: |-
 ---
 
 # seqera_action (Data Source)
+
+Manage pipeline actions for event-based workflow automation.
 
 This resource allows the management of pipeline actions. Actions enable event-based
 pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever

@@ -180,3 +180,57 @@ actions:
   - target: $["components"]["schemas"]["OrganizationDbDto"]
     update:
       x-speakeasy-entity: Orgs
+
+  # Request examples for Organization
+  - target: $.components.schemas.Organization.properties.name
+    update:
+      example: "my-org"
+  - target: $.components.schemas.Organization.properties.fullName
+    update:
+      example: "My Organization"
+  - target: $.components.schemas.Organization.properties.description
+    update:
+      example: "Put your organization description here"
+  - target: $.components.schemas.Organization.properties.location
+    update:
+      example: "Toronto, CA"
+  - target: $.components.schemas.Organization.properties.website
+    update:
+      example: "https://www.mybiotech.com"
+  - target: $.components.schemas.CreateOrganizationRequest.properties.logoId
+    update:
+      example: "logo"
+
+  # Schema description
+  - target: $.components.schemas.OrganizationDbDto
+    update:
+      description: |
+        Represents an organization in the Seqera Platform.
+        Contains organizational metadata, settings, and member management
+        information for multi-tenant environments.
+
+  # Field descriptions for OrganizationDbDto
+  - target: $.components.schemas.OrganizationDbDto.properties.orgId
+    update:
+      description: Unique numeric identifier for the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.name
+    update:
+      description: Short name or handle for the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.fullName
+    update:
+      description: Complete formal name of the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.description
+    update:
+      description: Detailed description of the organization's purpose and activities
+  - target: $.components.schemas.OrganizationDbDto.properties.location
+    update:
+      description: Geographic location or address of the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.website
+    update:
+      description: Official website URL for the organization
+  - target: $.components.schemas.OrganizationDbDto.properties.logoId
+    update:
+      description: Identifier for the organization's logo image
+  - target: $.components.schemas.OrganizationDbDto.properties.paying
+    update:
+      description: Deprecated flag indicating if organization has paid subscription

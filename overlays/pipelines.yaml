@@ -4,29 +4,9 @@ info:
   title: Pipelines Overlay
   version: 0.0.0
 actions:
-  # Pipeline request schema annotations
-  - target: $["components"]["schemas"]["CreatePipelineRequest"]["properties"]["name"]
-    update:
-      x-speakeasy-param-optional: false
-  - target: $["components"]["schemas"]["CreatePipelineResponse"]
-    update:
-      x-speakeasy-entity: Pipelines
-
-  # Pipeline entity annotations
-  - target: $["components"]["schemas"]["PipelineDbDto"]
-    update:
-      x-speakeasy-entity: Pipeline
-      x-speakeasy-entity-description: |
-        Manage Nextflow pipeline definitions and configurations.
-
-        Pipelines define reusable workflow templates with parameters,
-        compute environment settings, and execution configurations
-        for scalable bioinformatics and data processing workflows.
-  - target: $["components"]["schemas"]["PipelineInfo"]["properties"]["provider"]
-    update:
-      x-speakeasy-name-override: repositoryProvider
-
-  # Pipeline entity operations
+  ####################################################################
+  ####                 Pipeline Entity Operations                 ####
+  ####################################################################
   - target: $.paths["/pipelines"].post
     update:
       x-speakeasy-entity-operation: Pipeline#create
@@ -40,6 +20,110 @@ actions:
     update:
       x-speakeasy-entity-operation: Pipeline#delete
 
+  ####################################################################
+  ####                 Pipeline Entity Schema                     ####
+  ####################################################################
+  - target: $.components.schemas.PipelineDbDto
+    update:
+      x-speakeasy-entity: Pipeline
+      x-speakeasy-entity-description: |
+        Manage Nextflow pipeline definitions and configurations.
+
+        Pipelines define reusable workflow templates with parameters,
+        compute environment settings, and execution configurations
+        for scalable bioinformatics and data processing workflows.
+      description: |
+        Represents a pipeline configuration in the Seqera Platform.
+        Contains pipeline metadata, configuration settings, and execution parameters
+        for Nextflow workflows.
+
+  ####################################################################
+  ####            Pipeline Field Descriptions & Ordering          ####
+  ####################################################################
+  # Field descriptions and ordering for PipelineDbDto
+  - target: $.components.schemas.PipelineDbDto.properties.pipelineId
+    update:
+      description: Unique numeric identifier for the pipeline
+      x-speakeasy-param-ordering: 1
+  - target: $.components.schemas.PipelineDbDto.properties.name
+    update:
+      description: Display name for the pipeline
+      x-speakeasy-param-ordering: 2
+  - target: $.components.schemas.PipelineDbDto.properties.description
+    update:
+      description: Detailed description of the pipeline's purpose and functionality
+      x-speakeasy-param-ordering: 3
+  - target: $.components.schemas.PipelineDbDto.properties.repository
+    update:
+      description: Git repository URL containing the pipeline source code
+      x-speakeasy-param-ordering: 4
+  - target: $.components.schemas.PipelineDbDto.properties.icon
+    update:
+      description: Icon identifier or URL for visual representation
+      x-speakeasy-param-ordering: 5
+  - target: $.components.schemas.PipelineDbDto.properties.userId
+    update:
+      description: Numeric identifier of the user who created the pipeline
+      x-speakeasy-param-ordering: 6
+  - target: $.components.schemas.PipelineDbDto.properties.userName
+    update:
+      description: Username of the pipeline creator
+      x-speakeasy-param-ordering: 7
+  - target: $.components.schemas.PipelineDbDto.properties.userFirstName
+    update:
+      description: First name of the user who created the pipeline
+      x-speakeasy-param-ordering: 8
+
+  ####################################################################
+  ####            Server-Managed Read-Only Fields                 ####
+  ####################################################################
+  # Mark server-managed fields as read-only in PipelineDbDto
+  - target: $.components.schemas.PipelineDbDto.properties.pipelineId
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.PipelineDbDto.properties.userId
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.PipelineDbDto.properties.userName
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.PipelineDbDto.properties.userFirstName
+    update:
+      x-speakeasy-param-readonly: true
+
+  ####################################################################
+  ####               Pipeline Name Validators                     ####
+  ####################################################################
+  # Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric
+  # characters separated by dashes, dots or underscores
+  - target: $.components.schemas.PipelineCreateRequest.properties.name
+    update:
+      title: "Pipeline Name"
+      description: "Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores"
+      example: "rna-seq-analysis"
+      x-speakeasy-plan-validators: PipelineNameValidator
+      x-speakeasy-param-optional: false
+
+  - target: $.components.schemas.UpdatePipelineRequest.properties.name
+    update:
+      title: "Pipeline Name"
+      description: "Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores"
+      example: "rna-seq-analysis"
+      x-speakeasy-plan-validators: PipelineNameValidator
+
+  ####################################################################
+  ####                  Request Examples                          ####
+  ####################################################################
+  - target: $.components.schemas.PipelineCreateRequest.properties.description
+    update:
+      example: "RNA sequencing analysis pipeline for differential gene expression"
+  - target: $.components.schemas.PipelineCreateRequest.properties.repository
+    update:
+      example: "https://github.com/myorg/rna-seq-pipeline"
+
+  ####################################################################
+  ####               Parameter Configuration                      ####
+  ####################################################################
   # Mark workspaceId as required for pipelines GET endpoint to fix import
   - target: $.paths["/pipelines/{pipelineId}"].get.parameters[?(@.name == "workspaceId")]
     update:
@@ -50,3 +134,16 @@ actions:
       schema:
         type: integer
         format: int64
+
+  ####################################################################
+  ####                Schema Overrides                            ####
+  ####################################################################
+  # Pipeline request schema annotations
+  - target: $.components.schemas.CreatePipelineResponse
+    update:
+      x-speakeasy-entity: Pipelines
+
+  # Rename provider field to avoid conflicts
+  - target: $.components.schemas.PipelineInfo.properties.provider
+    update:
+      x-speakeasy-name-override: repositoryProvider

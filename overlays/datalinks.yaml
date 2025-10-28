@@ -53,3 +53,60 @@ actions:
       - azure
       - azure_entra
       - seqeracompute
+
+  # Request examples for DataLink
+  - target: $.components.schemas.DataLinkCreateRequest.properties.name
+    update:
+      example: "my-s3-datalink"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.description
+    update:
+      example: "S3 bucket for production data storage"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.credentialsId
+    update:
+      example: "aws-credentials-id"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.type
+    update:
+      example: "bucket"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.provider
+    update:
+      example: "aws"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.resourceRef
+    update:
+      example: "s3://my-bucket"
+  - target: $.components.schemas.DataLinkCreateRequest.properties.publicAccessible
+    update:
+      example: false
+
+  # Schema description
+  - target: $.components.schemas.DataLinkDto
+    update:
+      description: |
+        Represents a data link connection to external storage systems.
+        Provides access to cloud storage, file systems, and data repositories
+        for pipeline input/output operations.
+
+  # Field descriptions for DataLinkDto
+  - target: $.components.schemas.DataLinkDto.properties.id
+    update:
+      description: Unique identifier for the data link
+  - target: $.components.schemas.DataLinkDto.properties.name
+    update:
+      description: Display name for the data link connection
+  - target: $.components.schemas.DataLinkDto.properties.description
+    update:
+      description: Description of the data link's purpose and contents
+  - target: $.components.schemas.DataLinkDto.properties.resourceRef
+    update:
+      description: Reference identifier for the external resource
+  - target: $.components.schemas.DataLinkDto.properties.type
+    update:
+      description: Type of data link (e.g., S3, Azure Blob, etc.)
+  - target: $.components.schemas.DataLinkDto.properties.provider
+    update:
+      description: Cloud provider hosting the data link
+  - target: $.components.schemas.DataLinkDto.properties.region
+    update:
+      description: Geographic region where the data link is hosted
+  - target: $.components.schemas.DataLinkDto.properties.credentials
+    update:
+      description: Array of credentials required to access the data link

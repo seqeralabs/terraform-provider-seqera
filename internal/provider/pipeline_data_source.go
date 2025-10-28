@@ -152,7 +152,7 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed: true,
 			},
 			"pipeline_id": schema.Int64Attribute{
-				Required:    true,
+				Computed:    true,
 				Description: `Pipeline numeric identifier`,
 			},
 			"repository": schema.StringAttribute{

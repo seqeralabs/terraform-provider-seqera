@@ -39,6 +39,20 @@ actions:
     update:
       x-speakeasy-entity-operation: ComputeEnv#delete
 
+  # Add retry mechanism for compute environment creation
+  - target: $.paths["/compute-envs"].post
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 4XX
+          - 5XX
+
   # Mark workspaceId as required for compute-envs GET endpoint to fix import
   - target: $.paths["/compute-envs/{computeEnvId}"].get.parameters[?(@.name == "workspaceId")]
     update:
@@ -236,3 +250,39 @@ actions:
   - target: $.components.schemas.AwsBatchConfig
     update:
       x-speakeasy-plan-validators: awsForgeValidator
+
+  # Add Azure Batch work directory validator
+  # Must be a valid Azure Blob container URL with az:// prefix
+  - target: $.components.schemas.AzBatchConfig.properties.workDir
+    update:
+      title: "Azure Batch Work Directory"
+      description: "Must be a valid Azure Blob container URL with format az://container-name/path"
+      example: "az://my-container/work"
+      x-speakeasy-plan-validators: AzureBatchWorkDirValidator
+
+  # Schema description
+  - target: $.components.schemas.ComputeConfig
+    update:
+      description: |
+        Configuration settings for compute environments including work directories,
+        pre/post run scripts, and environment-specific parameters.
+
+  # Field descriptions for ComputeConfig
+  - target: $.components.schemas.ComputeConfig.properties.workDir
+    update:
+      description: Working directory path for workflow execution
+  - target: $.components.schemas.ComputeConfig.properties.preRunScript
+    update:
+      description: Shell script to execute before workflow starts
+  - target: $.components.schemas.ComputeConfig.properties.postRunScript
+    update:
+      description: Shell script to execute after workflow completes
+  - target: $.components.schemas.ComputeConfig.properties.environment
+    update:
+      description: Array of environment variables for the compute environment
+  - target: $.components.schemas.ComputeConfig.properties.nextflowConfig
+    update:
+      description: Nextflow configuration settings and parameters
+  - target: $.components.schemas.ComputeConfig.properties.discriminator
+    update:
+      description: Read-only property identifying the compute platform type

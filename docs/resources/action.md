@@ -3,6 +3,7 @@
 page_title: "seqera_action Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
+  Manage pipeline actions for event-based workflow automation.
   This resource allows the management of pipeline actions. Actions enable event-based
   pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
   the pipeline repository is updated.
@@ -11,6 +12,8 @@ description: |-
 ---
 
 # seqera_action (Resource)
+
+Manage pipeline actions for event-based workflow automation.
 
 This resource allows the management of pipeline actions. Actions enable event-based
 pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
@@ -43,7 +46,7 @@ resource "seqera_action" "my_action" {
     main_script          = "main.nf"
     optimization_id      = "...my_optimization_id..."
     optimization_targets = "...my_optimization_targets..."
-    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n"
+    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
     pipeline             = "https://github.com/nextflow-io/hello"
     post_run_script      = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
     pre_run_script       = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"

@@ -15,6 +15,20 @@ actions:
     update:
       x-speakeasy-entity-operation: Studios#delete
 
+  # Add retry mechanism for data studios creation
+  # This handles cases where a compute environment is not ready and is in a creating state
+  - target: $.paths["/studios"].post
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 400
+
   # Studios parameter configurations
   - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
     update:
@@ -93,3 +107,51 @@ actions:
   - target: $.paths["/studios/{sessionId}"].delete.responses["400"]
     update:
       description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
+
+  # Request examples for Studios
+  - target: $.components.schemas.DataStudioCreateRequest.properties.name
+    update:
+      example: "my-jupyter-studio"
+  - target: $.components.schemas.DataStudioCreateRequest.properties.description
+    update:
+      example: "Jupyter studio for data analysis and visualization"
+  - target: $.components.schemas.DataStudioCreateRequest.properties.dataStudioToolUrl
+    update:
+      example: "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
+  - target: $.components.schemas.DataStudioCreateRequest.properties.computeEnvId
+    update:
+      example: "compute-env-id"
+
+  # Schema description
+  - target: $.components.schemas.DataStudioDto
+    update:
+      description: |
+        Represents a Studio session for interactive data analysis.
+        Contains configuration and runtime information for Jupyter-based
+        computational environments.
+
+  # Field descriptions for DataStudioDto
+  - target: $.components.schemas.DataStudioDto.properties.sessionId
+    update:
+      description: Unique identifier for the Studio session
+  - target: $.components.schemas.DataStudioDto.properties.workspaceId
+    update:
+      description: Numeric identifier of the workspace containing the Studio
+  - target: $.components.schemas.DataStudioDto.properties.parentCheckpoint
+    update:
+      description: Reference to the parent checkpoint for session restoration
+  - target: $.components.schemas.DataStudioDto.properties.user
+    update:
+      description: User information for the Studio session owner
+  - target: $.components.schemas.DataStudioDto.properties.name
+    update:
+      description: Display name for the Studio session
+  - target: $.components.schemas.DataStudioDto.properties.description
+    update:
+      description: Description of the Studio session's purpose
+  - target: $.components.schemas.DataStudioDto.properties.studioUrl
+    update:
+      description: URL to access the running Studio instance
+  - target: $.components.schemas.DataStudioDto.properties.computeEnv
+    update:
+      description: Compute environment configuration for the Studio

@@ -2,8 +2,8 @@ speakeasyVersion: 1.640.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:2334a025f0563b2c2de30122ec9a2268b46ba7dba35a9095cd9f1a9fc2e2d4b8
-        sourceBlobDigest: sha256:42c9d29d7d4425a99058d3257a92e2060d4d648b5d43c284ada5360edda94d55
+        sourceRevisionDigest: sha256:41fa280e406017be169678a647d62814c260e052a5747e5cca6dcf22c272ab4a
+        sourceBlobDigest: sha256:6a2dffaaa46b363735a7fe7bd80bee14c14d4c254c21a6195b101de05247bfdd
         tags:
             - latest
             - 1.56.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:2334a025f0563b2c2de30122ec9a2268b46ba7dba35a9095cd9f1a9fc2e2d4b8
-        sourceBlobDigest: sha256:42c9d29d7d4425a99058d3257a92e2060d4d648b5d43c284ada5360edda94d55
+        sourceRevisionDigest: sha256:41fa280e406017be169678a647d62814c260e052a5747e5cca6dcf22c272ab4a
+        sourceBlobDigest: sha256:6a2dffaaa46b363735a7fe7bd80bee14c14d4c254c21a6195b101de05247bfdd
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -24,11 +24,6 @@ workflow:
                 - location: overlays/api-description.yaml
                 - location: overlays/speakeasy.yaml
                 - location: overlays/required.yaml
-                - location: overlays/schema-descriptions.yaml
-                - location: overlays/schema-field-descriptions.yaml
-                - location: overlays/request-examples.yaml
-                - location: overlays/validators.yaml
-                - location: overlays/retry.yaml
                 - location: overlays/datalinks.yaml
                 - location: overlays/actions.yaml
                 - location: overlays/credentials.yaml
@@ -44,7 +39,7 @@ workflow:
                 - location: overlays/studios.yaml
                 - location: overlays/teams.yaml
                 - location: overlays/tokens.yaml
-                - location: overlays/workflows-resource.yaml
+                - location: overlays/workflows.yaml
                 - location: overlays/workspaces.yaml
                 - location: overlays/users.yaml
                 - location: overlays/schema-fixes.yaml

@@ -4,34 +4,98 @@ info:
   title: Tokens Overlay
   version: 0.0.0
 actions:
-  # Tokens entity operations
-  - target: $["paths"]["/tokens"]["get"]
-    update:
-      x-speakeasy-entity-operation: Tokens#read
-  - target: $["paths"]["/tokens"]["post"]
+  ####################################################################
+  ####                  Token Entity Operations                   ####
+  ####################################################################
+  - target: $.paths["/tokens"].post
     update:
       x-speakeasy-entity-operation: Tokens#create
-  - target: $["paths"]["/tokens/{tokenId}"]["delete"]
+  - target: $.paths["/tokens"].get
+    update:
+      x-speakeasy-entity-operation: Tokens#read
+  - target: $.paths["/tokens/{tokenId}"].delete
     update:
       x-speakeasy-entity-operation: Tokens#delete
 
-  # Token parameter configurations
-  - target: $["paths"]["/tokens/{tokenId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-
-  # AccessToken schema annotations
-  - target: $["components"]["schemas"]["AccessToken"]["properties"]["id"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["AccessToken"]
+  ####################################################################
+  ####                  Token Entity Schema                       ####
+  ####################################################################
+  - target: $.components.schemas.AccessToken
     update:
       x-speakeasy-entity: Tokens
       x-speakeasy-entity-description: |
         Manage API access tokens for authentication.
 
         Tokens provide secure API access, enabling programmatic
-        access to platform resources and services.
-  - target: $["components"]["schemas"]["CreateAccessTokenResponse"]
+        access to platform resources and services. They can be used
+        for CI/CD integration, automation scripts, and external tools.
+      description: |
+        Represents an API access token for authentication.
+        Contains token metadata, permissions, and expiration information
+        for secure API access to platform resources.
+
+  ####################################################################
+  ####            Token Field Descriptions & Ordering             ####
+  ####################################################################
+  # Field descriptions and ordering for AccessToken
+  - target: $.components.schemas.AccessToken.properties.id
+    update:
+      description: Unique numeric identifier for the access token (nullable)
+      x-speakeasy-param-ordering: 1
+      x-speakeasy-param-optional: true
+  - target: $.components.schemas.AccessToken.properties.name
+    update:
+      description: Display name for the token (1-50 characters)
+      x-speakeasy-param-ordering: 2
+  - target: $.components.schemas.AccessToken.properties.dateCreated
+    update:
+      description: Timestamp when the token was created
+      x-speakeasy-param-ordering: 3
+  - target: $.components.schemas.AccessToken.properties.lastUsed
+    update:
+      description: Timestamp when the token was last used for authentication
+      x-speakeasy-param-ordering: 4
+  - target: $.components.schemas.AccessToken.properties.basicAuth
+    update:
+      description: Deprecated basic authentication string
+      x-speakeasy-param-ordering: 5
+
+  ####################################################################
+  ####            Server-Managed Read-Only Fields                 ####
+  ####################################################################
+  # Mark server-managed fields as read-only in AccessToken
+  - target: $.components.schemas.AccessToken.properties.id
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.AccessToken.properties.dateCreated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.AccessToken.properties.lastUsed
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.AccessToken.properties.basicAuth
+    update:
+      x-speakeasy-param-readonly: true
+
+  ####################################################################
+  ####                  Request Examples                          ####
+  ####################################################################
+  - target: $.components.schemas.CreateAccessTokenRequest.properties.name
+    update:
+      example: "ci-cd-pipeline-token"
+
+  ####################################################################
+  ####               Parameter Configuration                      ####
+  ####################################################################
+  # Token parameter configurations
+  - target: $.paths["/tokens/{tokenId}"].delete.parameters[0]
+    update:
+      x-speakeasy-param-optional: true
+
+  ####################################################################
+  ####                Schema Overrides                            ####
+  ####################################################################
+  # Response schema annotations
+  - target: $.components.schemas.CreateAccessTokenResponse
     update:
       x-speakeasy-entity: Tokens

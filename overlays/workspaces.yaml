@@ -40,3 +40,42 @@ actions:
         This is achieved by managing participants in the organization workspaces.
 
         Organizations consist of members, while workspaces consist of participants.
+
+  # Request examples for Workspaces
+  - target: $.components.schemas.Workspace.properties.name
+    update:
+      example: "genomics-research"
+  - target: $.components.schemas.Workspace.properties.fullName
+    update:
+      example: "Genomics Research Workspace"
+  - target: $.components.schemas.Workspace.properties.description
+    update:
+      example: "Workspace for genomics research projects and computational biology workflows"
+  - target: $.components.schemas.Workspace.properties.visibility
+    update:
+      example: "PRIVATE"
+
+  # Schema description
+  - target: $.components.schemas.WorkspaceDbDto
+    update:
+      description: |
+        Represents a workspace in the Seqera Platform.
+        Contains workspace configuration, member permissions, and resource
+        isolation settings for project organization.
+
+  # Field descriptions for WorkspaceDbDto
+  - target: $.components.schemas.WorkspaceDbDto.properties.id
+    update:
+      description: Unique numeric identifier for the workspace
+  - target: $.components.schemas.WorkspaceDbDto.properties.name
+    update:
+      description: Short name or handle for the workspace
+  - target: $.components.schemas.WorkspaceDbDto.properties.fullName
+    update:
+      description: Complete display name for the workspace
+  - target: $.components.schemas.WorkspaceDbDto.properties.description
+    update:
+      description: Detailed description of the workspace's purpose
+  - target: $.components.schemas.WorkspaceDbDto.properties.visibility
+    update:
+      description: Visibility level of the workspace (public, private, etc.)
