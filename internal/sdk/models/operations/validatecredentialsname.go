@@ -14,18 +14,18 @@ type ValidateCredentialsNameRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *ValidateCredentialsNameRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (v *ValidateCredentialsNameRequest) GetWorkspaceID() *int64 {
+	if v == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return v.WorkspaceID
 }
 
-func (o *ValidateCredentialsNameRequest) GetName() *string {
-	if o == nil {
+func (v *ValidateCredentialsNameRequest) GetName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Name
+	return v.Name
 }
 
 type ValidateCredentialsNameResponse struct {
@@ -39,30 +39,30 @@ type ValidateCredentialsNameResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ValidateCredentialsNameResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidateCredentialsNameResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidateCredentialsNameResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidateCredentialsNameResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidateCredentialsNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidateCredentialsNameResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }
 
-func (o *ValidateCredentialsNameResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (v *ValidateCredentialsNameResponse) GetErrorResponse() *shared.ErrorResponse {
+	if v == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return v.ErrorResponse
 }

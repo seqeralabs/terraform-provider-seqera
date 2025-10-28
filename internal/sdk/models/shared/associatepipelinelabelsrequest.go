@@ -7,16 +7,16 @@ type AssociatePipelineLabelsRequest struct {
 	LabelIds    []int64 `json:"labelIds,omitempty"`
 }
 
-func (o *AssociatePipelineLabelsRequest) GetPipelineIds() []int64 {
-	if o == nil {
+func (a *AssociatePipelineLabelsRequest) GetPipelineIds() []int64 {
+	if a == nil {
 		return nil
 	}
-	return o.PipelineIds
+	return a.PipelineIds
 }
 
-func (o *AssociatePipelineLabelsRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (a *AssociatePipelineLabelsRequest) GetLabelIds() []int64 {
+	if a == nil {
 		return nil
 	}
-	return o.LabelIds
+	return a.LabelIds
 }

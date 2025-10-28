@@ -16,25 +16,25 @@ type FindDataStudiosWorkspaceSettingsRequest struct {
 	UpdateWorkspaceRequest *shared.UpdateWorkspaceRequest `request:"mediaType=application/json"`
 }
 
-func (o *FindDataStudiosWorkspaceSettingsRequest) GetOrgID() int64 {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsRequest) GetOrgID() int64 {
+	if f == nil {
 		return 0
 	}
-	return o.OrgID
+	return f.OrgID
 }
 
-func (o *FindDataStudiosWorkspaceSettingsRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsRequest) GetWorkspaceID() int64 {
+	if f == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return f.WorkspaceID
 }
 
-func (o *FindDataStudiosWorkspaceSettingsRequest) GetUpdateWorkspaceRequest() *shared.UpdateWorkspaceRequest {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsRequest) GetUpdateWorkspaceRequest() *shared.UpdateWorkspaceRequest {
+	if f == nil {
 		return nil
 	}
-	return o.UpdateWorkspaceRequest
+	return f.UpdateWorkspaceRequest
 }
 
 type FindDataStudiosWorkspaceSettingsResponse struct {
@@ -50,37 +50,37 @@ type FindDataStudiosWorkspaceSettingsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *FindDataStudiosWorkspaceSettingsResponse) GetContentType() string {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsResponse) GetContentType() string {
+	if f == nil {
 		return ""
 	}
-	return o.ContentType
+	return f.ContentType
 }
 
-func (o *FindDataStudiosWorkspaceSettingsResponse) GetStatusCode() int {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsResponse) GetStatusCode() int {
+	if f == nil {
 		return 0
 	}
-	return o.StatusCode
+	return f.StatusCode
 }
 
-func (o *FindDataStudiosWorkspaceSettingsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsResponse) GetRawResponse() *http.Response {
+	if f == nil {
 		return nil
 	}
-	return o.RawResponse
+	return f.RawResponse
 }
 
-func (o *FindDataStudiosWorkspaceSettingsResponse) GetDataStudioWorkspaceSettingsResponse() *shared.DataStudioWorkspaceSettingsResponse {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsResponse) GetDataStudioWorkspaceSettingsResponse() *shared.DataStudioWorkspaceSettingsResponse {
+	if f == nil {
 		return nil
 	}
-	return o.DataStudioWorkspaceSettingsResponse
+	return f.DataStudioWorkspaceSettingsResponse
 }
 
-func (o *FindDataStudiosWorkspaceSettingsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (f *FindDataStudiosWorkspaceSettingsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if f == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return f.ErrorResponse
 }

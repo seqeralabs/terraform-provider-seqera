@@ -6,9 +6,9 @@ type Security struct {
 	BearerAuth string `security:"scheme,type=http,subtype=bearer,name=Authorization"`
 }
 
-func (o *Security) GetBearerAuth() string {
-	if o == nil {
+func (s *Security) GetBearerAuth() string {
+	if s == nil {
 		return ""
 	}
-	return o.BearerAuth
+	return s.BearerAuth
 }

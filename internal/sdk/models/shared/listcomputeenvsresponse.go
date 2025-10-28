@@ -6,9 +6,9 @@ type ListComputeEnvsResponse struct {
 	ComputeEnvs []ListComputeEnvsResponseEntry `json:"computeEnvs,omitempty"`
 }
 
-func (o *ListComputeEnvsResponse) GetComputeEnvs() []ListComputeEnvsResponseEntry {
-	if o == nil {
+func (l *ListComputeEnvsResponse) GetComputeEnvs() []ListComputeEnvsResponseEntry {
+	if l == nil {
 		return nil
 	}
-	return o.ComputeEnvs
+	return l.ComputeEnvs
 }

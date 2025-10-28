@@ -33,37 +33,37 @@ func (p *PipelineSecret) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PipelineSecret) GetID() *int64 {
-	if o == nil {
+func (p *PipelineSecret) GetID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PipelineSecret) GetName() string {
-	if o == nil {
+func (p *PipelineSecret) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PipelineSecret) GetLastUsed() *time.Time {
-	if o == nil {
+func (p *PipelineSecret) GetLastUsed() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.LastUsed
+	return p.LastUsed
 }
 
-func (o *PipelineSecret) GetDateCreated() *time.Time {
-	if o == nil {
+func (p *PipelineSecret) GetDateCreated() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.DateCreated
+	return p.DateCreated
 }
 
-func (o *PipelineSecret) GetLastUpdated() *time.Time {
-	if o == nil {
+func (p *PipelineSecret) GetLastUpdated() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return p.LastUpdated
 }

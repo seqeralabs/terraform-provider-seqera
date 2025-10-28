@@ -22,16 +22,16 @@ func (i *InstanceType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *InstanceType) GetID() *string {
-	if o == nil {
+func (i *InstanceType) GetID() *string {
+	if i == nil {
 		return nil
 	}
-	return o.ID
+	return i.ID
 }
 
-func (o *InstanceType) GetArch() string {
-	if o == nil {
+func (i *InstanceType) GetArch() string {
+	if i == nil {
 		return ""
 	}
-	return o.Arch
+	return i.Arch
 }

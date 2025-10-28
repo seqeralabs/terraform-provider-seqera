@@ -18,30 +18,30 @@ type DeleteAllTokensResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteAllTokensResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteAllTokensResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteAllTokensResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteAllTokensResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteAllTokensResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteAllTokensResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteAllTokensResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteAllTokensResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

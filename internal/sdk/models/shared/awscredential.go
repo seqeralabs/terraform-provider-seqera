@@ -68,81 +68,81 @@ func (a *AWSCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AWSCredential) GetCredentialsID() *string {
-	if o == nil {
+func (a *AWSCredential) GetCredentialsID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return a.CredentialsID
 }
 
-func (o *AWSCredential) GetName() string {
-	if o == nil {
+func (a *AWSCredential) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AWSCredential) GetDescription() *string {
-	if o == nil {
+func (a *AWSCredential) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AWSCredential) GetProviderType() AWSCredentialProviderType {
-	if o == nil {
+func (a *AWSCredential) GetProviderType() AWSCredentialProviderType {
+	if a == nil {
 		return AWSCredentialProviderType("")
 	}
-	return o.ProviderType
+	return a.ProviderType
 }
 
-func (o *AWSCredential) GetBaseURL() *string {
-	if o == nil {
+func (a *AWSCredential) GetBaseURL() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BaseURL
+	return a.BaseURL
 }
 
-func (o *AWSCredential) GetCategory() *string {
-	if o == nil {
+func (a *AWSCredential) GetCategory() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Category
+	return a.Category
 }
 
-func (o *AWSCredential) GetDeleted() *bool {
-	if o == nil {
+func (a *AWSCredential) GetDeleted() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Deleted
+	return a.Deleted
 }
 
-func (o *AWSCredential) GetLastUsed() *time.Time {
-	if o == nil {
+func (a *AWSCredential) GetLastUsed() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUsed
+	return a.LastUsed
 }
 
-func (o *AWSCredential) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *AWSCredential) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }
 
-func (o *AWSCredential) GetLastUpdated() *time.Time {
-	if o == nil {
+func (a *AWSCredential) GetLastUpdated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return a.LastUpdated
 }
 
-func (o *AWSCredential) GetKeys() AwsSecurityKeys {
-	if o == nil {
+func (a *AWSCredential) GetKeys() AwsSecurityKeys {
+	if a == nil {
 		return AwsSecurityKeys{}
 	}
-	return o.Keys
+	return a.Keys
 }
 
 type AWSCredentialOutput struct {
@@ -180,79 +180,79 @@ func (a *AWSCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AWSCredentialOutput) GetCredentialsID() *string {
-	if o == nil {
+func (a *AWSCredentialOutput) GetCredentialsID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return a.CredentialsID
 }
 
-func (o *AWSCredentialOutput) GetName() string {
-	if o == nil {
+func (a *AWSCredentialOutput) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *AWSCredentialOutput) GetDescription() *string {
-	if o == nil {
+func (a *AWSCredentialOutput) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *AWSCredentialOutput) GetProviderType() AWSCredentialProviderType {
-	if o == nil {
+func (a *AWSCredentialOutput) GetProviderType() AWSCredentialProviderType {
+	if a == nil {
 		return AWSCredentialProviderType("")
 	}
-	return o.ProviderType
+	return a.ProviderType
 }
 
-func (o *AWSCredentialOutput) GetBaseURL() *string {
-	if o == nil {
+func (a *AWSCredentialOutput) GetBaseURL() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BaseURL
+	return a.BaseURL
 }
 
-func (o *AWSCredentialOutput) GetCategory() *string {
-	if o == nil {
+func (a *AWSCredentialOutput) GetCategory() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Category
+	return a.Category
 }
 
-func (o *AWSCredentialOutput) GetDeleted() *bool {
-	if o == nil {
+func (a *AWSCredentialOutput) GetDeleted() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Deleted
+	return a.Deleted
 }
 
-func (o *AWSCredentialOutput) GetLastUsed() *time.Time {
-	if o == nil {
+func (a *AWSCredentialOutput) GetLastUsed() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUsed
+	return a.LastUsed
 }
 
-func (o *AWSCredentialOutput) GetDateCreated() *time.Time {
-	if o == nil {
+func (a *AWSCredentialOutput) GetDateCreated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.DateCreated
+	return a.DateCreated
 }
 
-func (o *AWSCredentialOutput) GetLastUpdated() *time.Time {
-	if o == nil {
+func (a *AWSCredentialOutput) GetLastUpdated() *time.Time {
+	if a == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return a.LastUpdated
 }
 
-func (o *AWSCredentialOutput) GetKeys() AwsSecurityKeysOutput {
-	if o == nil {
+func (a *AWSCredentialOutput) GetKeys() AwsSecurityKeysOutput {
+	if a == nil {
 		return AwsSecurityKeysOutput{}
 	}
-	return o.Keys
+	return a.Keys
 }

@@ -16,79 +16,79 @@ type DescribeWorkflowResponse struct {
 	Messages      []string            `json:"messages,omitempty"`
 }
 
-func (o *DescribeWorkflowResponse) GetWorkflow() *Workflow {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetWorkflow() *Workflow {
+	if d == nil {
 		return nil
 	}
-	return o.Workflow
+	return d.Workflow
 }
 
-func (o *DescribeWorkflowResponse) GetProgress() *ProgressData {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetProgress() *ProgressData {
+	if d == nil {
 		return nil
 	}
-	return o.Progress
+	return d.Progress
 }
 
-func (o *DescribeWorkflowResponse) GetPlatform() *ComputePlatformDto {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetPlatform() *ComputePlatformDto {
+	if d == nil {
 		return nil
 	}
-	return o.Platform
+	return d.Platform
 }
 
-func (o *DescribeWorkflowResponse) GetJobInfo() *JobInfoDto {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetJobInfo() *JobInfoDto {
+	if d == nil {
 		return nil
 	}
-	return o.JobInfo
+	return d.JobInfo
 }
 
-func (o *DescribeWorkflowResponse) GetOrgID() *int64 {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetOrgID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.OrgID
+	return d.OrgID
 }
 
-func (o *DescribeWorkflowResponse) GetOrgName() *string {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetOrgName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrgName
+	return d.OrgName
 }
 
-func (o *DescribeWorkflowResponse) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribeWorkflowResponse) GetWorkspaceName() *string {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetWorkspaceName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceName
+	return d.WorkspaceName
 }
 
-func (o *DescribeWorkflowResponse) GetLabels() []LabelDbDto {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetLabels() []LabelDbDto {
+	if d == nil {
 		return nil
 	}
-	return o.Labels
+	return d.Labels
 }
 
-func (o *DescribeWorkflowResponse) GetOptimized() *bool {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetOptimized() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Optimized
+	return d.Optimized
 }
 
-func (o *DescribeWorkflowResponse) GetMessages() []string {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetMessages() []string {
+	if d == nil {
 		return nil
 	}
-	return o.Messages
+	return d.Messages
 }

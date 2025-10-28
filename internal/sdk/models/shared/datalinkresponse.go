@@ -10,9 +10,9 @@ type DataLinkResponse struct {
 	DataLink *DataLinkDto `json:"dataLink,omitempty"`
 }
 
-func (o *DataLinkResponse) GetDataLink() *DataLinkDto {
-	if o == nil {
+func (d *DataLinkResponse) GetDataLink() *DataLinkDto {
+	if d == nil {
 		return nil
 	}
-	return o.DataLink
+	return d.DataLink
 }

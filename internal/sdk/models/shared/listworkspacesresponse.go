@@ -6,9 +6,9 @@ type ListWorkspacesResponse struct {
 	Workspaces []WorkspaceDbDto `json:"workspaces,omitempty"`
 }
 
-func (o *ListWorkspacesResponse) GetWorkspaces() []WorkspaceDbDto {
-	if o == nil {
+func (l *ListWorkspacesResponse) GetWorkspaces() []WorkspaceDbDto {
+	if l == nil {
 		return nil
 	}
-	return o.Workspaces
+	return l.Workspaces
 }

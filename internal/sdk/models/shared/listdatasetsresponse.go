@@ -6,9 +6,9 @@ type ListDatasetsResponse struct {
 	Datasets []Dataset `json:"datasets,omitempty"`
 }
 
-func (o *ListDatasetsResponse) GetDatasets() []Dataset {
-	if o == nil {
+func (l *ListDatasetsResponse) GetDatasets() []Dataset {
+	if l == nil {
 		return nil
 	}
-	return o.Datasets
+	return l.Datasets
 }

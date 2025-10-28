@@ -94,7 +94,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 		MarkdownDescription: "Manage workflow executions and pipeline runs.\n\nWorkflows represent individual executions of Nextflow pipelines,\ncontaining execution status, parameters, results, and monitoring\ninformation for computational workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -261,7 +261,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Requires replacement if changed.`,
 			},
 			"pipeline": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -583,15 +583,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"command_line": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(8096),
-						},
 					},
 					"commit_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(40),
-						},
 					},
 					"complete": schema.StringAttribute{
 						Computed: true,
@@ -638,9 +632,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(16),
-						},
 					},
 					"last_updated": schema.StringAttribute{
 						Computed: true,
@@ -653,78 +644,42 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"launch_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
 					},
 					"log_file": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(255),
-						},
 					},
 					"manifest": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"author": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(150),
-								},
 							},
 							"default_branch": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(20),
-								},
 							},
 							"description": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(1024),
-								},
 							},
 							"gitmodules": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(150),
-								},
 							},
 							"home_page": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(200),
-								},
 							},
 							"icon": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(255),
-								},
 							},
 							"main_script": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(100),
-								},
 							},
 							"name": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(150),
-								},
 							},
 							"nextflow_version": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(20),
-								},
 							},
 							"version": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(20),
-								},
 							},
 						},
 					},
@@ -733,9 +688,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 						Attributes: map[string]schema.Attribute{
 							"build": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(10),
-								},
 							},
 							"timestamp": schema.StringAttribute{
 								Computed: true,
@@ -745,23 +697,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 							},
 							"version": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(20),
-								},
 							},
 						},
 					},
 					"operation_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(110),
-						},
 					},
 					"out_file": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(255),
-						},
 					},
 					"owner_id": schema.Int64Attribute{
 						Computed: true,
@@ -775,18 +718,12 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"profile": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
 					},
 					"project_dir": schema.StringAttribute{
 						Computed: true,
 					},
 					"project_name": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(200),
-						},
 					},
 					"repository": schema.StringAttribute{
 						Computed: true,
@@ -799,36 +736,21 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"revision": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
 					},
 					"run_name": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(80),
-						},
 					},
 					"script_file": schema.StringAttribute{
 						Computed: true,
 					},
 					"script_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(40),
-						},
 					},
 					"script_name": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(100),
-						},
 					},
 					"session_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(36),
-						},
 					},
 					"start": schema.StringAttribute{
 						Computed: true,
@@ -853,9 +775,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 							},
 							"compute_time_fmt": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(50),
-								},
 							},
 							"failed_count": schema.Int32Attribute{
 								Computed: true,
@@ -917,9 +836,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"user_name": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(40),
-						},
 					},
 					"work_dir": schema.StringAttribute{
 						Computed: true,

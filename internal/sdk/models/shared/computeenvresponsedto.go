@@ -102,219 +102,219 @@ func (c *ComputeEnvResponseDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetComputeEnvID() *string {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetComputeEnvID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ComputeEnvID
+	return c.ComputeEnvID
 }
 
-func (o *ComputeEnvResponseDto) GetName() *string {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ComputeEnvResponseDto) GetDescription() *string {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }
 
-func (o *ComputeEnvResponseDto) GetPlatform() *ComputeEnvResponseDtoPlatform {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetPlatform() *ComputeEnvResponseDtoPlatform {
+	if c == nil {
 		return nil
 	}
-	return o.Platform
+	return c.Platform
 }
 
-func (o *ComputeEnvResponseDto) GetConfig() *ComputeConfig {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfig {
+	if c == nil {
 		return nil
 	}
-	return o.Config
+	return c.Config
 }
 
-func (o *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.MoabConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigAwsBatch() *AWSBatchConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigAwsBatch() *AWSBatchConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.AWSBatchConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.GoogleGKEClusterConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.GoogleBatchServiceConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigAwsCloud() *AWSCloudConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigAwsCloud() *AWSCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.AWSCloudConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.SlurmConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.KubernetesComputeConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.AltairPBSConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.IBMLSFConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigAzureBatch() *AzureBatchConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigAzureBatch() *AzureBatchConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.AzureBatchConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.SeqeraComputeConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.AmazonEKSClusterConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.GoogleLifeSciencesConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	if v := o.GetConfig(); v != nil {
+func (c *ComputeEnvResponseDto) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	if v := c.GetConfig(); v != nil {
 		return v.UnivaGridEngineConfiguration
 	}
 	return nil
 }
 
-func (o *ComputeEnvResponseDto) GetDateCreated() *time.Time {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetDateCreated() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.DateCreated
+	return c.DateCreated
 }
 
-func (o *ComputeEnvResponseDto) GetLastUpdated() *time.Time {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetLastUpdated() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return c.LastUpdated
 }
 
-func (o *ComputeEnvResponseDto) GetLastUsed() *time.Time {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetLastUsed() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.LastUsed
+	return c.LastUsed
 }
 
-func (o *ComputeEnvResponseDto) GetDeleted() *bool {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetDeleted() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Deleted
+	return c.Deleted
 }
 
-func (o *ComputeEnvResponseDto) GetStatus() *ComputeEnvStatus {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetStatus() *ComputeEnvStatus {
+	if c == nil {
 		return nil
 	}
-	return o.Status
+	return c.Status
 }
 
-func (o *ComputeEnvResponseDto) GetMessage() *string {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetMessage() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Message
+	return c.Message
 }
 
-func (o *ComputeEnvResponseDto) GetPrimary() *bool {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetPrimary() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Primary
+	return c.Primary
 }
 
-func (o *ComputeEnvResponseDto) GetCredentialsID() *string {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetCredentialsID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return c.CredentialsID
 }
 
-func (o *ComputeEnvResponseDto) GetManagedIdentityID() *string {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetManagedIdentityID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ManagedIdentityID
+	return c.ManagedIdentityID
 }
 
-func (o *ComputeEnvResponseDto) GetOrgID() *int64 {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetOrgID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *ComputeEnvResponseDto) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *ComputeEnvResponseDto) GetLabels() []LabelDbDto {
-	if o == nil {
+func (c *ComputeEnvResponseDto) GetLabels() []LabelDbDto {
+	if c == nil {
 		return nil
 	}
-	return o.Labels
+	return c.Labels
 }

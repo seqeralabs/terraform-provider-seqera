@@ -12,11 +12,11 @@ type DeleteTokenRequest struct {
 	TokenID int64 `pathParam:"style=simple,explode=false,name=tokenId"`
 }
 
-func (o *DeleteTokenRequest) GetTokenID() int64 {
-	if o == nil {
+func (d *DeleteTokenRequest) GetTokenID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.TokenID
+	return d.TokenID
 }
 
 type DeleteTokenResponse struct {
@@ -30,30 +30,30 @@ type DeleteTokenResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteTokenResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteTokenResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteTokenResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteTokenResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteTokenResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteTokenResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteTokenResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteTokenResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

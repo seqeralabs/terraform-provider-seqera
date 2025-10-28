@@ -14,18 +14,18 @@ type DescribeWorkflowStarRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeWorkflowStarRequest) GetWorkflowID() string {
-	if o == nil {
+func (d *DescribeWorkflowStarRequest) GetWorkflowID() string {
+	if d == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return d.WorkflowID
 }
 
-func (o *DescribeWorkflowStarRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeWorkflowStarRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeWorkflowStarResponse struct {
@@ -41,37 +41,37 @@ type DescribeWorkflowStarResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeWorkflowStarResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeWorkflowStarResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeWorkflowStarResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeWorkflowStarResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeWorkflowStarResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeWorkflowStarResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeWorkflowStarResponse) GetCreateWorkflowStarResponse() *shared.CreateWorkflowStarResponse {
-	if o == nil {
+func (d *DescribeWorkflowStarResponse) GetCreateWorkflowStarResponse() *shared.CreateWorkflowStarResponse {
+	if d == nil {
 		return nil
 	}
-	return o.CreateWorkflowStarResponse
+	return d.CreateWorkflowStarResponse
 }
 
-func (o *DescribeWorkflowStarResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeWorkflowStarResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

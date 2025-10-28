@@ -49,198 +49,198 @@ func (w *WorkflowLoad) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *WorkflowLoad) GetPending() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetPending() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Pending
+	return w.Pending
 }
 
-func (o *WorkflowLoad) GetSubmitted() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetSubmitted() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Submitted
+	return w.Submitted
 }
 
-func (o *WorkflowLoad) GetRunning() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetRunning() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Running
+	return w.Running
 }
 
-func (o *WorkflowLoad) GetSucceeded() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetSucceeded() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Succeeded
+	return w.Succeeded
 }
 
-func (o *WorkflowLoad) GetFailed() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetFailed() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Failed
+	return w.Failed
 }
 
-func (o *WorkflowLoad) GetCached() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetCached() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Cached
+	return w.Cached
 }
 
-func (o *WorkflowLoad) GetAborted() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetAborted() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Aborted
+	return w.Aborted
 }
 
-func (o *WorkflowLoad) GetMemoryEfficiency() *float32 {
-	if o == nil {
+func (w *WorkflowLoad) GetMemoryEfficiency() *float32 {
+	if w == nil {
 		return nil
 	}
-	return o.MemoryEfficiency
+	return w.MemoryEfficiency
 }
 
-func (o *WorkflowLoad) GetCPUEfficiency() *float32 {
-	if o == nil {
+func (w *WorkflowLoad) GetCPUEfficiency() *float32 {
+	if w == nil {
 		return nil
 	}
-	return o.CPUEfficiency
+	return w.CPUEfficiency
 }
 
-func (o *WorkflowLoad) GetDateCreated() *time.Time {
-	if o == nil {
+func (w *WorkflowLoad) GetDateCreated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.DateCreated
+	return w.DateCreated
 }
 
-func (o *WorkflowLoad) GetLastUpdated() *time.Time {
-	if o == nil {
+func (w *WorkflowLoad) GetLastUpdated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return w.LastUpdated
 }
 
-func (o *WorkflowLoad) GetExecutors() []string {
-	if o == nil {
+func (w *WorkflowLoad) GetExecutors() []string {
+	if w == nil {
 		return nil
 	}
-	return o.Executors
+	return w.Executors
 }
 
-func (o *WorkflowLoad) GetCpus() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetCpus() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.Cpus
+	return w.Cpus
 }
 
-func (o *WorkflowLoad) GetCPUTime() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetCPUTime() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.CPUTime
+	return w.CPUTime
 }
 
-func (o *WorkflowLoad) GetCPULoad() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetCPULoad() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.CPULoad
+	return w.CPULoad
 }
 
-func (o *WorkflowLoad) GetMemoryRss() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetMemoryRss() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.MemoryRss
+	return w.MemoryRss
 }
 
-func (o *WorkflowLoad) GetMemoryReq() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetMemoryReq() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.MemoryReq
+	return w.MemoryReq
 }
 
-func (o *WorkflowLoad) GetReadBytes() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetReadBytes() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.ReadBytes
+	return w.ReadBytes
 }
 
-func (o *WorkflowLoad) GetWriteBytes() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetWriteBytes() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.WriteBytes
+	return w.WriteBytes
 }
 
-func (o *WorkflowLoad) GetVolCtxSwitch() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetVolCtxSwitch() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.VolCtxSwitch
+	return w.VolCtxSwitch
 }
 
-func (o *WorkflowLoad) GetInvCtxSwitch() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetInvCtxSwitch() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.InvCtxSwitch
+	return w.InvCtxSwitch
 }
 
-func (o *WorkflowLoad) GetLoadTasks() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetLoadTasks() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.LoadTasks
+	return w.LoadTasks
 }
 
-func (o *WorkflowLoad) GetLoadCpus() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetLoadCpus() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.LoadCpus
+	return w.LoadCpus
 }
 
-func (o *WorkflowLoad) GetLoadMemory() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetLoadMemory() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.LoadMemory
+	return w.LoadMemory
 }
 
-func (o *WorkflowLoad) GetPeakCpus() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetPeakCpus() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.PeakCpus
+	return w.PeakCpus
 }
 
-func (o *WorkflowLoad) GetPeakTasks() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetPeakTasks() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.PeakTasks
+	return w.PeakTasks
 }
 
-func (o *WorkflowLoad) GetPeakMemory() int64 {
-	if o == nil {
+func (w *WorkflowLoad) GetPeakMemory() int64 {
+	if w == nil {
 		return 0
 	}
-	return o.PeakMemory
+	return w.PeakMemory
 }
 
-func (o *WorkflowLoad) GetCost() *float64 {
-	if o == nil {
+func (w *WorkflowLoad) GetCost() *float64 {
+	if w == nil {
 		return nil
 	}
-	return o.Cost
+	return w.Cost
 }

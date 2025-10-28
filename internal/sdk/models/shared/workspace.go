@@ -28,51 +28,51 @@ func (w *Workspace) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Workspace) GetID() *int64 {
-	if o == nil {
+func (w *Workspace) GetID() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.ID
+	return w.ID
 }
 
-func (o *Workspace) GetName() string {
-	if o == nil {
+func (w *Workspace) GetName() string {
+	if w == nil {
 		return ""
 	}
-	return o.Name
+	return w.Name
 }
 
-func (o *Workspace) GetFullName() string {
-	if o == nil {
+func (w *Workspace) GetFullName() string {
+	if w == nil {
 		return ""
 	}
-	return o.FullName
+	return w.FullName
 }
 
-func (o *Workspace) GetDescription() *string {
-	if o == nil {
+func (w *Workspace) GetDescription() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Description
+	return w.Description
 }
 
-func (o *Workspace) GetVisibility() Visibility {
-	if o == nil {
+func (w *Workspace) GetVisibility() Visibility {
+	if w == nil {
 		return Visibility("")
 	}
-	return o.Visibility
+	return w.Visibility
 }
 
-func (o *Workspace) GetDateCreated() *time.Time {
-	if o == nil {
+func (w *Workspace) GetDateCreated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.DateCreated
+	return w.DateCreated
 }
 
-func (o *Workspace) GetLastUpdated() *time.Time {
-	if o == nil {
+func (w *Workspace) GetLastUpdated() *time.Time {
+	if w == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return w.LastUpdated
 }

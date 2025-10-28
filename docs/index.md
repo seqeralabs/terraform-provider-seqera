@@ -31,7 +31,7 @@ provider "seqera" {
 
 ### Required
 
-- `bearer_auth` (String, Sensitive)
+- `bearer_auth` (String, Sensitive) HTTP Bearer.
 
 ### Optional
 

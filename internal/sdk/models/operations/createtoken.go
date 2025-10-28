@@ -20,37 +20,37 @@ type CreateTokenResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateTokenResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateTokenResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateTokenResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateTokenResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateTokenResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateTokenResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateTokenResponse) GetCreateAccessTokenResponse() *shared.CreateAccessTokenResponse {
-	if o == nil {
+func (c *CreateTokenResponse) GetCreateAccessTokenResponse() *shared.CreateAccessTokenResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateAccessTokenResponse
+	return c.CreateAccessTokenResponse
 }
 
-func (o *CreateTokenResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateTokenResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

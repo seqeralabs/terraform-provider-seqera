@@ -9,30 +9,30 @@ type DeleteCredentialsConflictResponseConflict struct {
 	URL  *string `json:"url,omitempty"`
 }
 
-func (o *DeleteCredentialsConflictResponseConflict) GetType() *string {
-	if o == nil {
+func (d *DeleteCredentialsConflictResponseConflict) GetType() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Type
+	return d.Type
 }
 
-func (o *DeleteCredentialsConflictResponseConflict) GetID() *string {
-	if o == nil {
+func (d *DeleteCredentialsConflictResponseConflict) GetID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ID
+	return d.ID
 }
 
-func (o *DeleteCredentialsConflictResponseConflict) GetName() *string {
-	if o == nil {
+func (d *DeleteCredentialsConflictResponseConflict) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DeleteCredentialsConflictResponseConflict) GetURL() *string {
-	if o == nil {
+func (d *DeleteCredentialsConflictResponseConflict) GetURL() *string {
+	if d == nil {
 		return nil
 	}
-	return o.URL
+	return d.URL
 }

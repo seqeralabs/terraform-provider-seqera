@@ -9,30 +9,30 @@ type DataLinkItem struct {
 	MimeType *string           `json:"mimeType,omitempty"`
 }
 
-func (o *DataLinkItem) GetType() *DataLinkItemType {
-	if o == nil {
+func (d *DataLinkItem) GetType() *DataLinkItemType {
+	if d == nil {
 		return nil
 	}
-	return o.Type
+	return d.Type
 }
 
-func (o *DataLinkItem) GetName() *string {
-	if o == nil {
+func (d *DataLinkItem) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataLinkItem) GetSize() *int64 {
-	if o == nil {
+func (d *DataLinkItem) GetSize() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.Size
+	return d.Size
 }
 
-func (o *DataLinkItem) GetMimeType() *string {
-	if o == nil {
+func (d *DataLinkItem) GetMimeType() *string {
+	if d == nil {
 		return nil
 	}
-	return o.MimeType
+	return d.MimeType
 }

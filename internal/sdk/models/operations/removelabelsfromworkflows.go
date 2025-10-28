@@ -14,18 +14,18 @@ type RemoveLabelsFromWorkflowsRequest struct {
 	AssociateWorkflowLabelsRequest shared.AssociateWorkflowLabelsRequest `request:"mediaType=application/json"`
 }
 
-func (o *RemoveLabelsFromWorkflowsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (r *RemoveLabelsFromWorkflowsRequest) GetWorkspaceID() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return r.WorkspaceID
 }
 
-func (o *RemoveLabelsFromWorkflowsRequest) GetAssociateWorkflowLabelsRequest() shared.AssociateWorkflowLabelsRequest {
-	if o == nil {
+func (r *RemoveLabelsFromWorkflowsRequest) GetAssociateWorkflowLabelsRequest() shared.AssociateWorkflowLabelsRequest {
+	if r == nil {
 		return shared.AssociateWorkflowLabelsRequest{}
 	}
-	return o.AssociateWorkflowLabelsRequest
+	return r.AssociateWorkflowLabelsRequest
 }
 
 type RemoveLabelsFromWorkflowsResponse struct {
@@ -37,23 +37,23 @@ type RemoveLabelsFromWorkflowsResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *RemoveLabelsFromWorkflowsResponse) GetContentType() string {
-	if o == nil {
+func (r *RemoveLabelsFromWorkflowsResponse) GetContentType() string {
+	if r == nil {
 		return ""
 	}
-	return o.ContentType
+	return r.ContentType
 }
 
-func (o *RemoveLabelsFromWorkflowsResponse) GetStatusCode() int {
-	if o == nil {
+func (r *RemoveLabelsFromWorkflowsResponse) GetStatusCode() int {
+	if r == nil {
 		return 0
 	}
-	return o.StatusCode
+	return r.StatusCode
 }
 
-func (o *RemoveLabelsFromWorkflowsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (r *RemoveLabelsFromWorkflowsResponse) GetRawResponse() *http.Response {
+	if r == nil {
 		return nil
 	}
-	return o.RawResponse
+	return r.RawResponse
 }

@@ -10,37 +10,37 @@ type CreateLabelResponse struct {
 	IsDefault *bool   `json:"isDefault,omitempty"`
 }
 
-func (o *CreateLabelResponse) GetLabelID() *int64 {
-	if o == nil {
+func (c *CreateLabelResponse) GetLabelID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.LabelID
+	return c.LabelID
 }
 
-func (o *CreateLabelResponse) GetName() *string {
-	if o == nil {
+func (c *CreateLabelResponse) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CreateLabelResponse) GetValue() *string {
-	if o == nil {
+func (c *CreateLabelResponse) GetValue() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Value
+	return c.Value
 }
 
-func (o *CreateLabelResponse) GetResource() *bool {
-	if o == nil {
+func (c *CreateLabelResponse) GetResource() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Resource
+	return c.Resource
 }
 
-func (o *CreateLabelResponse) GetIsDefault() *bool {
-	if o == nil {
+func (c *CreateLabelResponse) GetIsDefault() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.IsDefault
+	return c.IsDefault
 }

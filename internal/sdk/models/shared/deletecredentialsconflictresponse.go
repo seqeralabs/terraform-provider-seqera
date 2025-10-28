@@ -7,16 +7,16 @@ type DeleteCredentialsConflictResponse struct {
 	Conflicts     []DeleteCredentialsConflictResponseConflict `json:"conflicts,omitempty"`
 }
 
-func (o *DeleteCredentialsConflictResponse) GetCredentialsID() *string {
-	if o == nil {
+func (d *DeleteCredentialsConflictResponse) GetCredentialsID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DeleteCredentialsConflictResponse) GetConflicts() []DeleteCredentialsConflictResponseConflict {
-	if o == nil {
+func (d *DeleteCredentialsConflictResponse) GetConflicts() []DeleteCredentialsConflictResponseConflict {
+	if d == nil {
 		return nil
 	}
-	return o.Conflicts
+	return d.Conflicts
 }

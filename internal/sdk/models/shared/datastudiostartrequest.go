@@ -11,46 +11,46 @@ type Configuration struct {
 	LifespanHours    *int     `json:"lifespanHours,omitempty"`
 }
 
-func (o *Configuration) GetGpu() *int {
-	if o == nil {
+func (c *Configuration) GetGpu() *int {
+	if c == nil {
 		return nil
 	}
-	return o.Gpu
+	return c.Gpu
 }
 
-func (o *Configuration) GetCPU() *int {
-	if o == nil {
+func (c *Configuration) GetCPU() *int {
+	if c == nil {
 		return nil
 	}
-	return o.CPU
+	return c.CPU
 }
 
-func (o *Configuration) GetMemory() *int {
-	if o == nil {
+func (c *Configuration) GetMemory() *int {
+	if c == nil {
 		return nil
 	}
-	return o.Memory
+	return c.Memory
 }
 
-func (o *Configuration) GetMountData() []string {
-	if o == nil {
+func (c *Configuration) GetMountData() []string {
+	if c == nil {
 		return nil
 	}
-	return o.MountData
+	return c.MountData
 }
 
-func (o *Configuration) GetCondaEnvironment() *string {
-	if o == nil {
+func (c *Configuration) GetCondaEnvironment() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CondaEnvironment
+	return c.CondaEnvironment
 }
 
-func (o *Configuration) GetLifespanHours() *int {
-	if o == nil {
+func (c *Configuration) GetLifespanHours() *int {
+	if c == nil {
 		return nil
 	}
-	return o.LifespanHours
+	return c.LifespanHours
 }
 
 type DataStudioStartRequest struct {
@@ -60,30 +60,30 @@ type DataStudioStartRequest struct {
 	Spot          *bool          `json:"spot,omitempty"`
 }
 
-func (o *DataStudioStartRequest) GetConfiguration() *Configuration {
-	if o == nil {
+func (d *DataStudioStartRequest) GetConfiguration() *Configuration {
+	if d == nil {
 		return nil
 	}
-	return o.Configuration
+	return d.Configuration
 }
 
-func (o *DataStudioStartRequest) GetDescription() *string {
-	if o == nil {
+func (d *DataStudioStartRequest) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataStudioStartRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (d *DataStudioStartRequest) GetLabelIds() []int64 {
+	if d == nil {
 		return nil
 	}
-	return o.LabelIds
+	return d.LabelIds
 }
 
-func (o *DataStudioStartRequest) GetSpot() *bool {
-	if o == nil {
+func (d *DataStudioStartRequest) GetSpot() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Spot
+	return d.Spot
 }

@@ -10,9 +10,9 @@ type CreateDatasetResponse struct {
 	Dataset *Dataset `json:"dataset,omitempty"`
 }
 
-func (o *CreateDatasetResponse) GetDataset() *Dataset {
-	if o == nil {
+func (c *CreateDatasetResponse) GetDataset() *Dataset {
+	if c == nil {
 		return nil
 	}
-	return o.Dataset
+	return c.Dataset
 }

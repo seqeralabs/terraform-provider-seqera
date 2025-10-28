@@ -8,23 +8,23 @@ type DescribeUserResponse struct {
 	DefaultWorkspaceID *int64     `json:"defaultWorkspaceId,omitempty"`
 }
 
-func (o *DescribeUserResponse) GetUser() *UserDbDto {
-	if o == nil {
+func (d *DescribeUserResponse) GetUser() *UserDbDto {
+	if d == nil {
 		return nil
 	}
-	return o.User
+	return d.User
 }
 
-func (o *DescribeUserResponse) GetNeedConsent() *bool {
-	if o == nil {
+func (d *DescribeUserResponse) GetNeedConsent() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.NeedConsent
+	return d.NeedConsent
 }
 
-func (o *DescribeUserResponse) GetDefaultWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeUserResponse) GetDefaultWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.DefaultWorkspaceID
+	return d.DefaultWorkspaceID
 }

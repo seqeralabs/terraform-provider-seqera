@@ -7,16 +7,16 @@ type RunListResponse struct {
 	NextPageToken *string     `json:"next_page_token,omitempty"`
 }
 
-func (o *RunListResponse) GetRuns() []RunStatus {
-	if o == nil {
+func (r *RunListResponse) GetRuns() []RunStatus {
+	if r == nil {
 		return nil
 	}
-	return o.Runs
+	return r.Runs
 }
 
-func (o *RunListResponse) GetNextPageToken() *string {
-	if o == nil {
+func (r *RunListResponse) GetNextPageToken() *string {
+	if r == nil {
 		return nil
 	}
-	return o.NextPageToken
+	return r.NextPageToken
 }

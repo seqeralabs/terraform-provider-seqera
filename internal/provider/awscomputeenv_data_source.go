@@ -369,11 +369,11 @@ func (r *AWSComputeEnvDataSource) Read(ctx context.Context, req datasource.ReadR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAWSComputeEnvResponse != nil && res.DescribeAWSComputeEnvResponse.ComputeEnv != nil) {
+	if !(res.DescribeAWSComputeEnvResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSComputeEnvComputeConfig(ctx, res.DescribeAWSComputeEnvResponse.ComputeEnv)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSComputeEnvResponse(ctx, res.DescribeAWSComputeEnvResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

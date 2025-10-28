@@ -14,18 +14,18 @@ type ValidateComputeEnvNameRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *ValidateComputeEnvNameRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (v *ValidateComputeEnvNameRequest) GetWorkspaceID() *int64 {
+	if v == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return v.WorkspaceID
 }
 
-func (o *ValidateComputeEnvNameRequest) GetName() *string {
-	if o == nil {
+func (v *ValidateComputeEnvNameRequest) GetName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Name
+	return v.Name
 }
 
 type ValidateComputeEnvNameResponse struct {
@@ -39,30 +39,30 @@ type ValidateComputeEnvNameResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ValidateComputeEnvNameResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidateComputeEnvNameResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidateComputeEnvNameResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidateComputeEnvNameResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidateComputeEnvNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidateComputeEnvNameResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }
 
-func (o *ValidateComputeEnvNameResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (v *ValidateComputeEnvNameResponse) GetErrorResponse() *shared.ErrorResponse {
+	if v == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return v.ErrorResponse
 }

@@ -14,18 +14,18 @@ type CreateGoogleCredentialsRequest struct {
 	CreateGoogleCredentialsRequest shared.CreateGoogleCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateGoogleCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreateGoogleCredentialsRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateGoogleCredentialsRequest) GetCreateGoogleCredentialsRequest() shared.CreateGoogleCredentialsRequest {
-	if o == nil {
+func (c *CreateGoogleCredentialsRequest) GetCreateGoogleCredentialsRequest() shared.CreateGoogleCredentialsRequest {
+	if c == nil {
 		return shared.CreateGoogleCredentialsRequest{}
 	}
-	return o.CreateGoogleCredentialsRequest
+	return c.CreateGoogleCredentialsRequest
 }
 
 type CreateGoogleCredentialsResponse struct {
@@ -41,37 +41,37 @@ type CreateGoogleCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateGoogleCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateGoogleCredentialsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateGoogleCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateGoogleCredentialsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateGoogleCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateGoogleCredentialsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateGoogleCredentialsResponse) GetCreateGoogleCredentialsResponse() *shared.CreateGoogleCredentialsResponse {
-	if o == nil {
+func (c *CreateGoogleCredentialsResponse) GetCreateGoogleCredentialsResponse() *shared.CreateGoogleCredentialsResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateGoogleCredentialsResponse
+	return c.CreateGoogleCredentialsResponse
 }
 
-func (o *CreateGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

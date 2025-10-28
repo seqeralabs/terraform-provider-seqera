@@ -23,23 +23,23 @@ func (g *GooglePlatformMetainfoFilestore) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GooglePlatformMetainfoFilestore) GetTarget() *string {
-	if o == nil {
+func (g *GooglePlatformMetainfoFilestore) GetTarget() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Target
+	return g.Target
 }
 
-func (o *GooglePlatformMetainfoFilestore) GetName() *string {
-	if o == nil {
+func (g *GooglePlatformMetainfoFilestore) GetName() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Name
+	return g.Name
 }
 
-func (o *GooglePlatformMetainfoFilestore) GetLocation() *string {
-	if o == nil {
+func (g *GooglePlatformMetainfoFilestore) GetLocation() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Location
+	return g.Location
 }

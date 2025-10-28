@@ -21,9 +21,9 @@ func (b *Bucket) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Bucket) GetPath() *string {
-	if o == nil {
+func (b *Bucket) GetPath() *string {
+	if b == nil {
 		return nil
 	}
-	return o.Path
+	return b.Path
 }

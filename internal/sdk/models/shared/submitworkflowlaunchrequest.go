@@ -6,9 +6,9 @@ type SubmitWorkflowLaunchRequest struct {
 	Launch WorkflowLaunchRequest `json:"launch"`
 }
 
-func (o *SubmitWorkflowLaunchRequest) GetLaunch() WorkflowLaunchRequest {
-	if o == nil {
+func (s *SubmitWorkflowLaunchRequest) GetLaunch() WorkflowLaunchRequest {
+	if s == nil {
 		return WorkflowLaunchRequest{}
 	}
-	return o.Launch
+	return s.Launch
 }

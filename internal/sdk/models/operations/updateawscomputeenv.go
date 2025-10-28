@@ -16,25 +16,25 @@ type UpdateAWSComputeEnvRequest struct {
 	UpdateAWSComputeEnvRequest shared.UpdateAWSComputeEnvRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateAWSComputeEnvRequest) GetComputeEnvID() string {
-	if o == nil {
+func (u *UpdateAWSComputeEnvRequest) GetComputeEnvID() string {
+	if u == nil {
 		return ""
 	}
-	return o.ComputeEnvID
+	return u.ComputeEnvID
 }
 
-func (o *UpdateAWSComputeEnvRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateAWSComputeEnvRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateAWSComputeEnvRequest) GetUpdateAWSComputeEnvRequest() shared.UpdateAWSComputeEnvRequest {
-	if o == nil {
+func (u *UpdateAWSComputeEnvRequest) GetUpdateAWSComputeEnvRequest() shared.UpdateAWSComputeEnvRequest {
+	if u == nil {
 		return shared.UpdateAWSComputeEnvRequest{}
 	}
-	return o.UpdateAWSComputeEnvRequest
+	return u.UpdateAWSComputeEnvRequest
 }
 
 type UpdateAWSComputeEnvResponse struct {
@@ -48,30 +48,30 @@ type UpdateAWSComputeEnvResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateAWSComputeEnvResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateAWSComputeEnvResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateAWSComputeEnvResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateAWSComputeEnvResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateAWSComputeEnvResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateAWSComputeEnvResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateAWSComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateAWSComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

@@ -7,16 +7,16 @@ type WesErrorResponse struct {
 	StatusCode *int    `json:"status_code,omitempty"`
 }
 
-func (o *WesErrorResponse) GetMsg() *string {
-	if o == nil {
+func (w *WesErrorResponse) GetMsg() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Msg
+	return w.Msg
 }
 
-func (o *WesErrorResponse) GetStatusCode() *int {
-	if o == nil {
+func (w *WesErrorResponse) GetStatusCode() *int {
+	if w == nil {
 		return nil
 	}
-	return o.StatusCode
+	return w.StatusCode
 }

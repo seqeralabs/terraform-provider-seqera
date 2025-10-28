@@ -70,345 +70,345 @@ func (t *Task) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Task) GetHash() *string {
-	if o == nil {
+func (t *Task) GetHash() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Hash
+	return t.Hash
 }
 
-func (o *Task) GetName() *string {
-	if o == nil {
+func (t *Task) GetName() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Name
+	return t.Name
 }
 
-func (o *Task) GetProcess() *string {
-	if o == nil {
+func (t *Task) GetProcess() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Process
+	return t.Process
 }
 
-func (o *Task) GetTag() *string {
-	if o == nil {
+func (t *Task) GetTag() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Tag
+	return t.Tag
 }
 
-func (o *Task) GetSubmit() *time.Time {
-	if o == nil {
+func (t *Task) GetSubmit() *time.Time {
+	if t == nil {
 		return nil
 	}
-	return o.Submit
+	return t.Submit
 }
 
-func (o *Task) GetStart() *time.Time {
-	if o == nil {
+func (t *Task) GetStart() *time.Time {
+	if t == nil {
 		return nil
 	}
-	return o.Start
+	return t.Start
 }
 
-func (o *Task) GetComplete() *time.Time {
-	if o == nil {
+func (t *Task) GetComplete() *time.Time {
+	if t == nil {
 		return nil
 	}
-	return o.Complete
+	return t.Complete
 }
 
-func (o *Task) GetModule() []string {
-	if o == nil {
+func (t *Task) GetModule() []string {
+	if t == nil {
 		return nil
 	}
-	return o.Module
+	return t.Module
 }
 
-func (o *Task) GetContainer() *string {
-	if o == nil {
+func (t *Task) GetContainer() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Container
+	return t.Container
 }
 
-func (o *Task) GetAttempt() *int {
-	if o == nil {
+func (t *Task) GetAttempt() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Attempt
+	return t.Attempt
 }
 
-func (o *Task) GetScript() *string {
-	if o == nil {
+func (t *Task) GetScript() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Script
+	return t.Script
 }
 
-func (o *Task) GetScratch() *string {
-	if o == nil {
+func (t *Task) GetScratch() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Scratch
+	return t.Scratch
 }
 
-func (o *Task) GetWorkdir() *string {
-	if o == nil {
+func (t *Task) GetWorkdir() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Workdir
+	return t.Workdir
 }
 
-func (o *Task) GetQueue() *string {
-	if o == nil {
+func (t *Task) GetQueue() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Queue
+	return t.Queue
 }
 
-func (o *Task) GetCpus() *int {
-	if o == nil {
+func (t *Task) GetCpus() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Cpus
+	return t.Cpus
 }
 
-func (o *Task) GetMemory() *int64 {
-	if o == nil {
+func (t *Task) GetMemory() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Memory
+	return t.Memory
 }
 
-func (o *Task) GetDisk() *int64 {
-	if o == nil {
+func (t *Task) GetDisk() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Disk
+	return t.Disk
 }
 
-func (o *Task) GetTime() *int64 {
-	if o == nil {
+func (t *Task) GetTime() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Time
+	return t.Time
 }
 
-func (o *Task) GetEnv() *string {
-	if o == nil {
+func (t *Task) GetEnv() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Env
+	return t.Env
 }
 
-func (o *Task) GetExecutor() *string {
-	if o == nil {
+func (t *Task) GetExecutor() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Executor
+	return t.Executor
 }
 
-func (o *Task) GetMachineType() *string {
-	if o == nil {
+func (t *Task) GetMachineType() *string {
+	if t == nil {
 		return nil
 	}
-	return o.MachineType
+	return t.MachineType
 }
 
-func (o *Task) GetCloudZone() *string {
-	if o == nil {
+func (t *Task) GetCloudZone() *string {
+	if t == nil {
 		return nil
 	}
-	return o.CloudZone
+	return t.CloudZone
 }
 
-func (o *Task) GetPriceModel() *CloudPriceModel {
-	if o == nil {
+func (t *Task) GetPriceModel() *CloudPriceModel {
+	if t == nil {
 		return nil
 	}
-	return o.PriceModel
+	return t.PriceModel
 }
 
-func (o *Task) GetCost() *float64 {
-	if o == nil {
+func (t *Task) GetCost() *float64 {
+	if t == nil {
 		return nil
 	}
-	return o.Cost
+	return t.Cost
 }
 
-func (o *Task) GetErrorAction() *string {
-	if o == nil {
+func (t *Task) GetErrorAction() *string {
+	if t == nil {
 		return nil
 	}
-	return o.ErrorAction
+	return t.ErrorAction
 }
 
-func (o *Task) GetExitStatus() *int {
-	if o == nil {
+func (t *Task) GetExitStatus() *int {
+	if t == nil {
 		return nil
 	}
-	return o.ExitStatus
+	return t.ExitStatus
 }
 
-func (o *Task) GetDuration() *int64 {
-	if o == nil {
+func (t *Task) GetDuration() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Duration
+	return t.Duration
 }
 
-func (o *Task) GetRealtime() *int64 {
-	if o == nil {
+func (t *Task) GetRealtime() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Realtime
+	return t.Realtime
 }
 
-func (o *Task) GetNativeID() *string {
-	if o == nil {
+func (t *Task) GetNativeID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.NativeID
+	return t.NativeID
 }
 
-func (o *Task) GetPcpu() *float64 {
-	if o == nil {
+func (t *Task) GetPcpu() *float64 {
+	if t == nil {
 		return nil
 	}
-	return o.Pcpu
+	return t.Pcpu
 }
 
-func (o *Task) GetPmem() *float64 {
-	if o == nil {
+func (t *Task) GetPmem() *float64 {
+	if t == nil {
 		return nil
 	}
-	return o.Pmem
+	return t.Pmem
 }
 
-func (o *Task) GetRss() *int64 {
-	if o == nil {
+func (t *Task) GetRss() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Rss
+	return t.Rss
 }
 
-func (o *Task) GetVmem() *int64 {
-	if o == nil {
+func (t *Task) GetVmem() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Vmem
+	return t.Vmem
 }
 
-func (o *Task) GetPeakRss() *int64 {
-	if o == nil {
+func (t *Task) GetPeakRss() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.PeakRss
+	return t.PeakRss
 }
 
-func (o *Task) GetPeakVmem() *int64 {
-	if o == nil {
+func (t *Task) GetPeakVmem() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.PeakVmem
+	return t.PeakVmem
 }
 
-func (o *Task) GetRchar() *int64 {
-	if o == nil {
+func (t *Task) GetRchar() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Rchar
+	return t.Rchar
 }
 
-func (o *Task) GetWchar() *int64 {
-	if o == nil {
+func (t *Task) GetWchar() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Wchar
+	return t.Wchar
 }
 
-func (o *Task) GetSyscr() *int64 {
-	if o == nil {
+func (t *Task) GetSyscr() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Syscr
+	return t.Syscr
 }
 
-func (o *Task) GetSyscw() *int64 {
-	if o == nil {
+func (t *Task) GetSyscw() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.Syscw
+	return t.Syscw
 }
 
-func (o *Task) GetReadBytes() *int64 {
-	if o == nil {
+func (t *Task) GetReadBytes() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.ReadBytes
+	return t.ReadBytes
 }
 
-func (o *Task) GetWriteBytes() *int64 {
-	if o == nil {
+func (t *Task) GetWriteBytes() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.WriteBytes
+	return t.WriteBytes
 }
 
-func (o *Task) GetVolCtxt() *int64 {
-	if o == nil {
+func (t *Task) GetVolCtxt() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.VolCtxt
+	return t.VolCtxt
 }
 
-func (o *Task) GetInvCtxt() *int64 {
-	if o == nil {
+func (t *Task) GetInvCtxt() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.InvCtxt
+	return t.InvCtxt
 }
 
-func (o *Task) GetExit() *int {
-	if o == nil {
+func (t *Task) GetExit() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Exit
+	return t.Exit
 }
 
-func (o *Task) GetID() *int64 {
-	if o == nil {
+func (t *Task) GetID() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.ID
+	return t.ID
 }
 
-func (o *Task) GetTaskID() int64 {
-	if o == nil {
+func (t *Task) GetTaskID() int64 {
+	if t == nil {
 		return 0
 	}
-	return o.TaskID
+	return t.TaskID
 }
 
-func (o *Task) GetStatus() TaskStatus {
-	if o == nil {
+func (t *Task) GetStatus() TaskStatus {
+	if t == nil {
 		return TaskStatus("")
 	}
-	return o.Status
+	return t.Status
 }
 
-func (o *Task) GetDateCreated() *time.Time {
-	if o == nil {
+func (t *Task) GetDateCreated() *time.Time {
+	if t == nil {
 		return nil
 	}
-	return o.DateCreated
+	return t.DateCreated
 }
 
-func (o *Task) GetLastUpdated() *time.Time {
-	if o == nil {
+func (t *Task) GetLastUpdated() *time.Time {
+	if t == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return t.LastUpdated
 }

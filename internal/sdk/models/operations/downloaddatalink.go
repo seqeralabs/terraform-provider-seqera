@@ -18,32 +18,32 @@ type DownloadDataLinkRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DownloadDataLinkRequest) GetDataLinkID() string {
-	if o == nil {
+func (d *DownloadDataLinkRequest) GetDataLinkID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return d.DataLinkID
 }
 
-func (o *DownloadDataLinkRequest) GetFilePath() string {
-	if o == nil {
+func (d *DownloadDataLinkRequest) GetFilePath() string {
+	if d == nil {
 		return ""
 	}
-	return o.FilePath
+	return d.FilePath
 }
 
-func (o *DownloadDataLinkRequest) GetCredentialsID() *string {
-	if o == nil {
+func (d *DownloadDataLinkRequest) GetCredentialsID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DownloadDataLinkRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DownloadDataLinkRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DownloadDataLinkResponse struct {
@@ -59,37 +59,37 @@ type DownloadDataLinkResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DownloadDataLinkResponse) GetContentType() string {
-	if o == nil {
+func (d *DownloadDataLinkResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DownloadDataLinkResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DownloadDataLinkResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DownloadDataLinkResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DownloadDataLinkResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DownloadDataLinkResponse) GetBytes() []byte {
-	if o == nil {
+func (d *DownloadDataLinkResponse) GetBytes() []byte {
+	if d == nil {
 		return nil
 	}
-	return o.Bytes
+	return d.Bytes
 }
 
-func (o *DownloadDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DownloadDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

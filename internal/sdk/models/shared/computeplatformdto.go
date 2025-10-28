@@ -7,16 +7,16 @@ type ComputePlatformDto struct {
 	Name *string `json:"name,omitempty"`
 }
 
-func (o *ComputePlatformDto) GetID() *string {
-	if o == nil {
+func (c *ComputePlatformDto) GetID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *ComputePlatformDto) GetName() *string {
-	if o == nil {
+func (c *ComputePlatformDto) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }

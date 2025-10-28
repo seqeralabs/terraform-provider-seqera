@@ -14,18 +14,18 @@ type ListLatestDatasetVersionsV2Request struct {
 	MimeType *string `queryParam:"style=form,explode=true,name=mimeType"`
 }
 
-func (o *ListLatestDatasetVersionsV2Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Request) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListLatestDatasetVersionsV2Request) GetMimeType() *string {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Request) GetMimeType() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MimeType
+	return l.MimeType
 }
 
 type ListLatestDatasetVersionsV2Response struct {
@@ -41,37 +41,37 @@ type ListLatestDatasetVersionsV2Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetContentType() string {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetStatusCode() int {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetListDatasetVersionsResponse() *shared.ListDatasetVersionsResponse {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetListDatasetVersionsResponse() *shared.ListDatasetVersionsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListDatasetVersionsResponse
+	return l.ListDatasetVersionsResponse
 }
 
-func (o *ListLatestDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListLatestDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

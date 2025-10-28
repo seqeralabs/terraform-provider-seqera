@@ -23,15 +23,15 @@ const (
 )
 
 type PlatformMetainfo struct {
-	AwsBatchPlatformMetainfo *AwsBatchPlatformMetainfo `queryParam:"inline"`
-	AwsCloudPlatformMetainfo *AwsCloudPlatformMetainfo `queryParam:"inline"`
-	GooglePlatformMetainfo   *GooglePlatformMetainfo   `queryParam:"inline"`
-	AzBatchPlatformMetainfo  *AzBatchPlatformMetainfo  `queryParam:"inline"`
-	EksPlatformMetaInfo      *EksPlatformMetaInfo      `queryParam:"inline"`
-	GkePlatformMetaInfo      *GkePlatformMetaInfo      `queryParam:"inline"`
-	K8sPlatformMetaInfo      *K8sPlatformMetaInfo      `queryParam:"inline"`
-	GridPlatformMetainfo     *GridPlatformMetainfo     `queryParam:"inline"`
-	LocalPlatformMetainfo    *LocalPlatformMetainfo    `queryParam:"inline"`
+	AwsBatchPlatformMetainfo *AwsBatchPlatformMetainfo `queryParam:"inline,name=PlatformMetainfo"`
+	AwsCloudPlatformMetainfo *AwsCloudPlatformMetainfo `queryParam:"inline,name=PlatformMetainfo"`
+	GooglePlatformMetainfo   *GooglePlatformMetainfo   `queryParam:"inline,name=PlatformMetainfo"`
+	AzBatchPlatformMetainfo  *AzBatchPlatformMetainfo  `queryParam:"inline,name=PlatformMetainfo"`
+	EksPlatformMetaInfo      *EksPlatformMetaInfo      `queryParam:"inline,name=PlatformMetainfo"`
+	GkePlatformMetaInfo      *GkePlatformMetaInfo      `queryParam:"inline,name=PlatformMetainfo"`
+	K8sPlatformMetaInfo      *K8sPlatformMetaInfo      `queryParam:"inline,name=PlatformMetainfo"`
+	GridPlatformMetainfo     *GridPlatformMetainfo     `queryParam:"inline,name=PlatformMetainfo"`
+	LocalPlatformMetainfo    *LocalPlatformMetainfo    `queryParam:"inline,name=PlatformMetainfo"`
 
 	Type PlatformMetainfoType
 }

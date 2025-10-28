@@ -14,18 +14,18 @@ type CreatePipelineRequest struct {
 	CreatePipelineRequest shared.CreatePipelineRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreatePipelineRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreatePipelineRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreatePipelineRequest) GetCreatePipelineRequest() shared.CreatePipelineRequest {
-	if o == nil {
+func (c *CreatePipelineRequest) GetCreatePipelineRequest() shared.CreatePipelineRequest {
+	if c == nil {
 		return shared.CreatePipelineRequest{}
 	}
-	return o.CreatePipelineRequest
+	return c.CreatePipelineRequest
 }
 
 type CreatePipelineResponse struct {
@@ -41,37 +41,37 @@ type CreatePipelineResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreatePipelineResponse) GetContentType() string {
-	if o == nil {
+func (c *CreatePipelineResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreatePipelineResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreatePipelineResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreatePipelineResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreatePipelineResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreatePipelineResponse) GetCreatePipelineResponse() *shared.CreatePipelineResponse {
-	if o == nil {
+func (c *CreatePipelineResponse) GetCreatePipelineResponse() *shared.CreatePipelineResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreatePipelineResponse
+	return c.CreatePipelineResponse
 }
 
-func (o *CreatePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreatePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

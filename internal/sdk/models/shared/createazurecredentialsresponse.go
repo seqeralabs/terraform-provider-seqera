@@ -6,9 +6,9 @@ type CreateAzureCredentialsResponse struct {
 	CredentialsID *string `json:"credentialsId,omitempty"`
 }
 
-func (o *CreateAzureCredentialsResponse) GetCredentialsID() *string {
-	if o == nil {
+func (c *CreateAzureCredentialsResponse) GetCredentialsID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return c.CredentialsID
 }

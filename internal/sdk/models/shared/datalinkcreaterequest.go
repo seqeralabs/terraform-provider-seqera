@@ -12,51 +12,51 @@ type DataLinkCreateRequest struct {
 	CredentialsID    *string      `json:"credentialsId,omitempty"`
 }
 
-func (o *DataLinkCreateRequest) GetName() string {
-	if o == nil {
+func (d *DataLinkCreateRequest) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataLinkCreateRequest) GetDescription() string {
-	if o == nil {
+func (d *DataLinkCreateRequest) GetDescription() string {
+	if d == nil {
 		return ""
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataLinkCreateRequest) GetType() DataLinkType {
-	if o == nil {
+func (d *DataLinkCreateRequest) GetType() DataLinkType {
+	if d == nil {
 		return DataLinkType("")
 	}
-	return o.Type
+	return d.Type
 }
 
-func (o *DataLinkCreateRequest) GetProviderType() ProviderType {
-	if o == nil {
+func (d *DataLinkCreateRequest) GetProviderType() ProviderType {
+	if d == nil {
 		return ProviderType("")
 	}
-	return o.ProviderType
+	return d.ProviderType
 }
 
-func (o *DataLinkCreateRequest) GetResourceRef() string {
-	if o == nil {
+func (d *DataLinkCreateRequest) GetResourceRef() string {
+	if d == nil {
 		return ""
 	}
-	return o.ResourceRef
+	return d.ResourceRef
 }
 
-func (o *DataLinkCreateRequest) GetPublicAccessible() bool {
-	if o == nil {
+func (d *DataLinkCreateRequest) GetPublicAccessible() bool {
+	if d == nil {
 		return false
 	}
-	return o.PublicAccessible
+	return d.PublicAccessible
 }
 
-func (o *DataLinkCreateRequest) GetCredentialsID() *string {
-	if o == nil {
+func (d *DataLinkCreateRequest) GetCredentialsID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }

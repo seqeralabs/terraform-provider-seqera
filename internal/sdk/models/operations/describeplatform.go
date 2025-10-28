@@ -16,32 +16,32 @@ type DescribePlatformRequest struct {
 	CredentialsID string `queryParam:"style=form,explode=true,name=credentialsId"`
 }
 
-func (o *DescribePlatformRequest) GetPlatformID() string {
-	if o == nil {
+func (d *DescribePlatformRequest) GetPlatformID() string {
+	if d == nil {
 		return ""
 	}
-	return o.PlatformID
+	return d.PlatformID
 }
 
-func (o *DescribePlatformRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribePlatformRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribePlatformRequest) GetRegionID() string {
-	if o == nil {
+func (d *DescribePlatformRequest) GetRegionID() string {
+	if d == nil {
 		return ""
 	}
-	return o.RegionID
+	return d.RegionID
 }
 
-func (o *DescribePlatformRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DescribePlatformRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
 type DescribePlatformResponse struct {
@@ -57,37 +57,37 @@ type DescribePlatformResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribePlatformResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribePlatformResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribePlatformResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribePlatformResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribePlatformResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribePlatformResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribePlatformResponse) GetDescribePlatformResponse() *shared.DescribePlatformResponse {
-	if o == nil {
+func (d *DescribePlatformResponse) GetDescribePlatformResponse() *shared.DescribePlatformResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribePlatformResponse
+	return d.DescribePlatformResponse
 }
 
-func (o *DescribePlatformResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribePlatformResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

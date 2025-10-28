@@ -14,18 +14,18 @@ type StopDataStudioRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *StopDataStudioRequest) GetSessionID() string {
-	if o == nil {
+func (s *StopDataStudioRequest) GetSessionID() string {
+	if s == nil {
 		return ""
 	}
-	return o.SessionID
+	return s.SessionID
 }
 
-func (o *StopDataStudioRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (s *StopDataStudioRequest) GetWorkspaceID() *int64 {
+	if s == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return s.WorkspaceID
 }
 
 type StopDataStudioResponse struct {
@@ -41,37 +41,37 @@ type StopDataStudioResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *StopDataStudioResponse) GetContentType() string {
-	if o == nil {
+func (s *StopDataStudioResponse) GetContentType() string {
+	if s == nil {
 		return ""
 	}
-	return o.ContentType
+	return s.ContentType
 }
 
-func (o *StopDataStudioResponse) GetStatusCode() int {
-	if o == nil {
+func (s *StopDataStudioResponse) GetStatusCode() int {
+	if s == nil {
 		return 0
 	}
-	return o.StatusCode
+	return s.StatusCode
 }
 
-func (o *StopDataStudioResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (s *StopDataStudioResponse) GetRawResponse() *http.Response {
+	if s == nil {
 		return nil
 	}
-	return o.RawResponse
+	return s.RawResponse
 }
 
-func (o *StopDataStudioResponse) GetDataStudioStopResponse() *shared.DataStudioStopResponse {
-	if o == nil {
+func (s *StopDataStudioResponse) GetDataStudioStopResponse() *shared.DataStudioStopResponse {
+	if s == nil {
 		return nil
 	}
-	return o.DataStudioStopResponse
+	return s.DataStudioStopResponse
 }
 
-func (o *StopDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (s *StopDataStudioResponse) GetErrorResponse() *shared.ErrorResponse {
+	if s == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return s.ErrorResponse
 }

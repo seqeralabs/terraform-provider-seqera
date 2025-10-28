@@ -53,149 +53,149 @@ func (p *PipelineDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PipelineDbDto) GetPipelineID() *int64 {
-	if o == nil {
+func (p *PipelineDbDto) GetPipelineID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.PipelineID
+	return p.PipelineID
 }
 
-func (o *PipelineDbDto) GetName() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PipelineDbDto) GetDescription() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PipelineDbDto) GetIcon() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetIcon() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Icon
+	return p.Icon
 }
 
-func (o *PipelineDbDto) GetRepository() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetRepository() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Repository
+	return p.Repository
 }
 
-func (o *PipelineDbDto) GetUserID() *int64 {
-	if o == nil {
+func (p *PipelineDbDto) GetUserID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.UserID
+	return p.UserID
 }
 
-func (o *PipelineDbDto) GetUserName() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetUserName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.UserName
+	return p.UserName
 }
 
-func (o *PipelineDbDto) GetUserFirstName() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetUserFirstName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.UserFirstName
+	return p.UserFirstName
 }
 
-func (o *PipelineDbDto) GetUserLastName() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetUserLastName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.UserLastName
+	return p.UserLastName
 }
 
-func (o *PipelineDbDto) GetOrgID() *int64 {
-	if o == nil {
+func (p *PipelineDbDto) GetOrgID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.OrgID
+	return p.OrgID
 }
 
-func (o *PipelineDbDto) GetOrgName() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetOrgName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.OrgName
+	return p.OrgName
 }
 
-func (o *PipelineDbDto) GetWorkspaceID() *int64 {
-	if o == nil {
+func (p *PipelineDbDto) GetWorkspaceID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return p.WorkspaceID
 }
 
-func (o *PipelineDbDto) GetWorkspaceName() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetWorkspaceName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.WorkspaceName
+	return p.WorkspaceName
 }
 
-func (o *PipelineDbDto) GetVisibility() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetVisibility() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Visibility
+	return p.Visibility
 }
 
-func (o *PipelineDbDto) GetDeleted() *bool {
-	if o == nil {
+func (p *PipelineDbDto) GetDeleted() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Deleted
+	return p.Deleted
 }
 
-func (o *PipelineDbDto) GetLastUpdated() *time.Time {
-	if o == nil {
+func (p *PipelineDbDto) GetLastUpdated() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return p.LastUpdated
 }
 
-func (o *PipelineDbDto) GetOptimizationID() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetOptimizationID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.OptimizationID
+	return p.OptimizationID
 }
 
-func (o *PipelineDbDto) GetOptimizationTargets() *string {
-	if o == nil {
+func (p *PipelineDbDto) GetOptimizationTargets() *string {
+	if p == nil {
 		return nil
 	}
-	return o.OptimizationTargets
+	return p.OptimizationTargets
 }
 
-func (o *PipelineDbDto) GetOptimizationStatus() *PipelineOptimizationStatus {
-	if o == nil {
+func (p *PipelineDbDto) GetOptimizationStatus() *PipelineOptimizationStatus {
+	if p == nil {
 		return nil
 	}
-	return o.OptimizationStatus
+	return p.OptimizationStatus
 }
 
-func (o *PipelineDbDto) GetLabels() []LabelDbDto {
-	if o == nil {
+func (p *PipelineDbDto) GetLabels() []LabelDbDto {
+	if p == nil {
 		return nil
 	}
-	return o.Labels
+	return p.Labels
 }
 
-func (o *PipelineDbDto) GetComputeEnv() *ComputeEnvDbDto {
-	if o == nil {
+func (p *PipelineDbDto) GetComputeEnv() *ComputeEnvDbDto {
+	if p == nil {
 		return nil
 	}
-	return o.ComputeEnv
+	return p.ComputeEnv
 }

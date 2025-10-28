@@ -8,23 +8,23 @@ type DataLinkMultiPartUploadRequest struct {
 	ContentType   *string `json:"contentType,omitempty"`
 }
 
-func (o *DataLinkMultiPartUploadRequest) GetFileName() *string {
-	if o == nil {
+func (d *DataLinkMultiPartUploadRequest) GetFileName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.FileName
+	return d.FileName
 }
 
-func (o *DataLinkMultiPartUploadRequest) GetContentLength() *int64 {
-	if o == nil {
+func (d *DataLinkMultiPartUploadRequest) GetContentLength() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.ContentLength
+	return d.ContentLength
 }
 
-func (o *DataLinkMultiPartUploadRequest) GetContentType() *string {
-	if o == nil {
+func (d *DataLinkMultiPartUploadRequest) GetContentType() *string {
+	if d == nil {
 		return nil
 	}
-	return o.ContentType
+	return d.ContentType
 }

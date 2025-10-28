@@ -62,7 +62,7 @@ func (s *Ga4gh) Ga4ghRunList(ctx context.Context, request operations.Ga4ghRunLis
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "Ga4ghRunList",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -218,7 +218,7 @@ func (s *Ga4gh) Ga4ghRunCreate(ctx context.Context, request shared.RunRequest, o
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "Ga4ghRunCreate",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "Request", "json", `request:"mediaType=application/json"`)
@@ -377,7 +377,7 @@ func (s *Ga4gh) Ga4ghRunDescribe(ctx context.Context, request operations.Ga4ghRu
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "Ga4ghRunDescribe",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -529,7 +529,7 @@ func (s *Ga4gh) Ga4ghRunCancel(ctx context.Context, request operations.Ga4ghRunC
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "Ga4ghRunCancel",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, true, "EmptyBodyRequest", "json", `request:"mediaType=application/json"`)
@@ -688,7 +688,7 @@ func (s *Ga4gh) Ga4ghRunStatus(ctx context.Context, request operations.Ga4ghRunS
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "Ga4ghRunStatus",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -839,7 +839,7 @@ func (s *Ga4gh) Ga4ghServiceInfo(ctx context.Context, opts ...operations.Option)
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "Ga4ghServiceInfo",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

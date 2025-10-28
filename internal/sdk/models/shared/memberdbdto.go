@@ -13,58 +13,58 @@ type MemberDbDto struct {
 	Role      *OrgRole `json:"role,omitempty"`
 }
 
-func (o *MemberDbDto) GetMemberID() *int64 {
-	if o == nil {
+func (m *MemberDbDto) GetMemberID() *int64 {
+	if m == nil {
 		return nil
 	}
-	return o.MemberID
+	return m.MemberID
 }
 
-func (o *MemberDbDto) GetUserID() *int64 {
-	if o == nil {
+func (m *MemberDbDto) GetUserID() *int64 {
+	if m == nil {
 		return nil
 	}
-	return o.UserID
+	return m.UserID
 }
 
-func (o *MemberDbDto) GetUserName() *string {
-	if o == nil {
+func (m *MemberDbDto) GetUserName() *string {
+	if m == nil {
 		return nil
 	}
-	return o.UserName
+	return m.UserName
 }
 
-func (o *MemberDbDto) GetEmail() *string {
-	if o == nil {
+func (m *MemberDbDto) GetEmail() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Email
+	return m.Email
 }
 
-func (o *MemberDbDto) GetFirstName() *string {
-	if o == nil {
+func (m *MemberDbDto) GetFirstName() *string {
+	if m == nil {
 		return nil
 	}
-	return o.FirstName
+	return m.FirstName
 }
 
-func (o *MemberDbDto) GetLastName() *string {
-	if o == nil {
+func (m *MemberDbDto) GetLastName() *string {
+	if m == nil {
 		return nil
 	}
-	return o.LastName
+	return m.LastName
 }
 
-func (o *MemberDbDto) GetAvatar() *string {
-	if o == nil {
+func (m *MemberDbDto) GetAvatar() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Avatar
+	return m.Avatar
 }
 
-func (o *MemberDbDto) GetRole() *OrgRole {
-	if o == nil {
+func (m *MemberDbDto) GetRole() *OrgRole {
+	if m == nil {
 		return nil
 	}
-	return o.Role
+	return m.Role
 }

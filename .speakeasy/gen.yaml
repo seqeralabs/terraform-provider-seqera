@@ -16,7 +16,10 @@ generation:
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
+    hoistGlobalSecurity: true
   sdkHooksConfigAccess: true
+  schemas:
+    allOfMergeStrategy: shallowMerge
   tests:
     generateTests: true
     generateNewTests: false
@@ -38,5 +41,6 @@ terraform:
   environmentVariables: []
   generateValidationHelpers: true
   packageName: seqera
+  unionDeserializationStrategy: populated-fields
   validation:
     enabled: true

@@ -10,9 +10,9 @@ type CreatePipelineResponse struct {
 	Pipeline *PipelineDbDto `json:"pipeline,omitempty"`
 }
 
-func (o *CreatePipelineResponse) GetPipeline() *PipelineDbDto {
-	if o == nil {
+func (c *CreatePipelineResponse) GetPipeline() *PipelineDbDto {
+	if c == nil {
 		return nil
 	}
-	return o.Pipeline
+	return c.Pipeline
 }

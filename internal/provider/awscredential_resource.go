@@ -259,11 +259,11 @@ func (r *AWSCredentialResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeAWSCredentialsResponse != nil && res1.DescribeAWSCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeAWSCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res1.DescribeAWSCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res1.DescribeAWSCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -323,11 +323,11 @@ func (r *AWSCredentialResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeAWSCredentialsResponse != nil && res.DescribeAWSCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeAWSCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res.DescribeAWSCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res.DescribeAWSCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -401,11 +401,11 @@ func (r *AWSCredentialResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeAWSCredentialsResponse != nil && res1.DescribeAWSCredentialsResponse.Credentials != nil) {
+	if !(res1.DescribeAWSCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedAWSCredentialOutput(ctx, res1.DescribeAWSCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeAWSCredentialsResponse(ctx, res1.DescribeAWSCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -9,30 +9,30 @@ type StudioUser struct {
 	Avatar   string `json:"avatar"`
 }
 
-func (o *StudioUser) GetID() int64 {
-	if o == nil {
+func (s *StudioUser) GetID() int64 {
+	if s == nil {
 		return 0
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *StudioUser) GetUserName() string {
-	if o == nil {
+func (s *StudioUser) GetUserName() string {
+	if s == nil {
 		return ""
 	}
-	return o.UserName
+	return s.UserName
 }
 
-func (o *StudioUser) GetEmail() string {
-	if o == nil {
+func (s *StudioUser) GetEmail() string {
+	if s == nil {
 		return ""
 	}
-	return o.Email
+	return s.Email
 }
 
-func (o *StudioUser) GetAvatar() string {
-	if o == nil {
+func (s *StudioUser) GetAvatar() string {
+	if s == nil {
 		return ""
 	}
-	return o.Avatar
+	return s.Avatar
 }

@@ -6,9 +6,9 @@ type DescribeTaskResponse struct {
 	Task *Task `json:"task,omitempty"`
 }
 
-func (o *DescribeTaskResponse) GetTask() *Task {
-	if o == nil {
+func (d *DescribeTaskResponse) GetTask() *Task {
+	if d == nil {
 		return nil
 	}
-	return o.Task
+	return d.Task
 }

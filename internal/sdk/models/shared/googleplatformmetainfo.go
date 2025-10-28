@@ -26,44 +26,44 @@ func (g *GooglePlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GooglePlatformMetainfo) GetLocations() []string {
-	if o == nil {
+func (g *GooglePlatformMetainfo) GetLocations() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Locations
+	return g.Locations
 }
 
-func (o *GooglePlatformMetainfo) GetDiscriminator() *string {
-	if o == nil {
+func (g *GooglePlatformMetainfo) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GooglePlatformMetainfo) GetWarnings() []string {
-	if o == nil {
+func (g *GooglePlatformMetainfo) GetWarnings() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Warnings
+	return g.Warnings
 }
 
-func (o *GooglePlatformMetainfo) GetZones() []string {
-	if o == nil {
+func (g *GooglePlatformMetainfo) GetZones() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Zones
+	return g.Zones
 }
 
-func (o *GooglePlatformMetainfo) GetBuckets() []GooglePlatformMetainfoBucket {
-	if o == nil {
+func (g *GooglePlatformMetainfo) GetBuckets() []GooglePlatformMetainfoBucket {
+	if g == nil {
 		return nil
 	}
-	return o.Buckets
+	return g.Buckets
 }
 
-func (o *GooglePlatformMetainfo) GetFilestores() []GooglePlatformMetainfoFilestore {
-	if o == nil {
+func (g *GooglePlatformMetainfo) GetFilestores() []GooglePlatformMetainfoFilestore {
+	if g == nil {
 		return nil
 	}
-	return o.Filestores
+	return g.Filestores
 }

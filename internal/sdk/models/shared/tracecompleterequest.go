@@ -8,23 +8,23 @@ type TraceCompleteRequest struct {
 	Progress *TraceProgressData `json:"progress,omitempty"`
 }
 
-func (o *TraceCompleteRequest) GetWorkflow() *WorkflowInput {
-	if o == nil {
+func (t *TraceCompleteRequest) GetWorkflow() *WorkflowInput {
+	if t == nil {
 		return nil
 	}
-	return o.Workflow
+	return t.Workflow
 }
 
-func (o *TraceCompleteRequest) GetMetrics() []WorkflowMetrics {
-	if o == nil {
+func (t *TraceCompleteRequest) GetMetrics() []WorkflowMetrics {
+	if t == nil {
 		return nil
 	}
-	return o.Metrics
+	return t.Metrics
 }
 
-func (o *TraceCompleteRequest) GetProgress() *TraceProgressData {
-	if o == nil {
+func (t *TraceCompleteRequest) GetProgress() *TraceProgressData {
+	if t == nil {
 		return nil
 	}
-	return o.Progress
+	return t.Progress
 }

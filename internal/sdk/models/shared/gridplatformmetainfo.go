@@ -21,9 +21,9 @@ func (g *GridPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GridPlatformMetainfo) GetDiscriminator() *string {
-	if o == nil {
+func (g *GridPlatformMetainfo) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }

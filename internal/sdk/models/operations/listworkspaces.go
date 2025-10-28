@@ -12,11 +12,11 @@ type ListWorkspacesRequest struct {
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 }
 
-func (o *ListWorkspacesRequest) GetOrgID() int64 {
-	if o == nil {
+func (l *ListWorkspacesRequest) GetOrgID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
 type ListWorkspacesResponse struct {
@@ -32,37 +32,37 @@ type ListWorkspacesResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListWorkspacesResponse) GetContentType() string {
-	if o == nil {
+func (l *ListWorkspacesResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListWorkspacesResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListWorkspacesResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListWorkspacesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListWorkspacesResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListWorkspacesResponse) GetListWorkspacesResponse() *shared.ListWorkspacesResponse {
-	if o == nil {
+func (l *ListWorkspacesResponse) GetListWorkspacesResponse() *shared.ListWorkspacesResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListWorkspacesResponse
+	return l.ListWorkspacesResponse
 }
 
-func (o *ListWorkspacesResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListWorkspacesResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

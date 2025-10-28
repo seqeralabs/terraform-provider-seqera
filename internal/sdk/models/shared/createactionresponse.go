@@ -6,9 +6,9 @@ type CreateActionResponse struct {
 	ActionID *string `json:"actionId,omitempty"`
 }
 
-func (o *CreateActionResponse) GetActionID() *string {
-	if o == nil {
+func (c *CreateActionResponse) GetActionID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ActionID
+	return c.ActionID
 }

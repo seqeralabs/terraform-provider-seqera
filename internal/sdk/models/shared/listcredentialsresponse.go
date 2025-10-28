@@ -6,9 +6,9 @@ type ListCredentialsResponse struct {
 	Credentials []CredentialsOutput `json:"credentials,omitempty"`
 }
 
-func (o *ListCredentialsResponse) GetCredentials() []CredentialsOutput {
-	if o == nil {
+func (l *ListCredentialsResponse) GetCredentials() []CredentialsOutput {
+	if l == nil {
 		return nil
 	}
-	return o.Credentials
+	return l.Credentials
 }

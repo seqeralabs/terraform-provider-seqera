@@ -9,30 +9,30 @@ type UpdateLabelResponse struct {
 	IsDefault *bool   `json:"isDefault,omitempty"`
 }
 
-func (o *UpdateLabelResponse) GetID() *int64 {
-	if o == nil {
+func (u *UpdateLabelResponse) GetID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.ID
+	return u.ID
 }
 
-func (o *UpdateLabelResponse) GetName() *string {
-	if o == nil {
+func (u *UpdateLabelResponse) GetName() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Name
+	return u.Name
 }
 
-func (o *UpdateLabelResponse) GetValue() *string {
-	if o == nil {
+func (u *UpdateLabelResponse) GetValue() *string {
+	if u == nil {
 		return nil
 	}
-	return o.Value
+	return u.Value
 }
 
-func (o *UpdateLabelResponse) GetIsDefault() *bool {
-	if o == nil {
+func (u *UpdateLabelResponse) GetIsDefault() *bool {
+	if u == nil {
 		return nil
 	}
-	return o.IsDefault
+	return u.IsDefault
 }

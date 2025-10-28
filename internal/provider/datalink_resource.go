@@ -297,11 +297,11 @@ func (r *DataLinkResource) Read(ctx context.Context, req resource.ReadRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DataLinkResponse != nil && res.DataLinkResponse.DataLink != nil) {
+	if !(res.DataLinkResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataLinkDto(ctx, res.DataLinkResponse.DataLink)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDataLinkResponse(ctx, res.DataLinkResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

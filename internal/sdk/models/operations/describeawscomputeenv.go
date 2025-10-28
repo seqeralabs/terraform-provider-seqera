@@ -16,25 +16,25 @@ type DescribeAWSComputeEnvRequest struct {
 	Attributes []shared.ComputeEnvQueryAttribute `queryParam:"style=form,explode=true,name=attributes"`
 }
 
-func (o *DescribeAWSComputeEnvRequest) GetComputeEnvID() string {
-	if o == nil {
+func (d *DescribeAWSComputeEnvRequest) GetComputeEnvID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ComputeEnvID
+	return d.ComputeEnvID
 }
 
-func (o *DescribeAWSComputeEnvRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (d *DescribeAWSComputeEnvRequest) GetWorkspaceID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribeAWSComputeEnvRequest) GetAttributes() []shared.ComputeEnvQueryAttribute {
-	if o == nil {
+func (d *DescribeAWSComputeEnvRequest) GetAttributes() []shared.ComputeEnvQueryAttribute {
+	if d == nil {
 		return nil
 	}
-	return o.Attributes
+	return d.Attributes
 }
 
 type DescribeAWSComputeEnvResponse struct {
@@ -50,37 +50,37 @@ type DescribeAWSComputeEnvResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeAWSComputeEnvResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeAWSComputeEnvResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeAWSComputeEnvResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeAWSComputeEnvResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeAWSComputeEnvResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeAWSComputeEnvResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeAWSComputeEnvResponse) GetDescribeAWSComputeEnvResponse() *shared.DescribeAWSComputeEnvResponse {
-	if o == nil {
+func (d *DescribeAWSComputeEnvResponse) GetDescribeAWSComputeEnvResponse() *shared.DescribeAWSComputeEnvResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeAWSComputeEnvResponse
+	return d.DescribeAWSComputeEnvResponse
 }
 
-func (o *DescribeAWSComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeAWSComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

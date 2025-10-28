@@ -20,39 +20,39 @@ type ListWorkflowsRequest struct {
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 
-func (o *ListWorkflowsRequest) GetAttributes() []shared.WorkflowQueryAttribute {
-	if o == nil {
+func (l *ListWorkflowsRequest) GetAttributes() []shared.WorkflowQueryAttribute {
+	if l == nil {
 		return nil
 	}
-	return o.Attributes
+	return l.Attributes
 }
 
-func (o *ListWorkflowsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListWorkflowsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListWorkflowsRequest) GetMax() *int {
-	if o == nil {
+func (l *ListWorkflowsRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListWorkflowsRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListWorkflowsRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListWorkflowsRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListWorkflowsRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
 type ListWorkflowsResponse struct {
@@ -68,37 +68,37 @@ type ListWorkflowsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListWorkflowsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListWorkflowsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListWorkflowsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListWorkflowsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListWorkflowsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListWorkflowsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListWorkflowsResponse) GetListWorkflowsResponse() *shared.ListWorkflowsResponse {
-	if o == nil {
+func (l *ListWorkflowsResponse) GetListWorkflowsResponse() *shared.ListWorkflowsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListWorkflowsResponse
+	return l.ListWorkflowsResponse
 }
 
-func (o *ListWorkflowsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListWorkflowsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

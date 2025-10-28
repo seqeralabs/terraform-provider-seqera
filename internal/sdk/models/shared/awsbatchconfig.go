@@ -37,191 +37,191 @@ type AwsBatchConfig struct {
 	ForgedResources     []map[string]any    `json:"forgedResources,omitempty"`
 }
 
-func (o *AwsBatchConfig) GetStorageType() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetStorageType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageType
+	return a.StorageType
 }
 
-func (o *AwsBatchConfig) GetLustreID() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetLustreID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.LustreID
+	return a.LustreID
 }
 
-func (o *AwsBatchConfig) GetVolumes() []string {
-	if o == nil {
+func (a *AwsBatchConfig) GetVolumes() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Volumes
+	return a.Volumes
 }
 
-func (o *AwsBatchConfig) GetDiscriminator() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AwsBatchConfig) GetRegion() string {
-	if o == nil {
+func (a *AwsBatchConfig) GetRegion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Region
+	return a.Region
 }
 
-func (o *AwsBatchConfig) GetComputeQueue() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetComputeQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeQueue
+	return a.ComputeQueue
 }
 
-func (o *AwsBatchConfig) GetDragenQueue() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetDragenQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.DragenQueue
+	return a.DragenQueue
 }
 
-func (o *AwsBatchConfig) GetDragenInstanceType() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetDragenInstanceType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.DragenInstanceType
+	return a.DragenInstanceType
 }
 
-func (o *AwsBatchConfig) GetComputeJobRole() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetComputeJobRole() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ComputeJobRole
+	return a.ComputeJobRole
 }
 
-func (o *AwsBatchConfig) GetExecutionRole() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetExecutionRole() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ExecutionRole
+	return a.ExecutionRole
 }
 
-func (o *AwsBatchConfig) GetHeadQueue() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetHeadQueue() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadQueue
+	return a.HeadQueue
 }
 
-func (o *AwsBatchConfig) GetHeadJobRole() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetHeadJobRole() *string {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobRole
+	return a.HeadJobRole
 }
 
-func (o *AwsBatchConfig) GetCliPath() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetCliPath() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CliPath
+	return a.CliPath
 }
 
-func (o *AwsBatchConfig) GetWorkDir() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetWorkDir() *string {
+	if a == nil {
 		return nil
 	}
-	return o.WorkDir
+	return a.WorkDir
 }
 
-func (o *AwsBatchConfig) GetPreRunScript() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetPreRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PreRunScript
+	return a.PreRunScript
 }
 
-func (o *AwsBatchConfig) GetPostRunScript() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetPostRunScript() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PostRunScript
+	return a.PostRunScript
 }
 
-func (o *AwsBatchConfig) GetHeadJobCpus() *int {
-	if o == nil {
+func (a *AwsBatchConfig) GetHeadJobCpus() *int {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobCpus
+	return a.HeadJobCpus
 }
 
-func (o *AwsBatchConfig) GetHeadJobMemoryMb() *int {
-	if o == nil {
+func (a *AwsBatchConfig) GetHeadJobMemoryMb() *int {
+	if a == nil {
 		return nil
 	}
-	return o.HeadJobMemoryMb
+	return a.HeadJobMemoryMb
 }
 
-func (o *AwsBatchConfig) GetEnvironment() []ConfigEnvVariable {
-	if o == nil {
+func (a *AwsBatchConfig) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
 		return nil
 	}
-	return o.Environment
+	return a.Environment
 }
 
-func (o *AwsBatchConfig) GetWaveEnabled() *bool {
-	if o == nil {
+func (a *AwsBatchConfig) GetWaveEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return a.WaveEnabled
 }
 
-func (o *AwsBatchConfig) GetFusion2Enabled() *bool {
-	if o == nil {
+func (a *AwsBatchConfig) GetFusion2Enabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Fusion2Enabled
+	return a.Fusion2Enabled
 }
 
-func (o *AwsBatchConfig) GetNvnmeStorageEnabled() *bool {
-	if o == nil {
+func (a *AwsBatchConfig) GetNvnmeStorageEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.NvnmeStorageEnabled
+	return a.NvnmeStorageEnabled
 }
 
-func (o *AwsBatchConfig) GetLogGroup() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetLogGroup() *string {
+	if a == nil {
 		return nil
 	}
-	return o.LogGroup
+	return a.LogGroup
 }
 
-func (o *AwsBatchConfig) GetNextflowConfig() *string {
-	if o == nil {
+func (a *AwsBatchConfig) GetNextflowConfig() *string {
+	if a == nil {
 		return nil
 	}
-	return o.NextflowConfig
+	return a.NextflowConfig
 }
 
-func (o *AwsBatchConfig) GetFusionSnapshots() *bool {
-	if o == nil {
+func (a *AwsBatchConfig) GetFusionSnapshots() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.FusionSnapshots
+	return a.FusionSnapshots
 }
 
-func (o *AwsBatchConfig) GetForge() *ForgeConfig {
-	if o == nil {
+func (a *AwsBatchConfig) GetForge() *ForgeConfig {
+	if a == nil {
 		return nil
 	}
-	return o.Forge
+	return a.Forge
 }
 
-func (o *AwsBatchConfig) GetForgedResources() []map[string]any {
-	if o == nil {
+func (a *AwsBatchConfig) GetForgedResources() []map[string]any {
+	if a == nil {
 		return nil
 	}
-	return o.ForgedResources
+	return a.ForgedResources
 }

@@ -21,9 +21,9 @@ func (e *EfsFileSystem) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *EfsFileSystem) GetID() *string {
-	if o == nil {
+func (e *EfsFileSystem) GetID() *string {
+	if e == nil {
 		return nil
 	}
-	return o.ID
+	return e.ID
 }

@@ -6,9 +6,9 @@ type AddMemberResponse struct {
 	Member *MemberDbDto `json:"member,omitempty"`
 }
 
-func (o *AddMemberResponse) GetMember() *MemberDbDto {
-	if o == nil {
+func (a *AddMemberResponse) GetMember() *MemberDbDto {
+	if a == nil {
 		return nil
 	}
-	return o.Member
+	return a.Member
 }

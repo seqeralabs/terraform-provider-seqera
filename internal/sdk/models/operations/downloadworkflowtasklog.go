@@ -18,32 +18,32 @@ type DownloadWorkflowTaskLogRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DownloadWorkflowTaskLogRequest) GetWorkflowID() string {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogRequest) GetWorkflowID() string {
+	if d == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return d.WorkflowID
 }
 
-func (o *DownloadWorkflowTaskLogRequest) GetTaskID() int64 {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogRequest) GetTaskID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.TaskID
+	return d.TaskID
 }
 
-func (o *DownloadWorkflowTaskLogRequest) GetFileName() *string {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogRequest) GetFileName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.FileName
+	return d.FileName
 }
 
-func (o *DownloadWorkflowTaskLogRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DownloadWorkflowTaskLogResponse struct {
@@ -59,37 +59,37 @@ type DownloadWorkflowTaskLogResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DownloadWorkflowTaskLogResponse) GetContentType() string {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DownloadWorkflowTaskLogResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DownloadWorkflowTaskLogResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DownloadWorkflowTaskLogResponse) GetBytes() []byte {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogResponse) GetBytes() []byte {
+	if d == nil {
 		return nil
 	}
-	return o.Bytes
+	return d.Bytes
 }
 
-func (o *DownloadWorkflowTaskLogResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DownloadWorkflowTaskLogResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

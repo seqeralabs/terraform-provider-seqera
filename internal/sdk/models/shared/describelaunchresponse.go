@@ -6,9 +6,9 @@ type DescribeLaunchResponse struct {
 	Launch *Launch `json:"launch,omitempty"`
 }
 
-func (o *DescribeLaunchResponse) GetLaunch() *Launch {
-	if o == nil {
+func (d *DescribeLaunchResponse) GetLaunch() *Launch {
+	if d == nil {
 		return nil
 	}
-	return o.Launch
+	return d.Launch
 }

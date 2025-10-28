@@ -6,9 +6,9 @@ type UploadDatasetVersionResponse struct {
 	Version *DatasetVersionDbDto `json:"version,omitempty"`
 }
 
-func (o *UploadDatasetVersionResponse) GetVersion() *DatasetVersionDbDto {
-	if o == nil {
+func (u *UploadDatasetVersionResponse) GetVersion() *DatasetVersionDbDto {
+	if u == nil {
 		return nil
 	}
-	return o.Version
+	return u.Version
 }

@@ -10,37 +10,37 @@ type AzureSecurityKeys struct {
 	StorageKey    *string `json:"storageKey,omitempty"`
 }
 
-func (o *AzureSecurityKeys) GetDiscriminator() *string {
-	if o == nil {
+func (a *AzureSecurityKeys) GetDiscriminator() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Discriminator
+	return a.Discriminator
 }
 
-func (o *AzureSecurityKeys) GetBatchName() *string {
-	if o == nil {
+func (a *AzureSecurityKeys) GetBatchName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BatchName
+	return a.BatchName
 }
 
-func (o *AzureSecurityKeys) GetStorageName() *string {
-	if o == nil {
+func (a *AzureSecurityKeys) GetStorageName() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageName
+	return a.StorageName
 }
 
-func (o *AzureSecurityKeys) GetBatchKey() *string {
-	if o == nil {
+func (a *AzureSecurityKeys) GetBatchKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.BatchKey
+	return a.BatchKey
 }
 
-func (o *AzureSecurityKeys) GetStorageKey() *string {
-	if o == nil {
+func (a *AzureSecurityKeys) GetStorageKey() *string {
+	if a == nil {
 		return nil
 	}
-	return o.StorageKey
+	return a.StorageKey
 }

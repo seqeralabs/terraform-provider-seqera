@@ -18,32 +18,32 @@ type UpdateWorkspaceParticipantRoleRequest struct {
 	UpdateParticipantRoleRequest shared.UpdateParticipantRoleRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateWorkspaceParticipantRoleRequest) GetOrgID() int64 {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleRequest) GetOrgID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.OrgID
+	return u.OrgID
 }
 
-func (o *UpdateWorkspaceParticipantRoleRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleRequest) GetWorkspaceID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateWorkspaceParticipantRoleRequest) GetParticipantID() int64 {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleRequest) GetParticipantID() int64 {
+	if u == nil {
 		return 0
 	}
-	return o.ParticipantID
+	return u.ParticipantID
 }
 
-func (o *UpdateWorkspaceParticipantRoleRequest) GetUpdateParticipantRoleRequest() shared.UpdateParticipantRoleRequest {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleRequest) GetUpdateParticipantRoleRequest() shared.UpdateParticipantRoleRequest {
+	if u == nil {
 		return shared.UpdateParticipantRoleRequest{}
 	}
-	return o.UpdateParticipantRoleRequest
+	return u.UpdateParticipantRoleRequest
 }
 
 type UpdateWorkspaceParticipantRoleResponse struct {
@@ -57,30 +57,30 @@ type UpdateWorkspaceParticipantRoleResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateWorkspaceParticipantRoleResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateWorkspaceParticipantRoleResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateWorkspaceParticipantRoleResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateWorkspaceParticipantRoleResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateWorkspaceParticipantRoleResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

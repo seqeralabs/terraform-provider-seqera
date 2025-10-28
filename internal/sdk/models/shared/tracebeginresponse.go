@@ -8,23 +8,23 @@ type TraceBeginResponse struct {
 	WatchURL   *string                `json:"watchUrl,omitempty"`
 }
 
-func (o *TraceBeginResponse) GetStatus() *TraceProcessingStatus {
-	if o == nil {
+func (t *TraceBeginResponse) GetStatus() *TraceProcessingStatus {
+	if t == nil {
 		return nil
 	}
-	return o.Status
+	return t.Status
 }
 
-func (o *TraceBeginResponse) GetWorkflowID() *string {
-	if o == nil {
+func (t *TraceBeginResponse) GetWorkflowID() *string {
+	if t == nil {
 		return nil
 	}
-	return o.WorkflowID
+	return t.WorkflowID
 }
 
-func (o *TraceBeginResponse) GetWatchURL() *string {
-	if o == nil {
+func (t *TraceBeginResponse) GetWatchURL() *string {
+	if t == nil {
 		return nil
 	}
-	return o.WatchURL
+	return t.WatchURL
 }

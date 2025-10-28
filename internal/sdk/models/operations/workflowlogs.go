@@ -16,25 +16,25 @@ type WorkflowLogsRequest struct {
 	Next *string `queryParam:"style=form,explode=true,name=next"`
 }
 
-func (o *WorkflowLogsRequest) GetWorkflowID() string {
-	if o == nil {
+func (w *WorkflowLogsRequest) GetWorkflowID() string {
+	if w == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return w.WorkflowID
 }
 
-func (o *WorkflowLogsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (w *WorkflowLogsRequest) GetWorkspaceID() *int64 {
+	if w == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return w.WorkspaceID
 }
 
-func (o *WorkflowLogsRequest) GetNext() *string {
-	if o == nil {
+func (w *WorkflowLogsRequest) GetNext() *string {
+	if w == nil {
 		return nil
 	}
-	return o.Next
+	return w.Next
 }
 
 type WorkflowLogsResponse struct {
@@ -50,37 +50,37 @@ type WorkflowLogsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *WorkflowLogsResponse) GetContentType() string {
-	if o == nil {
+func (w *WorkflowLogsResponse) GetContentType() string {
+	if w == nil {
 		return ""
 	}
-	return o.ContentType
+	return w.ContentType
 }
 
-func (o *WorkflowLogsResponse) GetStatusCode() int {
-	if o == nil {
+func (w *WorkflowLogsResponse) GetStatusCode() int {
+	if w == nil {
 		return 0
 	}
-	return o.StatusCode
+	return w.StatusCode
 }
 
-func (o *WorkflowLogsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (w *WorkflowLogsResponse) GetRawResponse() *http.Response {
+	if w == nil {
 		return nil
 	}
-	return o.RawResponse
+	return w.RawResponse
 }
 
-func (o *WorkflowLogsResponse) GetWorkflowLogResponse() *shared.WorkflowLogResponse {
-	if o == nil {
+func (w *WorkflowLogsResponse) GetWorkflowLogResponse() *shared.WorkflowLogResponse {
+	if w == nil {
 		return nil
 	}
-	return o.WorkflowLogResponse
+	return w.WorkflowLogResponse
 }
 
-func (o *WorkflowLogsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (w *WorkflowLogsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if w == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return w.ErrorResponse
 }

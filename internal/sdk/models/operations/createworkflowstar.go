@@ -14,18 +14,18 @@ type CreateWorkflowStarRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *CreateWorkflowStarRequest) GetWorkflowID() string {
-	if o == nil {
+func (c *CreateWorkflowStarRequest) GetWorkflowID() string {
+	if c == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return c.WorkflowID
 }
 
-func (o *CreateWorkflowStarRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreateWorkflowStarRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
 type CreateWorkflowStarResponse struct {
@@ -41,37 +41,37 @@ type CreateWorkflowStarResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateWorkflowStarResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateWorkflowStarResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateWorkflowStarResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateWorkflowStarResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateWorkflowStarResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateWorkflowStarResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateWorkflowStarResponse) GetCreateWorkflowStarResponse() *shared.CreateWorkflowStarResponse {
-	if o == nil {
+func (c *CreateWorkflowStarResponse) GetCreateWorkflowStarResponse() *shared.CreateWorkflowStarResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateWorkflowStarResponse
+	return c.CreateWorkflowStarResponse
 }
 
-func (o *CreateWorkflowStarResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateWorkflowStarResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

@@ -16,25 +16,25 @@ type CreateWorkspaceParticipantRequest struct {
 	AddParticipantRequest shared.AddParticipantRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateWorkspaceParticipantRequest) GetOrgID() int64 {
-	if o == nil {
+func (c *CreateWorkspaceParticipantRequest) GetOrgID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *CreateWorkspaceParticipantRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateWorkspaceParticipantRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateWorkspaceParticipantRequest) GetAddParticipantRequest() shared.AddParticipantRequest {
-	if o == nil {
+func (c *CreateWorkspaceParticipantRequest) GetAddParticipantRequest() shared.AddParticipantRequest {
+	if c == nil {
 		return shared.AddParticipantRequest{}
 	}
-	return o.AddParticipantRequest
+	return c.AddParticipantRequest
 }
 
 type CreateWorkspaceParticipantResponse struct {
@@ -50,37 +50,37 @@ type CreateWorkspaceParticipantResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateWorkspaceParticipantResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateWorkspaceParticipantResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateWorkspaceParticipantResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateWorkspaceParticipantResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateWorkspaceParticipantResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateWorkspaceParticipantResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateWorkspaceParticipantResponse) GetAddParticipantResponse() *shared.AddParticipantResponse {
-	if o == nil {
+func (c *CreateWorkspaceParticipantResponse) GetAddParticipantResponse() *shared.AddParticipantResponse {
+	if c == nil {
 		return nil
 	}
-	return o.AddParticipantResponse
+	return c.AddParticipantResponse
 }
 
-func (o *CreateWorkspaceParticipantResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateWorkspaceParticipantResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

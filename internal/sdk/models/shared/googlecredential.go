@@ -68,81 +68,81 @@ func (g *GoogleCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GoogleCredential) GetCredentialsID() *string {
-	if o == nil {
+func (g *GoogleCredential) GetCredentialsID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return g.CredentialsID
 }
 
-func (o *GoogleCredential) GetName() string {
-	if o == nil {
+func (g *GoogleCredential) GetName() string {
+	if g == nil {
 		return ""
 	}
-	return o.Name
+	return g.Name
 }
 
-func (o *GoogleCredential) GetDescription() *string {
-	if o == nil {
+func (g *GoogleCredential) GetDescription() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Description
+	return g.Description
 }
 
-func (o *GoogleCredential) GetProviderType() GoogleCredentialProviderType {
-	if o == nil {
+func (g *GoogleCredential) GetProviderType() GoogleCredentialProviderType {
+	if g == nil {
 		return GoogleCredentialProviderType("")
 	}
-	return o.ProviderType
+	return g.ProviderType
 }
 
-func (o *GoogleCredential) GetBaseURL() *string {
-	if o == nil {
+func (g *GoogleCredential) GetBaseURL() *string {
+	if g == nil {
 		return nil
 	}
-	return o.BaseURL
+	return g.BaseURL
 }
 
-func (o *GoogleCredential) GetCategory() *string {
-	if o == nil {
+func (g *GoogleCredential) GetCategory() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Category
+	return g.Category
 }
 
-func (o *GoogleCredential) GetDeleted() *bool {
-	if o == nil {
+func (g *GoogleCredential) GetDeleted() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Deleted
+	return g.Deleted
 }
 
-func (o *GoogleCredential) GetLastUsed() *time.Time {
-	if o == nil {
+func (g *GoogleCredential) GetLastUsed() *time.Time {
+	if g == nil {
 		return nil
 	}
-	return o.LastUsed
+	return g.LastUsed
 }
 
-func (o *GoogleCredential) GetDateCreated() *time.Time {
-	if o == nil {
+func (g *GoogleCredential) GetDateCreated() *time.Time {
+	if g == nil {
 		return nil
 	}
-	return o.DateCreated
+	return g.DateCreated
 }
 
-func (o *GoogleCredential) GetLastUpdated() *time.Time {
-	if o == nil {
+func (g *GoogleCredential) GetLastUpdated() *time.Time {
+	if g == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return g.LastUpdated
 }
 
-func (o *GoogleCredential) GetKeys() GoogleSecurityKeys {
-	if o == nil {
+func (g *GoogleCredential) GetKeys() GoogleSecurityKeys {
+	if g == nil {
 		return GoogleSecurityKeys{}
 	}
-	return o.Keys
+	return g.Keys
 }
 
 type GoogleCredentialOutput struct {
@@ -180,79 +180,79 @@ func (g *GoogleCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GoogleCredentialOutput) GetCredentialsID() *string {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetCredentialsID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return g.CredentialsID
 }
 
-func (o *GoogleCredentialOutput) GetName() string {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetName() string {
+	if g == nil {
 		return ""
 	}
-	return o.Name
+	return g.Name
 }
 
-func (o *GoogleCredentialOutput) GetDescription() *string {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetDescription() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Description
+	return g.Description
 }
 
-func (o *GoogleCredentialOutput) GetProviderType() GoogleCredentialProviderType {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetProviderType() GoogleCredentialProviderType {
+	if g == nil {
 		return GoogleCredentialProviderType("")
 	}
-	return o.ProviderType
+	return g.ProviderType
 }
 
-func (o *GoogleCredentialOutput) GetBaseURL() *string {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetBaseURL() *string {
+	if g == nil {
 		return nil
 	}
-	return o.BaseURL
+	return g.BaseURL
 }
 
-func (o *GoogleCredentialOutput) GetCategory() *string {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetCategory() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Category
+	return g.Category
 }
 
-func (o *GoogleCredentialOutput) GetDeleted() *bool {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetDeleted() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Deleted
+	return g.Deleted
 }
 
-func (o *GoogleCredentialOutput) GetLastUsed() *time.Time {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetLastUsed() *time.Time {
+	if g == nil {
 		return nil
 	}
-	return o.LastUsed
+	return g.LastUsed
 }
 
-func (o *GoogleCredentialOutput) GetDateCreated() *time.Time {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetDateCreated() *time.Time {
+	if g == nil {
 		return nil
 	}
-	return o.DateCreated
+	return g.DateCreated
 }
 
-func (o *GoogleCredentialOutput) GetLastUpdated() *time.Time {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetLastUpdated() *time.Time {
+	if g == nil {
 		return nil
 	}
-	return o.LastUpdated
+	return g.LastUpdated
 }
 
-func (o *GoogleCredentialOutput) GetKeys() GoogleSecurityKeysOutput {
-	if o == nil {
+func (g *GoogleCredentialOutput) GetKeys() GoogleSecurityKeysOutput {
+	if g == nil {
 		return GoogleSecurityKeysOutput{}
 	}
-	return o.Keys
+	return g.Keys
 }

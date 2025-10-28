@@ -14,18 +14,18 @@ type CreateComputeEnvRequest struct {
 	CreateComputeEnvRequest shared.CreateComputeEnvRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateComputeEnvRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateComputeEnvRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateComputeEnvRequest) GetCreateComputeEnvRequest() shared.CreateComputeEnvRequest {
-	if o == nil {
+func (c *CreateComputeEnvRequest) GetCreateComputeEnvRequest() shared.CreateComputeEnvRequest {
+	if c == nil {
 		return shared.CreateComputeEnvRequest{}
 	}
-	return o.CreateComputeEnvRequest
+	return c.CreateComputeEnvRequest
 }
 
 type CreateComputeEnvResponse struct {
@@ -41,37 +41,37 @@ type CreateComputeEnvResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateComputeEnvResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateComputeEnvResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateComputeEnvResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateComputeEnvResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateComputeEnvResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateComputeEnvResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateComputeEnvResponse) GetCreateComputeEnvResponse() *shared.CreateComputeEnvResponse {
-	if o == nil {
+func (c *CreateComputeEnvResponse) GetCreateComputeEnvResponse() *shared.CreateComputeEnvResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateComputeEnvResponse
+	return c.CreateComputeEnvResponse
 }
 
-func (o *CreateComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

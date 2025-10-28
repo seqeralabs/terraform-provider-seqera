@@ -31,177 +31,177 @@ type ServiceInfo struct {
 	LogoutURL                    *string `json:"logoutUrl,omitempty"`
 }
 
-func (o *ServiceInfo) GetVersion() *string {
-	if o == nil {
+func (s *ServiceInfo) GetVersion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Version
+	return s.Version
 }
 
-func (o *ServiceInfo) GetAPIVersion() *string {
-	if o == nil {
+func (s *ServiceInfo) GetAPIVersion() *string {
+	if s == nil {
 		return nil
 	}
-	return o.APIVersion
+	return s.APIVersion
 }
 
-func (o *ServiceInfo) GetCommitID() *string {
-	if o == nil {
+func (s *ServiceInfo) GetCommitID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CommitID
+	return s.CommitID
 }
 
-func (o *ServiceInfo) GetAuthTypes() []string {
-	if o == nil {
+func (s *ServiceInfo) GetAuthTypes() []string {
+	if s == nil {
 		return nil
 	}
-	return o.AuthTypes
+	return s.AuthTypes
 }
 
-func (o *ServiceInfo) GetLoginPath() *string {
-	if o == nil {
+func (s *ServiceInfo) GetLoginPath() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LoginPath
+	return s.LoginPath
 }
 
-func (o *ServiceInfo) GetNavbar() *NavbarConfig {
-	if o == nil {
+func (s *ServiceInfo) GetNavbar() *NavbarConfig {
+	if s == nil {
 		return nil
 	}
-	return o.Navbar
+	return s.Navbar
 }
 
-func (o *ServiceInfo) GetHeartbeatInterval() *int {
-	if o == nil {
+func (s *ServiceInfo) GetHeartbeatInterval() *int {
+	if s == nil {
 		return nil
 	}
-	return o.HeartbeatInterval
+	return s.HeartbeatInterval
 }
 
-func (o *ServiceInfo) GetUserWorkspaceEnabled() *bool {
-	if o == nil {
+func (s *ServiceInfo) GetUserWorkspaceEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.UserWorkspaceEnabled
+	return s.UserWorkspaceEnabled
 }
 
-func (o *ServiceInfo) GetAllowInstanceCredentials() *bool {
-	if o == nil {
+func (s *ServiceInfo) GetAllowInstanceCredentials() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.AllowInstanceCredentials
+	return s.AllowInstanceCredentials
 }
 
-func (o *ServiceInfo) GetLandingURL() *string {
-	if o == nil {
+func (s *ServiceInfo) GetLandingURL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LandingURL
+	return s.LandingURL
 }
 
-func (o *ServiceInfo) GetTermsOfUseURL() *string {
-	if o == nil {
+func (s *ServiceInfo) GetTermsOfUseURL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.TermsOfUseURL
+	return s.TermsOfUseURL
 }
 
-func (o *ServiceInfo) GetContentURL() *string {
-	if o == nil {
+func (s *ServiceInfo) GetContentURL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ContentURL
+	return s.ContentURL
 }
 
-func (o *ServiceInfo) GetAnalytics() *Analytics {
-	if o == nil {
+func (s *ServiceInfo) GetAnalytics() *Analytics {
+	if s == nil {
 		return nil
 	}
-	return o.Analytics
+	return s.Analytics
 }
 
-func (o *ServiceInfo) GetAllowLocalRepos() *bool {
-	if o == nil {
+func (s *ServiceInfo) GetAllowLocalRepos() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.AllowLocalRepos
+	return s.AllowLocalRepos
 }
 
-func (o *ServiceInfo) GetContentMaxFileSize() *int64 {
-	if o == nil {
+func (s *ServiceInfo) GetContentMaxFileSize() *int64 {
+	if s == nil {
 		return nil
 	}
-	return o.ContentMaxFileSize
+	return s.ContentMaxFileSize
 }
 
-func (o *ServiceInfo) GetWaveEnabled() *bool {
-	if o == nil {
+func (s *ServiceInfo) GetWaveEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.WaveEnabled
+	return s.WaveEnabled
 }
 
-func (o *ServiceInfo) GetGroundswellEnabled() *bool {
-	if o == nil {
+func (s *ServiceInfo) GetGroundswellEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.GroundswellEnabled
+	return s.GroundswellEnabled
 }
 
-func (o *ServiceInfo) GetGroundswellAllowedWorkspaces() []int64 {
-	if o == nil {
+func (s *ServiceInfo) GetGroundswellAllowedWorkspaces() []int64 {
+	if s == nil {
 		return nil
 	}
-	return o.GroundswellAllowedWorkspaces
+	return s.GroundswellAllowedWorkspaces
 }
 
-func (o *ServiceInfo) GetScmsServerURL() *string {
-	if o == nil {
+func (s *ServiceInfo) GetScmsServerURL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ScmsServerURL
+	return s.ScmsServerURL
 }
 
-func (o *ServiceInfo) GetForgePrefix() *string {
-	if o == nil {
+func (s *ServiceInfo) GetForgePrefix() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ForgePrefix
+	return s.ForgePrefix
 }
 
-func (o *ServiceInfo) GetSeqeraCloud() *bool {
-	if o == nil {
+func (s *ServiceInfo) GetSeqeraCloud() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.SeqeraCloud
+	return s.SeqeraCloud
 }
 
-func (o *ServiceInfo) GetEvalWorkspaceIds() []int64 {
-	if o == nil {
+func (s *ServiceInfo) GetEvalWorkspaceIds() []int64 {
+	if s == nil {
 		return nil
 	}
-	return o.EvalWorkspaceIds
+	return s.EvalWorkspaceIds
 }
 
-func (o *ServiceInfo) GetContactEmail() *string {
-	if o == nil {
+func (s *ServiceInfo) GetContactEmail() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ContactEmail
+	return s.ContactEmail
 }
 
-func (o *ServiceInfo) GetAllowNextflowCliLogs() *bool {
-	if o == nil {
+func (s *ServiceInfo) GetAllowNextflowCliLogs() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.AllowNextflowCliLogs
+	return s.AllowNextflowCliLogs
 }
 
-func (o *ServiceInfo) GetLogoutURL() *string {
-	if o == nil {
+func (s *ServiceInfo) GetLogoutURL() *string {
+	if s == nil {
 		return nil
 	}
-	return o.LogoutURL
+	return s.LogoutURL
 }

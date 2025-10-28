@@ -8,23 +8,23 @@ type AddParticipantRequest struct {
 	UserNameOrEmail *string `json:"userNameOrEmail,omitempty"`
 }
 
-func (o *AddParticipantRequest) GetMemberID() *int64 {
-	if o == nil {
+func (a *AddParticipantRequest) GetMemberID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.MemberID
+	return a.MemberID
 }
 
-func (o *AddParticipantRequest) GetTeamID() *int64 {
-	if o == nil {
+func (a *AddParticipantRequest) GetTeamID() *int64 {
+	if a == nil {
 		return nil
 	}
-	return o.TeamID
+	return a.TeamID
 }
 
-func (o *AddParticipantRequest) GetUserNameOrEmail() *string {
-	if o == nil {
+func (a *AddParticipantRequest) GetUserNameOrEmail() *string {
+	if a == nil {
 		return nil
 	}
-	return o.UserNameOrEmail
+	return a.UserNameOrEmail
 }

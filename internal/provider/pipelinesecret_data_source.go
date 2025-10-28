@@ -139,11 +139,11 @@ func (r *PipelineSecretDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribePipelineSecretResponse != nil && res.DescribePipelineSecretResponse.PipelineSecret != nil) {
+	if !(res.DescribePipelineSecretResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineSecret(ctx, res.DescribePipelineSecretResponse.PipelineSecret)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineSecretResponse(ctx, res.DescribePipelineSecretResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

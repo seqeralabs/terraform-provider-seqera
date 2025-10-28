@@ -16,25 +16,25 @@ type CreateWorkflowLaunchRequest struct {
 	SubmitWorkflowLaunchRequest shared.SubmitWorkflowLaunchRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateWorkflowLaunchRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateWorkflowLaunchRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateWorkflowLaunchRequest) GetSourceWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreateWorkflowLaunchRequest) GetSourceWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.SourceWorkspaceID
+	return c.SourceWorkspaceID
 }
 
-func (o *CreateWorkflowLaunchRequest) GetSubmitWorkflowLaunchRequest() shared.SubmitWorkflowLaunchRequest {
-	if o == nil {
+func (c *CreateWorkflowLaunchRequest) GetSubmitWorkflowLaunchRequest() shared.SubmitWorkflowLaunchRequest {
+	if c == nil {
 		return shared.SubmitWorkflowLaunchRequest{}
 	}
-	return o.SubmitWorkflowLaunchRequest
+	return c.SubmitWorkflowLaunchRequest
 }
 
 type CreateWorkflowLaunchResponse struct {
@@ -50,37 +50,37 @@ type CreateWorkflowLaunchResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateWorkflowLaunchResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateWorkflowLaunchResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateWorkflowLaunchResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateWorkflowLaunchResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateWorkflowLaunchResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateWorkflowLaunchResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateWorkflowLaunchResponse) GetSubmitWorkflowLaunchResponse() *shared.SubmitWorkflowLaunchResponse {
-	if o == nil {
+func (c *CreateWorkflowLaunchResponse) GetSubmitWorkflowLaunchResponse() *shared.SubmitWorkflowLaunchResponse {
+	if c == nil {
 		return nil
 	}
-	return o.SubmitWorkflowLaunchResponse
+	return c.SubmitWorkflowLaunchResponse
 }
 
-func (o *CreateWorkflowLaunchResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateWorkflowLaunchResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

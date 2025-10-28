@@ -14,18 +14,18 @@ type CreateCredentialsRequest struct {
 	CreateCredentialsRequest shared.CreateCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateCredentialsRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (c *CreateCredentialsRequest) GetWorkspaceID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateCredentialsRequest) GetCreateCredentialsRequest() shared.CreateCredentialsRequest {
-	if o == nil {
+func (c *CreateCredentialsRequest) GetCreateCredentialsRequest() shared.CreateCredentialsRequest {
+	if c == nil {
 		return shared.CreateCredentialsRequest{}
 	}
-	return o.CreateCredentialsRequest
+	return c.CreateCredentialsRequest
 }
 
 type CreateCredentialsResponse struct {
@@ -41,37 +41,37 @@ type CreateCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateCredentialsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateCredentialsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateCredentialsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateCredentialsResponse) GetCreateCredentialsResponse() *shared.CreateCredentialsResponse {
-	if o == nil {
+func (c *CreateCredentialsResponse) GetCreateCredentialsResponse() *shared.CreateCredentialsResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateCredentialsResponse
+	return c.CreateCredentialsResponse
 }
 
-func (o *CreateCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

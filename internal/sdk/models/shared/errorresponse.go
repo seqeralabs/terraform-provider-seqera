@@ -6,9 +6,9 @@ type ErrorResponse struct {
 	Message string `json:"message"`
 }
 
-func (o *ErrorResponse) GetMessage() string {
-	if o == nil {
+func (e *ErrorResponse) GetMessage() string {
+	if e == nil {
 		return ""
 	}
-	return o.Message
+	return e.Message
 }

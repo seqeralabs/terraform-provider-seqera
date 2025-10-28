@@ -9,30 +9,30 @@ type ComputeEnvDbDto struct {
 	Region   *string `json:"region,omitempty"`
 }
 
-func (o *ComputeEnvDbDto) GetID() *string {
-	if o == nil {
+func (c *ComputeEnvDbDto) GetID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *ComputeEnvDbDto) GetName() *string {
-	if o == nil {
+func (c *ComputeEnvDbDto) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ComputeEnvDbDto) GetPlatform() *string {
-	if o == nil {
+func (c *ComputeEnvDbDto) GetPlatform() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Platform
+	return c.Platform
 }
 
-func (o *ComputeEnvDbDto) GetRegion() *string {
-	if o == nil {
+func (c *ComputeEnvDbDto) GetRegion() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Region
+	return c.Region
 }

@@ -16,25 +16,25 @@ type DescribeComputeEnvRequest struct {
 	Attributes []shared.ComputeEnvQueryAttribute `queryParam:"style=form,explode=true,name=attributes"`
 }
 
-func (o *DescribeComputeEnvRequest) GetComputeEnvID() string {
-	if o == nil {
+func (d *DescribeComputeEnvRequest) GetComputeEnvID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ComputeEnvID
+	return d.ComputeEnvID
 }
 
-func (o *DescribeComputeEnvRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (d *DescribeComputeEnvRequest) GetWorkspaceID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribeComputeEnvRequest) GetAttributes() []shared.ComputeEnvQueryAttribute {
-	if o == nil {
+func (d *DescribeComputeEnvRequest) GetAttributes() []shared.ComputeEnvQueryAttribute {
+	if d == nil {
 		return nil
 	}
-	return o.Attributes
+	return d.Attributes
 }
 
 type DescribeComputeEnvResponse struct {
@@ -50,37 +50,37 @@ type DescribeComputeEnvResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeComputeEnvResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeComputeEnvResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeComputeEnvResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeComputeEnvResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeComputeEnvResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeComputeEnvResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeComputeEnvResponse) GetDescribeComputeEnvResponse() *shared.DescribeComputeEnvResponse {
-	if o == nil {
+func (d *DescribeComputeEnvResponse) GetDescribeComputeEnvResponse() *shared.DescribeComputeEnvResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeComputeEnvResponse
+	return d.DescribeComputeEnvResponse
 }
 
-func (o *DescribeComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeComputeEnvResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

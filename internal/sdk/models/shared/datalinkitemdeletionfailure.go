@@ -7,16 +7,16 @@ type DataLinkItemDeletionFailure struct {
 	ErrorMessage string       `json:"errorMessage"`
 }
 
-func (o *DataLinkItemDeletionFailure) GetDataLinkItem() DataLinkItem {
-	if o == nil {
+func (d *DataLinkItemDeletionFailure) GetDataLinkItem() DataLinkItem {
+	if d == nil {
 		return DataLinkItem{}
 	}
-	return o.DataLinkItem
+	return d.DataLinkItem
 }
 
-func (o *DataLinkItemDeletionFailure) GetErrorMessage() string {
-	if o == nil {
+func (d *DataLinkItemDeletionFailure) GetErrorMessage() string {
+	if d == nil {
 		return ""
 	}
-	return o.ErrorMessage
+	return d.ErrorMessage
 }

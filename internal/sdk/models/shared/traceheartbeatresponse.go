@@ -6,9 +6,9 @@ type TraceHeartbeatResponse struct {
 	Message *string `json:"message,omitempty"`
 }
 
-func (o *TraceHeartbeatResponse) GetMessage() *string {
-	if o == nil {
+func (t *TraceHeartbeatResponse) GetMessage() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Message
+	return t.Message
 }

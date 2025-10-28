@@ -3,12 +3,22 @@
 page_title: "seqera_dataset Data Source - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Dataset DataSource
+  Manage datasets for storing and versioning research data.
+  Datasets in Seqera are CSV (comma-separated values) and TSV
+  (tab-separated values) files stored in a workspace.
+  They are used as inputs to pipelines to simplify data management,
+  minimize user data-input errors, and facilitate reproducible workflows.
 ---
 
 # seqera_dataset (Data Source)
 
-Dataset DataSource
+Manage datasets for storing and versioning research data.
+
+Datasets in Seqera are CSV (comma-separated values) and TSV
+(tab-separated values) files stored in a workspace.
+
+They are used as inputs to pipelines to simplify data management,
+minimize user data-input errors, and facilitate reproducible workflows.
 
 ## Example Usage
 

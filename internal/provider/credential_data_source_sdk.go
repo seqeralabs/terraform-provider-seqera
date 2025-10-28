@@ -98,6 +98,21 @@ func (r *CredentialDataSourceModel) RefreshFromSharedCredentialsOutput(ctx conte
 	return diags
 }
 
+func (r *CredentialDataSourceModel) RefreshFromSharedDescribeCredentialsResponse(ctx context.Context, resp *shared.DescribeCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedCredentialsOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *CredentialDataSourceModel) ToOperationsDescribeCredentialsRequest(ctx context.Context) (*operations.DescribeCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

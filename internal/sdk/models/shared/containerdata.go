@@ -30,65 +30,65 @@ func (c *ContainerData) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ContainerData) GetRequestID() *string {
-	if o == nil {
+func (c *ContainerData) GetRequestID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.RequestID
+	return c.RequestID
 }
 
-func (o *ContainerData) GetSourceImage() *string {
-	if o == nil {
+func (c *ContainerData) GetSourceImage() *string {
+	if c == nil {
 		return nil
 	}
-	return o.SourceImage
+	return c.SourceImage
 }
 
-func (o *ContainerData) GetTargetImage() string {
-	if o == nil {
+func (c *ContainerData) GetTargetImage() string {
+	if c == nil {
 		return ""
 	}
-	return o.TargetImage
+	return c.TargetImage
 }
 
-func (o *ContainerData) GetBuildID() *string {
-	if o == nil {
+func (c *ContainerData) GetBuildID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.BuildID
+	return c.BuildID
 }
 
-func (o *ContainerData) GetScanID() *string {
-	if o == nil {
+func (c *ContainerData) GetScanID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ScanID
+	return c.ScanID
 }
 
-func (o *ContainerData) GetMirrorID() *string {
-	if o == nil {
+func (c *ContainerData) GetMirrorID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.MirrorID
+	return c.MirrorID
 }
 
-func (o *ContainerData) GetCached() *bool {
-	if o == nil {
+func (c *ContainerData) GetCached() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Cached
+	return c.Cached
 }
 
-func (o *ContainerData) GetFreeze() *bool {
-	if o == nil {
+func (c *ContainerData) GetFreeze() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Freeze
+	return c.Freeze
 }
 
-func (o *ContainerData) GetRequestTime() *time.Time {
-	if o == nil {
+func (c *ContainerData) GetRequestTime() *time.Time {
+	if c == nil {
 		return nil
 	}
-	return o.RequestTime
+	return c.RequestTime
 }

@@ -22,6 +22,21 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedCreateGoogleCredentials
 	return diags
 }
 
+func (r *GoogleCredentialResourceModel) RefreshFromSharedDescribeGoogleCredentialsResponse(ctx context.Context, resp *shared.DescribeGoogleCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedGoogleCredentialOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(ctx context.Context, resp *shared.GoogleCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 

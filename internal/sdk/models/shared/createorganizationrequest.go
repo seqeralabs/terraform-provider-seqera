@@ -7,16 +7,16 @@ type CreateOrganizationRequest struct {
 	LogoID       *string       `json:"logoId,omitempty"`
 }
 
-func (o *CreateOrganizationRequest) GetOrganization() *Organization {
-	if o == nil {
+func (c *CreateOrganizationRequest) GetOrganization() *Organization {
+	if c == nil {
 		return nil
 	}
-	return o.Organization
+	return c.Organization
 }
 
-func (o *CreateOrganizationRequest) GetLogoID() *string {
-	if o == nil {
+func (c *CreateOrganizationRequest) GetLogoID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.LogoID
+	return c.LogoID
 }

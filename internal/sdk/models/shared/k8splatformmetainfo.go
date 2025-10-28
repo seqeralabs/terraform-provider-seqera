@@ -21,9 +21,9 @@ func (k *K8sPlatformMetaInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *K8sPlatformMetaInfo) GetDiscriminator() *string {
-	if o == nil {
+func (k *K8sPlatformMetaInfo) GetDiscriminator() *string {
+	if k == nil {
 		return nil
 	}
-	return o.Discriminator
+	return k.Discriminator
 }

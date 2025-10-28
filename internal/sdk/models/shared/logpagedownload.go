@@ -8,23 +8,23 @@ type LogPageDownload struct {
 	DisplayText *string `json:"displayText,omitempty"`
 }
 
-func (o *LogPageDownload) GetSaveName() *string {
-	if o == nil {
+func (l *LogPageDownload) GetSaveName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.SaveName
+	return l.SaveName
 }
 
-func (o *LogPageDownload) GetFileName() *string {
-	if o == nil {
+func (l *LogPageDownload) GetFileName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.FileName
+	return l.FileName
 }
 
-func (o *LogPageDownload) GetDisplayText() *string {
-	if o == nil {
+func (l *LogPageDownload) GetDisplayText() *string {
+	if l == nil {
 		return nil
 	}
-	return o.DisplayText
+	return l.DisplayText
 }

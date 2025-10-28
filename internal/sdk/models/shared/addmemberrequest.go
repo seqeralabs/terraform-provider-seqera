@@ -6,9 +6,9 @@ type AddMemberRequest struct {
 	User *string `json:"user,omitempty"`
 }
 
-func (o *AddMemberRequest) GetUser() *string {
-	if o == nil {
+func (a *AddMemberRequest) GetUser() *string {
+	if a == nil {
 		return nil
 	}
-	return o.User
+	return a.User
 }

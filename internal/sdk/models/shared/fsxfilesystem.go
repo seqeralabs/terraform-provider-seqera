@@ -23,23 +23,23 @@ func (f *FsxFileSystem) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *FsxFileSystem) GetID() *string {
-	if o == nil {
+func (f *FsxFileSystem) GetID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.ID
+	return f.ID
 }
 
-func (o *FsxFileSystem) GetDNS() *string {
-	if o == nil {
+func (f *FsxFileSystem) GetDNS() *string {
+	if f == nil {
 		return nil
 	}
-	return o.DNS
+	return f.DNS
 }
 
-func (o *FsxFileSystem) GetMount() *string {
-	if o == nil {
+func (f *FsxFileSystem) GetMount() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Mount
+	return f.Mount
 }

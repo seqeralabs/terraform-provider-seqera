@@ -33,86 +33,86 @@ func (l *ListComputeEnvsResponseEntry) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ListComputeEnvsResponseEntry) GetID() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *ListComputeEnvsResponseEntry) GetName() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *ListComputeEnvsResponseEntry) GetPlatform() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetPlatform() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Platform
+	return l.Platform
 }
 
-func (o *ListComputeEnvsResponseEntry) GetStatus() *ComputeEnvStatus {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetStatus() *ComputeEnvStatus {
+	if l == nil {
 		return nil
 	}
-	return o.Status
+	return l.Status
 }
 
-func (o *ListComputeEnvsResponseEntry) GetMessage() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetMessage() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Message
+	return l.Message
 }
 
-func (o *ListComputeEnvsResponseEntry) GetLastUsed() *time.Time {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetLastUsed() *time.Time {
+	if l == nil {
 		return nil
 	}
-	return o.LastUsed
+	return l.LastUsed
 }
 
-func (o *ListComputeEnvsResponseEntry) GetPrimary() *bool {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetPrimary() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Primary
+	return l.Primary
 }
 
-func (o *ListComputeEnvsResponseEntry) GetWorkspaceName() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetWorkspaceName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceName
+	return l.WorkspaceName
 }
 
-func (o *ListComputeEnvsResponseEntry) GetVisibility() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetVisibility() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Visibility
+	return l.Visibility
 }
 
-func (o *ListComputeEnvsResponseEntry) GetWorkDir() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetWorkDir() *string {
+	if l == nil {
 		return nil
 	}
-	return o.WorkDir
+	return l.WorkDir
 }
 
-func (o *ListComputeEnvsResponseEntry) GetCredentialsID() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetCredentialsID() *string {
+	if l == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return l.CredentialsID
 }
 
-func (o *ListComputeEnvsResponseEntry) GetRegion() *string {
-	if o == nil {
+func (l *ListComputeEnvsResponseEntry) GetRegion() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Region
+	return l.Region
 }

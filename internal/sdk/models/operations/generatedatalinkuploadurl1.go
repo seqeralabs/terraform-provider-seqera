@@ -20,46 +20,46 @@ type GenerateDataLinkUploadURL1Request struct {
 	DataLinkMultiPartUploadRequest shared.DataLinkMultiPartUploadRequest `request:"mediaType=application/json"`
 }
 
-func (o *GenerateDataLinkUploadURL1Request) GetDataLinkID() string {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Request) GetDataLinkID() string {
+	if g == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return g.DataLinkID
 }
 
-func (o *GenerateDataLinkUploadURL1Request) GetDirPath() string {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Request) GetDirPath() string {
+	if g == nil {
 		return ""
 	}
-	return o.DirPath
+	return g.DirPath
 }
 
-func (o *GenerateDataLinkUploadURL1Request) GetCredentialsID() *string {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Request) GetCredentialsID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return g.CredentialsID
 }
 
-func (o *GenerateDataLinkUploadURL1Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Request) GetWorkspaceID() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return g.WorkspaceID
 }
 
-func (o *GenerateDataLinkUploadURL1Request) GetOrigin() *string {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Request) GetOrigin() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Origin
+	return g.Origin
 }
 
-func (o *GenerateDataLinkUploadURL1Request) GetDataLinkMultiPartUploadRequest() shared.DataLinkMultiPartUploadRequest {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Request) GetDataLinkMultiPartUploadRequest() shared.DataLinkMultiPartUploadRequest {
+	if g == nil {
 		return shared.DataLinkMultiPartUploadRequest{}
 	}
-	return o.DataLinkMultiPartUploadRequest
+	return g.DataLinkMultiPartUploadRequest
 }
 
 type GenerateDataLinkUploadURL1Response struct {
@@ -75,37 +75,37 @@ type GenerateDataLinkUploadURL1Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *GenerateDataLinkUploadURL1Response) GetContentType() string {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Response) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GenerateDataLinkUploadURL1Response) GetStatusCode() int {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Response) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GenerateDataLinkUploadURL1Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Response) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GenerateDataLinkUploadURL1Response) GetDataLinkMultiPartUploadResponse() *shared.DataLinkMultiPartUploadResponse {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Response) GetDataLinkMultiPartUploadResponse() *shared.DataLinkMultiPartUploadResponse {
+	if g == nil {
 		return nil
 	}
-	return o.DataLinkMultiPartUploadResponse
+	return g.DataLinkMultiPartUploadResponse
 }
 
-func (o *GenerateDataLinkUploadURL1Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (g *GenerateDataLinkUploadURL1Response) GetErrorResponse() *shared.ErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return g.ErrorResponse
 }

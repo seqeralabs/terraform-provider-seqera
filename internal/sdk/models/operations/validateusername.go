@@ -12,11 +12,11 @@ type ValidateUserNameRequest struct {
 	Name *string `queryParam:"style=form,explode=true,name=name"`
 }
 
-func (o *ValidateUserNameRequest) GetName() *string {
-	if o == nil {
+func (v *ValidateUserNameRequest) GetName() *string {
+	if v == nil {
 		return nil
 	}
-	return o.Name
+	return v.Name
 }
 
 type ValidateUserNameResponse struct {
@@ -30,30 +30,30 @@ type ValidateUserNameResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ValidateUserNameResponse) GetContentType() string {
-	if o == nil {
+func (v *ValidateUserNameResponse) GetContentType() string {
+	if v == nil {
 		return ""
 	}
-	return o.ContentType
+	return v.ContentType
 }
 
-func (o *ValidateUserNameResponse) GetStatusCode() int {
-	if o == nil {
+func (v *ValidateUserNameResponse) GetStatusCode() int {
+	if v == nil {
 		return 0
 	}
-	return o.StatusCode
+	return v.StatusCode
 }
 
-func (o *ValidateUserNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (v *ValidateUserNameResponse) GetRawResponse() *http.Response {
+	if v == nil {
 		return nil
 	}
-	return o.RawResponse
+	return v.RawResponse
 }
 
-func (o *ValidateUserNameResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (v *ValidateUserNameResponse) GetErrorResponse() *shared.ErrorResponse {
+	if v == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return v.ErrorResponse
 }

@@ -20,39 +20,39 @@ type ListDataStudioCheckpointsRequest struct {
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
 }
 
-func (o *ListDataStudioCheckpointsRequest) GetSessionID() string {
-	if o == nil {
+func (l *ListDataStudioCheckpointsRequest) GetSessionID() string {
+	if l == nil {
 		return ""
 	}
-	return o.SessionID
+	return l.SessionID
 }
 
-func (o *ListDataStudioCheckpointsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListDataStudioCheckpointsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListDataStudioCheckpointsRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListDataStudioCheckpointsRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
-func (o *ListDataStudioCheckpointsRequest) GetMax() *int {
-	if o == nil {
+func (l *ListDataStudioCheckpointsRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListDataStudioCheckpointsRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListDataStudioCheckpointsRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
 type ListDataStudioCheckpointsResponse struct {
@@ -68,37 +68,37 @@ type ListDataStudioCheckpointsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListDataStudioCheckpointsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListDataStudioCheckpointsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListDataStudioCheckpointsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListDataStudioCheckpointsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListDataStudioCheckpointsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListDataStudioCheckpointsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListDataStudioCheckpointsResponse) GetDataStudioListCheckpointsResponse() *shared.DataStudioListCheckpointsResponse {
-	if o == nil {
+func (l *ListDataStudioCheckpointsResponse) GetDataStudioListCheckpointsResponse() *shared.DataStudioListCheckpointsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.DataStudioListCheckpointsResponse
+	return l.DataStudioListCheckpointsResponse
 }
 
-func (o *ListDataStudioCheckpointsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListDataStudioCheckpointsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

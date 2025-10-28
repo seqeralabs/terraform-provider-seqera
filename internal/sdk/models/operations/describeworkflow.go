@@ -16,25 +16,25 @@ type DescribeWorkflowRequest struct {
 	Attributes []shared.WorkflowQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 }
 
-func (o *DescribeWorkflowRequest) GetWorkflowID() string {
-	if o == nil {
+func (d *DescribeWorkflowRequest) GetWorkflowID() string {
+	if d == nil {
 		return ""
 	}
-	return o.WorkflowID
+	return d.WorkflowID
 }
 
-func (o *DescribeWorkflowRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeWorkflowRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribeWorkflowRequest) GetAttributes() []shared.WorkflowQueryAttribute {
-	if o == nil {
+func (d *DescribeWorkflowRequest) GetAttributes() []shared.WorkflowQueryAttribute {
+	if d == nil {
 		return nil
 	}
-	return o.Attributes
+	return d.Attributes
 }
 
 type DescribeWorkflowResponse struct {
@@ -50,37 +50,37 @@ type DescribeWorkflowResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeWorkflowResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeWorkflowResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeWorkflowResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeWorkflowResponse) GetDescribeWorkflowResponse() *shared.DescribeWorkflowResponse {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetDescribeWorkflowResponse() *shared.DescribeWorkflowResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeWorkflowResponse
+	return d.DescribeWorkflowResponse
 }
 
-func (o *DescribeWorkflowResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeWorkflowResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

@@ -766,6 +766,21 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 	return diags
 }
 
+func (r *ActionDataSourceModel) RefreshFromSharedDescribeActionResponse(ctx context.Context, resp *shared.DescribeActionResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedActionResponseDto(ctx, resp.Action)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *ActionDataSourceModel) ToOperationsDescribeActionRequest(ctx context.Context) (*operations.DescribeActionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

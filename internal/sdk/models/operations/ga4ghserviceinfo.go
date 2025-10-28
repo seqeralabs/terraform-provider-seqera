@@ -20,37 +20,37 @@ type Ga4ghServiceInfoResponse struct {
 	WesErrorResponse *shared.WesErrorResponse
 }
 
-func (o *Ga4ghServiceInfoResponse) GetContentType() string {
-	if o == nil {
+func (g *Ga4ghServiceInfoResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *Ga4ghServiceInfoResponse) GetStatusCode() int {
-	if o == nil {
+func (g *Ga4ghServiceInfoResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *Ga4ghServiceInfoResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *Ga4ghServiceInfoResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *Ga4ghServiceInfoResponse) GetServiceInfo() *shared.ServiceInfo {
-	if o == nil {
+func (g *Ga4ghServiceInfoResponse) GetServiceInfo() *shared.ServiceInfo {
+	if g == nil {
 		return nil
 	}
-	return o.ServiceInfo
+	return g.ServiceInfo
 }
 
-func (o *Ga4ghServiceInfoResponse) GetWesErrorResponse() *shared.WesErrorResponse {
-	if o == nil {
+func (g *Ga4ghServiceInfoResponse) GetWesErrorResponse() *shared.WesErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.WesErrorResponse
+	return g.WesErrorResponse
 }

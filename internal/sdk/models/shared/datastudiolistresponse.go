@@ -7,16 +7,16 @@ type DataStudioListResponse struct {
 	TotalSize int64           `json:"totalSize"`
 }
 
-func (o *DataStudioListResponse) GetStudios() []DataStudioDto {
-	if o == nil {
+func (d *DataStudioListResponse) GetStudios() []DataStudioDto {
+	if d == nil {
 		return []DataStudioDto{}
 	}
-	return o.Studios
+	return d.Studios
 }
 
-func (o *DataStudioListResponse) GetTotalSize() int64 {
-	if o == nil {
+func (d *DataStudioListResponse) GetTotalSize() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.TotalSize
+	return d.TotalSize
 }

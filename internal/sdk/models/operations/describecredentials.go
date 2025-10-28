@@ -14,18 +14,18 @@ type DescribeCredentialsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DescribeCredentialsRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DescribeCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeCredentialsRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeCredentialsResponse struct {
@@ -41,37 +41,37 @@ type DescribeCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeCredentialsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeCredentialsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeCredentialsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeCredentialsResponse) GetDescribeCredentialsResponse() *shared.DescribeCredentialsResponse {
-	if o == nil {
+func (d *DescribeCredentialsResponse) GetDescribeCredentialsResponse() *shared.DescribeCredentialsResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeCredentialsResponse
+	return d.DescribeCredentialsResponse
 }
 
-func (o *DescribeCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

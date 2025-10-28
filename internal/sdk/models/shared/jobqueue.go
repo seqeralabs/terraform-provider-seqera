@@ -22,16 +22,16 @@ func (j *JobQueue) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *JobQueue) GetName() string {
-	if o == nil {
+func (j *JobQueue) GetName() string {
+	if j == nil {
 		return ""
 	}
-	return o.Name
+	return j.Name
 }
 
-func (o *JobQueue) GetState() string {
-	if o == nil {
+func (j *JobQueue) GetState() string {
+	if j == nil {
 		return ""
 	}
-	return o.State
+	return j.State
 }

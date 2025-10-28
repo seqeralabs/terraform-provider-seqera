@@ -639,11 +639,11 @@ func (r *StudiosResource) Create(ctx context.Context, req resource.CreateRequest
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DataStudioCreateResponse != nil && res.DataStudioCreateResponse.Studio != nil) {
+	if !(res.DataStudioCreateResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioDto(ctx, res.DataStudioCreateResponse.Studio)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDataStudioCreateResponse(ctx, res.DataStudioCreateResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

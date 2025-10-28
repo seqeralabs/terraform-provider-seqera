@@ -8,23 +8,23 @@ type ComputePlatform struct {
 	CredentialsProviders []string `json:"credentialsProviders,omitempty"`
 }
 
-func (o *ComputePlatform) GetID() *string {
-	if o == nil {
+func (c *ComputePlatform) GetID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.ID
+	return c.ID
 }
 
-func (o *ComputePlatform) GetName() *string {
-	if o == nil {
+func (c *ComputePlatform) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *ComputePlatform) GetCredentialsProviders() []string {
-	if o == nil {
+func (c *ComputePlatform) GetCredentialsProviders() []string {
+	if c == nil {
 		return nil
 	}
-	return o.CredentialsProviders
+	return c.CredentialsProviders
 }

@@ -6,9 +6,9 @@ type DataStudioMountedLinksResponse struct {
 	DataLinkIds []string `json:"dataLinkIds,omitempty"`
 }
 
-func (o *DataStudioMountedLinksResponse) GetDataLinkIds() []string {
-	if o == nil {
+func (d *DataStudioMountedLinksResponse) GetDataLinkIds() []string {
+	if d == nil {
 		return nil
 	}
-	return o.DataLinkIds
+	return d.DataLinkIds
 }

@@ -16,25 +16,25 @@ type UpdateCustomDataLinkRequest struct {
 	DataLinkUpdateRequest shared.DataLinkUpdateRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateCustomDataLinkRequest) GetDataLinkID() string {
-	if o == nil {
+func (u *UpdateCustomDataLinkRequest) GetDataLinkID() string {
+	if u == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return u.DataLinkID
 }
 
-func (o *UpdateCustomDataLinkRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateCustomDataLinkRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateCustomDataLinkRequest) GetDataLinkUpdateRequest() shared.DataLinkUpdateRequest {
-	if o == nil {
+func (u *UpdateCustomDataLinkRequest) GetDataLinkUpdateRequest() shared.DataLinkUpdateRequest {
+	if u == nil {
 		return shared.DataLinkUpdateRequest{}
 	}
-	return o.DataLinkUpdateRequest
+	return u.DataLinkUpdateRequest
 }
 
 type UpdateCustomDataLinkResponse struct {
@@ -50,37 +50,37 @@ type UpdateCustomDataLinkResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateCustomDataLinkResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateCustomDataLinkResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateCustomDataLinkResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateCustomDataLinkResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateCustomDataLinkResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateCustomDataLinkResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateCustomDataLinkResponse) GetDataLinkDto() *shared.DataLinkDto {
-	if o == nil {
+func (u *UpdateCustomDataLinkResponse) GetDataLinkDto() *shared.DataLinkDto {
+	if u == nil {
 		return nil
 	}
-	return o.DataLinkDto
+	return u.DataLinkDto
 }
 
-func (o *UpdateCustomDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateCustomDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

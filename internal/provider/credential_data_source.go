@@ -306,11 +306,11 @@ func (r *CredentialDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeCredentialsResponse != nil && res.DescribeCredentialsResponse.Credentials != nil) {
+	if !(res.DescribeCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCredentialsOutput(ctx, res.DescribeCredentialsResponse.Credentials)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCredentialsResponse(ctx, res.DescribeCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

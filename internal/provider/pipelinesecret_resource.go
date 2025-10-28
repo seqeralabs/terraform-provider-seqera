@@ -201,11 +201,11 @@ func (r *PipelineSecretResource) Create(ctx context.Context, req resource.Create
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribePipelineSecretResponse != nil && res1.DescribePipelineSecretResponse.PipelineSecret != nil) {
+	if !(res1.DescribePipelineSecretResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineSecret(ctx, res1.DescribePipelineSecretResponse.PipelineSecret)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineSecretResponse(ctx, res1.DescribePipelineSecretResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -265,11 +265,11 @@ func (r *PipelineSecretResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribePipelineSecretResponse != nil && res.DescribePipelineSecretResponse.PipelineSecret != nil) {
+	if !(res.DescribePipelineSecretResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineSecret(ctx, res.DescribePipelineSecretResponse.PipelineSecret)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineSecretResponse(ctx, res.DescribePipelineSecretResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -343,11 +343,11 @@ func (r *PipelineSecretResource) Update(ctx context.Context, req resource.Update
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribePipelineSecretResponse != nil && res1.DescribePipelineSecretResponse.PipelineSecret != nil) {
+	if !(res1.DescribePipelineSecretResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedPipelineSecret(ctx, res1.DescribePipelineSecretResponse.PipelineSecret)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribePipelineSecretResponse(ctx, res1.DescribePipelineSecretResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -7,16 +7,16 @@ type CreateDatasetRequest struct {
 	Description *string `json:"description,omitempty"`
 }
 
-func (o *CreateDatasetRequest) GetName() string {
-	if o == nil {
+func (c *CreateDatasetRequest) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CreateDatasetRequest) GetDescription() *string {
-	if o == nil {
+func (c *CreateDatasetRequest) GetDescription() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Description
+	return c.Description
 }

@@ -18,30 +18,30 @@ type GenerateRandomWorkflowNameResponse struct {
 	RandomWorkflowNameResponse *shared.RandomWorkflowNameResponse
 }
 
-func (o *GenerateRandomWorkflowNameResponse) GetContentType() string {
-	if o == nil {
+func (g *GenerateRandomWorkflowNameResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GenerateRandomWorkflowNameResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GenerateRandomWorkflowNameResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GenerateRandomWorkflowNameResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GenerateRandomWorkflowNameResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GenerateRandomWorkflowNameResponse) GetRandomWorkflowNameResponse() *shared.RandomWorkflowNameResponse {
-	if o == nil {
+func (g *GenerateRandomWorkflowNameResponse) GetRandomWorkflowNameResponse() *shared.RandomWorkflowNameResponse {
+	if g == nil {
 		return nil
 	}
-	return o.RandomWorkflowNameResponse
+	return g.RandomWorkflowNameResponse
 }

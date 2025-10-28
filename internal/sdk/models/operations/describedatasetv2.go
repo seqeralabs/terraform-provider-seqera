@@ -14,18 +14,18 @@ type DescribeDatasetV2Request struct {
 	DatasetID string `pathParam:"style=simple,explode=false,name=datasetId"`
 }
 
-func (o *DescribeDatasetV2Request) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeDatasetV2Request) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribeDatasetV2Request) GetDatasetID() string {
-	if o == nil {
+func (d *DescribeDatasetV2Request) GetDatasetID() string {
+	if d == nil {
 		return ""
 	}
-	return o.DatasetID
+	return d.DatasetID
 }
 
 type DescribeDatasetV2Response struct {
@@ -41,37 +41,37 @@ type DescribeDatasetV2Response struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeDatasetV2Response) GetContentType() string {
-	if o == nil {
+func (d *DescribeDatasetV2Response) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeDatasetV2Response) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeDatasetV2Response) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeDatasetV2Response) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeDatasetV2Response) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeDatasetV2Response) GetDescribeDatasetResponse() *shared.DescribeDatasetResponse {
-	if o == nil {
+func (d *DescribeDatasetV2Response) GetDescribeDatasetResponse() *shared.DescribeDatasetResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeDatasetResponse
+	return d.DescribeDatasetResponse
 }
 
-func (o *DescribeDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

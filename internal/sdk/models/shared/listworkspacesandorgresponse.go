@@ -6,9 +6,9 @@ type ListWorkspacesAndOrgResponse struct {
 	OrgsAndWorkspaces []OrgAndWorkspaceDto `json:"orgsAndWorkspaces,omitempty"`
 }
 
-func (o *ListWorkspacesAndOrgResponse) GetOrgsAndWorkspaces() []OrgAndWorkspaceDto {
-	if o == nil {
+func (l *ListWorkspacesAndOrgResponse) GetOrgsAndWorkspaces() []OrgAndWorkspaceDto {
+	if l == nil {
 		return nil
 	}
-	return o.OrgsAndWorkspaces
+	return l.OrgsAndWorkspaces
 }

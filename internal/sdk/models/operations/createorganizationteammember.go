@@ -16,25 +16,25 @@ type CreateOrganizationTeamMemberRequest struct {
 	CreateTeamMemberRequest shared.CreateTeamMemberRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateOrganizationTeamMemberRequest) GetOrgID() int64 {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberRequest) GetOrgID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *CreateOrganizationTeamMemberRequest) GetTeamID() int64 {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberRequest) GetTeamID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.TeamID
+	return c.TeamID
 }
 
-func (o *CreateOrganizationTeamMemberRequest) GetCreateTeamMemberRequest() shared.CreateTeamMemberRequest {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberRequest) GetCreateTeamMemberRequest() shared.CreateTeamMemberRequest {
+	if c == nil {
 		return shared.CreateTeamMemberRequest{}
 	}
-	return o.CreateTeamMemberRequest
+	return c.CreateTeamMemberRequest
 }
 
 type CreateOrganizationTeamMemberResponse struct {
@@ -50,37 +50,37 @@ type CreateOrganizationTeamMemberResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateOrganizationTeamMemberResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrganizationTeamMemberResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrganizationTeamMemberResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrganizationTeamMemberResponse) GetAddTeamMemberResponse() *shared.AddTeamMemberResponse {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberResponse) GetAddTeamMemberResponse() *shared.AddTeamMemberResponse {
+	if c == nil {
 		return nil
 	}
-	return o.AddTeamMemberResponse
+	return c.AddTeamMemberResponse
 }
 
-func (o *CreateOrganizationTeamMemberResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateOrganizationTeamMemberResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

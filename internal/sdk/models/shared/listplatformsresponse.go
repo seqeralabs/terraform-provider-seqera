@@ -6,9 +6,9 @@ type ListPlatformsResponse struct {
 	Platforms []ComputePlatform `json:"platforms,omitempty"`
 }
 
-func (o *ListPlatformsResponse) GetPlatforms() []ComputePlatform {
-	if o == nil {
+func (l *ListPlatformsResponse) GetPlatforms() []ComputePlatform {
+	if l == nil {
 		return nil
 	}
-	return o.Platforms
+	return l.Platforms
 }

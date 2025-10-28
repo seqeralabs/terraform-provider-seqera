@@ -191,11 +191,11 @@ func (r *OrgsResource) Create(ctx context.Context, req resource.CreateRequest, r
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateOrganizationResponse != nil && res.CreateOrganizationResponse.Organization != nil) {
+	if !(res.CreateOrganizationResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedOrganizationDbDto(ctx, res.CreateOrganizationResponse.Organization)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateOrganizationResponse(ctx, res.CreateOrganizationResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -255,11 +255,11 @@ func (r *OrgsResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeOrganizationResponse != nil && res.DescribeOrganizationResponse.Organization != nil) {
+	if !(res.DescribeOrganizationResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedOrganizationDbDto(ctx, res.DescribeOrganizationResponse.Organization)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeOrganizationResponse(ctx, res.DescribeOrganizationResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

@@ -14,18 +14,18 @@ type RemoveLabelsFromPipelinesRequest struct {
 	AssociatePipelineLabelsRequest shared.AssociatePipelineLabelsRequest `request:"mediaType=application/json"`
 }
 
-func (o *RemoveLabelsFromPipelinesRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (r *RemoveLabelsFromPipelinesRequest) GetWorkspaceID() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return r.WorkspaceID
 }
 
-func (o *RemoveLabelsFromPipelinesRequest) GetAssociatePipelineLabelsRequest() shared.AssociatePipelineLabelsRequest {
-	if o == nil {
+func (r *RemoveLabelsFromPipelinesRequest) GetAssociatePipelineLabelsRequest() shared.AssociatePipelineLabelsRequest {
+	if r == nil {
 		return shared.AssociatePipelineLabelsRequest{}
 	}
-	return o.AssociatePipelineLabelsRequest
+	return r.AssociatePipelineLabelsRequest
 }
 
 type RemoveLabelsFromPipelinesResponse struct {
@@ -37,23 +37,23 @@ type RemoveLabelsFromPipelinesResponse struct {
 	RawResponse *http.Response
 }
 
-func (o *RemoveLabelsFromPipelinesResponse) GetContentType() string {
-	if o == nil {
+func (r *RemoveLabelsFromPipelinesResponse) GetContentType() string {
+	if r == nil {
 		return ""
 	}
-	return o.ContentType
+	return r.ContentType
 }
 
-func (o *RemoveLabelsFromPipelinesResponse) GetStatusCode() int {
-	if o == nil {
+func (r *RemoveLabelsFromPipelinesResponse) GetStatusCode() int {
+	if r == nil {
 		return 0
 	}
-	return o.StatusCode
+	return r.StatusCode
 }
 
-func (o *RemoveLabelsFromPipelinesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (r *RemoveLabelsFromPipelinesResponse) GetRawResponse() *http.Response {
+	if r == nil {
 		return nil
 	}
-	return o.RawResponse
+	return r.RawResponse
 }

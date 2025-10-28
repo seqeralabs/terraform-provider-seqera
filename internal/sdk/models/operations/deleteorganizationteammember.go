@@ -16,25 +16,25 @@ type DeleteOrganizationTeamMemberRequest struct {
 	MemberID int64 `pathParam:"style=simple,explode=false,name=memberId"`
 }
 
-func (o *DeleteOrganizationTeamMemberRequest) GetOrgID() int64 {
-	if o == nil {
+func (d *DeleteOrganizationTeamMemberRequest) GetOrgID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.OrgID
+	return d.OrgID
 }
 
-func (o *DeleteOrganizationTeamMemberRequest) GetTeamID() int64 {
-	if o == nil {
+func (d *DeleteOrganizationTeamMemberRequest) GetTeamID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.TeamID
+	return d.TeamID
 }
 
-func (o *DeleteOrganizationTeamMemberRequest) GetMemberID() int64 {
-	if o == nil {
+func (d *DeleteOrganizationTeamMemberRequest) GetMemberID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.MemberID
+	return d.MemberID
 }
 
 type DeleteOrganizationTeamMemberResponse struct {
@@ -48,30 +48,30 @@ type DeleteOrganizationTeamMemberResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DeleteOrganizationTeamMemberResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteOrganizationTeamMemberResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteOrganizationTeamMemberResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteOrganizationTeamMemberResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteOrganizationTeamMemberResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteOrganizationTeamMemberResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteOrganizationTeamMemberResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DeleteOrganizationTeamMemberResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

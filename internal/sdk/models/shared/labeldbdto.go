@@ -36,44 +36,44 @@ func (l *LabelDbDto) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LabelDbDto) GetID() *int64 {
-	if o == nil {
+func (l *LabelDbDto) GetID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.ID
+	return l.ID
 }
 
-func (o *LabelDbDto) GetName() *string {
-	if o == nil {
+func (l *LabelDbDto) GetName() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Name
+	return l.Name
 }
 
-func (o *LabelDbDto) GetValue() *string {
-	if o == nil {
+func (l *LabelDbDto) GetValue() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Value
+	return l.Value
 }
 
-func (o *LabelDbDto) GetResource() *bool {
-	if o == nil {
+func (l *LabelDbDto) GetResource() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Resource
+	return l.Resource
 }
 
-func (o *LabelDbDto) GetIsDefault() *bool {
-	if o == nil {
+func (l *LabelDbDto) GetIsDefault() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.IsDefault
+	return l.IsDefault
 }
 
-func (o *LabelDbDto) GetDateCreated() *time.Time {
-	if o == nil {
+func (l *LabelDbDto) GetDateCreated() *time.Time {
+	if l == nil {
 		return nil
 	}
-	return o.DateCreated
+	return l.DateCreated
 }

@@ -8,23 +8,23 @@ type DataLinkUpdateRequest struct {
 	CredentialsID *string `json:"credentialsId,omitempty"`
 }
 
-func (o *DataLinkUpdateRequest) GetName() *string {
-	if o == nil {
+func (d *DataLinkUpdateRequest) GetName() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataLinkUpdateRequest) GetDescription() *string {
-	if o == nil {
+func (d *DataLinkUpdateRequest) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataLinkUpdateRequest) GetCredentialsID() *string {
-	if o == nil {
+func (d *DataLinkUpdateRequest) GetCredentialsID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }

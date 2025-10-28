@@ -43,7 +43,7 @@ func (r *ComputeEnvDataSource) Metadata(ctx context.Context, req datasource.Meta
 // Schema defines the schema for the data source.
 func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "ComputeEnv DataSource",
+		MarkdownDescription: "Seqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and\non-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"attributes": schema.ListAttribute{

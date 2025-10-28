@@ -16,25 +16,25 @@ type UpdateCredentialsRequest struct {
 	UpdateCredentialsRequest shared.UpdateCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *UpdateCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (u *UpdateCredentialsRequest) GetCredentialsID() string {
+	if u == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return u.CredentialsID
 }
 
-func (o *UpdateCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (u *UpdateCredentialsRequest) GetWorkspaceID() *int64 {
+	if u == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return u.WorkspaceID
 }
 
-func (o *UpdateCredentialsRequest) GetUpdateCredentialsRequest() shared.UpdateCredentialsRequest {
-	if o == nil {
+func (u *UpdateCredentialsRequest) GetUpdateCredentialsRequest() shared.UpdateCredentialsRequest {
+	if u == nil {
 		return shared.UpdateCredentialsRequest{}
 	}
-	return o.UpdateCredentialsRequest
+	return u.UpdateCredentialsRequest
 }
 
 type UpdateCredentialsResponse struct {
@@ -48,30 +48,30 @@ type UpdateCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *UpdateCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (u *UpdateCredentialsResponse) GetContentType() string {
+	if u == nil {
 		return ""
 	}
-	return o.ContentType
+	return u.ContentType
 }
 
-func (o *UpdateCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (u *UpdateCredentialsResponse) GetStatusCode() int {
+	if u == nil {
 		return 0
 	}
-	return o.StatusCode
+	return u.StatusCode
 }
 
-func (o *UpdateCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (u *UpdateCredentialsResponse) GetRawResponse() *http.Response {
+	if u == nil {
 		return nil
 	}
-	return o.RawResponse
+	return u.RawResponse
 }
 
-func (o *UpdateCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (u *UpdateCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if u == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return u.ErrorResponse
 }

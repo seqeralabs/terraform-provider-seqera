@@ -23,128 +23,128 @@ type TraceProgressDetail struct {
 	PeakMemory  *int64  `json:"peakMemory,omitempty"`
 }
 
-func (o *TraceProgressDetail) GetIndex() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetIndex() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Index
+	return t.Index
 }
 
-func (o *TraceProgressDetail) GetName() *string {
-	if o == nil {
+func (t *TraceProgressDetail) GetName() *string {
+	if t == nil {
 		return nil
 	}
-	return o.Name
+	return t.Name
 }
 
-func (o *TraceProgressDetail) GetPending() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetPending() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Pending
+	return t.Pending
 }
 
-func (o *TraceProgressDetail) GetSubmitted() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetSubmitted() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Submitted
+	return t.Submitted
 }
 
-func (o *TraceProgressDetail) GetRunning() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetRunning() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Running
+	return t.Running
 }
 
-func (o *TraceProgressDetail) GetSucceeded() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetSucceeded() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Succeeded
+	return t.Succeeded
 }
 
-func (o *TraceProgressDetail) GetCached() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetCached() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Cached
+	return t.Cached
 }
 
-func (o *TraceProgressDetail) GetFailed() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetFailed() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Failed
+	return t.Failed
 }
 
-func (o *TraceProgressDetail) GetAborted() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetAborted() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Aborted
+	return t.Aborted
 }
 
-func (o *TraceProgressDetail) GetStored() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetStored() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Stored
+	return t.Stored
 }
 
-func (o *TraceProgressDetail) GetIgnored() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetIgnored() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Ignored
+	return t.Ignored
 }
 
-func (o *TraceProgressDetail) GetRetries() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetRetries() *int {
+	if t == nil {
 		return nil
 	}
-	return o.Retries
+	return t.Retries
 }
 
-func (o *TraceProgressDetail) GetTerminated() *bool {
-	if o == nil {
+func (t *TraceProgressDetail) GetTerminated() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.Terminated
+	return t.Terminated
 }
 
-func (o *TraceProgressDetail) GetLoadCpus() *int64 {
-	if o == nil {
+func (t *TraceProgressDetail) GetLoadCpus() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.LoadCpus
+	return t.LoadCpus
 }
 
-func (o *TraceProgressDetail) GetLoadMemory() *int64 {
-	if o == nil {
+func (t *TraceProgressDetail) GetLoadMemory() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.LoadMemory
+	return t.LoadMemory
 }
 
-func (o *TraceProgressDetail) GetPeakRunning() *int {
-	if o == nil {
+func (t *TraceProgressDetail) GetPeakRunning() *int {
+	if t == nil {
 		return nil
 	}
-	return o.PeakRunning
+	return t.PeakRunning
 }
 
-func (o *TraceProgressDetail) GetPeakCpus() *int64 {
-	if o == nil {
+func (t *TraceProgressDetail) GetPeakCpus() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.PeakCpus
+	return t.PeakCpus
 }
 
-func (o *TraceProgressDetail) GetPeakMemory() *int64 {
-	if o == nil {
+func (t *TraceProgressDetail) GetPeakMemory() *int64 {
+	if t == nil {
 		return nil
 	}
-	return o.PeakMemory
+	return t.PeakMemory
 }

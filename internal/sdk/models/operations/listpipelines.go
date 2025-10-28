@@ -22,46 +22,46 @@ type ListPipelinesRequest struct {
 	Visibility *string `queryParam:"style=form,explode=true,name=visibility"`
 }
 
-func (o *ListPipelinesRequest) GetAttributes() []shared.PipelineQueryAttribute {
-	if o == nil {
+func (l *ListPipelinesRequest) GetAttributes() []shared.PipelineQueryAttribute {
+	if l == nil {
 		return nil
 	}
-	return o.Attributes
+	return l.Attributes
 }
 
-func (o *ListPipelinesRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListPipelinesRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListPipelinesRequest) GetMax() *int {
-	if o == nil {
+func (l *ListPipelinesRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListPipelinesRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListPipelinesRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListPipelinesRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListPipelinesRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
-func (o *ListPipelinesRequest) GetVisibility() *string {
-	if o == nil {
+func (l *ListPipelinesRequest) GetVisibility() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Visibility
+	return l.Visibility
 }
 
 type ListPipelinesResponse struct {
@@ -77,37 +77,37 @@ type ListPipelinesResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListPipelinesResponse) GetContentType() string {
-	if o == nil {
+func (l *ListPipelinesResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListPipelinesResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListPipelinesResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListPipelinesResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListPipelinesResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListPipelinesResponse) GetListPipelinesResponse() *shared.ListPipelinesResponse {
-	if o == nil {
+func (l *ListPipelinesResponse) GetListPipelinesResponse() *shared.ListPipelinesResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListPipelinesResponse
+	return l.ListPipelinesResponse
 }
 
-func (o *ListPipelinesResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListPipelinesResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

@@ -18,32 +18,32 @@ type DescribePipelineRequest struct {
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 }
 
-func (o *DescribePipelineRequest) GetPipelineID() int64 {
-	if o == nil {
+func (d *DescribePipelineRequest) GetPipelineID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.PipelineID
+	return d.PipelineID
 }
 
-func (o *DescribePipelineRequest) GetAttributes() []shared.PipelineQueryAttribute {
-	if o == nil {
+func (d *DescribePipelineRequest) GetAttributes() []shared.PipelineQueryAttribute {
+	if d == nil {
 		return nil
 	}
-	return o.Attributes
+	return d.Attributes
 }
 
-func (o *DescribePipelineRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (d *DescribePipelineRequest) GetWorkspaceID() int64 {
+	if d == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
-func (o *DescribePipelineRequest) GetSourceWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribePipelineRequest) GetSourceWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.SourceWorkspaceID
+	return d.SourceWorkspaceID
 }
 
 type DescribePipelineResponse struct {
@@ -59,37 +59,37 @@ type DescribePipelineResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribePipelineResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribePipelineResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribePipelineResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribePipelineResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribePipelineResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribePipelineResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribePipelineResponse) GetDescribePipelineResponse() *shared.DescribePipelineResponse {
-	if o == nil {
+func (d *DescribePipelineResponse) GetDescribePipelineResponse() *shared.DescribePipelineResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribePipelineResponse
+	return d.DescribePipelineResponse
 }
 
-func (o *DescribePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribePipelineResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

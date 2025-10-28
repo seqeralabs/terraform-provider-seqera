@@ -8,23 +8,23 @@ type CreateActionRequest struct {
 	Launch WorkflowLaunchRequest `json:"launch"`
 }
 
-func (o *CreateActionRequest) GetName() string {
-	if o == nil {
+func (c *CreateActionRequest) GetName() string {
+	if c == nil {
 		return ""
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CreateActionRequest) GetSource() ActionSource {
-	if o == nil {
+func (c *CreateActionRequest) GetSource() ActionSource {
+	if c == nil {
 		return ActionSource("")
 	}
-	return o.Source
+	return c.Source
 }
 
-func (o *CreateActionRequest) GetLaunch() WorkflowLaunchRequest {
-	if o == nil {
+func (c *CreateActionRequest) GetLaunch() WorkflowLaunchRequest {
+	if c == nil {
 		return WorkflowLaunchRequest{}
 	}
-	return o.Launch
+	return c.Launch
 }

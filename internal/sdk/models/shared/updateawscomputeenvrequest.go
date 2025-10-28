@@ -6,9 +6,9 @@ type UpdateAWSComputeEnvRequest struct {
 	ComputeEnv *AWSComputeEnvComputeConfigInput `json:"computeEnv,omitempty"`
 }
 
-func (o *UpdateAWSComputeEnvRequest) GetComputeEnv() *AWSComputeEnvComputeConfigInput {
-	if o == nil {
+func (u *UpdateAWSComputeEnvRequest) GetComputeEnv() *AWSComputeEnvComputeConfigInput {
+	if u == nil {
 		return nil
 	}
-	return o.ComputeEnv
+	return u.ComputeEnv
 }

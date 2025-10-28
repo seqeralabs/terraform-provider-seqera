@@ -25,37 +25,37 @@ func (a *AzBatchForgeConfig) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *AzBatchForgeConfig) GetVMType() *string {
-	if o == nil {
+func (a *AzBatchForgeConfig) GetVMType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.VMType
+	return a.VMType
 }
 
-func (o *AzBatchForgeConfig) GetVMCount() int {
-	if o == nil {
+func (a *AzBatchForgeConfig) GetVMCount() int {
+	if a == nil {
 		return 0
 	}
-	return o.VMCount
+	return a.VMCount
 }
 
-func (o *AzBatchForgeConfig) GetAutoScale() *bool {
-	if o == nil {
+func (a *AzBatchForgeConfig) GetAutoScale() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.AutoScale
+	return a.AutoScale
 }
 
-func (o *AzBatchForgeConfig) GetDisposeOnDeletion() *bool {
-	if o == nil {
+func (a *AzBatchForgeConfig) GetDisposeOnDeletion() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.DisposeOnDeletion
+	return a.DisposeOnDeletion
 }
 
-func (o *AzBatchForgeConfig) GetContainerRegIds() []string {
-	if o == nil {
+func (a *AzBatchForgeConfig) GetContainerRegIds() []string {
+	if a == nil {
 		return nil
 	}
-	return o.ContainerRegIds
+	return a.ContainerRegIds
 }

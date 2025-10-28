@@ -14,18 +14,18 @@ type DescribeGoogleCredentialsRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (o *DescribeGoogleCredentialsRequest) GetCredentialsID() string {
-	if o == nil {
+func (d *DescribeGoogleCredentialsRequest) GetCredentialsID() string {
+	if d == nil {
 		return ""
 	}
-	return o.CredentialsID
+	return d.CredentialsID
 }
 
-func (o *DescribeGoogleCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (d *DescribeGoogleCredentialsRequest) GetWorkspaceID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return d.WorkspaceID
 }
 
 type DescribeGoogleCredentialsResponse struct {
@@ -41,37 +41,37 @@ type DescribeGoogleCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *DescribeGoogleCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (d *DescribeGoogleCredentialsResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DescribeGoogleCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DescribeGoogleCredentialsResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DescribeGoogleCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DescribeGoogleCredentialsResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DescribeGoogleCredentialsResponse) GetDescribeGoogleCredentialsResponse() *shared.DescribeGoogleCredentialsResponse {
-	if o == nil {
+func (d *DescribeGoogleCredentialsResponse) GetDescribeGoogleCredentialsResponse() *shared.DescribeGoogleCredentialsResponse {
+	if d == nil {
 		return nil
 	}
-	return o.DescribeGoogleCredentialsResponse
+	return d.DescribeGoogleCredentialsResponse
 }
 
-func (o *DescribeGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (d *DescribeGoogleCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if d == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return d.ErrorResponse
 }

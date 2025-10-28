@@ -23,23 +23,23 @@ func (g *GkePlatformMetaInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GkePlatformMetaInfo) GetDiscriminator() *string {
-	if o == nil {
+func (g *GkePlatformMetaInfo) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return o.Discriminator
+	return g.Discriminator
 }
 
-func (o *GkePlatformMetaInfo) GetWarnings() []string {
-	if o == nil {
+func (g *GkePlatformMetaInfo) GetWarnings() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Warnings
+	return g.Warnings
 }
 
-func (o *GkePlatformMetaInfo) GetClusters() []string {
-	if o == nil {
+func (g *GkePlatformMetaInfo) GetClusters() []string {
+	if g == nil {
 		return nil
 	}
-	return o.Clusters
+	return g.Clusters
 }

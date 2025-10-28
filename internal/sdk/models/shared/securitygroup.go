@@ -23,23 +23,23 @@ func (s *SecurityGroup) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SecurityGroup) GetID() *string {
-	if o == nil {
+func (s *SecurityGroup) GetID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SecurityGroup) GetName() *string {
-	if o == nil {
+func (s *SecurityGroup) GetName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SecurityGroup) GetVpcID() *string {
-	if o == nil {
+func (s *SecurityGroup) GetVpcID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.VpcID
+	return s.VpcID
 }

@@ -6,9 +6,9 @@ type DescribeAWSComputeEnvResponse struct {
 	ComputeEnv *AWSComputeEnvComputeConfig `json:"computeEnv,omitempty"`
 }
 
-func (o *DescribeAWSComputeEnvResponse) GetComputeEnv() *AWSComputeEnvComputeConfig {
-	if o == nil {
+func (d *DescribeAWSComputeEnvResponse) GetComputeEnv() *AWSComputeEnvComputeConfig {
+	if d == nil {
 		return nil
 	}
-	return o.ComputeEnv
+	return d.ComputeEnv
 }

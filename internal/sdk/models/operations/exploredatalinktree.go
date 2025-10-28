@@ -21,32 +21,32 @@ type ExploreDataLinkTreeRequest struct {
 	Paths []Path `queryParam:"style=form,explode=true,name=paths"`
 }
 
-func (o *ExploreDataLinkTreeRequest) GetDataLinkID() string {
-	if o == nil {
+func (e *ExploreDataLinkTreeRequest) GetDataLinkID() string {
+	if e == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return e.DataLinkID
 }
 
-func (o *ExploreDataLinkTreeRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (e *ExploreDataLinkTreeRequest) GetWorkspaceID() *int64 {
+	if e == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return e.WorkspaceID
 }
 
-func (o *ExploreDataLinkTreeRequest) GetCredentialsID() *string {
-	if o == nil {
+func (e *ExploreDataLinkTreeRequest) GetCredentialsID() *string {
+	if e == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return e.CredentialsID
 }
 
-func (o *ExploreDataLinkTreeRequest) GetPaths() []Path {
-	if o == nil {
+func (e *ExploreDataLinkTreeRequest) GetPaths() []Path {
+	if e == nil {
 		return nil
 	}
-	return o.Paths
+	return e.Paths
 }
 
 type ExploreDataLinkTreeResponse struct {
@@ -62,37 +62,37 @@ type ExploreDataLinkTreeResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ExploreDataLinkTreeResponse) GetContentType() string {
-	if o == nil {
+func (e *ExploreDataLinkTreeResponse) GetContentType() string {
+	if e == nil {
 		return ""
 	}
-	return o.ContentType
+	return e.ContentType
 }
 
-func (o *ExploreDataLinkTreeResponse) GetStatusCode() int {
-	if o == nil {
+func (e *ExploreDataLinkTreeResponse) GetStatusCode() int {
+	if e == nil {
 		return 0
 	}
-	return o.StatusCode
+	return e.StatusCode
 }
 
-func (o *ExploreDataLinkTreeResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (e *ExploreDataLinkTreeResponse) GetRawResponse() *http.Response {
+	if e == nil {
 		return nil
 	}
-	return o.RawResponse
+	return e.RawResponse
 }
 
-func (o *ExploreDataLinkTreeResponse) GetDataLinkContentTreeListResponse() *shared.DataLinkContentTreeListResponse {
-	if o == nil {
+func (e *ExploreDataLinkTreeResponse) GetDataLinkContentTreeListResponse() *shared.DataLinkContentTreeListResponse {
+	if e == nil {
 		return nil
 	}
-	return o.DataLinkContentTreeListResponse
+	return e.DataLinkContentTreeListResponse
 }
 
-func (o *ExploreDataLinkTreeResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (e *ExploreDataLinkTreeResponse) GetErrorResponse() *shared.ErrorResponse {
+	if e == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return e.ErrorResponse
 }

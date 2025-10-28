@@ -14,18 +14,18 @@ type CreateAWSCredentialsRequest struct {
 	CreateAWSCredentialsRequest shared.CreateAWSCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateAWSCredentialsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (c *CreateAWSCredentialsRequest) GetWorkspaceID() *int64 {
+	if c == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return c.WorkspaceID
 }
 
-func (o *CreateAWSCredentialsRequest) GetCreateAWSCredentialsRequest() shared.CreateAWSCredentialsRequest {
-	if o == nil {
+func (c *CreateAWSCredentialsRequest) GetCreateAWSCredentialsRequest() shared.CreateAWSCredentialsRequest {
+	if c == nil {
 		return shared.CreateAWSCredentialsRequest{}
 	}
-	return o.CreateAWSCredentialsRequest
+	return c.CreateAWSCredentialsRequest
 }
 
 type CreateAWSCredentialsResponse struct {
@@ -41,37 +41,37 @@ type CreateAWSCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateAWSCredentialsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateAWSCredentialsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateAWSCredentialsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateAWSCredentialsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateAWSCredentialsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateAWSCredentialsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateAWSCredentialsResponse) GetCreateAWSCredentialsResponse() *shared.CreateAWSCredentialsResponse {
-	if o == nil {
+func (c *CreateAWSCredentialsResponse) GetCreateAWSCredentialsResponse() *shared.CreateAWSCredentialsResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateAWSCredentialsResponse
+	return c.CreateAWSCredentialsResponse
 }
 
-func (o *CreateAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateAWSCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

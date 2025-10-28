@@ -14,18 +14,18 @@ type LeaveWorkspaceParticipantRequest struct {
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 }
 
-func (o *LeaveWorkspaceParticipantRequest) GetOrgID() int64 {
-	if o == nil {
+func (l *LeaveWorkspaceParticipantRequest) GetOrgID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.OrgID
+	return l.OrgID
 }
 
-func (o *LeaveWorkspaceParticipantRequest) GetWorkspaceID() int64 {
-	if o == nil {
+func (l *LeaveWorkspaceParticipantRequest) GetWorkspaceID() int64 {
+	if l == nil {
 		return 0
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
 type LeaveWorkspaceParticipantResponse struct {
@@ -39,30 +39,30 @@ type LeaveWorkspaceParticipantResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *LeaveWorkspaceParticipantResponse) GetContentType() string {
-	if o == nil {
+func (l *LeaveWorkspaceParticipantResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *LeaveWorkspaceParticipantResponse) GetStatusCode() int {
-	if o == nil {
+func (l *LeaveWorkspaceParticipantResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *LeaveWorkspaceParticipantResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *LeaveWorkspaceParticipantResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *LeaveWorkspaceParticipantResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *LeaveWorkspaceParticipantResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

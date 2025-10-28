@@ -14,65 +14,65 @@ type DataStudioCreateRequest struct {
 	Spot                *bool                    `json:"spot,omitempty"`
 }
 
-func (o *DataStudioCreateRequest) GetName() string {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetName() string {
+	if d == nil {
 		return ""
 	}
-	return o.Name
+	return d.Name
 }
 
-func (o *DataStudioCreateRequest) GetDescription() *string {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetDescription() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Description
+	return d.Description
 }
 
-func (o *DataStudioCreateRequest) GetDataStudioToolURL() string {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetDataStudioToolURL() string {
+	if d == nil {
 		return ""
 	}
-	return o.DataStudioToolURL
+	return d.DataStudioToolURL
 }
 
-func (o *DataStudioCreateRequest) GetComputeEnvID() string {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetComputeEnvID() string {
+	if d == nil {
 		return ""
 	}
-	return o.ComputeEnvID
+	return d.ComputeEnvID
 }
 
-func (o *DataStudioCreateRequest) GetInitialCheckpointID() *int64 {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetInitialCheckpointID() *int64 {
+	if d == nil {
 		return nil
 	}
-	return o.InitialCheckpointID
+	return d.InitialCheckpointID
 }
 
-func (o *DataStudioCreateRequest) GetConfiguration() *DataStudioConfiguration {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetConfiguration() *DataStudioConfiguration {
+	if d == nil {
 		return nil
 	}
-	return o.Configuration
+	return d.Configuration
 }
 
-func (o *DataStudioCreateRequest) GetIsPrivate() *bool {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetIsPrivate() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.IsPrivate
+	return d.IsPrivate
 }
 
-func (o *DataStudioCreateRequest) GetLabelIds() []int64 {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetLabelIds() []int64 {
+	if d == nil {
 		return nil
 	}
-	return o.LabelIds
+	return d.LabelIds
 }
 
-func (o *DataStudioCreateRequest) GetSpot() *bool {
-	if o == nil {
+func (d *DataStudioCreateRequest) GetSpot() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.Spot
+	return d.Spot
 }

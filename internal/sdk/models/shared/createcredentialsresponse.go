@@ -6,9 +6,9 @@ type CreateCredentialsResponse struct {
 	CredentialsID *string `json:"credentialsId,omitempty"`
 }
 
-func (o *CreateCredentialsResponse) GetCredentialsID() *string {
-	if o == nil {
+func (c *CreateCredentialsResponse) GetCredentialsID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return c.CredentialsID
 }

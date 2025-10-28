@@ -32,6 +32,21 @@ func (r *AzureCredentialDataSourceModel) RefreshFromSharedAzureCredentialOutput(
 	return diags
 }
 
+func (r *AzureCredentialDataSourceModel) RefreshFromSharedDescribeAzureCredentialsResponse(ctx context.Context, resp *shared.DescribeAzureCredentialsResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedAzureCredentialOutput(ctx, resp.Credentials)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *AzureCredentialDataSourceModel) ToOperationsDescribeAzureCredentialsRequest(ctx context.Context) (*operations.DescribeAzureCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 

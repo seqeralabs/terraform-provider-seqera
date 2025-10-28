@@ -14,18 +14,18 @@ type CreateWorkspaceRequest struct {
 	CreateWorkspaceRequest shared.CreateWorkspaceRequest `request:"mediaType=application/json"`
 }
 
-func (o *CreateWorkspaceRequest) GetOrgID() int64 {
-	if o == nil {
+func (c *CreateWorkspaceRequest) GetOrgID() int64 {
+	if c == nil {
 		return 0
 	}
-	return o.OrgID
+	return c.OrgID
 }
 
-func (o *CreateWorkspaceRequest) GetCreateWorkspaceRequest() shared.CreateWorkspaceRequest {
-	if o == nil {
+func (c *CreateWorkspaceRequest) GetCreateWorkspaceRequest() shared.CreateWorkspaceRequest {
+	if c == nil {
 		return shared.CreateWorkspaceRequest{}
 	}
-	return o.CreateWorkspaceRequest
+	return c.CreateWorkspaceRequest
 }
 
 type CreateWorkspaceResponse struct {
@@ -41,37 +41,37 @@ type CreateWorkspaceResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *CreateWorkspaceResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateWorkspaceResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateWorkspaceResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateWorkspaceResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateWorkspaceResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateWorkspaceResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateWorkspaceResponse) GetCreateWorkspaceResponse() *shared.CreateWorkspaceResponse {
-	if o == nil {
+func (c *CreateWorkspaceResponse) GetCreateWorkspaceResponse() *shared.CreateWorkspaceResponse {
+	if c == nil {
 		return nil
 	}
-	return o.CreateWorkspaceResponse
+	return c.CreateWorkspaceResponse
 }
 
-func (o *CreateWorkspaceResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (c *CreateWorkspaceResponse) GetErrorResponse() *shared.ErrorResponse {
+	if c == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return c.ErrorResponse
 }

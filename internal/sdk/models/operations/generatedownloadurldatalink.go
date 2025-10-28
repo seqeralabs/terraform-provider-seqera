@@ -20,39 +20,39 @@ type GenerateDownloadURLDataLinkRequest struct {
 	Preview *bool `queryParam:"style=form,explode=true,name=preview"`
 }
 
-func (o *GenerateDownloadURLDataLinkRequest) GetDataLinkID() string {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkRequest) GetDataLinkID() string {
+	if g == nil {
 		return ""
 	}
-	return o.DataLinkID
+	return g.DataLinkID
 }
 
-func (o *GenerateDownloadURLDataLinkRequest) GetFilePath() *string {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkRequest) GetFilePath() *string {
+	if g == nil {
 		return nil
 	}
-	return o.FilePath
+	return g.FilePath
 }
 
-func (o *GenerateDownloadURLDataLinkRequest) GetCredentialsID() *string {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkRequest) GetCredentialsID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.CredentialsID
+	return g.CredentialsID
 }
 
-func (o *GenerateDownloadURLDataLinkRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkRequest) GetWorkspaceID() *int64 {
+	if g == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return g.WorkspaceID
 }
 
-func (o *GenerateDownloadURLDataLinkRequest) GetPreview() *bool {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkRequest) GetPreview() *bool {
+	if g == nil {
 		return nil
 	}
-	return o.Preview
+	return g.Preview
 }
 
 type GenerateDownloadURLDataLinkResponse struct {
@@ -68,37 +68,37 @@ type GenerateDownloadURLDataLinkResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *GenerateDownloadURLDataLinkResponse) GetContentType() string {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GenerateDownloadURLDataLinkResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GenerateDownloadURLDataLinkResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GenerateDownloadURLDataLinkResponse) GetDataLinkDownloadURLResponse() *shared.DataLinkDownloadURLResponse {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkResponse) GetDataLinkDownloadURLResponse() *shared.DataLinkDownloadURLResponse {
+	if g == nil {
 		return nil
 	}
-	return o.DataLinkDownloadURLResponse
+	return g.DataLinkDownloadURLResponse
 }
 
-func (o *GenerateDownloadURLDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (g *GenerateDownloadURLDataLinkResponse) GetErrorResponse() *shared.ErrorResponse {
+	if g == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return g.ErrorResponse
 }

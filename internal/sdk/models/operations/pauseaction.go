@@ -15,25 +15,25 @@ type PauseActionRequest struct {
 	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
 }
 
-func (o *PauseActionRequest) GetActionID() string {
-	if o == nil {
+func (p *PauseActionRequest) GetActionID() string {
+	if p == nil {
 		return ""
 	}
-	return o.ActionID
+	return p.ActionID
 }
 
-func (o *PauseActionRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (p *PauseActionRequest) GetWorkspaceID() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return p.WorkspaceID
 }
 
-func (o *PauseActionRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
-	if o == nil {
+func (p *PauseActionRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
+	if p == nil {
 		return nil
 	}
-	return o.EmptyBodyRequest
+	return p.EmptyBodyRequest
 }
 
 type PauseActionResponse struct {
@@ -47,30 +47,30 @@ type PauseActionResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *PauseActionResponse) GetContentType() string {
-	if o == nil {
+func (p *PauseActionResponse) GetContentType() string {
+	if p == nil {
 		return ""
 	}
-	return o.ContentType
+	return p.ContentType
 }
 
-func (o *PauseActionResponse) GetStatusCode() int {
-	if o == nil {
+func (p *PauseActionResponse) GetStatusCode() int {
+	if p == nil {
 		return 0
 	}
-	return o.StatusCode
+	return p.StatusCode
 }
 
-func (o *PauseActionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (p *PauseActionResponse) GetRawResponse() *http.Response {
+	if p == nil {
 		return nil
 	}
-	return o.RawResponse
+	return p.RawResponse
 }
 
-func (o *PauseActionResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (p *PauseActionResponse) GetErrorResponse() *shared.ErrorResponse {
+	if p == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return p.ErrorResponse
 }

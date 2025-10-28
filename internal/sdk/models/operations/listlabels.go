@@ -22,46 +22,46 @@ type ListLabelsRequest struct {
 	IsDefault *bool `queryParam:"style=form,explode=true,name=isDefault"`
 }
 
-func (o *ListLabelsRequest) GetWorkspaceID() *int64 {
-	if o == nil {
+func (l *ListLabelsRequest) GetWorkspaceID() *int64 {
+	if l == nil {
 		return nil
 	}
-	return o.WorkspaceID
+	return l.WorkspaceID
 }
 
-func (o *ListLabelsRequest) GetMax() *int {
-	if o == nil {
+func (l *ListLabelsRequest) GetMax() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Max
+	return l.Max
 }
 
-func (o *ListLabelsRequest) GetOffset() *int {
-	if o == nil {
+func (l *ListLabelsRequest) GetOffset() *int {
+	if l == nil {
 		return nil
 	}
-	return o.Offset
+	return l.Offset
 }
 
-func (o *ListLabelsRequest) GetSearch() *string {
-	if o == nil {
+func (l *ListLabelsRequest) GetSearch() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Search
+	return l.Search
 }
 
-func (o *ListLabelsRequest) GetType() *shared.LabelType {
-	if o == nil {
+func (l *ListLabelsRequest) GetType() *shared.LabelType {
+	if l == nil {
 		return nil
 	}
-	return o.Type
+	return l.Type
 }
 
-func (o *ListLabelsRequest) GetIsDefault() *bool {
-	if o == nil {
+func (l *ListLabelsRequest) GetIsDefault() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.IsDefault
+	return l.IsDefault
 }
 
 type ListLabelsResponse struct {
@@ -77,37 +77,37 @@ type ListLabelsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (o *ListLabelsResponse) GetContentType() string {
-	if o == nil {
+func (l *ListLabelsResponse) GetContentType() string {
+	if l == nil {
 		return ""
 	}
-	return o.ContentType
+	return l.ContentType
 }
 
-func (o *ListLabelsResponse) GetStatusCode() int {
-	if o == nil {
+func (l *ListLabelsResponse) GetStatusCode() int {
+	if l == nil {
 		return 0
 	}
-	return o.StatusCode
+	return l.StatusCode
 }
 
-func (o *ListLabelsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (l *ListLabelsResponse) GetRawResponse() *http.Response {
+	if l == nil {
 		return nil
 	}
-	return o.RawResponse
+	return l.RawResponse
 }
 
-func (o *ListLabelsResponse) GetListLabelsResponse() *shared.ListLabelsResponse {
-	if o == nil {
+func (l *ListLabelsResponse) GetListLabelsResponse() *shared.ListLabelsResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ListLabelsResponse
+	return l.ListLabelsResponse
 }
 
-func (o *ListLabelsResponse) GetErrorResponse() *shared.ErrorResponse {
-	if o == nil {
+func (l *ListLabelsResponse) GetErrorResponse() *shared.ErrorResponse {
+	if l == nil {
 		return nil
 	}
-	return o.ErrorResponse
+	return l.ErrorResponse
 }

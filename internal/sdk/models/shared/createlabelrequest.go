@@ -11,30 +11,30 @@ type CreateLabelRequest struct {
 	IsDefault *bool   `json:"isDefault,omitempty"`
 }
 
-func (o *CreateLabelRequest) GetName() *string {
-	if o == nil {
+func (c *CreateLabelRequest) GetName() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Name
+	return c.Name
 }
 
-func (o *CreateLabelRequest) GetValue() *string {
-	if o == nil {
+func (c *CreateLabelRequest) GetValue() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Value
+	return c.Value
 }
 
-func (o *CreateLabelRequest) GetResource() *bool {
-	if o == nil {
+func (c *CreateLabelRequest) GetResource() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Resource
+	return c.Resource
 }
 
-func (o *CreateLabelRequest) GetIsDefault() *bool {
-	if o == nil {
+func (c *CreateLabelRequest) GetIsDefault() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.IsDefault
+	return c.IsDefault
 }

@@ -22,16 +22,16 @@ func (v *Vpc) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Vpc) GetID() *string {
-	if o == nil {
+func (v *Vpc) GetID() *string {
+	if v == nil {
 		return nil
 	}
-	return o.ID
+	return v.ID
 }
 
-func (o *Vpc) GetIsDefault() *bool {
-	if o == nil {
+func (v *Vpc) GetIsDefault() *bool {
+	if v == nil {
 		return nil
 	}
-	return o.IsDefault
+	return v.IsDefault
 }

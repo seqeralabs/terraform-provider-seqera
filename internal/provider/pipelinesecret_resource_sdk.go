@@ -21,6 +21,21 @@ func (r *PipelineSecretResourceModel) RefreshFromSharedCreatePipelineSecretRespo
 	return diags
 }
 
+func (r *PipelineSecretResourceModel) RefreshFromSharedDescribePipelineSecretResponse(ctx context.Context, resp *shared.DescribePipelineSecretResponse) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	if resp != nil {
+		diags.Append(r.RefreshFromSharedPipelineSecret(ctx, resp.PipelineSecret)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
+	}
+
+	return diags
+}
+
 func (r *PipelineSecretResourceModel) RefreshFromSharedPipelineSecret(ctx context.Context, resp *shared.PipelineSecret) diag.Diagnostics {
 	var diags diag.Diagnostics
 
