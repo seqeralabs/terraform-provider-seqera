@@ -5,7 +5,8 @@ subcategory: ""
 description: |-
   Manage API access tokens for authentication.
   Tokens provide secure API access, enabling programmatic
-  access to platform resources and services.
+  access to platform resources and services. They can be used
+  for CI/CD integration, automation scripts, and external tools.
 ---
 
 # seqera_tokens (Resource)
@@ -13,7 +14,8 @@ description: |-
 Manage API access tokens for authentication.
 
 Tokens provide secure API access, enabling programmatic
-access to platform resources and services.
+access to platform resources and services. They can be used
+for CI/CD integration, automation scripts, and external tools.
 
 ## Example Usage
 

@@ -2,9 +2,6 @@
 
 package shared
 
-// TraceBeginRequest - Represents workflow execution trace information.
-// Contains metadata and progress tracking data for monitoring
-// pipeline execution and performance metrics.
 type TraceBeginRequest struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LaunchID     *string        `json:"launchId,omitempty"`

@@ -32,6 +32,40 @@ actions:
         Labels provide metadata tagging capabilities for pipelines, workflows,
         and other platform resources, enabling resource organization, filtering,
         and management across the platform.
+
+  # Label name and value validators for CreateLabelRequest
+  # Label name must contain a minimum of 1 and a maximum of 39 alphanumeric
+  # characters separated by dashes or underscores
+  - target: $.components.schemas.CreateLabelRequest.properties.name
+    update:
+      title: "Label Name"
+      description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "my-label"
+      x-speakeasy-plan-validators: LabelNameValidator
+
+  # Label value must contain a minimum of 1 and a maximum of 39 alphanumeric
+  # characters separated by dashes or underscores
+  - target: $.components.schemas.CreateLabelRequest.properties.value
+    update:
+      title: "Label Value"
+      description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "production"
+      x-speakeasy-plan-validators: LabelValueValidator
+
+  # Label name and value validators for UpdateLabelRequest
+  - target: $.components.schemas.UpdateLabelRequest.properties.name
+    update:
+      title: "Label Name"
+      description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "my-label"
+      x-speakeasy-plan-validators: LabelNameValidator
+
+  - target: $.components.schemas.UpdateLabelRequest.properties.value
+    update:
+      title: "Label Value"
+      description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      example: "production"
+      x-speakeasy-plan-validators: LabelValueValidator
   - target: $["components"]["schemas"]["CreateLabelResponse"]
     update:
       x-speakeasy-entity: Labels
@@ -62,3 +96,45 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["AllowedDynamicLabelsResponse"]
     remove: true
+
+  # Request examples for Labels
+  - target: $.components.schemas.CreateLabelRequest.properties.name
+    update:
+      example: "environment"
+  - target: $.components.schemas.CreateLabelRequest.properties.value
+    update:
+      example: "production"
+  - target: $.components.schemas.CreateLabelRequest.properties.resource
+    update:
+      example: true
+  - target: $.components.schemas.CreateLabelRequest.properties.isDefault
+    update:
+      example: false
+
+  # Schema description
+  - target: $.components.schemas.LabelDbDto
+    update:
+      description: |
+        Represents a label for organizing and categorizing resources.
+        Provides metadata tagging capabilities for pipelines, workflows,
+        and other platform resources.
+
+  # Field descriptions for LabelDbDto
+  - target: $.components.schemas.LabelDbDto.properties.id
+    update:
+      description: Unique numeric identifier for the label
+  - target: $.components.schemas.LabelDbDto.properties.name
+    update:
+      description: Name or key of the label
+  - target: $.components.schemas.LabelDbDto.properties.value
+    update:
+      description: Value associated with the label
+  - target: $.components.schemas.LabelDbDto.properties.resource
+    update:
+      description: Flag indicating if this is a resource-level label
+  - target: $.components.schemas.LabelDbDto.properties.isDefault
+    update:
+      description: Flag indicating if this is a default system label
+  - target: $.components.schemas.LabelDbDto.properties.dateCreated
+    update:
+      description: Timestamp when the label was created

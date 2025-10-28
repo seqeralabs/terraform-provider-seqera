@@ -4,7 +4,6 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
-
   - target: $.components.schemas.CreateComputeEnvRequest
     update:
       required:
@@ -36,13 +35,6 @@ actions:
       required:
           - workDir
 
-  # - target: $.components.schemas.ComputeEnv_ComputeConfig_
-  #   update:
-  #     required:
-  #     - workspaceId
-  #     - credentialsId
-
-    # Compute config platform-specific schemas
   - target: $.components.schemas.AwsBatchConfig
     update:
       required:

@@ -24,7 +24,6 @@ data "seqera_pipeline" "my_pipeline" {
   attributes = [
     "computeEnv"
   ]
-  pipeline_id         = 1
   source_workspace_id = 6
   workspace_id        = 3
 }
@@ -35,7 +34,6 @@ data "seqera_pipeline" "my_pipeline" {
 
 ### Required
 
-- `pipeline_id` (Number) Pipeline numeric identifier
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
@@ -57,6 +55,7 @@ data "seqera_pipeline" "my_pipeline" {
 - `optimization_targets` (String)
 - `org_id` (Number)
 - `org_name` (String)
+- `pipeline_id` (Number) Pipeline numeric identifier
 - `repository` (String) Git repository URL containing the pipeline source code
 - `user_first_name` (String) First name of the user who created the pipeline
 - `user_id` (Number) Numeric identifier of the user who created the pipeline

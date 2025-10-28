@@ -8,11 +8,6 @@ sources:
             - location: overlays/api-description.yaml
             - location: overlays/speakeasy.yaml
             - location: overlays/required.yaml
-            - location: overlays/schema-descriptions.yaml
-            - location: overlays/schema-field-descriptions.yaml
-            - location: overlays/request-examples.yaml
-            - location: overlays/validators.yaml
-            - location: overlays/retry.yaml
             - location: overlays/datalinks.yaml
             - location: overlays/actions.yaml
             - location: overlays/credentials.yaml
@@ -28,7 +23,7 @@ sources:
             - location: overlays/studios.yaml
             - location: overlays/teams.yaml
             - location: overlays/tokens.yaml
-            - location: overlays/workflows-resource.yaml
+            - location: overlays/workflows.yaml
             - location: overlays/workspaces.yaml
             - location: overlays/users.yaml
             - location: overlays/schema-fixes.yaml

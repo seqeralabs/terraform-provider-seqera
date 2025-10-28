@@ -39,3 +39,36 @@ actions:
   - target: $["paths"]["/datasets"]["post"]["parameters"][0]
     update:
       required: true
+
+  # Request examples for Dataset
+  - target: $.components.schemas.CreateDatasetRequest.properties.name
+    update:
+      example: "my-dataset"
+  - target: $.components.schemas.CreateDatasetRequest.properties.description
+    update:
+      example: "Dataset containing sample genomic data"
+
+  # Schema description
+  - target: $.components.schemas.Dataset
+    update:
+      description: |
+        Represents a dataset in the Seqera Platform.
+        Contains dataset metadata, versioning information, and access
+        controls for data management and sharing.
+
+  # Field descriptions for Dataset
+  - target: $.components.schemas.Dataset.properties.id
+    update:
+      description: Unique identifier for the dataset (max 22 characters)
+  - target: $.components.schemas.Dataset.properties.name
+    update:
+      description: Dataset name following naming conventions (1-100 characters)
+  - target: $.components.schemas.Dataset.properties.description
+    update:
+      description: Detailed description of the dataset contents and purpose (max 1000 characters)
+  - target: $.components.schemas.Dataset.properties.mediaType
+    update:
+      description: MIME type or media type of the dataset content (max 80 characters)
+  - target: $.components.schemas.Dataset.properties.deleted
+    update:
+      description: Read-only flag indicating if the dataset has been deleted

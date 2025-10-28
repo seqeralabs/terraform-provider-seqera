@@ -580,6 +580,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ComputeEnv#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -590,7 +591,6 @@ paths:
         statusCodes:
           - 4XX
           - 5XX
-      x-speakeasy-entity-operation: ComputeEnv#create
   /compute-envs/validate:
     get:
       summary: Validate compute environment name
@@ -5379,6 +5379,7 @@ paths:
                 $ref: "#/components/schemas/DataStudioCreateResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Studios#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -5388,7 +5389,6 @@ paths:
           exponent: 1.0 # No exponential backoff, fixed interval
         statusCodes:
           - 400
-      x-speakeasy-entity-operation: Studios#create
   /studios/data-links:
     get:
       summary: List mounted data-links
@@ -6625,6 +6625,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: Workflows#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -6634,7 +6635,6 @@ paths:
           exponent: 1.0 # No exponential backoff, fixed interval
         statusCodes:
           - 400
-      x-speakeasy-entity-operation: Workflows#create
   /workflow/random-name:
     get:
       summary: Generates a random name
@@ -8424,35 +8424,45 @@ components:
           type: string
           deprecated: true
           description: Deprecated basic authentication string
+          x-speakeasy-param-ordering: 5
+          x-speakeasy-param-readonly: true
         id:
           type: integer
           format: int64
           nullable: true
           description: Unique numeric identifier for the access token (nullable)
+          x-speakeasy-param-ordering: 1
           x-speakeasy-param-optional: true
+          x-speakeasy-param-readonly: true
         name:
           maxLength: 50
           minLength: 1
           type: string
           description: Display name for the token (1-50 characters)
+          x-speakeasy-param-ordering: 2
         lastUsed:
           type: string
           format: date-time
           description: Timestamp when the token was last used for authentication
+          x-speakeasy-param-ordering: 4
+          x-speakeasy-param-readonly: true
         dateCreated:
           type: string
           format: date-time
           description: Timestamp when the token was created
-      description: |
-        Represents an API access token for authentication.
-        Contains token metadata, permissions, and expiration information
-        for secure API access to platform resources.
+          x-speakeasy-param-ordering: 3
+          x-speakeasy-param-readonly: true
       x-speakeasy-entity: Tokens
       x-speakeasy-entity-description: |
         Manage API access tokens for authentication.
 
         Tokens provide secure API access, enabling programmatic
-        access to platform resources and services.
+        access to platform resources and services. They can be used
+        for CI/CD integration, automation scripts, and external tools.
+      description: |
+        Represents an API access token for authentication.
+        Contains token metadata, permissions, and expiration information
+        for secure API access to platform resources.
     Action.ConfigType:
       type: object
       properties:
@@ -8519,30 +8529,44 @@ components:
         id:
           type: string
           description: Unique identifier for the action
+          x-speakeasy-param-ordering: 1
+          x-speakeasy-param-readonly: true
         launch:
           $ref: "#/components/schemas/Launch"
           description: Launch configuration and parameters for the action
+          x-speakeasy-param-ordering: 5
         name:
           type: string
           description: Human-readable name for the action
+          x-speakeasy-param-ordering: 2
         hookId:
           type: string
           description: Identifier for the webhook associated with this action
+          x-speakeasy-param-ordering: 7
+          x-speakeasy-param-readonly: true
         hookUrl:
           type: string
           description: URL endpoint for the webhook that triggers this action
+          x-speakeasy-param-ordering: 8
+          x-speakeasy-param-readonly: true
         message:
           type: string
           description: Status or informational message about the action
+          x-speakeasy-param-ordering: 9
+          x-speakeasy-param-readonly: true
         source:
           $ref: "#/components/schemas/Action.Source"
           description: Source system or trigger that initiated the action
+          x-speakeasy-param-ordering: 3
         status:
           $ref: "#/components/schemas/Action.Status"
           description: Current execution status of the action
+          x-speakeasy-param-ordering: 4
+          x-speakeasy-param-readonly: true
         config:
           $ref: "#/components/schemas/Action.ConfigType"
           description: Configuration type and settings for the action
+          x-speakeasy-param-ordering: 6
         event:
           $ref: "#/components/schemas/Action.EventType"
         lastSeen:
@@ -8558,18 +8582,20 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelDbDto"
-      description: |
-        Represents a pipeline action in the Seqera Platform.
-        Contains action configuration, triggers, and execution settings
-        for automated pipeline workflows.
       x-speakeasy-entity: Action
       x-speakeasy-entity-description: |
+        Manage pipeline actions for event-based workflow automation.
+
         This resource allows the management of pipeline actions. Actions enable event-based
         pipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever
         the pipeline repository is updated.
 
         Seqera Platform currently offers support for native GitHub webhooks and a general
         Tower webhook that can be invoked programmatically.
+      description: |
+        Represents a pipeline action in the Seqera Platform.
+        Contains action configuration, triggers, and execution settings
+        for automated pipeline workflows.
     ActiveConnection:
       type: object
       allOf:
@@ -9523,15 +9549,15 @@ components:
       properties:
         name:
           type: string
-          example: "my-label"
           title: "Label Name"
           description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          example: "environment"
           x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
-          example: "production"
           title: "Label Value"
           description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          example: "production"
           x-speakeasy-plan-validators: LabelValueValidator
         resource:
           type: boolean
@@ -9580,7 +9606,6 @@ components:
       properties:
         name:
           type: string
-          x-speakeasy-param-optional: false
         description:
           type: string
         icon:
@@ -9664,19 +9689,19 @@ components:
         id:
           maxLength: 22
           type: string
-          description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-name-override: credentialsId
           x-speakeasy-param-suppress-computed-diff: true
+          description: Unique identifier for the credential (max 22 characters)
         name:
           maxLength: 100
           type: string
-          description: Display name for the credential (max 100 characters)
           example: "my-gcp-credentials"
+          description: Display name for the credential (max 100 characters)
         description:
           type: string
-          description: Optional description explaining the purpose of the credential
-          example: "Google Cloud credentials for production workloads"
           x-speakeasy-param-computed: false
+          example: "Google Cloud credentials for production workloads"
+          description: Optional description explaining the purpose of the credential
         provider:
           maxLength: 16
           type: string
@@ -9696,38 +9721,38 @@ components:
             - gitea
             - azurerepos
             - seqeracompute
-          description: Cloud or service provider type (e.g., aws, azure, gcp)
-          example: "google"
           x-speakeasy-name-override: providerType
           x-speakeasy-plan-validators: CredentialsConfigValidator
+          example: "google"
+          description: Cloud or service provider type (e.g., aws, azure, gcp)
         baseUrl:
           maxLength: 200
           pattern: ""
           type: string
-          example: "https://www.googleapis.com"
           x-speakeasy-param-computed: false
+          example: "https://www.googleapis.com"
         category:
           maxLength: 20
           type: string
-          example: "cloud"
           x-speakeasy-param-computed: false
+          example: "cloud"
         deleted:
           type: boolean
           readOnly: true
-          description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-suppress-computed-diff: true
+          description: Flag indicating if the credential has been soft-deleted
         lastUsed:
           type: string
           format: date-time
           readOnly: true
-          description: Timestamp when the credential was last used
           x-speakeasy-param-suppress-computed-diff: true
+          description: Timestamp when the credential was last used
         dateCreated:
           type: string
           format: date-time
           readOnly: true
-          description: Timestamp when the credential was created
           x-speakeasy-param-suppress-computed-diff: true
+          description: Timestamp when the credential was created
         lastUpdated:
           type: string
           format: date-time
@@ -9735,10 +9760,6 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
-      description: |
-        Represents credentials used for authentication with various platforms and services.
-        Contains authentication information for accessing cloud providers, Git repositories,
-        and other external services within the Seqera Platform.
       x-speakeasy-entity: Credential
       x-speakeasy-entity-description: |
         Manage workspace credentials in Seqera platform using this resource.
@@ -9746,6 +9767,10 @@ components:
         Credentials store authentication information for accessing cloud providers,
         Git repositories, container registries, and other external services
         within the Seqera Platform workflows.
+      description: |
+        Represents credentials used for authentication with various platforms and services.
+        Contains authentication information for accessing cloud providers, Git repositories,
+        and other external services within the Seqera Platform.
     DataLink.Status:
       type: string
       readOnly: true
@@ -9849,8 +9874,8 @@ components:
       properties:
         id:
           type: string
-          description: Unique identifier for the data link
           x-speakeasy-name-override: dataLinkId
+          description: Unique identifier for the data link
         name:
           type: string
           description: Display name for the data link connection
@@ -9885,16 +9910,16 @@ components:
               readOnly: true
         message:
           type: string
-      description: |
-        Represents a data link connection to external storage systems.
-        Provides access to cloud storage, file systems, and data repositories
-        for pipeline input/output operations.
       x-speakeasy-entity: DataLink
       x-speakeasy-entity-description: |
         Manage connections to external storage systems and data repositories.
 
         Data links provide access to cloud storage for pipeline input/output operations,
         enabling seamless data integration.
+      description: |
+        Represents a data link connection to external storage systems.
+        Provides access to cloud storage, file systems, and data repositories
+        for pipeline input/output operations.
     DataLinkFinishMultiPartUploadRequest:
       type: object
       properties:
@@ -10140,10 +10165,10 @@ components:
       properties:
         sessionId:
           type: string
-          description: Unique identifier for the Studio session
           x-speakeasy-param-readonly: true
           x-speakeasy-name-override: sessionId
           x-speakeasy-param-optional: true
+          description: Unique identifier for the Studio session
         workspaceId:
           type: integer
           format: int64
@@ -10209,11 +10234,11 @@ components:
           nullable: true
           items:
             $ref: "#/components/schemas/LabelDbDto"
+      x-speakeasy-entity: Studios
       description: |
         Represents a Studio session for interactive data analysis.
         Contains configuration and runtime information for Jupyter-based
         computational environments.
-      x-speakeasy-entity: Studios
     DataStudioDto.ParentCheckpoint:
       type: object
       properties:
@@ -10427,10 +10452,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-      description: |
-        Represents a dataset in the Seqera Platform.
-        Contains dataset metadata, versioning information, and access
-        controls for data management and sharing.
       x-speakeasy-entity: Datasets
       x-speakeasy-entity-description: |
         Manage datasets for storing and versioning research data.
@@ -10440,6 +10461,10 @@ components:
 
         They are used as inputs to pipelines to simplify data management,
         minimize user data-input errors, and facilitate reproducible workflows.
+      description: |
+        Represents a dataset in the Seqera Platform.
+        Contains dataset metadata, versioning information, and access
+        controls for data management and sharing.
     DatasetVersionDbDto:
       type: object
       properties:
@@ -11103,6 +11128,8 @@ components:
         data:
           type: string
           writeOnly: true
+          x-speakeasy-param-sensitive: true
+          x-speakeasy-param-suppress-computed-diff: true
           example: |
             {
               "type": "service_account",
@@ -11114,8 +11141,6 @@ components:
               "auth_uri": "https://accounts.google.com/o/oauth2/auth",
               "token_uri": "https://oauth2.googleapis.com/token"
             }
-          x-speakeasy-param-sensitive: true
-          x-speakeasy-param-suppress-computed-diff: true
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
     GridPlatformMetainfo:
       type: object
@@ -11259,8 +11284,8 @@ components:
         id:
           type: integer
           format: int64
-          description: Unique numeric identifier for the label
           x-speakeasy-param-readonly: true
+          description: Unique numeric identifier for the label
         name:
           type: string
           description: Name or key of the label
@@ -11892,8 +11917,8 @@ components:
           description: Official website URL for the organization
         logoId:
           type: string
-          description: Identifier for the organization's logo image
           x-speakeasy-param-optional: true
+          description: Identifier for the organization's logo image
         logoUrl:
           type: string
           x-speakeasy-param-optional: true
@@ -11904,11 +11929,11 @@ components:
           $ref: "#/components/schemas/OrgRole"
         type:
           $ref: "#/components/schemas/OrgType"
+      x-speakeasy-entity: Orgs
       description: |
         Represents an organization in the Seqera Platform.
         Contains organizational metadata, settings, and member management
         information for multi-tenant environments.
-      x-speakeasy-entity: Orgs
     OrganizationQuotas:
       type: object
       properties:
@@ -11997,28 +12022,40 @@ components:
           type: integer
           format: int64
           description: Unique numeric identifier for the pipeline
+          x-speakeasy-param-ordering: 1
+          x-speakeasy-param-readonly: true
         name:
           type: string
           description: Display name for the pipeline
+          x-speakeasy-param-ordering: 2
         description:
           type: string
           description: Detailed description of the pipeline's purpose and functionality
+          x-speakeasy-param-ordering: 3
         icon:
           type: string
           description: Icon identifier or URL for visual representation
+          x-speakeasy-param-ordering: 5
         repository:
           type: string
           description: Git repository URL containing the pipeline source code
+          x-speakeasy-param-ordering: 4
         userId:
           type: integer
           format: int64
           description: Numeric identifier of the user who created the pipeline
+          x-speakeasy-param-ordering: 6
+          x-speakeasy-param-readonly: true
         userName:
           type: string
           description: Username of the pipeline creator
+          x-speakeasy-param-ordering: 7
+          x-speakeasy-param-readonly: true
         userFirstName:
           type: string
           description: First name of the user who created the pipeline
+          x-speakeasy-param-ordering: 8
+          x-speakeasy-param-readonly: true
         userLastName:
           type: string
         orgId:
@@ -12050,10 +12087,6 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         computeEnv:
           $ref: "#/components/schemas/ComputeEnvDbDto"
-      description: |
-        Represents a pipeline configuration in the Seqera Platform.
-        Contains pipeline metadata, configuration settings, and execution parameters
-        for Nextflow workflows.
       x-speakeasy-entity: Pipeline
       x-speakeasy-entity-description: |
         Manage Nextflow pipeline definitions and configurations.
@@ -12061,6 +12094,10 @@ components:
         Pipelines define reusable workflow templates with parameters,
         compute environment settings, and execution configurations
         for scalable bioinformatics and data processing workflows.
+      description: |
+        Represents a pipeline configuration in the Seqera Platform.
+        Contains pipeline metadata, configuration settings, and execution parameters
+        for Nextflow workflows.
     PipelineInfo:
       type: object
       properties:
@@ -12152,10 +12189,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-      description: |
-        Represents a secure secret for pipeline execution.
-        Contains encrypted sensitive data such as API keys, passwords,
-        and configuration values used in workflows.
       x-speakeasy-entity: PipelineSecret
       x-speakeasy-entity-description: |
         Manage secure secrets for pipeline execution.
@@ -12163,6 +12196,10 @@ components:
         Pipeline secrets store encrypted sensitive data such as API keys,
         passwords, and configuration values used in workflows, providing
         secure access to external services and resources.
+      description: |
+        Represents a secure secret for pipeline execution.
+        Contains encrypted sensitive data such as API keys, passwords,
+        and configuration values used in workflows.
     PlatformMetainfo:
       type: object
       discriminator:
@@ -12829,9 +12866,9 @@ components:
         teamId:
           type: integer
           format: int64
-          description: Unique numeric identifier for the team
           x-speakeasy-param-optional: true
           x-speakeasy-name-override: teamId
+          description: Unique numeric identifier for the team
         name:
           type: string
           description: Display name for the team
@@ -12845,11 +12882,11 @@ components:
           type: integer
           format: int64
           description: Total number of members in the team
+      x-speakeasy-entity: Teams
       description: |
         Represents a team within an organization.
         Contains team membership, permissions, and access controls
         for collaborative workspace management.
-      x-speakeasy-entity: Teams
     TraceBeginRequest:
       type: object
       properties:
@@ -12864,10 +12901,6 @@ components:
             type: string
         towerLaunch:
           type: boolean
-      description: |
-        Represents workflow execution trace information.
-        Contains metadata and progress tracking data for monitoring
-        pipeline execution and performance metrics.
     TraceBeginResponse:
       type: object
       properties:
@@ -13171,7 +13204,7 @@ components:
           type: string
           title: "Pipeline Name"
           description: "Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores"
-          example: "my-pipeline"
+          example: "rna-seq-analysis"
           x-speakeasy-plan-validators: PipelineNameValidator
         description:
           type: string
@@ -13531,31 +13564,39 @@ components:
           items:
             type: string
           description: Array of status messages and logs from workflow execution
+          x-speakeasy-param-readonly: true
         id:
           type: string
           description: Unique identifier for the workflow execution
+          x-speakeasy-param-readonly: true
         ownerId:
           type: integer
           format: int64
           description: Numeric identifier of the user who owns this workflow
+          x-speakeasy-param-readonly: true
         submit:
           type: string
           format: date-time
           description: Timestamp when the workflow was submitted for execution
+          x-speakeasy-param-readonly: true
         start:
           type: string
           format: date-time
           description: Timestamp when the workflow execution actually started
+          x-speakeasy-param-readonly: true
         complete:
           type: string
           format: date-time
           description: Timestamp when the workflow execution completed
+          x-speakeasy-param-readonly: true
         dateCreated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         lastUpdated:
           type: string
           format: date-time
+          x-speakeasy-param-readonly: true
         runName:
           type: string
         sessionId:
@@ -13582,6 +13623,7 @@ components:
           type: string
         status:
           $ref: "#/components/schemas/WorkflowStatus"
+          x-speakeasy-param-readonly: true
         requiresAttention:
           type: boolean
         configFiles:
@@ -13605,6 +13647,7 @@ components:
           type: string
         deleted:
           type: boolean
+          x-speakeasy-param-readonly: true
         projectDir:
           type: string
         homeDir:
@@ -13644,7 +13687,7 @@ components:
           example: "nextflow-hello"
         pipeline:
           type: string
-          example: https://github.com/nextflow-io/hello
+          example: "https://github.com/nextflow-io/hello"
         workDir:
           type: string
           example: "s3://my-bucket/work"
@@ -13682,7 +13725,7 @@ components:
           example: |
             {
               "input": "s3://my-bucket/input.csv",
-              "output_dir": "s3://my-bucket/results",
+              "output_dir": "s3://my-bucket/results"
             }
         preRunScript:
           type: string
@@ -13742,11 +13785,6 @@ components:
           example: "2024-07-23T10:30:00Z"
       required:
         - workDir
-        # - target: $.components.schemas.ComputeEnv_ComputeConfig_
-        #   update:
-        #     required:
-        #     - workspaceId
-        #     - credentialsId
       x-speakeasy-entity: Workflows
     WorkflowLaunchResponse:
       type: object
@@ -13996,22 +14034,22 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
-          example: "genomics-research"
           x-speakeasy-param-readonly: false
+          example: "genomics-research"
         fullName:
           maxLength: 100
           type: string
-          example: "Genomics Research Workspace"
           x-speakeasy-param-readonly: false
+          example: "Genomics Research Workspace"
         description:
           maxLength: 1000
           type: string
-          example: "Workspace for genomics research projects and computational biology workflows"
           x-speakeasy-param-readonly: false
+          example: "Workspace for genomics research projects and computational biology workflows"
         visibility:
           $ref: "#/components/schemas/Visibility"
-          example: "PRIVATE"
           x-speakeasy-param-readonly: false
+          example: "PRIVATE"
         dateCreated:
           type: string
           format: date-time

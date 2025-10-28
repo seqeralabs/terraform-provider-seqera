@@ -24,7 +24,7 @@ resource "seqera_pipeline" "my_pipeline" {
     main_script          = "main.nf"
     optimization_id      = "...my_optimization_id..."
     optimization_targets = "...my_optimization_targets..."
-    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\",\n}\n"
+    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
     pipeline             = "https://github.com/nextflow-io/hello"
     post_run_script      = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
     pre_run_script       = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
@@ -46,6 +46,6 @@ resource "seqera_pipeline" "my_pipeline" {
       "SHARED_CREDENTIALS",
     ]
   }
-  name         = "my-pipeline"
+  name         = "rna-seq-analysis"
   workspace_id = 3
 }

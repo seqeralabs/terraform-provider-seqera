@@ -44,3 +44,39 @@ actions:
   - target: $["components"]["schemas"]["TeamDbDto"]
     update:
       x-speakeasy-entity: Teams
+
+  # Request examples for Teams
+  - target: $.components.schemas.CreateTeamRequest.properties.avatarId
+    update:
+      example: "avatar-123456"
+  - target: $.components.schemas.Team.properties.name
+    update:
+      example: "bioinformatics-team"
+  - target: $.components.schemas.Team.properties.description
+    update:
+      example: "Team responsible for bioinformatics analysis and pipeline development"
+
+  # Schema description
+  - target: $.components.schemas.TeamDbDto
+    update:
+      description: |
+        Represents a team within an organization.
+        Contains team membership, permissions, and access controls
+        for collaborative workspace management.
+
+  # Field descriptions for TeamDbDto
+  - target: $.components.schemas.TeamDbDto.properties.teamId
+    update:
+      description: Unique numeric identifier for the team
+  - target: $.components.schemas.TeamDbDto.properties.name
+    update:
+      description: Display name for the team
+  - target: $.components.schemas.TeamDbDto.properties.description
+    update:
+      description: Description of the team's purpose and responsibilities
+  - target: $.components.schemas.TeamDbDto.properties.avatarUrl
+    update:
+      description: URL to the team's avatar or profile image
+  - target: $.components.schemas.TeamDbDto.properties.membersCount
+    update:
+      description: Total number of members in the team
