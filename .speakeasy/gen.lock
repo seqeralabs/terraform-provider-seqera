@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 68eb47fa847136a8393c517079e9facb
+  docChecksum: b66c777c213b8619193c39169ce000b7
   docVersion: 1.56.0
   speakeasyVersion: 1.640.0
   generationVersion: 2.730.5
@@ -72,7 +72,6 @@ generatedFiles:
   - examples/resources/seqera_google_credential/import-by-string-id.tf
   - examples/resources/seqera_google_credential/import.sh
   - examples/resources/seqera_google_credential/resource.tf
-  - examples/resources/seqera_labels/resource.tf
   - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
   - examples/resources/seqera_orgs/resource.tf
@@ -980,7 +979,7 @@ examples:
         path:
           labelId: 478484
       requestBody:
-        application/json: {"name": "my-label", "value": "production"}
+        application/json: {"name": "environment", "value": "production"}
       responses:
         "200":
           application/json: {}

@@ -20,12 +20,75 @@ and management across the platform.
 ## Example Usage
 
 ```terraform
-resource "seqera_labels" "my_labels" {
-  is_default   = false
+# Example 1: Resource Label (Most Common)
+# Resource labels have key-value pairs used to tag pipelines, workflows, etc.
+# The "value" field is REQUIRED when resource=true.
+
+resource "seqera_labels" "environment" {
+  workspace_id = 123456
   name         = "environment"
-  resource     = true
   value        = "production"
-  workspace_id = 1
+  resource     = true
+  is_default   = false
+}
+
+# Example 2: Default Resource Labels (Auto-Applied)
+# Default labels are automatically applied to new resources in the workspace.
+# Use for_each to create multiple default labels from a map.
+
+locals {
+  default_labels = {
+    "team"        = "data-science"
+    "cost-center" = "research"
+    "project"     = "genomics"
+  }
+}
+
+resource "seqera_labels" "defaults" {
+  for_each = local.default_labels
+
+  workspace_id = 123456
+  name         = each.key
+  value        = each.value
+  resource     = true
+  is_default   = true
+}
+
+# Example 3: Non-Resource Labels (Simple Tags)
+# Non-resource labels are simple tags without values.
+# These cannot have a value and cannot be marked as default.
+
+resource "seqera_labels" "critical" {
+  workspace_id = 123456
+  name         = "critical"
+  resource     = false
+  is_default   = false
+}
+
+resource "seqera_labels" "experimental" {
+  workspace_id = 123456
+  name         = "experimental"
+  resource     = false
+  is_default   = false
+}
+
+# Example 4: Labels with Workspace Reference
+# Use workspace resource references for dynamic workspace IDs.
+
+resource "seqera_workspace" "my_workspace" {
+  name          = "my-workspace"
+  org_id        = 123456
+  full_name     = "my-org/my-workspace"
+  visibility    = "PRIVATE"
+  description   = "Example workspace"
+}
+
+resource "seqera_labels" "workspace_label" {
+  workspace_id = seqera_workspace.my_workspace.id
+  name         = "owner"
+  value        = "john-doe"
+  resource     = true
+  is_default   = false
 }
 ```
 
@@ -34,26 +97,12 @@ resource "seqera_labels" "my_labels" {
 
 ### Optional
 
-- `is_default` (Boolean)
-- `name` (String) Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
-- `resource` (Boolean) Requires replacement if changed.
-- `value` (String) Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
+- `is_default` (Boolean) Whether this label is automatically applied to new resources. Can only be true when resource=true.
+- `name` (String) Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'
+- `resource` (Boolean) Whether this is a resource label. Resource labels (true) can have values and be applied to resources. Non-resource labels (false) are simple tags. Requires replacement if changed. Requires replacement if changed.
+- `value` (String) Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 
 - `label_id` (Number) Label numeric identifier
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
-- `total_size` (Number)
-
-<a id="nestedatt--labels"></a>
-### Nested Schema for `labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label

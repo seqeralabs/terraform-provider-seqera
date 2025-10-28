@@ -3,26 +3,80 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Labels Overlay
   version: 0.0.0
+
+# ==============================================================================
+# LABELS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Labels provide metadata tagging for organizing and categorizing resources
+# in the Seqera Platform (pipelines, workflows, compute environments, etc.).
+#
+# LABEL TYPES:
+# ------------
+# 1. Resource Labels (resource=true):
+#    - Must have a value assigned
+#    - Used to tag specific resources (pipelines, workflows, etc.)
+#    - Can be marked as default (is_default=true) to auto-apply to new resources
+#    - Example: "environment=production", "team=data-science"
+#
+# 2. Non-Resource Labels (resource=false):
+#    - Cannot have a value assigned
+#    - Simple tag/category markers
+#    - Cannot be marked as default
+#    - Example: "critical", "experimental"
+#
+# VALIDATION RULES:
+# -----------------
+# - name: 1-39 alphanumeric characters with dashes/underscores
+# - value: 1-39 alphanumeric characters with dashes/underscores (required if resource=true)
+# - is_default: can only be true if resource=true
+# - resource: determines if label can have values
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Resource label with value (most common)
+# resource "seqera_labels" "environment" {
+#   workspace_id = seqera_workspace.my_workspace.id
+#   name         = "environment"
+#   value        = "production"
+#   resource     = true
+#   is_default   = false
+# }
+#
+# Example 2: Default resource labels (auto-applied to new resources)
+# locals {
+#   default_labels = {
+#     "team"        = "data-science"
+#     "cost-center" = "research"
+#   }
+# }
+#
+# resource "seqera_labels" "defaults" {
+#   for_each     = local.default_labels
+#   workspace_id = seqera_workspace.my_workspace.id
+#   name         = each.key
+#   value        = each.value
+#   resource     = true
+#   is_default   = true
+# }
+#
+# Example 3: Non-resource labels (simple tags)
+# resource "seqera_labels" "tag" {
+#   workspace_id = seqera_workspace.my_workspace.id
+#   name         = "experimental"
+#   resource     = false
+#   is_default   = false
+# }
+#
+# ==============================================================================
+
 actions:
-  # Labels entity operations
-  - target: $["paths"]["/labels"]["get"]
-    update:
-      x-speakeasy-entity-operation: Labels#read
-  - target: $["paths"]["/labels"]["post"]
-    update:
-      x-speakeasy-entity-operation: Labels#create
-  - target: $["paths"]["/labels/{labelId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Labels#update
-  - target: $["paths"]["/labels/{labelId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Labels#delete
+  # ============================================================================
+  # ENTITY CONFIGURATION
+  # ============================================================================
 
-  # Remove required parameter
-  - target: $["paths"]["/labels/{labelId}"]["post"]["parameters"][0]["required"]
-    remove: true
-
-  # Entity schema annotations
+  # Entity schema - Labels resource for organizing and categorizing resources
   - target: $["components"]["schemas"]["CreateLabelRequest"]
     update:
       x-speakeasy-entity: Labels
@@ -33,85 +87,137 @@ actions:
         and other platform resources, enabling resource organization, filtering,
         and management across the platform.
 
-  # Label name and value validators for CreateLabelRequest
-  # Label name must contain a minimum of 1 and a maximum of 39 alphanumeric
-  # characters separated by dashes or underscores
+  # Entity response schema
+  - target: $["components"]["schemas"]["CreateLabelResponse"]
+    update:
+      x-speakeasy-entity: Labels
+
+  # ============================================================================
+  # ENTITY OPERATIONS (CRUD)
+  # ============================================================================
+
+  # CREATE - POST /labels
+  - target: $["paths"]["/labels"]["post"]
+    update:
+      x-speakeasy-entity-operation: Labels#create
+
+  # READ - GET /labels
+  - target: $["paths"]["/labels"]["get"]
+    update:
+      x-speakeasy-entity-operation: Labels#read
+
+  # UPDATE - PUT /labels/{labelId}
+  - target: $["paths"]["/labels/{labelId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Labels#update
+
+  # DELETE - DELETE /labels/{labelId}
+  - target: $["paths"]["/labels/{labelId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Labels#delete
+
+  # ============================================================================
+  # FIELD VALIDATORS
+  # ============================================================================
+
+  # CreateLabelRequest validators
   - target: $.components.schemas.CreateLabelRequest.properties.name
     update:
       title: "Label Name"
-      description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
-      example: "my-label"
+      description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
+      example: "environment"
       x-speakeasy-plan-validators: LabelNameValidator
 
-  # Label value must contain a minimum of 1 and a maximum of 39 alphanumeric
-  # characters separated by dashes or underscores
   - target: $.components.schemas.CreateLabelRequest.properties.value
     update:
       title: "Label Value"
-      description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
       example: "production"
-      x-speakeasy-plan-validators: LabelValueValidator
+      x-speakeasy-plan-validators: LabelValueResourceValidator
 
-  # Label name and value validators for UpdateLabelRequest
+  - target: $.components.schemas.CreateLabelRequest.properties.resource
+    update:
+      description: "Whether this is a resource label. Resource labels (true) can have values and be applied to resources. Non-resource labels (false) are simple tags. Requires replacement if changed."
+
+  - target: $.components.schemas.CreateLabelRequest.properties.isDefault
+    update:
+      description: "Whether this label is automatically applied to new resources. Can only be true when resource=true."
+      x-speakeasy-plan-validators: LabelIsDefaultValidator
+
+  - target: $.components.schemas.CreateLabelRequest.properties.workspaceId
+    update:
+      description: "Workspace numeric identifier where the label is defined"
+
+  # UpdateLabelRequest validators
   - target: $.components.schemas.UpdateLabelRequest.properties.name
     update:
       title: "Label Name"
-      description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
-      example: "my-label"
+      description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
+      example: "environment"
       x-speakeasy-plan-validators: LabelNameValidator
 
   - target: $.components.schemas.UpdateLabelRequest.properties.value
     update:
       title: "Label Value"
-      description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+      description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
       example: "production"
-      x-speakeasy-plan-validators: LabelValueValidator
-  - target: $["components"]["schemas"]["CreateLabelResponse"]
+      x-speakeasy-plan-validators: LabelValueResourceValidator
+
+  - target: $.components.schemas.UpdateLabelRequest.properties.resource
     update:
-      x-speakeasy-entity: Labels
+      description: "Whether this is a resource label. Resource labels (true) can have values and be applied to resources. Non-resource labels (false) are simple tags. Requires replacement if changed."
+
+  - target: $.components.schemas.UpdateLabelRequest.properties.isDefault
+    update:
+      description: "Whether this label is automatically applied to new resources. Can only be true when resource=true."
+      x-speakeasy-plan-validators: LabelIsDefaultValidator
+
+  - target: $.components.schemas.UpdateLabelRequest.properties.workspaceId
+    update:
+      description: "Workspace numeric identifier where the label is defined"
+
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
+
+  # Remove the 'labels' list from response schemas (single label resource shouldn't show a list)
+  - target: $["components"]["schemas"]["ListLabelsResponse"]["properties"]["labels"]
+    remove: true
+
+  - target: $["components"]["schemas"]["ListLabelsResponse"]["properties"]["totalSize"]
+    remove: true
+
+  # ID field name override
   - target: $["components"]["schemas"]["CreateLabelResponse"]["properties"]["id"]
     update:
       x-speakeasy-name-override: labelId
 
-  # LabelDbDto property annotations
+  # Readonly parameters
   - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["id"]
     update:
       x-speakeasy-param-readonly: true
+
   - target: $["paths"]["/labels/{labelId}"]["get"]["parameters"][0]
     update:
       x-speakeasy-param-readonly: true
+
   - target: $["paths"]["/labels/{labelId}"]["put"]["parameters"][0]
     update:
       x-speakeasy-param-readonly: true
+
   - target: $["paths"]["/labels/{labelId}"]["delete"]["parameters"][0]
     update:
       x-speakeasy-param-readonly: true
 
-  # Remove deprecated paths and properties
-  - target: $["paths"]["/labels/dynamic/allowed"]
-    remove: true
-  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isDynamic"]
-    remove: true
-  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isInterpolated"]
-    remove: true
-  - target: $["components"]["schemas"]["AllowedDynamicLabelsResponse"]
+  # Remove required flag from parameter (allow optional workspace filtering)
+  - target: $["paths"]["/labels/{labelId}"]["post"]["parameters"][0]["required"]
     remove: true
 
-  # Request examples for Labels
-  - target: $.components.schemas.CreateLabelRequest.properties.name
-    update:
-      example: "environment"
-  - target: $.components.schemas.CreateLabelRequest.properties.value
-    update:
-      example: "production"
-  - target: $.components.schemas.CreateLabelRequest.properties.resource
-    update:
-      example: true
-  - target: $.components.schemas.CreateLabelRequest.properties.isDefault
-    update:
-      example: false
+  # ============================================================================
+  # SCHEMA DESCRIPTIONS
+  # ============================================================================
 
-  # Schema description
+  # LabelDbDto schema description
   - target: $.components.schemas.LabelDbDto
     update:
       description: |
@@ -119,22 +225,64 @@ actions:
         Provides metadata tagging capabilities for pipelines, workflows,
         and other platform resources.
 
-  # Field descriptions for LabelDbDto
+  # Field descriptions
   - target: $.components.schemas.LabelDbDto.properties.id
     update:
       description: Unique numeric identifier for the label
+
   - target: $.components.schemas.LabelDbDto.properties.name
     update:
       description: Name or key of the label
+
   - target: $.components.schemas.LabelDbDto.properties.value
     update:
       description: Value associated with the label
+
   - target: $.components.schemas.LabelDbDto.properties.resource
     update:
       description: Flag indicating if this is a resource-level label
+
   - target: $.components.schemas.LabelDbDto.properties.isDefault
     update:
       description: Flag indicating if this is a default system label
+
   - target: $.components.schemas.LabelDbDto.properties.dateCreated
     update:
       description: Timestamp when the label was created
+
+  # ============================================================================
+  # REQUEST EXAMPLES
+  # ============================================================================
+
+  # Example: Resource label with value (for pipelines, workflows, etc.)
+  - target: $.components.schemas.CreateLabelRequest.properties.name
+    update:
+      example: "environment"
+
+  - target: $.components.schemas.CreateLabelRequest.properties.value
+    update:
+      example: "production"
+
+  - target: $.components.schemas.CreateLabelRequest.properties.resource
+    update:
+      example: true
+
+  - target: $.components.schemas.CreateLabelRequest.properties.isDefault
+    update:
+      example: false
+
+  # ============================================================================
+  # CLEANUP - Remove deprecated fields and endpoints
+  # ============================================================================
+
+  - target: $["paths"]["/labels/dynamic/allowed"]
+    remove: true
+
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isDynamic"]
+    remove: true
+
+  - target: $["components"]["schemas"]["LabelDbDto"]["properties"]["isInterpolated"]
+    remove: true
+
+  - target: $["components"]["schemas"]["AllowedDynamicLabelsResponse"]
+    remove: true

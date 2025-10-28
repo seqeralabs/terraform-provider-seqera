@@ -3,11 +3,12 @@
 package shared
 
 type UpdateLabelRequest struct {
-	// Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
+	// Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'
 	Name *string `json:"name,omitempty"`
-	// Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores
-	Value     *string `json:"value,omitempty"`
-	IsDefault *bool   `json:"isDefault,omitempty"`
+	// Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'
+	Value *string `json:"value,omitempty"`
+	// Whether this label is automatically applied to new resources. Can only be true when resource=true.
+	IsDefault *bool `json:"isDefault,omitempty"`
 }
 
 func (u *UpdateLabelRequest) GetName() *string {

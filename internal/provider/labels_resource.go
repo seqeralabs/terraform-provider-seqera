@@ -13,9 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
+	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
@@ -35,14 +34,12 @@ type LabelsResource struct {
 
 // LabelsResourceModel describes the resource data model.
 type LabelsResourceModel struct {
-	IsDefault   types.Bool           `tfsdk:"is_default"`
-	LabelID     types.Int64          `tfsdk:"label_id"`
-	Labels      []tfTypes.LabelDbDto `tfsdk:"labels"`
-	Name        types.String         `tfsdk:"name"`
-	Resource    types.Bool           `tfsdk:"resource"`
-	TotalSize   types.Int64          `tfsdk:"total_size"`
-	Value       types.String         `tfsdk:"value"`
-	WorkspaceID types.Int64          `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	IsDefault   types.Bool   `tfsdk:"is_default"`
+	LabelID     types.Int64  `tfsdk:"label_id"`
+	Name        types.String `tfsdk:"name"`
+	Resource    types.Bool   `tfsdk:"resource"`
+	Value       types.String `tfsdk:"value"`
+	WorkspaceID types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *LabelsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -54,51 +51,21 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		MarkdownDescription: "Manage labels for organizing and categorizing resources.\n\nLabels provide metadata tagging capabilities for pipelines, workflows,\nand other platform resources, enabling resource organization, filtering,\nand management across the platform.\n",
 		Attributes: map[string]schema.Attribute{
 			"is_default": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Whether this label is automatically applied to new resources. Can only be true when resource=true.`,
+				Validators: []validator.Bool{
+					custom_boolvalidators.LabelIsDefaultValidator(),
+				},
 			},
 			"label_id": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Label numeric identifier`,
 			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-							Validators: []validator.String{
-								validators.IsRFC3339(),
-							},
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
+				Description: `Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'`,
 				Validators: []validator.String{
 					custom_stringvalidators.LabelNameValidator(),
 				},
@@ -110,17 +77,14 @@ func (r *LabelsResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
-			},
-			"total_size": schema.Int64Attribute{
-				Computed: true,
+				Description: `Whether this is a resource label. Resource labels (true) can have values and be applied to resources. Non-resource labels (false) are simple tags. Requires replacement if changed. Requires replacement if changed.`,
 			},
 			"value": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores`,
+				Description: `Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'`,
 				Validators: []validator.String{
-					custom_stringvalidators.LabelValueValidator(),
+					custom_stringvalidators.LabelValueResourceValidator(),
 				},
 			},
 			"workspace_id": schema.Int64Attribute{

@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 )
 
@@ -31,14 +30,12 @@ type LabelsDataSource struct {
 
 // LabelsDataSourceModel describes the data model.
 type LabelsDataSourceModel struct {
-	IsDefault   types.Bool           `queryParam:"style=form,explode=true,name=isDefault" tfsdk:"is_default"`
-	Labels      []tfTypes.LabelDbDto `tfsdk:"labels"`
-	Max         types.Int32          `queryParam:"style=form,explode=true,name=max" tfsdk:"max"`
-	Offset      types.Int32          `queryParam:"style=form,explode=true,name=offset" tfsdk:"offset"`
-	Search      types.String         `queryParam:"style=form,explode=true,name=search" tfsdk:"search"`
-	TotalSize   types.Int64          `tfsdk:"total_size"`
-	Type        types.String         `queryParam:"style=form,explode=true,name=type" tfsdk:"type"`
-	WorkspaceID types.Int64          `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	IsDefault   types.Bool   `queryParam:"style=form,explode=true,name=isDefault" tfsdk:"is_default"`
+	Max         types.Int32  `queryParam:"style=form,explode=true,name=max" tfsdk:"max"`
+	Offset      types.Int32  `queryParam:"style=form,explode=true,name=offset" tfsdk:"offset"`
+	Search      types.String `queryParam:"style=form,explode=true,name=search" tfsdk:"search"`
+	Type        types.String `queryParam:"style=form,explode=true,name=type" tfsdk:"type"`
+	WorkspaceID types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -56,37 +53,6 @@ func (r *LabelsDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Optional:    true,
 				Description: `Label default flag`,
 			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
 			"max": schema.Int32Attribute{
 				Optional:    true,
 				Description: `Pagination max results`,
@@ -98,9 +64,6 @@ func (r *LabelsDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"search": schema.StringAttribute{
 				Optional:    true,
 				Description: `Filter search parameter`,
-			},
-			"total_size": schema.Int64Attribute{
-				Computed: true,
 			},
 			"type": schema.StringAttribute{
 				Optional:    true,
