@@ -3,11 +3,16 @@
 package shared
 
 type Organization struct {
-	Name        string  `json:"name"`
-	FullName    string  `json:"fullName"`
+	// Short name or handle for the organization (used in URLs and resource paths). Required.
+	Name string `json:"name"`
+	// Complete formal display name of the organization. Required.
+	FullName string `json:"fullName"`
+	// Detailed description of the organization's purpose and activities.
 	Description *string `json:"description,omitempty"`
-	Location    *string `json:"location,omitempty"`
-	Website     *string `json:"website,omitempty"`
+	// Geographic location or address of the organization.
+	Location *string `json:"location,omitempty"`
+	// Official website URL for the organization.
+	Website *string `json:"website,omitempty"`
 }
 
 func (o *Organization) GetName() string {

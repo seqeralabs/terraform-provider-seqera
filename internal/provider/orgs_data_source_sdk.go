@@ -32,8 +32,6 @@ func (r *OrgsDataSourceModel) RefreshFromSharedOrganizationDbDto(ctx context.Con
 		r.Description = types.StringPointerValue(resp.Description)
 		r.FullName = types.StringPointerValue(resp.FullName)
 		r.Location = types.StringPointerValue(resp.Location)
-		r.LogoID = types.StringPointerValue(resp.LogoID)
-		r.LogoURL = types.StringPointerValue(resp.LogoURL)
 		r.MemberID = types.Int64PointerValue(resp.MemberID)
 		if resp.MemberRole != nil {
 			r.MemberRole = types.StringValue(string(*resp.MemberRole))
@@ -42,12 +40,6 @@ func (r *OrgsDataSourceModel) RefreshFromSharedOrganizationDbDto(ctx context.Con
 		}
 		r.Name = types.StringPointerValue(resp.Name)
 		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.Paying = types.BoolPointerValue(resp.Paying)
-		if resp.Type != nil {
-			r.Type = types.StringValue(string(*resp.Type))
-		} else {
-			r.Type = types.StringNull()
-		}
 		r.Website = types.StringPointerValue(resp.Website)
 	}
 

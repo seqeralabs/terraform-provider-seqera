@@ -4,7 +4,6 @@ package shared
 
 type CreateOrganizationRequest struct {
 	Organization *Organization `json:"organization,omitempty"`
-	LogoID       *string       `json:"logoId,omitempty"`
 }
 
 func (c *CreateOrganizationRequest) GetOrganization() *Organization {
@@ -12,11 +11,4 @@ func (c *CreateOrganizationRequest) GetOrganization() *Organization {
 		return nil
 	}
 	return c.Organization
-}
-
-func (c *CreateOrganizationRequest) GetLogoID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.LogoID
 }

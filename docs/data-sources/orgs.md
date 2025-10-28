@@ -28,13 +28,9 @@ data "seqera_orgs" "my_orgs" {
 ### Read-Only
 
 - `description` (String) Detailed description of the organization's purpose and activities
-- `full_name` (String) Complete formal name of the organization
+- `full_name` (String) Complete formal display name of the organization
 - `location` (String) Geographic location or address of the organization
-- `logo_id` (String) Identifier for the organization's logo image
-- `logo_url` (String)
 - `member_id` (Number)
 - `member_role` (String)
-- `name` (String) Short name or handle for the organization
-- `paying` (Boolean, Deprecated) Deprecated flag indicating if organization has paid subscription
-- `type` (String)
+- `name` (String) Short name or handle for the organization (used in URLs and paths)
 - `website` (String) Official website URL for the organization

@@ -35,14 +35,10 @@ type OrgsResourceModel struct {
 	Description types.String `tfsdk:"description"`
 	FullName    types.String `tfsdk:"full_name"`
 	Location    types.String `tfsdk:"location"`
-	LogoID      types.String `tfsdk:"logo_id"`
-	LogoURL     types.String `tfsdk:"logo_url"`
 	MemberID    types.Int64  `tfsdk:"member_id"`
 	MemberRole  types.String `tfsdk:"member_role"`
 	Name        types.String `tfsdk:"name"`
 	OrgID       types.Int64  `tfsdk:"org_id"`
-	Paying      types.Bool   `tfsdk:"paying"`
-	Type        types.String `tfsdk:"type"`
 	Website     types.String `tfsdk:"website"`
 }
 
@@ -55,31 +51,27 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 		MarkdownDescription: "Manage your organization in Seqera platform using this resource.\n\nOrganizations are the top-level structure and contain workspaces, members, and teams.\nYou can create multiple organizations, each of which can contain multiple workspaces\nwith shared users and resources. This means you can customize and organize the use of\nresources while maintaining an access control layer for users associated with a workspace.\n",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Detailed description of the organization's purpose and activities.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1000),
 				},
 			},
 			"full_name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Complete formal display name of the organization. Required.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
 			},
 			"location": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Geographic location or address of the organization.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
-			},
-			"logo_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-			},
-			"logo_url": schema.StringAttribute{
-				Computed: true,
 			},
 			"member_id": schema.Int64Attribute{
 				Computed: true,
@@ -96,7 +88,8 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Short name or handle for the organization (used in URLs and resource paths). Required.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(40),
 				},
@@ -105,27 +98,10 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed:    true,
 				Description: `Unique numeric identifier for the organization`,
 			},
-			"paying": schema.BoolAttribute{
-				Computed:           true,
-				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-				Description:        `Deprecated flag indicating if organization has paid subscription`,
-			},
-			"type": schema.StringAttribute{
-				Computed:    true,
-				Description: `must be one of ["academic", "evaluating", "pro", "basic", "internal"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"academic",
-						"evaluating",
-						"pro",
-						"basic",
-						"internal",
-					),
-				},
-			},
 			"website": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Official website URL for the organization.`,
 			},
 		},
 	}
@@ -303,6 +279,43 @@ func (r *OrgsResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	}
 	if res.StatusCode != 204 {
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+		return
+	}
+
+	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsDescribeOrganizationRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.Orgs.DescribeOrganization(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DescribeOrganizationResponse != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeOrganizationResponse(ctx, res1.DescribeOrganizationResponse)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 

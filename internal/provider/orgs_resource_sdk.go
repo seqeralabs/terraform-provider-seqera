@@ -47,8 +47,6 @@ func (r *OrgsResourceModel) RefreshFromSharedOrganizationDbDto(ctx context.Conte
 		r.Description = types.StringPointerValue(resp.Description)
 		r.FullName = types.StringPointerValue(resp.FullName)
 		r.Location = types.StringPointerValue(resp.Location)
-		r.LogoID = types.StringPointerValue(resp.LogoID)
-		r.LogoURL = types.StringPointerValue(resp.LogoURL)
 		r.MemberID = types.Int64PointerValue(resp.MemberID)
 		if resp.MemberRole != nil {
 			r.MemberRole = types.StringValue(string(*resp.MemberRole))
@@ -57,12 +55,6 @@ func (r *OrgsResourceModel) RefreshFromSharedOrganizationDbDto(ctx context.Conte
 		}
 		r.Name = types.StringPointerValue(resp.Name)
 		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.Paying = types.BoolPointerValue(resp.Paying)
-		if resp.Type != nil {
-			r.Type = types.StringValue(string(*resp.Type))
-		} else {
-			r.Type = types.StringNull()
-		}
 		r.Website = types.StringPointerValue(resp.Website)
 	}
 
@@ -126,15 +118,8 @@ func (r *OrgsResourceModel) ToSharedCreateOrganizationRequest(ctx context.Contex
 		return nil, diags
 	}
 
-	logoID := new(string)
-	if !r.LogoID.IsUnknown() && !r.LogoID.IsNull() {
-		*logoID = r.LogoID.ValueString()
-	} else {
-		logoID = nil
-	}
 	out := shared.CreateOrganizationRequest{
 		Organization: organization,
-		LogoID:       logoID,
 	}
 
 	return &out, diags
@@ -211,33 +196,12 @@ func (r *OrgsResourceModel) ToSharedUpdateOrganizationRequest(ctx context.Contex
 	} else {
 		website = nil
 	}
-	logoID := new(string)
-	if !r.LogoID.IsUnknown() && !r.LogoID.IsNull() {
-		*logoID = r.LogoID.ValueString()
-	} else {
-		logoID = nil
-	}
-	paying := new(bool)
-	if !r.Paying.IsUnknown() && !r.Paying.IsNull() {
-		*paying = r.Paying.ValueBool()
-	} else {
-		paying = nil
-	}
-	typeVar := new(shared.UpdateOrganizationRequestType)
-	if !r.Type.IsUnknown() && !r.Type.IsNull() {
-		*typeVar = shared.UpdateOrganizationRequestType(r.Type.ValueString())
-	} else {
-		typeVar = nil
-	}
 	out := shared.UpdateOrganizationRequest{
 		FullName:    fullName,
 		Name:        name,
 		Description: description,
 		Location:    location,
 		Website:     website,
-		LogoID:      logoID,
-		Paying:      paying,
-		Type:        typeVar,
 	}
 
 	return &out, diags
