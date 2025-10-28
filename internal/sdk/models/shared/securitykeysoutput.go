@@ -1497,7 +1497,8 @@ func (g *GitHubSecurityKeys) GetPassword() *string {
 
 type SecurityKeysGoogleSecurityKeys struct {
 	Discriminator *string `json:"discriminator,omitempty"`
-	Data          *string `json:"data,omitempty"`
+	// Google Cloud service account key JSON (sensitive)
+	Data *string `json:"data,omitempty"`
 }
 
 func (s SecurityKeysGoogleSecurityKeys) MarshalJSON() ([]byte, error) {

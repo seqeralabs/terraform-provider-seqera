@@ -41,18 +41,19 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
 		keysPriorData := r.Keys
 		r.Keys.Data = keysPriorData.Data
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.ProviderType != nil {
+			r.ProviderType = types.StringValue(string(*resp.ProviderType))
+		} else {
+			r.ProviderType = types.StringNull()
+		}
 	}
 
 	return diags
@@ -94,16 +95,9 @@ func (r *GoogleCredentialResourceModel) ToOperationsDeleteGoogleCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	checked := new(bool)
-	if !r.Checked.IsUnknown() && !r.Checked.IsNull() {
-		*checked = r.Checked.ValueBool()
-	} else {
-		checked = nil
-	}
 	out := operations.DeleteGoogleCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
-		Checked:       checked,
 	}
 
 	return &out, diags
@@ -186,24 +180,11 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	var name string
 	name = r.Name.ValueString()
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
+	providerType := new(shared.GoogleCredentialProviderType)
+	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
+		*providerType = shared.GoogleCredentialProviderType(r.ProviderType.ValueString())
 	} else {
-		description = nil
-	}
-	providerType := shared.GoogleCredentialProviderType(r.ProviderType.ValueString())
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
-	category := new(string)
-	if !r.Category.IsUnknown() && !r.Category.IsNull() {
-		*category = r.Category.ValueString()
-	} else {
-		category = nil
+		providerType = nil
 	}
 	deleted := new(bool)
 	if !r.Deleted.IsUnknown() && !r.Deleted.IsNull() {
@@ -241,10 +222,7 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	out := shared.GoogleCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
-		Description:   description,
 		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Category:      category,
 		Deleted:       deleted,
 		LastUsed:      lastUsed,
 		DateCreated:   dateCreated,

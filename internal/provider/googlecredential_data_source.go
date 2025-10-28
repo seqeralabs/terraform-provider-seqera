@@ -29,12 +29,9 @@ type GoogleCredentialDataSource struct {
 
 // GoogleCredentialDataSourceModel describes the data model.
 type GoogleCredentialDataSourceModel struct {
-	BaseURL       types.String                `tfsdk:"base_url"`
-	Category      types.String                `tfsdk:"category"`
 	CredentialsID types.String                `tfsdk:"credentials_id"`
 	DateCreated   types.String                `tfsdk:"date_created"`
 	Deleted       types.Bool                  `tfsdk:"deleted"`
-	Description   types.String                `tfsdk:"description"`
 	Keys          tfTypes.GoogleSecurityKeys1 `tfsdk:"keys"`
 	LastUpdated   types.String                `tfsdk:"last_updated"`
 	LastUsed      types.String                `tfsdk:"last_used"`
@@ -54,16 +51,8 @@ func (r *GoogleCredentialDataSource) Schema(ctx context.Context, req datasource.
 		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `Base URL for the service`,
-			},
-			"category": schema.StringAttribute{
-				Computed:    true,
-				Description: `Category of the credential`,
-			},
 			"credentials_id": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
 				Description: `Credentials string identifier`,
 			},
 			"date_created": schema.StringAttribute{
@@ -74,10 +63,6 @@ func (r *GoogleCredentialDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `Flag indicating if the credential has been soft-deleted`,
 			},
-			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optional description explaining the purpose of the credential`,
-			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,
 			},
@@ -87,15 +72,15 @@ func (r *GoogleCredentialDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"last_used": schema.StringAttribute{
 				Computed:    true,
-				Description: `Timestamp when the credential was last used`,
+				Description: `Timestamp when the credential was last used by a workflow`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
-				Description: `Display name for the credential (max 100 characters)`,
+				Description: `Display name for the credential (max 100 characters). Required.`,
 			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
-				Description: `Cloud provider type (google)`,
+				Description: `Cloud provider type (automatically set to "google")`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

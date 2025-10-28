@@ -354,6 +354,89 @@ func (v StringExampleValidator) ValidateString(ctx context.Context, req validato
 }
 ```
 
+#### Object Validator Pattern
+For validating complex object structures with JSON content:
+
+```go
+// File: internal/validators/objectvalidators/example_validator.go
+type ObjectExampleValidator struct{}
+
+func (v ObjectExampleValidator) ValidateObject(ctx context.Context, req validator.ObjectRequest, resp *validator.ObjectResponse) {
+    // Skip validation if object is null or unknown
+    if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+        return
+    }
+
+    attrs := req.ConfigValue.Attributes()
+
+    // Check if required field exists
+    dataAttr, exists := attrs["data"]
+    if !exists || dataAttr.IsNull() {
+        resp.Diagnostics.AddAttributeError(
+            req.Path.AtName("data"),
+            "Missing Required Field",
+            "The 'data' field is required and cannot be null",
+        )
+        return
+    }
+
+    // Get the string value
+    stringValue, ok := dataAttr.(basetypes.StringValue)
+    if !ok {
+        resp.Diagnostics.AddAttributeError(
+            req.Path.AtName("data"),
+            "Invalid Data Type",
+            "The 'data' field must be a string",
+        )
+        return
+    }
+
+    // Allow unknown values during plan phase
+    if stringValue.IsUnknown() || stringValue.IsNull() {
+        return
+    }
+
+    jsonData := stringValue.ValueString()
+    if jsonData == "" {
+        resp.Diagnostics.AddAttributeError(
+            req.Path.AtName("data"),
+            "Empty Value",
+            "The 'data' field cannot be empty",
+        )
+        return
+    }
+
+    // Validate JSON structure
+    var data map[string]interface{}
+    if err := json.Unmarshal([]byte(jsonData), &data); err != nil {
+        resp.Diagnostics.AddAttributeError(
+            req.Path.AtName("data"),
+            "Invalid JSON",
+            fmt.Sprintf("The 'data' field must contain valid JSON. Error: %s\n\nTip: Use file() to read from a JSON file", err.Error()),
+        )
+        return
+    }
+
+    // Validate required JSON fields
+    requiredFields := []string{"field1", "field2"}
+    var missingFields []string
+    for _, field := range requiredFields {
+        if _, exists := data[field]; !exists {
+            missingFields = append(missingFields, field)
+        }
+    }
+
+    if len(missingFields) > 0 {
+        resp.Diagnostics.AddAttributeError(
+            req.Path.AtName("data"),
+            "Missing Required JSON Fields",
+            fmt.Sprintf("Required fields: %v\nMissing fields: %v", requiredFields, missingFields),
+        )
+        return
+    }
+}
+```
+
 ### Validator Best Practices
 
 1. **Handle Unknown Values**: Always check for `IsUnknown()` to support Terraform's plan phase with `for_each`, `count`, etc.
@@ -464,7 +547,12 @@ After regeneration, check:
 See the following resources for complete examples:
 - `overlays/labels.yaml` - Labels resource with custom validators
 - `overlays/orgs.yaml` - Organizations resource with field cleanup
+- `overlays/pipeline-secrets.yaml` - Pipeline secrets with sensitive fields
+- `overlays/gcp-credentials.yaml` - Google credentials with object validator
 - `examples/resources/seqera_labels/resource.tf` - Comprehensive label examples
 - `examples/resources/seqera_orgs/resource.tf` - Simple organization examples
+- `examples/resources/seqera_pipeline_secret/resource.tf` - Security-focused secret examples
+- `examples/resources/seqera_google_credential/resource.tf` - GCP credential examples
 - `internal/validators/boolvalidators/label_is_default_validator.go` - Boolean validator
 - `internal/validators/stringvalidators/label_value_resource_validator.go` - String validator with composition
+- `internal/validators/objectvalidators/google_keys_crdential_validator.go` - Object validator with JSON validation

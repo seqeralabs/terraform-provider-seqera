@@ -454,8 +454,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"data": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional:    true,
+								Sensitive:   true,
+								Description: `Google Cloud service account key JSON (sensitive)`,
 							},
 						},
 						Validators: []validator.Object{

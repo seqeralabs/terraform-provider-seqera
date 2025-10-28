@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// GoogleCredentialProviderType - Cloud provider type (google)
+// GoogleCredentialProviderType - Cloud provider type (automatically set to "google")
 type GoogleCredentialProviderType string
 
 const (
@@ -36,19 +36,13 @@ func (e *GoogleCredentialProviderType) UnmarshalJSON(data []byte) error {
 type GoogleCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential (max 100 characters). Required.
 	Name string `json:"name"`
-	// Optional description explaining the purpose of the credential
-	Description *string `json:"description,omitempty"`
-	// Cloud provider type (google)
-	ProviderType GoogleCredentialProviderType `json:"provider"`
-	// Base URL for the service
-	BaseURL *string `json:"baseUrl,omitempty"`
-	// Category of the credential
-	Category *string `json:"category,omitempty"`
+	// Cloud provider type (automatically set to "google")
+	ProviderType *GoogleCredentialProviderType `default:"google" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
-	// Timestamp when the credential was last used
+	// Timestamp when the credential was last used by a workflow
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
@@ -62,7 +56,7 @@ func (g GoogleCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GoogleCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "provider", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
@@ -82,32 +76,11 @@ func (g *GoogleCredential) GetName() string {
 	return g.Name
 }
 
-func (g *GoogleCredential) GetDescription() *string {
+func (g *GoogleCredential) GetProviderType() *GoogleCredentialProviderType {
 	if g == nil {
 		return nil
-	}
-	return g.Description
-}
-
-func (g *GoogleCredential) GetProviderType() GoogleCredentialProviderType {
-	if g == nil {
-		return GoogleCredentialProviderType("")
 	}
 	return g.ProviderType
-}
-
-func (g *GoogleCredential) GetBaseURL() *string {
-	if g == nil {
-		return nil
-	}
-	return g.BaseURL
-}
-
-func (g *GoogleCredential) GetCategory() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Category
 }
 
 func (g *GoogleCredential) GetDeleted() *bool {
@@ -148,19 +121,13 @@ func (g *GoogleCredential) GetKeys() GoogleSecurityKeys {
 type GoogleCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential (max 100 characters). Required.
 	Name string `json:"name"`
-	// Optional description explaining the purpose of the credential
-	Description *string `json:"description,omitempty"`
-	// Cloud provider type (google)
-	ProviderType GoogleCredentialProviderType `json:"provider"`
-	// Base URL for the service
-	BaseURL *string `json:"baseUrl,omitempty"`
-	// Category of the credential
-	Category *string `json:"category,omitempty"`
+	// Cloud provider type (automatically set to "google")
+	ProviderType *GoogleCredentialProviderType `default:"google" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
-	// Timestamp when the credential was last used
+	// Timestamp when the credential was last used by a workflow
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
@@ -174,7 +141,7 @@ func (g GoogleCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GoogleCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "provider", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
@@ -194,32 +161,11 @@ func (g *GoogleCredentialOutput) GetName() string {
 	return g.Name
 }
 
-func (g *GoogleCredentialOutput) GetDescription() *string {
+func (g *GoogleCredentialOutput) GetProviderType() *GoogleCredentialProviderType {
 	if g == nil {
 		return nil
-	}
-	return g.Description
-}
-
-func (g *GoogleCredentialOutput) GetProviderType() GoogleCredentialProviderType {
-	if g == nil {
-		return GoogleCredentialProviderType("")
 	}
 	return g.ProviderType
-}
-
-func (g *GoogleCredentialOutput) GetBaseURL() *string {
-	if g == nil {
-		return nil
-	}
-	return g.BaseURL
-}
-
-func (g *GoogleCredentialOutput) GetCategory() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Category
 }
 
 func (g *GoogleCredentialOutput) GetDeleted() *bool {

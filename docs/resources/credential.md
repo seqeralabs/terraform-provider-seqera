@@ -188,7 +188,7 @@ Optional:
 
 Optional:
 
-- `data` (String, Sensitive)
+- `data` (String, Sensitive) Google Cloud service account key JSON (sensitive)
 
 
 <a id="nestedatt--keys--k8s"></a>

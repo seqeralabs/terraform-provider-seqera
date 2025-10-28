@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 883da62e43900d661dc121b5cf5ac9ed
+  docChecksum: b470b0f1ddb6c4d2d95c534315371dd0
   docVersion: 1.56.0
   speakeasyVersion: 1.642.0
   generationVersion: 2.731.4
@@ -10,6 +10,7 @@ management:
 features:
   terraform:
     additionalDependencies: 0.1.0
+    constsAndDefaults: 0.3.0
     core: 3.46.3
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
@@ -69,9 +70,6 @@ generatedFiles:
   - examples/resources/seqera_data_link/import.sh
   - examples/resources/seqera_data_link/resource.tf
   - examples/resources/seqera_datasets/resource.tf
-  - examples/resources/seqera_google_credential/import-by-string-id.tf
-  - examples/resources/seqera_google_credential/import.sh
-  - examples/resources/seqera_google_credential/resource.tf
   - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
   - examples/resources/seqera_pipeline/import-by-string-id.tf

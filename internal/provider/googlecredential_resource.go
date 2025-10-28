@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -37,13 +38,9 @@ type GoogleCredentialResource struct {
 
 // GoogleCredentialResourceModel describes the resource data model.
 type GoogleCredentialResourceModel struct {
-	BaseURL       types.String               `tfsdk:"base_url"`
-	Category      types.String               `tfsdk:"category"`
-	Checked       types.Bool                 `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
 	CredentialsID types.String               `tfsdk:"credentials_id"`
 	DateCreated   types.String               `tfsdk:"date_created"`
 	Deleted       types.Bool                 `tfsdk:"deleted"`
-	Description   types.String               `tfsdk:"description"`
 	Keys          tfTypes.GoogleSecurityKeys `tfsdk:"keys"`
 	LastUpdated   types.String               `tfsdk:"last_updated"`
 	LastUsed      types.String               `tfsdk:"last_used"`
@@ -60,21 +57,8 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
-				Optional:    true,
-				Description: `Base URL for the service`,
-			},
-			"category": schema.StringAttribute{
-				Optional:    true,
-				Description: `Category of the credential`,
-			},
-			"checked": schema.BoolAttribute{
-				Optional:    true,
-				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
-			},
 			"credentials_id": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
@@ -82,7 +66,6 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 			},
 			"date_created": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
@@ -93,22 +76,18 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 			},
 			"deleted": schema.BoolAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 				},
 				Description: `Flag indicating if the credential has been soft-deleted`,
 			},
-			"description": schema.StringAttribute{
-				Optional:    true,
-				Description: `Optional description explaining the purpose of the credential`,
-			},
 			"keys": schema.SingleNestedAttribute{
 				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"data": schema.StringAttribute{
-						Optional:  true,
-						Sensitive: true,
+						Optional:    true,
+						Sensitive:   true,
+						Description: `Google Cloud service account key JSON (sensitive)`,
 					},
 				},
 				Validators: []validator.Object{
@@ -117,7 +96,6 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
@@ -128,32 +106,32 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 			},
 			"last_used": schema.StringAttribute{
 				Computed: true,
-				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Timestamp when the credential was last used`,
+				Description: `Timestamp when the credential was last used by a workflow`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
-				Description: `Display name for the credential (max 100 characters)`,
+				Description: `Display name for the credential (max 100 characters). Required.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
 			},
 			"provider_type": schema.StringAttribute{
-				Required:    true,
-				Description: `Cloud provider type (google). must be "google"`,
+				Computed:    true,
+				Default:     stringdefault.StaticString(`google`),
+				Description: `Cloud provider type (automatically set to "google"). Default: "google"; must be "google"`,
 				Validators: []validator.String{
 					stringvalidator.OneOf("google"),
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
-				Description: `Workspace numeric identifier`,
+				Description: `Workspace numeric identifier where the credentials will be stored`,
 			},
 		},
 	}

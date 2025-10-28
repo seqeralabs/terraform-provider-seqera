@@ -6,3 +6,6 @@ examples/resources/seqera_labels/resource.tf
 examples/resources/seqera_orgs/resource.tf
 examples/resources/seqera_primary_compute_env/resource.tf
 examples/resources/seqera_pipeline_secret/resource.tf
+examples/resources/seqera_google_credential/resource.tf
+examples/resources/seqera_google_credential/import.sh
+examples/resources/seqera_google_credential/import-by-string-id.tf
