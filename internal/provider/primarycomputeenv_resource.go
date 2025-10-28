@@ -48,14 +48,14 @@ func (r *PrimaryComputeEnvResource) Schema(ctx context.Context, req resource.Sch
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Compute environment string identifier. Requires replacement if changed.`,
+				Description: `Compute environment string identifier to designate as primary. Requires replacement if changed.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Workspace numeric identifier. Requires replacement if changed.`,
+				Description: `Workspace numeric identifier where the compute environment will be set as primary. Requires replacement if changed.`,
 			},
 		},
 	}
