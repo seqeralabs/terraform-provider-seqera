@@ -29,15 +29,11 @@ type GoogleCredentialDataSource struct {
 
 // GoogleCredentialDataSourceModel describes the data model.
 type GoogleCredentialDataSourceModel struct {
-	CredentialsID types.String                `tfsdk:"credentials_id"`
-	DateCreated   types.String                `tfsdk:"date_created"`
-	Deleted       types.Bool                  `tfsdk:"deleted"`
-	Keys          tfTypes.GoogleSecurityKeys1 `tfsdk:"keys"`
-	LastUpdated   types.String                `tfsdk:"last_updated"`
-	LastUsed      types.String                `tfsdk:"last_used"`
-	Name          types.String                `tfsdk:"name"`
-	ProviderType  types.String                `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CredentialsID types.String                 `tfsdk:"credentials_id"`
+	Keys          tfTypes.GoogleCredentialKeys `tfsdk:"keys"`
+	Name          types.String                 `tfsdk:"name"`
+	ProviderType  types.String                 `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -55,28 +51,12 @@ func (r *GoogleCredentialDataSource) Schema(ctx context.Context, req datasource.
 				Computed:    true,
 				Description: `Credentials string identifier`,
 			},
-			"date_created": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was created`,
-			},
-			"deleted": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Flag indicating if the credential has been soft-deleted`,
-			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,
 			},
-			"last_updated": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was last updated`,
-			},
-			"last_used": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was last used by a workflow`,
-			},
 			"name": schema.StringAttribute{
 				Computed:    true,
-				Description: `Display name for the credential (max 100 characters). Required.`,
+				Description: `Display name for the credential (max 100 characters)`,
 			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,

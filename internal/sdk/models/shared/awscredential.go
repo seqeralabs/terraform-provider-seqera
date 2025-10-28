@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AWSCredentialProviderType - Cloud provider type (aws)
+// AWSCredentialProviderType - Cloud provider type (automatically set to "aws")
 type AWSCredentialProviderType string
 
 const (
@@ -33,19 +33,43 @@ func (e *AWSCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type AWSCredentialKeys struct {
+	// AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
+	AccessKey string `json:"accessKey"`
+	// AWS secret access key (required, sensitive). Must be at least 40 characters.
+	SecretKey string `json:"secretKey"`
+	// IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
+	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
+}
+
+func (a *AWSCredentialKeys) GetAccessKey() string {
+	if a == nil {
+		return ""
+	}
+	return a.AccessKey
+}
+
+func (a *AWSCredentialKeys) GetSecretKey() string {
+	if a == nil {
+		return ""
+	}
+	return a.SecretKey
+}
+
+func (a *AWSCredentialKeys) GetAssumeRoleArn() *string {
+	if a == nil {
+		return nil
+	}
+	return a.AssumeRoleArn
+}
+
 type AWSCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
-	// Optional description explaining the purpose of the credential
-	Description *string `json:"description,omitempty"`
-	// Cloud provider type (aws)
-	ProviderType AWSCredentialProviderType `json:"provider"`
-	// Base URL for the service
-	BaseURL *string `json:"baseUrl,omitempty"`
-	// Category of the credential
-	Category *string `json:"category,omitempty"`
+	// Cloud provider type (automatically set to "aws")
+	ProviderType *AWSCredentialProviderType `default:"aws" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -53,8 +77,8 @@ type AWSCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time      `json:"lastUpdated,omitempty"`
-	Keys        AwsSecurityKeys `json:"keys"`
+	LastUpdated *time.Time        `json:"lastUpdated,omitempty"`
+	Keys        AWSCredentialKeys `json:"keys"`
 }
 
 func (a AWSCredential) MarshalJSON() ([]byte, error) {
@@ -62,7 +86,7 @@ func (a AWSCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "provider", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
@@ -82,32 +106,11 @@ func (a *AWSCredential) GetName() string {
 	return a.Name
 }
 
-func (a *AWSCredential) GetDescription() *string {
+func (a *AWSCredential) GetProviderType() *AWSCredentialProviderType {
 	if a == nil {
 		return nil
-	}
-	return a.Description
-}
-
-func (a *AWSCredential) GetProviderType() AWSCredentialProviderType {
-	if a == nil {
-		return AWSCredentialProviderType("")
 	}
 	return a.ProviderType
-}
-
-func (a *AWSCredential) GetBaseURL() *string {
-	if a == nil {
-		return nil
-	}
-	return a.BaseURL
-}
-
-func (a *AWSCredential) GetCategory() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Category
 }
 
 func (a *AWSCredential) GetDeleted() *bool {
@@ -138,11 +141,23 @@ func (a *AWSCredential) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AWSCredential) GetKeys() AwsSecurityKeys {
+func (a *AWSCredential) GetKeys() AWSCredentialKeys {
 	if a == nil {
-		return AwsSecurityKeys{}
+		return AWSCredentialKeys{}
 	}
 	return a.Keys
+}
+
+type AWSCredentialKeysOutput struct {
+	// AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
+	AccessKey string `json:"accessKey"`
+}
+
+func (a *AWSCredentialKeysOutput) GetAccessKey() string {
+	if a == nil {
+		return ""
+	}
+	return a.AccessKey
 }
 
 type AWSCredentialOutput struct {
@@ -150,14 +165,8 @@ type AWSCredentialOutput struct {
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
-	// Optional description explaining the purpose of the credential
-	Description *string `json:"description,omitempty"`
-	// Cloud provider type (aws)
-	ProviderType AWSCredentialProviderType `json:"provider"`
-	// Base URL for the service
-	BaseURL *string `json:"baseUrl,omitempty"`
-	// Category of the credential
-	Category *string `json:"category,omitempty"`
+	// Cloud provider type (automatically set to "aws")
+	ProviderType *AWSCredentialProviderType `default:"aws" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -165,8 +174,8 @@ type AWSCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time            `json:"lastUpdated,omitempty"`
-	Keys        AwsSecurityKeysOutput `json:"keys"`
+	LastUpdated *time.Time              `json:"lastUpdated,omitempty"`
+	Keys        AWSCredentialKeysOutput `json:"keys"`
 }
 
 func (a AWSCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -174,7 +183,7 @@ func (a AWSCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "provider", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
@@ -194,32 +203,11 @@ func (a *AWSCredentialOutput) GetName() string {
 	return a.Name
 }
 
-func (a *AWSCredentialOutput) GetDescription() *string {
+func (a *AWSCredentialOutput) GetProviderType() *AWSCredentialProviderType {
 	if a == nil {
 		return nil
-	}
-	return a.Description
-}
-
-func (a *AWSCredentialOutput) GetProviderType() AWSCredentialProviderType {
-	if a == nil {
-		return AWSCredentialProviderType("")
 	}
 	return a.ProviderType
-}
-
-func (a *AWSCredentialOutput) GetBaseURL() *string {
-	if a == nil {
-		return nil
-	}
-	return a.BaseURL
-}
-
-func (a *AWSCredentialOutput) GetCategory() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Category
 }
 
 func (a *AWSCredentialOutput) GetDeleted() *bool {
@@ -250,9 +238,9 @@ func (a *AWSCredentialOutput) GetLastUpdated() *time.Time {
 	return a.LastUpdated
 }
 
-func (a *AWSCredentialOutput) GetKeys() AwsSecurityKeysOutput {
+func (a *AWSCredentialOutput) GetKeys() AWSCredentialKeysOutput {
 	if a == nil {
-		return AwsSecurityKeysOutput{}
+		return AWSCredentialKeysOutput{}
 	}
 	return a.Keys
 }

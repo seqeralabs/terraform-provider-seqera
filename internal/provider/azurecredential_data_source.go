@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 )
 
@@ -29,18 +28,12 @@ type AzureCredentialDataSource struct {
 
 // AzureCredentialDataSourceModel describes the data model.
 type AzureCredentialDataSourceModel struct {
-	BaseURL       types.String               `tfsdk:"base_url"`
-	Category      types.String               `tfsdk:"category"`
-	CredentialsID types.String               `tfsdk:"credentials_id"`
-	DateCreated   types.String               `tfsdk:"date_created"`
-	Deleted       types.Bool                 `tfsdk:"deleted"`
-	Description   types.String               `tfsdk:"description"`
-	Keys          tfTypes.AzureSecurityKeys1 `tfsdk:"keys"`
-	LastUpdated   types.String               `tfsdk:"last_updated"`
-	LastUsed      types.String               `tfsdk:"last_used"`
-	Name          types.String               `tfsdk:"name"`
-	ProviderType  types.String               `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BatchName     types.String `tfsdk:"batch_name"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	Name          types.String `tfsdk:"name"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	StorageName   types.String `tfsdk:"storage_name"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -51,51 +44,16 @@ func (r *AzureCredentialDataSource) Metadata(ctx context.Context, req datasource
 // Schema defines the schema for the data source.
 func (r *AzureCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Azure credentials in Seqera platform using this resource.\n\nAzure credentials store authentication information for accessing Azure services\nwithin the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Azure credentials in Seqera platform using this resource.\n\nAzure credentials support three authentication modes:\n- Shared key: Use batch_key and storage_key (discriminator='azure')\n- Entra: Use tenant_id, client_id, client_secret (discriminator='azure-entra')\n- Cloud: Use tenant_id, client_id, client_secret (discriminator='azure-cloud')\n",
 
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
+			"batch_name": schema.StringAttribute{
 				Computed:    true,
-				Description: `Base URL for the service`,
-			},
-			"category": schema.StringAttribute{
-				Computed:    true,
-				Description: `Category of the credential`,
+				Description: `Azure Batch account name (required)`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
 				Description: `Credentials string identifier`,
-			},
-			"date_created": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was created`,
-			},
-			"deleted": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Flag indicating if the credential has been soft-deleted`,
-			},
-			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optional description explaining the purpose of the credential`,
-			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"batch_name": schema.StringAttribute{
-						Computed: true,
-					},
-					"storage_name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was last updated`,
-			},
-			"last_used": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was last used`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
@@ -103,7 +61,11 @@ func (r *AzureCredentialDataSource) Schema(ctx context.Context, req datasource.S
 			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
-				Description: `Cloud provider type (azure)`,
+				Description: `Cloud provider type (automatically set to "azure")`,
+			},
+			"storage_name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Azure Blob Storage account name (required)`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

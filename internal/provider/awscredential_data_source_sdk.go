@@ -6,27 +6,35 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
+
+func (r *AWSCredentialDataSourceModel) RefreshFromSharedAWSCredentialKeysOutput(ctx context.Context, resp *shared.AWSCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.AccessKey = types.StringValue(resp.AccessKey)
+
+	return diags
+}
 
 func (r *AWSCredentialDataSourceModel) RefreshFromSharedAWSCredentialOutput(ctx context.Context, resp *shared.AWSCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		r.Keys.AccessKey = types.StringPointerValue(resp.Keys.AccessKey)
-		r.Keys.AssumeRoleArn = types.StringPointerValue(resp.Keys.AssumeRoleArn)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		diags.Append(r.RefreshFromSharedAWSCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.ProviderType != nil {
+			r.ProviderType = types.StringValue(string(*resp.ProviderType))
+		} else {
+			r.ProviderType = types.StringNull()
+		}
 	}
 
 	return diags

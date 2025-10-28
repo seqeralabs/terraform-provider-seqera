@@ -18,24 +18,97 @@ within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-resource "seqera_aws_credential" "my_awscredential" {
-  base_url       = "...my_base_url..."
-  category       = "...my_category..."
-  checked        = false
-  credentials_id = "...my_credentials_id..."
-  date_created   = "2022-09-21T21:03:12.536Z"
-  deleted        = true
-  description    = "...my_description..."
-  keys = {
-    access_key      = "AKIAIOSFODNN7EXAMPLE"
-    assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraRole"
-    secret_key      = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+# Seqera AWS Credentials Examples
+#
+# AWS credentials store authentication information for accessing AWS services
+# within the Seqera Platform workflows.
+#
+# SECURITY BEST PRACTICES:
+# - Never hardcode AWS access keys or secret keys in Terraform files
+# - Use Terraform variables marked as sensitive
+# - Store actual credentials in secure secret management systems (AWS Secrets Manager, HashiCorp Vault, etc.)
+# - Use IAM roles and assume role ARN when possible for enhanced security
+# - Restrict IAM permissions to minimum required (principle of least privilege)
+
+# Variable declarations for sensitive AWS credentials
+variable "aws_access_key" {
+  description = "AWS access key ID"
+  type        = string
+  sensitive   = true
+}
+
+variable "aws_secret_key" {
+  description = "AWS secret access key"
+  type        = string
+  sensitive   = true
+}
+
+# Example 1: Basic AWS credentials using variables
+# Use IAM user access keys (least recommended for production)
+
+resource "seqera_aws_credential" "basic" {
+  name         = "aws-basic"
+  workspace_id = seqera_workspace.main.id
+  access_key   = var.aws_access_key
+  secret_key   = var.aws_secret_key
+}
+
+# Example 2: AWS credentials with assume role ARN (recommended)
+# Use IAM role assumption for enhanced security
+
+resource "seqera_aws_credential" "with_assume_role" {
+  name            = "aws-assume-role"
+  workspace_id    = seqera_workspace.main.id
+  access_key      = var.aws_access_key
+  secret_key      = var.aws_secret_key
+  assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraRole"
+}
+
+# Example 3: AWS credentials for specific services
+# Configure credentials for accessing specific AWS services like S3, Batch, etc.
+
+resource "seqera_aws_credential" "s3_access" {
+  name         = "aws-s3-access"
+  workspace_id = seqera_workspace.main.id
+  access_key   = var.aws_access_key
+  secret_key   = var.aws_secret_key
+}
+
+# Example 4: Multiple AWS credentials for different environments
+# Create credentials for dev, staging, and production environments
+
+locals {
+  aws_environments = {
+    "dev" = {
+      access_key_var = var.aws_dev_access_key
+      secret_key_var = var.aws_dev_secret_key
+    }
+    "staging" = {
+      access_key_var = var.aws_staging_access_key
+      secret_key_var = var.aws_staging_secret_key
+    }
+    "production" = {
+      access_key_var = var.aws_prod_access_key
+      secret_key_var = var.aws_prod_secret_key
+    }
   }
-  last_updated  = "2022-07-20T00:51:49.763Z"
-  last_used     = "2021-06-04T18:43:01.971Z"
-  name          = "...my_name..."
-  provider_type = "aws"
-  workspace_id  = 4
+}
+
+# Note: You would need to declare the corresponding variables:
+# variable "aws_dev_access_key" { type = string; sensitive = true }
+# variable "aws_dev_secret_key" { type = string; sensitive = true }
+# variable "aws_staging_access_key" { type = string; sensitive = true }
+# variable "aws_staging_secret_key" { type = string; sensitive = true }
+# variable "aws_prod_access_key" { type = string; sensitive = true }
+# variable "aws_prod_secret_key" { type = string; sensitive = true }
+
+resource "seqera_aws_credential" "environment_credentials" {
+  for_each = local.aws_environments
+
+  name         = "aws-${each.key}"
+  workspace_id = seqera_workspace.main.id
+  access_key   = each.value.access_key_var
+  secret_key   = each.value.secret_key_var
 }
 ```
 
@@ -44,31 +117,19 @@ resource "seqera_aws_credential" "my_awscredential" {
 
 ### Required
 
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `name` (String) Display name for the credential (max 100 characters)
-- `provider_type` (String) Cloud provider type (aws). must be "aws"
+- `access_key` (String) AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary). Requires replacement if changed.
+- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
+- `secret_key` (String, Sensitive) AWS secret access key (required, sensitive). Must be at least 40 characters. Requires replacement if changed.
 
 ### Optional
 
-- `base_url` (String) Base URL for the service
-- `category` (String) Category of the credential
-- `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
-- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
-- `date_created` (String) Timestamp when the credential was created
-- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
-- `description` (String) Optional description explaining the purpose of the credential
-- `last_updated` (String) Timestamp when the credential was last updated
-- `last_used` (String) Timestamp when the credential was last used
+- `assume_role_arn` (String) IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier
 
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
+### Read-Only
 
-Optional:
-
-- `access_key` (String)
-- `assume_role_arn` (String)
-- `secret_key` (String)
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `provider_type` (String) Cloud provider type (automatically set to "aws"). Default: "aws"; must be "aws"
 
 ## Import
 

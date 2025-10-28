@@ -6,10 +6,8 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
-	"time"
 )
 
 func (r *GoogleCredentialResourceModel) RefreshFromSharedCreateGoogleCredentialsResponse(ctx context.Context, resp *shared.CreateGoogleCredentialsResponse) diag.Diagnostics {
@@ -42,12 +40,6 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		keysPriorData := r.Keys
-		r.Keys.Data = keysPriorData.Data
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -186,48 +178,25 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	} else {
 		providerType = nil
 	}
-	deleted := new(bool)
-	if !r.Deleted.IsUnknown() && !r.Deleted.IsNull() {
-		*deleted = r.Deleted.ValueBool()
-	} else {
-		deleted = nil
-	}
-	lastUsed := new(time.Time)
-	if !r.LastUsed.IsUnknown() && !r.LastUsed.IsNull() {
-		*lastUsed, _ = time.Parse(time.RFC3339Nano, r.LastUsed.ValueString())
-	} else {
-		lastUsed = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
-	lastUpdated := new(time.Time)
-	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
-		*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.LastUpdated.ValueString())
-	} else {
-		lastUpdated = nil
-	}
-	data := new(string)
-	if !r.Keys.Data.IsUnknown() && !r.Keys.Data.IsNull() {
-		*data = r.Keys.Data.ValueString()
-	} else {
-		data = nil
-	}
-	keys := shared.GoogleSecurityKeys{
-		Data: data,
-	}
+	keys := shared.GoogleCredentialKeys{}
 	out := shared.GoogleCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
 		ProviderType:  providerType,
-		Deleted:       deleted,
-		LastUsed:      lastUsed,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
 		Keys:          keys,
+	}
+
+	return &out, diags
+}
+
+func (r *GoogleCredentialResourceModel) ToSharedGoogleCredentialKeys(ctx context.Context) (*shared.GoogleCredentialKeys, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var data string
+	data = r.Data.ValueString()
+
+	out := shared.GoogleCredentialKeys{
+		Data: data,
 	}
 
 	return &out, diags

@@ -33,22 +33,34 @@ func (e *GoogleCredentialProviderType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type GoogleCredentialKeys struct {
+	// Google Cloud service account key JSON (required, sensitive).
+	Data string `json:"data"`
+}
+
+func (g *GoogleCredentialKeys) GetData() string {
+	if g == nil {
+		return ""
+	}
+	return g.Data
+}
+
 type GoogleCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters). Required.
+	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "google")
 	ProviderType *GoogleCredentialProviderType `default:"google" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
-	// Timestamp when the credential was last used by a workflow
+	// Timestamp when the credential was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time         `json:"lastUpdated,omitempty"`
-	Keys        GoogleSecurityKeys `json:"keys"`
+	LastUpdated *time.Time           `json:"lastUpdated,omitempty"`
+	Keys        GoogleCredentialKeys `json:"keys"`
 }
 
 func (g GoogleCredential) MarshalJSON() ([]byte, error) {
@@ -111,29 +123,32 @@ func (g *GoogleCredential) GetLastUpdated() *time.Time {
 	return g.LastUpdated
 }
 
-func (g *GoogleCredential) GetKeys() GoogleSecurityKeys {
+func (g *GoogleCredential) GetKeys() GoogleCredentialKeys {
 	if g == nil {
-		return GoogleSecurityKeys{}
+		return GoogleCredentialKeys{}
 	}
 	return g.Keys
+}
+
+type GoogleCredentialKeysOutput struct {
 }
 
 type GoogleCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters). Required.
+	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "google")
 	ProviderType *GoogleCredentialProviderType `default:"google" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
-	// Timestamp when the credential was last used by a workflow
+	// Timestamp when the credential was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        GoogleSecurityKeysOutput `json:"keys"`
+	LastUpdated *time.Time                 `json:"lastUpdated,omitempty"`
+	Keys        GoogleCredentialKeysOutput `json:"keys"`
 }
 
 func (g GoogleCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -196,9 +211,9 @@ func (g *GoogleCredentialOutput) GetLastUpdated() *time.Time {
 	return g.LastUpdated
 }
 
-func (g *GoogleCredentialOutput) GetKeys() GoogleSecurityKeysOutput {
+func (g *GoogleCredentialOutput) GetKeys() GoogleCredentialKeysOutput {
 	if g == nil {
-		return GoogleSecurityKeysOutput{}
+		return GoogleCredentialKeysOutput{}
 	}
 	return g.Keys
 }

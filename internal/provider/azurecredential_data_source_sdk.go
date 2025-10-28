@@ -6,27 +6,36 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
+
+func (r *AzureCredentialDataSourceModel) RefreshFromSharedAzureCredentialKeysOutput(ctx context.Context, resp *shared.AzureCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.BatchName = types.StringValue(resp.BatchName)
+	r.StorageName = types.StringValue(resp.StorageName)
+
+	return diags
+}
 
 func (r *AzureCredentialDataSourceModel) RefreshFromSharedAzureCredentialOutput(ctx context.Context, resp *shared.AzureCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		r.Keys.BatchName = types.StringPointerValue(resp.Keys.BatchName)
-		r.Keys.StorageName = types.StringPointerValue(resp.Keys.StorageName)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		diags.Append(r.RefreshFromSharedAzureCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.ProviderType != nil {
+			r.ProviderType = types.StringValue(string(*resp.ProviderType))
+		} else {
+			r.ProviderType = types.StringNull()
+		}
 	}
 
 	return diags

@@ -11,15 +11,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
-	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -38,15 +36,12 @@ type GoogleCredentialResource struct {
 
 // GoogleCredentialResourceModel describes the resource data model.
 type GoogleCredentialResourceModel struct {
-	CredentialsID types.String               `tfsdk:"credentials_id"`
-	DateCreated   types.String               `tfsdk:"date_created"`
-	Deleted       types.Bool                 `tfsdk:"deleted"`
-	Keys          tfTypes.GoogleSecurityKeys `tfsdk:"keys"`
-	LastUpdated   types.String               `tfsdk:"last_updated"`
-	LastUsed      types.String               `tfsdk:"last_used"`
-	Name          types.String               `tfsdk:"name"`
-	ProviderType  types.String               `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CredentialsID types.String                 `tfsdk:"credentials_id"`
+	Data          types.String                 `tfsdk:"data"`
+	Keys          tfTypes.GoogleCredentialKeys `tfsdk:"keys"`
+	Name          types.String                 `tfsdk:"name"`
+	ProviderType  types.String                 `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GoogleCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -58,65 +53,24 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was created`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
-				Description: `Flag indicating if the credential has been soft-deleted`,
+			"data": schema.StringAttribute{
+				Required:    true,
+				Sensitive:   true,
+				Description: `Google Cloud service account key JSON (required, sensitive).`,
 			},
 			"keys": schema.SingleNestedAttribute{
-				Required: true,
-				Attributes: map[string]schema.Attribute{
-					"data": schema.StringAttribute{
-						Optional:    true,
-						Sensitive:   true,
-						Description: `Google Cloud service account key JSON (sensitive)`,
-					},
-				},
-				Validators: []validator.Object{
-					custom_objectvalidators.GoogleKeysCrdentialValidator(),
-				},
-			},
-			"last_updated": schema.StringAttribute{
 				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last updated`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"last_used": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last used by a workflow`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"name": schema.StringAttribute{
-				Required:    true,
-				Description: `Display name for the credential (max 100 characters). Required.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Display name for the credential (max 100 characters). Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},

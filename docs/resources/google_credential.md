@@ -43,10 +43,7 @@ variable "gcp_service_account_key" {
 resource "seqera_google_credential" "gcs_access" {
   name         = "gcs-bucket-access"
   workspace_id = seqera_workspace.main.id
-
-  keys = {
-    data = file("${path.module}/gcp-service-account.json")
-  }
+  data         = file("${path.module}/gcp-service-account.json")
 }
 
 # Example 2: Google credentials using variable
@@ -55,10 +52,7 @@ resource "seqera_google_credential" "gcs_access" {
 resource "seqera_google_credential" "gcp_prod" {
   name         = "gcp-production"
   workspace_id = seqera_workspace.prod.id
-
-  keys = {
-    data = var.gcp_service_account_key
-  }
+  data         = var.gcp_service_account_key
 }
 
 # Example 3: Google credentials with jsonencode
@@ -82,20 +76,17 @@ variable "gcp_private_key" {
 resource "seqera_google_credential" "gcp_composed" {
   name         = "gcp-composed-key"
   workspace_id = seqera_workspace.main.id
-
-  keys = {
-    data = jsonencode({
-      type                    = "service_account"
-      project_id              = var.gcp_project_id
-      private_key_id          = "key-id"
-      private_key             = var.gcp_private_key
-      client_email            = var.gcp_client_email
-      client_id               = "123456789"
-      auth_uri                = "https://accounts.google.com/o/oauth2/auth"
-      token_uri               = "https://oauth2.googleapis.com/token"
-      auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
-    })
-  }
+  data = jsonencode({
+    type                        = "service_account"
+    project_id                  = var.gcp_project_id
+    private_key_id              = "key-id"
+    private_key                 = var.gcp_private_key
+    client_email                = var.gcp_client_email
+    client_id                   = "123456789"
+    auth_uri                    = "https://accounts.google.com/o/oauth2/auth"
+    token_uri                   = "https://oauth2.googleapis.com/token"
+    auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
+  })
 }
 
 # Example 4: Multiple GCP credentials for different projects
@@ -113,10 +104,7 @@ resource "seqera_google_credential" "project_credentials" {
 
   name         = "gcp-${each.key}"
   workspace_id = seqera_workspace.main.id
-
-  keys = {
-    data = file("${path.module}/${each.value}")
-  }
+  data         = file("${path.module}/${each.value}")
 }
 ```
 
@@ -125,8 +113,8 @@ resource "seqera_google_credential" "project_credentials" {
 
 ### Required
 
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `name` (String) Display name for the credential (max 100 characters). Required.
+- `data` (String, Sensitive) Google Cloud service account key JSON (required, sensitive).
+- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
 
 ### Optional
 
@@ -135,18 +123,11 @@ resource "seqera_google_credential" "project_credentials" {
 ### Read-Only
 
 - `credentials_id` (String) Unique identifier for the credential (max 22 characters)
-- `date_created` (String) Timestamp when the credential was created
-- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
-- `last_updated` (String) Timestamp when the credential was last updated
-- `last_used` (String) Timestamp when the credential was last used by a workflow
+- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `provider_type` (String) Cloud provider type (automatically set to "google"). Default: "google"; must be "google"
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`
-
-Optional:
-
-- `data` (String, Sensitive) Google Cloud service account key JSON (sensitive)
 
 ## Import
 

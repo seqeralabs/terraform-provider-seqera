@@ -33,12 +33,8 @@ data "seqera_google_credential" "my_googlecredential" {
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
-- `date_created` (String) Timestamp when the credential was created
-- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
 - `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `last_updated` (String) Timestamp when the credential was last updated
-- `last_used` (String) Timestamp when the credential was last used by a workflow
-- `name` (String) Display name for the credential (max 100 characters). Required.
+- `name` (String) Display name for the credential (max 100 characters)
 - `provider_type` (String) Cloud provider type (automatically set to "google")
 
 <a id="nestedatt--keys"></a>

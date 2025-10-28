@@ -1,0 +1,250 @@
+# Seqera GitHub Credentials Examples
+#
+# GitHub credentials store authentication information for accessing GitHub
+# repositories within the Seqera Platform workflows.
+#
+# SECURITY BEST PRACTICES:
+# - Never hardcode credentials in Terraform files
+# - Use Terraform variables marked as sensitive
+# - Store actual credentials in secure secret management systems
+# - Use Personal Access Tokens (PATs) with minimal required scopes
+# - Regularly rotate tokens
+# - Use fine-grained PATs for better security (when available)
+
+# Variable declarations for sensitive GitHub credentials
+variable "github_access_token" {
+  description = "GitHub Personal Access Token (PAT)"
+  type        = string
+  sensitive   = true
+}
+
+# =============================================================================
+# Example 1: Basic GitHub Credentials (Recommended)
+# =============================================================================
+# Basic configuration with GitHub Personal Access Token (PAT).
+# This works for both GitHub.com and GitHub Enterprise Server.
+
+resource "seqera_github_credential" "basic" {
+  name         = "github-main"
+  workspace_id = seqera_workspace.main.id
+
+  access_token = var.github_access_token
+}
+
+# =============================================================================
+# Example 2: GitHub Enterprise Server Credentials
+# =============================================================================
+# Use base_url when connecting to GitHub Enterprise Server.
+# Leave base_url empty or unset for GitHub.com.
+
+resource "seqera_github_credential" "enterprise" {
+  name         = "github-enterprise"
+  workspace_id = seqera_workspace.main.id
+
+  access_token = var.github_access_token
+  base_url     = "https://github.mycompany.com"
+}
+
+# =============================================================================
+# Example 3: Multiple GitHub Credentials for Different Organizations
+# =============================================================================
+# Use separate PATs for different GitHub organizations or accounts
+# for better access control and auditability.
+
+locals {
+  github_accounts = {
+    "public" = {
+      token    = var.github_public_token
+      base_url = "" # GitHub.com (default)
+    }
+    "enterprise" = {
+      token    = var.github_enterprise_token
+      base_url = "https://github.mycompany.com"
+    }
+    "partner" = {
+      token    = var.github_partner_token
+      base_url = "https://github.partner.com"
+    }
+  }
+}
+
+# Note: You would need to declare the corresponding variables:
+# variable "github_public_token" { type = string; sensitive = true }
+# variable "github_enterprise_token" { type = string; sensitive = true }
+# variable "github_partner_token" { type = string; sensitive = true }
+
+resource "seqera_github_credential" "multi_account" {
+  for_each = local.github_accounts
+
+  name         = "github-${each.key}"
+  workspace_id = seqera_workspace.main.id
+  access_token = each.value.token
+  base_url     = each.value.base_url != "" ? each.value.base_url : null
+}
+
+# =============================================================================
+# Example 4: Creating GitHub Personal Access Tokens (Classic)
+# =============================================================================
+# To create a GitHub Personal Access Token (Classic):
+#
+# 1. Go to GitHub Settings:
+#    https://github.com/settings/tokens
+#
+# 2. Click "Generate new token" > "Generate new token (classic)"
+#
+# 3. Give your token a descriptive name (e.g., "Seqera Platform Access")
+#
+# 4. Select the required scopes:
+#    - repo (Full control of private repositories)
+#      - Required for accessing private repositories
+#      - Includes repo:status, repo_deployment, public_repo
+#    - workflow (Update GitHub Action workflows)
+#      - Optional, if you need to trigger workflows
+#    - read:org (Read org and team membership)
+#      - Optional, for organization repositories
+#
+# 5. Click "Generate token"
+#
+# 6. Copy the token immediately (it won't be shown again)
+#
+# 7. Store the token securely and use it in your Terraform configuration
+
+# =============================================================================
+# Example 5: Creating GitHub Fine-Grained Personal Access Tokens (Recommended)
+# =============================================================================
+# Fine-grained PATs provide better security through granular permissions:
+#
+# 1. Go to GitHub Settings:
+#    https://github.com/settings/tokens?type=beta
+#
+# 2. Click "Generate new token"
+#
+# 3. Configure token:
+#    - Token name: "Seqera Platform"
+#    - Expiration: Set appropriate expiration (e.g., 90 days)
+#    - Resource owner: Select your account or organization
+#
+# 4. Repository access:
+#    - Select "Only select repositories" or "All repositories"
+#    - Choose specific repositories if possible
+#
+# 5. Permissions (Repository permissions):
+#    - Contents: Read and write (for cloning and pushing)
+#    - Metadata: Read-only (automatically included)
+#    - Pull requests: Read and write (if needed)
+#    - Workflows: Read and write (if needed for Actions)
+#
+# 6. Click "Generate token" and copy it immediately
+
+# =============================================================================
+# Example 6: Using GitHub Credentials with Pipelines
+# =============================================================================
+
+resource "seqera_github_credential" "pipeline_creds" {
+  name         = "github-pipelines"
+  workspace_id = seqera_workspace.main.id
+  access_token = var.github_access_token
+}
+
+resource "seqera_pipeline" "from_github" {
+  name         = "my-pipeline"
+  workspace_id = seqera_workspace.main.id
+
+  # Reference the GitHub repository
+  repository = "https://github.com/myorg/my-repo"
+
+  # Use the GitHub credentials
+  credentials_id = seqera_github_credential.pipeline_creds.credentials_id
+}
+
+# =============================================================================
+# Example 7: GitHub Credentials for Public and Private Repositories
+# =============================================================================
+# Use separate credentials for public and private repositories
+# or different access levels.
+
+resource "seqera_github_credential" "public_repos" {
+  name         = "github-public"
+  workspace_id = seqera_workspace.main.id
+  access_token = var.github_public_token
+  # No scopes beyond public_repo needed
+}
+
+resource "seqera_github_credential" "private_repos" {
+  name         = "github-private"
+  workspace_id = seqera_workspace.main.id
+  access_token = var.github_private_token
+  # Requires full repo scope
+}
+
+# =============================================================================
+# Example 8: Using GitHub App Installation Tokens (Advanced)
+# =============================================================================
+# For organizations using GitHub Apps, you can generate installation tokens
+# and use them as access tokens. Note: Installation tokens expire after 1 hour.
+#
+# This is an advanced use case and typically requires external token generation.
+
+# =============================================================================
+# Example 9: GitHub Credentials by Environment
+# =============================================================================
+
+locals {
+  environments = {
+    "dev" = {
+      token = var.github_dev_token
+      url   = "https://github-dev.company.com"
+    }
+    "staging" = {
+      token = var.github_staging_token
+      url   = "https://github-staging.company.com"
+    }
+    "prod" = {
+      token = var.github_prod_token
+      url   = "https://github.company.com"
+    }
+  }
+}
+
+resource "seqera_github_credential" "by_environment" {
+  for_each = local.environments
+
+  name         = "github-${each.key}"
+  workspace_id = seqera_workspace.main.id
+  access_token = each.value.token
+  base_url     = each.value.url
+}
+
+# =============================================================================
+# Example 10: Token Rotation Strategy
+# =============================================================================
+# Implement token rotation by:
+# 1. Creating a new PAT with same permissions
+# 2. Updating the Terraform variable with new token
+# 3. Running terraform apply to update credentials
+# 4. Verifying new token works
+# 5. Revoking old token
+#
+# Consider setting token expiration dates and automating rotation:
+
+resource "seqera_github_credential" "with_rotation" {
+  name         = "github-rotated"
+  workspace_id = seqera_workspace.main.id
+  access_token = var.github_access_token
+  # Update var.github_access_token when rotating tokens
+}
+
+# =============================================================================
+# SECURITY RECOMMENDATIONS
+# =============================================================================
+#
+# 1. Use Fine-Grained PATs when possible for better security
+# 2. Set token expiration dates (e.g., 90 days) to enforce rotation
+# 3. Grant minimum required scopes/permissions
+# 4. Use separate tokens for different projects or environments
+# 5. Store tokens in secure secret management systems (Vault, AWS Secrets Manager)
+# 6. Monitor token usage through GitHub's token audit logs
+# 7. Revoke tokens immediately if compromised
+# 8. Never commit tokens to version control
+# 9. Use GitHub Apps for organization-wide access when appropriate
+# 10. Enable SSO requirements for tokens in organizations
