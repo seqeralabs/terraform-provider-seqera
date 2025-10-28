@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type CreateBitBucketCredentialsRequest struct {
+type CreateBitbucketCredentialsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// BitBucket credentials create request
-	CreateBitBucketCredentialsRequest shared.CreateBitBucketCredentialsRequest `request:"mediaType=application/json"`
+	// Bitbucket credentials create request
+	CreateBitbucketCredentialsRequest shared.CreateBitbucketCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateBitBucketCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateBitbucketCredentialsRequest) GetWorkspaceID() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.WorkspaceID
 }
 
-func (c *CreateBitBucketCredentialsRequest) GetCreateBitBucketCredentialsRequest() shared.CreateBitBucketCredentialsRequest {
+func (c *CreateBitbucketCredentialsRequest) GetCreateBitbucketCredentialsRequest() shared.CreateBitbucketCredentialsRequest {
 	if c == nil {
-		return shared.CreateBitBucketCredentialsRequest{}
+		return shared.CreateBitbucketCredentialsRequest{}
 	}
-	return c.CreateBitBucketCredentialsRequest
+	return c.CreateBitbucketCredentialsRequest
 }
 
-type CreateBitBucketCredentialsResponse struct {
+type CreateBitbucketCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,40 +36,40 @@ type CreateBitBucketCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	CreateBitBucketCredentialsResponse *shared.CreateBitBucketCredentialsResponse
+	CreateBitbucketCredentialsResponse *shared.CreateBitbucketCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (c *CreateBitBucketCredentialsResponse) GetContentType() string {
+func (c *CreateBitbucketCredentialsResponse) GetContentType() string {
 	if c == nil {
 		return ""
 	}
 	return c.ContentType
 }
 
-func (c *CreateBitBucketCredentialsResponse) GetStatusCode() int {
+func (c *CreateBitbucketCredentialsResponse) GetStatusCode() int {
 	if c == nil {
 		return 0
 	}
 	return c.StatusCode
 }
 
-func (c *CreateBitBucketCredentialsResponse) GetRawResponse() *http.Response {
+func (c *CreateBitbucketCredentialsResponse) GetRawResponse() *http.Response {
 	if c == nil {
 		return nil
 	}
 	return c.RawResponse
 }
 
-func (c *CreateBitBucketCredentialsResponse) GetCreateBitBucketCredentialsResponse() *shared.CreateBitBucketCredentialsResponse {
+func (c *CreateBitbucketCredentialsResponse) GetCreateBitbucketCredentialsResponse() *shared.CreateBitbucketCredentialsResponse {
 	if c == nil {
 		return nil
 	}
-	return c.CreateBitBucketCredentialsResponse
+	return c.CreateBitbucketCredentialsResponse
 }
 
-func (c *CreateBitBucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (c *CreateBitbucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if c == nil {
 		return nil
 	}

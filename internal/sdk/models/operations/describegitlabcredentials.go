@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type DescribeGitLabCredentialsRequest struct {
+type DescribeGitlabCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (d *DescribeGitLabCredentialsRequest) GetCredentialsID() string {
+func (d *DescribeGitlabCredentialsRequest) GetCredentialsID() string {
 	if d == nil {
 		return ""
 	}
 	return d.CredentialsID
 }
 
-func (d *DescribeGitLabCredentialsRequest) GetWorkspaceID() *int64 {
+func (d *DescribeGitlabCredentialsRequest) GetWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
 	return d.WorkspaceID
 }
 
-type DescribeGitLabCredentialsResponse struct {
+type DescribeGitlabCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,40 +36,40 @@ type DescribeGitLabCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	DescribeGitLabCredentialsResponse *shared.DescribeGitLabCredentialsResponse
+	DescribeGitlabCredentialsResponse *shared.DescribeGitlabCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (d *DescribeGitLabCredentialsResponse) GetContentType() string {
+func (d *DescribeGitlabCredentialsResponse) GetContentType() string {
 	if d == nil {
 		return ""
 	}
 	return d.ContentType
 }
 
-func (d *DescribeGitLabCredentialsResponse) GetStatusCode() int {
+func (d *DescribeGitlabCredentialsResponse) GetStatusCode() int {
 	if d == nil {
 		return 0
 	}
 	return d.StatusCode
 }
 
-func (d *DescribeGitLabCredentialsResponse) GetRawResponse() *http.Response {
+func (d *DescribeGitlabCredentialsResponse) GetRawResponse() *http.Response {
 	if d == nil {
 		return nil
 	}
 	return d.RawResponse
 }
 
-func (d *DescribeGitLabCredentialsResponse) GetDescribeGitLabCredentialsResponse() *shared.DescribeGitLabCredentialsResponse {
+func (d *DescribeGitlabCredentialsResponse) GetDescribeGitlabCredentialsResponse() *shared.DescribeGitlabCredentialsResponse {
 	if d == nil {
 		return nil
 	}
-	return d.DescribeGitLabCredentialsResponse
+	return d.DescribeGitlabCredentialsResponse
 }
 
-func (d *DescribeGitLabCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (d *DescribeGitlabCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if d == nil {
 		return nil
 	}

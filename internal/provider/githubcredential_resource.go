@@ -21,35 +21,35 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &GitHubCredentialResource{}
-var _ resource.ResourceWithImportState = &GitHubCredentialResource{}
+var _ resource.Resource = &GithubCredentialResource{}
+var _ resource.ResourceWithImportState = &GithubCredentialResource{}
 
-func NewGitHubCredentialResource() resource.Resource {
-	return &GitHubCredentialResource{}
+func NewGithubCredentialResource() resource.Resource {
+	return &GithubCredentialResource{}
 }
 
-// GitHubCredentialResource defines the resource implementation.
-type GitHubCredentialResource struct {
+// GithubCredentialResource defines the resource implementation.
+type GithubCredentialResource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// GitHubCredentialResourceModel describes the resource data model.
-type GitHubCredentialResourceModel struct {
+// GithubCredentialResourceModel describes the resource data model.
+type GithubCredentialResourceModel struct {
 	AccessToken   types.String                 `tfsdk:"access_token"`
 	BaseURL       types.String                 `tfsdk:"base_url"`
 	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	Keys          tfTypes.GitHubCredentialKeys `tfsdk:"keys"`
+	Keys          tfTypes.GithubCredentialKeys `tfsdk:"keys"`
 	Name          types.String                 `tfsdk:"name"`
 	ProviderType  types.String                 `tfsdk:"provider_type"`
 	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
-func (r *GitHubCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_git_hub_credential"
+func (r *GithubCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_github_credential"
 }
 
-func (r *GitHubCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage GitHub credentials in Seqera platform using this resource.\n\nGitHub credentials store authentication information for accessing GitHub\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
@@ -96,7 +96,7 @@ func (r *GitHubCredentialResource) Schema(ctx context.Context, req resource.Sche
 	}
 }
 
-func (r *GitHubCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *GithubCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -116,8 +116,8 @@ func (r *GitHubCredentialResource) Configure(ctx context.Context, req resource.C
 	r.client = client
 }
 
-func (r *GitHubCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *GitHubCredentialResourceModel
+func (r *GithubCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *GithubCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -134,13 +134,13 @@ func (r *GitHubCredentialResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateGitHubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateGithubCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.CreateGitHubCredentials(ctx, *request)
+	res, err := r.client.Credentials.CreateGithubCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -156,11 +156,11 @@ func (r *GitHubCredentialResource) Create(ctx context.Context, req resource.Crea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateGitHubCredentialsResponse != nil) {
+	if !(res.CreateGithubCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCreateGitHubCredentialsResponse(ctx, res.CreateGitHubCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateGithubCredentialsResponse(ctx, res.CreateGithubCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -171,13 +171,13 @@ func (r *GitHubCredentialResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeGitHubCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeGithubCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeGitHubCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeGithubCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -193,11 +193,11 @@ func (r *GitHubCredentialResource) Create(ctx context.Context, req resource.Crea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeGitHubCredentialsResponse != nil) {
+	if !(res1.DescribeGithubCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitHubCredentialsResponse(ctx, res1.DescribeGitHubCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGithubCredentialsResponse(ctx, res1.DescribeGithubCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -213,8 +213,8 @@ func (r *GitHubCredentialResource) Create(ctx context.Context, req resource.Crea
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *GitHubCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *GitHubCredentialResourceModel
+func (r *GithubCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *GithubCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -231,13 +231,13 @@ func (r *GitHubCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGitHubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGithubCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeGitHubCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeGithubCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -257,11 +257,11 @@ func (r *GitHubCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeGitHubCredentialsResponse != nil) {
+	if !(res.DescribeGithubCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitHubCredentialsResponse(ctx, res.DescribeGitHubCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGithubCredentialsResponse(ctx, res.DescribeGithubCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -271,8 +271,8 @@ func (r *GitHubCredentialResource) Read(ctx context.Context, req resource.ReadRe
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *GitHubCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *GitHubCredentialResourceModel
+func (r *GithubCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *GithubCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -285,13 +285,13 @@ func (r *GitHubCredentialResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateGitHubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateGithubCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.UpdateGitHubCredentials(ctx, *request)
+	res, err := r.client.Credentials.UpdateGithubCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -313,13 +313,13 @@ func (r *GitHubCredentialResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeGitHubCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeGithubCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeGitHubCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeGithubCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -335,11 +335,11 @@ func (r *GitHubCredentialResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeGitHubCredentialsResponse != nil) {
+	if !(res1.DescribeGithubCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitHubCredentialsResponse(ctx, res1.DescribeGitHubCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGithubCredentialsResponse(ctx, res1.DescribeGithubCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -355,8 +355,8 @@ func (r *GitHubCredentialResource) Update(ctx context.Context, req resource.Upda
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *GitHubCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *GitHubCredentialResourceModel
+func (r *GithubCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *GithubCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -373,13 +373,13 @@ func (r *GitHubCredentialResource) Delete(ctx context.Context, req resource.Dele
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteGitHubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteGithubCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DeleteGitHubCredentials(ctx, *request)
+	res, err := r.client.Credentials.DeleteGithubCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -398,6 +398,6 @@ func (r *GitHubCredentialResource) Delete(ctx context.Context, req resource.Dele
 
 }
 
-func (r *GitHubCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *GithubCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
 }

@@ -14,35 +14,35 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &GitHubCredentialDataSource{}
-var _ datasource.DataSourceWithConfigure = &GitHubCredentialDataSource{}
+var _ datasource.DataSource = &GithubCredentialDataSource{}
+var _ datasource.DataSourceWithConfigure = &GithubCredentialDataSource{}
 
-func NewGitHubCredentialDataSource() datasource.DataSource {
-	return &GitHubCredentialDataSource{}
+func NewGithubCredentialDataSource() datasource.DataSource {
+	return &GithubCredentialDataSource{}
 }
 
-// GitHubCredentialDataSource is the data source implementation.
-type GitHubCredentialDataSource struct {
+// GithubCredentialDataSource is the data source implementation.
+type GithubCredentialDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// GitHubCredentialDataSourceModel describes the data model.
-type GitHubCredentialDataSourceModel struct {
+// GithubCredentialDataSourceModel describes the data model.
+type GithubCredentialDataSourceModel struct {
 	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	Keys          tfTypes.GitHubCredentialKeys `tfsdk:"keys"`
+	Keys          tfTypes.GithubCredentialKeys `tfsdk:"keys"`
 	Name          types.String                 `tfsdk:"name"`
 	ProviderType  types.String                 `tfsdk:"provider_type"`
 	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
-func (r *GitHubCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_git_hub_credential"
+func (r *GithubCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_github_credential"
 }
 
 // Schema defines the schema for the data source.
-func (r *GitHubCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *GithubCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage GitHub credentials in Seqera platform using this resource.\n\nGitHub credentials store authentication information for accessing GitHub\nrepositories within the Seqera Platform workflows.\n",
 
@@ -70,7 +70,7 @@ func (r *GitHubCredentialDataSource) Schema(ctx context.Context, req datasource.
 	}
 }
 
-func (r *GitHubCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *GithubCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -90,8 +90,8 @@ func (r *GitHubCredentialDataSource) Configure(ctx context.Context, req datasour
 	r.client = client
 }
 
-func (r *GitHubCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *GitHubCredentialDataSourceModel
+func (r *GithubCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *GithubCredentialDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)
@@ -108,13 +108,13 @@ func (r *GitHubCredentialDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGitHubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGithubCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeGitHubCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeGithubCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -130,11 +130,11 @@ func (r *GitHubCredentialDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeGitHubCredentialsResponse != nil) {
+	if !(res.DescribeGithubCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitHubCredentialsResponse(ctx, res.DescribeGitHubCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGithubCredentialsResponse(ctx, res.DescribeGithubCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

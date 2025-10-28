@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type DeleteBitBucketCredentialsRequest struct {
+type DeleteBitbucketCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (d *DeleteBitBucketCredentialsRequest) GetCredentialsID() string {
+func (d *DeleteBitbucketCredentialsRequest) GetCredentialsID() string {
 	if d == nil {
 		return ""
 	}
 	return d.CredentialsID
 }
 
-func (d *DeleteBitBucketCredentialsRequest) GetWorkspaceID() *int64 {
+func (d *DeleteBitbucketCredentialsRequest) GetWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
 	return d.WorkspaceID
 }
 
-type DeleteBitBucketCredentialsResponse struct {
+type DeleteBitbucketCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -39,28 +39,28 @@ type DeleteBitBucketCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (d *DeleteBitBucketCredentialsResponse) GetContentType() string {
+func (d *DeleteBitbucketCredentialsResponse) GetContentType() string {
 	if d == nil {
 		return ""
 	}
 	return d.ContentType
 }
 
-func (d *DeleteBitBucketCredentialsResponse) GetStatusCode() int {
+func (d *DeleteBitbucketCredentialsResponse) GetStatusCode() int {
 	if d == nil {
 		return 0
 	}
 	return d.StatusCode
 }
 
-func (d *DeleteBitBucketCredentialsResponse) GetRawResponse() *http.Response {
+func (d *DeleteBitbucketCredentialsResponse) GetRawResponse() *http.Response {
 	if d == nil {
 		return nil
 	}
 	return d.RawResponse
 }
 
-func (d *DeleteBitBucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (d *DeleteBitbucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if d == nil {
 		return nil
 	}

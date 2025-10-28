@@ -9,67 +9,67 @@ import (
 	"time"
 )
 
-// CodeCommitCredentialProviderType - Cloud provider type (automatically set to "codecommit")
-type CodeCommitCredentialProviderType string
+// CodecommitCredentialProviderType - Cloud provider type (automatically set to "codecommit")
+type CodecommitCredentialProviderType string
 
 const (
-	CodeCommitCredentialProviderTypeCodecommit CodeCommitCredentialProviderType = "codecommit"
+	CodecommitCredentialProviderTypeCodecommit CodecommitCredentialProviderType = "codecommit"
 )
 
-func (e CodeCommitCredentialProviderType) ToPointer() *CodeCommitCredentialProviderType {
+func (e CodecommitCredentialProviderType) ToPointer() *CodecommitCredentialProviderType {
 	return &e
 }
-func (e *CodeCommitCredentialProviderType) UnmarshalJSON(data []byte) error {
+func (e *CodecommitCredentialProviderType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "codecommit":
-		*e = CodeCommitCredentialProviderType(v)
+		*e = CodecommitCredentialProviderType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for CodeCommitCredentialProviderType: %v", v)
+		return fmt.Errorf("invalid value for CodecommitCredentialProviderType: %v", v)
 	}
 }
 
-type CodeCommitCredentialKeys struct {
-	// AWS access key to access the CodeCommit repository (required)
+type CodecommitCredentialKeys struct {
+	// AWS access key to access the Codecommit repository (required)
 	AccessKey string `json:"accessKey"`
-	// AWS secret key to access the CodeCommit repository (required, sensitive)
+	// AWS secret key to access the Codecommit repository (required, sensitive)
 	SecretKey string `json:"secretKey"`
 	// Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com
 	BaseURL *string `json:"baseUrl,omitempty"`
 }
 
-func (c *CodeCommitCredentialKeys) GetAccessKey() string {
+func (c *CodecommitCredentialKeys) GetAccessKey() string {
 	if c == nil {
 		return ""
 	}
 	return c.AccessKey
 }
 
-func (c *CodeCommitCredentialKeys) GetSecretKey() string {
+func (c *CodecommitCredentialKeys) GetSecretKey() string {
 	if c == nil {
 		return ""
 	}
 	return c.SecretKey
 }
 
-func (c *CodeCommitCredentialKeys) GetBaseURL() *string {
+func (c *CodecommitCredentialKeys) GetBaseURL() *string {
 	if c == nil {
 		return nil
 	}
 	return c.BaseURL
 }
 
-type CodeCommitCredential struct {
+type CodecommitCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "codecommit")
-	ProviderType *CodeCommitCredentialProviderType `default:"codecommit" json:"provider"`
+	ProviderType *CodecommitCredentialProviderType `default:"codecommit" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -78,95 +78,95 @@ type CodeCommitCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        CodeCommitCredentialKeys `json:"keys"`
+	Keys        CodecommitCredentialKeys `json:"keys"`
 }
 
-func (c CodeCommitCredential) MarshalJSON() ([]byte, error) {
+func (c CodecommitCredential) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(c, "", false)
 }
 
-func (c *CodeCommitCredential) UnmarshalJSON(data []byte) error {
+func (c *CodecommitCredential) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *CodeCommitCredential) GetCredentialsID() *string {
+func (c *CodecommitCredential) GetCredentialsID() *string {
 	if c == nil {
 		return nil
 	}
 	return c.CredentialsID
 }
 
-func (c *CodeCommitCredential) GetName() string {
+func (c *CodecommitCredential) GetName() string {
 	if c == nil {
 		return ""
 	}
 	return c.Name
 }
 
-func (c *CodeCommitCredential) GetProviderType() *CodeCommitCredentialProviderType {
+func (c *CodecommitCredential) GetProviderType() *CodecommitCredentialProviderType {
 	if c == nil {
 		return nil
 	}
 	return c.ProviderType
 }
 
-func (c *CodeCommitCredential) GetDeleted() *bool {
+func (c *CodecommitCredential) GetDeleted() *bool {
 	if c == nil {
 		return nil
 	}
 	return c.Deleted
 }
 
-func (c *CodeCommitCredential) GetLastUsed() *time.Time {
+func (c *CodecommitCredential) GetLastUsed() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.LastUsed
 }
 
-func (c *CodeCommitCredential) GetDateCreated() *time.Time {
+func (c *CodecommitCredential) GetDateCreated() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.DateCreated
 }
 
-func (c *CodeCommitCredential) GetLastUpdated() *time.Time {
+func (c *CodecommitCredential) GetLastUpdated() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.LastUpdated
 }
 
-func (c *CodeCommitCredential) GetKeys() CodeCommitCredentialKeys {
+func (c *CodecommitCredential) GetKeys() CodecommitCredentialKeys {
 	if c == nil {
-		return CodeCommitCredentialKeys{}
+		return CodecommitCredentialKeys{}
 	}
 	return c.Keys
 }
 
-type CodeCommitCredentialKeysOutput struct {
-	// AWS access key to access the CodeCommit repository (required)
+type CodecommitCredentialKeysOutput struct {
+	// AWS access key to access the Codecommit repository (required)
 	AccessKey string `json:"accessKey"`
 }
 
-func (c *CodeCommitCredentialKeysOutput) GetAccessKey() string {
+func (c *CodecommitCredentialKeysOutput) GetAccessKey() string {
 	if c == nil {
 		return ""
 	}
 	return c.AccessKey
 }
 
-type CodeCommitCredentialOutput struct {
+type CodecommitCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "codecommit")
-	ProviderType *CodeCommitCredentialProviderType `default:"codecommit" json:"provider"`
+	ProviderType *CodecommitCredentialProviderType `default:"codecommit" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -175,72 +175,72 @@ type CodeCommitCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	Keys        CodeCommitCredentialKeysOutput `json:"keys"`
+	Keys        CodecommitCredentialKeysOutput `json:"keys"`
 }
 
-func (c CodeCommitCredentialOutput) MarshalJSON() ([]byte, error) {
+func (c CodecommitCredentialOutput) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(c, "", false)
 }
 
-func (c *CodeCommitCredentialOutput) UnmarshalJSON(data []byte) error {
+func (c *CodecommitCredentialOutput) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *CodeCommitCredentialOutput) GetCredentialsID() *string {
+func (c *CodecommitCredentialOutput) GetCredentialsID() *string {
 	if c == nil {
 		return nil
 	}
 	return c.CredentialsID
 }
 
-func (c *CodeCommitCredentialOutput) GetName() string {
+func (c *CodecommitCredentialOutput) GetName() string {
 	if c == nil {
 		return ""
 	}
 	return c.Name
 }
 
-func (c *CodeCommitCredentialOutput) GetProviderType() *CodeCommitCredentialProviderType {
+func (c *CodecommitCredentialOutput) GetProviderType() *CodecommitCredentialProviderType {
 	if c == nil {
 		return nil
 	}
 	return c.ProviderType
 }
 
-func (c *CodeCommitCredentialOutput) GetDeleted() *bool {
+func (c *CodecommitCredentialOutput) GetDeleted() *bool {
 	if c == nil {
 		return nil
 	}
 	return c.Deleted
 }
 
-func (c *CodeCommitCredentialOutput) GetLastUsed() *time.Time {
+func (c *CodecommitCredentialOutput) GetLastUsed() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.LastUsed
 }
 
-func (c *CodeCommitCredentialOutput) GetDateCreated() *time.Time {
+func (c *CodecommitCredentialOutput) GetDateCreated() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.DateCreated
 }
 
-func (c *CodeCommitCredentialOutput) GetLastUpdated() *time.Time {
+func (c *CodecommitCredentialOutput) GetLastUpdated() *time.Time {
 	if c == nil {
 		return nil
 	}
 	return c.LastUpdated
 }
 
-func (c *CodeCommitCredentialOutput) GetKeys() CodeCommitCredentialKeysOutput {
+func (c *CodecommitCredentialOutput) GetKeys() CodecommitCredentialKeysOutput {
 	if c == nil {
-		return CodeCommitCredentialKeysOutput{}
+		return CodecommitCredentialKeysOutput{}
 	}
 	return c.Keys
 }

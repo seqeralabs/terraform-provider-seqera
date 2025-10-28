@@ -7,37 +7,37 @@ import (
 	"net/http"
 )
 
-type UpdateBitBucketCredentialsRequest struct {
+type UpdateBitbucketCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// BitBucket credentials update request
-	UpdateBitBucketCredentialsRequest shared.UpdateBitBucketCredentialsRequest `request:"mediaType=application/json"`
+	// Bitbucket credentials update request
+	UpdateBitbucketCredentialsRequest shared.UpdateBitbucketCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (u *UpdateBitBucketCredentialsRequest) GetCredentialsID() string {
+func (u *UpdateBitbucketCredentialsRequest) GetCredentialsID() string {
 	if u == nil {
 		return ""
 	}
 	return u.CredentialsID
 }
 
-func (u *UpdateBitBucketCredentialsRequest) GetWorkspaceID() *int64 {
+func (u *UpdateBitbucketCredentialsRequest) GetWorkspaceID() *int64 {
 	if u == nil {
 		return nil
 	}
 	return u.WorkspaceID
 }
 
-func (u *UpdateBitBucketCredentialsRequest) GetUpdateBitBucketCredentialsRequest() shared.UpdateBitBucketCredentialsRequest {
+func (u *UpdateBitbucketCredentialsRequest) GetUpdateBitbucketCredentialsRequest() shared.UpdateBitbucketCredentialsRequest {
 	if u == nil {
-		return shared.UpdateBitBucketCredentialsRequest{}
+		return shared.UpdateBitbucketCredentialsRequest{}
 	}
-	return u.UpdateBitBucketCredentialsRequest
+	return u.UpdateBitbucketCredentialsRequest
 }
 
-type UpdateBitBucketCredentialsResponse struct {
+type UpdateBitbucketCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,28 +48,28 @@ type UpdateBitBucketCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (u *UpdateBitBucketCredentialsResponse) GetContentType() string {
+func (u *UpdateBitbucketCredentialsResponse) GetContentType() string {
 	if u == nil {
 		return ""
 	}
 	return u.ContentType
 }
 
-func (u *UpdateBitBucketCredentialsResponse) GetStatusCode() int {
+func (u *UpdateBitbucketCredentialsResponse) GetStatusCode() int {
 	if u == nil {
 		return 0
 	}
 	return u.StatusCode
 }
 
-func (u *UpdateBitBucketCredentialsResponse) GetRawResponse() *http.Response {
+func (u *UpdateBitbucketCredentialsResponse) GetRawResponse() *http.Response {
 	if u == nil {
 		return nil
 	}
 	return u.RawResponse
 }
 
-func (u *UpdateBitBucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (u *UpdateBitbucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if u == nil {
 		return nil
 	}

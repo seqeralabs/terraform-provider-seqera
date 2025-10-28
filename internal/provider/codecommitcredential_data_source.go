@@ -13,21 +13,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &CodeCommitCredentialDataSource{}
-var _ datasource.DataSourceWithConfigure = &CodeCommitCredentialDataSource{}
+var _ datasource.DataSource = &CodecommitCredentialDataSource{}
+var _ datasource.DataSourceWithConfigure = &CodecommitCredentialDataSource{}
 
-func NewCodeCommitCredentialDataSource() datasource.DataSource {
-	return &CodeCommitCredentialDataSource{}
+func NewCodecommitCredentialDataSource() datasource.DataSource {
+	return &CodecommitCredentialDataSource{}
 }
 
-// CodeCommitCredentialDataSource is the data source implementation.
-type CodeCommitCredentialDataSource struct {
+// CodecommitCredentialDataSource is the data source implementation.
+type CodecommitCredentialDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// CodeCommitCredentialDataSourceModel describes the data model.
-type CodeCommitCredentialDataSourceModel struct {
+// CodecommitCredentialDataSourceModel describes the data model.
+type CodecommitCredentialDataSourceModel struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
 	Name          types.String `tfsdk:"name"`
@@ -36,19 +36,19 @@ type CodeCommitCredentialDataSourceModel struct {
 }
 
 // Metadata returns the data source type name.
-func (r *CodeCommitCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_code_commit_credential"
+func (r *CodecommitCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_codecommit_credential"
 }
 
 // Schema defines the schema for the data source.
-func (r *CodeCommitCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *CodecommitCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage CodeCommit credentials in Seqera platform using this resource.\n\nCodeCommit credentials store AWS authentication information for accessing\nAWS CodeCommit repositories within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Codecommit credentials in Seqera platform using this resource.\n\nCodecommit credentials store AWS authentication information for accessing\nAWS Codecommit repositories within the Seqera Platform workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
 				Computed:    true,
-				Description: `AWS access key to access the CodeCommit repository (required)`,
+				Description: `AWS access key to access the Codecommit repository (required)`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
@@ -70,7 +70,7 @@ func (r *CodeCommitCredentialDataSource) Schema(ctx context.Context, req datasou
 	}
 }
 
-func (r *CodeCommitCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *CodecommitCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -90,8 +90,8 @@ func (r *CodeCommitCredentialDataSource) Configure(ctx context.Context, req data
 	r.client = client
 }
 
-func (r *CodeCommitCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *CodeCommitCredentialDataSourceModel
+func (r *CodecommitCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *CodecommitCredentialDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)
@@ -108,13 +108,13 @@ func (r *CodeCommitCredentialDataSource) Read(ctx context.Context, req datasourc
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeCodeCommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeCodecommitCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeCodeCommitCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeCodecommitCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -130,11 +130,11 @@ func (r *CodeCommitCredentialDataSource) Read(ctx context.Context, req datasourc
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeCodeCommitCredentialsResponse != nil) {
+	if !(res.DescribeCodecommitCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodeCommitCredentialsResponse(ctx, res.DescribeCodeCommitCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodecommitCredentialsResponse(ctx, res.DescribeCodecommitCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

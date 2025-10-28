@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type CreateCodeCommitCredentialsRequest struct {
+type CreateCodecommitCredentialsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// CodeCommit credentials create request
-	CreateCodeCommitCredentialsRequest shared.CreateCodeCommitCredentialsRequest `request:"mediaType=application/json"`
+	// Codecommit credentials create request
+	CreateCodecommitCredentialsRequest shared.CreateCodecommitCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateCodeCommitCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateCodecommitCredentialsRequest) GetWorkspaceID() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.WorkspaceID
 }
 
-func (c *CreateCodeCommitCredentialsRequest) GetCreateCodeCommitCredentialsRequest() shared.CreateCodeCommitCredentialsRequest {
+func (c *CreateCodecommitCredentialsRequest) GetCreateCodecommitCredentialsRequest() shared.CreateCodecommitCredentialsRequest {
 	if c == nil {
-		return shared.CreateCodeCommitCredentialsRequest{}
+		return shared.CreateCodecommitCredentialsRequest{}
 	}
-	return c.CreateCodeCommitCredentialsRequest
+	return c.CreateCodecommitCredentialsRequest
 }
 
-type CreateCodeCommitCredentialsResponse struct {
+type CreateCodecommitCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,40 +36,40 @@ type CreateCodeCommitCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	CreateCodeCommitCredentialsResponse *shared.CreateCodeCommitCredentialsResponse
+	CreateCodecommitCredentialsResponse *shared.CreateCodecommitCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (c *CreateCodeCommitCredentialsResponse) GetContentType() string {
+func (c *CreateCodecommitCredentialsResponse) GetContentType() string {
 	if c == nil {
 		return ""
 	}
 	return c.ContentType
 }
 
-func (c *CreateCodeCommitCredentialsResponse) GetStatusCode() int {
+func (c *CreateCodecommitCredentialsResponse) GetStatusCode() int {
 	if c == nil {
 		return 0
 	}
 	return c.StatusCode
 }
 
-func (c *CreateCodeCommitCredentialsResponse) GetRawResponse() *http.Response {
+func (c *CreateCodecommitCredentialsResponse) GetRawResponse() *http.Response {
 	if c == nil {
 		return nil
 	}
 	return c.RawResponse
 }
 
-func (c *CreateCodeCommitCredentialsResponse) GetCreateCodeCommitCredentialsResponse() *shared.CreateCodeCommitCredentialsResponse {
+func (c *CreateCodecommitCredentialsResponse) GetCreateCodecommitCredentialsResponse() *shared.CreateCodecommitCredentialsResponse {
 	if c == nil {
 		return nil
 	}
-	return c.CreateCodeCommitCredentialsResponse
+	return c.CreateCodecommitCredentialsResponse
 }
 
-func (c *CreateCodeCommitCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (c *CreateCodecommitCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if c == nil {
 		return nil
 	}

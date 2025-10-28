@@ -2,11 +2,11 @@
 
 package shared
 
-type UpdateGitHubCredentialsRequest struct {
-	Credentials *GitHubCredential `json:"credentials,omitempty"`
+type UpdateGithubCredentialsRequest struct {
+	Credentials *GithubCredential `json:"credentials,omitempty"`
 }
 
-func (u *UpdateGitHubCredentialsRequest) GetCredentials() *GitHubCredential {
+func (u *UpdateGithubCredentialsRequest) GetCredentials() *GithubCredential {
 	if u == nil {
 		return nil
 	}

@@ -14,35 +14,35 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &GitLabCredentialDataSource{}
-var _ datasource.DataSourceWithConfigure = &GitLabCredentialDataSource{}
+var _ datasource.DataSource = &GitlabCredentialDataSource{}
+var _ datasource.DataSourceWithConfigure = &GitlabCredentialDataSource{}
 
-func NewGitLabCredentialDataSource() datasource.DataSource {
-	return &GitLabCredentialDataSource{}
+func NewGitlabCredentialDataSource() datasource.DataSource {
+	return &GitlabCredentialDataSource{}
 }
 
-// GitLabCredentialDataSource is the data source implementation.
-type GitLabCredentialDataSource struct {
+// GitlabCredentialDataSource is the data source implementation.
+type GitlabCredentialDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// GitLabCredentialDataSourceModel describes the data model.
-type GitLabCredentialDataSourceModel struct {
+// GitlabCredentialDataSourceModel describes the data model.
+type GitlabCredentialDataSourceModel struct {
 	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	Keys          tfTypes.GitLabCredentialKeys `tfsdk:"keys"`
+	Keys          tfTypes.GitlabCredentialKeys `tfsdk:"keys"`
 	Name          types.String                 `tfsdk:"name"`
 	ProviderType  types.String                 `tfsdk:"provider_type"`
 	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
-func (r *GitLabCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_git_lab_credential"
+func (r *GitlabCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_gitlab_credential"
 }
 
 // Schema defines the schema for the data source.
-func (r *GitLabCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *GitlabCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage GitLab credentials in Seqera platform using this resource.\n\nGitLab credentials store authentication information for accessing GitLab\nrepositories within the Seqera Platform workflows.\n",
 
@@ -70,7 +70,7 @@ func (r *GitLabCredentialDataSource) Schema(ctx context.Context, req datasource.
 	}
 }
 
-func (r *GitLabCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *GitlabCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -90,8 +90,8 @@ func (r *GitLabCredentialDataSource) Configure(ctx context.Context, req datasour
 	r.client = client
 }
 
-func (r *GitLabCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *GitLabCredentialDataSourceModel
+func (r *GitlabCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *GitlabCredentialDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)
@@ -108,13 +108,13 @@ func (r *GitLabCredentialDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGitLabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGitlabCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeGitLabCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeGitlabCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -130,11 +130,11 @@ func (r *GitLabCredentialDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeGitLabCredentialsResponse != nil) {
+	if !(res.DescribeGitlabCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitLabCredentialsResponse(ctx, res.DescribeGitLabCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitlabCredentialsResponse(ctx, res.DescribeGitlabCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

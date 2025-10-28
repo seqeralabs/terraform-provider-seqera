@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type CreateGitHubCredentialsRequest struct {
+type CreateGithubCredentialsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// GitHub credentials create request
-	CreateGitHubCredentialsRequest shared.CreateGitHubCredentialsRequest `request:"mediaType=application/json"`
+	CreateGithubCredentialsRequest shared.CreateGithubCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreateGitHubCredentialsRequest) GetWorkspaceID() *int64 {
+func (c *CreateGithubCredentialsRequest) GetWorkspaceID() *int64 {
 	if c == nil {
 		return nil
 	}
 	return c.WorkspaceID
 }
 
-func (c *CreateGitHubCredentialsRequest) GetCreateGitHubCredentialsRequest() shared.CreateGitHubCredentialsRequest {
+func (c *CreateGithubCredentialsRequest) GetCreateGithubCredentialsRequest() shared.CreateGithubCredentialsRequest {
 	if c == nil {
-		return shared.CreateGitHubCredentialsRequest{}
+		return shared.CreateGithubCredentialsRequest{}
 	}
-	return c.CreateGitHubCredentialsRequest
+	return c.CreateGithubCredentialsRequest
 }
 
-type CreateGitHubCredentialsResponse struct {
+type CreateGithubCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,40 +36,40 @@ type CreateGitHubCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	CreateGitHubCredentialsResponse *shared.CreateGitHubCredentialsResponse
+	CreateGithubCredentialsResponse *shared.CreateGithubCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (c *CreateGitHubCredentialsResponse) GetContentType() string {
+func (c *CreateGithubCredentialsResponse) GetContentType() string {
 	if c == nil {
 		return ""
 	}
 	return c.ContentType
 }
 
-func (c *CreateGitHubCredentialsResponse) GetStatusCode() int {
+func (c *CreateGithubCredentialsResponse) GetStatusCode() int {
 	if c == nil {
 		return 0
 	}
 	return c.StatusCode
 }
 
-func (c *CreateGitHubCredentialsResponse) GetRawResponse() *http.Response {
+func (c *CreateGithubCredentialsResponse) GetRawResponse() *http.Response {
 	if c == nil {
 		return nil
 	}
 	return c.RawResponse
 }
 
-func (c *CreateGitHubCredentialsResponse) GetCreateGitHubCredentialsResponse() *shared.CreateGitHubCredentialsResponse {
+func (c *CreateGithubCredentialsResponse) GetCreateGithubCredentialsResponse() *shared.CreateGithubCredentialsResponse {
 	if c == nil {
 		return nil
 	}
-	return c.CreateGitHubCredentialsResponse
+	return c.CreateGithubCredentialsResponse
 }
 
-func (c *CreateGitHubCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (c *CreateGithubCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if c == nil {
 		return nil
 	}

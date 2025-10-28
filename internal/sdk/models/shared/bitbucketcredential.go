@@ -9,67 +9,67 @@ import (
 	"time"
 )
 
-// BitBucketCredentialProviderType - Cloud provider type (automatically set to "bitbucket")
-type BitBucketCredentialProviderType string
+// BitbucketCredentialProviderType - Cloud provider type (automatically set to "bitbucket")
+type BitbucketCredentialProviderType string
 
 const (
-	BitBucketCredentialProviderTypeBitbucket BitBucketCredentialProviderType = "bitbucket"
+	BitbucketCredentialProviderTypeBitbucket BitbucketCredentialProviderType = "bitbucket"
 )
 
-func (e BitBucketCredentialProviderType) ToPointer() *BitBucketCredentialProviderType {
+func (e BitbucketCredentialProviderType) ToPointer() *BitbucketCredentialProviderType {
 	return &e
 }
-func (e *BitBucketCredentialProviderType) UnmarshalJSON(data []byte) error {
+func (e *BitbucketCredentialProviderType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "bitbucket":
-		*e = BitBucketCredentialProviderType(v)
+		*e = BitbucketCredentialProviderType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for BitBucketCredentialProviderType: %v", v)
+		return fmt.Errorf("invalid value for BitbucketCredentialProviderType: %v", v)
 	}
 }
 
-type BitBucketCredentialKeys struct {
-	// BitBucket account username (for app passwords) or email (for API tokens). Required.
+type BitbucketCredentialKeys struct {
+	// Bitbucket account username (for app passwords) or email (for API tokens). Required.
 	Username string `json:"username"`
-	// BitBucket API token (required, sensitive). App passwords are deprecated.
+	// Bitbucket API token (required, sensitive). App passwords are deprecated.
 	Token string `json:"token"`
-	// Repository base URL for on-premises BitBucket server (optional). Example: https://bitbucket.org/seqeralabs
+	// Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs
 	BaseURL *string `json:"baseUrl,omitempty"`
 }
 
-func (b *BitBucketCredentialKeys) GetUsername() string {
+func (b *BitbucketCredentialKeys) GetUsername() string {
 	if b == nil {
 		return ""
 	}
 	return b.Username
 }
 
-func (b *BitBucketCredentialKeys) GetToken() string {
+func (b *BitbucketCredentialKeys) GetToken() string {
 	if b == nil {
 		return ""
 	}
 	return b.Token
 }
 
-func (b *BitBucketCredentialKeys) GetBaseURL() *string {
+func (b *BitbucketCredentialKeys) GetBaseURL() *string {
 	if b == nil {
 		return nil
 	}
 	return b.BaseURL
 }
 
-type BitBucketCredential struct {
+type BitbucketCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")
-	ProviderType *BitBucketCredentialProviderType `default:"bitbucket" json:"provider"`
+	ProviderType *BitbucketCredentialProviderType `default:"bitbucket" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -78,95 +78,95 @@ type BitBucketCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time              `json:"lastUpdated,omitempty"`
-	Keys        BitBucketCredentialKeys `json:"keys"`
+	Keys        BitbucketCredentialKeys `json:"keys"`
 }
 
-func (b BitBucketCredential) MarshalJSON() ([]byte, error) {
+func (b BitbucketCredential) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(b, "", false)
 }
 
-func (b *BitBucketCredential) UnmarshalJSON(data []byte) error {
+func (b *BitbucketCredential) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *BitBucketCredential) GetCredentialsID() *string {
+func (b *BitbucketCredential) GetCredentialsID() *string {
 	if b == nil {
 		return nil
 	}
 	return b.CredentialsID
 }
 
-func (b *BitBucketCredential) GetName() string {
+func (b *BitbucketCredential) GetName() string {
 	if b == nil {
 		return ""
 	}
 	return b.Name
 }
 
-func (b *BitBucketCredential) GetProviderType() *BitBucketCredentialProviderType {
+func (b *BitbucketCredential) GetProviderType() *BitbucketCredentialProviderType {
 	if b == nil {
 		return nil
 	}
 	return b.ProviderType
 }
 
-func (b *BitBucketCredential) GetDeleted() *bool {
+func (b *BitbucketCredential) GetDeleted() *bool {
 	if b == nil {
 		return nil
 	}
 	return b.Deleted
 }
 
-func (b *BitBucketCredential) GetLastUsed() *time.Time {
+func (b *BitbucketCredential) GetLastUsed() *time.Time {
 	if b == nil {
 		return nil
 	}
 	return b.LastUsed
 }
 
-func (b *BitBucketCredential) GetDateCreated() *time.Time {
+func (b *BitbucketCredential) GetDateCreated() *time.Time {
 	if b == nil {
 		return nil
 	}
 	return b.DateCreated
 }
 
-func (b *BitBucketCredential) GetLastUpdated() *time.Time {
+func (b *BitbucketCredential) GetLastUpdated() *time.Time {
 	if b == nil {
 		return nil
 	}
 	return b.LastUpdated
 }
 
-func (b *BitBucketCredential) GetKeys() BitBucketCredentialKeys {
+func (b *BitbucketCredential) GetKeys() BitbucketCredentialKeys {
 	if b == nil {
-		return BitBucketCredentialKeys{}
+		return BitbucketCredentialKeys{}
 	}
 	return b.Keys
 }
 
-type BitBucketCredentialKeysOutput struct {
-	// BitBucket account username (for app passwords) or email (for API tokens). Required.
+type BitbucketCredentialKeysOutput struct {
+	// Bitbucket account username (for app passwords) or email (for API tokens). Required.
 	Username string `json:"username"`
 }
 
-func (b *BitBucketCredentialKeysOutput) GetUsername() string {
+func (b *BitbucketCredentialKeysOutput) GetUsername() string {
 	if b == nil {
 		return ""
 	}
 	return b.Username
 }
 
-type BitBucketCredentialOutput struct {
+type BitbucketCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")
-	ProviderType *BitBucketCredentialProviderType `default:"bitbucket" json:"provider"`
+	ProviderType *BitbucketCredentialProviderType `default:"bitbucket" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -175,72 +175,72 @@ type BitBucketCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time                    `json:"lastUpdated,omitempty"`
-	Keys        BitBucketCredentialKeysOutput `json:"keys"`
+	Keys        BitbucketCredentialKeysOutput `json:"keys"`
 }
 
-func (b BitBucketCredentialOutput) MarshalJSON() ([]byte, error) {
+func (b BitbucketCredentialOutput) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(b, "", false)
 }
 
-func (b *BitBucketCredentialOutput) UnmarshalJSON(data []byte) error {
+func (b *BitbucketCredentialOutput) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *BitBucketCredentialOutput) GetCredentialsID() *string {
+func (b *BitbucketCredentialOutput) GetCredentialsID() *string {
 	if b == nil {
 		return nil
 	}
 	return b.CredentialsID
 }
 
-func (b *BitBucketCredentialOutput) GetName() string {
+func (b *BitbucketCredentialOutput) GetName() string {
 	if b == nil {
 		return ""
 	}
 	return b.Name
 }
 
-func (b *BitBucketCredentialOutput) GetProviderType() *BitBucketCredentialProviderType {
+func (b *BitbucketCredentialOutput) GetProviderType() *BitbucketCredentialProviderType {
 	if b == nil {
 		return nil
 	}
 	return b.ProviderType
 }
 
-func (b *BitBucketCredentialOutput) GetDeleted() *bool {
+func (b *BitbucketCredentialOutput) GetDeleted() *bool {
 	if b == nil {
 		return nil
 	}
 	return b.Deleted
 }
 
-func (b *BitBucketCredentialOutput) GetLastUsed() *time.Time {
+func (b *BitbucketCredentialOutput) GetLastUsed() *time.Time {
 	if b == nil {
 		return nil
 	}
 	return b.LastUsed
 }
 
-func (b *BitBucketCredentialOutput) GetDateCreated() *time.Time {
+func (b *BitbucketCredentialOutput) GetDateCreated() *time.Time {
 	if b == nil {
 		return nil
 	}
 	return b.DateCreated
 }
 
-func (b *BitBucketCredentialOutput) GetLastUpdated() *time.Time {
+func (b *BitbucketCredentialOutput) GetLastUpdated() *time.Time {
 	if b == nil {
 		return nil
 	}
 	return b.LastUpdated
 }
 
-func (b *BitBucketCredentialOutput) GetKeys() BitBucketCredentialKeysOutput {
+func (b *BitbucketCredentialOutput) GetKeys() BitbucketCredentialKeysOutput {
 	if b == nil {
-		return BitBucketCredentialKeysOutput{}
+		return BitbucketCredentialKeysOutput{}
 	}
 	return b.Keys
 }

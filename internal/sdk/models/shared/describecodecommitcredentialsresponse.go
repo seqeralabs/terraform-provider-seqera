@@ -2,11 +2,11 @@
 
 package shared
 
-type DescribeCodeCommitCredentialsResponse struct {
-	Credentials *CodeCommitCredentialOutput `json:"credentials,omitempty"`
+type DescribeCodecommitCredentialsResponse struct {
+	Credentials *CodecommitCredentialOutput `json:"credentials,omitempty"`
 }
 
-func (d *DescribeCodeCommitCredentialsResponse) GetCredentials() *CodeCommitCredentialOutput {
+func (d *DescribeCodecommitCredentialsResponse) GetCredentials() *CodecommitCredentialOutput {
 	if d == nil {
 		return nil
 	}

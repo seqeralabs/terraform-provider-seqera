@@ -13,21 +13,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ datasource.DataSource = &BitBucketCredentialDataSource{}
-var _ datasource.DataSourceWithConfigure = &BitBucketCredentialDataSource{}
+var _ datasource.DataSource = &BitbucketCredentialDataSource{}
+var _ datasource.DataSourceWithConfigure = &BitbucketCredentialDataSource{}
 
-func NewBitBucketCredentialDataSource() datasource.DataSource {
-	return &BitBucketCredentialDataSource{}
+func NewBitbucketCredentialDataSource() datasource.DataSource {
+	return &BitbucketCredentialDataSource{}
 }
 
-// BitBucketCredentialDataSource is the data source implementation.
-type BitBucketCredentialDataSource struct {
+// BitbucketCredentialDataSource is the data source implementation.
+type BitbucketCredentialDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// BitBucketCredentialDataSourceModel describes the data model.
-type BitBucketCredentialDataSourceModel struct {
+// BitbucketCredentialDataSourceModel describes the data model.
+type BitbucketCredentialDataSourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
@@ -36,14 +36,14 @@ type BitBucketCredentialDataSourceModel struct {
 }
 
 // Metadata returns the data source type name.
-func (r *BitBucketCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_bit_bucket_credential"
+func (r *BitbucketCredentialDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bitbucket_credential"
 }
 
 // Schema defines the schema for the data source.
-func (r *BitBucketCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (r *BitbucketCredentialDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage BitBucket credentials in Seqera platform using this resource.\n\nBitBucket credentials store authentication information for accessing BitBucket\nrepositories within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Bitbucket credentials in Seqera platform using this resource.\n\nBitbucket credentials store authentication information for accessing Bitbucket\nrepositories within the Seqera Platform workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
@@ -60,7 +60,7 @@ func (r *BitBucketCredentialDataSource) Schema(ctx context.Context, req datasour
 			},
 			"username": schema.StringAttribute{
 				Computed:    true,
-				Description: `BitBucket account username (for app passwords) or email (for API tokens). Required.`,
+				Description: `Bitbucket account username (for app passwords) or email (for API tokens). Required.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
@@ -70,7 +70,7 @@ func (r *BitBucketCredentialDataSource) Schema(ctx context.Context, req datasour
 	}
 }
 
-func (r *BitBucketCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (r *BitbucketCredentialDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -90,8 +90,8 @@ func (r *BitBucketCredentialDataSource) Configure(ctx context.Context, req datas
 	r.client = client
 }
 
-func (r *BitBucketCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *BitBucketCredentialDataSourceModel
+func (r *BitbucketCredentialDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *BitbucketCredentialDataSourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &item)...)
@@ -108,13 +108,13 @@ func (r *BitBucketCredentialDataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeBitBucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeBitbucketCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeBitBucketCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeBitbucketCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -130,11 +130,11 @@ func (r *BitBucketCredentialDataSource) Read(ctx context.Context, req datasource
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeBitBucketCredentialsResponse != nil) {
+	if !(res.DescribeBitbucketCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitBucketCredentialsResponse(ctx, res.DescribeBitBucketCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitbucketCredentialsResponse(ctx, res.DescribeBitbucketCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return

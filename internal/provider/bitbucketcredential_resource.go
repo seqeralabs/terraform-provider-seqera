@@ -20,21 +20,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &BitBucketCredentialResource{}
-var _ resource.ResourceWithImportState = &BitBucketCredentialResource{}
+var _ resource.Resource = &BitbucketCredentialResource{}
+var _ resource.ResourceWithImportState = &BitbucketCredentialResource{}
 
-func NewBitBucketCredentialResource() resource.Resource {
-	return &BitBucketCredentialResource{}
+func NewBitbucketCredentialResource() resource.Resource {
+	return &BitbucketCredentialResource{}
 }
 
-// BitBucketCredentialResource defines the resource implementation.
-type BitBucketCredentialResource struct {
+// BitbucketCredentialResource defines the resource implementation.
+type BitbucketCredentialResource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// BitBucketCredentialResourceModel describes the resource data model.
-type BitBucketCredentialResourceModel struct {
+// BitbucketCredentialResourceModel describes the resource data model.
+type BitbucketCredentialResourceModel struct {
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
 	Name          types.String `tfsdk:"name"`
@@ -44,17 +44,17 @@ type BitBucketCredentialResourceModel struct {
 	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
-func (r *BitBucketCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_bit_bucket_credential"
+func (r *BitbucketCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bitbucket_credential"
 }
 
-func (r *BitBucketCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage BitBucket credentials in Seqera platform using this resource.\n\nBitBucket credentials store authentication information for accessing BitBucket\nrepositories within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Bitbucket credentials in Seqera platform using this resource.\n\nBitbucket credentials store authentication information for accessing Bitbucket\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
-				Description: `Repository base URL for on-premises BitBucket server (optional). Example: https://bitbucket.org/seqeralabs`,
+				Description: `Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
@@ -84,11 +84,11 @@ func (r *BitBucketCredentialResource) Schema(ctx context.Context, req resource.S
 			"token": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
-				Description: `BitBucket API token (required, sensitive). App passwords are deprecated.`,
+				Description: `Bitbucket API token (required, sensitive). App passwords are deprecated.`,
 			},
 			"username": schema.StringAttribute{
 				Required:    true,
-				Description: `BitBucket account username (for app passwords) or email (for API tokens). Required.`,
+				Description: `Bitbucket account username (for app passwords) or email (for API tokens). Required.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
@@ -98,7 +98,7 @@ func (r *BitBucketCredentialResource) Schema(ctx context.Context, req resource.S
 	}
 }
 
-func (r *BitBucketCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *BitbucketCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -118,8 +118,8 @@ func (r *BitBucketCredentialResource) Configure(ctx context.Context, req resourc
 	r.client = client
 }
 
-func (r *BitBucketCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *BitBucketCredentialResourceModel
+func (r *BitbucketCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *BitbucketCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -136,13 +136,13 @@ func (r *BitBucketCredentialResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateBitBucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateBitbucketCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.CreateBitBucketCredentials(ctx, *request)
+	res, err := r.client.Credentials.CreateBitbucketCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -158,11 +158,11 @@ func (r *BitBucketCredentialResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateBitBucketCredentialsResponse != nil) {
+	if !(res.CreateBitbucketCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCreateBitBucketCredentialsResponse(ctx, res.CreateBitBucketCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateBitbucketCredentialsResponse(ctx, res.CreateBitbucketCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -173,13 +173,13 @@ func (r *BitBucketCredentialResource) Create(ctx context.Context, req resource.C
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeBitBucketCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeBitbucketCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeBitBucketCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeBitbucketCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -195,11 +195,11 @@ func (r *BitBucketCredentialResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeBitBucketCredentialsResponse != nil) {
+	if !(res1.DescribeBitbucketCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitBucketCredentialsResponse(ctx, res1.DescribeBitBucketCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitbucketCredentialsResponse(ctx, res1.DescribeBitbucketCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -215,8 +215,8 @@ func (r *BitBucketCredentialResource) Create(ctx context.Context, req resource.C
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *BitBucketCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *BitBucketCredentialResourceModel
+func (r *BitbucketCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *BitbucketCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -233,13 +233,13 @@ func (r *BitBucketCredentialResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeBitBucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeBitbucketCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeBitBucketCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeBitbucketCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -259,11 +259,11 @@ func (r *BitBucketCredentialResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeBitBucketCredentialsResponse != nil) {
+	if !(res.DescribeBitbucketCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitBucketCredentialsResponse(ctx, res.DescribeBitBucketCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitbucketCredentialsResponse(ctx, res.DescribeBitbucketCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -273,8 +273,8 @@ func (r *BitBucketCredentialResource) Read(ctx context.Context, req resource.Rea
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *BitBucketCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *BitBucketCredentialResourceModel
+func (r *BitbucketCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *BitbucketCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -287,13 +287,13 @@ func (r *BitBucketCredentialResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateBitBucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateBitbucketCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.UpdateBitBucketCredentials(ctx, *request)
+	res, err := r.client.Credentials.UpdateBitbucketCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -315,13 +315,13 @@ func (r *BitBucketCredentialResource) Update(ctx context.Context, req resource.U
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeBitBucketCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeBitbucketCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeBitBucketCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeBitbucketCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -337,11 +337,11 @@ func (r *BitBucketCredentialResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeBitBucketCredentialsResponse != nil) {
+	if !(res1.DescribeBitbucketCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitBucketCredentialsResponse(ctx, res1.DescribeBitBucketCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeBitbucketCredentialsResponse(ctx, res1.DescribeBitbucketCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -357,8 +357,8 @@ func (r *BitBucketCredentialResource) Update(ctx context.Context, req resource.U
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *BitBucketCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *BitBucketCredentialResourceModel
+func (r *BitbucketCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *BitbucketCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -375,13 +375,13 @@ func (r *BitBucketCredentialResource) Delete(ctx context.Context, req resource.D
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteBitBucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteBitbucketCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DeleteBitBucketCredentials(ctx, *request)
+	res, err := r.client.Credentials.DeleteBitbucketCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -400,6 +400,6 @@ func (r *BitBucketCredentialResource) Delete(ctx context.Context, req resource.D
 
 }
 
-func (r *BitBucketCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *BitbucketCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
 }

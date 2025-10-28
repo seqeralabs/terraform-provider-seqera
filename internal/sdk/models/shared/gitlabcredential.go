@@ -9,58 +9,58 @@ import (
 	"time"
 )
 
-// GitLabCredentialProviderType - Cloud provider type (automatically set to "gitlab")
-type GitLabCredentialProviderType string
+// GitlabCredentialProviderType - Cloud provider type (automatically set to "gitlab")
+type GitlabCredentialProviderType string
 
 const (
-	GitLabCredentialProviderTypeGitlab GitLabCredentialProviderType = "gitlab"
+	GitlabCredentialProviderTypeGitlab GitlabCredentialProviderType = "gitlab"
 )
 
-func (e GitLabCredentialProviderType) ToPointer() *GitLabCredentialProviderType {
+func (e GitlabCredentialProviderType) ToPointer() *GitlabCredentialProviderType {
 	return &e
 }
-func (e *GitLabCredentialProviderType) UnmarshalJSON(data []byte) error {
+func (e *GitlabCredentialProviderType) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
 	switch v {
 	case "gitlab":
-		*e = GitLabCredentialProviderType(v)
+		*e = GitlabCredentialProviderType(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for GitLabCredentialProviderType: %v", v)
+		return fmt.Errorf("invalid value for GitlabCredentialProviderType: %v", v)
 	}
 }
 
-type GitLabCredentialKeys struct {
+type GitlabCredentialKeys struct {
 	// GitLab Personal Access Token or Project Access Token (required, sensitive)
 	Token string `json:"token"`
 	// Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
 	BaseURL *string `json:"baseUrl,omitempty"`
 }
 
-func (g *GitLabCredentialKeys) GetToken() string {
+func (g *GitlabCredentialKeys) GetToken() string {
 	if g == nil {
 		return ""
 	}
 	return g.Token
 }
 
-func (g *GitLabCredentialKeys) GetBaseURL() *string {
+func (g *GitlabCredentialKeys) GetBaseURL() *string {
 	if g == nil {
 		return nil
 	}
 	return g.BaseURL
 }
 
-type GitLabCredential struct {
+type GitlabCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitlab")
-	ProviderType *GitLabCredentialProviderType `default:"gitlab" json:"provider"`
+	ProviderType *GitlabCredentialProviderType `default:"gitlab" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -69,86 +69,86 @@ type GitLabCredential struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time           `json:"lastUpdated,omitempty"`
-	Keys        GitLabCredentialKeys `json:"keys"`
+	Keys        GitlabCredentialKeys `json:"keys"`
 }
 
-func (g GitLabCredential) MarshalJSON() ([]byte, error) {
+func (g GitlabCredential) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GitLabCredential) UnmarshalJSON(data []byte) error {
+func (g *GitlabCredential) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (g *GitLabCredential) GetCredentialsID() *string {
+func (g *GitlabCredential) GetCredentialsID() *string {
 	if g == nil {
 		return nil
 	}
 	return g.CredentialsID
 }
 
-func (g *GitLabCredential) GetName() string {
+func (g *GitlabCredential) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GitLabCredential) GetProviderType() *GitLabCredentialProviderType {
+func (g *GitlabCredential) GetProviderType() *GitlabCredentialProviderType {
 	if g == nil {
 		return nil
 	}
 	return g.ProviderType
 }
 
-func (g *GitLabCredential) GetDeleted() *bool {
+func (g *GitlabCredential) GetDeleted() *bool {
 	if g == nil {
 		return nil
 	}
 	return g.Deleted
 }
 
-func (g *GitLabCredential) GetLastUsed() *time.Time {
+func (g *GitlabCredential) GetLastUsed() *time.Time {
 	if g == nil {
 		return nil
 	}
 	return g.LastUsed
 }
 
-func (g *GitLabCredential) GetDateCreated() *time.Time {
+func (g *GitlabCredential) GetDateCreated() *time.Time {
 	if g == nil {
 		return nil
 	}
 	return g.DateCreated
 }
 
-func (g *GitLabCredential) GetLastUpdated() *time.Time {
+func (g *GitlabCredential) GetLastUpdated() *time.Time {
 	if g == nil {
 		return nil
 	}
 	return g.LastUpdated
 }
 
-func (g *GitLabCredential) GetKeys() GitLabCredentialKeys {
+func (g *GitlabCredential) GetKeys() GitlabCredentialKeys {
 	if g == nil {
-		return GitLabCredentialKeys{}
+		return GitlabCredentialKeys{}
 	}
 	return g.Keys
 }
 
-type GitLabCredentialKeysOutput struct {
+type GitlabCredentialKeysOutput struct {
 }
 
-type GitLabCredentialOutput struct {
+type GitlabCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitlab")
-	ProviderType *GitLabCredentialProviderType `default:"gitlab" json:"provider"`
+	ProviderType *GitlabCredentialProviderType `default:"gitlab" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -157,72 +157,72 @@ type GitLabCredentialOutput struct {
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
 	LastUpdated *time.Time                 `json:"lastUpdated,omitempty"`
-	Keys        GitLabCredentialKeysOutput `json:"keys"`
+	Keys        GitlabCredentialKeysOutput `json:"keys"`
 }
 
-func (g GitLabCredentialOutput) MarshalJSON() ([]byte, error) {
+func (g GitlabCredentialOutput) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GitLabCredentialOutput) UnmarshalJSON(data []byte) error {
+func (g *GitlabCredentialOutput) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (g *GitLabCredentialOutput) GetCredentialsID() *string {
+func (g *GitlabCredentialOutput) GetCredentialsID() *string {
 	if g == nil {
 		return nil
 	}
 	return g.CredentialsID
 }
 
-func (g *GitLabCredentialOutput) GetName() string {
+func (g *GitlabCredentialOutput) GetName() string {
 	if g == nil {
 		return ""
 	}
 	return g.Name
 }
 
-func (g *GitLabCredentialOutput) GetProviderType() *GitLabCredentialProviderType {
+func (g *GitlabCredentialOutput) GetProviderType() *GitlabCredentialProviderType {
 	if g == nil {
 		return nil
 	}
 	return g.ProviderType
 }
 
-func (g *GitLabCredentialOutput) GetDeleted() *bool {
+func (g *GitlabCredentialOutput) GetDeleted() *bool {
 	if g == nil {
 		return nil
 	}
 	return g.Deleted
 }
 
-func (g *GitLabCredentialOutput) GetLastUsed() *time.Time {
+func (g *GitlabCredentialOutput) GetLastUsed() *time.Time {
 	if g == nil {
 		return nil
 	}
 	return g.LastUsed
 }
 
-func (g *GitLabCredentialOutput) GetDateCreated() *time.Time {
+func (g *GitlabCredentialOutput) GetDateCreated() *time.Time {
 	if g == nil {
 		return nil
 	}
 	return g.DateCreated
 }
 
-func (g *GitLabCredentialOutput) GetLastUpdated() *time.Time {
+func (g *GitlabCredentialOutput) GetLastUpdated() *time.Time {
 	if g == nil {
 		return nil
 	}
 	return g.LastUpdated
 }
 
-func (g *GitLabCredentialOutput) GetKeys() GitLabCredentialKeysOutput {
+func (g *GitlabCredentialOutput) GetKeys() GitlabCredentialKeysOutput {
 	if g == nil {
-		return GitLabCredentialKeysOutput{}
+		return GitlabCredentialKeysOutput{}
 	}
 	return g.Keys
 }

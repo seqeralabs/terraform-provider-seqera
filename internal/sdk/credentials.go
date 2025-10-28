@@ -2801,9 +2801,9 @@ func (s *Credentials) DeleteGoogleCredentials(ctx context.Context, request opera
 
 }
 
-// CreateBitBucketCredentials - Create BitBucket credentials
-// Creates new BitBucket credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateBitBucketCredentials(ctx context.Context, request operations.CreateBitBucketCredentialsRequest, opts ...operations.Option) (*operations.CreateBitBucketCredentialsResponse, error) {
+// CreateBitbucketCredentials - Create Bitbucket credentials
+// Creates new Bitbucket credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+func (s *Credentials) CreateBitbucketCredentials(ctx context.Context, request operations.CreateBitbucketCredentialsRequest, opts ...operations.Option) (*operations.CreateBitbucketCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2831,11 +2831,11 @@ func (s *Credentials) CreateBitBucketCredentials(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "CreateBitBucketCredentials",
+		OperationID:      "CreateBitbucketCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateBitBucketCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateBitbucketCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -2902,7 +2902,7 @@ func (s *Credentials) CreateBitBucketCredentials(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.CreateBitBucketCredentialsResponse{
+	res := &operations.CreateBitbucketCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -2917,12 +2917,12 @@ func (s *Credentials) CreateBitBucketCredentials(ctx context.Context, request op
 				return nil, err
 			}
 
-			var out shared.CreateBitBucketCredentialsResponse
+			var out shared.CreateBitbucketCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateBitBucketCredentialsResponse = &out
+			res.CreateBitbucketCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -2964,9 +2964,9 @@ func (s *Credentials) CreateBitBucketCredentials(ctx context.Context, request op
 
 }
 
-// DescribeBitBucketCredentials - Describe BitBucket credentials
-// Retrieves the details of the BitBucket credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeBitBucketCredentials(ctx context.Context, request operations.DescribeBitBucketCredentialsRequest, opts ...operations.Option) (*operations.DescribeBitBucketCredentialsResponse, error) {
+// DescribeBitbucketCredentials - Describe Bitbucket credentials
+// Retrieves the details of the Bitbucket credentials identified by the given `credentialsId`.
+func (s *Credentials) DescribeBitbucketCredentials(ctx context.Context, request operations.DescribeBitbucketCredentialsRequest, opts ...operations.Option) (*operations.DescribeBitbucketCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2994,7 +2994,7 @@ func (s *Credentials) DescribeBitBucketCredentials(ctx context.Context, request 
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DescribeBitBucketCredentials",
+		OperationID:      "DescribeBitbucketCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -3058,7 +3058,7 @@ func (s *Credentials) DescribeBitBucketCredentials(ctx context.Context, request 
 		}
 	}
 
-	res := &operations.DescribeBitBucketCredentialsResponse{
+	res := &operations.DescribeBitbucketCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -3073,12 +3073,12 @@ func (s *Credentials) DescribeBitBucketCredentials(ctx context.Context, request 
 				return nil, err
 			}
 
-			var out shared.DescribeBitBucketCredentialsResponse
+			var out shared.DescribeBitbucketCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DescribeBitBucketCredentialsResponse = &out
+			res.DescribeBitbucketCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -3120,9 +3120,9 @@ func (s *Credentials) DescribeBitBucketCredentials(ctx context.Context, request 
 
 }
 
-// UpdateBitBucketCredentials - Update BitBucket credentials
-// Updates the details of the BitBucket credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateBitBucketCredentials(ctx context.Context, request operations.UpdateBitBucketCredentialsRequest, opts ...operations.Option) (*operations.UpdateBitBucketCredentialsResponse, error) {
+// UpdateBitbucketCredentials - Update Bitbucket credentials
+// Updates the details of the Bitbucket credentials identified by the given `credentialsId`.
+func (s *Credentials) UpdateBitbucketCredentials(ctx context.Context, request operations.UpdateBitbucketCredentialsRequest, opts ...operations.Option) (*operations.UpdateBitbucketCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -3150,11 +3150,11 @@ func (s *Credentials) UpdateBitBucketCredentials(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "UpdateBitBucketCredentials",
+		OperationID:      "UpdateBitbucketCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateBitBucketCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateBitbucketCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -3221,7 +3221,7 @@ func (s *Credentials) UpdateBitBucketCredentials(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.UpdateBitBucketCredentialsResponse{
+	res := &operations.UpdateBitbucketCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -3263,9 +3263,9 @@ func (s *Credentials) UpdateBitBucketCredentials(ctx context.Context, request op
 
 }
 
-// DeleteBitBucketCredentials - Delete BitBucket credentials
-// Deletes the BitBucket credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteBitBucketCredentials(ctx context.Context, request operations.DeleteBitBucketCredentialsRequest, opts ...operations.Option) (*operations.DeleteBitBucketCredentialsResponse, error) {
+// DeleteBitbucketCredentials - Delete Bitbucket credentials
+// Deletes the Bitbucket credentials identified by the given `credentialsId`.
+func (s *Credentials) DeleteBitbucketCredentials(ctx context.Context, request operations.DeleteBitbucketCredentialsRequest, opts ...operations.Option) (*operations.DeleteBitbucketCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -3293,7 +3293,7 @@ func (s *Credentials) DeleteBitBucketCredentials(ctx context.Context, request op
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DeleteBitBucketCredentials",
+		OperationID:      "DeleteBitbucketCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -3357,7 +3357,7 @@ func (s *Credentials) DeleteBitBucketCredentials(ctx context.Context, request op
 		}
 	}
 
-	res := &operations.DeleteBitBucketCredentialsResponse{
+	res := &operations.DeleteBitbucketCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -3399,9 +3399,9 @@ func (s *Credentials) DeleteBitBucketCredentials(ctx context.Context, request op
 
 }
 
-// CreateCodeCommitCredentials - Create CodeCommit credentials
-// Creates new CodeCommit credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateCodeCommitCredentials(ctx context.Context, request operations.CreateCodeCommitCredentialsRequest, opts ...operations.Option) (*operations.CreateCodeCommitCredentialsResponse, error) {
+// CreateCodecommitCredentials - Create Codecommit credentials
+// Creates new Codecommit credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+func (s *Credentials) CreateCodecommitCredentials(ctx context.Context, request operations.CreateCodecommitCredentialsRequest, opts ...operations.Option) (*operations.CreateCodecommitCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -3429,11 +3429,11 @@ func (s *Credentials) CreateCodeCommitCredentials(ctx context.Context, request o
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "CreateCodeCommitCredentials",
+		OperationID:      "CreateCodecommitCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateCodeCommitCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateCodecommitCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -3500,7 +3500,7 @@ func (s *Credentials) CreateCodeCommitCredentials(ctx context.Context, request o
 		}
 	}
 
-	res := &operations.CreateCodeCommitCredentialsResponse{
+	res := &operations.CreateCodecommitCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -3515,12 +3515,12 @@ func (s *Credentials) CreateCodeCommitCredentials(ctx context.Context, request o
 				return nil, err
 			}
 
-			var out shared.CreateCodeCommitCredentialsResponse
+			var out shared.CreateCodecommitCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateCodeCommitCredentialsResponse = &out
+			res.CreateCodecommitCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -3562,9 +3562,9 @@ func (s *Credentials) CreateCodeCommitCredentials(ctx context.Context, request o
 
 }
 
-// DescribeCodeCommitCredentials - Describe CodeCommit credentials
-// Retrieves the details of the CodeCommit credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeCodeCommitCredentials(ctx context.Context, request operations.DescribeCodeCommitCredentialsRequest, opts ...operations.Option) (*operations.DescribeCodeCommitCredentialsResponse, error) {
+// DescribeCodecommitCredentials - Describe Codecommit credentials
+// Retrieves the details of the Codecommit credentials identified by the given `credentialsId`.
+func (s *Credentials) DescribeCodecommitCredentials(ctx context.Context, request operations.DescribeCodecommitCredentialsRequest, opts ...operations.Option) (*operations.DescribeCodecommitCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -3592,7 +3592,7 @@ func (s *Credentials) DescribeCodeCommitCredentials(ctx context.Context, request
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DescribeCodeCommitCredentials",
+		OperationID:      "DescribeCodecommitCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -3656,7 +3656,7 @@ func (s *Credentials) DescribeCodeCommitCredentials(ctx context.Context, request
 		}
 	}
 
-	res := &operations.DescribeCodeCommitCredentialsResponse{
+	res := &operations.DescribeCodecommitCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -3671,12 +3671,12 @@ func (s *Credentials) DescribeCodeCommitCredentials(ctx context.Context, request
 				return nil, err
 			}
 
-			var out shared.DescribeCodeCommitCredentialsResponse
+			var out shared.DescribeCodecommitCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DescribeCodeCommitCredentialsResponse = &out
+			res.DescribeCodecommitCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -3718,9 +3718,9 @@ func (s *Credentials) DescribeCodeCommitCredentials(ctx context.Context, request
 
 }
 
-// UpdateCodeCommitCredentials - Update CodeCommit credentials
-// Updates the details of the CodeCommit credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateCodeCommitCredentials(ctx context.Context, request operations.UpdateCodeCommitCredentialsRequest, opts ...operations.Option) (*operations.UpdateCodeCommitCredentialsResponse, error) {
+// UpdateCodecommitCredentials - Update Codecommit credentials
+// Updates the details of the Codecommit credentials identified by the given `credentialsId`.
+func (s *Credentials) UpdateCodecommitCredentials(ctx context.Context, request operations.UpdateCodecommitCredentialsRequest, opts ...operations.Option) (*operations.UpdateCodecommitCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -3748,11 +3748,11 @@ func (s *Credentials) UpdateCodeCommitCredentials(ctx context.Context, request o
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "UpdateCodeCommitCredentials",
+		OperationID:      "UpdateCodecommitCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateCodeCommitCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateCodecommitCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -3819,7 +3819,7 @@ func (s *Credentials) UpdateCodeCommitCredentials(ctx context.Context, request o
 		}
 	}
 
-	res := &operations.UpdateCodeCommitCredentialsResponse{
+	res := &operations.UpdateCodecommitCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -3861,9 +3861,9 @@ func (s *Credentials) UpdateCodeCommitCredentials(ctx context.Context, request o
 
 }
 
-// DeleteCodeCommitCredentials - Delete CodeCommit credentials
-// Deletes the CodeCommit credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteCodeCommitCredentials(ctx context.Context, request operations.DeleteCodeCommitCredentialsRequest, opts ...operations.Option) (*operations.DeleteCodeCommitCredentialsResponse, error) {
+// DeleteCodecommitCredentials - Delete Codecommit credentials
+// Deletes the Codecommit credentials identified by the given `credentialsId`.
+func (s *Credentials) DeleteCodecommitCredentials(ctx context.Context, request operations.DeleteCodecommitCredentialsRequest, opts ...operations.Option) (*operations.DeleteCodecommitCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -3891,7 +3891,7 @@ func (s *Credentials) DeleteCodeCommitCredentials(ctx context.Context, request o
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DeleteCodeCommitCredentials",
+		OperationID:      "DeleteCodecommitCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -3955,7 +3955,7 @@ func (s *Credentials) DeleteCodeCommitCredentials(ctx context.Context, request o
 		}
 	}
 
-	res := &operations.DeleteCodeCommitCredentialsResponse{
+	res := &operations.DeleteCodecommitCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -5193,9 +5193,9 @@ func (s *Credentials) DeleteGiteaCredentials(ctx context.Context, request operat
 
 }
 
-// CreateGitHubCredentials - Create GitHub credentials
+// CreateGithubCredentials - Create GitHub credentials
 // Creates new GitHub credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateGitHubCredentials(ctx context.Context, request operations.CreateGitHubCredentialsRequest, opts ...operations.Option) (*operations.CreateGitHubCredentialsResponse, error) {
+func (s *Credentials) CreateGithubCredentials(ctx context.Context, request operations.CreateGithubCredentialsRequest, opts ...operations.Option) (*operations.CreateGithubCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -5223,11 +5223,11 @@ func (s *Credentials) CreateGitHubCredentials(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "CreateGitHubCredentials",
+		OperationID:      "CreateGithubCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGitHubCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGithubCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -5294,7 +5294,7 @@ func (s *Credentials) CreateGitHubCredentials(ctx context.Context, request opera
 		}
 	}
 
-	res := &operations.CreateGitHubCredentialsResponse{
+	res := &operations.CreateGithubCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -5309,12 +5309,12 @@ func (s *Credentials) CreateGitHubCredentials(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out shared.CreateGitHubCredentialsResponse
+			var out shared.CreateGithubCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateGitHubCredentialsResponse = &out
+			res.CreateGithubCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -5356,9 +5356,9 @@ func (s *Credentials) CreateGitHubCredentials(ctx context.Context, request opera
 
 }
 
-// DescribeGitHubCredentials - Describe GitHub credentials
+// DescribeGithubCredentials - Describe GitHub credentials
 // Retrieves the details of the GitHub credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeGitHubCredentials(ctx context.Context, request operations.DescribeGitHubCredentialsRequest, opts ...operations.Option) (*operations.DescribeGitHubCredentialsResponse, error) {
+func (s *Credentials) DescribeGithubCredentials(ctx context.Context, request operations.DescribeGithubCredentialsRequest, opts ...operations.Option) (*operations.DescribeGithubCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -5386,7 +5386,7 @@ func (s *Credentials) DescribeGitHubCredentials(ctx context.Context, request ope
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DescribeGitHubCredentials",
+		OperationID:      "DescribeGithubCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -5450,7 +5450,7 @@ func (s *Credentials) DescribeGitHubCredentials(ctx context.Context, request ope
 		}
 	}
 
-	res := &operations.DescribeGitHubCredentialsResponse{
+	res := &operations.DescribeGithubCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -5465,12 +5465,12 @@ func (s *Credentials) DescribeGitHubCredentials(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out shared.DescribeGitHubCredentialsResponse
+			var out shared.DescribeGithubCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DescribeGitHubCredentialsResponse = &out
+			res.DescribeGithubCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -5512,9 +5512,9 @@ func (s *Credentials) DescribeGitHubCredentials(ctx context.Context, request ope
 
 }
 
-// UpdateGitHubCredentials - Update GitHub credentials
+// UpdateGithubCredentials - Update GitHub credentials
 // Updates the details of the GitHub credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateGitHubCredentials(ctx context.Context, request operations.UpdateGitHubCredentialsRequest, opts ...operations.Option) (*operations.UpdateGitHubCredentialsResponse, error) {
+func (s *Credentials) UpdateGithubCredentials(ctx context.Context, request operations.UpdateGithubCredentialsRequest, opts ...operations.Option) (*operations.UpdateGithubCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -5542,11 +5542,11 @@ func (s *Credentials) UpdateGitHubCredentials(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "UpdateGitHubCredentials",
+		OperationID:      "UpdateGithubCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGitHubCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGithubCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -5613,7 +5613,7 @@ func (s *Credentials) UpdateGitHubCredentials(ctx context.Context, request opera
 		}
 	}
 
-	res := &operations.UpdateGitHubCredentialsResponse{
+	res := &operations.UpdateGithubCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -5655,9 +5655,9 @@ func (s *Credentials) UpdateGitHubCredentials(ctx context.Context, request opera
 
 }
 
-// DeleteGitHubCredentials - Delete GitHub credentials
+// DeleteGithubCredentials - Delete GitHub credentials
 // Deletes the GitHub credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteGitHubCredentials(ctx context.Context, request operations.DeleteGitHubCredentialsRequest, opts ...operations.Option) (*operations.DeleteGitHubCredentialsResponse, error) {
+func (s *Credentials) DeleteGithubCredentials(ctx context.Context, request operations.DeleteGithubCredentialsRequest, opts ...operations.Option) (*operations.DeleteGithubCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -5685,7 +5685,7 @@ func (s *Credentials) DeleteGitHubCredentials(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DeleteGitHubCredentials",
+		OperationID:      "DeleteGithubCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -5749,7 +5749,7 @@ func (s *Credentials) DeleteGitHubCredentials(ctx context.Context, request opera
 		}
 	}
 
-	res := &operations.DeleteGitHubCredentialsResponse{
+	res := &operations.DeleteGithubCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -5791,9 +5791,9 @@ func (s *Credentials) DeleteGitHubCredentials(ctx context.Context, request opera
 
 }
 
-// CreateGitLabCredentials - Create GitLab credentials
+// CreateGitlabCredentials - Create GitLab credentials
 // Creates new GitLab credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-func (s *Credentials) CreateGitLabCredentials(ctx context.Context, request operations.CreateGitLabCredentialsRequest, opts ...operations.Option) (*operations.CreateGitLabCredentialsResponse, error) {
+func (s *Credentials) CreateGitlabCredentials(ctx context.Context, request operations.CreateGitlabCredentialsRequest, opts ...operations.Option) (*operations.CreateGitlabCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -5821,11 +5821,11 @@ func (s *Credentials) CreateGitLabCredentials(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "CreateGitLabCredentials",
+		OperationID:      "CreateGitlabCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGitLabCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateGitlabCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -5892,7 +5892,7 @@ func (s *Credentials) CreateGitLabCredentials(ctx context.Context, request opera
 		}
 	}
 
-	res := &operations.CreateGitLabCredentialsResponse{
+	res := &operations.CreateGitlabCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -5907,12 +5907,12 @@ func (s *Credentials) CreateGitLabCredentials(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out shared.CreateGitLabCredentialsResponse
+			var out shared.CreateGitlabCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateGitLabCredentialsResponse = &out
+			res.CreateGitlabCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -5954,9 +5954,9 @@ func (s *Credentials) CreateGitLabCredentials(ctx context.Context, request opera
 
 }
 
-// DescribeGitLabCredentials - Describe GitLab credentials
+// DescribeGitlabCredentials - Describe GitLab credentials
 // Retrieves the details of the GitLab credentials identified by the given `credentialsId`.
-func (s *Credentials) DescribeGitLabCredentials(ctx context.Context, request operations.DescribeGitLabCredentialsRequest, opts ...operations.Option) (*operations.DescribeGitLabCredentialsResponse, error) {
+func (s *Credentials) DescribeGitlabCredentials(ctx context.Context, request operations.DescribeGitlabCredentialsRequest, opts ...operations.Option) (*operations.DescribeGitlabCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -5984,7 +5984,7 @@ func (s *Credentials) DescribeGitLabCredentials(ctx context.Context, request ope
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DescribeGitLabCredentials",
+		OperationID:      "DescribeGitlabCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -6048,7 +6048,7 @@ func (s *Credentials) DescribeGitLabCredentials(ctx context.Context, request ope
 		}
 	}
 
-	res := &operations.DescribeGitLabCredentialsResponse{
+	res := &operations.DescribeGitlabCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -6063,12 +6063,12 @@ func (s *Credentials) DescribeGitLabCredentials(ctx context.Context, request ope
 				return nil, err
 			}
 
-			var out shared.DescribeGitLabCredentialsResponse
+			var out shared.DescribeGitlabCredentialsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DescribeGitLabCredentialsResponse = &out
+			res.DescribeGitlabCredentialsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -6110,9 +6110,9 @@ func (s *Credentials) DescribeGitLabCredentials(ctx context.Context, request ope
 
 }
 
-// UpdateGitLabCredentials - Update GitLab credentials
+// UpdateGitlabCredentials - Update GitLab credentials
 // Updates the details of the GitLab credentials identified by the given `credentialsId`.
-func (s *Credentials) UpdateGitLabCredentials(ctx context.Context, request operations.UpdateGitLabCredentialsRequest, opts ...operations.Option) (*operations.UpdateGitLabCredentialsResponse, error) {
+func (s *Credentials) UpdateGitlabCredentials(ctx context.Context, request operations.UpdateGitlabCredentialsRequest, opts ...operations.Option) (*operations.UpdateGitlabCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -6140,11 +6140,11 @@ func (s *Credentials) UpdateGitLabCredentials(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "UpdateGitLabCredentials",
+		OperationID:      "UpdateGitlabCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGitLabCredentialsRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateGitlabCredentialsRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -6211,7 +6211,7 @@ func (s *Credentials) UpdateGitLabCredentials(ctx context.Context, request opera
 		}
 	}
 
-	res := &operations.UpdateGitLabCredentialsResponse{
+	res := &operations.UpdateGitlabCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -6253,9 +6253,9 @@ func (s *Credentials) UpdateGitLabCredentials(ctx context.Context, request opera
 
 }
 
-// DeleteGitLabCredentials - Delete GitLab credentials
+// DeleteGitlabCredentials - Delete GitLab credentials
 // Deletes the GitLab credentials identified by the given `credentialsId`.
-func (s *Credentials) DeleteGitLabCredentials(ctx context.Context, request operations.DeleteGitLabCredentialsRequest, opts ...operations.Option) (*operations.DeleteGitLabCredentialsResponse, error) {
+func (s *Credentials) DeleteGitlabCredentials(ctx context.Context, request operations.DeleteGitlabCredentialsRequest, opts ...operations.Option) (*operations.DeleteGitlabCredentialsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -6283,7 +6283,7 @@ func (s *Credentials) DeleteGitLabCredentials(ctx context.Context, request opera
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DeleteGitLabCredentials",
+		OperationID:      "DeleteGitlabCredentials",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -6347,7 +6347,7 @@ func (s *Credentials) DeleteGitLabCredentials(ctx context.Context, request opera
 		}
 	}
 
-	res := &operations.DeleteGitLabCredentialsResponse{
+	res := &operations.DeleteGitlabCredentialsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,

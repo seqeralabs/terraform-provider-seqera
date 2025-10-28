@@ -10,7 +10,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *BitBucketCredentialResourceModel) RefreshFromSharedBitBucketCredentialKeysOutput(ctx context.Context, resp *shared.BitBucketCredentialKeysOutput) diag.Diagnostics {
+func (r *BitbucketCredentialResourceModel) RefreshFromSharedBitbucketCredentialKeysOutput(ctx context.Context, resp *shared.BitbucketCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	r.Username = types.StringValue(resp.Username)
@@ -18,12 +18,12 @@ func (r *BitBucketCredentialResourceModel) RefreshFromSharedBitBucketCredentialK
 	return diags
 }
 
-func (r *BitBucketCredentialResourceModel) RefreshFromSharedBitBucketCredentialOutput(ctx context.Context, resp *shared.BitBucketCredentialOutput) diag.Diagnostics {
+func (r *BitbucketCredentialResourceModel) RefreshFromSharedBitbucketCredentialOutput(ctx context.Context, resp *shared.BitbucketCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedBitBucketCredentialKeysOutput(ctx, &resp.Keys)...)
+		diags.Append(r.RefreshFromSharedBitbucketCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
 			return diags
@@ -40,7 +40,7 @@ func (r *BitBucketCredentialResourceModel) RefreshFromSharedBitBucketCredentialO
 	return diags
 }
 
-func (r *BitBucketCredentialResourceModel) RefreshFromSharedCreateBitBucketCredentialsResponse(ctx context.Context, resp *shared.CreateBitBucketCredentialsResponse) diag.Diagnostics {
+func (r *BitbucketCredentialResourceModel) RefreshFromSharedCreateBitbucketCredentialsResponse(ctx context.Context, resp *shared.CreateBitbucketCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -50,11 +50,11 @@ func (r *BitBucketCredentialResourceModel) RefreshFromSharedCreateBitBucketCrede
 	return diags
 }
 
-func (r *BitBucketCredentialResourceModel) RefreshFromSharedDescribeBitBucketCredentialsResponse(ctx context.Context, resp *shared.DescribeBitBucketCredentialsResponse) diag.Diagnostics {
+func (r *BitbucketCredentialResourceModel) RefreshFromSharedDescribeBitbucketCredentialsResponse(ctx context.Context, resp *shared.DescribeBitbucketCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedBitBucketCredentialOutput(ctx, resp.Credentials)...)
+		diags.Append(r.RefreshFromSharedBitbucketCredentialOutput(ctx, resp.Credentials)...)
 
 		if diags.HasError() {
 			return diags
@@ -65,7 +65,7 @@ func (r *BitBucketCredentialResourceModel) RefreshFromSharedDescribeBitBucketCre
 	return diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToOperationsCreateBitBucketCredentialsRequest(ctx context.Context) (*operations.CreateBitBucketCredentialsRequest, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToOperationsCreateBitbucketCredentialsRequest(ctx context.Context) (*operations.CreateBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -74,22 +74,22 @@ func (r *BitBucketCredentialResourceModel) ToOperationsCreateBitBucketCredential
 	} else {
 		workspaceID = nil
 	}
-	createBitBucketCredentialsRequest, createBitBucketCredentialsRequestDiags := r.ToSharedCreateBitBucketCredentialsRequest(ctx)
-	diags.Append(createBitBucketCredentialsRequestDiags...)
+	createBitbucketCredentialsRequest, createBitbucketCredentialsRequestDiags := r.ToSharedCreateBitbucketCredentialsRequest(ctx)
+	diags.Append(createBitbucketCredentialsRequestDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.CreateBitBucketCredentialsRequest{
+	out := operations.CreateBitbucketCredentialsRequest{
 		WorkspaceID:                       workspaceID,
-		CreateBitBucketCredentialsRequest: *createBitBucketCredentialsRequest,
+		CreateBitbucketCredentialsRequest: *createBitbucketCredentialsRequest,
 	}
 
 	return &out, diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToOperationsDeleteBitBucketCredentialsRequest(ctx context.Context) (*operations.DeleteBitBucketCredentialsRequest, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToOperationsDeleteBitbucketCredentialsRequest(ctx context.Context) (*operations.DeleteBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -101,7 +101,7 @@ func (r *BitBucketCredentialResourceModel) ToOperationsDeleteBitBucketCredential
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DeleteBitBucketCredentialsRequest{
+	out := operations.DeleteBitbucketCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}
@@ -109,7 +109,7 @@ func (r *BitBucketCredentialResourceModel) ToOperationsDeleteBitBucketCredential
 	return &out, diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToOperationsDescribeBitBucketCredentialsRequest(ctx context.Context) (*operations.DescribeBitBucketCredentialsRequest, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToOperationsDescribeBitbucketCredentialsRequest(ctx context.Context) (*operations.DescribeBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -121,7 +121,7 @@ func (r *BitBucketCredentialResourceModel) ToOperationsDescribeBitBucketCredenti
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DescribeBitBucketCredentialsRequest{
+	out := operations.DescribeBitbucketCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}
@@ -129,7 +129,7 @@ func (r *BitBucketCredentialResourceModel) ToOperationsDescribeBitBucketCredenti
 	return &out, diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToOperationsUpdateBitBucketCredentialsRequest(ctx context.Context) (*operations.UpdateBitBucketCredentialsRequest, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToOperationsUpdateBitbucketCredentialsRequest(ctx context.Context) (*operations.UpdateBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -141,23 +141,23 @@ func (r *BitBucketCredentialResourceModel) ToOperationsUpdateBitBucketCredential
 	} else {
 		workspaceID = nil
 	}
-	updateBitBucketCredentialsRequest, updateBitBucketCredentialsRequestDiags := r.ToSharedUpdateBitBucketCredentialsRequest(ctx)
-	diags.Append(updateBitBucketCredentialsRequestDiags...)
+	updateBitbucketCredentialsRequest, updateBitbucketCredentialsRequestDiags := r.ToSharedUpdateBitbucketCredentialsRequest(ctx)
+	diags.Append(updateBitbucketCredentialsRequestDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.UpdateBitBucketCredentialsRequest{
+	out := operations.UpdateBitbucketCredentialsRequest{
 		CredentialsID:                     credentialsID,
 		WorkspaceID:                       workspaceID,
-		UpdateBitBucketCredentialsRequest: *updateBitBucketCredentialsRequest,
+		UpdateBitbucketCredentialsRequest: *updateBitbucketCredentialsRequest,
 	}
 
 	return &out, diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToSharedBitBucketCredential(ctx context.Context) (*shared.BitBucketCredential, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredential(ctx context.Context) (*shared.BitbucketCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	credentialsID := new(string)
@@ -169,20 +169,20 @@ func (r *BitBucketCredentialResourceModel) ToSharedBitBucketCredential(ctx conte
 	var name string
 	name = r.Name.ValueString()
 
-	providerType := new(shared.BitBucketCredentialProviderType)
+	providerType := new(shared.BitbucketCredentialProviderType)
 	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
-		*providerType = shared.BitBucketCredentialProviderType(r.ProviderType.ValueString())
+		*providerType = shared.BitbucketCredentialProviderType(r.ProviderType.ValueString())
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedBitBucketCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedBitbucketCredentialKeys(ctx)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := shared.BitBucketCredential{
+	out := shared.BitbucketCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
 		ProviderType:  providerType,
@@ -192,7 +192,7 @@ func (r *BitBucketCredentialResourceModel) ToSharedBitBucketCredential(ctx conte
 	return &out, diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToSharedBitBucketCredentialKeys(ctx context.Context) (*shared.BitBucketCredentialKeys, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredentialKeys(ctx context.Context) (*shared.BitbucketCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var username string
@@ -207,7 +207,7 @@ func (r *BitBucketCredentialResourceModel) ToSharedBitBucketCredentialKeys(ctx c
 	} else {
 		baseURL = nil
 	}
-	out := shared.BitBucketCredentialKeys{
+	out := shared.BitbucketCredentialKeys{
 		Username: username,
 		Token:    token,
 		BaseURL:  baseURL,
@@ -216,34 +216,34 @@ func (r *BitBucketCredentialResourceModel) ToSharedBitBucketCredentialKeys(ctx c
 	return &out, diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToSharedCreateBitBucketCredentialsRequest(ctx context.Context) (*shared.CreateBitBucketCredentialsRequest, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToSharedCreateBitbucketCredentialsRequest(ctx context.Context) (*shared.CreateBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedBitBucketCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedBitbucketCredential(ctx)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := shared.CreateBitBucketCredentialsRequest{
+	out := shared.CreateBitbucketCredentialsRequest{
 		Credentials: credentials,
 	}
 
 	return &out, diags
 }
 
-func (r *BitBucketCredentialResourceModel) ToSharedUpdateBitBucketCredentialsRequest(ctx context.Context) (*shared.UpdateBitBucketCredentialsRequest, diag.Diagnostics) {
+func (r *BitbucketCredentialResourceModel) ToSharedUpdateBitbucketCredentialsRequest(ctx context.Context) (*shared.UpdateBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedBitBucketCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedBitbucketCredential(ctx)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := shared.UpdateBitBucketCredentialsRequest{
+	out := shared.UpdateBitbucketCredentialsRequest{
 		Credentials: credentials,
 	}
 

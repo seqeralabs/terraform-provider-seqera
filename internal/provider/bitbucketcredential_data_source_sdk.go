@@ -10,7 +10,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *BitBucketCredentialDataSourceModel) RefreshFromSharedBitBucketCredentialKeysOutput(ctx context.Context, resp *shared.BitBucketCredentialKeysOutput) diag.Diagnostics {
+func (r *BitbucketCredentialDataSourceModel) RefreshFromSharedBitbucketCredentialKeysOutput(ctx context.Context, resp *shared.BitbucketCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	r.Username = types.StringValue(resp.Username)
@@ -18,12 +18,12 @@ func (r *BitBucketCredentialDataSourceModel) RefreshFromSharedBitBucketCredentia
 	return diags
 }
 
-func (r *BitBucketCredentialDataSourceModel) RefreshFromSharedBitBucketCredentialOutput(ctx context.Context, resp *shared.BitBucketCredentialOutput) diag.Diagnostics {
+func (r *BitbucketCredentialDataSourceModel) RefreshFromSharedBitbucketCredentialOutput(ctx context.Context, resp *shared.BitbucketCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedBitBucketCredentialKeysOutput(ctx, &resp.Keys)...)
+		diags.Append(r.RefreshFromSharedBitbucketCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
 			return diags
@@ -40,11 +40,11 @@ func (r *BitBucketCredentialDataSourceModel) RefreshFromSharedBitBucketCredentia
 	return diags
 }
 
-func (r *BitBucketCredentialDataSourceModel) RefreshFromSharedDescribeBitBucketCredentialsResponse(ctx context.Context, resp *shared.DescribeBitBucketCredentialsResponse) diag.Diagnostics {
+func (r *BitbucketCredentialDataSourceModel) RefreshFromSharedDescribeBitbucketCredentialsResponse(ctx context.Context, resp *shared.DescribeBitbucketCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedBitBucketCredentialOutput(ctx, resp.Credentials)...)
+		diags.Append(r.RefreshFromSharedBitbucketCredentialOutput(ctx, resp.Credentials)...)
 
 		if diags.HasError() {
 			return diags
@@ -55,7 +55,7 @@ func (r *BitBucketCredentialDataSourceModel) RefreshFromSharedDescribeBitBucketC
 	return diags
 }
 
-func (r *BitBucketCredentialDataSourceModel) ToOperationsDescribeBitBucketCredentialsRequest(ctx context.Context) (*operations.DescribeBitBucketCredentialsRequest, diag.Diagnostics) {
+func (r *BitbucketCredentialDataSourceModel) ToOperationsDescribeBitbucketCredentialsRequest(ctx context.Context) (*operations.DescribeBitbucketCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -67,7 +67,7 @@ func (r *BitBucketCredentialDataSourceModel) ToOperationsDescribeBitBucketCreden
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DescribeBitBucketCredentialsRequest{
+	out := operations.DescribeBitbucketCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}

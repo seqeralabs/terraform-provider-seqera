@@ -2,11 +2,11 @@
 
 package shared
 
-type DescribeGitHubCredentialsResponse struct {
-	Credentials *GitHubCredentialOutput `json:"credentials,omitempty"`
+type DescribeGithubCredentialsResponse struct {
+	Credentials *GithubCredentialOutput `json:"credentials,omitempty"`
 }
 
-func (d *DescribeGitHubCredentialsResponse) GetCredentials() *GitHubCredentialOutput {
+func (d *DescribeGithubCredentialsResponse) GetCredentials() *GithubCredentialOutput {
 	if d == nil {
 		return nil
 	}

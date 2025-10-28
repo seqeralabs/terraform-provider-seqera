@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type DeleteGitHubCredentialsRequest struct {
+type DeleteGithubCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (d *DeleteGitHubCredentialsRequest) GetCredentialsID() string {
+func (d *DeleteGithubCredentialsRequest) GetCredentialsID() string {
 	if d == nil {
 		return ""
 	}
 	return d.CredentialsID
 }
 
-func (d *DeleteGitHubCredentialsRequest) GetWorkspaceID() *int64 {
+func (d *DeleteGithubCredentialsRequest) GetWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
 	return d.WorkspaceID
 }
 
-type DeleteGitHubCredentialsResponse struct {
+type DeleteGithubCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -39,28 +39,28 @@ type DeleteGitHubCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (d *DeleteGitHubCredentialsResponse) GetContentType() string {
+func (d *DeleteGithubCredentialsResponse) GetContentType() string {
 	if d == nil {
 		return ""
 	}
 	return d.ContentType
 }
 
-func (d *DeleteGitHubCredentialsResponse) GetStatusCode() int {
+func (d *DeleteGithubCredentialsResponse) GetStatusCode() int {
 	if d == nil {
 		return 0
 	}
 	return d.StatusCode
 }
 
-func (d *DeleteGitHubCredentialsResponse) GetRawResponse() *http.Response {
+func (d *DeleteGithubCredentialsResponse) GetRawResponse() *http.Response {
 	if d == nil {
 		return nil
 	}
 	return d.RawResponse
 }
 
-func (d *DeleteGitHubCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (d *DeleteGithubCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if d == nil {
 		return nil
 	}

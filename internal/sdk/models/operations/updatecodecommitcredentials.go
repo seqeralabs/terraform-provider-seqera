@@ -7,37 +7,37 @@ import (
 	"net/http"
 )
 
-type UpdateCodeCommitCredentialsRequest struct {
+type UpdateCodecommitCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// CodeCommit credentials update request
-	UpdateCodeCommitCredentialsRequest shared.UpdateCodeCommitCredentialsRequest `request:"mediaType=application/json"`
+	// Codecommit credentials update request
+	UpdateCodecommitCredentialsRequest shared.UpdateCodecommitCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (u *UpdateCodeCommitCredentialsRequest) GetCredentialsID() string {
+func (u *UpdateCodecommitCredentialsRequest) GetCredentialsID() string {
 	if u == nil {
 		return ""
 	}
 	return u.CredentialsID
 }
 
-func (u *UpdateCodeCommitCredentialsRequest) GetWorkspaceID() *int64 {
+func (u *UpdateCodecommitCredentialsRequest) GetWorkspaceID() *int64 {
 	if u == nil {
 		return nil
 	}
 	return u.WorkspaceID
 }
 
-func (u *UpdateCodeCommitCredentialsRequest) GetUpdateCodeCommitCredentialsRequest() shared.UpdateCodeCommitCredentialsRequest {
+func (u *UpdateCodecommitCredentialsRequest) GetUpdateCodecommitCredentialsRequest() shared.UpdateCodecommitCredentialsRequest {
 	if u == nil {
-		return shared.UpdateCodeCommitCredentialsRequest{}
+		return shared.UpdateCodecommitCredentialsRequest{}
 	}
-	return u.UpdateCodeCommitCredentialsRequest
+	return u.UpdateCodecommitCredentialsRequest
 }
 
-type UpdateCodeCommitCredentialsResponse struct {
+type UpdateCodecommitCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,28 +48,28 @@ type UpdateCodeCommitCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (u *UpdateCodeCommitCredentialsResponse) GetContentType() string {
+func (u *UpdateCodecommitCredentialsResponse) GetContentType() string {
 	if u == nil {
 		return ""
 	}
 	return u.ContentType
 }
 
-func (u *UpdateCodeCommitCredentialsResponse) GetStatusCode() int {
+func (u *UpdateCodecommitCredentialsResponse) GetStatusCode() int {
 	if u == nil {
 		return 0
 	}
 	return u.StatusCode
 }
 
-func (u *UpdateCodeCommitCredentialsResponse) GetRawResponse() *http.Response {
+func (u *UpdateCodecommitCredentialsResponse) GetRawResponse() *http.Response {
 	if u == nil {
 		return nil
 	}
 	return u.RawResponse
 }
 
-func (u *UpdateCodeCommitCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (u *UpdateCodecommitCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if u == nil {
 		return nil
 	}

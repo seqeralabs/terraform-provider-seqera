@@ -7,37 +7,37 @@ import (
 	"net/http"
 )
 
-type UpdateGitLabCredentialsRequest struct {
+type UpdateGitlabCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// GitLab credentials update request
-	UpdateGitLabCredentialsRequest shared.UpdateGitLabCredentialsRequest `request:"mediaType=application/json"`
+	UpdateGitlabCredentialsRequest shared.UpdateGitlabCredentialsRequest `request:"mediaType=application/json"`
 }
 
-func (u *UpdateGitLabCredentialsRequest) GetCredentialsID() string {
+func (u *UpdateGitlabCredentialsRequest) GetCredentialsID() string {
 	if u == nil {
 		return ""
 	}
 	return u.CredentialsID
 }
 
-func (u *UpdateGitLabCredentialsRequest) GetWorkspaceID() *int64 {
+func (u *UpdateGitlabCredentialsRequest) GetWorkspaceID() *int64 {
 	if u == nil {
 		return nil
 	}
 	return u.WorkspaceID
 }
 
-func (u *UpdateGitLabCredentialsRequest) GetUpdateGitLabCredentialsRequest() shared.UpdateGitLabCredentialsRequest {
+func (u *UpdateGitlabCredentialsRequest) GetUpdateGitlabCredentialsRequest() shared.UpdateGitlabCredentialsRequest {
 	if u == nil {
-		return shared.UpdateGitLabCredentialsRequest{}
+		return shared.UpdateGitlabCredentialsRequest{}
 	}
-	return u.UpdateGitLabCredentialsRequest
+	return u.UpdateGitlabCredentialsRequest
 }
 
-type UpdateGitLabCredentialsResponse struct {
+type UpdateGitlabCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -48,28 +48,28 @@ type UpdateGitLabCredentialsResponse struct {
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (u *UpdateGitLabCredentialsResponse) GetContentType() string {
+func (u *UpdateGitlabCredentialsResponse) GetContentType() string {
 	if u == nil {
 		return ""
 	}
 	return u.ContentType
 }
 
-func (u *UpdateGitLabCredentialsResponse) GetStatusCode() int {
+func (u *UpdateGitlabCredentialsResponse) GetStatusCode() int {
 	if u == nil {
 		return 0
 	}
 	return u.StatusCode
 }
 
-func (u *UpdateGitLabCredentialsResponse) GetRawResponse() *http.Response {
+func (u *UpdateGitlabCredentialsResponse) GetRawResponse() *http.Response {
 	if u == nil {
 		return nil
 	}
 	return u.RawResponse
 }
 
-func (u *UpdateGitLabCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (u *UpdateGitlabCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if u == nil {
 		return nil
 	}

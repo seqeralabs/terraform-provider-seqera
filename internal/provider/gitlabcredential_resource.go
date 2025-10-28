@@ -21,35 +21,35 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &GitLabCredentialResource{}
-var _ resource.ResourceWithImportState = &GitLabCredentialResource{}
+var _ resource.Resource = &GitlabCredentialResource{}
+var _ resource.ResourceWithImportState = &GitlabCredentialResource{}
 
-func NewGitLabCredentialResource() resource.Resource {
-	return &GitLabCredentialResource{}
+func NewGitlabCredentialResource() resource.Resource {
+	return &GitlabCredentialResource{}
 }
 
-// GitLabCredentialResource defines the resource implementation.
-type GitLabCredentialResource struct {
+// GitlabCredentialResource defines the resource implementation.
+type GitlabCredentialResource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// GitLabCredentialResourceModel describes the resource data model.
-type GitLabCredentialResourceModel struct {
+// GitlabCredentialResourceModel describes the resource data model.
+type GitlabCredentialResourceModel struct {
 	BaseURL       types.String                 `tfsdk:"base_url"`
 	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	Keys          tfTypes.GitLabCredentialKeys `tfsdk:"keys"`
+	Keys          tfTypes.GitlabCredentialKeys `tfsdk:"keys"`
 	Name          types.String                 `tfsdk:"name"`
 	ProviderType  types.String                 `tfsdk:"provider_type"`
 	Token         types.String                 `tfsdk:"token"`
 	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
-func (r *GitLabCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_git_lab_credential"
+func (r *GitlabCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_gitlab_credential"
 }
 
-func (r *GitLabCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage GitLab credentials in Seqera platform using this resource.\n\nGitLab credentials store authentication information for accessing GitLab\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
@@ -96,7 +96,7 @@ func (r *GitLabCredentialResource) Schema(ctx context.Context, req resource.Sche
 	}
 }
 
-func (r *GitLabCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *GitlabCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -116,8 +116,8 @@ func (r *GitLabCredentialResource) Configure(ctx context.Context, req resource.C
 	r.client = client
 }
 
-func (r *GitLabCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *GitLabCredentialResourceModel
+func (r *GitlabCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *GitlabCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -134,13 +134,13 @@ func (r *GitLabCredentialResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateGitLabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateGitlabCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.CreateGitLabCredentials(ctx, *request)
+	res, err := r.client.Credentials.CreateGitlabCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -156,11 +156,11 @@ func (r *GitLabCredentialResource) Create(ctx context.Context, req resource.Crea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateGitLabCredentialsResponse != nil) {
+	if !(res.CreateGitlabCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCreateGitLabCredentialsResponse(ctx, res.CreateGitLabCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateGitlabCredentialsResponse(ctx, res.CreateGitlabCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -171,13 +171,13 @@ func (r *GitLabCredentialResource) Create(ctx context.Context, req resource.Crea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeGitLabCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeGitlabCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeGitLabCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeGitlabCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -193,11 +193,11 @@ func (r *GitLabCredentialResource) Create(ctx context.Context, req resource.Crea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeGitLabCredentialsResponse != nil) {
+	if !(res1.DescribeGitlabCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitLabCredentialsResponse(ctx, res1.DescribeGitLabCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitlabCredentialsResponse(ctx, res1.DescribeGitlabCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -213,8 +213,8 @@ func (r *GitLabCredentialResource) Create(ctx context.Context, req resource.Crea
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *GitLabCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *GitLabCredentialResourceModel
+func (r *GitlabCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *GitlabCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -231,13 +231,13 @@ func (r *GitLabCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGitLabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGitlabCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeGitLabCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeGitlabCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -257,11 +257,11 @@ func (r *GitLabCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeGitLabCredentialsResponse != nil) {
+	if !(res.DescribeGitlabCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitLabCredentialsResponse(ctx, res.DescribeGitLabCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitlabCredentialsResponse(ctx, res.DescribeGitlabCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -271,8 +271,8 @@ func (r *GitLabCredentialResource) Read(ctx context.Context, req resource.ReadRe
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *GitLabCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *GitLabCredentialResourceModel
+func (r *GitlabCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *GitlabCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -285,13 +285,13 @@ func (r *GitLabCredentialResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateGitLabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateGitlabCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.UpdateGitLabCredentials(ctx, *request)
+	res, err := r.client.Credentials.UpdateGitlabCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -313,13 +313,13 @@ func (r *GitLabCredentialResource) Update(ctx context.Context, req resource.Upda
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeGitLabCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeGitlabCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeGitLabCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeGitlabCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -335,11 +335,11 @@ func (r *GitLabCredentialResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeGitLabCredentialsResponse != nil) {
+	if !(res1.DescribeGitlabCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitLabCredentialsResponse(ctx, res1.DescribeGitLabCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeGitlabCredentialsResponse(ctx, res1.DescribeGitlabCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -355,8 +355,8 @@ func (r *GitLabCredentialResource) Update(ctx context.Context, req resource.Upda
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *GitLabCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *GitLabCredentialResourceModel
+func (r *GitlabCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *GitlabCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -373,13 +373,13 @@ func (r *GitLabCredentialResource) Delete(ctx context.Context, req resource.Dele
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteGitLabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteGitlabCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DeleteGitLabCredentials(ctx, *request)
+	res, err := r.client.Credentials.DeleteGitlabCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -398,6 +398,6 @@ func (r *GitLabCredentialResource) Delete(ctx context.Context, req resource.Dele
 
 }
 
-func (r *GitLabCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *GitlabCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
 }

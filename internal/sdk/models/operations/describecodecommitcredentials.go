@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type DescribeCodeCommitCredentialsRequest struct {
+type DescribeCodecommitCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (d *DescribeCodeCommitCredentialsRequest) GetCredentialsID() string {
+func (d *DescribeCodecommitCredentialsRequest) GetCredentialsID() string {
 	if d == nil {
 		return ""
 	}
 	return d.CredentialsID
 }
 
-func (d *DescribeCodeCommitCredentialsRequest) GetWorkspaceID() *int64 {
+func (d *DescribeCodecommitCredentialsRequest) GetWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
 	return d.WorkspaceID
 }
 
-type DescribeCodeCommitCredentialsResponse struct {
+type DescribeCodecommitCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,40 +36,40 @@ type DescribeCodeCommitCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	DescribeCodeCommitCredentialsResponse *shared.DescribeCodeCommitCredentialsResponse
+	DescribeCodecommitCredentialsResponse *shared.DescribeCodecommitCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (d *DescribeCodeCommitCredentialsResponse) GetContentType() string {
+func (d *DescribeCodecommitCredentialsResponse) GetContentType() string {
 	if d == nil {
 		return ""
 	}
 	return d.ContentType
 }
 
-func (d *DescribeCodeCommitCredentialsResponse) GetStatusCode() int {
+func (d *DescribeCodecommitCredentialsResponse) GetStatusCode() int {
 	if d == nil {
 		return 0
 	}
 	return d.StatusCode
 }
 
-func (d *DescribeCodeCommitCredentialsResponse) GetRawResponse() *http.Response {
+func (d *DescribeCodecommitCredentialsResponse) GetRawResponse() *http.Response {
 	if d == nil {
 		return nil
 	}
 	return d.RawResponse
 }
 
-func (d *DescribeCodeCommitCredentialsResponse) GetDescribeCodeCommitCredentialsResponse() *shared.DescribeCodeCommitCredentialsResponse {
+func (d *DescribeCodecommitCredentialsResponse) GetDescribeCodecommitCredentialsResponse() *shared.DescribeCodecommitCredentialsResponse {
 	if d == nil {
 		return nil
 	}
-	return d.DescribeCodeCommitCredentialsResponse
+	return d.DescribeCodecommitCredentialsResponse
 }
 
-func (d *DescribeCodeCommitCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (d *DescribeCodecommitCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if d == nil {
 		return nil
 	}

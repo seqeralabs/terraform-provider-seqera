@@ -7,28 +7,28 @@ import (
 	"net/http"
 )
 
-type DescribeBitBucketCredentialsRequest struct {
+type DescribeBitbucketCredentialsRequest struct {
 	// Credentials string identifier
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 
-func (d *DescribeBitBucketCredentialsRequest) GetCredentialsID() string {
+func (d *DescribeBitbucketCredentialsRequest) GetCredentialsID() string {
 	if d == nil {
 		return ""
 	}
 	return d.CredentialsID
 }
 
-func (d *DescribeBitBucketCredentialsRequest) GetWorkspaceID() *int64 {
+func (d *DescribeBitbucketCredentialsRequest) GetWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
 	return d.WorkspaceID
 }
 
-type DescribeBitBucketCredentialsResponse struct {
+type DescribeBitbucketCredentialsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,40 +36,40 @@ type DescribeBitBucketCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	DescribeBitBucketCredentialsResponse *shared.DescribeBitBucketCredentialsResponse
+	DescribeBitbucketCredentialsResponse *shared.DescribeBitbucketCredentialsResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (d *DescribeBitBucketCredentialsResponse) GetContentType() string {
+func (d *DescribeBitbucketCredentialsResponse) GetContentType() string {
 	if d == nil {
 		return ""
 	}
 	return d.ContentType
 }
 
-func (d *DescribeBitBucketCredentialsResponse) GetStatusCode() int {
+func (d *DescribeBitbucketCredentialsResponse) GetStatusCode() int {
 	if d == nil {
 		return 0
 	}
 	return d.StatusCode
 }
 
-func (d *DescribeBitBucketCredentialsResponse) GetRawResponse() *http.Response {
+func (d *DescribeBitbucketCredentialsResponse) GetRawResponse() *http.Response {
 	if d == nil {
 		return nil
 	}
 	return d.RawResponse
 }
 
-func (d *DescribeBitBucketCredentialsResponse) GetDescribeBitBucketCredentialsResponse() *shared.DescribeBitBucketCredentialsResponse {
+func (d *DescribeBitbucketCredentialsResponse) GetDescribeBitbucketCredentialsResponse() *shared.DescribeBitbucketCredentialsResponse {
 	if d == nil {
 		return nil
 	}
-	return d.DescribeBitBucketCredentialsResponse
+	return d.DescribeBitbucketCredentialsResponse
 }
 
-func (d *DescribeBitBucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (d *DescribeBitbucketCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
 	if d == nil {
 		return nil
 	}

@@ -10,7 +10,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *CodeCommitCredentialDataSourceModel) RefreshFromSharedCodeCommitCredentialKeysOutput(ctx context.Context, resp *shared.CodeCommitCredentialKeysOutput) diag.Diagnostics {
+func (r *CodecommitCredentialDataSourceModel) RefreshFromSharedCodecommitCredentialKeysOutput(ctx context.Context, resp *shared.CodecommitCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	r.AccessKey = types.StringValue(resp.AccessKey)
@@ -18,12 +18,12 @@ func (r *CodeCommitCredentialDataSourceModel) RefreshFromSharedCodeCommitCredent
 	return diags
 }
 
-func (r *CodeCommitCredentialDataSourceModel) RefreshFromSharedCodeCommitCredentialOutput(ctx context.Context, resp *shared.CodeCommitCredentialOutput) diag.Diagnostics {
+func (r *CodecommitCredentialDataSourceModel) RefreshFromSharedCodecommitCredentialOutput(ctx context.Context, resp *shared.CodecommitCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		diags.Append(r.RefreshFromSharedCodeCommitCredentialKeysOutput(ctx, &resp.Keys)...)
+		diags.Append(r.RefreshFromSharedCodecommitCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
 			return diags
@@ -40,11 +40,11 @@ func (r *CodeCommitCredentialDataSourceModel) RefreshFromSharedCodeCommitCredent
 	return diags
 }
 
-func (r *CodeCommitCredentialDataSourceModel) RefreshFromSharedDescribeCodeCommitCredentialsResponse(ctx context.Context, resp *shared.DescribeCodeCommitCredentialsResponse) diag.Diagnostics {
+func (r *CodecommitCredentialDataSourceModel) RefreshFromSharedDescribeCodecommitCredentialsResponse(ctx context.Context, resp *shared.DescribeCodecommitCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedCodeCommitCredentialOutput(ctx, resp.Credentials)...)
+		diags.Append(r.RefreshFromSharedCodecommitCredentialOutput(ctx, resp.Credentials)...)
 
 		if diags.HasError() {
 			return diags
@@ -55,7 +55,7 @@ func (r *CodeCommitCredentialDataSourceModel) RefreshFromSharedDescribeCodeCommi
 	return diags
 }
 
-func (r *CodeCommitCredentialDataSourceModel) ToOperationsDescribeCodeCommitCredentialsRequest(ctx context.Context) (*operations.DescribeCodeCommitCredentialsRequest, diag.Diagnostics) {
+func (r *CodecommitCredentialDataSourceModel) ToOperationsDescribeCodecommitCredentialsRequest(ctx context.Context) (*operations.DescribeCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -67,7 +67,7 @@ func (r *CodeCommitCredentialDataSourceModel) ToOperationsDescribeCodeCommitCred
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DescribeCodeCommitCredentialsRequest{
+	out := operations.DescribeCodecommitCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}

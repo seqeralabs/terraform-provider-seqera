@@ -2,11 +2,11 @@
 
 package shared
 
-type CreateGitLabCredentialsResponse struct {
+type CreateGitlabCredentialsResponse struct {
 	CredentialsID *string `json:"credentialsId,omitempty"`
 }
 
-func (c *CreateGitLabCredentialsResponse) GetCredentialsID() *string {
+func (c *CreateGitlabCredentialsResponse) GetCredentialsID() *string {
 	if c == nil {
 		return nil
 	}

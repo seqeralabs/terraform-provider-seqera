@@ -2,11 +2,11 @@
 
 package shared
 
-type UpdateBitBucketCredentialsRequest struct {
-	Credentials *BitBucketCredential `json:"credentials,omitempty"`
+type UpdateBitbucketCredentialsRequest struct {
+	Credentials *BitbucketCredential `json:"credentials,omitempty"`
 }
 
-func (u *UpdateBitBucketCredentialsRequest) GetCredentials() *BitBucketCredential {
+func (u *UpdateBitbucketCredentialsRequest) GetCredentials() *BitbucketCredential {
 	if u == nil {
 		return nil
 	}

@@ -10,7 +10,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *GitHubCredentialResourceModel) RefreshFromSharedCreateGitHubCredentialsResponse(ctx context.Context, resp *shared.CreateGitHubCredentialsResponse) diag.Diagnostics {
+func (r *GithubCredentialResourceModel) RefreshFromSharedCreateGithubCredentialsResponse(ctx context.Context, resp *shared.CreateGithubCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -20,11 +20,11 @@ func (r *GitHubCredentialResourceModel) RefreshFromSharedCreateGitHubCredentials
 	return diags
 }
 
-func (r *GitHubCredentialResourceModel) RefreshFromSharedDescribeGitHubCredentialsResponse(ctx context.Context, resp *shared.DescribeGitHubCredentialsResponse) diag.Diagnostics {
+func (r *GithubCredentialResourceModel) RefreshFromSharedDescribeGithubCredentialsResponse(ctx context.Context, resp *shared.DescribeGithubCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedGitHubCredentialOutput(ctx, resp.Credentials)...)
+		diags.Append(r.RefreshFromSharedGithubCredentialOutput(ctx, resp.Credentials)...)
 
 		if diags.HasError() {
 			return diags
@@ -35,7 +35,7 @@ func (r *GitHubCredentialResourceModel) RefreshFromSharedDescribeGitHubCredentia
 	return diags
 }
 
-func (r *GitHubCredentialResourceModel) RefreshFromSharedGitHubCredentialOutput(ctx context.Context, resp *shared.GitHubCredentialOutput) diag.Diagnostics {
+func (r *GithubCredentialResourceModel) RefreshFromSharedGithubCredentialOutput(ctx context.Context, resp *shared.GithubCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -51,7 +51,7 @@ func (r *GitHubCredentialResourceModel) RefreshFromSharedGitHubCredentialOutput(
 	return diags
 }
 
-func (r *GitHubCredentialResourceModel) ToOperationsCreateGitHubCredentialsRequest(ctx context.Context) (*operations.CreateGitHubCredentialsRequest, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToOperationsCreateGithubCredentialsRequest(ctx context.Context) (*operations.CreateGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -60,22 +60,22 @@ func (r *GitHubCredentialResourceModel) ToOperationsCreateGitHubCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	createGitHubCredentialsRequest, createGitHubCredentialsRequestDiags := r.ToSharedCreateGitHubCredentialsRequest(ctx)
-	diags.Append(createGitHubCredentialsRequestDiags...)
+	createGithubCredentialsRequest, createGithubCredentialsRequestDiags := r.ToSharedCreateGithubCredentialsRequest(ctx)
+	diags.Append(createGithubCredentialsRequestDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.CreateGitHubCredentialsRequest{
+	out := operations.CreateGithubCredentialsRequest{
 		WorkspaceID:                    workspaceID,
-		CreateGitHubCredentialsRequest: *createGitHubCredentialsRequest,
+		CreateGithubCredentialsRequest: *createGithubCredentialsRequest,
 	}
 
 	return &out, diags
 }
 
-func (r *GitHubCredentialResourceModel) ToOperationsDeleteGitHubCredentialsRequest(ctx context.Context) (*operations.DeleteGitHubCredentialsRequest, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToOperationsDeleteGithubCredentialsRequest(ctx context.Context) (*operations.DeleteGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -87,7 +87,7 @@ func (r *GitHubCredentialResourceModel) ToOperationsDeleteGitHubCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DeleteGitHubCredentialsRequest{
+	out := operations.DeleteGithubCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}
@@ -95,7 +95,7 @@ func (r *GitHubCredentialResourceModel) ToOperationsDeleteGitHubCredentialsReque
 	return &out, diags
 }
 
-func (r *GitHubCredentialResourceModel) ToOperationsDescribeGitHubCredentialsRequest(ctx context.Context) (*operations.DescribeGitHubCredentialsRequest, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToOperationsDescribeGithubCredentialsRequest(ctx context.Context) (*operations.DescribeGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -107,7 +107,7 @@ func (r *GitHubCredentialResourceModel) ToOperationsDescribeGitHubCredentialsReq
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DescribeGitHubCredentialsRequest{
+	out := operations.DescribeGithubCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}
@@ -115,7 +115,7 @@ func (r *GitHubCredentialResourceModel) ToOperationsDescribeGitHubCredentialsReq
 	return &out, diags
 }
 
-func (r *GitHubCredentialResourceModel) ToOperationsUpdateGitHubCredentialsRequest(ctx context.Context) (*operations.UpdateGitHubCredentialsRequest, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToOperationsUpdateGithubCredentialsRequest(ctx context.Context) (*operations.UpdateGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -127,40 +127,40 @@ func (r *GitHubCredentialResourceModel) ToOperationsUpdateGitHubCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	updateGitHubCredentialsRequest, updateGitHubCredentialsRequestDiags := r.ToSharedUpdateGitHubCredentialsRequest(ctx)
-	diags.Append(updateGitHubCredentialsRequestDiags...)
+	updateGithubCredentialsRequest, updateGithubCredentialsRequestDiags := r.ToSharedUpdateGithubCredentialsRequest(ctx)
+	diags.Append(updateGithubCredentialsRequestDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.UpdateGitHubCredentialsRequest{
+	out := operations.UpdateGithubCredentialsRequest{
 		CredentialsID:                  credentialsID,
 		WorkspaceID:                    workspaceID,
-		UpdateGitHubCredentialsRequest: *updateGitHubCredentialsRequest,
+		UpdateGithubCredentialsRequest: *updateGithubCredentialsRequest,
 	}
 
 	return &out, diags
 }
 
-func (r *GitHubCredentialResourceModel) ToSharedCreateGitHubCredentialsRequest(ctx context.Context) (*shared.CreateGitHubCredentialsRequest, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToSharedCreateGithubCredentialsRequest(ctx context.Context) (*shared.CreateGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGitHubCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGithubCredential(ctx)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := shared.CreateGitHubCredentialsRequest{
+	out := shared.CreateGithubCredentialsRequest{
 		Credentials: credentials,
 	}
 
 	return &out, diags
 }
 
-func (r *GitHubCredentialResourceModel) ToSharedGitHubCredential(ctx context.Context) (*shared.GitHubCredential, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToSharedGithubCredential(ctx context.Context) (*shared.GithubCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	credentialsID := new(string)
@@ -172,14 +172,14 @@ func (r *GitHubCredentialResourceModel) ToSharedGitHubCredential(ctx context.Con
 	var name string
 	name = r.Name.ValueString()
 
-	providerType := new(shared.GitHubCredentialProviderType)
+	providerType := new(shared.GithubCredentialProviderType)
 	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
-		*providerType = shared.GitHubCredentialProviderType(r.ProviderType.ValueString())
+		*providerType = shared.GithubCredentialProviderType(r.ProviderType.ValueString())
 	} else {
 		providerType = nil
 	}
-	keys := shared.GitHubCredentialKeys{}
-	out := shared.GitHubCredential{
+	keys := shared.GithubCredentialKeys{}
+	out := shared.GithubCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
 		ProviderType:  providerType,
@@ -189,7 +189,7 @@ func (r *GitHubCredentialResourceModel) ToSharedGitHubCredential(ctx context.Con
 	return &out, diags
 }
 
-func (r *GitHubCredentialResourceModel) ToSharedGitHubCredentialKeys(ctx context.Context) (*shared.GitHubCredentialKeys, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToSharedGithubCredentialKeys(ctx context.Context) (*shared.GithubCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var accessToken string
@@ -201,7 +201,7 @@ func (r *GitHubCredentialResourceModel) ToSharedGitHubCredentialKeys(ctx context
 	} else {
 		baseURL = nil
 	}
-	out := shared.GitHubCredentialKeys{
+	out := shared.GithubCredentialKeys{
 		AccessToken: accessToken,
 		BaseURL:     baseURL,
 	}
@@ -209,17 +209,17 @@ func (r *GitHubCredentialResourceModel) ToSharedGitHubCredentialKeys(ctx context
 	return &out, diags
 }
 
-func (r *GitHubCredentialResourceModel) ToSharedUpdateGitHubCredentialsRequest(ctx context.Context) (*shared.UpdateGitHubCredentialsRequest, diag.Diagnostics) {
+func (r *GithubCredentialResourceModel) ToSharedUpdateGithubCredentialsRequest(ctx context.Context) (*shared.UpdateGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGitHubCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGithubCredential(ctx)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := shared.UpdateGitHubCredentialsRequest{
+	out := shared.UpdateGithubCredentialsRequest{
 		Credentials: credentials,
 	}
 

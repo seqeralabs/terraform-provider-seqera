@@ -10,7 +10,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *GitLabCredentialResourceModel) RefreshFromSharedCreateGitLabCredentialsResponse(ctx context.Context, resp *shared.CreateGitLabCredentialsResponse) diag.Diagnostics {
+func (r *GitlabCredentialResourceModel) RefreshFromSharedCreateGitlabCredentialsResponse(ctx context.Context, resp *shared.CreateGitlabCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -20,11 +20,11 @@ func (r *GitLabCredentialResourceModel) RefreshFromSharedCreateGitLabCredentials
 	return diags
 }
 
-func (r *GitLabCredentialResourceModel) RefreshFromSharedDescribeGitLabCredentialsResponse(ctx context.Context, resp *shared.DescribeGitLabCredentialsResponse) diag.Diagnostics {
+func (r *GitlabCredentialResourceModel) RefreshFromSharedDescribeGitlabCredentialsResponse(ctx context.Context, resp *shared.DescribeGitlabCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedGitLabCredentialOutput(ctx, resp.Credentials)...)
+		diags.Append(r.RefreshFromSharedGitlabCredentialOutput(ctx, resp.Credentials)...)
 
 		if diags.HasError() {
 			return diags
@@ -35,7 +35,7 @@ func (r *GitLabCredentialResourceModel) RefreshFromSharedDescribeGitLabCredentia
 	return diags
 }
 
-func (r *GitLabCredentialResourceModel) RefreshFromSharedGitLabCredentialOutput(ctx context.Context, resp *shared.GitLabCredentialOutput) diag.Diagnostics {
+func (r *GitlabCredentialResourceModel) RefreshFromSharedGitlabCredentialOutput(ctx context.Context, resp *shared.GitlabCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -51,7 +51,7 @@ func (r *GitLabCredentialResourceModel) RefreshFromSharedGitLabCredentialOutput(
 	return diags
 }
 
-func (r *GitLabCredentialResourceModel) ToOperationsCreateGitLabCredentialsRequest(ctx context.Context) (*operations.CreateGitLabCredentialsRequest, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToOperationsCreateGitlabCredentialsRequest(ctx context.Context) (*operations.CreateGitlabCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -60,22 +60,22 @@ func (r *GitLabCredentialResourceModel) ToOperationsCreateGitLabCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	createGitLabCredentialsRequest, createGitLabCredentialsRequestDiags := r.ToSharedCreateGitLabCredentialsRequest(ctx)
-	diags.Append(createGitLabCredentialsRequestDiags...)
+	createGitlabCredentialsRequest, createGitlabCredentialsRequestDiags := r.ToSharedCreateGitlabCredentialsRequest(ctx)
+	diags.Append(createGitlabCredentialsRequestDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.CreateGitLabCredentialsRequest{
+	out := operations.CreateGitlabCredentialsRequest{
 		WorkspaceID:                    workspaceID,
-		CreateGitLabCredentialsRequest: *createGitLabCredentialsRequest,
+		CreateGitlabCredentialsRequest: *createGitlabCredentialsRequest,
 	}
 
 	return &out, diags
 }
 
-func (r *GitLabCredentialResourceModel) ToOperationsDeleteGitLabCredentialsRequest(ctx context.Context) (*operations.DeleteGitLabCredentialsRequest, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToOperationsDeleteGitlabCredentialsRequest(ctx context.Context) (*operations.DeleteGitlabCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -87,7 +87,7 @@ func (r *GitLabCredentialResourceModel) ToOperationsDeleteGitLabCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DeleteGitLabCredentialsRequest{
+	out := operations.DeleteGitlabCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}
@@ -95,7 +95,7 @@ func (r *GitLabCredentialResourceModel) ToOperationsDeleteGitLabCredentialsReque
 	return &out, diags
 }
 
-func (r *GitLabCredentialResourceModel) ToOperationsDescribeGitLabCredentialsRequest(ctx context.Context) (*operations.DescribeGitLabCredentialsRequest, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToOperationsDescribeGitlabCredentialsRequest(ctx context.Context) (*operations.DescribeGitlabCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -107,7 +107,7 @@ func (r *GitLabCredentialResourceModel) ToOperationsDescribeGitLabCredentialsReq
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DescribeGitLabCredentialsRequest{
+	out := operations.DescribeGitlabCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}
@@ -115,7 +115,7 @@ func (r *GitLabCredentialResourceModel) ToOperationsDescribeGitLabCredentialsReq
 	return &out, diags
 }
 
-func (r *GitLabCredentialResourceModel) ToOperationsUpdateGitLabCredentialsRequest(ctx context.Context) (*operations.UpdateGitLabCredentialsRequest, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToOperationsUpdateGitlabCredentialsRequest(ctx context.Context) (*operations.UpdateGitlabCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -127,40 +127,40 @@ func (r *GitLabCredentialResourceModel) ToOperationsUpdateGitLabCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	updateGitLabCredentialsRequest, updateGitLabCredentialsRequestDiags := r.ToSharedUpdateGitLabCredentialsRequest(ctx)
-	diags.Append(updateGitLabCredentialsRequestDiags...)
+	updateGitlabCredentialsRequest, updateGitlabCredentialsRequestDiags := r.ToSharedUpdateGitlabCredentialsRequest(ctx)
+	diags.Append(updateGitlabCredentialsRequestDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.UpdateGitLabCredentialsRequest{
+	out := operations.UpdateGitlabCredentialsRequest{
 		CredentialsID:                  credentialsID,
 		WorkspaceID:                    workspaceID,
-		UpdateGitLabCredentialsRequest: *updateGitLabCredentialsRequest,
+		UpdateGitlabCredentialsRequest: *updateGitlabCredentialsRequest,
 	}
 
 	return &out, diags
 }
 
-func (r *GitLabCredentialResourceModel) ToSharedCreateGitLabCredentialsRequest(ctx context.Context) (*shared.CreateGitLabCredentialsRequest, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToSharedCreateGitlabCredentialsRequest(ctx context.Context) (*shared.CreateGitlabCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGitLabCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGitlabCredential(ctx)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := shared.CreateGitLabCredentialsRequest{
+	out := shared.CreateGitlabCredentialsRequest{
 		Credentials: credentials,
 	}
 
 	return &out, diags
 }
 
-func (r *GitLabCredentialResourceModel) ToSharedGitLabCredential(ctx context.Context) (*shared.GitLabCredential, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToSharedGitlabCredential(ctx context.Context) (*shared.GitlabCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	credentialsID := new(string)
@@ -172,14 +172,14 @@ func (r *GitLabCredentialResourceModel) ToSharedGitLabCredential(ctx context.Con
 	var name string
 	name = r.Name.ValueString()
 
-	providerType := new(shared.GitLabCredentialProviderType)
+	providerType := new(shared.GitlabCredentialProviderType)
 	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
-		*providerType = shared.GitLabCredentialProviderType(r.ProviderType.ValueString())
+		*providerType = shared.GitlabCredentialProviderType(r.ProviderType.ValueString())
 	} else {
 		providerType = nil
 	}
-	keys := shared.GitLabCredentialKeys{}
-	out := shared.GitLabCredential{
+	keys := shared.GitlabCredentialKeys{}
+	out := shared.GitlabCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
 		ProviderType:  providerType,
@@ -189,7 +189,7 @@ func (r *GitLabCredentialResourceModel) ToSharedGitLabCredential(ctx context.Con
 	return &out, diags
 }
 
-func (r *GitLabCredentialResourceModel) ToSharedGitLabCredentialKeys(ctx context.Context) (*shared.GitLabCredentialKeys, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToSharedGitlabCredentialKeys(ctx context.Context) (*shared.GitlabCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var token string
@@ -201,7 +201,7 @@ func (r *GitLabCredentialResourceModel) ToSharedGitLabCredentialKeys(ctx context
 	} else {
 		baseURL = nil
 	}
-	out := shared.GitLabCredentialKeys{
+	out := shared.GitlabCredentialKeys{
 		Token:   token,
 		BaseURL: baseURL,
 	}
@@ -209,17 +209,17 @@ func (r *GitLabCredentialResourceModel) ToSharedGitLabCredentialKeys(ctx context
 	return &out, diags
 }
 
-func (r *GitLabCredentialResourceModel) ToSharedUpdateGitLabCredentialsRequest(ctx context.Context) (*shared.UpdateGitLabCredentialsRequest, diag.Diagnostics) {
+func (r *GitlabCredentialResourceModel) ToSharedUpdateGitlabCredentialsRequest(ctx context.Context) (*shared.UpdateGitlabCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGitLabCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGitlabCredential(ctx)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := shared.UpdateGitLabCredentialsRequest{
+	out := shared.UpdateGitlabCredentialsRequest{
 		Credentials: credentials,
 	}
 

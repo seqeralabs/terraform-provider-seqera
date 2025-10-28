@@ -10,11 +10,11 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-func (r *GitHubCredentialDataSourceModel) RefreshFromSharedDescribeGitHubCredentialsResponse(ctx context.Context, resp *shared.DescribeGitHubCredentialsResponse) diag.Diagnostics {
+func (r *GithubCredentialDataSourceModel) RefreshFromSharedDescribeGithubCredentialsResponse(ctx context.Context, resp *shared.DescribeGithubCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedGitHubCredentialOutput(ctx, resp.Credentials)...)
+		diags.Append(r.RefreshFromSharedGithubCredentialOutput(ctx, resp.Credentials)...)
 
 		if diags.HasError() {
 			return diags
@@ -25,7 +25,7 @@ func (r *GitHubCredentialDataSourceModel) RefreshFromSharedDescribeGitHubCredent
 	return diags
 }
 
-func (r *GitHubCredentialDataSourceModel) RefreshFromSharedGitHubCredentialOutput(ctx context.Context, resp *shared.GitHubCredentialOutput) diag.Diagnostics {
+func (r *GithubCredentialDataSourceModel) RefreshFromSharedGithubCredentialOutput(ctx context.Context, resp *shared.GithubCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -41,7 +41,7 @@ func (r *GitHubCredentialDataSourceModel) RefreshFromSharedGitHubCredentialOutpu
 	return diags
 }
 
-func (r *GitHubCredentialDataSourceModel) ToOperationsDescribeGitHubCredentialsRequest(ctx context.Context) (*operations.DescribeGitHubCredentialsRequest, diag.Diagnostics) {
+func (r *GithubCredentialDataSourceModel) ToOperationsDescribeGithubCredentialsRequest(ctx context.Context) (*operations.DescribeGithubCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -53,7 +53,7 @@ func (r *GitHubCredentialDataSourceModel) ToOperationsDescribeGitHubCredentialsR
 	} else {
 		workspaceID = nil
 	}
-	out := operations.DescribeGitHubCredentialsRequest{
+	out := operations.DescribeGithubCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
 	}

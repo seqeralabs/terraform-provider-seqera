@@ -2,11 +2,11 @@
 
 package shared
 
-type CreateCodeCommitCredentialsRequest struct {
-	Credentials *CodeCommitCredential `json:"credentials,omitempty"`
+type CreateCodecommitCredentialsRequest struct {
+	Credentials *CodecommitCredential `json:"credentials,omitempty"`
 }
 
-func (c *CreateCodeCommitCredentialsRequest) GetCredentials() *CodeCommitCredential {
+func (c *CreateCodecommitCredentialsRequest) GetCredentials() *CodecommitCredential {
 	if c == nil {
 		return nil
 	}

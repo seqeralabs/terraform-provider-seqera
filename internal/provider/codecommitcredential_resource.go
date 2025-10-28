@@ -20,21 +20,21 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &CodeCommitCredentialResource{}
-var _ resource.ResourceWithImportState = &CodeCommitCredentialResource{}
+var _ resource.Resource = &CodecommitCredentialResource{}
+var _ resource.ResourceWithImportState = &CodecommitCredentialResource{}
 
-func NewCodeCommitCredentialResource() resource.Resource {
-	return &CodeCommitCredentialResource{}
+func NewCodecommitCredentialResource() resource.Resource {
+	return &CodecommitCredentialResource{}
 }
 
-// CodeCommitCredentialResource defines the resource implementation.
-type CodeCommitCredentialResource struct {
+// CodecommitCredentialResource defines the resource implementation.
+type CodecommitCredentialResource struct {
 	// Provider configured SDK client.
 	client *sdk.Seqera
 }
 
-// CodeCommitCredentialResourceModel describes the resource data model.
-type CodeCommitCredentialResourceModel struct {
+// CodecommitCredentialResourceModel describes the resource data model.
+type CodecommitCredentialResourceModel struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
@@ -44,17 +44,17 @@ type CodeCommitCredentialResourceModel struct {
 	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
-func (r *CodeCommitCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_code_commit_credential"
+func (r *CodecommitCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_codecommit_credential"
 }
 
-func (r *CodeCommitCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage CodeCommit credentials in Seqera platform using this resource.\n\nCodeCommit credentials store AWS authentication information for accessing\nAWS CodeCommit repositories within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Codecommit credentials in Seqera platform using this resource.\n\nCodecommit credentials store AWS authentication information for accessing\nAWS Codecommit repositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
 				Required:    true,
-				Description: `AWS access key to access the CodeCommit repository (required)`,
+				Description: `AWS access key to access the Codecommit repository (required)`,
 			},
 			"base_url": schema.StringAttribute{
 				Optional:    true,
@@ -88,7 +88,7 @@ func (r *CodeCommitCredentialResource) Schema(ctx context.Context, req resource.
 			"secret_key": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
-				Description: `AWS secret key to access the CodeCommit repository (required, sensitive)`,
+				Description: `AWS secret key to access the Codecommit repository (required, sensitive)`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,
@@ -98,7 +98,7 @@ func (r *CodeCommitCredentialResource) Schema(ctx context.Context, req resource.
 	}
 }
 
-func (r *CodeCommitCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *CodecommitCredentialResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -118,8 +118,8 @@ func (r *CodeCommitCredentialResource) Configure(ctx context.Context, req resour
 	r.client = client
 }
 
-func (r *CodeCommitCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *CodeCommitCredentialResourceModel
+func (r *CodecommitCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *CodecommitCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -136,13 +136,13 @@ func (r *CodeCommitCredentialResource) Create(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateCodeCommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateCodecommitCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.CreateCodeCommitCredentials(ctx, *request)
+	res, err := r.client.Credentials.CreateCodecommitCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -158,11 +158,11 @@ func (r *CodeCommitCredentialResource) Create(ctx context.Context, req resource.
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateCodeCommitCredentialsResponse != nil) {
+	if !(res.CreateCodecommitCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedCreateCodeCommitCredentialsResponse(ctx, res.CreateCodeCommitCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedCreateCodecommitCredentialsResponse(ctx, res.CreateCodecommitCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -173,13 +173,13 @@ func (r *CodeCommitCredentialResource) Create(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeCodeCommitCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeCodecommitCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeCodeCommitCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeCodecommitCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -195,11 +195,11 @@ func (r *CodeCommitCredentialResource) Create(ctx context.Context, req resource.
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeCodeCommitCredentialsResponse != nil) {
+	if !(res1.DescribeCodecommitCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodeCommitCredentialsResponse(ctx, res1.DescribeCodeCommitCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodecommitCredentialsResponse(ctx, res1.DescribeCodecommitCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -215,8 +215,8 @@ func (r *CodeCommitCredentialResource) Create(ctx context.Context, req resource.
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *CodeCommitCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *CodeCommitCredentialResourceModel
+func (r *CodecommitCredentialResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *CodecommitCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -233,13 +233,13 @@ func (r *CodeCommitCredentialResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeCodeCommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeCodecommitCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DescribeCodeCommitCredentials(ctx, *request)
+	res, err := r.client.Credentials.DescribeCodecommitCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -259,11 +259,11 @@ func (r *CodeCommitCredentialResource) Read(ctx context.Context, req resource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DescribeCodeCommitCredentialsResponse != nil) {
+	if !(res.DescribeCodecommitCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodeCommitCredentialsResponse(ctx, res.DescribeCodeCommitCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodecommitCredentialsResponse(ctx, res.DescribeCodecommitCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -273,8 +273,8 @@ func (r *CodeCommitCredentialResource) Read(ctx context.Context, req resource.Re
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *CodeCommitCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *CodeCommitCredentialResourceModel
+func (r *CodecommitCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *CodecommitCredentialResourceModel
 	var plan types.Object
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -287,13 +287,13 @@ func (r *CodeCommitCredentialResource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateCodeCommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateCodecommitCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.UpdateCodeCommitCredentials(ctx, *request)
+	res, err := r.client.Credentials.UpdateCodecommitCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -315,13 +315,13 @@ func (r *CodeCommitCredentialResource) Update(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	request1, request1Diags := data.ToOperationsDescribeCodeCommitCredentialsRequest(ctx)
+	request1, request1Diags := data.ToOperationsDescribeCodecommitCredentialsRequest(ctx)
 	resp.Diagnostics.Append(request1Diags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.Credentials.DescribeCodeCommitCredentials(ctx, *request1)
+	res1, err := r.client.Credentials.DescribeCodecommitCredentials(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -337,11 +337,11 @@ func (r *CodeCommitCredentialResource) Update(ctx context.Context, req resource.
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DescribeCodeCommitCredentialsResponse != nil) {
+	if !(res1.DescribeCodecommitCredentialsResponse != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodeCommitCredentialsResponse(ctx, res1.DescribeCodeCommitCredentialsResponse)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDescribeCodecommitCredentialsResponse(ctx, res1.DescribeCodecommitCredentialsResponse)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -357,8 +357,8 @@ func (r *CodeCommitCredentialResource) Update(ctx context.Context, req resource.
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *CodeCommitCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *CodeCommitCredentialResourceModel
+func (r *CodecommitCredentialResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *CodecommitCredentialResourceModel
 	var item types.Object
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &item)...)
@@ -375,13 +375,13 @@ func (r *CodeCommitCredentialResource) Delete(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteCodeCommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteCodecommitCredentialsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Credentials.DeleteCodeCommitCredentials(ctx, *request)
+	res, err := r.client.Credentials.DeleteCodecommitCredentials(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -400,6 +400,6 @@ func (r *CodeCommitCredentialResource) Delete(ctx context.Context, req resource.
 
 }
 
-func (r *CodeCommitCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *CodecommitCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
 }

@@ -2,11 +2,11 @@
 
 package shared
 
-type CreateGitLabCredentialsRequest struct {
-	Credentials *GitLabCredential `json:"credentials,omitempty"`
+type CreateGitlabCredentialsRequest struct {
+	Credentials *GitlabCredential `json:"credentials,omitempty"`
 }
 
-func (c *CreateGitLabCredentialsRequest) GetCredentials() *GitLabCredential {
+func (c *CreateGitlabCredentialsRequest) GetCredentials() *GitlabCredential {
 	if c == nil {
 		return nil
 	}
