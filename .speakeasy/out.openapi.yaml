@@ -9635,10 +9635,13 @@ components:
       properties:
         name:
           type: string
-          example: "database_password"
+          description: Secret name used to reference the secret in workflows (max 100 characters)
+          example: "api_key"
         value:
           type: string
-          example: "super-secret-password-123"
+          x-speakeasy-param-sensitive: true
+          description: The sensitive secret value to store (will be encrypted)
+          example: "secret_value_here"
       required:
         - name
         - value
@@ -12157,22 +12160,25 @@ components:
           type: integer
           format: int64
           nullable: true
-          description: Unique numeric identifier for the secret (nullable)
+          x-speakeasy-param-readonly: true
+          description: Unique numeric identifier for the secret
         name:
           maxLength: 100
           pattern: "^[a-zA-Z_](?:[0-9A-Za-z]+|(_)(?!\\1)){1,49}$"
           type: string
-          description: Secret name following naming conventions (max 100 characters)
+          description: Secret name used to reference the secret in workflows (max 100 characters). Required.
         lastUsed:
           type: string
           format: date-time
           readOnly: true
-          description: Read-only timestamp when the secret was last accessed
+          x-speakeasy-param-readonly: true
+          description: Timestamp when the secret was last accessed by a workflow
         dateCreated:
           type: string
           format: date-time
           readOnly: true
-          description: Read-only timestamp when the secret was created
+          x-speakeasy-param-readonly: true
+          description: Timestamp when the secret was created
         lastUpdated:
           type: string
           format: date-time
@@ -13217,6 +13223,7 @@ components:
       properties:
         value:
           type: string
+          x-speakeasy-param-sensitive: true
     UpdateTeamRequest:
       type: object
       properties:

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 140baf7db2d278789008d9ea78491682
+  docChecksum: 75cdf8965e45dda1c24af118296617c4
   docVersion: 1.56.0
   speakeasyVersion: 1.641.1
   generationVersion: 2.730.5
@@ -79,7 +79,6 @@ generatedFiles:
   - examples/resources/seqera_pipeline/resource.tf
   - examples/resources/seqera_pipeline_secret/import-by-string-id.tf
   - examples/resources/seqera_pipeline_secret/import.sh
-  - examples/resources/seqera_pipeline_secret/resource.tf
   - examples/resources/seqera_studios/import-by-string-id.tf
   - examples/resources/seqera_studios/import.sh
   - examples/resources/seqera_studios/resource.tf
@@ -1964,7 +1963,7 @@ examples:
   CreatePipelineSecret:
     speakeasy-default-create-pipeline-secret:
       requestBody:
-        application/json: {"name": "database_password", "value": "super-secret-password-123"}
+        application/json: {"name": "api_key", "value": "secret_value_here"}
       responses:
         "200":
           application/json: {}

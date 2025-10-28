@@ -11,13 +11,13 @@ import (
 // Contains encrypted sensitive data such as API keys, passwords,
 // and configuration values used in workflows.
 type PipelineSecret struct {
-	// Unique numeric identifier for the secret (nullable)
+	// Unique numeric identifier for the secret
 	ID *int64 `json:"id,omitempty"`
-	// Secret name following naming conventions (max 100 characters)
+	// Secret name used to reference the secret in workflows (max 100 characters). Required.
 	Name string `json:"name"`
-	// Read-only timestamp when the secret was last accessed
+	// Timestamp when the secret was last accessed by a workflow
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
-	// Read-only timestamp when the secret was created
+	// Timestamp when the secret was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 }

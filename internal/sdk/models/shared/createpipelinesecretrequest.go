@@ -3,7 +3,9 @@
 package shared
 
 type CreatePipelineSecretRequest struct {
-	Name  string `json:"name"`
+	// Secret name used to reference the secret in workflows (max 100 characters)
+	Name string `json:"name"`
+	// The sensitive secret value to store (will be encrypted)
 	Value string `json:"value"`
 }
 

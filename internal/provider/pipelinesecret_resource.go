@@ -56,14 +56,14 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed:    true,
-				Description: `Read-only timestamp when the secret was created`,
+				Description: `Timestamp when the secret was created`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
 			},
 			"id": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Unique numeric identifier for the secret (nullable)`,
+				Description: `Unique numeric identifier for the secret`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
@@ -73,7 +73,7 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"last_used": schema.StringAttribute{
 				Computed:    true,
-				Description: `Read-only timestamp when the secret was last accessed`,
+				Description: `Timestamp when the secret was last accessed by a workflow`,
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -84,7 +84,7 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Secret name used to reference the secret in workflows (max 100 characters). Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
@@ -94,7 +94,9 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 				Description: `Secret numeric identifier`,
 			},
 			"value": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Sensitive:   true,
+				Description: `The sensitive secret value to store (will be encrypted)`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

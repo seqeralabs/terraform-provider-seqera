@@ -39,8 +39,8 @@ data "seqera_pipeline_secret" "my_pipelinesecret" {
 
 ### Read-Only
 
-- `date_created` (String) Read-only timestamp when the secret was created
-- `id` (Number) Unique numeric identifier for the secret (nullable)
+- `date_created` (String) Timestamp when the secret was created
+- `id` (Number) Unique numeric identifier for the secret
 - `last_updated` (String)
-- `last_used` (String) Read-only timestamp when the secret was last accessed
-- `name` (String) Secret name following naming conventions (max 100 characters)
+- `last_used` (String) Timestamp when the secret was last accessed by a workflow
+- `name` (String) Secret name used to reference the secret in workflows (max 100 characters). Required.
