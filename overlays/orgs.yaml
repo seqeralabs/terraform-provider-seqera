@@ -12,35 +12,22 @@ info:
 # workspaces, members, and teams. Organizations provide multi-tenancy,
 # resource isolation, and access control.
 #
-# KEY CONCEPTS:
-# -------------
-# - Organizations contain multiple workspaces
-# - Each organization has members with roles (owner, member, collaborator)
-# - Teams can be created within organizations for group access control
-# - Workspaces within an organization can share resources
-#
 # TERRAFORM EXAMPLES:
 # -------------------
 #
 # Example 1: Basic organization
-# resource "seqera_orgs" "my_org" {
-#   name        = "my-biotech"
-#   full_name   = "My Biotech Company"
-#   description = "Organization for genomics research"
-#   location    = "Boston, MA"
-#   website     = "https://www.mybiotech.com"
+# resource "seqera_orgs" "basic" {
+#   name      = "my-org"
+#   full_name = "My Organization"
 # }
 #
-# Example 2: Organization with related resources
-# resource "seqera_orgs" "research_org" {
-#   name      = "research-lab"
-#   full_name = "Research Laboratory"
-# }
-#
-# resource "seqera_workspace" "analysis" {
-#   name     = "analysis-workspace"
-#   org_id   = seqera_orgs.research_org.org_id
-#   full_name = "${seqera_orgs.research_org.name}/analysis-workspace"
+# Example 2: Organization with optional metadata
+# resource "seqera_orgs" "research" {
+#   name        = "research-lab"
+#   full_name   = "Research Laboratory"
+#   description = "Organization for computational research"
+#   location    = "San Francisco, CA"
+#   website     = "https://www.research-lab.org"
 # }
 #
 # ==============================================================================
