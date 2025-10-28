@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: e3cacc5c88e07dcd34a47dece505a223
+  docChecksum: 140baf7db2d278789008d9ea78491682
   docVersion: 1.56.0
-  speakeasyVersion: 1.640.0
+  speakeasyVersion: 1.641.1
   generationVersion: 2.730.5
   releaseVersion: 0.25.4
   configChecksum: 853d1b859009f3eb0de1df23d43a5fac
@@ -80,7 +80,6 @@ generatedFiles:
   - examples/resources/seqera_pipeline_secret/import-by-string-id.tf
   - examples/resources/seqera_pipeline_secret/import.sh
   - examples/resources/seqera_pipeline_secret/resource.tf
-  - examples/resources/seqera_primary_compute_env/resource.tf
   - examples/resources/seqera_studios/import-by-string-id.tf
   - examples/resources/seqera_studios/import.sh
   - examples/resources/seqera_studios/resource.tf

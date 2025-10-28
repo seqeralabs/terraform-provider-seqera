@@ -763,20 +763,23 @@ paths:
   /compute-envs/{computeEnvId}/primary:
     post:
       summary: Define primary compute environment
-      description: Selects the compute environment identified by the given `computeEnvId` as the primary compute environment in the given workspace context.
+      description: |
+        Designates a compute environment as the primary (default) compute
+        environment for a workspace. The primary compute environment is used
+        by default when launching workflows in the workspace.
       tags:
         - compute-envs
       operationId: UpdateComputeEnvPrimary
       parameters:
         - name: computeEnvId
           in: path
-          description: Compute environment string identifier
+          description: Compute environment string identifier to designate as primary
           required: true
           schema:
             type: string
         - name: workspaceId
           in: query
-          description: Workspace numeric identifier
+          description: Workspace numeric identifier where the compute environment will be set as primary
           schema:
             type: integer
             format: int64

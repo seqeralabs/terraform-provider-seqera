@@ -1,25 +1,86 @@
 overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
 info:
-  title: Primary Compute Environment Resource Configuration
+  title: Primary Compute Environment Overlay
   version: 0.0.0
+
+# ==============================================================================
+# PRIMARY COMPUTE ENVIRONMENT RESOURCE OVERLAY
+# ==============================================================================
+#
+# The primary compute environment is the default compute environment that will
+# be used for launching workflows within a workspace. Each workspace can have
+# one primary compute environment designated from its available compute
+# environments.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Set primary compute environment
+# resource "seqera_primary_compute_env" "primary" {
+#   workspace_id   = seqera_workspace.main.id
+#   compute_env_id = seqera_compute_env.default.id
+# }
+#
+# Example 2: Primary compute environment with workspace dependency
+# resource "seqera_workspace" "main" {
+#   name      = "my-workspace"
+#   full_name = "org/my-workspace"
+# }
+#
+# resource "seqera_compute_env" "default" {
+#   name         = "default-compute"
+#   workspace_id = seqera_workspace.main.id
+#   # ... compute environment config
+# }
+#
+# resource "seqera_primary_compute_env" "primary" {
+#   workspace_id   = seqera_workspace.main.id
+#   compute_env_id = seqera_compute_env.default.id
+# }
+#
+# ==============================================================================
+
 actions:
-  # Configure primary compute environment as a create-only resource
+  # ============================================================================
+  # ENTITY CONFIGURATION
+  # ============================================================================
+
+  # Primary compute environment entity - this is a create-only resource
+  # that designates which compute environment is primary in a workspace
   - target: $.paths["/compute-envs/{computeEnvId}/primary"].post
     update:
       x-speakeasy-entity-operation: PrimaryComputeEnv#create
+      description: |
+        Designates a compute environment as the primary (default) compute
+        environment for a workspace. The primary compute environment is used
+        by default when launching workflows in the workspace.
+
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
 
   # Make workspace_id required for primary compute environment endpoint
   - target: $.paths["/compute-envs/{computeEnvId}/primary"].post.parameters[?(@.name == "workspaceId")]
     update:
       name: workspaceId
       in: query
-      description: Workspace numeric identifier
+      description: Workspace numeric identifier where the compute environment will be set as primary
       required: true
       schema:
         type: integer
         format: int64
 
+  # Update compute environment ID parameter description
+  - target: $.paths["/compute-envs/{computeEnvId}/primary"].post.parameters[?(@.name == "computeEnvId")]
+    update:
+      description: Compute environment string identifier to designate as primary
 
+  # ============================================================================
+  # CLEANUP
+  # ============================================================================
+
+  # Ignore empty body request schema from documentation
   - target: $.components.schemas.EmptyBodyRequest
     update:
       x-speakeasy-terraform-ignore: true

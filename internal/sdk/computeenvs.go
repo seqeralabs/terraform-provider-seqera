@@ -999,7 +999,9 @@ func (s *ComputeEnvs) DeleteComputeEnv(ctx context.Context, request operations.D
 }
 
 // UpdateComputeEnvPrimary - Define primary compute environment
-// Selects the compute environment identified by the given `computeEnvId` as the primary compute environment in the given workspace context.
+// Designates a compute environment as the primary (default) compute
+// environment for a workspace. The primary compute environment is used
+// by default when launching workflows in the workspace.
 func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request operations.UpdateComputeEnvPrimaryRequest, opts ...operations.Option) (*operations.UpdateComputeEnvPrimaryResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{

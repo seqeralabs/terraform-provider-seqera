@@ -8,9 +8,9 @@ import (
 )
 
 type UpdateComputeEnvPrimaryRequest struct {
-	// Compute environment string identifier
+	// Compute environment string identifier to designate as primary
 	ComputeEnvID string `pathParam:"style=simple,explode=false,name=computeEnvId"`
-	// Workspace numeric identifier
+	// Workspace numeric identifier where the compute environment will be set as primary
 	WorkspaceID      int64                    `queryParam:"style=form,explode=true,name=workspaceId"`
 	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
 }
