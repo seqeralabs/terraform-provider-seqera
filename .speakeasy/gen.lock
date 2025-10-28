@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: b66c777c213b8619193c39169ce000b7
+  docChecksum: e3cacc5c88e07dcd34a47dece505a223
   docVersion: 1.56.0
   speakeasyVersion: 1.640.0
   generationVersion: 2.730.5
@@ -74,7 +74,6 @@ generatedFiles:
   - examples/resources/seqera_google_credential/resource.tf
   - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
-  - examples/resources/seqera_orgs/resource.tf
   - examples/resources/seqera_pipeline/import-by-string-id.tf
   - examples/resources/seqera_pipeline/import.sh
   - examples/resources/seqera_pipeline/resource.tf
@@ -1589,7 +1588,7 @@ examples:
   CreateOrganization:
     speakeasy-default-create-organization:
       requestBody:
-        application/json: {"organization": {"name": "my-org", "fullName": "My Organization", "description": "Put your organization description here", "location": "Toronto, CA", "website": "https://www.mybiotech.com"}, "logoId": "logo"}
+        application/json: {"organization": {"name": "my-org", "fullName": "My Organization", "description": "Put your organization description here", "location": "Toronto, CA", "website": "https://www.mybiotech.com"}}
       responses:
         "200":
           application/json: {}

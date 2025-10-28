@@ -6,35 +6,20 @@ package shared
 // Contains organizational metadata, settings, and member management
 // information for multi-tenant environments.
 type OrganizationDbDto struct {
-	// Deprecated flag indicating if organization has paid subscription
-	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	Paying *bool `json:"paying,omitempty"`
 	// Unique numeric identifier for the organization
 	OrgID *int64 `json:"orgId,omitempty"`
-	// Short name or handle for the organization
+	// Short name or handle for the organization (used in URLs and paths)
 	Name *string `json:"name,omitempty"`
-	// Complete formal name of the organization
+	// Complete formal display name of the organization
 	FullName *string `json:"fullName,omitempty"`
 	// Detailed description of the organization's purpose and activities
 	Description *string `json:"description,omitempty"`
 	// Geographic location or address of the organization
 	Location *string `json:"location,omitempty"`
 	// Official website URL for the organization
-	Website *string `json:"website,omitempty"`
-	// Identifier for the organization's logo image
-	LogoID     *string  `json:"logoId,omitempty"`
-	LogoURL    *string  `json:"logoUrl,omitempty"`
+	Website    *string  `json:"website,omitempty"`
 	MemberID   *int64   `json:"memberId,omitempty"`
 	MemberRole *OrgRole `json:"memberRole,omitempty"`
-	Type       *OrgType `json:"type,omitempty"`
-}
-
-func (o *OrganizationDbDto) GetPaying() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Paying
 }
 
 func (o *OrganizationDbDto) GetOrgID() *int64 {
@@ -79,20 +64,6 @@ func (o *OrganizationDbDto) GetWebsite() *string {
 	return o.Website
 }
 
-func (o *OrganizationDbDto) GetLogoID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.LogoID
-}
-
-func (o *OrganizationDbDto) GetLogoURL() *string {
-	if o == nil {
-		return nil
-	}
-	return o.LogoURL
-}
-
 func (o *OrganizationDbDto) GetMemberID() *int64 {
 	if o == nil {
 		return nil
@@ -105,11 +76,4 @@ func (o *OrganizationDbDto) GetMemberRole() *OrgRole {
 		return nil
 	}
 	return o.MemberRole
-}
-
-func (o *OrganizationDbDto) GetType() *OrgType {
-	if o == nil {
-		return nil
-	}
-	return o.Type
 }

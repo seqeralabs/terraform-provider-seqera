@@ -31,14 +31,10 @@ type OrgsDataSourceModel struct {
 	Description types.String `tfsdk:"description"`
 	FullName    types.String `tfsdk:"full_name"`
 	Location    types.String `tfsdk:"location"`
-	LogoID      types.String `tfsdk:"logo_id"`
-	LogoURL     types.String `tfsdk:"logo_url"`
 	MemberID    types.Int64  `tfsdk:"member_id"`
 	MemberRole  types.String `tfsdk:"member_role"`
 	Name        types.String `tfsdk:"name"`
 	OrgID       types.Int64  `tfsdk:"org_id"`
-	Paying      types.Bool   `tfsdk:"paying"`
-	Type        types.String `tfsdk:"type"`
 	Website     types.String `tfsdk:"website"`
 }
 
@@ -59,18 +55,11 @@ func (r *OrgsDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			},
 			"full_name": schema.StringAttribute{
 				Computed:    true,
-				Description: `Complete formal name of the organization`,
+				Description: `Complete formal display name of the organization`,
 			},
 			"location": schema.StringAttribute{
 				Computed:    true,
 				Description: `Geographic location or address of the organization`,
-			},
-			"logo_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Identifier for the organization's logo image`,
-			},
-			"logo_url": schema.StringAttribute{
-				Computed: true,
 			},
 			"member_id": schema.Int64Attribute{
 				Computed: true,
@@ -80,20 +69,12 @@ func (r *OrgsDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
-				Description: `Short name or handle for the organization`,
+				Description: `Short name or handle for the organization (used in URLs and paths)`,
 			},
 			"org_id": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
 				Description: `Organization numeric identifier`,
-			},
-			"paying": schema.BoolAttribute{
-				Computed:           true,
-				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-				Description:        `Deprecated flag indicating if organization has paid subscription`,
-			},
-			"type": schema.StringAttribute{
-				Computed: true,
 			},
 			"website": schema.StringAttribute{
 				Computed:    true,

@@ -22,13 +22,29 @@ resources while maintaining an access control layer for users associated with a 
 ## Example Usage
 
 ```terraform
-resource "seqera_orgs" "my_orgs" {
-  description = "Put your organization description here"
-  full_name   = "My Organization"
-  location    = "Toronto, CA"
-  logo_id     = "logo"
-  name        = "my-org"
-  website     = "https://www.mybiotech.com"
+# Seqera Organizations Resource Examples
+#
+# Organizations are the top-level structure in Seqera Platform that contain
+# workspaces, members, and teams. Organizations provide multi-tenancy, resource
+# isolation, and access control.
+
+# Example 1: Basic organization
+# Minimal configuration with required fields only
+
+resource "seqera_orgs" "basic" {
+  name      = "my-org"
+  full_name = "My Organization"
+}
+
+# Example 2: Organization with optional metadata
+# Include description, location, and website information
+
+resource "seqera_orgs" "research" {
+  name        = "research-lab"
+  full_name   = "Research Laboratory"
+  description = "Organization for computational research"
+  location    = "San Francisco, CA"
+  website     = "https://www.research-lab.org"
 }
 ```
 
@@ -37,24 +53,20 @@ resource "seqera_orgs" "my_orgs" {
 
 ### Required
 
-- `full_name` (String)
-- `name` (String)
+- `full_name` (String) Complete formal display name of the organization. Required.
+- `name` (String) Short name or handle for the organization (used in URLs and resource paths). Required.
 
 ### Optional
 
-- `description` (String)
-- `location` (String)
-- `logo_id` (String)
-- `website` (String)
+- `description` (String) Detailed description of the organization's purpose and activities.
+- `location` (String) Geographic location or address of the organization.
+- `website` (String) Official website URL for the organization.
 
 ### Read-Only
 
-- `logo_url` (String)
 - `member_id` (Number)
 - `member_role` (String) must be one of ["owner", "member", "collaborator"]
 - `org_id` (Number) Unique numeric identifier for the organization
-- `paying` (Boolean, Deprecated) Deprecated flag indicating if organization has paid subscription
-- `type` (String) must be one of ["academic", "evaluating", "pro", "basic", "internal"]
 
 ## Import
 

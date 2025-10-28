@@ -9596,9 +9596,6 @@ components:
       properties:
         organization:
           $ref: "#/components/schemas/Organization"
-        logoId:
-          type: string
-          example: "logo"
     CreateOrganizationResponse:
       type: object
       properties:
@@ -11852,22 +11849,27 @@ components:
           maxLength: 40
           pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
           type: string
+          description: Short name or handle for the organization (used in URLs and resource paths). Required.
           example: "my-org"
         fullName:
           maxLength: 100
           type: string
+          description: Complete formal display name of the organization. Required.
           example: "My Organization"
         description:
           maxLength: 1000
           type: string
+          description: Detailed description of the organization's purpose and activities.
           example: "Put your organization description here"
         location:
           maxLength: 100
           type: string
+          description: Geographic location or address of the organization.
           example: "Toronto, CA"
         website:
           pattern: ""
           type: string
+          description: Official website URL for the organization.
           example: "https://www.mybiotech.com"
         dateCreated:
           type: string
@@ -11888,20 +11890,16 @@ components:
     OrganizationDbDto:
       type: object
       properties:
-        paying:
-          type: boolean
-          deprecated: true
-          description: Deprecated flag indicating if organization has paid subscription
         orgId:
           type: integer
           format: int64
           description: Unique numeric identifier for the organization
         name:
           type: string
-          description: Short name or handle for the organization
+          description: Short name or handle for the organization (used in URLs and paths)
         fullName:
           type: string
-          description: Complete formal name of the organization
+          description: Complete formal display name of the organization
         description:
           type: string
           description: Detailed description of the organization's purpose and activities
@@ -11911,20 +11909,11 @@ components:
         website:
           type: string
           description: Official website URL for the organization
-        logoId:
-          type: string
-          x-speakeasy-param-optional: true
-          description: Identifier for the organization's logo image
-        logoUrl:
-          type: string
-          x-speakeasy-param-optional: true
         memberId:
           type: integer
           format: int64
         memberRole:
           $ref: "#/components/schemas/OrgRole"
-        type:
-          $ref: "#/components/schemas/OrgType"
       x-speakeasy-entity: Orgs
       description: |
         Represents an organization in the Seqera Platform.

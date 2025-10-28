@@ -3,164 +3,41 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Organizations Overlay
   version: 0.0.0
+
+# ==============================================================================
+# ORGANIZATIONS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Organizations are the top-level structure in Seqera Platform that contain
+# workspaces, members, and teams. Organizations provide multi-tenancy,
+# resource isolation, and access control.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Basic organization
+# resource "seqera_orgs" "basic" {
+#   name      = "my-org"
+#   full_name = "My Organization"
+# }
+#
+# Example 2: Organization with optional metadata
+# resource "seqera_orgs" "research" {
+#   name        = "research-lab"
+#   full_name   = "Research Laboratory"
+#   description = "Organization for computational research"
+#   location    = "San Francisco, CA"
+#   website     = "https://www.research-lab.org"
+# }
+#
+# ==============================================================================
+
 actions:
-  # Organization entity operations
-  - target: $["paths"]["/orgs"]["post"]
-    update:
-      x-speakeasy-entity-operation: Orgs#create
-  - target: $["paths"]["/orgs/{orgId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Orgs#read
-  - target: $["paths"]["/orgs/{orgId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Orgs#update
-  - target: $["paths"]["/orgs/{orgId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Orgs#delete
+  # ============================================================================
+  # ENTITY CONFIGURATION
+  # ============================================================================
 
-  # Organization parameter configurations
-  - target: $["paths"]["/orgs/{orgId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-
-  # Teams operations within organizations
-  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: false
-  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
-    update:
-      x-speakeasy-entity-operation: Teams#create
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Teams#read
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Teams#update
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Teams#delete
-
-  # Team member operations
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-
-  # Workspace operations within organizations
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]
-    update:
-      x-speakeasy-entity-operation: Workspaces#read
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: false
-  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
-    update:
-      x-speakeasy-entity-operation: Workspace#create
-  - target: $["paths"]["/orgs/{orgId}/workspaces/validate"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][1]
-    update:
-      x-speakeasy-name-override: id
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Workspace#read
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][1]
-    update:
-      x-speakeasy-name-override: id
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]
-    update:
-      x-speakeasy-entity-operation: Workspace#update
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][1]
-    update:
-      x-speakeasy-name-override: id
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Workspace#delete
-
-  # Workspace participant operations
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-
-  # Organization schema annotations
-  - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
-    update:
-      x-speakeasy-param-optional: true
+  # Organization entity schema
   - target: $["components"]["schemas"]["Organization"]
     update:
       x-speakeasy-entity: Orgs
@@ -171,37 +48,84 @@ actions:
         You can create multiple organizations, each of which can contain multiple workspaces
         with shared users and resources. This means you can customize and organize the use of
         resources while maintaining an access control layer for users associated with a workspace.
-  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoId"]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoUrl"]
-    update:
-      x-speakeasy-param-optional: true
+
   - target: $["components"]["schemas"]["OrganizationDbDto"]
     update:
       x-speakeasy-entity: Orgs
 
-  # Request examples for Organization
+  # ============================================================================
+  # ENTITY OPERATIONS (CRUD)
+  # ============================================================================
+
+  # CREATE - POST /orgs
+  - target: $["paths"]["/orgs"]["post"]
+    update:
+      x-speakeasy-entity-operation: Orgs#create
+
+  # READ - GET /orgs/{orgId}
+  - target: $["paths"]["/orgs/{orgId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Orgs#read
+
+  # UPDATE - PUT /orgs/{orgId}
+  - target: $["paths"]["/orgs/{orgId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Orgs#update
+
+  # DELETE - DELETE /orgs/{orgId}
+  - target: $["paths"]["/orgs/{orgId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Orgs#delete
+
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
+
+  # Organization ID is optional (computed)
+  - target: $["components"]["schemas"]["Organization"]["properties"]["id"]
+    update:
+      x-speakeasy-param-optional: true
+
+
+  # Organization path parameters (make optional for computed values)
+  - target: $["paths"]["/orgs/{orgId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # ============================================================================
+  # SCHEMA DESCRIPTIONS
+  # ============================================================================
+
+  # Organization (input) schema descriptions
   - target: $.components.schemas.Organization.properties.name
     update:
-      example: "my-org"
+      description: Short name or handle for the organization (used in URLs and resource paths). Required.
+
   - target: $.components.schemas.Organization.properties.fullName
     update:
-      example: "My Organization"
+      description: Complete formal display name of the organization. Required.
+
   - target: $.components.schemas.Organization.properties.description
     update:
-      example: "Put your organization description here"
+      description: Detailed description of the organization's purpose and activities.
+
   - target: $.components.schemas.Organization.properties.location
     update:
-      example: "Toronto, CA"
+      description: Geographic location or address of the organization.
+
   - target: $.components.schemas.Organization.properties.website
     update:
-      example: "https://www.mybiotech.com"
-  - target: $.components.schemas.CreateOrganizationRequest.properties.logoId
-    update:
-      example: "logo"
+      description: Official website URL for the organization.
 
-  # Schema description
+  # OrganizationDbDto (output) schema description
   - target: $.components.schemas.OrganizationDbDto
     update:
       description: |
@@ -209,28 +133,249 @@ actions:
         Contains organizational metadata, settings, and member management
         information for multi-tenant environments.
 
-  # Field descriptions for OrganizationDbDto
+  # OrganizationDbDto field descriptions
   - target: $.components.schemas.OrganizationDbDto.properties.orgId
     update:
       description: Unique numeric identifier for the organization
+
   - target: $.components.schemas.OrganizationDbDto.properties.name
     update:
-      description: Short name or handle for the organization
+      description: Short name or handle for the organization (used in URLs and paths)
+
   - target: $.components.schemas.OrganizationDbDto.properties.fullName
     update:
-      description: Complete formal name of the organization
+      description: Complete formal display name of the organization
+
   - target: $.components.schemas.OrganizationDbDto.properties.description
     update:
       description: Detailed description of the organization's purpose and activities
+
   - target: $.components.schemas.OrganizationDbDto.properties.location
     update:
       description: Geographic location or address of the organization
+
   - target: $.components.schemas.OrganizationDbDto.properties.website
     update:
       description: Official website URL for the organization
-  - target: $.components.schemas.OrganizationDbDto.properties.logoId
+
+  # ============================================================================
+  # REQUEST EXAMPLES
+  # ============================================================================
+
+  - target: $.components.schemas.Organization.properties.name
     update:
-      description: Identifier for the organization's logo image
-  - target: $.components.schemas.OrganizationDbDto.properties.paying
+      example: "my-org"
+
+  - target: $.components.schemas.Organization.properties.fullName
     update:
-      description: Deprecated flag indicating if organization has paid subscription
+      example: "My Organization"
+
+  - target: $.components.schemas.Organization.properties.description
+    update:
+      example: "Put your organization description here"
+
+  - target: $.components.schemas.Organization.properties.location
+    update:
+      example: "Toronto, CA"
+
+  - target: $.components.schemas.Organization.properties.website
+    update:
+      example: "https://www.mybiotech.com"
+
+  # ============================================================================
+  # RELATED ENTITIES - Teams
+  # ============================================================================
+
+  # Team entity operations
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
+    update:
+      x-speakeasy-entity-operation: Teams#create
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Teams#read
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Teams#update
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Teams#delete
+
+  # Team path parameters
+  - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: false
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+
+  # Team member operations
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members"]["post"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/members/{memberId}/delete"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/teams/{teamId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # ============================================================================
+  # RELATED ENTITIES - Workspaces
+  # ============================================================================
+
+  # Workspace entity operations
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]
+    update:
+      x-speakeasy-entity-operation: Workspaces#read
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
+    update:
+      x-speakeasy-entity-operation: Workspace#create
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]
+    update:
+      x-speakeasy-entity-operation: Workspace#read
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]
+    update:
+      x-speakeasy-entity-operation: Workspace#update
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Workspace#delete
+
+  # Workspace path parameters
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: false
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/validate"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]["parameters"][1]
+    update:
+      x-speakeasy-name-override: id
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]["parameters"][1]
+    update:
+      x-speakeasy-name-override: id
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]["parameters"][1]
+    update:
+      x-speakeasy-name-override: id
+
+  # Workspace participant operations
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/add"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/participants/{participantId}/role"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}/settings/studios"]["put"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # ============================================================================
+  # CLEANUP - Remove unmanageable and internal fields
+  # ============================================================================
+
+  # Remove logo fields (require file upload via web UI, cannot be managed via API)
+  - target: $["components"]["schemas"]["Organization"]["properties"]["logoId"]
+    remove: true
+
+  - target: $["components"]["schemas"]["CreateOrganizationRequest"]["properties"]["logoId"]
+    remove: true
+
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoId"]
+    remove: true
+
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["logoUrl"]
+    remove: true
+
+  # Remove internal fields
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["paying"]
+    remove: true
+
+  - target: $["components"]["schemas"]["OrganizationDbDto"]["properties"]["type"]
+    remove: true
