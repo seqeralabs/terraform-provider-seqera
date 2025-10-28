@@ -3,20 +3,4 @@
 package shared
 
 type ListLabelsResponse struct {
-	Labels    []LabelDbDto `json:"labels,omitempty"`
-	TotalSize *int64       `json:"totalSize,omitempty"`
-}
-
-func (l *ListLabelsResponse) GetLabels() []LabelDbDto {
-	if l == nil {
-		return nil
-	}
-	return l.Labels
-}
-
-func (l *ListLabelsResponse) GetTotalSize() *int64 {
-	if l == nil {
-		return nil
-	}
-	return l.TotalSize
 }

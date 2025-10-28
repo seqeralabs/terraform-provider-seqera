@@ -9550,20 +9550,23 @@ components:
         name:
           type: string
           title: "Label Name"
-          description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
           example: "environment"
           x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
           title: "Label Value"
-          description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
           example: "production"
-          x-speakeasy-plan-validators: LabelValueValidator
+          x-speakeasy-plan-validators: LabelValueResourceValidator
         resource:
           type: boolean
+          description: "Whether this is a resource label. Resource labels (true) can have values and be applied to resources. Non-resource labels (false) are simple tags. Requires replacement if changed."
           example: true
         isDefault:
           type: boolean
+          description: "Whether this label is automatically applied to new resources. Can only be true when resource=true."
+          x-speakeasy-plan-validators: LabelIsDefaultValidator
           example: false
       x-speakeasy-entity: Labels
       x-speakeasy-entity-description: |
@@ -11521,14 +11524,7 @@ components:
             $ref: "#/components/schemas/EventType"
     ListLabelsResponse:
       type: object
-      properties:
-        labels:
-          type: array
-          items:
-            $ref: "#/components/schemas/LabelDbDto"
-        totalSize:
-          type: integer
-          format: int64
+      properties: {}
     ListMembersResponse:
       type: object
       properties:
@@ -13141,17 +13137,19 @@ components:
         name:
           type: string
           title: "Label Name"
-          description: "Label name must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
-          example: "my-label"
+          description: "Label name (key). Must be 1-39 alphanumeric characters, dashes, or underscores. Example: 'environment', 'team', 'cost-center'"
+          example: "environment"
           x-speakeasy-plan-validators: LabelNameValidator
         value:
           type: string
           title: "Label Value"
-          description: "Label value must contain a minimum of 1 and a maximum of 39 alphanumeric characters separated by dashes or underscores"
+          description: "Label value. Must be 1-39 alphanumeric characters, dashes, or underscores. Required when resource=true. Example: 'production', 'data-science'"
           example: "production"
-          x-speakeasy-plan-validators: LabelValueValidator
+          x-speakeasy-plan-validators: LabelValueResourceValidator
         isDefault:
           type: boolean
+          description: "Whether this label is automatically applied to new resources. Can only be true when resource=true."
+          x-speakeasy-plan-validators: LabelIsDefaultValidator
     UpdateLabelResponse:
       type: object
       properties:

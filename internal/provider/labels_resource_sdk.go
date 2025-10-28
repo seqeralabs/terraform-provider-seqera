@@ -6,8 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -30,21 +28,6 @@ func (r *LabelsResourceModel) RefreshFromSharedListLabelsResponse(ctx context.Co
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.Labels = []tfTypes.LabelDbDto{}
-
-		for _, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-
-			r.Labels = append(r.Labels, labels)
-		}
-		r.TotalSize = types.Int64PointerValue(resp.TotalSize)
 	}
 
 	return diags
