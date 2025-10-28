@@ -4390,10 +4390,11 @@ paths:
       parameters:
         - name: workspaceId
           in: query
-          description: Workspace numeric identifier
+          description: Workspace numeric identifier where the secret will be stored
           schema:
             type: integer
             format: int64
+          required: true
       requestBody:
         description: Pipeline secret create request
         content:

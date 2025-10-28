@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 75cdf8965e45dda1c24af118296617c4
+  docChecksum: 883da62e43900d661dc121b5cf5ac9ed
   docVersion: 1.56.0
-  speakeasyVersion: 1.641.1
-  generationVersion: 2.730.5
+  speakeasyVersion: 1.642.0
+  generationVersion: 2.731.4
   releaseVersion: 0.25.4
   configChecksum: 853d1b859009f3eb0de1df23d43a5fac
 features:
@@ -1962,6 +1962,9 @@ examples:
           application/json: {"message": "<value>"}
   CreatePipelineSecret:
     speakeasy-default-create-pipeline-secret:
+      parameters:
+        query:
+          workspaceId: 771442
       requestBody:
         application/json: {"name": "api_key", "value": "secret_value_here"}
       responses:

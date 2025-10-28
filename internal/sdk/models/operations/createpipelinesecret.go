@@ -8,15 +8,15 @@ import (
 )
 
 type CreatePipelineSecretRequest struct {
-	// Workspace numeric identifier
-	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Workspace numeric identifier where the secret will be stored
+	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Pipeline secret create request
 	CreatePipelineSecretRequest shared.CreatePipelineSecretRequest `request:"mediaType=application/json"`
 }
 
-func (c *CreatePipelineSecretRequest) GetWorkspaceID() *int64 {
+func (c *CreatePipelineSecretRequest) GetWorkspaceID() int64 {
 	if c == nil {
-		return nil
+		return 0
 	}
 	return c.WorkspaceID
 }

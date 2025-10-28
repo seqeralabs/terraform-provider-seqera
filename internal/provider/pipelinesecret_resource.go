@@ -99,8 +99,8 @@ func (r *PipelineSecretResource) Schema(ctx context.Context, req resource.Schema
 				Description: `The sensitive secret value to store (will be encrypted)`,
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
-				Description: `Workspace numeric identifier`,
+				Required:    true,
+				Description: `Workspace numeric identifier where the secret will be stored`,
 			},
 		},
 	}

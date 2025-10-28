@@ -105,10 +105,7 @@ resource "seqera_pipeline_secret" "service_secrets" {
 
 - `name` (String) Secret name used to reference the secret in workflows (max 100 characters). Requires replacement if changed.
 - `value` (String, Sensitive) The sensitive secret value to store (will be encrypted)
-
-### Optional
-
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier where the secret will be stored
 
 ### Read-Only
 
