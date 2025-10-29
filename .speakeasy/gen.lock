@@ -1,15 +1,16 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 883da62e43900d661dc121b5cf5ac9ed
+  docChecksum: 2100b157d037db724beb67208ca70807
   docVersion: 1.56.0
-  speakeasyVersion: 1.642.0
+  speakeasyVersion: 1.642.1
   generationVersion: 2.731.4
   releaseVersion: 0.25.4
   configChecksum: 853d1b859009f3eb0de1df23d43a5fac
 features:
   terraform:
     additionalDependencies: 0.1.0
+    constsAndDefaults: 0.3.0
     core: 3.46.3
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
@@ -29,18 +30,27 @@ generatedFiles:
   - examples/data-sources/seqera_aws_compute_env/data-source.tf
   - examples/data-sources/seqera_aws_credential/data-source.tf
   - examples/data-sources/seqera_azure_credential/data-source.tf
+  - examples/data-sources/seqera_bitbucket_credential/data-source.tf
+  - examples/data-sources/seqera_codecommit_credential/data-source.tf
   - examples/data-sources/seqera_compute_env/data-source.tf
+  - examples/data-sources/seqera_container_registry_credential/data-source.tf
   - examples/data-sources/seqera_credential/data-source.tf
   - examples/data-sources/seqera_data_link/data-source.tf
   - examples/data-sources/seqera_dataset/data-source.tf
+  - examples/data-sources/seqera_gitea_credential/data-source.tf
+  - examples/data-sources/seqera_github_credential/data-source.tf
+  - examples/data-sources/seqera_gitlab_credential/data-source.tf
   - examples/data-sources/seqera_google_credential/data-source.tf
+  - examples/data-sources/seqera_kubernetes_credential/data-source.tf
   - examples/data-sources/seqera_labels/data-source.tf
   - examples/data-sources/seqera_orgs/data-source.tf
   - examples/data-sources/seqera_pipeline/data-source.tf
   - examples/data-sources/seqera_pipeline_secret/data-source.tf
+  - examples/data-sources/seqera_ssh_credential/data-source.tf
   - examples/data-sources/seqera_studios/data-source.tf
   - examples/data-sources/seqera_teams/data-source.tf
   - examples/data-sources/seqera_tokens/data-source.tf
+  - examples/data-sources/seqera_tower_agent_credential/data-source.tf
   - examples/data-sources/seqera_user/data-source.tf
   - examples/data-sources/seqera_user_workspaces/data-source.tf
   - examples/data-sources/seqera_workflows/data-source.tf
@@ -55,13 +65,17 @@ generatedFiles:
   - examples/resources/seqera_aws_compute_env/resource.tf
   - examples/resources/seqera_aws_credential/import-by-string-id.tf
   - examples/resources/seqera_aws_credential/import.sh
-  - examples/resources/seqera_aws_credential/resource.tf
   - examples/resources/seqera_azure_credential/import-by-string-id.tf
   - examples/resources/seqera_azure_credential/import.sh
-  - examples/resources/seqera_azure_credential/resource.tf
+  - examples/resources/seqera_bitbucket_credential/import-by-string-id.tf
+  - examples/resources/seqera_bitbucket_credential/import.sh
+  - examples/resources/seqera_codecommit_credential/import-by-string-id.tf
+  - examples/resources/seqera_codecommit_credential/import.sh
   - examples/resources/seqera_compute_env/import-by-string-id.tf
   - examples/resources/seqera_compute_env/import.sh
   - examples/resources/seqera_compute_env/resource.tf
+  - examples/resources/seqera_container_registry_credential/import-by-string-id.tf
+  - examples/resources/seqera_container_registry_credential/import.sh
   - examples/resources/seqera_credential/import-by-string-id.tf
   - examples/resources/seqera_credential/import.sh
   - examples/resources/seqera_credential/resource.tf
@@ -69,9 +83,14 @@ generatedFiles:
   - examples/resources/seqera_data_link/import.sh
   - examples/resources/seqera_data_link/resource.tf
   - examples/resources/seqera_datasets/resource.tf
-  - examples/resources/seqera_google_credential/import-by-string-id.tf
-  - examples/resources/seqera_google_credential/import.sh
-  - examples/resources/seqera_google_credential/resource.tf
+  - examples/resources/seqera_gitea_credential/import-by-string-id.tf
+  - examples/resources/seqera_gitea_credential/import.sh
+  - examples/resources/seqera_github_credential/import-by-string-id.tf
+  - examples/resources/seqera_github_credential/import.sh
+  - examples/resources/seqera_gitlab_credential/import-by-string-id.tf
+  - examples/resources/seqera_gitlab_credential/import.sh
+  - examples/resources/seqera_kubernetes_credential/import-by-string-id.tf
+  - examples/resources/seqera_kubernetes_credential/import.sh
   - examples/resources/seqera_orgs/import-by-string-id.tf
   - examples/resources/seqera_orgs/import.sh
   - examples/resources/seqera_pipeline/import-by-string-id.tf
@@ -79,6 +98,8 @@ generatedFiles:
   - examples/resources/seqera_pipeline/resource.tf
   - examples/resources/seqera_pipeline_secret/import-by-string-id.tf
   - examples/resources/seqera_pipeline_secret/import.sh
+  - examples/resources/seqera_ssh_credential/import-by-string-id.tf
+  - examples/resources/seqera_ssh_credential/import.sh
   - examples/resources/seqera_studios/import-by-string-id.tf
   - examples/resources/seqera_studios/import.sh
   - examples/resources/seqera_studios/resource.tf
@@ -86,6 +107,8 @@ generatedFiles:
   - examples/resources/seqera_teams/import.sh
   - examples/resources/seqera_teams/resource.tf
   - examples/resources/seqera_tokens/resource.tf
+  - examples/resources/seqera_tower_agent_credential/import-by-string-id.tf
+  - examples/resources/seqera_tower_agent_credential/import.sh
   - examples/resources/seqera_workflows/import-by-string-id.tf
   - examples/resources/seqera_workflows/import.sh
   - examples/resources/seqera_workflows/resource.tf
@@ -122,10 +145,22 @@ generatedFiles:
   - internal/provider/azurecredential_data_source_sdk.go
   - internal/provider/azurecredential_resource.go
   - internal/provider/azurecredential_resource_sdk.go
+  - internal/provider/bitbucketcredential_data_source.go
+  - internal/provider/bitbucketcredential_data_source_sdk.go
+  - internal/provider/bitbucketcredential_resource.go
+  - internal/provider/bitbucketcredential_resource_sdk.go
+  - internal/provider/codecommitcredential_data_source.go
+  - internal/provider/codecommitcredential_data_source_sdk.go
+  - internal/provider/codecommitcredential_resource.go
+  - internal/provider/codecommitcredential_resource_sdk.go
   - internal/provider/computeenv_data_source.go
   - internal/provider/computeenv_data_source_sdk.go
   - internal/provider/computeenv_resource.go
   - internal/provider/computeenv_resource_sdk.go
+  - internal/provider/containerregistrycredential_data_source.go
+  - internal/provider/containerregistrycredential_data_source_sdk.go
+  - internal/provider/containerregistrycredential_resource.go
+  - internal/provider/containerregistrycredential_resource_sdk.go
   - internal/provider/credential_data_source.go
   - internal/provider/credential_data_source_sdk.go
   - internal/provider/credential_resource.go
@@ -138,10 +173,26 @@ generatedFiles:
   - internal/provider/dataset_data_source_sdk.go
   - internal/provider/datasets_resource.go
   - internal/provider/datasets_resource_sdk.go
+  - internal/provider/giteacredential_data_source.go
+  - internal/provider/giteacredential_data_source_sdk.go
+  - internal/provider/giteacredential_resource.go
+  - internal/provider/giteacredential_resource_sdk.go
+  - internal/provider/githubcredential_data_source.go
+  - internal/provider/githubcredential_data_source_sdk.go
+  - internal/provider/githubcredential_resource.go
+  - internal/provider/githubcredential_resource_sdk.go
+  - internal/provider/gitlabcredential_data_source.go
+  - internal/provider/gitlabcredential_data_source_sdk.go
+  - internal/provider/gitlabcredential_resource.go
+  - internal/provider/gitlabcredential_resource_sdk.go
   - internal/provider/googlecredential_data_source.go
   - internal/provider/googlecredential_data_source_sdk.go
   - internal/provider/googlecredential_resource.go
   - internal/provider/googlecredential_resource_sdk.go
+  - internal/provider/kubernetescredential_data_source.go
+  - internal/provider/kubernetescredential_data_source_sdk.go
+  - internal/provider/kubernetescredential_resource.go
+  - internal/provider/kubernetescredential_resource_sdk.go
   - internal/provider/labels_data_source.go
   - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
@@ -175,6 +226,10 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
+  - internal/provider/sshcredential_data_source.go
+  - internal/provider/sshcredential_data_source_sdk.go
+  - internal/provider/sshcredential_resource.go
+  - internal/provider/sshcredential_resource_sdk.go
   - internal/provider/studios_data_source.go
   - internal/provider/studios_data_source_sdk.go
   - internal/provider/studios_resource.go
@@ -187,6 +242,10 @@ generatedFiles:
   - internal/provider/tokens_data_source_sdk.go
   - internal/provider/tokens_resource.go
   - internal/provider/tokens_resource_sdk.go
+  - internal/provider/toweragentcredential_data_source.go
+  - internal/provider/toweragentcredential_data_source_sdk.go
+  - internal/provider/toweragentcredential_resource.go
+  - internal/provider/toweragentcredential_resource_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
@@ -243,7 +302,10 @@ generatedFiles:
   - internal/provider/types/gitea_security_keys1.go
   - internal/provider/types/github_action_config.go
   - internal/provider/types/github_action_event.go
+  - internal/provider/types/github_credential_keys.go
+  - internal/provider/types/gitlab_credential_keys.go
   - internal/provider/types/google_batch_service_configuration.go
+  - internal/provider/types/google_credential_keys.go
   - internal/provider/types/google_gke_cluster_configuration.go
   - internal/provider/types/google_life_sciences_configuration.go
   - internal/provider/types/google_security_keys.go
@@ -253,6 +315,7 @@ generatedFiles:
   - internal/provider/types/k8s_security_keys.go
   - internal/provider/types/k8s_security_keys1.go
   - internal/provider/types/kubernetes_compute_configuration.go
+  - internal/provider/types/kubernetes_credential_keys.go
   - internal/provider/types/label_db_dto.go
   - internal/provider/types/launch.go
   - internal/provider/types/moab_configuration.go
@@ -260,20 +323,16 @@ generatedFiles:
   - internal/provider/types/process_load.go
   - internal/provider/types/progress_data.go
   - internal/provider/types/security_keys.go
-  - internal/provider/types/security_keys_aws_security_keys.go
-  - internal/provider/types/security_keys_aws_security_keys1.go
-  - internal/provider/types/security_keys_azure_security_keys.go
-  - internal/provider/types/security_keys_azure_security_keys1.go
-  - internal/provider/types/security_keys_google_security_keys.go
-  - internal/provider/types/security_keys_google_security_keys1.go
   - internal/provider/types/security_keys_output.go
   - internal/provider/types/seqera_compute_configuration.go
   - internal/provider/types/seqera_compute_security_keys.go
   - internal/provider/types/seqera_compute_security_keys1.go
   - internal/provider/types/slurm_configuration.go
+  - internal/provider/types/ssh_credential_keys.go
   - internal/provider/types/ssh_security_keys.go
   - internal/provider/types/ssh_security_keys1.go
   - internal/provider/types/studio_user.go
+  - internal/provider/types/tower_agent_credential_keys.go
   - internal/provider/types/univa_grid_engine_configuration.go
   - internal/provider/types/wf_manifest.go
   - internal/provider/types/wf_nextflow.go
@@ -334,13 +393,20 @@ generatedFiles:
   - internal/sdk/models/operations/createawscomputeenv.go
   - internal/sdk/models/operations/createawscredentials.go
   - internal/sdk/models/operations/createazurecredentials.go
+  - internal/sdk/models/operations/createbitbucketcredentials.go
+  - internal/sdk/models/operations/createcodecommitcredentials.go
   - internal/sdk/models/operations/createcomputeenv.go
+  - internal/sdk/models/operations/createcontainerregistrycredentials.go
   - internal/sdk/models/operations/createcredentials.go
   - internal/sdk/models/operations/createcustomdatalink.go
   - internal/sdk/models/operations/createdataset.go
   - internal/sdk/models/operations/createdatasetv2.go
   - internal/sdk/models/operations/createdatastudio.go
+  - internal/sdk/models/operations/creategiteacredentials.go
+  - internal/sdk/models/operations/creategithubcredentials.go
+  - internal/sdk/models/operations/creategitlabcredentials.go
   - internal/sdk/models/operations/creategooglecredentials.go
+  - internal/sdk/models/operations/createkubernetescredentials.go
   - internal/sdk/models/operations/createlabel.go
   - internal/sdk/models/operations/createorganization.go
   - internal/sdk/models/operations/createorganizationmember.go
@@ -348,7 +414,9 @@ generatedFiles:
   - internal/sdk/models/operations/createorganizationteammember.go
   - internal/sdk/models/operations/createpipeline.go
   - internal/sdk/models/operations/createpipelinesecret.go
+  - internal/sdk/models/operations/createsshcredentials.go
   - internal/sdk/models/operations/createtoken.go
+  - internal/sdk/models/operations/createtoweragentcredentials.go
   - internal/sdk/models/operations/createtrace.go
   - internal/sdk/models/operations/createworkflowlaunch.go
   - internal/sdk/models/operations/createworkflowstar.go
@@ -359,14 +427,21 @@ generatedFiles:
   - internal/sdk/models/operations/deleteawscomputeenv.go
   - internal/sdk/models/operations/deleteawscredentials.go
   - internal/sdk/models/operations/deleteazurecredentials.go
+  - internal/sdk/models/operations/deletebitbucketcredentials.go
+  - internal/sdk/models/operations/deletecodecommitcredentials.go
   - internal/sdk/models/operations/deletecomputeenv.go
+  - internal/sdk/models/operations/deletecontainerregistrycredentials.go
   - internal/sdk/models/operations/deletecredentials.go
   - internal/sdk/models/operations/deletecustomdatalink.go
   - internal/sdk/models/operations/deletedatalinkitem.go
   - internal/sdk/models/operations/deletedataset.go
   - internal/sdk/models/operations/deletedatasetv2.go
   - internal/sdk/models/operations/deletedatastudio.go
+  - internal/sdk/models/operations/deletegiteacredentials.go
+  - internal/sdk/models/operations/deletegithubcredentials.go
+  - internal/sdk/models/operations/deletegitlabcredentials.go
   - internal/sdk/models/operations/deletegooglecredentials.go
+  - internal/sdk/models/operations/deletekubernetescredentials.go
   - internal/sdk/models/operations/deletelabel.go
   - internal/sdk/models/operations/deleteorganization.go
   - internal/sdk/models/operations/deleteorganizationmember.go
@@ -374,7 +449,9 @@ generatedFiles:
   - internal/sdk/models/operations/deleteorganizationteammember.go
   - internal/sdk/models/operations/deletepipeline.go
   - internal/sdk/models/operations/deletepipelinesecret.go
+  - internal/sdk/models/operations/deletesshcredentials.go
   - internal/sdk/models/operations/deletetoken.go
+  - internal/sdk/models/operations/deletetoweragentcredentials.go
   - internal/sdk/models/operations/deleteuser.go
   - internal/sdk/models/operations/deleteworkflow.go
   - internal/sdk/models/operations/deleteworkflowmany.go
@@ -385,13 +462,20 @@ generatedFiles:
   - internal/sdk/models/operations/describeawscomputeenv.go
   - internal/sdk/models/operations/describeawscredentials.go
   - internal/sdk/models/operations/describeazurecredentials.go
+  - internal/sdk/models/operations/describebitbucketcredentials.go
+  - internal/sdk/models/operations/describecodecommitcredentials.go
   - internal/sdk/models/operations/describecomputeenv.go
+  - internal/sdk/models/operations/describecontainerregistrycredentials.go
   - internal/sdk/models/operations/describecredentials.go
   - internal/sdk/models/operations/describedatalink.go
   - internal/sdk/models/operations/describedataset.go
   - internal/sdk/models/operations/describedatasetv2.go
   - internal/sdk/models/operations/describedatastudio.go
+  - internal/sdk/models/operations/describegiteacredentials.go
+  - internal/sdk/models/operations/describegithubcredentials.go
+  - internal/sdk/models/operations/describegitlabcredentials.go
   - internal/sdk/models/operations/describegooglecredentials.go
+  - internal/sdk/models/operations/describekubernetescredentials.go
   - internal/sdk/models/operations/describelaunch.go
   - internal/sdk/models/operations/describeorganization.go
   - internal/sdk/models/operations/describeorganizationquotas.go
@@ -402,6 +486,8 @@ generatedFiles:
   - internal/sdk/models/operations/describepipelineschema.go
   - internal/sdk/models/operations/describepipelinesecret.go
   - internal/sdk/models/operations/describeplatform.go
+  - internal/sdk/models/operations/describesshcredentials.go
+  - internal/sdk/models/operations/describetoweragentcredentials.go
   - internal/sdk/models/operations/describeuser.go
   - internal/sdk/models/operations/describeworkflow.go
   - internal/sdk/models/operations/describeworkflowlaunch.go
@@ -486,21 +572,30 @@ generatedFiles:
   - internal/sdk/models/operations/updateawscomputeenv.go
   - internal/sdk/models/operations/updateawscredentials.go
   - internal/sdk/models/operations/updateazurecredentials.go
+  - internal/sdk/models/operations/updatebitbucketcredentials.go
+  - internal/sdk/models/operations/updatecodecommitcredentials.go
   - internal/sdk/models/operations/updatecomputeenv.go
   - internal/sdk/models/operations/updatecomputeenvprimary.go
+  - internal/sdk/models/operations/updatecontainerregistrycredentials.go
   - internal/sdk/models/operations/updatecredentials.go
   - internal/sdk/models/operations/updatecustomdatalink.go
   - internal/sdk/models/operations/updatedataset.go
   - internal/sdk/models/operations/updatedatasetv2.go
   - internal/sdk/models/operations/updatedatastudiocheckpoint.go
   - internal/sdk/models/operations/updatedatastudiosworkspacesettings.go
+  - internal/sdk/models/operations/updategiteacredentials.go
+  - internal/sdk/models/operations/updategithubcredentials.go
+  - internal/sdk/models/operations/updategitlabcredentials.go
   - internal/sdk/models/operations/updategooglecredentials.go
+  - internal/sdk/models/operations/updatekubernetescredentials.go
   - internal/sdk/models/operations/updatelabel.go
   - internal/sdk/models/operations/updateorganization.go
   - internal/sdk/models/operations/updateorganizationmemberrole.go
   - internal/sdk/models/operations/updateorganizationteam.go
   - internal/sdk/models/operations/updatepipeline.go
   - internal/sdk/models/operations/updatepipelinesecret.go
+  - internal/sdk/models/operations/updatesshcredentials.go
+  - internal/sdk/models/operations/updatetoweragentcredentials.go
   - internal/sdk/models/operations/updatetracebegin.go
   - internal/sdk/models/operations/updatetracecomplete.go
   - internal/sdk/models/operations/updatetraceheartbeat.go
@@ -545,15 +640,13 @@ generatedFiles:
   - internal/sdk/models/shared/awscloudplatformmetainfo.go
   - internal/sdk/models/shared/awscomputeenvcomputeconfiginput.go
   - internal/sdk/models/shared/awscredential.go
-  - internal/sdk/models/shared/awssecuritykeys.go
-  - internal/sdk/models/shared/awssecuritykeysoutput.go
   - internal/sdk/models/shared/azbatchforgeconfig.go
   - internal/sdk/models/shared/azbatchplatformmetainfo.go
   - internal/sdk/models/shared/azurecredential.go
-  - internal/sdk/models/shared/azuresecuritykeys.go
-  - internal/sdk/models/shared/azuresecuritykeysoutput.go
+  - internal/sdk/models/shared/bitbucketcredential.go
   - internal/sdk/models/shared/bucket.go
   - internal/sdk/models/shared/cloudpricemodel.go
+  - internal/sdk/models/shared/codecommitcredential.go
   - internal/sdk/models/shared/computeconfig.go
   - internal/sdk/models/shared/computeenvcomputeconfiginput.go
   - internal/sdk/models/shared/computeenvdbdto.go
@@ -565,6 +658,7 @@ generatedFiles:
   - internal/sdk/models/shared/computeregion.go
   - internal/sdk/models/shared/configenvvariable.go
   - internal/sdk/models/shared/containerdata.go
+  - internal/sdk/models/shared/containerregistrycredential.go
   - internal/sdk/models/shared/createaccesstokenrequest.go
   - internal/sdk/models/shared/createaccesstokenresponse.go
   - internal/sdk/models/shared/createactionrequest.go
@@ -575,14 +669,28 @@ generatedFiles:
   - internal/sdk/models/shared/createawscredentialsresponse.go
   - internal/sdk/models/shared/createazurecredentialsrequest.go
   - internal/sdk/models/shared/createazurecredentialsresponse.go
+  - internal/sdk/models/shared/createbitbucketcredentialsrequest.go
+  - internal/sdk/models/shared/createbitbucketcredentialsresponse.go
+  - internal/sdk/models/shared/createcodecommitcredentialsrequest.go
+  - internal/sdk/models/shared/createcodecommitcredentialsresponse.go
   - internal/sdk/models/shared/createcomputeenvrequest.go
   - internal/sdk/models/shared/createcomputeenvresponse.go
+  - internal/sdk/models/shared/createcontainerregistrycredentialsrequest.go
+  - internal/sdk/models/shared/createcontainerregistrycredentialsresponse.go
   - internal/sdk/models/shared/createcredentialsrequest.go
   - internal/sdk/models/shared/createcredentialsresponse.go
   - internal/sdk/models/shared/createdatasetrequest.go
   - internal/sdk/models/shared/createdatasetresponse.go
+  - internal/sdk/models/shared/creategiteacredentialsrequest.go
+  - internal/sdk/models/shared/creategiteacredentialsresponse.go
+  - internal/sdk/models/shared/creategithubcredentialsrequest.go
+  - internal/sdk/models/shared/creategithubcredentialsresponse.go
+  - internal/sdk/models/shared/creategitlabcredentialsrequest.go
+  - internal/sdk/models/shared/creategitlabcredentialsresponse.go
   - internal/sdk/models/shared/creategooglecredentialsrequest.go
   - internal/sdk/models/shared/creategooglecredentialsresponse.go
+  - internal/sdk/models/shared/createkubernetescredentialsrequest.go
+  - internal/sdk/models/shared/createkubernetescredentialsresponse.go
   - internal/sdk/models/shared/createlabelrequest.go
   - internal/sdk/models/shared/createlabelresponse.go
   - internal/sdk/models/shared/createorganizationrequest.go
@@ -591,9 +699,13 @@ generatedFiles:
   - internal/sdk/models/shared/createpipelineresponse.go
   - internal/sdk/models/shared/createpipelinesecretrequest.go
   - internal/sdk/models/shared/createpipelinesecretresponse.go
+  - internal/sdk/models/shared/createsshcredentialsrequest.go
+  - internal/sdk/models/shared/createsshcredentialsresponse.go
   - internal/sdk/models/shared/createteammemberrequest.go
   - internal/sdk/models/shared/createteamrequest.go
   - internal/sdk/models/shared/createteamresponse.go
+  - internal/sdk/models/shared/createtoweragentcredentialsrequest.go
+  - internal/sdk/models/shared/createtoweragentcredentialsresponse.go
   - internal/sdk/models/shared/createworkflowstarresponse.go
   - internal/sdk/models/shared/createworkspacerequest.go
   - internal/sdk/models/shared/createworkspaceresponse.go
@@ -651,10 +763,17 @@ generatedFiles:
   - internal/sdk/models/shared/describeawscomputeenvresponse.go
   - internal/sdk/models/shared/describeawscredentialsresponse.go
   - internal/sdk/models/shared/describeazurecredentialsresponse.go
+  - internal/sdk/models/shared/describebitbucketcredentialsresponse.go
+  - internal/sdk/models/shared/describecodecommitcredentialsresponse.go
   - internal/sdk/models/shared/describecomputeenvresponse.go
+  - internal/sdk/models/shared/describecontainerregistrycredentialsresponse.go
   - internal/sdk/models/shared/describecredentialsresponse.go
   - internal/sdk/models/shared/describedatasetresponse.go
+  - internal/sdk/models/shared/describegiteacredentialsresponse.go
+  - internal/sdk/models/shared/describegithubcredentialsresponse.go
+  - internal/sdk/models/shared/describegitlabcredentialsresponse.go
   - internal/sdk/models/shared/describegooglecredentialsresponse.go
+  - internal/sdk/models/shared/describekubernetescredentialsresponse.go
   - internal/sdk/models/shared/describelaunchresponse.go
   - internal/sdk/models/shared/describeorganizationquotasresponse.go
   - internal/sdk/models/shared/describeorganizationresponse.go
@@ -662,8 +781,10 @@ generatedFiles:
   - internal/sdk/models/shared/describepipelineresponse.go
   - internal/sdk/models/shared/describepipelinesecretresponse.go
   - internal/sdk/models/shared/describeplatformresponse.go
+  - internal/sdk/models/shared/describesshcredentialsresponse.go
   - internal/sdk/models/shared/describetaskresponse.go
   - internal/sdk/models/shared/describeteamresponse.go
+  - internal/sdk/models/shared/describetoweragentcredentialsresponse.go
   - internal/sdk/models/shared/describeuserresponse.go
   - internal/sdk/models/shared/describeworkflowlaunchresponse.go
   - internal/sdk/models/shared/describeworkflowresponse.go
@@ -677,13 +798,14 @@ generatedFiles:
   - internal/sdk/models/shared/fsxfilesystem.go
   - internal/sdk/models/shared/getprogressresponse.go
   - internal/sdk/models/shared/getworkflowmetricsresponse.go
+  - internal/sdk/models/shared/giteacredential.go
+  - internal/sdk/models/shared/githubcredential.go
+  - internal/sdk/models/shared/gitlabcredential.go
   - internal/sdk/models/shared/gkeplatformmetainfo.go
   - internal/sdk/models/shared/googlecredential.go
   - internal/sdk/models/shared/googleplatformmetainfo.go
   - internal/sdk/models/shared/googleplatformmetainfobucket.go
   - internal/sdk/models/shared/googleplatformmetainfofilestore.go
-  - internal/sdk/models/shared/googlesecuritykeys.go
-  - internal/sdk/models/shared/googlesecuritykeysoutput.go
   - internal/sdk/models/shared/gridplatformmetainfo.go
   - internal/sdk/models/shared/image.go
   - internal/sdk/models/shared/instancetype.go
@@ -692,6 +814,7 @@ generatedFiles:
   - internal/sdk/models/shared/jobinfodto.go
   - internal/sdk/models/shared/jobqueue.go
   - internal/sdk/models/shared/k8splatformmetainfo.go
+  - internal/sdk/models/shared/kubernetescredential.go
   - internal/sdk/models/shared/labeldbdto.go
   - internal/sdk/models/shared/labeltype.go
   - internal/sdk/models/shared/launch.go
@@ -761,6 +884,7 @@ generatedFiles:
   - internal/sdk/models/shared/securitykeysoutput.go
   - internal/sdk/models/shared/serviceinfo.go
   - internal/sdk/models/shared/serviceinforesponse.go
+  - internal/sdk/models/shared/sshcredential.go
   - internal/sdk/models/shared/state.go
   - internal/sdk/models/shared/studiouser.go
   - internal/sdk/models/shared/submitworkflowlaunchrequest.go
@@ -770,6 +894,7 @@ generatedFiles:
   - internal/sdk/models/shared/taskstatus.go
   - internal/sdk/models/shared/team.go
   - internal/sdk/models/shared/teamdbdto.go
+  - internal/sdk/models/shared/toweragentcredential.go
   - internal/sdk/models/shared/tracebeginrequest.go
   - internal/sdk/models/shared/tracebeginresponse.go
   - internal/sdk/models/shared/tracecompleterequest.go
@@ -787,10 +912,17 @@ generatedFiles:
   - internal/sdk/models/shared/updateawscomputeenvrequest.go
   - internal/sdk/models/shared/updateawscredentialsrequest.go
   - internal/sdk/models/shared/updateazurecredentialsrequest.go
+  - internal/sdk/models/shared/updatebitbucketcredentialsrequest.go
+  - internal/sdk/models/shared/updatecodecommitcredentialsrequest.go
   - internal/sdk/models/shared/updatecomputeenvrequest.go
+  - internal/sdk/models/shared/updatecontainerregistrycredentialsrequest.go
   - internal/sdk/models/shared/updatecredentialsrequest.go
   - internal/sdk/models/shared/updatedatasetrequest.go
+  - internal/sdk/models/shared/updategiteacredentialsrequest.go
+  - internal/sdk/models/shared/updategithubcredentialsrequest.go
+  - internal/sdk/models/shared/updategitlabcredentialsrequest.go
   - internal/sdk/models/shared/updategooglecredentialsrequest.go
+  - internal/sdk/models/shared/updatekubernetescredentialsrequest.go
   - internal/sdk/models/shared/updatelabelrequest.go
   - internal/sdk/models/shared/updatelabelresponse.go
   - internal/sdk/models/shared/updatememberrolerequest.go
@@ -799,7 +931,9 @@ generatedFiles:
   - internal/sdk/models/shared/updatepipelinerequest.go
   - internal/sdk/models/shared/updatepipelineresponse.go
   - internal/sdk/models/shared/updatepipelinesecretrequest.go
+  - internal/sdk/models/shared/updatesshcredentialsrequest.go
   - internal/sdk/models/shared/updateteamrequest.go
+  - internal/sdk/models/shared/updatetoweragentcredentialsrequest.go
   - internal/sdk/models/shared/updateworkspacerequest.go
   - internal/sdk/models/shared/uploaddatasetversionresponse.go
   - internal/sdk/models/shared/uploadetag.go
@@ -2558,7 +2692,7 @@ examples:
   CreateAWSCredentials:
     speakeasy-default-create-AWS-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
       responses:
         "200":
           application/json: {}
@@ -2571,7 +2705,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+          application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSCredentials:
@@ -2580,7 +2714,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2597,7 +2731,7 @@ examples:
   CreateAzureCredentials:
     speakeasy-default-create-azure-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere=="}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
       responses:
         "200":
           application/json: {}
@@ -2610,7 +2744,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAzureCredentials:
@@ -2619,7 +2753,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere=="}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2711,6 +2845,487 @@ examples:
       parameters:
         path:
           computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateBitBucketCredentials:
+    speakeasy-default-create-bit-bucket-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeBitBucketCredentials:
+    speakeasy-default-describe-bit-bucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateBitBucketCredentials:
+    speakeasy-default-update-bit-bucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteBitBucketCredentials:
+    speakeasy-default-delete-bit-bucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateCodeCommitCredentials:
+    speakeasy-default-create-code-commit-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeCodeCommitCredentials:
+    speakeasy-default-describe-code-commit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateCodeCommitCredentials:
+    speakeasy-default-update-code-commit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteCodeCommitCredentials:
+    speakeasy-default-delete-code-commit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGiteaCredentials:
+    speakeasy-default-create-gitea-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "keys": {"username": "myuser", "password": "mypassword", "baseUrl": "https://gitea.example.com"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGiteaCredentials:
+    speakeasy-default-describe-gitea-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "gitea", "keys": {"username": "myuser"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGiteaCredentials:
+    speakeasy-default-update-gitea-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "keys": {"username": "myuser", "password": "mypassword", "baseUrl": "https://gitea.example.com"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGiteaCredentials:
+    speakeasy-default-delete-gitea-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGitHubCredentials:
+    speakeasy-default-create-git-hub-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGitHubCredentials:
+    speakeasy-default-describe-git-hub-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGitHubCredentials:
+    speakeasy-default-update-git-hub-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGitHubCredentials:
+    speakeasy-default-delete-git-hub-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGitLabCredentials:
+    speakeasy-default-create-git-lab-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGitLabCredentials:
+    speakeasy-default-describe-git-lab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGitLabCredentials:
+    speakeasy-default-update-git-lab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGitLabCredentials:
+    speakeasy-default-delete-git-lab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateContainerRegistryCredentials:
+    speakeasy-default-create-container-registry-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeContainerRegistryCredentials:
+    speakeasy-default-describe-container-registry-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateContainerRegistryCredentials:
+    speakeasy-default-update-container-registry-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteContainerRegistryCredentials:
+    speakeasy-default-delete-container-registry-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateSSHCredentials:
+    speakeasy-default-create-SSH-credentials:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeSSHCredentials:
+    speakeasy-default-describe-SSH-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateSSHCredentials:
+    speakeasy-default-update-SSH-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteSSHCredentials:
+    speakeasy-default-delete-SSH-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateTowerAgentCredentials:
+    speakeasy-default-create-tower-agent-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "workDir": "/work"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeTowerAgentCredentials:
+    speakeasy-default-describe-tower-agent-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateTowerAgentCredentials:
+    speakeasy-default-update-tower-agent-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "workDir": "/work"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteTowerAgentCredentials:
+    speakeasy-default-delete-tower-agent-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateKubernetesCredentials:
+    speakeasy-default-create-kubernetes-credentials:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeKubernetesCredentials:
+    speakeasy-default-describe-kubernetes-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateKubernetesCredentials:
+    speakeasy-default-update-kubernetes-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteKubernetesCredentials:
+    speakeasy-default-delete-kubernetes-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateBitbucketCredentials:
+    speakeasy-default-create-bitbucket-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeBitbucketCredentials:
+    speakeasy-default-describe-bitbucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateBitbucketCredentials:
+    speakeasy-default-update-bitbucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteBitbucketCredentials:
+    speakeasy-default-delete-bitbucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateCodecommitCredentials:
+    speakeasy-default-create-codecommit-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeCodecommitCredentials:
+    speakeasy-default-describe-codecommit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateCodecommitCredentials:
+    speakeasy-default-update-codecommit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteCodecommitCredentials:
+    speakeasy-default-delete-codecommit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGithubCredentials:
+    speakeasy-default-create-github-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGithubCredentials:
+    speakeasy-default-describe-github-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGithubCredentials:
+    speakeasy-default-update-github-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGithubCredentials:
+    speakeasy-default-delete-github-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGitlabCredentials:
+    speakeasy-default-create-gitlab-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGitlabCredentials:
+    speakeasy-default-describe-gitlab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGitlabCredentials:
+    speakeasy-default-update-gitlab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGitlabCredentials:
+    speakeasy-default-delete-gitlab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
       responses:
         "400":
           application/json: {"message": "<value>"}

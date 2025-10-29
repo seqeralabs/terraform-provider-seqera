@@ -6,31 +6,36 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
-	"time"
 )
+
+func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialKeysOutput(ctx context.Context, resp *shared.AzureCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.BatchName = types.StringValue(resp.BatchName)
+	r.StorageName = types.StringValue(resp.StorageName)
+
+	return diags
+}
 
 func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialOutput(ctx context.Context, resp *shared.AzureCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		keysPriorData := r.Keys
-		r.Keys.BatchName = types.StringPointerValue(resp.Keys.BatchName)
-		r.Keys.StorageName = types.StringPointerValue(resp.Keys.StorageName)
-		r.Keys.BatchKey = keysPriorData.BatchKey
-		r.Keys.StorageKey = keysPriorData.StorageKey
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		diags.Append(r.RefreshFromSharedAzureCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.ProviderType != nil {
+			r.ProviderType = types.StringValue(string(*resp.ProviderType))
+		} else {
+			r.ProviderType = types.StringNull()
+		}
 	}
 
 	return diags
@@ -97,16 +102,9 @@ func (r *AzureCredentialResourceModel) ToOperationsDeleteAzureCredentialsRequest
 	} else {
 		workspaceID = nil
 	}
-	checked := new(bool)
-	if !r.Checked.IsUnknown() && !r.Checked.IsNull() {
-		*checked = r.Checked.ValueBool()
-	} else {
-		checked = nil
-	}
 	out := operations.DeleteAzureCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
-		Checked:       checked,
 	}
 
 	return &out, diags
@@ -172,91 +170,76 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Conte
 	var name string
 	name = r.Name.ValueString()
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
+	providerType := new(shared.AzureCredentialProviderType)
+	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
+		*providerType = shared.AzureCredentialProviderType(r.ProviderType.ValueString())
 	} else {
-		description = nil
+		providerType = nil
 	}
-	providerType := shared.AzureCredentialProviderType(r.ProviderType.ValueString())
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
+	keys, keysDiags := r.ToSharedAzureCredentialKeys(ctx)
+	diags.Append(keysDiags...)
+
+	if diags.HasError() {
+		return nil, diags
 	}
-	category := new(string)
-	if !r.Category.IsUnknown() && !r.Category.IsNull() {
-		*category = r.Category.ValueString()
-	} else {
-		category = nil
+
+	out := shared.AzureCredential{
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
-	deleted := new(bool)
-	if !r.Deleted.IsUnknown() && !r.Deleted.IsNull() {
-		*deleted = r.Deleted.ValueBool()
-	} else {
-		deleted = nil
-	}
-	lastUsed := new(time.Time)
-	if !r.LastUsed.IsUnknown() && !r.LastUsed.IsNull() {
-		*lastUsed, _ = time.Parse(time.RFC3339Nano, r.LastUsed.ValueString())
-	} else {
-		lastUsed = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
-	lastUpdated := new(time.Time)
-	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
-		*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.LastUpdated.ValueString())
-	} else {
-		lastUpdated = nil
-	}
-	batchName := new(string)
-	if !r.Keys.BatchName.IsUnknown() && !r.Keys.BatchName.IsNull() {
-		*batchName = r.Keys.BatchName.ValueString()
-	} else {
-		batchName = nil
-	}
-	storageName := new(string)
-	if !r.Keys.StorageName.IsUnknown() && !r.Keys.StorageName.IsNull() {
-		*storageName = r.Keys.StorageName.ValueString()
-	} else {
-		storageName = nil
-	}
+
+	return &out, diags
+}
+
+func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.Context) (*shared.AzureCredentialKeys, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var batchName string
+	batchName = r.BatchName.ValueString()
+
+	var storageName string
+	storageName = r.StorageName.ValueString()
+
 	batchKey := new(string)
-	if !r.Keys.BatchKey.IsUnknown() && !r.Keys.BatchKey.IsNull() {
-		*batchKey = r.Keys.BatchKey.ValueString()
+	if !r.BatchKey.IsUnknown() && !r.BatchKey.IsNull() {
+		*batchKey = r.BatchKey.ValueString()
 	} else {
 		batchKey = nil
 	}
 	storageKey := new(string)
-	if !r.Keys.StorageKey.IsUnknown() && !r.Keys.StorageKey.IsNull() {
-		*storageKey = r.Keys.StorageKey.ValueString()
+	if !r.StorageKey.IsUnknown() && !r.StorageKey.IsNull() {
+		*storageKey = r.StorageKey.ValueString()
 	} else {
 		storageKey = nil
 	}
-	keys := shared.AzureSecurityKeys{
-		BatchName:   batchName,
-		StorageName: storageName,
-		BatchKey:    batchKey,
-		StorageKey:  storageKey,
+	tenantID := new(string)
+	if !r.TenantID.IsUnknown() && !r.TenantID.IsNull() {
+		*tenantID = r.TenantID.ValueString()
+	} else {
+		tenantID = nil
 	}
-	out := shared.AzureCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		Description:   description,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Category:      category,
-		Deleted:       deleted,
-		LastUsed:      lastUsed,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
-		Keys:          keys,
+	clientID := new(string)
+	if !r.ClientID.IsUnknown() && !r.ClientID.IsNull() {
+		*clientID = r.ClientID.ValueString()
+	} else {
+		clientID = nil
+	}
+	clientSecret := new(string)
+	if !r.ClientSecret.IsUnknown() && !r.ClientSecret.IsNull() {
+		*clientSecret = r.ClientSecret.ValueString()
+	} else {
+		clientSecret = nil
+	}
+	out := shared.AzureCredentialKeys{
+		BatchName:    batchName,
+		StorageName:  storageName,
+		BatchKey:     batchKey,
+		StorageKey:   storageKey,
+		TenantID:     tenantID,
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
 	}
 
 	return &out, diags

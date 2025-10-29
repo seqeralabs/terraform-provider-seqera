@@ -215,8 +215,8 @@ func (c *CredentialsOutput) GetKeysSSH() *SSHSecurityKeysOutput {
 	return c.GetKeys().SSHSecurityKeysOutput
 }
 
-func (c *CredentialsOutput) GetKeysGoogle() *SecurityKeysGoogleSecurityKeysOutput {
-	return c.GetKeys().SecurityKeysGoogleSecurityKeysOutput
+func (c *CredentialsOutput) GetKeysGoogle() *GoogleSecurityKeysOutput {
+	return c.GetKeys().GoogleSecurityKeysOutput
 }
 
 func (c *CredentialsOutput) GetKeysBitbucket() *BitBucketSecurityKeysOutput {
@@ -239,12 +239,12 @@ func (c *CredentialsOutput) GetKeysGitlab() *GitLabSecurityKeysOutput {
 	return c.GetKeys().GitLabSecurityKeysOutput
 }
 
-func (c *CredentialsOutput) GetKeysAws() *SecurityKeysAwsSecurityKeysOutput {
-	return c.GetKeys().SecurityKeysAwsSecurityKeysOutput
+func (c *CredentialsOutput) GetKeysAws() *AwsSecurityKeysOutput {
+	return c.GetKeys().AwsSecurityKeysOutput
 }
 
-func (c *CredentialsOutput) GetKeysAzure() *SecurityKeysAzureSecurityKeysOutput {
-	return c.GetKeys().SecurityKeysAzureSecurityKeysOutput
+func (c *CredentialsOutput) GetKeysAzure() *AzureSecurityKeysOutput {
+	return c.GetKeys().AzureSecurityKeysOutput
 }
 
 // CredentialsInput - Represents credentials used for authentication with various platforms and services.
@@ -341,8 +341,8 @@ func (c *CredentialsInput) GetKeysSSH() *SSHSecurityKeys {
 	return c.GetKeys().SSHSecurityKeys
 }
 
-func (c *CredentialsInput) GetKeysGoogle() *SecurityKeysGoogleSecurityKeys {
-	return c.GetKeys().SecurityKeysGoogleSecurityKeys
+func (c *CredentialsInput) GetKeysGoogle() *GoogleSecurityKeys {
+	return c.GetKeys().GoogleSecurityKeys
 }
 
 func (c *CredentialsInput) GetKeysBitbucket() *BitBucketSecurityKeys {
@@ -365,10 +365,10 @@ func (c *CredentialsInput) GetKeysGitlab() *GitLabSecurityKeys {
 	return c.GetKeys().GitLabSecurityKeys
 }
 
-func (c *CredentialsInput) GetKeysAws() *SecurityKeysAwsSecurityKeys {
-	return c.GetKeys().SecurityKeysAwsSecurityKeys
+func (c *CredentialsInput) GetKeysAws() *AwsSecurityKeys {
+	return c.GetKeys().AwsSecurityKeys
 }
 
-func (c *CredentialsInput) GetKeysAzure() *SecurityKeysAzureSecurityKeys {
-	return c.GetKeys().SecurityKeysAzureSecurityKeys
+func (c *CredentialsInput) GetKeysAzure() *AzureSecurityKeys {
+	return c.GetKeys().AzureSecurityKeys
 }

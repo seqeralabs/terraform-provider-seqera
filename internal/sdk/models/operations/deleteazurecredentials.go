@@ -12,8 +12,6 @@ type DeleteAzureCredentialsRequest struct {
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// If set credentials deletion will be blocked by running jobs that depend on them
-	Checked *bool `queryParam:"style=form,explode=true,name=checked"`
 }
 
 func (d *DeleteAzureCredentialsRequest) GetCredentialsID() string {
@@ -28,13 +26,6 @@ func (d *DeleteAzureCredentialsRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
-}
-
-func (d *DeleteAzureCredentialsRequest) GetChecked() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.Checked
 }
 
 type DeleteAzureCredentialsResponse struct {

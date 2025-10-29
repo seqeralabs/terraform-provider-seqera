@@ -10,14 +10,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -36,19 +36,17 @@ type AzureCredentialResource struct {
 
 // AzureCredentialResourceModel describes the resource data model.
 type AzureCredentialResourceModel struct {
-	BaseURL       types.String              `tfsdk:"base_url"`
-	Category      types.String              `tfsdk:"category"`
-	Checked       types.Bool                `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
-	CredentialsID types.String              `tfsdk:"credentials_id"`
-	DateCreated   types.String              `tfsdk:"date_created"`
-	Deleted       types.Bool                `tfsdk:"deleted"`
-	Description   types.String              `tfsdk:"description"`
-	Keys          tfTypes.AzureSecurityKeys `tfsdk:"keys"`
-	LastUpdated   types.String              `tfsdk:"last_updated"`
-	LastUsed      types.String              `tfsdk:"last_used"`
-	Name          types.String              `tfsdk:"name"`
-	ProviderType  types.String              `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64               `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BatchKey      types.String `tfsdk:"batch_key"`
+	BatchName     types.String `tfsdk:"batch_name"`
+	ClientID      types.String `tfsdk:"client_id"`
+	ClientSecret  types.String `tfsdk:"client_secret"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	Name          types.String `tfsdk:"name"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	StorageKey    types.String `tfsdk:"storage_key"`
+	StorageName   types.String `tfsdk:"storage_name"`
+	TenantID      types.String `tfsdk:"tenant_id"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AzureCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -57,104 +55,75 @@ func (r *AzureCredentialResource) Metadata(ctx context.Context, req resource.Met
 
 func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Azure credentials in Seqera platform using this resource.\n\nAzure credentials store authentication information for accessing Azure services\nwithin the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage Azure credentials in Seqera platform using this resource.\n\nAzure credentials support three authentication modes:\n- Shared key: Use batch_key and storage_key (discriminator='azure')\n- Entra: Use tenant_id, client_id, client_secret (discriminator='azure-entra')\n- Cloud: Use tenant_id, client_id, client_secret (discriminator='azure-cloud')\n",
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
+			"batch_key": schema.StringAttribute{
 				Optional:    true,
-				Description: `Base URL for the service`,
+				Sensitive:   true,
+				Description: `Azure Batch account key (for shared key authentication)`,
+				Validators: []validator.String{
+					custom_stringvalidators.AzureCredentialSharedKeyValidator(),
+				},
 			},
-			"category": schema.StringAttribute{
-				Optional:    true,
-				Description: `Category of the credential`,
+			"batch_name": schema.StringAttribute{
+				Required:    true,
+				Description: `Azure Batch account name (required)`,
 			},
-			"checked": schema.BoolAttribute{
+			"client_id": schema.StringAttribute{
 				Optional:    true,
-				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
+				Description: `Azure service principal client ID (for Entra/Cloud authentication)`,
+				Validators: []validator.String{
+					custom_stringvalidators.AzureCredentialEntraValidator(),
+				},
+			},
+			"client_secret": schema.StringAttribute{
+				Optional:    true,
+				Sensitive:   true,
+				Description: `Azure service principal client secret (for Entra/Cloud authentication)`,
+				Validators: []validator.String{
+					custom_stringvalidators.AzureCredentialEntraValidator(),
+				},
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was created`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
-				Description: `Flag indicating if the credential has been soft-deleted`,
-			},
-			"description": schema.StringAttribute{
-				Optional:    true,
-				Description: `Optional description explaining the purpose of the credential`,
-			},
-			"keys": schema.SingleNestedAttribute{
-				Required: true,
-				Attributes: map[string]schema.Attribute{
-					"batch_key": schema.StringAttribute{
-						Optional: true,
-					},
-					"batch_name": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"storage_key": schema.StringAttribute{
-						Optional: true,
-					},
-					"storage_name": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last updated`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"last_used": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last used`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
 			"name": schema.StringAttribute{
-				Required:    true,
-				Description: `Display name for the credential (max 100 characters)`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Display name for the credential (max 100 characters). Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
 			},
 			"provider_type": schema.StringAttribute{
-				Required:    true,
-				Description: `Cloud provider type (azure). must be "azure"`,
+				Computed:    true,
+				Default:     stringdefault.StaticString(`azure`),
+				Description: `Cloud provider type (automatically set to "azure"). Default: "azure"; must be "azure"`,
 				Validators: []validator.String{
 					stringvalidator.OneOf("azure"),
+				},
+			},
+			"storage_key": schema.StringAttribute{
+				Optional:    true,
+				Sensitive:   true,
+				Description: `Azure Storage account key (for shared key authentication)`,
+				Validators: []validator.String{
+					custom_stringvalidators.AzureCredentialSharedKeyValidator(),
+				},
+			},
+			"storage_name": schema.StringAttribute{
+				Required:    true,
+				Description: `Azure Blob Storage account name (required)`,
+			},
+			"tenant_id": schema.StringAttribute{
+				Optional:    true,
+				Description: `Azure tenant ID (for Entra/Cloud authentication)`,
+				Validators: []validator.String{
+					custom_stringvalidators.AzureCredentialEntraValidator(),
 				},
 			},
 			"workspace_id": schema.Int64Attribute{

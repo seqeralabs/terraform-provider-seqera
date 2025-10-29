@@ -8,7 +8,7 @@ import (
 )
 
 type CreateGoogleCredentialsRequest struct {
-	// Workspace numeric identifier
+	// Workspace numeric identifier where the credentials will be stored
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Google credentials create request
 	CreateGoogleCredentialsRequest shared.CreateGoogleCredentialsRequest `request:"mediaType=application/json"`

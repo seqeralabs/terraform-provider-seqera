@@ -10,14 +10,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -36,19 +36,13 @@ type AWSCredentialResource struct {
 
 // AWSCredentialResourceModel describes the resource data model.
 type AWSCredentialResourceModel struct {
-	BaseURL       types.String            `tfsdk:"base_url"`
-	Category      types.String            `tfsdk:"category"`
-	Checked       types.Bool              `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
-	CredentialsID types.String            `tfsdk:"credentials_id"`
-	DateCreated   types.String            `tfsdk:"date_created"`
-	Deleted       types.Bool              `tfsdk:"deleted"`
-	Description   types.String            `tfsdk:"description"`
-	Keys          tfTypes.AwsSecurityKeys `tfsdk:"keys"`
-	LastUpdated   types.String            `tfsdk:"last_updated"`
-	LastUsed      types.String            `tfsdk:"last_used"`
-	Name          types.String            `tfsdk:"name"`
-	ProviderType  types.String            `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64             `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AccessKey     types.String `tfsdk:"access_key"`
+	AssumeRoleArn types.String `tfsdk:"assume_role_arn"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	Name          types.String `tfsdk:"name"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	SecretKey     types.String `tfsdk:"secret_key"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AWSCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -59,99 +53,59 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage AWS credentials in Seqera platform using this resource.\n\nAWS credentials store authentication information for accessing AWS services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
-				Optional:    true,
-				Description: `Base URL for the service`,
+			"access_key": schema.StringAttribute{
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary). Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthBetween(16, 128),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$`), "must match pattern "+regexp.MustCompile(`^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$`).String()),
+				},
 			},
-			"category": schema.StringAttribute{
-				Optional:    true,
-				Description: `Category of the credential`,
-			},
-			"checked": schema.BoolAttribute{
-				Optional:    true,
-				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
+			"assume_role_arn": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`), "must match pattern "+regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`).String()),
+				},
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was created`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
-				Description: `Flag indicating if the credential has been soft-deleted`,
-			},
-			"description": schema.StringAttribute{
-				Optional:    true,
-				Description: `Optional description explaining the purpose of the credential`,
-			},
-			"keys": schema.SingleNestedAttribute{
-				Required: true,
-				Attributes: map[string]schema.Attribute{
-					"access_key": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"assume_role_arn": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-					},
-					"secret_key": schema.StringAttribute{
-						Optional: true,
-					},
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last updated`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"last_used": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last used`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
 			"name": schema.StringAttribute{
-				Required:    true,
-				Description: `Display name for the credential (max 100 characters)`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Display name for the credential (max 100 characters). Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 				},
 			},
 			"provider_type": schema.StringAttribute{
-				Required:    true,
-				Description: `Cloud provider type (aws). must be "aws"`,
+				Computed:    true,
+				Default:     stringdefault.StaticString(`aws`),
+				Description: `Cloud provider type (automatically set to "aws"). Default: "aws"; must be "aws"`,
 				Validators: []validator.String{
 					stringvalidator.OneOf("aws"),
+				},
+			},
+			"secret_key": schema.StringAttribute{
+				Required:  true,
+				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `AWS secret access key (required, sensitive). Must be at least 40 characters. Requires replacement if changed.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtLeast(40),
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
