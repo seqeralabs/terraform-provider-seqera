@@ -148,6 +148,7 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 		NewWorkflowsDataSource,
 		NewWorkspaceDataSource,
 		NewWorkspacesDataSource,
+		NewNextflowConfigDataSource,
 	}
 }
 
