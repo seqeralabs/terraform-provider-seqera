@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 6fc5e05701c2a93124b485c73c2cebfe
+  docChecksum: ab334591c766ee5740e4f51ce4aeae8d
   docVersion: 1.56.0
   speakeasyVersion: 1.642.2
   generationVersion: 2.731.6
@@ -27,6 +27,7 @@ generatedFiles:
   - .gitattributes
   - USAGE.md
   - examples/data-sources/seqera_action/data-source.tf
+  - examples/data-sources/seqera_aws_batch_compute_env/data-source.tf
   - examples/data-sources/seqera_aws_compute_env/data-source.tf
   - examples/data-sources/seqera_aws_credential/data-source.tf
   - examples/data-sources/seqera_azure_credential/data-source.tf
@@ -60,6 +61,9 @@ generatedFiles:
   - examples/resources/seqera_action/import-by-string-id.tf
   - examples/resources/seqera_action/import.sh
   - examples/resources/seqera_action/resource.tf
+  - examples/resources/seqera_aws_batch_compute_env/import-by-string-id.tf
+  - examples/resources/seqera_aws_batch_compute_env/import.sh
+  - examples/resources/seqera_aws_batch_compute_env/resource.tf
   - examples/resources/seqera_aws_compute_env/import-by-string-id.tf
   - examples/resources/seqera_aws_compute_env/import.sh
   - examples/resources/seqera_aws_credential/import-by-string-id.tf
@@ -132,6 +136,10 @@ generatedFiles:
   - internal/provider/action_data_source_sdk.go
   - internal/provider/action_resource.go
   - internal/provider/action_resource_sdk.go
+  - internal/provider/awsbatchcomputeenv_data_source.go
+  - internal/provider/awsbatchcomputeenv_data_source_sdk.go
+  - internal/provider/awsbatchcomputeenv_resource.go
+  - internal/provider/awsbatchcomputeenv_resource_sdk.go
   - internal/provider/awscomputeenv_data_source.go
   - internal/provider/awscomputeenv_data_source_sdk.go
   - internal/provider/awscomputeenv_resource.go
@@ -280,6 +288,7 @@ generatedFiles:
   - internal/provider/types/compute_env_db_dto.go
   - internal/provider/types/compute_env_response_dto.go
   - internal/provider/types/compute_platform_dto.go
+  - internal/provider/types/config.go
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
   - internal/provider/types/container_registry_keys1.go
@@ -292,6 +301,7 @@ generatedFiles:
   - internal/provider/types/data_studio_status_info.go
   - internal/provider/types/data_studio_template.go
   - internal/provider/types/dataset.go
+  - internal/provider/types/forge.go
   - internal/provider/types/forge_config.go
   - internal/provider/types/git_hub_security_keys.go
   - internal/provider/types/git_hub_security_keys1.go
@@ -389,6 +399,7 @@ generatedFiles:
   - internal/sdk/models/operations/applylabelstoworkflows.go
   - internal/sdk/models/operations/cancelworkflow.go
   - internal/sdk/models/operations/createaction.go
+  - internal/sdk/models/operations/createawsbatchcomputeenv.go
   - internal/sdk/models/operations/createawscomputeenv.go
   - internal/sdk/models/operations/createawscredentials.go
   - internal/sdk/models/operations/createazurecredentials.go
@@ -423,6 +434,7 @@ generatedFiles:
   - internal/sdk/models/operations/createworkspaceparticipant.go
   - internal/sdk/models/operations/deleteaction.go
   - internal/sdk/models/operations/deletealltokens.go
+  - internal/sdk/models/operations/deleteawsbatchcomputeenv.go
   - internal/sdk/models/operations/deleteawscomputeenv.go
   - internal/sdk/models/operations/deleteawscredentials.go
   - internal/sdk/models/operations/deleteazurecredentials.go
@@ -458,6 +470,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteworkspace.go
   - internal/sdk/models/operations/deleteworkspaceparticipant.go
   - internal/sdk/models/operations/describeaction.go
+  - internal/sdk/models/operations/describeawsbatchcomputeenv.go
   - internal/sdk/models/operations/describeawscomputeenv.go
   - internal/sdk/models/operations/describeawscredentials.go
   - internal/sdk/models/operations/describeazurecredentials.go
@@ -568,6 +581,7 @@ generatedFiles:
   - internal/sdk/models/operations/stopdatastudio.go
   - internal/sdk/models/operations/tokenlist.go
   - internal/sdk/models/operations/updateaction.go
+  - internal/sdk/models/operations/updateawsbatchcomputeenv.go
   - internal/sdk/models/operations/updateawscomputeenv.go
   - internal/sdk/models/operations/updateawscredentials.go
   - internal/sdk/models/operations/updateazurecredentials.go
@@ -634,6 +648,7 @@ generatedFiles:
   - internal/sdk/models/shared/associateactionlabelsrequest.go
   - internal/sdk/models/shared/associatepipelinelabelsrequest.go
   - internal/sdk/models/shared/associateworkflowlabelsrequest.go
+  - internal/sdk/models/shared/awsbatchcomputeenv.go
   - internal/sdk/models/shared/awsbatchconfig.go
   - internal/sdk/models/shared/awsbatchplatformmetainfo.go
   - internal/sdk/models/shared/awscloudplatformmetainfo.go
@@ -662,6 +677,8 @@ generatedFiles:
   - internal/sdk/models/shared/createaccesstokenresponse.go
   - internal/sdk/models/shared/createactionrequest.go
   - internal/sdk/models/shared/createactionresponse.go
+  - internal/sdk/models/shared/createawsbatchcomputeenvrequest.go
+  - internal/sdk/models/shared/createawsbatchcomputeenvresponse.go
   - internal/sdk/models/shared/createawscomputeenvrequest.go
   - internal/sdk/models/shared/createawscomputeenvresponse.go
   - internal/sdk/models/shared/createawscredentialsrequest.go
@@ -759,6 +776,7 @@ generatedFiles:
   - internal/sdk/models/shared/deleteworkflowsrequest.go
   - internal/sdk/models/shared/deleteworkflowsresponse.go
   - internal/sdk/models/shared/describeactionresponse.go
+  - internal/sdk/models/shared/describeawsbatchcomputeenvresponse.go
   - internal/sdk/models/shared/describeawscomputeenvresponse.go
   - internal/sdk/models/shared/describeawscredentialsresponse.go
   - internal/sdk/models/shared/describeazurecredentialsresponse.go
@@ -908,6 +926,7 @@ generatedFiles:
   - internal/sdk/models/shared/traceprogressrequest.go
   - internal/sdk/models/shared/traceprogressresponse.go
   - internal/sdk/models/shared/updateactionrequest.go
+  - internal/sdk/models/shared/updateawsbatchcomputeenvrequest.go
   - internal/sdk/models/shared/updateawscomputeenvrequest.go
   - internal/sdk/models/shared/updateawscredentialsrequest.go
   - internal/sdk/models/shared/updateazurecredentialsrequest.go
@@ -3325,6 +3344,48 @@ examples:
       parameters:
         path:
           credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateAWSBatchComputeEnv:
+    speakeasy-default-create-AWS-batch-compute-env:
+      parameters:
+        query:
+          workspaceId: 880713
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAWSBatchComputeEnv:
+    speakeasy-default-describe-AWS-batch-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 740771
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAWSBatchComputeEnv:
+    speakeasy-default-update-AWS-batch-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAWSBatchComputeEnv:
+    speakeasy-default-delete-AWS-batch-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
       responses:
         "400":
           application/json: {"message": "<value>"}

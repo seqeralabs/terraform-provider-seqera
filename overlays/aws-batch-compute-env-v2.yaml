@@ -43,32 +43,175 @@ info:
 
 actions:
   # ============================================================================
-  # ENTITY OPERATIONS (CRUD)
+  # CREATE NEW PATHS FOR AWSBATCH COMPUTE ENV (V2)
   # ============================================================================
 
-  # CREATE - POST /compute-envs#aws
-  - target: $.paths["/compute-envs#aws"].post
+  - target: $.paths
     update:
-      x-speakeasy-entity-operation: AWSBatchComputeEnv#create
-      x-speakeasy-name-override: CreateAWSBatchComputeEnv
+      "/compute-envs#awsbatch":
+        post:
+          x-speakeasy-entity-operation: AWSBatchComputeEnv#create
+          x-speakeasy-name-override: CreateAWSBatchComputeEnv
+          summary: Create AWS Batch compute environment (v2)
+          description: Creates a new AWS Batch compute environment with hoisted configuration. Append `?workspaceId` to create the environment in a workspace context.
+          tags:
+            - compute-envs
+          operationId: CreateAWSBatchComputeEnv
+          parameters:
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+              required: true
+          requestBody:
+            description: AWS Batch compute environment create request
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CreateAWSBatchComputeEnvRequest"
+            required: true
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CreateAWSBatchComputeEnvResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
 
-  # READ - GET /compute-envs/{computeEnvId}#aws
-  - target: $.paths["/compute-envs/{computeEnvId}#aws"].get
-    update:
-      x-speakeasy-entity-operation: AWSBatchComputeEnv#read
-      x-speakeasy-name-override: DescribeAWSBatchComputeEnv
-
-  # UPDATE - PUT /compute-envs/{computeEnvId}#aws
-  - target: $.paths["/compute-envs/{computeEnvId}#aws"].put
-    update:
-      x-speakeasy-entity-operation: AWSBatchComputeEnv#update
-      x-speakeasy-name-override: UpdateAWSBatchComputeEnv
-
-  # DELETE - DELETE /compute-envs/{computeEnvId}#aws
-  - target: $.paths["/compute-envs/{computeEnvId}#aws"].delete
-    update:
-      x-speakeasy-entity-operation: AWSBatchComputeEnv#delete
-      x-speakeasy-name-override: DeleteAWSBatchComputeEnv
+      "/compute-envs/{computeEnvId}#awsbatch":
+        get:
+          x-speakeasy-entity-operation: AWSBatchComputeEnv#read
+          x-speakeasy-name-override: DescribeAWSBatchComputeEnv
+          summary: Describe AWS Batch compute environment (v2)
+          description: Retrieves the details of the AWS Batch compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DescribeAWSBatchComputeEnv
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+              required: true
+            - name: attributes
+              in: query
+              description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/DescribeAWSBatchComputeEnvResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+        put:
+          x-speakeasy-entity-operation: AWSBatchComputeEnv#update
+          x-speakeasy-name-override: UpdateAWSBatchComputeEnv
+          summary: Update AWS Batch compute environment (v2)
+          description: Updates the details of the AWS Batch compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: UpdateAWSBatchComputeEnv
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+          requestBody:
+            description: AWS Batch compute environment update request
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UpdateAWSBatchComputeEnvRequest"
+            required: true
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+        delete:
+          x-speakeasy-entity-operation: AWSBatchComputeEnv#delete
+          x-speakeasy-name-override: DeleteAWSBatchComputeEnv
+          summary: Delete AWS Batch compute environment (v2)
+          description: Deletes the AWS Batch compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DeleteAWSBatchComputeEnv
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
 
   # ============================================================================
   # SCHEMA DEFINITIONS - HOISTED STRUCTURE
@@ -333,10 +476,9 @@ actions:
                     type: integer
                     format: int32
                     description: |
-                      Maximum percentage of On-Demand price to pay for Spot instances (1-100).
+                      Maximum percentage of On-Demand price to pay for Spot instances (0-100).
                       Only applicable when forge_type is SPOT.
                     x-speakeasy-name-override: bid_percentage
-                    x-speakeasy-plan-validators: BidPercentageValidator
                     minimum: 0
                     maximum: 100
 
@@ -471,17 +613,7 @@ actions:
   # FIELD VALIDATORS
   # ============================================================================
 
-  # Work directory must start with s3://
-  - target: $.components.schemas.AWSBatchComputeEnv.properties.workDir
-    update:
-      x-speakeasy-plan-validators: S3WorkDirValidator
-
-  # Bid percentage validator (0-100)
-  - target: $.components.schemas.AWSBatchComputeEnv.properties.config.properties.forge.properties.bidPercentage
-    update:
-      x-speakeasy-plan-validators: BidPercentageValidator
-
-  # Wave enabled validator
+  # Wave enabled validator (only complex validator needed - regex handles S3, schema constraints handle bid %)
   - target: $.components.schemas.AWSBatchComputeEnv.properties.config.properties.waveEnabled
     update:
       x-speakeasy-plan-validators: WaveEnabledValidator
