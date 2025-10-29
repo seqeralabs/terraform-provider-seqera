@@ -26,7 +26,8 @@ generation:
     skipResponseBodyAssertions: false
 terraform:
   version: 0.25.4
-  additionalDataSources: []
+  additionalDataSources:
+    - datasource: NewNextflowConfigDataSource
   additionalDependencies: {}
   additionalEphemeralResources: []
   additionalProviderAttributes:
