@@ -27,7 +27,7 @@ resource "seqera_container_registry_credential" "example_ecr" {
 resource "seqera_container_registry_credential" "example_gcr" {
   name      = "Example GCR Credentials"
   user_name = "_json_key"
-  password  = jsonencode({
+  password = jsonencode({
     "type" : "service_account",
     "project_id" : "example-project-123456",
     "private_key_id" : "1234567890abcdef1234567890abcdef12345678",
@@ -44,7 +44,7 @@ resource "seqera_container_registry_credential" "example_gcr" {
 resource "seqera_container_registry_credential" "example_gar" {
   name      = "Example GAR Credentials"
   user_name = "_json_key"
-  password  = jsonencode({
+  password = jsonencode({
     "type" : "service_account",
     "project_id" : "example-project-123456",
     "private_key_id" : "1234567890abcdef1234567890abcdef12345678",

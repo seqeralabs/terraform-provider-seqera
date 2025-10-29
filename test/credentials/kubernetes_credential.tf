@@ -12,14 +12,14 @@ resource "seqera_kubernetes_credential" "example_token" {
 
 # Kubernetes credential with client certificate
 resource "seqera_kubernetes_credential" "example_certificate" {
-  name = "Example Kubernetes Credentials (Certificate)"
+  name               = "Example Kubernetes Credentials (Certificate)"
   client_certificate = <<-EOT
     -----BEGIN CERTIFICATE-----
     MIIDITCCAgmgAwIBAgIIExampleCertificateNotRealJustForTesting123456789AB
     CDEFGHIJKLMNOPQRSTUVWXYZ0123456789ExampleCertificateContent
     -----END CERTIFICATE-----
   EOT
-  private_key = <<-EOT
+  private_key        = <<-EOT
     -----BEGIN RSA PRIVATE KEY-----
     MIIEpAIBAAKCAQEAyExamplePrivateKeyNotRealJustForTesting123456789ABCDEF
     GHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ExampleKey
