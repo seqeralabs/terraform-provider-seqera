@@ -28,29 +28,40 @@ func (v StringAzureCredentialSharedKeyValidator) ValidateString(ctx context.Cont
 		return
 	}
 
-	// Get the discriminator field value
-	var discriminatorValue types.String
-	discriminatorPath := req.Path.ParentPath().AtName("discriminator")
-	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, discriminatorPath, &discriminatorValue)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	// Determine authentication mode by checking if Entra/Cloud fields are set
+	// If tenant_id, client_id, or client_secret are set, we're in Entra/Cloud mode
+	var tenantID types.String
+	var clientID types.String
+	var clientSecret types.String
 
-	// Allow unknown discriminator during plan phase
-	if discriminatorValue.IsUnknown() {
+	tenantIDPath := req.Path.ParentPath().AtName("tenant_id")
+	clientIDPath := req.Path.ParentPath().AtName("client_id")
+	clientSecretPath := req.Path.ParentPath().AtName("client_secret")
+
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, tenantIDPath, &tenantID)...)
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, clientIDPath, &clientID)...)
+	resp.Diagnostics.Append(req.Config.GetAttribute(ctx, clientSecretPath, &clientSecret)...)
+
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	// Determine which field we're validating
 	fieldName := req.Path.Steps()[len(req.Path.Steps())-1].String()
 
-	// If discriminator is not "azure" (shared key mode), these fields should not be set
-	if !discriminatorValue.IsNull() && discriminatorValue.ValueString() != "azure" {
+	// Check if any Entra/Cloud fields are set (indicating Entra/Cloud authentication mode)
+	isEntraOrCloudMode := (!tenantID.IsNull() && !tenantID.IsUnknown()) ||
+		(!clientID.IsNull() && !clientID.IsUnknown()) ||
+		(!clientSecret.IsNull() && !clientSecret.IsUnknown())
+
+	// If Entra/Cloud mode is detected, shared key fields should not be set
+	if isEntraOrCloudMode {
 		resp.Diagnostics.AddAttributeError(
 			req.Path,
 			"Invalid Azure Credential Configuration",
-			"The '"+fieldName+"' field can only be used with shared key authentication (discriminator='azure'). "+
-				"For Entra or Cloud authentication, use tenant_id, client_id, and client_secret instead.",
+			"The '"+fieldName+"' field can only be used with shared key authentication. "+
+				"For Entra or Cloud authentication, use tenant_id, client_id, and client_secret instead. "+
+				"Do not mix shared key fields (batch_key, storage_key) with Entra/Cloud fields (tenant_id, client_id, client_secret).",
 		)
 	}
 }

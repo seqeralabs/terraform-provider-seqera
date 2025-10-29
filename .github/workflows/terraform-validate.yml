@@ -102,3 +102,17 @@ jobs:
       with:
         message-path: ./test/hello-world-tests/plan_output.md
         message-id: terraform-plan
+
+    # Validate credentials test configurations
+    - name: Terraform Init (Credentials)
+      working-directory: ./test/credentials
+      run: terraform init
+      continue-on-error: true # We continue on a failure since tf init will fail since its a local provider.
+
+    - name: Terraform Format Check (Credentials)
+      working-directory: ./test/credentials
+      run: terraform fmt -check
+
+    - name: Terraform Validate (Credentials)
+      working-directory: ./test/credentials
+      run: terraform validate
