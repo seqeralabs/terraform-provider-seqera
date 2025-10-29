@@ -6,10 +6,8 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
-	"time"
 )
 
 func (r *GoogleCredentialResourceModel) RefreshFromSharedCreateGoogleCredentialsResponse(ctx context.Context, resp *shared.CreateGoogleCredentialsResponse) diag.Diagnostics {
@@ -41,18 +39,13 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		keysPriorData := r.Keys
-		r.Keys.Data = keysPriorData.Data
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.ProviderType != nil {
+			r.ProviderType = types.StringValue(string(*resp.ProviderType))
+		} else {
+			r.ProviderType = types.StringNull()
+		}
 	}
 
 	return diags
@@ -94,16 +87,9 @@ func (r *GoogleCredentialResourceModel) ToOperationsDeleteGoogleCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	checked := new(bool)
-	if !r.Checked.IsUnknown() && !r.Checked.IsNull() {
-		*checked = r.Checked.ValueBool()
-	} else {
-		checked = nil
-	}
 	out := operations.DeleteGoogleCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
-		Checked:       checked,
 	}
 
 	return &out, diags
@@ -186,70 +172,31 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	var name string
 	name = r.Name.ValueString()
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
+	providerType := new(shared.GoogleCredentialProviderType)
+	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
+		*providerType = shared.GoogleCredentialProviderType(r.ProviderType.ValueString())
 	} else {
-		description = nil
+		providerType = nil
 	}
-	providerType := shared.GoogleCredentialProviderType(r.ProviderType.ValueString())
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
-	category := new(string)
-	if !r.Category.IsUnknown() && !r.Category.IsNull() {
-		*category = r.Category.ValueString()
-	} else {
-		category = nil
-	}
-	deleted := new(bool)
-	if !r.Deleted.IsUnknown() && !r.Deleted.IsNull() {
-		*deleted = r.Deleted.ValueBool()
-	} else {
-		deleted = nil
-	}
-	lastUsed := new(time.Time)
-	if !r.LastUsed.IsUnknown() && !r.LastUsed.IsNull() {
-		*lastUsed, _ = time.Parse(time.RFC3339Nano, r.LastUsed.ValueString())
-	} else {
-		lastUsed = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
-	lastUpdated := new(time.Time)
-	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
-		*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.LastUpdated.ValueString())
-	} else {
-		lastUpdated = nil
-	}
-	data := new(string)
-	if !r.Keys.Data.IsUnknown() && !r.Keys.Data.IsNull() {
-		*data = r.Keys.Data.ValueString()
-	} else {
-		data = nil
-	}
-	keys := shared.GoogleSecurityKeys{
-		Data: data,
-	}
+	keys := shared.GoogleCredentialKeys{}
 	out := shared.GoogleCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
-		Description:   description,
 		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Category:      category,
-		Deleted:       deleted,
-		LastUsed:      lastUsed,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
 		Keys:          keys,
+	}
+
+	return &out, diags
+}
+
+func (r *GoogleCredentialResourceModel) ToSharedGoogleCredentialKeys(ctx context.Context) (*shared.GoogleCredentialKeys, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var data string
+	data = r.Data.ValueString()
+
+	out := shared.GoogleCredentialKeys{
+		Data: data,
 	}
 
 	return &out, diags

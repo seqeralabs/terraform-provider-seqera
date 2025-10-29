@@ -18,22 +18,93 @@ within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-resource "seqera_google_credential" "my_googlecredential" {
-  base_url       = "...my_base_url..."
-  category       = "...my_category..."
-  checked        = false
-  credentials_id = "...my_credentials_id..."
-  date_created   = "2022-11-20T02:44:17.334Z"
-  deleted        = false
-  description    = "...my_description..."
-  keys = {
-    data = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
+# Seqera Google Cloud Credentials Examples
+#
+# Google Cloud credentials store service account keys for authenticating with
+# Google Cloud Platform services in Seqera workflows.
+#
+# SECURITY BEST PRACTICES:
+# - Never hardcode service account keys in Terraform files
+# - Use file() function to read from secure key files
+# - Use Terraform variables marked as sensitive
+# - Store service account keys in secure secret management systems
+# - Restrict service account permissions to minimum required
+
+# Variable declarations for sensitive service account key
+variable "gcp_service_account_key" {
+  description = "GCP service account key JSON"
+  type        = string
+  sensitive   = true
+}
+
+# Example 1: Basic Google credentials using file
+# Load service account key from a JSON file
+
+resource "seqera_google_credential" "gcs_access" {
+  name         = "gcs-bucket-access"
+  workspace_id = seqera_workspace.main.id
+  data         = file("${path.module}/gcp-service-account.json")
+}
+
+# Example 2: Google credentials using variable
+# Use a sensitive variable for the service account key
+
+resource "seqera_google_credential" "gcp_prod" {
+  name         = "gcp-production"
+  workspace_id = seqera_workspace.prod.id
+  data         = var.gcp_service_account_key
+}
+
+# Example 3: Google credentials with jsonencode
+# Build service account key from separate variables
+
+variable "gcp_project_id" {
+  type      = string
+  sensitive = false
+}
+
+variable "gcp_client_email" {
+  type      = string
+  sensitive = false
+}
+
+variable "gcp_private_key" {
+  type      = string
+  sensitive = true
+}
+
+resource "seqera_google_credential" "gcp_composed" {
+  name         = "gcp-composed-key"
+  workspace_id = seqera_workspace.main.id
+  data = jsonencode({
+    type                        = "service_account"
+    project_id                  = var.gcp_project_id
+    private_key_id              = "key-id"
+    private_key                 = var.gcp_private_key
+    client_email                = var.gcp_client_email
+    client_id                   = "123456789"
+    auth_uri                    = "https://accounts.google.com/o/oauth2/auth"
+    token_uri                   = "https://oauth2.googleapis.com/token"
+    auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
+  })
+}
+
+# Example 4: Multiple GCP credentials for different projects
+# Create credentials for multiple GCP projects
+
+locals {
+  gcp_projects = {
+    "data-pipeline" = "service-account-data-pipeline.json"
+    "ml-training"   = "service-account-ml-training.json"
   }
-  last_updated  = "2022-05-09T00:51:23.496Z"
-  last_used     = "2021-10-25T20:07:00.111Z"
-  name          = "...my_name..."
-  provider_type = "google"
-  workspace_id  = 6
+}
+
+resource "seqera_google_credential" "project_credentials" {
+  for_each = local.gcp_projects
+
+  name         = "gcp-${each.key}"
+  workspace_id = seqera_workspace.main.id
+  data         = file("${path.module}/${each.value}")
 }
 ```
 
@@ -42,29 +113,21 @@ resource "seqera_google_credential" "my_googlecredential" {
 
 ### Required
 
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `name` (String) Display name for the credential (max 100 characters)
-- `provider_type` (String) Cloud provider type (google). must be "google"
+- `data` (String, Sensitive) Google Cloud service account key JSON (required, sensitive).
+- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
 
 ### Optional
 
-- `base_url` (String) Base URL for the service
-- `category` (String) Category of the credential
-- `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
+- `workspace_id` (Number) Workspace numeric identifier where the credentials will be stored
+
+### Read-Only
+
 - `credentials_id` (String) Unique identifier for the credential (max 22 characters)
-- `date_created` (String) Timestamp when the credential was created
-- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
-- `description` (String) Optional description explaining the purpose of the credential
-- `last_updated` (String) Timestamp when the credential was last updated
-- `last_used` (String) Timestamp when the credential was last used
-- `workspace_id` (Number) Workspace numeric identifier
+- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
+- `provider_type` (String) Cloud provider type (automatically set to "google"). Default: "google"; must be "google"
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`
-
-Optional:
-
-- `data` (String, Sensitive)
 
 ## Import
 
@@ -73,14 +136,20 @@ Import is supported using the following syntax:
 In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
 
 ```terraform
+# Note: Import only works for user-level credentials
+# For workspace-level credentials, you must also set workspace_id in the config
+
 import {
   to = seqera_google_credential.my_seqera_google_credential
-  id = "..."
+  id = "1a2b3c4d5e6f7g8h9i0j"
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import seqera_google_credential.my_seqera_google_credential "..."
+# Note: Import only works for user-level credentials
+# For workspace-level credentials, you must also set workspace_id in the config
+
+terraform import seqera_google_credential.my_seqera_google_credential "1a2b3c4d5e6f7g8h9i0j"
 ```

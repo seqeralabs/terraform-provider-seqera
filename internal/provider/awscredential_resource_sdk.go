@@ -6,30 +6,35 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
-	"time"
 )
+
+func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialKeysOutput(ctx context.Context, resp *shared.AWSCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.AccessKey = types.StringValue(resp.AccessKey)
+
+	return diags
+}
 
 func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialOutput(ctx context.Context, resp *shared.AWSCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		keysPriorData := r.Keys
-		r.Keys.AccessKey = types.StringPointerValue(resp.Keys.AccessKey)
-		r.Keys.AssumeRoleArn = types.StringPointerValue(resp.Keys.AssumeRoleArn)
-		r.Keys.SecretKey = keysPriorData.SecretKey
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
+		diags.Append(r.RefreshFromSharedAWSCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.ProviderType != nil {
+			r.ProviderType = types.StringValue(string(*resp.ProviderType))
+		} else {
+			r.ProviderType = types.StringNull()
+		}
 	}
 
 	return diags
@@ -96,16 +101,9 @@ func (r *AWSCredentialResourceModel) ToOperationsDeleteAWSCredentialsRequest(ctx
 	} else {
 		workspaceID = nil
 	}
-	checked := new(bool)
-	if !r.Checked.IsUnknown() && !r.Checked.IsNull() {
-		*checked = r.Checked.ValueBool()
-	} else {
-		checked = nil
-	}
 	out := operations.DeleteAWSCredentialsRequest{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
-		Checked:       checked,
 	}
 
 	return &out, diags
@@ -171,84 +169,48 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context) 
 	var name string
 	name = r.Name.ValueString()
 
-	description := new(string)
-	if !r.Description.IsUnknown() && !r.Description.IsNull() {
-		*description = r.Description.ValueString()
+	providerType := new(shared.AWSCredentialProviderType)
+	if !r.ProviderType.IsUnknown() && !r.ProviderType.IsNull() {
+		*providerType = shared.AWSCredentialProviderType(r.ProviderType.ValueString())
 	} else {
-		description = nil
+		providerType = nil
 	}
-	providerType := shared.AWSCredentialProviderType(r.ProviderType.ValueString())
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
+	keys, keysDiags := r.ToSharedAWSCredentialKeys(ctx)
+	diags.Append(keysDiags...)
+
+	if diags.HasError() {
+		return nil, diags
 	}
-	category := new(string)
-	if !r.Category.IsUnknown() && !r.Category.IsNull() {
-		*category = r.Category.ValueString()
-	} else {
-		category = nil
-	}
-	deleted := new(bool)
-	if !r.Deleted.IsUnknown() && !r.Deleted.IsNull() {
-		*deleted = r.Deleted.ValueBool()
-	} else {
-		deleted = nil
-	}
-	lastUsed := new(time.Time)
-	if !r.LastUsed.IsUnknown() && !r.LastUsed.IsNull() {
-		*lastUsed, _ = time.Parse(time.RFC3339Nano, r.LastUsed.ValueString())
-	} else {
-		lastUsed = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
-	lastUpdated := new(time.Time)
-	if !r.LastUpdated.IsUnknown() && !r.LastUpdated.IsNull() {
-		*lastUpdated, _ = time.Parse(time.RFC3339Nano, r.LastUpdated.ValueString())
-	} else {
-		lastUpdated = nil
-	}
-	accessKey := new(string)
-	if !r.Keys.AccessKey.IsUnknown() && !r.Keys.AccessKey.IsNull() {
-		*accessKey = r.Keys.AccessKey.ValueString()
-	} else {
-		accessKey = nil
-	}
-	secretKey := new(string)
-	if !r.Keys.SecretKey.IsUnknown() && !r.Keys.SecretKey.IsNull() {
-		*secretKey = r.Keys.SecretKey.ValueString()
-	} else {
-		secretKey = nil
-	}
-	assumeRoleArn := new(string)
-	if !r.Keys.AssumeRoleArn.IsUnknown() && !r.Keys.AssumeRoleArn.IsNull() {
-		*assumeRoleArn = r.Keys.AssumeRoleArn.ValueString()
-	} else {
-		assumeRoleArn = nil
-	}
-	keys := shared.AwsSecurityKeys{
-		AccessKey:     accessKey,
-		SecretKey:     secretKey,
-		AssumeRoleArn: assumeRoleArn,
-	}
+
 	out := shared.AWSCredential{
 		CredentialsID: credentialsID,
 		Name:          name,
-		Description:   description,
 		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Category:      category,
-		Deleted:       deleted,
-		LastUsed:      lastUsed,
-		DateCreated:   dateCreated,
-		LastUpdated:   lastUpdated,
-		Keys:          keys,
+		Keys:          *keys,
+	}
+
+	return &out, diags
+}
+
+func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Context) (*shared.AWSCredentialKeys, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	var accessKey string
+	accessKey = r.AccessKey.ValueString()
+
+	var secretKey string
+	secretKey = r.SecretKey.ValueString()
+
+	assumeRoleArn := new(string)
+	if !r.AssumeRoleArn.IsUnknown() && !r.AssumeRoleArn.IsNull() {
+		*assumeRoleArn = r.AssumeRoleArn.ValueString()
+	} else {
+		assumeRoleArn = nil
+	}
+	out := shared.AWSCredentialKeys{
+		AccessKey:     accessKey,
+		SecretKey:     secretKey,
+		AssumeRoleArn: assumeRoleArn,
 	}
 
 	return &out, diags

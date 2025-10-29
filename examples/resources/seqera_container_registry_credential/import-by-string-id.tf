@@ -1,0 +1,4 @@
+import {
+  to = seqera_container_registry_credential.my_seqera_container_registry_credential
+  id = "..."
+}

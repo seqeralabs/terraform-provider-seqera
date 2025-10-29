@@ -29,18 +29,11 @@ type GoogleCredentialDataSource struct {
 
 // GoogleCredentialDataSourceModel describes the data model.
 type GoogleCredentialDataSourceModel struct {
-	BaseURL       types.String                `tfsdk:"base_url"`
-	Category      types.String                `tfsdk:"category"`
-	CredentialsID types.String                `tfsdk:"credentials_id"`
-	DateCreated   types.String                `tfsdk:"date_created"`
-	Deleted       types.Bool                  `tfsdk:"deleted"`
-	Description   types.String                `tfsdk:"description"`
-	Keys          tfTypes.GoogleSecurityKeys1 `tfsdk:"keys"`
-	LastUpdated   types.String                `tfsdk:"last_updated"`
-	LastUsed      types.String                `tfsdk:"last_used"`
-	Name          types.String                `tfsdk:"name"`
-	ProviderType  types.String                `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CredentialsID types.String                 `tfsdk:"credentials_id"`
+	Keys          tfTypes.GoogleCredentialKeys `tfsdk:"keys"`
+	Name          types.String                 `tfsdk:"name"`
+	ProviderType  types.String                 `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -54,40 +47,12 @@ func (r *GoogleCredentialDataSource) Schema(ctx context.Context, req datasource.
 		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
 
 		Attributes: map[string]schema.Attribute{
-			"base_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `Base URL for the service`,
-			},
-			"category": schema.StringAttribute{
-				Computed:    true,
-				Description: `Category of the credential`,
-			},
 			"credentials_id": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
 				Description: `Credentials string identifier`,
-			},
-			"date_created": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was created`,
-			},
-			"deleted": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Flag indicating if the credential has been soft-deleted`,
-			},
-			"description": schema.StringAttribute{
-				Computed:    true,
-				Description: `Optional description explaining the purpose of the credential`,
 			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,
-			},
-			"last_updated": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was last updated`,
-			},
-			"last_used": schema.StringAttribute{
-				Computed:    true,
-				Description: `Timestamp when the credential was last used`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
@@ -95,7 +60,7 @@ func (r *GoogleCredentialDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
-				Description: `Cloud provider type (google)`,
+				Description: `Cloud provider type (automatically set to "google")`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

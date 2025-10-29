@@ -12,8 +12,6 @@ type DeleteGoogleCredentialsRequest struct {
 	CredentialsID string `pathParam:"style=simple,explode=false,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// If set credentials deletion will be blocked by running jobs that depend on them
-	Checked *bool `queryParam:"style=form,explode=true,name=checked"`
 }
 
 func (d *DeleteGoogleCredentialsRequest) GetCredentialsID() string {
@@ -28,13 +26,6 @@ func (d *DeleteGoogleCredentialsRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return d.WorkspaceID
-}
-
-func (d *DeleteGoogleCredentialsRequest) GetChecked() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.Checked
 }
 
 type DeleteGoogleCredentialsResponse struct {

@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -30,16 +29,13 @@ func (r *GoogleCredentialDataSourceModel) RefreshFromSharedGoogleCredentialOutpu
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.Category = types.StringPointerValue(resp.Category)
 		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
-		r.ProviderType = types.StringValue(string(resp.ProviderType))
+		if resp.ProviderType != nil {
+			r.ProviderType = types.StringValue(string(*resp.ProviderType))
+		} else {
+			r.ProviderType = types.StringNull()
+		}
 	}
 
 	return diags

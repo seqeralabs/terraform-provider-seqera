@@ -11,8 +11,18 @@ sources:
             - location: overlays/datalinks.yaml
             - location: overlays/actions.yaml
             - location: overlays/credentials.yaml
-            - location: overlays/azure-credentials.yaml
-            - location: overlays/gcp-credentials.yaml
+            - location: overlays/credentials-aws.yaml
+            - location: overlays/credentials-azure.yaml
+            - location: overlays/credentials-gcp.yaml
+            - location: overlays/credentials-bitbucket.yaml
+            - location: overlays/credentials-codecommit.yaml
+            - location: overlays/credentials-container-registry.yaml
+            - location: overlays/credentials-gitea.yaml
+            - location: overlays/credentials-github.yaml
+            - location: overlays/credentials-gitlab.yaml
+            - location: overlays/credentials-ssh.yaml
+            - location: overlays/credentials-tower-agent.yaml
+            - location: overlays/credentials-kubernetes.yaml
             - location: overlays/compute-env.yaml
             - location: overlays/aws-compute-env.yaml
             - location: overlays/datasets.yaml
@@ -28,7 +38,6 @@ sources:
             - location: overlays/users.yaml
             - location: overlays/schema-fixes.yaml
             - location: overlays/primary-compute-env.yaml
-            - location: overlays/aws-credentials.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

@@ -6,7 +6,7 @@ resource "seqera_credential" "my_credential" {
   description    = "Google Cloud credentials for production workloads"
   keys = {
     google = {
-      data = "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
+      data = "...my_data..."
     }
   }
   name          = "my-gcp-credentials"

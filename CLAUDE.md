@@ -75,7 +75,10 @@ speakeasy run --skip-versioning
 - `examples/` - Example Terraform configurations for testing
 - `examples/tests/` - Test configurations
 - `.genignore` - Files to protect from Speakeasy regeneration
-- `OVERLAY_GUIDE.md` - **Best practices for overlays, validators, and resource documentation**
+- `internal-docs/` - Internal development guides
+  - `OVERLAY_GUIDE.md` - Best practices for overlays, validators, and resource documentation
+  - `CREDS_HOISTING_GUIDE.md` - Guide for implementing credential hoisting
+  - `SPEAKEASY_EXTENSIONS_REFERENCE.md` - Complete Speakeasy extensions reference
 
 ## Available Resources and Data Sources
 
@@ -96,7 +99,7 @@ speakeasy run --skip-versioning
 ## Development Guidelines
 
 ### Overlay and Resource Best Practices
-**IMPORTANT**: When working with overlays, resource documentation, or custom validators, always consult `OVERLAY_GUIDE.md` for:
+**IMPORTANT**: When working with overlays, resource documentation, or custom validators, always consult `internal-docs/OVERLAY_GUIDE.md` for:
 - Overlay file structure and organization patterns
 - Field cleanup guidelines (removing unmanageable/internal fields)
 - Resource example best practices
@@ -106,7 +109,7 @@ speakeasy run --skip-versioning
 ### Code Generation Workflow
 1. Only modify the OpenAPI specifications in `schemas/seqera-final.yaml` to add speakeasy annotations.
 2. Generate the overlay file from the edited specification using `speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml`.
-3. Edit overlay files in `overlays/` directory following patterns in `OVERLAY_GUIDE.md`
+3. Edit overlay files in `overlays/` directory following patterns in `internal-docs/OVERLAY_GUIDE.md`
 4. Create custom examples in `examples/resources/seqera_[resource]/resource.tf` and protect them with `.genignore`
 5. Run `speakeasy run --skip-versioning` to regenerate provider code
 6. Verify generated documentation in `docs/resources/[resource].md`

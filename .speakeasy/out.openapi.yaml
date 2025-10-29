@@ -7720,6 +7720,168 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
+  "/credentials#aws":
+    post:
+      x-speakeasy-entity-operation: AWSCredential#create
+      x-speakeasy-name-override: CreateAWSCredentials
+      summary: Create AWS credentials
+      description: Creates new AWS credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateAWSCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: AWS credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAWSCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateAWSCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#aws":
+    get:
+      x-speakeasy-entity-operation: AWSCredential#read
+      x-speakeasy-name-override: DescribeAWSCredentials
+      summary: Describe AWS credentials
+      description: Retrieves the details of the AWS credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeAWSCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeAWSCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: AWSCredential#update
+      x-speakeasy-name-override: UpdateAWSCredentials
+      summary: Update AWS credentials
+      description: Updates the details of the AWS credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateAWSCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: AWS credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAWSCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: AWSCredential#delete
+      x-speakeasy-name-override: DeleteAWSCredentials
+      summary: Delete AWS credentials
+      description: Deletes the AWS credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteAWSCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Running jobs block the deletion of this credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
+      security:
+        - BearerAuth: []
+          # "/credentials#azure":
+          #   # Similar duplication for Azure operations
   "/credentials#azure":
     post:
       x-speakeasy-entity-operation: AzureCredential#create
@@ -7861,11 +8023,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: checked
-          in: query
-          description: If set credentials deletion will be blocked by running jobs that depend on them
-          schema:
-            type: boolean
       responses:
         "204":
           description: OK - No content
@@ -7897,7 +8054,7 @@ paths:
       parameters:
         - name: workspaceId
           in: query
-          description: Workspace numeric identifier
+          description: Workspace numeric identifier where the credentials will be stored
           schema:
             type: integer
             format: int64
@@ -8026,11 +8183,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: checked
-          in: query
-          description: If set credentials deletion will be blocked by running jobs that depend on them
-          schema:
-            type: boolean
       responses:
         "204":
           description: OK - No content
@@ -8048,6 +8200,1392 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
+      security:
+        - BearerAuth: []
+  "/credentials#bitbucket":
+    post:
+      x-speakeasy-entity-operation: BitbucketCredential#create
+      x-speakeasy-name-override: CreateBitbucketCredentials
+      summary: Create Bitbucket credentials
+      description: Creates new Bitbucket credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateBitbucketCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Bitbucket credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBitbucketCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateBitbucketCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#bitbucket":
+    get:
+      x-speakeasy-entity-operation: BitbucketCredential#read
+      x-speakeasy-name-override: DescribeBitbucketCredentials
+      summary: Describe Bitbucket credentials
+      description: Retrieves the details of the Bitbucket credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeBitbucketCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeBitbucketCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: BitbucketCredential#update
+      x-speakeasy-name-override: UpdateBitbucketCredentials
+      summary: Update Bitbucket credentials
+      description: Updates the details of the Bitbucket credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateBitbucketCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Bitbucket credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBitbucketCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: BitbucketCredential#delete
+      x-speakeasy-name-override: DeleteBitbucketCredentials
+      summary: Delete Bitbucket credentials
+      description: Deletes the Bitbucket credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteBitbucketCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#codecommit":
+    post:
+      x-speakeasy-entity-operation: CodecommitCredential#create
+      x-speakeasy-name-override: CreateCodecommitCredentials
+      summary: Create Codecommit credentials
+      description: Creates new Codecommit credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateCodecommitCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Codecommit credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCodecommitCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCodecommitCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#codecommit":
+    get:
+      x-speakeasy-entity-operation: CodecommitCredential#read
+      x-speakeasy-name-override: DescribeCodecommitCredentials
+      summary: Describe Codecommit credentials
+      description: Retrieves the details of the Codecommit credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeCodecommitCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeCodecommitCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: CodecommitCredential#update
+      x-speakeasy-name-override: UpdateCodecommitCredentials
+      summary: Update Codecommit credentials
+      description: Updates the details of the Codecommit credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateCodecommitCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Codecommit credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCodecommitCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: CodecommitCredential#delete
+      x-speakeasy-name-override: DeleteCodecommitCredentials
+      summary: Delete Codecommit credentials
+      description: Deletes the Codecommit credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteCodecommitCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#container-registry":
+    post:
+      x-speakeasy-entity-operation: ContainerRegistryCredential#create
+      x-speakeasy-name-override: CreateContainerRegistryCredentials
+      summary: Create container registry credentials
+      description: Creates new container registry credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateContainerRegistryCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Container registry credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateContainerRegistryCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateContainerRegistryCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#container-registry":
+    get:
+      x-speakeasy-entity-operation: ContainerRegistryCredential#read
+      x-speakeasy-name-override: DescribeContainerRegistryCredentials
+      summary: Describe container registry credentials
+      description: Retrieves the details of the container registry credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeContainerRegistryCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeContainerRegistryCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: ContainerRegistryCredential#update
+      x-speakeasy-name-override: UpdateContainerRegistryCredentials
+      summary: Update container registry credentials
+      description: Updates the details of the container registry credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateContainerRegistryCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Container registry credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateContainerRegistryCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: ContainerRegistryCredential#delete
+      x-speakeasy-name-override: DeleteContainerRegistryCredentials
+      summary: Delete container registry credentials
+      description: Deletes the container registry credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteContainerRegistryCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#gitea":
+    post:
+      x-speakeasy-entity-operation: GiteaCredential#create
+      x-speakeasy-name-override: CreateGiteaCredentials
+      summary: Create Gitea credentials
+      description: Creates new Gitea credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateGiteaCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Gitea credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGiteaCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateGiteaCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#gitea":
+    get:
+      x-speakeasy-entity-operation: GiteaCredential#read
+      x-speakeasy-name-override: DescribeGiteaCredentials
+      summary: Describe Gitea credentials
+      description: Retrieves the details of the Gitea credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeGiteaCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeGiteaCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: GiteaCredential#update
+      x-speakeasy-name-override: UpdateGiteaCredentials
+      summary: Update Gitea credentials
+      description: Updates the details of the Gitea credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateGiteaCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Gitea credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGiteaCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: GiteaCredential#delete
+      x-speakeasy-name-override: DeleteGiteaCredentials
+      summary: Delete Gitea credentials
+      description: Deletes the Gitea credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteGiteaCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#github":
+    post:
+      x-speakeasy-entity-operation: GithubCredential#create
+      x-speakeasy-name-override: CreateGithubCredentials
+      summary: Create GitHub credentials
+      description: Creates new GitHub credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateGithubCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: GitHub credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGithubCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateGithubCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#github":
+    get:
+      x-speakeasy-entity-operation: GithubCredential#read
+      x-speakeasy-name-override: DescribeGithubCredentials
+      summary: Describe GitHub credentials
+      description: Retrieves the details of the GitHub credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeGithubCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeGithubCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: GithubCredential#update
+      x-speakeasy-name-override: UpdateGithubCredentials
+      summary: Update GitHub credentials
+      description: Updates the details of the GitHub credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateGithubCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: GitHub credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGithubCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: GithubCredential#delete
+      x-speakeasy-name-override: DeleteGithubCredentials
+      summary: Delete GitHub credentials
+      description: Deletes the GitHub credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteGithubCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#gitlab":
+    post:
+      x-speakeasy-entity-operation: GitlabCredential#create
+      x-speakeasy-name-override: CreateGitlabCredentials
+      summary: Create GitLab credentials
+      description: Creates new GitLab credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateGitlabCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: GitLab credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGitlabCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateGitlabCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#gitlab":
+    get:
+      x-speakeasy-entity-operation: GitlabCredential#read
+      x-speakeasy-name-override: DescribeGitlabCredentials
+      summary: Describe GitLab credentials
+      description: Retrieves the details of the GitLab credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeGitlabCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeGitlabCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: GitlabCredential#update
+      x-speakeasy-name-override: UpdateGitlabCredentials
+      summary: Update GitLab credentials
+      description: Updates the details of the GitLab credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateGitlabCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: GitLab credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGitlabCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: GitlabCredential#delete
+      x-speakeasy-name-override: DeleteGitlabCredentials
+      summary: Delete GitLab credentials
+      description: Deletes the GitLab credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteGitlabCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#ssh":
+    post:
+      x-speakeasy-entity-operation: SSHCredential#create
+      x-speakeasy-name-override: CreateSSHCredentials
+      summary: Create SSH credentials
+      description: Creates new SSH credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateSSHCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: SSH credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSSHCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSSHCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#ssh":
+    get:
+      x-speakeasy-entity-operation: SSHCredential#read
+      x-speakeasy-name-override: DescribeSSHCredentials
+      summary: Describe SSH credentials
+      description: Retrieves the details of the SSH credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeSSHCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeSSHCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: SSHCredential#update
+      x-speakeasy-name-override: UpdateSSHCredentials
+      summary: Update SSH credentials
+      description: Updates the details of the SSH credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateSSHCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: SSH credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSSHCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: SSHCredential#delete
+      x-speakeasy-name-override: DeleteSSHCredentials
+      summary: Delete SSH credentials
+      description: Deletes the SSH credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteSSHCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#agent":
+    post:
+      x-speakeasy-entity-operation: TowerAgentCredential#create
+      x-speakeasy-name-override: CreateTowerAgentCredentials
+      summary: Create Tower Agent credentials
+      description: Creates new Tower Agent credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateTowerAgentCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Tower Agent credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTowerAgentCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateTowerAgentCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#agent":
+    get:
+      x-speakeasy-entity-operation: TowerAgentCredential#read
+      x-speakeasy-name-override: DescribeTowerAgentCredentials
+      summary: Describe Tower Agent credentials
+      description: Retrieves the details of the Tower Agent credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeTowerAgentCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeTowerAgentCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: TowerAgentCredential#update
+      x-speakeasy-name-override: UpdateTowerAgentCredentials
+      summary: Update Tower Agent credentials
+      description: Updates the details of the Tower Agent credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateTowerAgentCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Tower Agent credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTowerAgentCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: TowerAgentCredential#delete
+      x-speakeasy-name-override: DeleteTowerAgentCredentials
+      summary: Delete Tower Agent credentials
+      description: Deletes the Tower Agent credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteTowerAgentCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials#k8s":
+    post:
+      x-speakeasy-entity-operation: KubernetesCredential#create
+      x-speakeasy-name-override: CreateKubernetesCredentials
+      summary: Create Kubernetes credentials
+      description: Creates new Kubernetes credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateKubernetesCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Kubernetes credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateKubernetesCredentialsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateKubernetesCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/credentials/{credentialsId}#k8s":
+    get:
+      x-speakeasy-entity-operation: KubernetesCredential#read
+      x-speakeasy-name-override: DescribeKubernetesCredentials
+      summary: Describe Kubernetes credentials
+      description: Retrieves the details of the Kubernetes credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeKubernetesCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeKubernetesCredentialsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation: KubernetesCredential#update
+      x-speakeasy-name-override: UpdateKubernetesCredentials
+      summary: Update Kubernetes credentials
+      description: Updates the details of the Kubernetes credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateKubernetesCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Kubernetes credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateKubernetesCredentialsRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation: KubernetesCredential#delete
+      x-speakeasy-name-override: DeleteKubernetesCredentials
+      summary: Delete Kubernetes credentials
+      description: Deletes the Kubernetes credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteKubernetesCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
       security:
         - BearerAuth: []
   "/compute-envs#aws":
@@ -8213,176 +9751,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-  "/credentials#aws":
-    post:
-      x-speakeasy-entity-operation: AWSCredential#create
-      x-speakeasy-name-override: CreateAWSCredentials
-      summary: Create AWS credentials
-      description: Creates new AWS credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-      tags:
-        - credentials
-      operationId: CreateAWSCredentials
-      parameters:
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: AWS credentials create request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateAWSCredentialsRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreateAWSCredentialsResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-  "/credentials/{credentialsId}#aws":
-    get:
-      x-speakeasy-entity-operation: AWSCredential#read
-      x-speakeasy-name-override: DescribeAWSCredentials
-      summary: Describe AWS credentials
-      description: Retrieves the details of the AWS credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: DescribeAWSCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DescribeAWSCredentialsResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-    put:
-      x-speakeasy-entity-operation: AWSCredential#update
-      x-speakeasy-name-override: UpdateAWSCredentials
-      summary: Update AWS credentials
-      description: Updates the details of the AWS credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: UpdateAWSCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: AWS credentials update request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateAWSCredentialsRequest"
-        required: true
-      responses:
-        "204":
-          description: OK - No content
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-    delete:
-      x-speakeasy-entity-operation: AWSCredential#delete
-      x-speakeasy-name-override: DeleteAWSCredentials
-      summary: Delete AWS credentials
-      description: Deletes the AWS credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: DeleteAWSCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-        - name: checked
-          in: query
-          description: If set credentials deletion will be blocked by running jobs that depend on them
-          schema:
-            type: boolean
-      responses:
-        "204":
-          description: OK - No content
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-        "409":
-          description: Running jobs block the deletion of this credentials
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
-      security:
-        - BearerAuth: []
-          # "/credentials#azure":
-          #   # Similar duplication for Azure operations
+# "/credentials/{credentialsId}#azure":
+#   # Similar duplication for Azure operations
 
-          # "/credentials/{credentialsId}#azure":
-          #   # Similar duplication for Azure operations
 components:
   schemas:
     AbstractGridConfig:
@@ -8963,14 +10334,11 @@ components:
           x-speakeasy-terraform-ignore: true
         accessKey:
           type: string
-          example: "AKIAIOSFODNN7EXAMPLE"
         secretKey:
           type: string
           writeOnly: true
-          example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         assumeRoleArn:
           type: string
-          example: "arn:aws:iam::123456789012:role/SeqeraRole"
     AzBatchConfig:
       title: Azure batch configuration
       type: object
@@ -9092,18 +10460,14 @@ components:
           x-speakeasy-terraform-ignore: true
         batchName:
           type: string
-          example: "myazurebatch"
         storageName:
           type: string
-          example: "myazurestorage"
         batchKey:
           type: string
           writeOnly: true
-          example: "YourAzureBatchAccountKeyHere=="
         storageKey:
           type: string
           writeOnly: true
-          example: "YourAzureStorageAccountKeyHere=="
     BitBucketSecurityKeys:
       type: object
       properties:
@@ -11137,17 +12501,6 @@ components:
           writeOnly: true
           x-speakeasy-param-sensitive: true
           x-speakeasy-param-suppress-computed-diff: true
-          example: |
-            {
-              "type": "service_account",
-              "project_id": "my-project",
-              "private_key_id": "key-id",
-              "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
-              "client_email": "service-account@my-project.iam.gserviceaccount.com",
-              "client_id": "123456789",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token"
-            }
       x-speakeasy-plan-validators: GoogleKeysCrdentialValidator
     GridPlatformMetainfo:
       type: object
@@ -14104,17 +15457,10 @@ components:
         - launch
         - connect
         - view
-    # Azure-specific credential schema
-    AzureCredential:
-      x-speakeasy-entity: AzureCredential
-      x-speakeasy-entity-description: |
-        Manage Azure credentials in Seqera platform using this resource.
-
-        Azure credentials store authentication information for accessing Azure services
-        within the Seqera Platform workflows.
+    # AWS-specific credential schema with flattened keys
+    AWSCredential:
       required:
         - name
-        - provider
         - keys
       type: object
       properties:
@@ -14122,51 +15468,227 @@ components:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-name-override: credentialsId
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         name:
           maxLength: 100
           type: string
           description: Display name for the credential (max 100 characters)
-        description:
-          type: string
-          description: Optional description explaining the purpose of the credential
-          x-speakeasy-param-computed: false
+          x-speakeasy-param-force-new: true
         provider:
           type: string
-          enum: [azure]
-          description: Cloud provider type (azure)
+          enum: [aws]
+          default: aws
+          description: Cloud provider type (automatically set to "aws")
           x-speakeasy-name-override: providerType
-          x-speakeasy-param-computed: false
-        baseUrl:
-          type: string
-          description: Base URL for the service
-          x-speakeasy-param-computed: false
-        category:
-          type: string
-          description: Category of the credential
-          x-speakeasy-param-computed: false
+          x-speakeasy-param-readonly: true
         deleted:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
           format: date-time
           description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         dateCreated:
           type: string
           format: date-time
           description: Timestamp when the credential was created
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         lastUpdated:
           type: string
           format: date-time
           description: Timestamp when the credential was last updated
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         keys:
-          $ref: '#/components/schemas/AzureSecurityKeys'
-          description: Azure security keys for authentication
+          x-speakeasy-entity: AWSCredential
+          x-speakeasy-entity-description: |
+            Manage AWS credentials in Seqera platform using this resource.
+
+            AWS credentials store authentication information for accessing AWS services
+            within the Seqera Platform workflows.
+          type: object
+          required:
+            - accessKey
+            - secretKey
+          properties:
+            accessKey:
+              type: string
+              minLength: 16
+              maxLength: 128
+              pattern: "^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$"
+              description: AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
+              example: "AKIAIOSFODNN7EXAMPLE"
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: access_key
+            secretKey:
+              type: string
+              minLength: 40
+              description: AWS secret access key (required, sensitive). Must be at least 40 characters.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-computed: false
+              example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+              x-speakeasy-name-override: secret_key
+              writeOnly: true
+            assumeRoleArn:
+              type: string
+              pattern: "^arn:aws:iam::[0-9]{12}:role/.+$"
+              description: "IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME"
+              example: "arn:aws:iam::123456789012:role/SeqeraRole"
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: assume_role_arn
+              writeOnly: true
+    # AWS-specific request/response schemas
+    CreateAWSCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/AWSCredential"
+    CreateAWSCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateAWSCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/AWSCredential"
+    DescribeAWSCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/AWSCredential"
+    # Azure-specific credential schema with flattened keys
+    AzureCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [azure]
+          default: azure
+          description: Cloud provider type (automatically set to "azure")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: AzureCredential
+          x-speakeasy-entity-description: |
+            Manage Azure credentials in Seqera platform using this resource.
+
+            Azure credentials support three authentication modes:
+            - Shared key: Use batch_key and storage_key (discriminator='azure')
+            - Entra: Use tenant_id, client_id, client_secret (discriminator='azure-entra')
+            - Cloud: Use tenant_id, client_id, client_secret (discriminator='azure-cloud')
+          type: object
+          required:
+            - batchName
+            - storageName
+          properties:
+            discriminator:
+              type: string
+              description: Authentication mode discriminator (azure, azure-entra, or azure-cloud)
+              enum: [azure, azure-entra, azure-cloud]
+              default: azure
+              x-speakeasy-terraform-ignore: true
+              x-speakeasy-param-readonly: true
+            batchName:
+              type: string
+              description: Azure Batch account name (required)
+              example: "myazurebatch"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: batch_name
+            storageName:
+              type: string
+              description: Azure Blob Storage account name (required)
+              example: "myazurestorage"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: storage_name
+            batchKey:
+              type: string
+              description: Azure Batch account key (for shared key authentication)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "YourAzureBatchAccountKeyHere=="
+              x-speakeasy-name-override: batch_key
+              x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
+              writeOnly: true
+            storageKey:
+              type: string
+              description: Azure Storage account key (for shared key authentication)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "YourAzureStorageAccountKeyHere=="
+              x-speakeasy-name-override: storage_key
+              x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
+              writeOnly: true
+            tenantId:
+              type: string
+              description: Azure tenant ID (for Entra/Cloud authentication)
+              example: "00000000-0000-0000-0000-000000000000"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: tenant_id
+              x-speakeasy-plan-validators: AzureCredentialEntraValidator
+              writeOnly: true
+            clientId:
+              type: string
+              description: Azure service principal client ID (for Entra/Cloud authentication)
+              example: "00000000-0000-0000-0000-000000000000"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: client_id
+              x-speakeasy-plan-validators: AzureCredentialEntraValidator
+              writeOnly: true
+            clientSecret:
+              type: string
+              description: Azure service principal client secret (for Entra/Cloud authentication)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "YourAzureClientSecretHere"
+              x-speakeasy-name-override: client_secret
+              x-speakeasy-plan-validators: AzureCredentialEntraValidator
+              writeOnly: true
     # Azure-specific request/response schemas
     CreateAzureCredentialsRequest:
       type: object
@@ -14192,17 +15714,10 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/AzureCredential'
-    # Google-specific credential schema
+    # Main credential schema with flattened keys
     GoogleCredential:
-      x-speakeasy-entity: GoogleCredential
-      x-speakeasy-entity-description: |
-        Manage Google credentials in Seqera platform using this resource.
-
-        Google credentials store authentication information for accessing Google Cloud services
-        within the Seqera Platform workflows.
       required:
         - name
-        - provider
         - keys
       type: object
       properties:
@@ -14210,52 +15725,71 @@ components:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-name-override: credentialsId
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
         name:
           maxLength: 100
           type: string
           description: Display name for the credential (max 100 characters)
-        description:
-          type: string
-          description: Optional description explaining the purpose of the credential
-          x-speakeasy-param-computed: false
+          x-speakeasy-param-force-new: true
         provider:
           type: string
           enum: [google]
-          description: Cloud provider type (google)
+          default: google
+          description: Cloud provider type (automatically set to "google")
           x-speakeasy-name-override: providerType
-          x-speakeasy-param-computed: false
-        baseUrl:
-          type: string
-          description: Base URL for the service
-          x-speakeasy-param-computed: false
-        category:
-          type: string
-          description: Category of the credential
-          x-speakeasy-param-computed: false
+          x-speakeasy-param-readonly: true
         deleted:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
           format: date-time
           description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         dateCreated:
           type: string
           format: date-time
           description: Timestamp when the credential was created
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         lastUpdated:
           type: string
           format: date-time
           description: Timestamp when the credential was last updated
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         keys:
-          $ref: '#/components/schemas/GoogleSecurityKeys'
-          description: Google security keys for authentication
-    # Google-specific request/response schemas
+          x-speakeasy-entity: GoogleCredential
+          x-speakeasy-entity-description: |
+            Manage Google credentials in Seqera platform using this resource.
+
+            Google credentials store authentication information for accessing Google Cloud services
+            within the Seqera Platform workflows.
+          type: object
+          required:
+            - data
+          properties:
+            data:
+              type: string
+              description: Google Cloud service account key JSON (required, sensitive).
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: |
+                {
+                  "type": "service_account",
+                  "project_id": "my-project",
+                  "private_key_id": "key-id",
+                  "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+                  "client_email": "service-account@my-project.iam.gserviceaccount.com",
+                  "client_id": "123456789",
+                  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                  "token_uri": "https://oauth2.googleapis.com/token"
+                }
+              writeOnly: true
+    # Request/Response schemas
     CreateGoogleCredentialsRequest:
       type: object
       required:
@@ -14280,6 +15814,877 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/GoogleCredential'
+    # Bitbucket-specific credential schema with hoisted keys
+    BitbucketCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [bitbucket]
+          default: bitbucket
+          description: Cloud provider type (automatically set to "bitbucket")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: BitbucketCredential
+          x-speakeasy-terraform-resource-name: bitbucket_credential
+          x-speakeasy-entity-description: |
+            Manage Bitbucket credentials in Seqera platform using this resource.
+
+            Bitbucket credentials store authentication information for accessing Bitbucket
+            repositories within the Seqera Platform workflows.
+          type: object
+          required:
+            - username
+            - token
+          properties:
+            username:
+              type: string
+              description: Bitbucket account username (for app passwords) or email (for API tokens). Required.
+              example: "myuser@example.com"
+              x-speakeasy-param-computed: false
+            token:
+              type: string
+              description: Bitbucket API token (required, sensitive). App passwords are deprecated.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "ATBB..."
+              writeOnly: true
+            baseUrl:
+              type: string
+              description: "Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs"
+              example: "https://bitbucket.org/myorg"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: base_url
+              writeOnly: true
+    # Bitbucket-specific request/response schemas
+    CreateBitbucketCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/BitbucketCredential"
+    CreateBitbucketCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateBitbucketCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/BitbucketCredential"
+    DescribeBitbucketCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/BitbucketCredential"
+    # Codecommit-specific credential schema with hoisted keys
+    CodecommitCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [codecommit]
+          default: codecommit
+          description: Cloud provider type (automatically set to "codecommit")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: CodecommitCredential
+          x-speakeasy-terraform-resource-name: codecommit_credential
+          x-speakeasy-entity-description: |
+            Manage Codecommit credentials in Seqera platform using this resource.
+
+            Codecommit credentials store AWS authentication information for accessing
+            AWS Codecommit repositories within the Seqera Platform workflows.
+          type: object
+          required:
+            - accessKey
+            - secretKey
+          properties:
+            accessKey:
+              type: string
+              description: AWS access key to access the Codecommit repository (required)
+              example: "AKIAIOSFODNN7EXAMPLE"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: access_key
+            secretKey:
+              type: string
+              description: AWS secret key to access the Codecommit repository (required, sensitive)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+              x-speakeasy-name-override: secret_key
+              writeOnly: true
+            baseUrl:
+              type: string
+              description: "Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com"
+              example: "https://git-codecommit.us-east-1.amazonaws.com"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: base_url
+              writeOnly: true
+    # Codecommit-specific request/response schemas
+    CreateCodecommitCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/CodecommitCredential"
+    CreateCodecommitCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateCodecommitCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/CodecommitCredential"
+    DescribeCodecommitCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/CodecommitCredential"
+    # Container Registry-specific credential schema with hoisted keys
+    ContainerRegistryCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [container-reg]
+          default: container-reg
+          description: Cloud provider type (automatically set to "container-reg")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: ContainerRegistryCredential
+          x-speakeasy-entity-description: |
+            Manage container registry credentials in Seqera platform using this resource.
+
+            Container registry credentials store authentication information for accessing
+            container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.
+          type: object
+          required:
+            - userName
+            - password
+          properties:
+            userName:
+              type: string
+              description: Username for container registry authentication (required)
+              example: "myuser"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: user_name
+            password:
+              type: string
+              description: Password or access token for container registry authentication (required, sensitive)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "mypassword"
+              writeOnly: true
+            registry:
+              type: string
+              description: "Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com"
+              example: "docker.io"
+              x-speakeasy-param-computed: false
+              writeOnly: true
+    # Container Registry-specific request/response schemas
+    CreateContainerRegistryCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/ContainerRegistryCredential"
+    CreateContainerRegistryCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateContainerRegistryCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/ContainerRegistryCredential"
+    DescribeContainerRegistryCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/ContainerRegistryCredential"
+    # Gitea-specific credential schema with hoisted keys
+    GiteaCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [gitea]
+          default: gitea
+          description: Cloud provider type (automatically set to "gitea")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: GiteaCredential
+          x-speakeasy-entity-description: |
+            Manage Gitea credentials in Seqera platform using this resource.
+
+            Gitea credentials store authentication information for accessing Gitea
+            repositories within the Seqera Platform workflows.
+          type: object
+          required:
+            - username
+            - password
+          properties:
+            username:
+              type: string
+              description: Gitea account username (required)
+              example: "myuser"
+              x-speakeasy-param-computed: false
+            password:
+              type: string
+              description: Gitea account password (required, sensitive)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "mypassword"
+              writeOnly: true
+            baseUrl:
+              type: string
+              description: "Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower"
+              example: "https://gitea.example.com"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: base_url
+              writeOnly: true
+    # Gitea-specific request/response schemas
+    CreateGiteaCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GiteaCredential"
+    CreateGiteaCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateGiteaCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GiteaCredential"
+    DescribeGiteaCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GiteaCredential"
+    # GitHub-specific credential schema with hoisted keys
+    GithubCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [github]
+          default: github
+          description: Cloud provider type (automatically set to "github")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: GithubCredential
+          x-speakeasy-terraform-resource-name: github_credential
+          x-speakeasy-entity-description: |
+            Manage GitHub credentials in Seqera platform using this resource.
+
+            GitHub credentials store authentication information for accessing GitHub
+            repositories within the Seqera Platform workflows.
+          type: object
+          required:
+            - accessToken
+          properties:
+            accessToken:
+              type: string
+              description: GitHub Personal Access Token (PAT) for authentication (required, sensitive)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "ghp_1234567890abcdefghijklmnopqrstuvwxyz"
+              x-speakeasy-name-override: access_token
+              writeOnly: true
+            baseUrl:
+              type: string
+              description: "Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com"
+              example: "https://github.mycompany.com"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: base_url
+              writeOnly: true
+    # GitHub-specific request/response schemas
+    CreateGithubCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GithubCredential"
+    CreateGithubCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateGithubCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GithubCredential"
+    DescribeGithubCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GithubCredential"
+    # GitLab-specific credential schema with hoisted keys
+    GitlabCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [gitlab]
+          default: gitlab
+          description: Cloud provider type (automatically set to "gitlab")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: GitlabCredential
+          x-speakeasy-terraform-resource-name: gitlab_credential
+          x-speakeasy-entity-description: |
+            Manage GitLab credentials in Seqera platform using this resource.
+
+            GitLab credentials store authentication information for accessing GitLab
+            repositories within the Seqera Platform workflows.
+          type: object
+          required:
+            - token
+          properties:
+            token:
+              type: string
+              description: GitLab Personal Access Token or Project Access Token (required, sensitive)
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              example: "glpat-xxxxxxxxxxxxxxxxxxxx"
+              writeOnly: true
+            baseUrl:
+              type: string
+              description: "Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com"
+              example: "https://gitlab.mycompany.com"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: base_url
+              writeOnly: true
+    # GitLab-specific request/response schemas
+    CreateGitlabCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GitlabCredential"
+    CreateGitlabCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateGitlabCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GitlabCredential"
+    DescribeGitlabCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/GitlabCredential"
+    # SSH-specific credential schema with hoisted keys
+    SSHCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [ssh]
+          default: ssh
+          description: Cloud provider type (automatically set to "ssh")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: SSHCredential
+          x-speakeasy-entity-description: |
+            Manage SSH credentials in Seqera platform using this resource.
+
+            SSH credentials store SSH private keys for secure access to remote
+            compute environments and resources within the Seqera Platform workflows.
+          type: object
+          required:
+            - privateKey
+          properties:
+            privateKey:
+              type: string
+              description: "SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen"
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: private_key
+              writeOnly: true
+            passphrase:
+              type: string
+              description: Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              writeOnly: true
+    # SSH-specific request/response schemas
+    CreateSSHCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/SSHCredential"
+    CreateSSHCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateSSHCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/SSHCredential"
+    DescribeSSHCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/SSHCredential"
+    # Tower Agent-specific credential schema with hoisted keys
+    TowerAgentCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [agent]
+          default: agent
+          description: Cloud provider type (automatically set to "agent")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: TowerAgentCredential
+          x-speakeasy-entity-description: |
+            Manage Tower Agent credentials in Seqera platform using this resource.
+
+            Tower Agent credentials store connection IDs for Tower Agent instances that
+            enable secure communication between the Seqera Platform and compute environments.
+          type: object
+          required:
+            - connectionId
+          properties:
+            connectionId:
+              type: string
+              description: "Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource."
+              example: "31e42060-7985-4727-aca1-4071c819ad8e"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: connection_id
+              writeOnly: true
+            workDir:
+              type: string
+              description: "Working directory for the Tower Agent (optional)"
+              example: "/work"
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: work_dir
+              writeOnly: true
+    # Tower Agent-specific request/response schemas
+    CreateTowerAgentCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/TowerAgentCredential"
+    CreateTowerAgentCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateTowerAgentCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/TowerAgentCredential"
+    DescribeTowerAgentCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/TowerAgentCredential"
+    # Kubernetes-specific credential schema with hoisted keys
+    KubernetesCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentialsId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the credential (max 100 characters)
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum: [k8s]
+          default: k8s
+          description: Cloud provider type (automatically set to "k8s")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: KubernetesCredential
+          x-speakeasy-entity-description: |-
+            Manage Kubernetes credentials in Seqera platform using this resource.
+
+            Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
+            execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.
+          type: object
+          properties:
+            token:
+              type: string
+              description: "Service Account token for Kubernetes authentication (optional). Required if using token-based authentication."
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              writeOnly: true
+            certificate:
+              type: string
+              description: "X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication."
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: client_certificate
+              writeOnly: true
+            privateKey:
+              type: string
+              description: "Private key for X.509 client certificate (optional). Required if using certificate-based authentication."
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: private_key
+              writeOnly: true
+    # Kubernetes-specific request/response schemas
+    CreateKubernetesCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/KubernetesCredential"
+    CreateKubernetesCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateKubernetesCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/KubernetesCredential"
+    DescribeKubernetesCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: "#/components/schemas/KubernetesCredential"
     # AWS-specific compute environment schema
     AWSComputeEnv_ComputeConfig:
       x-speakeasy-entity: AWSComputeEnv
@@ -14388,90 +16793,6 @@ components:
         totalSize:
           type: integer
           format: int64
-    # AWS-specific credential schema
-    AWSCredential:
-      x-speakeasy-entity: AWSCredential
-      x-speakeasy-entity-description: |
-        Manage AWS credentials in Seqera platform using this resource.
-
-        AWS credentials store authentication information for accessing AWS services
-        within the Seqera Platform workflows.
-      required:
-        - name
-        - provider
-        - keys
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
-          x-speakeasy-param-suppress-computed-diff: true
-        name:
-          maxLength: 100
-          type: string
-          description: Display name for the credential (max 100 characters)
-        description:
-          type: string
-          description: Optional description explaining the purpose of the credential
-          x-speakeasy-param-computed: false
-        provider:
-          type: string
-          enum: [aws]
-          description: Cloud provider type (aws)
-          x-speakeasy-name-override: providerType
-          x-speakeasy-param-computed: false
-        baseUrl:
-          type: string
-          description: Base URL for the service
-          x-speakeasy-param-computed: false
-        category:
-          type: string
-          description: Category of the credential
-          x-speakeasy-param-computed: false
-        deleted:
-          type: boolean
-          description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-suppress-computed-diff: true
-        lastUsed:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
-        dateCreated:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was created
-          x-speakeasy-param-suppress-computed-diff: true
-        lastUpdated:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was last updated
-          x-speakeasy-param-suppress-computed-diff: true
-        keys:
-          $ref: '#/components/schemas/AwsSecurityKeys'
-          description: AWS security keys for authentication
-    # AWS-specific request/response schemas
-    CreateAWSCredentialsRequest:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/AWSCredential'
-    CreateAWSCredentialsResponse:
-      type: object
-      properties:
-        credentialsId:
-          type: string
-    UpdateAWSCredentialsRequest:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/AWSCredential'
-    DescribeAWSCredentialsResponse:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/AWSCredential'
   securitySchemes:
     BearerAuth:
       type: http
