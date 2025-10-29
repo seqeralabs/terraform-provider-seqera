@@ -12,10 +12,11 @@ type SeqeraComputeConfiguration struct {
 	ComputeQueue        types.String        `tfsdk:"compute_queue"`
 	DragenInstanceType  types.String        `tfsdk:"dragen_instance_type"`
 	DragenQueue         types.String        `tfsdk:"dragen_queue"`
+	EnableFusion        types.Bool          `tfsdk:"enable_fusion"`
+	EnableWave          types.Bool          `tfsdk:"enable_wave"`
 	Environment         []ConfigEnvVariable `tfsdk:"environment"`
 	ExecutionRole       types.String        `tfsdk:"execution_role"`
 	Forge               *ForgeConfig        `tfsdk:"forge"`
-	Fusion2Enabled      types.Bool          `tfsdk:"fusion2_enabled"`
 	FusionSnapshots     types.Bool          `tfsdk:"fusion_snapshots"`
 	HeadJobCpus         types.Int32         `tfsdk:"head_job_cpus"`
 	HeadJobMemoryMb     types.Int32         `tfsdk:"head_job_memory_mb"`
@@ -30,6 +31,5 @@ type SeqeraComputeConfiguration struct {
 	Region              types.String        `tfsdk:"region"`
 	StorageType         types.String        `tfsdk:"storage_type"`
 	Volumes             []types.String      `tfsdk:"volumes"`
-	WaveEnabled         types.Bool          `tfsdk:"wave_enabled"`
 	WorkDir             types.String        `tfsdk:"work_dir"`
 }

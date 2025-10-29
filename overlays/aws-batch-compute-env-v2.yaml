@@ -1,0 +1,504 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AWS Batch Compute Environment Overlay (Hoisted)
+  version: 0.0.2
+
+# ==============================================================================
+# AWS BATCH COMPUTE ENVIRONMENT RESOURCE OVERLAY (WITH HOISTING)
+# ==============================================================================
+#
+# This overlay implements the AWS Batch compute environment resource with
+# hoisted fields for a better Terraform user experience.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Minimal AWS Batch configuration
+# resource "seqera_compute_aws_batch" "minimal" {
+#   name           = "aws-batch-minimal"
+#   workspace_id   = 123
+#   credentials_id = "aws-creds-id"
+#   region         = "us-east-1"
+#   work_directory = "s3://my-bucket/work"
+# }
+#
+# Example 2: AWS Batch with Spot instances
+# resource "seqera_compute_aws_batch" "spot" {
+#   name           = "aws-batch-spot"
+#   workspace_id   = 123
+#   credentials_id = "aws-creds-id"
+#   region         = "us-east-1"
+#   work_directory = "s3://my-bucket/work"
+#
+#   forge_type          = "SPOT"
+#   bid_percentage      = 70
+#   min_cpus            = 0
+#   max_cpus            = 256
+#   enable_fusion       = true
+#   enable_wave         = true
+# }
+#
+# ==============================================================================
+
+actions:
+  # ============================================================================
+  # ENTITY OPERATIONS (CRUD)
+  # ============================================================================
+
+  # CREATE - POST /compute-envs#aws
+  - target: $.paths["/compute-envs#aws"].post
+    update:
+      x-speakeasy-entity-operation: AWSBatchComputeEnv#create
+      x-speakeasy-name-override: CreateAWSBatchComputeEnv
+
+  # READ - GET /compute-envs/{computeEnvId}#aws
+  - target: $.paths["/compute-envs/{computeEnvId}#aws"].get
+    update:
+      x-speakeasy-entity-operation: AWSBatchComputeEnv#read
+      x-speakeasy-name-override: DescribeAWSBatchComputeEnv
+
+  # UPDATE - PUT /compute-envs/{computeEnvId}#aws
+  - target: $.paths["/compute-envs/{computeEnvId}#aws"].put
+    update:
+      x-speakeasy-entity-operation: AWSBatchComputeEnv#update
+      x-speakeasy-name-override: UpdateAWSBatchComputeEnv
+
+  # DELETE - DELETE /compute-envs/{computeEnvId}#aws
+  - target: $.paths["/compute-envs/{computeEnvId}#aws"].delete
+    update:
+      x-speakeasy-entity-operation: AWSBatchComputeEnv#delete
+      x-speakeasy-name-override: DeleteAWSBatchComputeEnv
+
+  # ============================================================================
+  # SCHEMA DEFINITIONS - HOISTED STRUCTURE
+  # ============================================================================
+
+  - target: $.components.schemas
+    update:
+      # Main AWS Batch Compute Environment schema with hoisting
+      AWSBatchComputeEnv:
+        x-speakeasy-entity: AWSBatchComputeEnv
+        x-speakeasy-entity-description: |
+          Manage AWS Batch compute environments in Seqera Platform.
+
+          AWS Batch compute environments provide scalable compute capacity for running
+          Nextflow workflows on AWS using the AWS Batch service.
+        required:
+          - name
+          - credentialsId
+          - region
+          - workDir
+        type: object
+        properties:
+          # ============================================================================
+          # READ-ONLY METADATA FIELDS
+          # ============================================================================
+          id:
+            type: string
+            description: Unique identifier for the compute environment
+            x-speakeasy-name-override: compute_env_id
+            x-speakeasy-param-readonly: true
+
+          status:
+            type: string
+            description: Current status of the compute environment
+            x-speakeasy-param-readonly: true
+
+          message:
+            type: string
+            description: Status message or error details
+            x-speakeasy-param-readonly: true
+
+          dateCreated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was created
+            x-speakeasy-param-readonly: true
+            x-speakeasy-terraform-ignore: true
+
+          lastUpdated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was last modified
+            x-speakeasy-param-readonly: true
+            x-speakeasy-terraform-ignore: true
+
+          deleted:
+            type: boolean
+            description: Flag indicating if the compute environment has been deleted
+            x-speakeasy-param-readonly: true
+            x-speakeasy-terraform-ignore: true
+
+          # ============================================================================
+          # REQUIRED FIELDS
+          # ============================================================================
+          name:
+            type: string
+            maxLength: 100
+            description: Display name for the compute environment (max 100 characters)
+            x-speakeasy-param-force-new: true
+
+          credentialsId:
+            type: string
+            description: AWS credentials ID to use for accessing AWS services
+            x-speakeasy-name-override: credentials_id
+            x-speakeasy-param-force-new: true
+
+          region:
+            type: string
+            description: |
+              AWS region where the Batch compute environment will be created.
+              Examples: us-east-1, eu-west-1, ap-southeast-2
+            x-speakeasy-param-force-new: true
+
+          workDir:
+            type: string
+            description: |
+              S3 bucket path for Nextflow work directory where intermediate files will be stored.
+              Format: s3://bucket-name/path
+              Example: s3://my-nextflow-bucket/work
+            x-speakeasy-name-override: work_directory
+            pattern: "^s3://.+"
+
+          # ============================================================================
+          # OPTIONAL CONFIGURATION FIELDS
+          # ============================================================================
+          workspaceId:
+            type: integer
+            format: int64
+            description: Workspace numeric identifier where the compute environment will be created
+            x-speakeasy-name-override: workspace_id
+
+          description:
+            type: string
+            description: Optional description of the compute environment
+
+          # AWS Batch configuration hoisted here via x-speakeasy-entity
+          config:
+            x-speakeasy-entity: AWSBatchComputeEnv
+            type: object
+            properties:
+              computeQueue:
+                type: string
+                description: Name of the AWS Batch compute queue
+                x-speakeasy-name-override: compute_queue
+
+              headQueue:
+                type: string
+                description: Name of the head job queue
+                x-speakeasy-name-override: head_queue
+
+              preRunScript:
+                type: string
+                description: |
+                  Bash script to run before workflow execution begins.
+                  Use for environment setup, loading modules, etc.
+                x-speakeasy-name-override: pre_run_script
+
+              postRunScript:
+                type: string
+                description: |
+                  Bash script to run after workflow execution completes.
+                  Use for cleanup, archiving results, etc.
+                x-speakeasy-name-override: post_run_script
+
+              cliPath:
+                type: string
+                description: Path to AWS CLI on compute instances
+                x-speakeasy-name-override: cli_path
+                default: "/home/ec2-user/miniconda/bin/aws"
+
+              executionRole:
+                type: string
+                description: |
+                  IAM role ARN for Batch execution (pulling container images, writing logs).
+                  Format: arn:aws:iam::account-id:role/role-name
+                x-speakeasy-name-override: execution_role
+                pattern: "^arn:aws:iam::[0-9]{12}:role/.+$"
+
+              computeJobRole:
+                type: string
+                description: |
+                  IAM role ARN for compute jobs. Jobs assume this role during execution.
+                  Format: arn:aws:iam::account-id:role/role-name
+                x-speakeasy-name-override: compute_job_role
+                pattern: "^arn:aws:iam::[0-9]{12}:role/.+$"
+
+              headJobRole:
+                type: string
+                description: IAM role ARN for the head job
+                x-speakeasy-name-override: head_job_role
+                pattern: "^arn:aws:iam::[0-9]{12}:role/.+$"
+
+              headJobCpus:
+                type: integer
+                format: int32
+                description: Number of CPUs allocated for the head job
+                x-speakeasy-name-override: head_job_cpus
+                default: 1
+
+              headJobMemoryMb:
+                type: integer
+                format: int32
+                description: Memory allocation for the head job in MB
+                x-speakeasy-name-override: head_job_memory_mb
+                default: 1024
+
+              # Fusion and Wave
+              fusion2Enabled:
+                type: boolean
+                description: |
+                  Enable Fusion v2 for virtual file system. Fusion provides virtual file system
+                  for efficient S3 access and improves performance by lazy loading files.
+                x-speakeasy-name-override: enable_fusion
+                default: false
+
+              waveEnabled:
+                type: boolean
+                description: |
+                  Enable Wave containers service. Wave builds and manages container images on-demand.
+                  When enable_wave is true, enable_fusion must be explicitly set.
+                x-speakeasy-name-override: enable_wave
+                x-speakeasy-plan-validators: WaveEnabledValidator
+                default: false
+
+              # Forge configuration
+              forge:
+                type: object
+                description: AWS Forge configuration for compute resources
+                properties:
+                  type:
+                    type: string
+                    enum: ["SPOT", "EC2", "FARGATE"]
+                    description: |
+                      Type of compute instances to provision:
+                      - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+                      - EC2: Use On-Demand EC2 instances (reliable, higher cost)
+                      - FARGATE: Use AWS Fargate serverless compute
+                    x-speakeasy-name-override: forge_type
+                    default: "EC2"
+
+                  minCpus:
+                    type: integer
+                    format: int32
+                    description: |
+                      Minimum number of CPUs to maintain in the compute environment.
+                      Setting to 0 allows environment to scale to zero when idle.
+                    x-speakeasy-name-override: min_cpus
+                    default: 0
+                    minimum: 0
+
+                  maxCpus:
+                    type: integer
+                    format: int32
+                    description: |
+                      Maximum number of CPUs available in the compute environment.
+                      Subject to AWS service quotas.
+                    x-speakeasy-name-override: max_cpus
+                    default: 256
+                    minimum: 1
+
+                  gpuEnabled:
+                    type: boolean
+                    description: |
+                      Enable GPU support for compute instances.
+                      When enabled, GPU-capable instance types will be selected.
+                    x-speakeasy-name-override: gpu_enabled
+                    default: false
+
+                  instanceTypes:
+                    type: array
+                    items:
+                      type: string
+                    description: |
+                      List of EC2 instance types to use.
+                      Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+                      Default: ["optimal"] - AWS Batch selects appropriate instances
+                    x-speakeasy-name-override: instance_types
+
+                  allocStrategy:
+                    type: string
+                    enum:
+                      - BEST_FIT
+                      - BEST_FIT_PROGRESSIVE
+                      - SPOT_CAPACITY_OPTIMIZED
+                      - SPOT_PRICE_CAPACITY_OPTIMIZED
+                    description: |
+                      Strategy for allocating compute resources.
+                      SPOT_CAPACITY_OPTIMIZED only valid when forge_type is SPOT.
+                    x-speakeasy-name-override: allocation_strategy
+
+                  bidPercentage:
+                    type: integer
+                    format: int32
+                    description: |
+                      Maximum percentage of On-Demand price to pay for Spot instances (1-100).
+                      Only applicable when forge_type is SPOT.
+                    x-speakeasy-name-override: bid_percentage
+                    x-speakeasy-plan-validators: BidPercentageValidator
+                    minimum: 0
+                    maximum: 100
+
+                  ebsAutoScale:
+                    type: boolean
+                    description: Enable automatic EBS volume expansion
+                    x-speakeasy-name-override: ebs_auto_scale
+                    default: false
+
+                  ebsBlockSize:
+                    type: integer
+                    format: int32
+                    description: Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB)
+                    x-speakeasy-name-override: ebs_block_size
+                    default: 50
+                    minimum: 8
+                    maximum: 16384
+
+                  vpcId:
+                    type: string
+                    description: |
+                      VPC ID where compute environment will be deployed.
+                      Format: vpc- followed by hexadecimal characters
+                    x-speakeasy-name-override: vpc_id
+                    x-speakeasy-param-force-new: true
+                    pattern: "^vpc-[a-f0-9]+$"
+
+                  subnets:
+                    type: array
+                    items:
+                      type: string
+                    description: |
+                      List of subnet IDs for compute instances.
+                      Subnets must be in the specified VPC. Use multiple subnets for high availability.
+                    x-speakeasy-param-force-new: true
+
+                  securityGroups:
+                    type: array
+                    items:
+                      type: string
+                    description: List of security group IDs to attach to compute instances
+                    x-speakeasy-name-override: security_groups
+
+                  ec2KeyPair:
+                    type: string
+                    description: EC2 key pair name for SSH access to compute instances
+                    x-speakeasy-name-override: ec2_key_pair
+
+                  disposeOnDeletion:
+                    type: boolean
+                    description: |
+                      Dispose of AWS Batch resources when compute environment is deleted
+                    x-speakeasy-name-override: dispose_on_deletion
+                    default: true
+
+                  fargateHeadEnabled:
+                    type: boolean
+                    description: |
+                      Use Fargate for head job instead of EC2.
+                      Reduces costs by running head job on serverless compute.
+                    x-speakeasy-name-override: fargate_head_enabled
+                    default: false
+
+                  efsCreate:
+                    type: boolean
+                    description: Automatically create an EFS file system
+                    x-speakeasy-name-override: efs_create
+                    default: false
+
+                  efsId:
+                    type: string
+                    description: |
+                      EFS file system ID to mount.
+                      Format: fs- followed by hexadecimal characters
+                    x-speakeasy-name-override: efs_id
+                    pattern: "^fs-[a-f0-9]+$"
+
+                  efsMount:
+                    type: string
+                    description: Path where EFS will be mounted in the container
+                    x-speakeasy-name-override: efs_mount
+                    default: "/mnt/efs"
+
+                  fsxName:
+                    type: string
+                    description: FSx for Lustre file system name
+                    x-speakeasy-name-override: fsx_name
+
+                  fsxMount:
+                    type: string
+                    description: Path where FSx will be mounted in the container
+                    x-speakeasy-name-override: fsx_mount
+                    default: "/fsx"
+
+                  fsxSize:
+                    type: integer
+                    format: int32
+                    description: Size of FSx file system in GB
+                    x-speakeasy-name-override: fsx_size
+
+      # Request/Response schemas
+      CreateAWSBatchComputeEnvRequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/AWSBatchComputeEnv'
+          labelIds:
+            type: array
+            items:
+              type: integer
+              format: int64
+
+      CreateAWSBatchComputeEnvResponse:
+        type: object
+        properties:
+          computeEnvId:
+            type: string
+
+      UpdateAWSBatchComputeEnvRequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/AWSBatchComputeEnv'
+
+      DescribeAWSBatchComputeEnvResponse:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/AWSBatchComputeEnv'
+
+  # ============================================================================
+  # FIELD VALIDATORS
+  # ============================================================================
+
+  # Work directory must start with s3://
+  - target: $.components.schemas.AWSBatchComputeEnv.properties.workDir
+    update:
+      x-speakeasy-plan-validators: S3WorkDirValidator
+
+  # Bid percentage validator (0-100)
+  - target: $.components.schemas.AWSBatchComputeEnv.properties.config.properties.forge.properties.bidPercentage
+    update:
+      x-speakeasy-plan-validators: BidPercentageValidator
+
+  # Wave enabled validator
+  - target: $.components.schemas.AWSBatchComputeEnv.properties.config.properties.waveEnabled
+    update:
+      x-speakeasy-plan-validators: WaveEnabledValidator
+
+  # ============================================================================
+  # FORCE REPLACEMENT FIELDS
+  # ============================================================================
+
+  # These fields require replacement if changed
+  - target: $.components.schemas.AWSBatchComputeEnv.properties.name
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AWSBatchComputeEnv.properties.credentialsId
+    update:
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AWSBatchComputeEnv.properties.region
+    update:
+      x-speakeasy-param-force-new: true

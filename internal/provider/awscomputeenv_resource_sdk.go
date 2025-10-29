@@ -23,6 +23,8 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 		r.Config.ComputeQueue = types.StringPointerValue(resp.Config.ComputeQueue)
 		r.Config.DragenInstanceType = types.StringPointerValue(resp.Config.DragenInstanceType)
 		r.Config.DragenQueue = types.StringPointerValue(resp.Config.DragenQueue)
+		r.Config.EnableFusion = types.BoolPointerValue(resp.Config.EnableFusion)
+		r.Config.EnableWave = types.BoolPointerValue(resp.Config.EnableWave)
 		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
 		for _, environmentItem := range resp.Config.Environment {
@@ -67,7 +69,6 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 			r.Config.Forge.FsxMount = types.StringPointerValue(resp.Config.Forge.FsxMount)
 			r.Config.Forge.FsxName = types.StringPointerValue(resp.Config.Forge.FsxName)
 			r.Config.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.FsxSize))
-			r.Config.Forge.FusionEnabled = types.BoolPointerValue(resp.Config.Forge.FusionEnabled)
 			r.Config.Forge.GpuEnabled = types.BoolPointerValue(resp.Config.Forge.GpuEnabled)
 			r.Config.Forge.ImageID = types.StringPointerValue(resp.Config.Forge.ImageID)
 			r.Config.Forge.InstanceTypes = make([]types.String, 0, len(resp.Config.Forge.InstanceTypes))
@@ -87,7 +88,6 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 			r.Config.Forge.Type = types.StringValue(string(resp.Config.Forge.Type))
 			r.Config.Forge.VpcID = types.StringPointerValue(resp.Config.Forge.VpcID)
 		}
-		r.Config.Fusion2Enabled = types.BoolPointerValue(resp.Config.Fusion2Enabled)
 		r.Config.FusionSnapshots = types.BoolPointerValue(resp.Config.FusionSnapshots)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
 		r.Config.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobMemoryMb))
@@ -105,7 +105,6 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 		for _, v := range resp.Config.Volumes {
 			r.Config.Volumes = append(r.Config.Volumes, types.StringValue(v))
 		}
-		r.Config.WaveEnabled = types.BoolPointerValue(resp.Config.WaveEnabled)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.CredentialsID = types.StringValue(resp.CredentialsID)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
@@ -422,17 +421,17 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 			Compute: compute,
 		})
 	}
-	waveEnabled := new(bool)
-	if !r.Config.WaveEnabled.IsUnknown() && !r.Config.WaveEnabled.IsNull() {
-		*waveEnabled = r.Config.WaveEnabled.ValueBool()
+	enableWave := new(bool)
+	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
+		*enableWave = r.Config.EnableWave.ValueBool()
 	} else {
-		waveEnabled = nil
+		enableWave = nil
 	}
-	fusion2Enabled := new(bool)
-	if !r.Config.Fusion2Enabled.IsUnknown() && !r.Config.Fusion2Enabled.IsNull() {
-		*fusion2Enabled = r.Config.Fusion2Enabled.ValueBool()
+	enableFusion := new(bool)
+	if !r.Config.EnableFusion.IsUnknown() && !r.Config.EnableFusion.IsNull() {
+		*enableFusion = r.Config.EnableFusion.ValueBool()
 	} else {
-		fusion2Enabled = nil
+		enableFusion = nil
 	}
 	nvnmeStorageEnabled := new(bool)
 	if !r.Config.NvnmeStorageEnabled.IsUnknown() && !r.Config.NvnmeStorageEnabled.IsNull() {
@@ -549,12 +548,6 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		} else {
 			ebsBlockSize = nil
 		}
-		fusionEnabled := new(bool)
-		if !r.Config.Forge.FusionEnabled.IsUnknown() && !r.Config.Forge.FusionEnabled.IsNull() {
-			*fusionEnabled = r.Config.Forge.FusionEnabled.ValueBool()
-		} else {
-			fusionEnabled = nil
-		}
 		bidPercentage := new(int)
 		if !r.Config.Forge.BidPercentage.IsUnknown() && !r.Config.Forge.BidPercentage.IsNull() {
 			*bidPercentage = int(r.Config.Forge.BidPercentage.ValueInt32())
@@ -640,7 +633,6 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 			Ec2KeyPair:         ec2KeyPair,
 			AllowBuckets:       allowBuckets,
 			EbsBlockSize:       ebsBlockSize,
-			FusionEnabled:      fusionEnabled,
 			BidPercentage:      bidPercentage,
 			EfsCreate:          efsCreate,
 			EfsID:              efsID,
@@ -673,8 +665,8 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		HeadJobCpus:         headJobCpus,
 		HeadJobMemoryMb:     headJobMemoryMb,
 		Environment:         environment,
-		WaveEnabled:         waveEnabled,
-		Fusion2Enabled:      fusion2Enabled,
+		EnableWave:          enableWave,
+		EnableFusion:        enableFusion,
 		NvnmeStorageEnabled: nvnmeStorageEnabled,
 		LogGroup:            logGroup,
 		NextflowConfig:      nextflowConfig,

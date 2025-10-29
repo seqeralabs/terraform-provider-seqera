@@ -22,6 +22,8 @@ func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedAWSComputeEnvComputeConf
 		r.Config.ComputeQueue = types.StringPointerValue(resp.Config.ComputeQueue)
 		r.Config.DragenInstanceType = types.StringPointerValue(resp.Config.DragenInstanceType)
 		r.Config.DragenQueue = types.StringPointerValue(resp.Config.DragenQueue)
+		r.Config.EnableFusion = types.BoolPointerValue(resp.Config.EnableFusion)
+		r.Config.EnableWave = types.BoolPointerValue(resp.Config.EnableWave)
 		r.Config.Environment = []tfTypes.ConfigEnvVariable{}
 
 		for _, environmentItem := range resp.Config.Environment {
@@ -66,7 +68,6 @@ func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedAWSComputeEnvComputeConf
 			r.Config.Forge.FsxMount = types.StringPointerValue(resp.Config.Forge.FsxMount)
 			r.Config.Forge.FsxName = types.StringPointerValue(resp.Config.Forge.FsxName)
 			r.Config.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.Forge.FsxSize))
-			r.Config.Forge.FusionEnabled = types.BoolPointerValue(resp.Config.Forge.FusionEnabled)
 			r.Config.Forge.GpuEnabled = types.BoolPointerValue(resp.Config.Forge.GpuEnabled)
 			r.Config.Forge.ImageID = types.StringPointerValue(resp.Config.Forge.ImageID)
 			r.Config.Forge.InstanceTypes = make([]types.String, 0, len(resp.Config.Forge.InstanceTypes))
@@ -86,7 +87,6 @@ func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedAWSComputeEnvComputeConf
 			r.Config.Forge.Type = types.StringValue(string(resp.Config.Forge.Type))
 			r.Config.Forge.VpcID = types.StringPointerValue(resp.Config.Forge.VpcID)
 		}
-		r.Config.Fusion2Enabled = types.BoolPointerValue(resp.Config.Fusion2Enabled)
 		r.Config.FusionSnapshots = types.BoolPointerValue(resp.Config.FusionSnapshots)
 		r.Config.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobCpus))
 		r.Config.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Config.HeadJobMemoryMb))
@@ -104,7 +104,6 @@ func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedAWSComputeEnvComputeConf
 		for _, v := range resp.Config.Volumes {
 			r.Config.Volumes = append(r.Config.Volumes, types.StringValue(v))
 		}
-		r.Config.WaveEnabled = types.BoolPointerValue(resp.Config.WaveEnabled)
 		r.Config.WorkDir = types.StringPointerValue(resp.Config.WorkDir)
 		r.CredentialsID = types.StringValue(resp.CredentialsID)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))

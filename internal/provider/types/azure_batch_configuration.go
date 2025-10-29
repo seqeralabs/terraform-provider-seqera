@@ -10,9 +10,10 @@ type AzureBatchConfiguration struct {
 	AutoPoolMode            types.Bool          `tfsdk:"auto_pool_mode"`
 	DeleteJobsOnCompletion  types.String        `tfsdk:"delete_jobs_on_completion"`
 	DeletePoolsOnCompletion types.Bool          `tfsdk:"delete_pools_on_completion"`
+	EnableFusion            types.Bool          `tfsdk:"enable_fusion"`
+	EnableWave              types.Bool          `tfsdk:"enable_wave"`
 	Environment             []ConfigEnvVariable `tfsdk:"environment"`
 	Forge                   *AzBatchForgeConfig `tfsdk:"forge"`
-	Fusion2Enabled          types.Bool          `tfsdk:"fusion2_enabled"`
 	HeadPool                types.String        `tfsdk:"head_pool"`
 	ManagedIdentityClientID types.String        `tfsdk:"managed_identity_client_id"`
 	NextflowConfig          types.String        `tfsdk:"nextflow_config"`
@@ -20,6 +21,5 @@ type AzureBatchConfiguration struct {
 	PreRunScript            types.String        `tfsdk:"pre_run_script"`
 	Region                  types.String        `tfsdk:"region"`
 	TokenDuration           types.String        `tfsdk:"token_duration"`
-	WaveEnabled             types.Bool          `tfsdk:"wave_enabled"`
 	WorkDir                 types.String        `tfsdk:"work_dir"`
 }

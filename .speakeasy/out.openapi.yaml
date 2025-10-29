@@ -10118,44 +10118,86 @@ components:
           x-speakeasy-terraform-ignore: true
         region:
           type: string
+          description: |
+            AWS region where the Batch compute environment will be created.
+            Examples: us-east-1, eu-west-1, ap-southeast-2
+          example: "us-east-1"
         computeQueue:
           type: string
+          description: Name of the AWS Batch compute queue
         dragenQueue:
           type: string
         dragenInstanceType:
           type: string
         computeJobRole:
           type: string
+          description: |
+            IAM role ARN for compute jobs. Jobs assume this role during execution.
+            Must have permissions for S3, CloudWatch, etc.
+            Format: arn:aws:iam::account-id:role/role-name
+          example: "arn:aws:iam::123456789012:role/BatchJobRole"
         executionRole:
           type: string
+          description: |
+            IAM role ARN for Batch execution (pulling container images, writing logs).
+            Must have permissions for ECR and CloudWatch Logs.
+            Format: arn:aws:iam::account-id:role/role-name
+          example: "arn:aws:iam::123456789012:role/BatchExecutionRole"
         headQueue:
           type: string
+          description: Name of the head job queue
         headJobRole:
           type: string
+          description: |
+            IAM role ARN for the head job.
+            Format: arn:aws:iam::account-id:role/role-name
+          example: "arn:aws:iam::123456789012:role/BatchHeadJobRole"
         cliPath:
           type: string
+          description: |
+            Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+          example: "/home/ec2-user/miniconda/bin/aws"
         workDir:
           type: string
+          description: |
+            S3 bucket path for Nextflow work directory where intermediate files will be stored.
+            Format: s3://bucket-name/path
+          example: "s3://my-nextflow-bucket/work"
+          pattern: "^s3://.+"
         preRunScript:
           type: string
-          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          description: "Bash script to run before workflow execution begins.\nUse for environment setup, loading modules, downloading reference data, etc.\n"
         postRunScript:
           type: string
-          description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          description: "Bash script to run after workflow execution completes.\nUse for cleanup, archiving results, sending notifications, etc.\n"
         headJobCpus:
           type: integer
           format: int32
+          description: "Number of CPUs allocated for the head job (default: 1)"
+          example: 4
         headJobMemoryMb:
           type: integer
           format: int32
+          description: "Memory allocation for the head job in MB (default: 1024)"
+          example: 8192
         environment:
           type: array
           items:
             $ref: "#/components/schemas/ConfigEnvVariable"
         waveEnabled:
           type: boolean
+          title: "Wave Enabled"
+          description: |
+            Enable Wave containers for this compute environment. Wave provides container provisioning
+            and augmentation capabilities for Nextflow workflows.
+
+            When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+            Note: If Fusion2 is enabled, Wave must also be enabled.
+          x-speakeasy-plan-validators: WaveEnabledValidator
+          x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
+          x-speakeasy-name-override: enable_fusion
         nvnmeStorageEnabled:
           type: boolean
         logGroup:
@@ -10260,8 +10302,10 @@ components:
             $ref: "#/components/schemas/ConfigEnvVariable"
         waveEnabled:
           type: boolean
+          x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
+          x-speakeasy-name-override: enable_fusion
         logGroup:
           type: string
         arm64Enabled:
@@ -10352,7 +10396,7 @@ components:
           title: "Azure Batch Work Directory"
           description: "Must be a valid Azure Blob container URL with format az://container-name/path"
           example: "az://my-container/work"
-          x-speakeasy-plan-validators: AzureBatchWorkDirValidator
+          pattern: "^az://.+"
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
@@ -10380,8 +10424,10 @@ components:
             $ref: "#/components/schemas/ConfigEnvVariable"
         waveEnabled:
           type: boolean
+          x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
+          x-speakeasy-name-override: enable_fusion
         nextflowConfig:
           type: string
         managedIdentityClientId:
@@ -12053,8 +12099,10 @@ components:
               description: The AWS EKS cluster name
             waveEnabled:
               type: boolean
+              x-speakeasy-name-override: enable_wave
             fusion2Enabled:
               type: boolean
+              x-speakeasy-name-override: enable_fusion
       required:
         - region
         - clusterName
@@ -12100,20 +12148,47 @@ components:
           enum:
             - SPOT
             - EC2
+          description: |
+            Type of compute instances to provision:
+            - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+            - EC2: Use On-Demand EC2 instances (reliable, higher cost)
+            - FARGATE: Use AWS Fargate serverless compute
+          example: "SPOT"
         minCpus:
           type: integer
           format: int32
+          description: |
+            Minimum number of CPUs to maintain in the compute environment.
+            Setting to 0 allows environment to scale to zero when idle.
+          example: 0
         maxCpus:
           type: integer
           format: int32
+          description: |
+            Maximum number of CPUs available in the compute environment.
+            Subject to AWS service quotas.
+          example: 256
         gpuEnabled:
           type: boolean
+          description: |
+            Enable GPU support for compute instances.
+            When enabled, GPU-capable instance types will be selected.
+          example: false
         ebsAutoScale:
           type: boolean
+          description: |
+            Enable automatic EBS volume expansion.
+            When enabled, EBS volumes automatically expand as needed.
+          example: true
         instanceTypes:
           type: array
           items:
             type: string
+          description: |
+            List of EC2 instance types to use.
+            Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+            Default: ["optimal"] - AWS Batch selects appropriate instances
+          example: ["m5.xlarge", "m5.2xlarge"]
         allocStrategy:
           type: string
           enum:
@@ -12121,29 +12196,66 @@ components:
             - BEST_FIT_PROGRESSIVE
             - SPOT_CAPACITY_OPTIMIZED
             - SPOT_PRICE_CAPACITY_OPTIMIZED
+          description: |
+            Strategy for allocating compute resources:
+            - BEST_FIT: Selects instance type that best fits job requirements
+            - BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+            - SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+            - SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+            Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
+          example: "SPOT_CAPACITY_OPTIMIZED"
         imageId:
           type: string
         vpcId:
           type: string
+          description: |
+            VPC ID where compute environment will be deployed.
+            Format: vpc- followed by hexadecimal characters
+          example: "vpc-1234567890abcdef0"
         subnets:
           type: array
           items:
             type: string
+          description: |
+            List of subnet IDs for compute instances.
+            Subnets must be in the specified VPC. Use multiple subnets for high availability.
+            Must have sufficient IP addresses.
+          example: ["subnet-12345", "subnet-67890"]
         securityGroups:
           type: array
           items:
             type: string
+          description: |
+            List of security group IDs to attach to compute instances.
+            Security groups must allow necessary network access.
+          example: ["sg-12345678"]
         fsxMount:
           type: string
+          description: |
+            Path where FSx will be mounted in the container.
+          example: "/fsx"
         fsxName:
           type: string
+          description: |
+            FSx for Lustre file system name.
+          example: "my-fsx-filesystem"
         fsxSize:
           type: integer
           format: int32
+          description: |
+            Size of FSx file system in GB.
+          example: 1200
         disposeOnDeletion:
           type: boolean
+          description: |
+            Dispose of AWS Batch resources when compute environment is deleted.
+          example: true
         ec2KeyPair:
           type: string
+          description: |
+            EC2 key pair name for SSH access to compute instances.
+            Key pair must exist in the specified region.
+          example: "my-keypair"
         allowBuckets:
           type: array
           items:
@@ -12151,17 +12263,41 @@ components:
         ebsBlockSize:
           type: integer
           format: int32
-        fusionEnabled:
-          type: boolean
+          description: |
+            Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
+          example: 100
         bidPercentage:
           type: integer
           format: int32
+          title: "Bid Percentage"
+          description: |
+            The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+            for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+            then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+            You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+            field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+            this field empty.
+
+            Must be a whole number between 0 and 100 (inclusive).
+          example: 20
+          minimum: 0
+          maximum: 100
         efsCreate:
           type: boolean
+          description: Automatically create an EFS file system
+          example: false
         efsId:
           type: string
+          description: |
+            EFS file system ID to mount.
+            Format: fs- followed by hexadecimal characters.
+            EFS must be in the same VPC and region.
+          example: "fs-1234567890abcdef0"
         efsMount:
           type: string
+          description: |
+            Path where EFS will be mounted in the container.
+          example: "/mnt/efs"
         dragenEnabled:
           type: boolean
         dragenAmiId:
@@ -12173,6 +12309,11 @@ components:
           type: string
         fargateHeadEnabled:
           type: boolean
+          description: |
+            Use Fargate for head job instead of EC2.
+            Reduces costs by running head job on serverless compute.
+            Only applicable when using EC2 for worker jobs.
+          example: false
         arm64Enabled:
           type: boolean
         dragenInstanceType:
@@ -12297,8 +12438,10 @@ components:
               description: The GKE cluster name
             fusion2Enabled:
               type: boolean
+              x-speakeasy-name-override: enable_fusion
             waveEnabled:
               type: boolean
+              x-speakeasy-name-override: enable_wave
       required:
         - region
         - clusterName
@@ -12377,8 +12520,10 @@ components:
             $ref: "#/components/schemas/ConfigEnvVariable"
         waveEnabled:
           type: boolean
+          x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
+          x-speakeasy-name-override: enable_fusion
         serviceAccount:
           type: string
         network:

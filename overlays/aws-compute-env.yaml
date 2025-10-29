@@ -3,6 +3,55 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: AWS Compute Environment Overlay
   version: 0.0.1
+
+# ==============================================================================
+# AWS COMPUTE ENVIRONMENT RESOURCE OVERLAY
+# ==============================================================================
+#
+# This overlay enhances the AWS-specific compute environment resource with
+# improved descriptions, validators, and Terraform-friendly naming.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Basic AWS Batch configuration
+# resource "seqera_aws_compute_env" "basic" {
+#   name         = "aws-batch-basic"
+#   workspace_id = 123
+#   platform     = "aws-batch"
+#   credentials_id = seqera_aws_credential.main.credentials_id
+#
+#   config = {
+#     region     = "us-east-1"
+#     work_dir   = "s3://my-bucket/work"
+#   }
+# }
+#
+# Example 2: AWS Batch with Spot instances and Fusion
+# resource "seqera_aws_compute_env" "spot" {
+#   name         = "aws-batch-spot"
+#   workspace_id = 123
+#   platform     = "aws-batch"
+#   credentials_id = seqera_aws_credential.main.credentials_id
+#
+#   config = {
+#     region         = "us-east-1"
+#     work_dir       = "s3://my-bucket/work"
+#     enable_fusion  = true
+#     enable_wave    = true
+#
+#     forge = {
+#       type            = "SPOT"
+#       bid_percentage  = 70
+#       min_cpus        = 0
+#       max_cpus        = 256
+#       instance_types  = ["m5.xlarge", "m5.2xlarge"]
+#     }
+#   }
+# }
+#
+# ==============================================================================
+
 actions:
   - target: $.paths
     update:
@@ -286,3 +335,225 @@ actions:
           totalSize:
             type: integer
             format: int64
+
+  # ============================================================================
+  # FIELD DESCRIPTIONS AND VALIDATORS
+  # ============================================================================
+
+  # Add descriptions to AwsBatchConfig fields
+  - target: $.components.schemas.AwsBatchConfig.properties.region
+    update:
+      description: |
+        AWS region where the Batch compute environment will be created.
+        Examples: us-east-1, eu-west-1, ap-southeast-2
+      example: "us-east-1"
+
+  - target: $.components.schemas.AwsBatchConfig.properties.workDir
+    update:
+      description: |
+        S3 bucket path for Nextflow work directory where intermediate files will be stored.
+        Format: s3://bucket-name/path
+      example: "s3://my-nextflow-bucket/work"
+      pattern: "^s3://.+"
+
+  - target: $.components.schemas.AwsBatchConfig.properties.computeQueue
+    update:
+      description: Name of the AWS Batch compute queue
+
+  - target: $.components.schemas.AwsBatchConfig.properties.headQueue
+    update:
+      description: Name of the head job queue
+
+  - target: $.components.schemas.AwsBatchConfig.properties.executionRole
+    update:
+      description: |
+        IAM role ARN for Batch execution (pulling container images, writing logs).
+        Must have permissions for ECR and CloudWatch Logs.
+        Format: arn:aws:iam::account-id:role/role-name
+      example: "arn:aws:iam::123456789012:role/BatchExecutionRole"
+
+  - target: $.components.schemas.AwsBatchConfig.properties.computeJobRole
+    update:
+      description: |
+        IAM role ARN for compute jobs. Jobs assume this role during execution.
+        Must have permissions for S3, CloudWatch, etc.
+        Format: arn:aws:iam::account-id:role/role-name
+      example: "arn:aws:iam::123456789012:role/BatchJobRole"
+
+  - target: $.components.schemas.AwsBatchConfig.properties.headJobRole
+    update:
+      description: |
+        IAM role ARN for the head job.
+        Format: arn:aws:iam::account-id:role/role-name
+      example: "arn:aws:iam::123456789012:role/BatchHeadJobRole"
+
+  - target: $.components.schemas.AwsBatchConfig.properties.cliPath
+    update:
+      description: |
+        Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+      example: "/home/ec2-user/miniconda/bin/aws"
+
+  - target: $.components.schemas.AwsBatchConfig.properties.preRunScript
+    update:
+      description: |
+        Bash script to run before workflow execution begins.
+        Use for environment setup, loading modules, downloading reference data, etc.
+
+  - target: $.components.schemas.AwsBatchConfig.properties.postRunScript
+    update:
+      description: |
+        Bash script to run after workflow execution completes.
+        Use for cleanup, archiving results, sending notifications, etc.
+
+  - target: $.components.schemas.AwsBatchConfig.properties.headJobCpus
+    update:
+      description: "Number of CPUs allocated for the head job (default: 1)"
+      example: 4
+
+  - target: $.components.schemas.AwsBatchConfig.properties.headJobMemoryMb
+    update:
+      description: "Memory allocation for the head job in MB (default: 1024)"
+      example: 8192
+
+  # Forge configuration descriptions
+  - target: $.components.schemas.ForgeConfig.properties.type
+    update:
+      description: |
+        Type of compute instances to provision:
+        - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+        - EC2: Use On-Demand EC2 instances (reliable, higher cost)
+        - FARGATE: Use AWS Fargate serverless compute
+      example: "SPOT"
+
+  - target: $.components.schemas.ForgeConfig.properties.minCpus
+    update:
+      description: |
+        Minimum number of CPUs to maintain in the compute environment.
+        Setting to 0 allows environment to scale to zero when idle.
+      example: 0
+
+  - target: $.components.schemas.ForgeConfig.properties.maxCpus
+    update:
+      description: |
+        Maximum number of CPUs available in the compute environment.
+        Subject to AWS service quotas.
+      example: 256
+
+  - target: $.components.schemas.ForgeConfig.properties.gpuEnabled
+    update:
+      description: |
+        Enable GPU support for compute instances.
+        When enabled, GPU-capable instance types will be selected.
+      example: false
+
+  - target: $.components.schemas.ForgeConfig.properties.instanceTypes
+    update:
+      description: |
+        List of EC2 instance types to use.
+        Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+        Default: ["optimal"] - AWS Batch selects appropriate instances
+      example: ["m5.xlarge", "m5.2xlarge"]
+
+  - target: $.components.schemas.ForgeConfig.properties.allocStrategy
+    update:
+      description: |
+        Strategy for allocating compute resources:
+        - BEST_FIT: Selects instance type that best fits job requirements
+        - BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+        - SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+        - SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+        Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
+      example: "SPOT_CAPACITY_OPTIMIZED"
+
+  - target: $.components.schemas.ForgeConfig.properties.ebsAutoScale
+    update:
+      description: |
+        Enable automatic EBS volume expansion.
+        When enabled, EBS volumes automatically expand as needed.
+      example: true
+
+  - target: $.components.schemas.ForgeConfig.properties.ebsBlockSize
+    update:
+      description: |
+        Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
+      example: 100
+
+  - target: $.components.schemas.ForgeConfig.properties.vpcId
+    update:
+      description: |
+        VPC ID where compute environment will be deployed.
+        Format: vpc- followed by hexadecimal characters
+      example: "vpc-1234567890abcdef0"
+
+  - target: $.components.schemas.ForgeConfig.properties.subnets
+    update:
+      description: |
+        List of subnet IDs for compute instances.
+        Subnets must be in the specified VPC. Use multiple subnets for high availability.
+        Must have sufficient IP addresses.
+      example: ["subnet-12345", "subnet-67890"]
+
+  - target: $.components.schemas.ForgeConfig.properties.securityGroups
+    update:
+      description: |
+        List of security group IDs to attach to compute instances.
+        Security groups must allow necessary network access.
+      example: ["sg-12345678"]
+
+  - target: $.components.schemas.ForgeConfig.properties.ec2KeyPair
+    update:
+      description: |
+        EC2 key pair name for SSH access to compute instances.
+        Key pair must exist in the specified region.
+      example: "my-keypair"
+
+  - target: $.components.schemas.ForgeConfig.properties.disposeOnDeletion
+    update:
+      description: |
+        Dispose of AWS Batch resources when compute environment is deleted.
+      example: true
+
+  - target: $.components.schemas.ForgeConfig.properties.fargateHeadEnabled
+    update:
+      description: |
+        Use Fargate for head job instead of EC2.
+        Reduces costs by running head job on serverless compute.
+        Only applicable when using EC2 for worker jobs.
+      example: false
+
+  - target: $.components.schemas.ForgeConfig.properties.efsCreate
+    update:
+      description: Automatically create an EFS file system
+      example: false
+
+  - target: $.components.schemas.ForgeConfig.properties.efsId
+    update:
+      description: |
+        EFS file system ID to mount.
+        Format: fs- followed by hexadecimal characters.
+        EFS must be in the same VPC and region.
+      example: "fs-1234567890abcdef0"
+
+  - target: $.components.schemas.ForgeConfig.properties.efsMount
+    update:
+      description: |
+        Path where EFS will be mounted in the container.
+      example: "/mnt/efs"
+
+  - target: $.components.schemas.ForgeConfig.properties.fsxName
+    update:
+      description: |
+        FSx for Lustre file system name.
+      example: "my-fsx-filesystem"
+
+  - target: $.components.schemas.ForgeConfig.properties.fsxMount
+    update:
+      description: |
+        Path where FSx will be mounted in the container.
+      example: "/fsx"
+
+  - target: $.components.schemas.ForgeConfig.properties.fsxSize
+    update:
+      description: |
+        Size of FSx file system in GB.
+      example: 1200

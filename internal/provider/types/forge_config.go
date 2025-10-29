@@ -27,7 +27,6 @@ type ForgeConfig struct {
 	FsxMount           types.String   `tfsdk:"fsx_mount"`
 	FsxName            types.String   `tfsdk:"fsx_name"`
 	FsxSize            types.Int32    `tfsdk:"fsx_size"`
-	FusionEnabled      types.Bool     `tfsdk:"fusion_enabled"`
 	GpuEnabled         types.Bool     `tfsdk:"gpu_enabled"`
 	ImageID            types.String   `tfsdk:"image_id"`
 	InstanceTypes      []types.String `tfsdk:"instance_types"`

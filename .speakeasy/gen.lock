@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 2100b157d037db724beb67208ca70807
+  docChecksum: 6fc5e05701c2a93124b485c73c2cebfe
   docVersion: 1.56.0
-  speakeasyVersion: 1.642.1
-  generationVersion: 2.731.4
+  speakeasyVersion: 1.642.2
+  generationVersion: 2.731.6
   releaseVersion: 0.25.4
   configChecksum: 853d1b859009f3eb0de1df23d43a5fac
 features:
@@ -22,7 +22,7 @@ features:
     nameOverrides: 2.81.3
     nullables: 0.0.0
     retries: 2.81.4
-    unions: 2.82.1
+    unions: 2.82.2
 generatedFiles:
   - .gitattributes
   - USAGE.md
@@ -62,7 +62,6 @@ generatedFiles:
   - examples/resources/seqera_action/resource.tf
   - examples/resources/seqera_aws_compute_env/import-by-string-id.tf
   - examples/resources/seqera_aws_compute_env/import.sh
-  - examples/resources/seqera_aws_compute_env/resource.tf
   - examples/resources/seqera_aws_credential/import-by-string-id.tf
   - examples/resources/seqera_aws_credential/import.sh
   - examples/resources/seqera_azure_credential/import-by-string-id.tf
@@ -1035,7 +1034,7 @@ examples:
           actionId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"action": {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "uge-platform", "config": {"workDir": "<value>", "discriminator": "slurm-platform"}}, "pipeline": "<value>", "dateCreated": "2024-05-31T13:24:57.129Z"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAction:
@@ -1191,7 +1190,7 @@ examples:
           workspaceId: 90014
       responses:
         "200":
-          application/json: {}
+          application/json: {"computeEnv": {"config": {"discriminator": "aws-batch", "region": "<value>"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateComputeEnv:
@@ -1545,7 +1544,7 @@ examples:
           launchId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"launch": {"computeEnv": null, "pipeline": "<value>", "dateCreated": "2023-07-03T07:06:42.847Z"}}
   ListDatasets:
     speakeasy-default-list-datasets:
       parameters:
@@ -1707,7 +1706,7 @@ examples:
           launchId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "gke-platform", "config": {"discriminator": "aws-cloud", "region": "<value>"}}, "pipeline": "<value>", "dateCreated": "2024-09-13T11:17:27.230Z"}}
         "400":
           application/json: {"message": "<value>"}
   ListOrganizations:
@@ -2213,7 +2212,7 @@ examples:
           pipelineId: 833165
       responses:
         "200":
-          application/json: {}
+          application/json: {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"discriminator": "gke-platform", "server": "<value>", "sslCert": "<value>", "namespace": "<value>", "headServiceAccount": "<value>", "storageClaimName": "<value>", "region": "<value>", "clusterName": "<value>"}}, "pipeline": "<value>", "dateCreated": "2023-02-10T15:30:45.146Z"}}
         "400":
           application/json: {"message": "<value>"}
   DescribePipelineSchema:
@@ -2594,7 +2593,7 @@ examples:
           workflowId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "<value>", "discriminator": "moab-platform"}}}}
         "400":
           application/json: {"message": "<value>"}
   WorkflowLogs:
@@ -2812,7 +2811,7 @@ examples:
         query:
           workspaceId: 814681
       requestBody:
-        application/json: {}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
       responses:
         "200":
           application/json: {}
@@ -2827,7 +2826,7 @@ examples:
           workspaceId: 757884
       responses:
         "200":
-          application/json: {}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSComputeEnv:
@@ -2836,7 +2835,7 @@ examples:
         path:
           computeEnvId: "<id>"
       requestBody:
-        application/json: {}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
