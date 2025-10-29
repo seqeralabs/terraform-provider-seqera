@@ -9,6 +9,10 @@ package hooks
  */
 
 func initHooks(h *Hooks) {
+	// Register credential error hook to treat 403 as 404 for deleted credentials
+	credentialErrorHook := &CredentialErrorHook{}
+	h.registerAfterSuccessHook(credentialErrorHook)
+
 	// exampleHook := &ExampleHook{}
 
 	// h.registerSDKInitHook(exampleHook)
