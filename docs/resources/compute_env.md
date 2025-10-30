@@ -80,7 +80,7 @@ resource "seqera_compute_env" "my_computeenv" {
 ### Required
 
 - `compute_env` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env))
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
@@ -217,7 +217,7 @@ Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_batch--environment"></a>
 ### Nested Schema for `compute_env.config.aws_batch.environment`
@@ -292,7 +292,7 @@ Subject to AWS service quotas.
 Not Null; Requires replacement if changed.
 - `min_cpus` (Number) Minimum number of CPUs to maintain in the compute environment.
 Setting to 0 allows environment to scale to zero when idle.
-Not Null; Requires replacement if changed.
+Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.
@@ -334,7 +334,7 @@ Optional:
 - `region` (String) Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
 - `subnet_id` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.aws_cloud.environment`
@@ -367,7 +367,7 @@ Optional:
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Not Null; Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--azure_batch--environment"></a>
 ### Nested Schema for `compute_env.config.azure_batch.environment`
@@ -418,7 +418,7 @@ Optional:
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
 - `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--eks_platform--environment"></a>
 ### Nested Schema for `compute_env.config.eks_platform.environment`
@@ -457,7 +457,7 @@ Optional:
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
 - `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--gke_platform--environment"></a>
 ### Nested Schema for `compute_env.config.gke_platform.environment`
@@ -503,7 +503,7 @@ Optional:
 - `ssh_image` (String) Requires replacement if changed.
 - `subnetwork` (String) Requires replacement if changed.
 - `use_private_address` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_batch--environment"></a>
 ### Nested Schema for `compute_env.config.google_batch.environment`
@@ -541,7 +541,7 @@ Optional:
 - `ssh_daemon` (Boolean) Requires replacement if changed.
 - `ssh_image` (String) Requires replacement if changed.
 - `use_private_address` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 - `zones` (List of String) Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_lifesciences--environment"></a>
@@ -577,7 +577,7 @@ Optional:
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
 - `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--k8s_platform--environment"></a>
 ### Nested Schema for `compute_env.config.k8s_platform.environment`
@@ -702,7 +702,7 @@ Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--seqeracompute_platform--environment"></a>
 ### Nested Schema for `compute_env.config.seqeracompute_platform.environment`
@@ -777,7 +777,7 @@ Subject to AWS service quotas.
 Not Null; Requires replacement if changed.
 - `min_cpus` (Number) Minimum number of CPUs to maintain in the compute environment.
 Setting to 0 allows environment to scale to zero when idle.
-Not Null; Requires replacement if changed.
+Requires replacement if changed.
 - `security_groups` (List of String) List of security group IDs to attach to compute instances.
 Security groups must allow necessary network access.
 Requires replacement if changed.

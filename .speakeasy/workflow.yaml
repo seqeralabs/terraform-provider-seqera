@@ -24,6 +24,7 @@ sources:
             - location: overlays/credentials-tower-agent.yaml
             - location: overlays/credentials-kubernetes.yaml
             - location: overlays/compute-env.yaml
+            - location: overlays/compute-env-aws-batch.yaml
             - location: overlays/aws-compute-env.yaml
             - location: overlays/datasets.yaml
             - location: overlays/labels.yaml

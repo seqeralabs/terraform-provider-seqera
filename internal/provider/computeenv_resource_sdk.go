@@ -743,34 +743,6 @@ func (r *ComputeEnvResourceModel) ToOperationsDescribeComputeEnvRequest(ctx cont
 	return &out, diags
 }
 
-func (r *ComputeEnvResourceModel) ToOperationsUpdateComputeEnvRequest(ctx context.Context) (*operations.UpdateComputeEnvRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	var computeEnvID string
-	computeEnvID = r.ComputeEnvID.ValueString()
-
-	workspaceID := new(int64)
-	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
-		*workspaceID = r.WorkspaceID.ValueInt64()
-	} else {
-		workspaceID = nil
-	}
-	updateComputeEnvRequest, updateComputeEnvRequestDiags := r.ToSharedUpdateComputeEnvRequest(ctx)
-	diags.Append(updateComputeEnvRequestDiags...)
-
-	if diags.HasError() {
-		return nil, diags
-	}
-
-	out := operations.UpdateComputeEnvRequest{
-		ComputeEnvID:            computeEnvID,
-		WorkspaceID:             workspaceID,
-		UpdateComputeEnvRequest: *updateComputeEnvRequest,
-	}
-
-	return &out, diags
-}
-
 func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Context) (*shared.CreateComputeEnvRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
@@ -3493,14 +3465,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		ComputeEnv: computeEnv,
 		LabelIds:   labelIds,
 	}
-
-	return &out, diags
-}
-
-func (r *ComputeEnvResourceModel) ToSharedUpdateComputeEnvRequest(ctx context.Context) (*shared.UpdateComputeEnvRequest, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	out := shared.UpdateComputeEnvRequest{}
 
 	return &out, diags
 }

@@ -1143,9 +1143,9 @@ func (s *ComputeEnvs) UpdateComputeEnvPrimary(ctx context.Context, request opera
 
 }
 
-// CreateAWSComputeEnv - Create AWS compute environment
+// CreateAWSBatchCE - Create AWS compute environment
 // Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
-func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operations.CreateAWSComputeEnvRequest, opts ...operations.Option) (*operations.CreateAWSComputeEnvResponse, error) {
+func (s *ComputeEnvs) CreateAWSBatchCE(ctx context.Context, request operations.CreateAWSBatchCERequest, opts ...operations.Option) (*operations.CreateAWSBatchCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1173,11 +1173,11 @@ func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operation
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "CreateAWSComputeEnv",
+		OperationID:      "CreateAWSBatchCE",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAWSComputeEnvRequest", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "CreateAWSBatchCERequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -1244,7 +1244,7 @@ func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operation
 		}
 	}
 
-	res := &operations.CreateAWSComputeEnvResponse{
+	res := &operations.CreateAWSBatchCEResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -1259,12 +1259,12 @@ func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operation
 				return nil, err
 			}
 
-			var out shared.CreateAWSComputeEnvResponse
+			var out shared.CreateAWSBatchCEResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.CreateAWSComputeEnvResponse = &out
+			res.CreateAWSBatchCEResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1306,9 +1306,9 @@ func (s *ComputeEnvs) CreateAWSComputeEnv(ctx context.Context, request operation
 
 }
 
-// DescribeAWSComputeEnv - Describe AWS compute environment
+// DescribeAWSBatchCE - Describe AWS compute environment
 // Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operations.DescribeAWSComputeEnvRequest, opts ...operations.Option) (*operations.DescribeAWSComputeEnvResponse, error) {
+func (s *ComputeEnvs) DescribeAWSBatchCE(ctx context.Context, request operations.DescribeAWSBatchCERequest, opts ...operations.Option) (*operations.DescribeAWSBatchCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1336,7 +1336,7 @@ func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operati
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DescribeAWSComputeEnv",
+		OperationID:      "DescribeAWSBatchCE",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -1400,7 +1400,7 @@ func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operati
 		}
 	}
 
-	res := &operations.DescribeAWSComputeEnvResponse{
+	res := &operations.DescribeAWSBatchCEResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -1415,12 +1415,12 @@ func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operati
 				return nil, err
 			}
 
-			var out shared.DescribeAWSComputeEnvResponse
+			var out shared.DescribeAWSBatchCEResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DescribeAWSComputeEnvResponse = &out
+			res.DescribeAWSBatchCEResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1462,152 +1462,9 @@ func (s *ComputeEnvs) DescribeAWSComputeEnv(ctx context.Context, request operati
 
 }
 
-// UpdateAWSComputeEnv - Update AWS compute environment
-// Updates the details of the AWS compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) UpdateAWSComputeEnv(ctx context.Context, request operations.UpdateAWSComputeEnvRequest, opts ...operations.Option) (*operations.UpdateAWSComputeEnvResponse, error) {
-	o := operations.Options{}
-	supportedOptions := []string{
-		operations.SupportedOptionTimeout,
-	}
-
-	for _, opt := range opts {
-		if err := opt(&o, supportedOptions...); err != nil {
-			return nil, fmt.Errorf("error applying option: %w", err)
-		}
-	}
-
-	var baseURL string
-	if o.ServerURL == nil {
-		baseURL = utils.ReplaceParameters(s.sdkConfiguration.GetServerDetails())
-	} else {
-		baseURL = *o.ServerURL
-	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/compute-envs/{computeEnvId}", request, nil)
-	if err != nil {
-		return nil, fmt.Errorf("error generating URL: %w", err)
-	}
-
-	hookCtx := hooks.HookContext{
-		SDK:              s.rootSDK,
-		SDKConfiguration: s.sdkConfiguration,
-		BaseURL:          baseURL,
-		Context:          ctx,
-		OperationID:      "UpdateAWSComputeEnv",
-		OAuth2Scopes:     nil,
-		SecuritySource:   s.sdkConfiguration.Security,
-	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpdateAWSComputeEnvRequest", "json", `request:"mediaType=application/json"`)
-	if err != nil {
-		return nil, err
-	}
-
-	timeout := o.Timeout
-	if timeout == nil {
-		timeout = s.sdkConfiguration.Timeout
-	}
-
-	if timeout != nil {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *timeout)
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
-	if reqContentType != "" {
-		req.Header.Set("Content-Type", reqContentType)
-	}
-
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
-		return nil, fmt.Errorf("error populating query params: %w", err)
-	}
-
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
-		return nil, err
-	}
-
-	for k, v := range o.SetHeaders {
-		req.Header.Set(k, v)
-	}
-
-	req, err = s.hooks.BeforeRequest(hooks.BeforeRequestContext{HookContext: hookCtx}, req)
-	if err != nil {
-		return nil, err
-	}
-
-	httpRes, err := s.sdkConfiguration.Client.Do(req)
-	if err != nil || httpRes == nil {
-		if err != nil {
-			err = fmt.Errorf("error sending request: %w", err)
-		} else {
-			err = fmt.Errorf("error sending request: no response")
-		}
-
-		_, err = s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, nil, err)
-		return nil, err
-	} else if utils.MatchStatusCodes([]string{}, httpRes.StatusCode) {
-		_httpRes, err := s.hooks.AfterError(hooks.AfterErrorContext{HookContext: hookCtx}, httpRes, nil)
-		if err != nil {
-			return nil, err
-		} else if _httpRes != nil {
-			httpRes = _httpRes
-		}
-	} else {
-		httpRes, err = s.hooks.AfterSuccess(hooks.AfterSuccessContext{HookContext: hookCtx}, httpRes)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	res := &operations.UpdateAWSComputeEnvResponse{
-		StatusCode:  httpRes.StatusCode,
-		ContentType: httpRes.Header.Get("Content-Type"),
-		RawResponse: httpRes,
-	}
-
-	switch {
-	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 400:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.ErrorResponse
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.ErrorResponse = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
-	case httpRes.StatusCode == 403:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
-	}
-
-	return res, nil
-
-}
-
-// DeleteAWSComputeEnv - Delete AWS compute environment
+// DeleteAWSBatchCE - Delete AWS compute environment
 // Deletes the AWS compute environment identified by the given `computeEnvId`.
-func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operations.DeleteAWSComputeEnvRequest, opts ...operations.Option) (*operations.DeleteAWSComputeEnvResponse, error) {
+func (s *ComputeEnvs) DeleteAWSBatchCE(ctx context.Context, request operations.DeleteAWSBatchCERequest, opts ...operations.Option) (*operations.DeleteAWSBatchCEResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1635,7 +1492,7 @@ func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operation
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "DeleteAWSComputeEnv",
+		OperationID:      "DeleteAWSBatchCE",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -1699,7 +1556,7 @@ func (s *ComputeEnvs) DeleteAWSComputeEnv(ctx context.Context, request operation
 		}
 	}
 
-	res := &operations.DeleteAWSComputeEnvResponse{
+	res := &operations.DeleteAWSBatchCEResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,

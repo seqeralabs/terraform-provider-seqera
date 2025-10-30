@@ -22,6 +22,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_int32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
@@ -315,7 +316,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -341,17 +345,26 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed: true,
 										Attributes: map[string]schema.Attribute{
 											"cli_path": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Path to AWS CLI on compute instances. AWS CLI must be available at this path.`,
 											},
 											"compute_job_role": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `IAM role ARN for compute jobs. Jobs assume this role during execution.` + "\n" +
 													`Must have permissions for S3, CloudWatch, etc.` + "\n" +
 													`Format: arn:aws:iam::account-id:role/role-name`,
 											},
 											"compute_queue": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Name of the AWS Batch compute queue`,
 											},
 											"dragen_instance_type": schema.StringAttribute{
@@ -393,6 +406,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"execution_role": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `IAM role ARN for Batch execution (pulling container images, writing logs).` + "\n" +
 													`Must have permissions for ECR and CloudWatch Logs.` + "\n" +
 													`Format: arn:aws:iam::account-id:role/role-name`,
@@ -402,6 +418,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Attributes: map[string]schema.Attribute{
 													"alloc_strategy": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Strategy for allocating compute resources:` + "\n" +
 															`- BEST_FIT: Selects instance type that best fits job requirements` + "\n" +
 															`- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively` + "\n" +
@@ -437,7 +456,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															`Must be a whole number between 0 and 100 (inclusive).`,
 													},
 													"dispose_on_deletion": schema.BoolAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														Description: `Dispose of AWS Batch resources when compute environment is deleted.`,
 													},
 													"dragen_ami_id": schema.StringAttribute{
@@ -451,11 +473,17 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"ebs_auto_scale": schema.BoolAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
 															`When enabled, EBS volumes automatically expand as needed.`,
 													},
 													"ebs_block_size": schema.Int32Attribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).`,
 													},
 													"ebs_boot_size": schema.Int32Attribute{
@@ -463,6 +491,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"ec2_key_pair": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
 															`Key pair must exist in the specified region.`,
 													},
@@ -470,39 +501,63 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														Computed: true,
 													},
 													"efs_create": schema.BoolAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														Description: `Automatically create an EFS file system`,
 													},
 													"efs_id": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `EFS file system ID to mount.` + "\n" +
 															`Format: fs- followed by hexadecimal characters.` + "\n" +
 															`EFS must be in the same VPC and region.`,
 													},
 													"efs_mount": schema.StringAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `Path where EFS will be mounted in the container.`,
 													},
 													"fargate_head_enabled": schema.BoolAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
 															`Reduces costs by running head job on serverless compute.` + "\n" +
 															`Only applicable when using EC2 for worker jobs.`,
 													},
 													"fsx_mount": schema.StringAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `Path where FSx will be mounted in the container.`,
 													},
 													"fsx_name": schema.StringAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `FSx for Lustre file system name.`,
 													},
 													"fsx_size": schema.Int32Attribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														Description: `Size of FSx file system in GB.`,
 													},
 													"gpu_enabled": schema.BoolAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
 															`When enabled, GPU-capable instance types will be selected.`,
 													},
@@ -510,7 +565,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														Computed: true,
 													},
 													"instance_types": schema.ListAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.List{
+															speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+														},
 														ElementType: types.StringType,
 														MarkdownDescription: `List of EC2 instance types to use.` + "\n" +
 															`Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]` + "\n" +
@@ -518,22 +576,34 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"max_cpus": schema.Int32Attribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Maximum number of CPUs available in the compute environment.` + "\n" +
 															`Subject to AWS service quotas.`,
 													},
 													"min_cpus": schema.Int32Attribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Minimum number of CPUs to maintain in the compute environment.` + "\n" +
 															`Setting to 0 allows environment to scale to zero when idle.`,
 													},
 													"security_groups": schema.ListAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.List{
+															speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+														},
 														ElementType: types.StringType,
 														MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
 															`Security groups must allow necessary network access.`,
 													},
 													"subnets": schema.ListAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.List{
+															speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+														},
 														ElementType: types.StringType,
 														MarkdownDescription: `List of subnet IDs for compute instances.` + "\n" +
 															`Subnets must be in the specified VPC. Use multiple subnets for high availability.` + "\n" +
@@ -541,6 +611,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"type": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Type of compute instances to provision:` + "\n" +
 															`- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)` + "\n" +
 															`- EC2: Use On-Demand EC2 instances (reliable, higher cost)` + "\n" +
@@ -555,6 +628,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"vpc_id": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `VPC ID where compute environment will be deployed.` + "\n" +
 															`Format: vpc- followed by hexadecimal characters`,
 													},
@@ -564,20 +640,32 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"head_job_cpus": schema.Int32Attribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.Int32{
+													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+												},
 												Description: `Number of CPUs allocated for the head job (default: 1)`,
 											},
 											"head_job_memory_mb": schema.Int32Attribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.Int32{
+													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+												},
 												Description: `Memory allocation for the head job in MB (default: 1024)`,
 											},
 											"head_job_role": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `IAM role ARN for the head job.` + "\n" +
 													`Format: arn:aws:iam::account-id:role/role-name`,
 											},
 											"head_queue": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Name of the head job queue`,
 											},
 											"log_group": schema.StringAttribute{
@@ -604,6 +692,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"region": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `AWS region where the Batch compute environment will be created.` + "\n" +
 													`Examples: us-east-1, eu-west-1, ap-southeast-2`,
 											},
@@ -616,7 +707,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												ElementType: types.StringType,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -718,7 +812,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -833,7 +930,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -949,7 +1049,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -1065,7 +1168,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -1193,7 +1299,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -1297,7 +1406,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 											"zones": schema.ListAttribute{
@@ -1403,7 +1515,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -1497,7 +1612,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -1582,7 +1700,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -1608,17 +1729,26 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 										Computed: true,
 										Attributes: map[string]schema.Attribute{
 											"cli_path": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Path to AWS CLI on compute instances. AWS CLI must be available at this path.`,
 											},
 											"compute_job_role": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `IAM role ARN for compute jobs. Jobs assume this role during execution.` + "\n" +
 													`Must have permissions for S3, CloudWatch, etc.` + "\n" +
 													`Format: arn:aws:iam::account-id:role/role-name`,
 											},
 											"compute_queue": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Name of the AWS Batch compute queue`,
 											},
 											"dragen_instance_type": schema.StringAttribute{
@@ -1660,6 +1790,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"execution_role": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `IAM role ARN for Batch execution (pulling container images, writing logs).` + "\n" +
 													`Must have permissions for ECR and CloudWatch Logs.` + "\n" +
 													`Format: arn:aws:iam::account-id:role/role-name`,
@@ -1669,6 +1802,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Attributes: map[string]schema.Attribute{
 													"alloc_strategy": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Strategy for allocating compute resources:` + "\n" +
 															`- BEST_FIT: Selects instance type that best fits job requirements` + "\n" +
 															`- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively` + "\n" +
@@ -1704,7 +1840,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 															`Must be a whole number between 0 and 100 (inclusive).`,
 													},
 													"dispose_on_deletion": schema.BoolAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														Description: `Dispose of AWS Batch resources when compute environment is deleted.`,
 													},
 													"dragen_ami_id": schema.StringAttribute{
@@ -1718,11 +1857,17 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"ebs_auto_scale": schema.BoolAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
 															`When enabled, EBS volumes automatically expand as needed.`,
 													},
 													"ebs_block_size": schema.Int32Attribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).`,
 													},
 													"ebs_boot_size": schema.Int32Attribute{
@@ -1730,6 +1875,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"ec2_key_pair": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
 															`Key pair must exist in the specified region.`,
 													},
@@ -1737,39 +1885,63 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														Computed: true,
 													},
 													"efs_create": schema.BoolAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														Description: `Automatically create an EFS file system`,
 													},
 													"efs_id": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `EFS file system ID to mount.` + "\n" +
 															`Format: fs- followed by hexadecimal characters.` + "\n" +
 															`EFS must be in the same VPC and region.`,
 													},
 													"efs_mount": schema.StringAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `Path where EFS will be mounted in the container.`,
 													},
 													"fargate_head_enabled": schema.BoolAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
 															`Reduces costs by running head job on serverless compute.` + "\n" +
 															`Only applicable when using EC2 for worker jobs.`,
 													},
 													"fsx_mount": schema.StringAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `Path where FSx will be mounted in the container.`,
 													},
 													"fsx_name": schema.StringAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `FSx for Lustre file system name.`,
 													},
 													"fsx_size": schema.Int32Attribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														Description: `Size of FSx file system in GB.`,
 													},
 													"gpu_enabled": schema.BoolAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
 															`When enabled, GPU-capable instance types will be selected.`,
 													},
@@ -1777,7 +1949,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 														Computed: true,
 													},
 													"instance_types": schema.ListAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.List{
+															speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+														},
 														ElementType: types.StringType,
 														MarkdownDescription: `List of EC2 instance types to use.` + "\n" +
 															`Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]` + "\n" +
@@ -1785,22 +1960,34 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"max_cpus": schema.Int32Attribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Maximum number of CPUs available in the compute environment.` + "\n" +
 															`Subject to AWS service quotas.`,
 													},
 													"min_cpus": schema.Int32Attribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.Int32{
+															speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Minimum number of CPUs to maintain in the compute environment.` + "\n" +
 															`Setting to 0 allows environment to scale to zero when idle.`,
 													},
 													"security_groups": schema.ListAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.List{
+															speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+														},
 														ElementType: types.StringType,
 														MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
 															`Security groups must allow necessary network access.`,
 													},
 													"subnets": schema.ListAttribute{
-														Computed:    true,
+														Computed: true,
+														PlanModifiers: []planmodifier.List{
+															speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+														},
 														ElementType: types.StringType,
 														MarkdownDescription: `List of subnet IDs for compute instances.` + "\n" +
 															`Subnets must be in the specified VPC. Use multiple subnets for high availability.` + "\n" +
@@ -1808,6 +1995,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"type": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `Type of compute instances to provision:` + "\n" +
 															`- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)` + "\n" +
 															`- EC2: Use On-Demand EC2 instances (reliable, higher cost)` + "\n" +
@@ -1822,6 +2012,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 													},
 													"vpc_id": schema.StringAttribute{
 														Computed: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														MarkdownDescription: `VPC ID where compute environment will be deployed.` + "\n" +
 															`Format: vpc- followed by hexadecimal characters`,
 													},
@@ -1831,20 +2024,32 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"head_job_cpus": schema.Int32Attribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.Int32{
+													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+												},
 												Description: `Number of CPUs allocated for the head job (default: 1)`,
 											},
 											"head_job_memory_mb": schema.Int32Attribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.Int32{
+													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+												},
 												Description: `Memory allocation for the head job in MB (default: 1024)`,
 											},
 											"head_job_role": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `IAM role ARN for the head job.` + "\n" +
 													`Format: arn:aws:iam::account-id:role/role-name`,
 											},
 											"head_queue": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Name of the head job queue`,
 											},
 											"log_group": schema.StringAttribute{
@@ -1871,6 +2076,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 											},
 											"region": schema.StringAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												MarkdownDescription: `AWS region where the Batch compute environment will be created.` + "\n" +
 													`Examples: us-east-1, eu-west-1, ap-southeast-2`,
 											},
@@ -1883,7 +2091,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												ElementType: types.StringType,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -1968,7 +2179,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -2053,7 +2267,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed: true,
 											},
 											"work_dir": schema.StringAttribute{
-												Computed:    true,
+												Computed: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Working directory path for workflow execution`,
 											},
 										},
@@ -2081,6 +2298,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"credentials_id": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"date_created": schema.StringAttribute{
 								Computed: true,
@@ -2093,6 +2313,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"description": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"last_updated": schema.StringAttribute{
 								Computed: true,
@@ -2111,12 +2334,18 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"name": schema.StringAttribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 							},
 							"org_id": schema.Int64Attribute{
 								Computed: true,
 							},
 							"platform": schema.StringAttribute{
-								Computed:    true,
+								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "azure-batch", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "local-platform", "seqeracompute-platform"]`,
 								Validators: []validator.String{
 									stringvalidator.OneOf(
@@ -2155,6 +2384,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"workspace_id": schema.Int64Attribute{
 								Computed: true,
+								PlanModifiers: []planmodifier.Int64{
+									speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+								},
 							},
 						},
 					},

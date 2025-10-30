@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 4ca071e134f943b13b1c6c172b31440e
+  docChecksum: eb45f5f0322f756da7873624295e4403
   docVersion: 1.56.0
-  speakeasyVersion: 1.643.0
+  speakeasyVersion: 1.643.2
   generationVersion: 2.731.6
   releaseVersion: 0.25.4
   configChecksum: 853d1b859009f3eb0de1df23d43a5fac
@@ -27,7 +27,7 @@ generatedFiles:
   - .gitattributes
   - USAGE.md
   - examples/data-sources/seqera_action/data-source.tf
-  - examples/data-sources/seqera_aws_compute_env/data-source.tf
+  - examples/data-sources/seqera_aws_batch_ce/data-source.tf
   - examples/data-sources/seqera_aws_credential/data-source.tf
   - examples/data-sources/seqera_azure_credential/data-source.tf
   - examples/data-sources/seqera_bitbucket_credential/data-source.tf
@@ -60,9 +60,9 @@ generatedFiles:
   - examples/resources/seqera_action/import-by-string-id.tf
   - examples/resources/seqera_action/import.sh
   - examples/resources/seqera_action/resource.tf
-  - examples/resources/seqera_aws_compute_env/import-by-string-id.tf
-  - examples/resources/seqera_aws_compute_env/import.sh
-  - examples/resources/seqera_aws_compute_env/resource.tf
+  - examples/resources/seqera_aws_batch_ce/import-by-string-id.tf
+  - examples/resources/seqera_aws_batch_ce/import.sh
+  - examples/resources/seqera_aws_batch_ce/resource.tf
   - examples/resources/seqera_aws_credential/import-by-string-id.tf
   - examples/resources/seqera_aws_credential/import.sh
   - examples/resources/seqera_azure_credential/import-by-string-id.tf
@@ -133,10 +133,10 @@ generatedFiles:
   - internal/provider/action_data_source_sdk.go
   - internal/provider/action_resource.go
   - internal/provider/action_resource_sdk.go
-  - internal/provider/awscomputeenv_data_source.go
-  - internal/provider/awscomputeenv_data_source_sdk.go
-  - internal/provider/awscomputeenv_resource.go
-  - internal/provider/awscomputeenv_resource_sdk.go
+  - internal/provider/awsbatchce_data_source.go
+  - internal/provider/awsbatchce_data_source_sdk.go
+  - internal/provider/awsbatchce_resource.go
+  - internal/provider/awsbatchce_resource_sdk.go
   - internal/provider/awscredential_data_source.go
   - internal/provider/awscredential_data_source_sdk.go
   - internal/provider/awscredential_resource.go
@@ -390,7 +390,7 @@ generatedFiles:
   - internal/sdk/models/operations/applylabelstoworkflows.go
   - internal/sdk/models/operations/cancelworkflow.go
   - internal/sdk/models/operations/createaction.go
-  - internal/sdk/models/operations/createawscomputeenv.go
+  - internal/sdk/models/operations/createawsbatchce.go
   - internal/sdk/models/operations/createawscredentials.go
   - internal/sdk/models/operations/createazurecredentials.go
   - internal/sdk/models/operations/createbitbucketcredentials.go
@@ -424,7 +424,7 @@ generatedFiles:
   - internal/sdk/models/operations/createworkspaceparticipant.go
   - internal/sdk/models/operations/deleteaction.go
   - internal/sdk/models/operations/deletealltokens.go
-  - internal/sdk/models/operations/deleteawscomputeenv.go
+  - internal/sdk/models/operations/deleteawsbatchce.go
   - internal/sdk/models/operations/deleteawscredentials.go
   - internal/sdk/models/operations/deleteazurecredentials.go
   - internal/sdk/models/operations/deletebitbucketcredentials.go
@@ -459,7 +459,7 @@ generatedFiles:
   - internal/sdk/models/operations/deleteworkspace.go
   - internal/sdk/models/operations/deleteworkspaceparticipant.go
   - internal/sdk/models/operations/describeaction.go
-  - internal/sdk/models/operations/describeawscomputeenv.go
+  - internal/sdk/models/operations/describeawsbatchce.go
   - internal/sdk/models/operations/describeawscredentials.go
   - internal/sdk/models/operations/describeazurecredentials.go
   - internal/sdk/models/operations/describebitbucketcredentials.go
@@ -569,7 +569,6 @@ generatedFiles:
   - internal/sdk/models/operations/stopdatastudio.go
   - internal/sdk/models/operations/tokenlist.go
   - internal/sdk/models/operations/updateaction.go
-  - internal/sdk/models/operations/updateawscomputeenv.go
   - internal/sdk/models/operations/updateawscredentials.go
   - internal/sdk/models/operations/updateazurecredentials.go
   - internal/sdk/models/operations/updatebitbucketcredentials.go
@@ -635,10 +634,10 @@ generatedFiles:
   - internal/sdk/models/shared/associateactionlabelsrequest.go
   - internal/sdk/models/shared/associatepipelinelabelsrequest.go
   - internal/sdk/models/shared/associateworkflowlabelsrequest.go
+  - internal/sdk/models/shared/awsbatchcecomputeconfiginput.go
   - internal/sdk/models/shared/awsbatchconfig.go
   - internal/sdk/models/shared/awsbatchplatformmetainfo.go
   - internal/sdk/models/shared/awscloudplatformmetainfo.go
-  - internal/sdk/models/shared/awscomputeenvcomputeconfiginput.go
   - internal/sdk/models/shared/awscredential.go
   - internal/sdk/models/shared/azbatchforgeconfig.go
   - internal/sdk/models/shared/azbatchplatformmetainfo.go
@@ -663,8 +662,8 @@ generatedFiles:
   - internal/sdk/models/shared/createaccesstokenresponse.go
   - internal/sdk/models/shared/createactionrequest.go
   - internal/sdk/models/shared/createactionresponse.go
-  - internal/sdk/models/shared/createawscomputeenvrequest.go
-  - internal/sdk/models/shared/createawscomputeenvresponse.go
+  - internal/sdk/models/shared/createawsbatchcerequest.go
+  - internal/sdk/models/shared/createawsbatchceresponse.go
   - internal/sdk/models/shared/createawscredentialsrequest.go
   - internal/sdk/models/shared/createawscredentialsresponse.go
   - internal/sdk/models/shared/createazurecredentialsrequest.go
@@ -760,7 +759,7 @@ generatedFiles:
   - internal/sdk/models/shared/deleteworkflowsrequest.go
   - internal/sdk/models/shared/deleteworkflowsresponse.go
   - internal/sdk/models/shared/describeactionresponse.go
-  - internal/sdk/models/shared/describeawscomputeenvresponse.go
+  - internal/sdk/models/shared/describeawsbatchceresponse.go
   - internal/sdk/models/shared/describeawscredentialsresponse.go
   - internal/sdk/models/shared/describeazurecredentialsresponse.go
   - internal/sdk/models/shared/describebitbucketcredentialsresponse.go
@@ -909,7 +908,6 @@ generatedFiles:
   - internal/sdk/models/shared/traceprogressrequest.go
   - internal/sdk/models/shared/traceprogressresponse.go
   - internal/sdk/models/shared/updateactionrequest.go
-  - internal/sdk/models/shared/updateawscomputeenvrequest.go
   - internal/sdk/models/shared/updateawscredentialsrequest.go
   - internal/sdk/models/shared/updateazurecredentialsrequest.go
   - internal/sdk/models/shared/updatebitbucketcredentialsrequest.go
@@ -3377,7 +3375,7 @@ examples:
         query:
           workspaceId: 890311
       requestBody:
-        application/json: {}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
       responses:
         "200":
           application/json: {}
@@ -3392,7 +3390,7 @@ examples:
           workspaceId: 651683
       responses:
         "200":
-          application/json: {}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSBatchCE:
@@ -3407,6 +3405,38 @@ examples:
           application/json: {"message": "<value>"}
   DeleteAWSBatchCE:
     speakeasy-default-delete-AWS-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateAWSBatchComputeCE:
+    speakeasy-default-create-AWS-batch-compute-CE:
+      parameters:
+        query:
+          workspaceId: 960865
+      requestBody:
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAWSBatchComputeCE:
+    speakeasy-default-describe-AWS-batch-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 564591
+      responses:
+        "200":
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAWSBatchComputeCE:
+    speakeasy-default-delete-AWS-batch-compute-CE:
       parameters:
         path:
           computeEnvId: "<id>"

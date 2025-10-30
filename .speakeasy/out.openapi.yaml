@@ -720,7 +720,6 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#update
     delete:
       summary: Delete compute environment
       description: Deletes the compute environment identified by the given `computeEnvId`.
@@ -9668,8 +9667,16 @@ paths:
       description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
       tags:
         - compute-envs
+        - compute-envs
       operationId: CreateAWSComputeEnv
       parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
         - name: workspaceId
           in: query
           description: Workspace numeric identifier
@@ -9701,6 +9708,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+        - BearerAuth: []
   "/compute-envs/{computeEnvId}#aws":
     get:
       x-speakeasy-entity-operation: AWSComputeEnv#read
@@ -9709,8 +9717,29 @@ paths:
       description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
       tags:
         - compute-envs
+        - compute-envs
       operationId: DescribeAWSComputeEnv
       parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: attributes
+          in: query
+          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
         - name: computeEnvId
           in: path
           description: Compute environment string identifier
@@ -9748,46 +9777,6 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-    put:
-      x-speakeasy-entity-operation: AWSComputeEnv#update
-      x-speakeasy-name-override: UpdateAWSComputeEnv
-      summary: Update AWS compute environment
-      description: Updates the details of the AWS compute environment identified by the given `computeEnvId`.
-      tags:
-        - compute-envs
-      operationId: UpdateAWSComputeEnv
-      parameters:
-        - name: computeEnvId
-          in: path
-          description: Compute environment string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: AWS compute environment update request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateAWSComputeEnvRequest"
-        required: true
-      responses:
-        "204":
-          description: OK - No content
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-      security:
         - BearerAuth: []
     delete:
       x-speakeasy-entity-operation: AWSComputeEnv#delete
@@ -9795,6 +9784,7 @@ paths:
       summary: Delete AWS compute environment
       description: Deletes the AWS compute environment identified by the given `computeEnvId`.
       tags:
+        - compute-envs
         - compute-envs
       operationId: DeleteAWSComputeEnv
       parameters:
@@ -9810,6 +9800,18 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
       responses:
         "204":
           description: OK - No content
@@ -9822,6 +9824,7 @@ paths:
         "403":
           description: Operation not allowed
       security:
+        - BearerAuth: []
         - BearerAuth: []
 # "/credentials/{credentialsId}#azure":
 #   # Similar duplication for Azure operations
@@ -10194,9 +10197,12 @@ components:
             AWS region where the Batch compute environment will be created.
             Examples: us-east-1, eu-west-1, ap-southeast-2
           example: "us-east-1"
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: false
         computeQueue:
           type: string
           description: Name of the AWS Batch compute queue
+          x-speakeasy-param-force-new: true
         dragenQueue:
           type: string
         dragenInstanceType:
@@ -10208,6 +10214,7 @@ components:
             Must have permissions for S3, CloudWatch, etc.
             Format: arn:aws:iam::account-id:role/role-name
           example: "arn:aws:iam::123456789012:role/BatchJobRole"
+          x-speakeasy-param-force-new: true
         executionRole:
           type: string
           description: |
@@ -10215,20 +10222,24 @@ components:
             Must have permissions for ECR and CloudWatch Logs.
             Format: arn:aws:iam::account-id:role/role-name
           example: "arn:aws:iam::123456789012:role/BatchExecutionRole"
+          x-speakeasy-param-force-new: true
         headQueue:
           type: string
           description: Name of the head job queue
+          x-speakeasy-param-force-new: true
         headJobRole:
           type: string
           description: |
             IAM role ARN for the head job.
             Format: arn:aws:iam::account-id:role/role-name
           example: "arn:aws:iam::123456789012:role/BatchHeadJobRole"
+          x-speakeasy-param-force-new: true
         cliPath:
           type: string
           description: |
             Path to AWS CLI on compute instances. AWS CLI must be available at this path.
           example: "/home/ec2-user/miniconda/bin/aws"
+          x-speakeasy-param-force-new: true
         workDir:
           type: string
           description: |
@@ -10236,22 +10247,28 @@ components:
             Format: s3://bucket-name/path
           example: "s3://my-nextflow-bucket/work"
           pattern: "^s3://.+"
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: false
         preRunScript:
           type: string
           description: "Bash script to run before workflow execution begins.\nUse for environment setup, loading modules, downloading reference data, etc.\n"
+          x-speakeasy-param-force-new: true
         postRunScript:
           type: string
           description: "Bash script to run after workflow execution completes.\nUse for cleanup, archiving results, sending notifications, etc.\n"
+          x-speakeasy-param-force-new: true
         headJobCpus:
           type: integer
           format: int32
           description: "Number of CPUs allocated for the head job (default: 1)"
           example: 4
+          x-speakeasy-param-force-new: true
         headJobMemoryMb:
           type: integer
           format: int32
           description: "Memory allocation for the head job in MB (default: 1024)"
           example: 8192
+          x-speakeasy-param-force-new: true
         environment:
           type: array
           items:
@@ -10469,6 +10486,8 @@ components:
           description: "Must be a valid Azure Blob container URL with format az://container-name/path"
           example: "az://my-container/work"
           pattern: "^az://.+"
+          x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
         preRunScript:
           type: string
           description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
@@ -10624,6 +10643,8 @@ components:
         workDir:
           type: string
           description: Working directory path for workflow execution
+          x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
         preRunScript:
           type: string
           description: "Shell script to execute before workflow starts"
@@ -10782,6 +10803,7 @@ components:
       properties:
         credentialsId:
           type: string
+          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -10792,6 +10814,7 @@ components:
           format: int64
           readOnly: true
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-force-new: true
         id:
           maxLength: 22
           type: string
@@ -10801,9 +10824,11 @@ components:
         name:
           maxLength: 100
           type: string
+          x-speakeasy-param-force-new: true
         description:
           maxLength: 2000
           type: string
+          x-speakeasy-param-force-new: true
         platform:
           maxLength: 25
           type: string
@@ -10825,8 +10850,10 @@ components:
             - seqeracompute-platform
           x-speakeasy-plan-validators: ComputeConfigValidator
           x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
         config:
           $ref: "#/components/schemas/ComputeConfig"
+          x-speakeasy-param-force-new: true
         dateCreated:
           type: string
           format: date-time
@@ -12225,6 +12252,7 @@ components:
             - EC2: Use On-Demand EC2 instances (reliable, higher cost)
             - FARGATE: Use AWS Fargate serverless compute
           example: "SPOT"
+          x-speakeasy-param-force-new: true
         minCpus:
           type: integer
           format: int32
@@ -12232,6 +12260,8 @@ components:
             Minimum number of CPUs to maintain in the compute environment.
             Setting to 0 allows environment to scale to zero when idle.
           example: 0
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
         maxCpus:
           type: integer
           format: int32
@@ -12239,18 +12269,21 @@ components:
             Maximum number of CPUs available in the compute environment.
             Subject to AWS service quotas.
           example: 256
+          x-speakeasy-param-force-new: true
         gpuEnabled:
           type: boolean
           description: |
             Enable GPU support for compute instances.
             When enabled, GPU-capable instance types will be selected.
           example: false
+          x-speakeasy-param-force-new: true
         ebsAutoScale:
           type: boolean
           description: |
             Enable automatic EBS volume expansion.
             When enabled, EBS volumes automatically expand as needed.
           example: true
+          x-speakeasy-param-force-new: true
         instanceTypes:
           type: array
           items:
@@ -12259,7 +12292,8 @@ components:
             List of EC2 instance types to use.
             Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
             Default: ["optimal"] - AWS Batch selects appropriate instances
-          example: ["m5.xlarge", "m5.2xlarge"]
+          example: ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"]
+          x-speakeasy-param-force-new: true
         allocStrategy:
           type: string
           enum:
@@ -12275,6 +12309,7 @@ components:
             - SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
             Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
           example: "SPOT_CAPACITY_OPTIMIZED"
+          x-speakeasy-param-force-new: true
         imageId:
           type: string
         vpcId:
@@ -12283,6 +12318,7 @@ components:
             VPC ID where compute environment will be deployed.
             Format: vpc- followed by hexadecimal characters
           example: "vpc-1234567890abcdef0"
+          x-speakeasy-param-force-new: true
         subnets:
           type: array
           items:
@@ -12291,7 +12327,8 @@ components:
             List of subnet IDs for compute instances.
             Subnets must be in the specified VPC. Use multiple subnets for high availability.
             Must have sufficient IP addresses.
-          example: ["subnet-12345", "subnet-67890"]
+          example: ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"]
+          x-speakeasy-param-force-new: true
         securityGroups:
           type: array
           items:
@@ -12299,34 +12336,40 @@ components:
           description: |
             List of security group IDs to attach to compute instances.
             Security groups must allow necessary network access.
-          example: ["sg-12345678"]
+          example: ["sg-12345678", "sg-12345678"]
+          x-speakeasy-param-force-new: true
         fsxMount:
           type: string
           description: |
             Path where FSx will be mounted in the container.
           example: "/fsx"
+          x-speakeasy-param-force-new: true
         fsxName:
           type: string
           description: |
             FSx for Lustre file system name.
           example: "my-fsx-filesystem"
+          x-speakeasy-param-force-new: true
         fsxSize:
           type: integer
           format: int32
           description: |
             Size of FSx file system in GB.
           example: 1200
+          x-speakeasy-param-force-new: true
         disposeOnDeletion:
           type: boolean
           description: |
             Dispose of AWS Batch resources when compute environment is deleted.
           example: true
+          x-speakeasy-param-force-new: true
         ec2KeyPair:
           type: string
           description: |
             EC2 key pair name for SSH access to compute instances.
             Key pair must exist in the specified region.
           example: "my-keypair"
+          x-speakeasy-param-force-new: true
         allowBuckets:
           type: array
           items:
@@ -12337,6 +12380,7 @@ components:
           description: |
             Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
           example: 100
+          x-speakeasy-param-force-new: true
         bidPercentage:
           type: integer
           format: int32
@@ -12357,6 +12401,7 @@ components:
           type: boolean
           description: Automatically create an EFS file system
           example: false
+          x-speakeasy-param-force-new: true
         efsId:
           type: string
           description: |
@@ -12364,11 +12409,13 @@ components:
             Format: fs- followed by hexadecimal characters.
             EFS must be in the same VPC and region.
           example: "fs-1234567890abcdef0"
+          x-speakeasy-param-force-new: true
         efsMount:
           type: string
           description: |
             Path where EFS will be mounted in the container.
           example: "/mnt/efs"
+          x-speakeasy-param-force-new: true
         dragenEnabled:
           type: boolean
         dragenAmiId:
@@ -12385,6 +12432,7 @@ components:
             Reduces costs by running head job on serverless compute.
             Only applicable when using EC2 for worker jobs.
           example: false
+          x-speakeasy-param-force-new: true
         arm64Enabled:
           type: boolean
         dragenInstanceType:
@@ -16911,8 +16959,8 @@ components:
         credentials:
           $ref: "#/components/schemas/KubernetesCredential"
     # AWS-specific compute environment schema
-    AWSComputeEnv_ComputeConfig:
-      x-speakeasy-entity: AWSComputeEnv
+    AWSBatchCE_ComputeConfig:
+      x-speakeasy-entity: AWSBatchCE
       x-speakeasy-entity-description: |
         Manage AWS compute environments in Seqera platform using this resource.
 
@@ -16928,6 +16976,7 @@ components:
         credentialsId:
           type: string
           description: AWS credentials identifier
+          x-speakeasy-param-force-new: true
         orgId:
           type: integer
           format: int64
@@ -16937,6 +16986,7 @@ components:
           type: integer
           format: int64
           description: Workspace numeric identifier
+          x-speakeasy-param-force-new: true
         id:
           type: string
           description: Unique identifier for the compute environment
@@ -16946,16 +16996,19 @@ components:
           maxLength: 100
           type: string
           description: Display name for the compute environment
+          x-speakeasy-param-force-new: true
         description:
           type: string
           description: Optional description of the compute environment
           x-speakeasy-param-computed: false
+          x-speakeasy-param-force-new: true
         platform:
           type: string
           enum:
             - aws-batch
           description: AWS platform type
           x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
         status:
           type: string
           description: Compute environment status
@@ -16982,6 +17035,121 @@ components:
         config:
           description: AWS-specific compute environment configuration
           $ref: '#/components/schemas/AwsBatchConfig'
+          x-speakeasy-param-force-new: true
+    # AWS-specific request/response schemas
+    CreateAWSBatchCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateAWSBatchCEResponse:
+      type: object
+      properties:
+        computeEnvId:
+          type: string
+    UpdateAWSBatchCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+    DescribeAWSBatchCEResponse:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+    ListAWSBatchCEsResponse:
+      type: object
+      properties:
+        computeEnvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+        totalSize:
+          type: integer
+          format: int64
+    # AWS-specific compute environment schema
+    AWSComputeEnv_ComputeConfig:
+      x-speakeasy-entity: AWSComputeEnv
+      x-speakeasy-entity-description: |
+        Manage AWS compute environments in Seqera platform using this resource.
+
+        AWS compute environments define the execution platform where a pipeline will run
+        on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
+      required:
+        - config
+        - name
+        - platform
+        - credentialsId
+      type: object
+      properties:
+        credentialsId:
+          type: string
+          description: AWS credentials identifier
+          x-speakeasy-param-force-new: true
+        orgId:
+          type: integer
+          format: int64
+          readOnly: true
+          x-speakeasy-param-readonly: true
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+          x-speakeasy-param-force-new: true
+        id:
+          type: string
+          description: Unique identifier for the compute environment
+          x-speakeasy-name-override: computeEnvId
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the compute environment
+          x-speakeasy-param-force-new: true
+        description:
+          type: string
+          description: Optional description of the compute environment
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-force-new: true
+        platform:
+          type: string
+          enum:
+            - aws-batch
+          description: AWS platform type
+          x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
+        status:
+          type: string
+          description: Compute environment status
+          x-speakeasy-param-readonly: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was created
+          x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last updated
+          x-speakeasy-param-readonly: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last used
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the compute environment has been deleted
+          x-speakeasy-param-readonly: true
+        config:
+          description: AWS-specific compute environment configuration
+          $ref: '#/components/schemas/AwsBatchConfig'
+          x-speakeasy-param-force-new: true
     # AWS-specific request/response schemas
     CreateAWSComputeEnvRequest:
       type: object
