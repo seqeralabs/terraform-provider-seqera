@@ -1229,7 +1229,10 @@ func (s *Credentials) DescribeAWSCredentials(ctx context.Context, request operat
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
+	case httpRes.StatusCode == 403:
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 404:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -1250,7 +1253,6 @@ func (s *Credentials) DescribeAWSCredentials(ctx context.Context, request operat
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 403:
 	default:
 		rawBody, err := utils.ConsumeRawBody(httpRes)
 		if err != nil {

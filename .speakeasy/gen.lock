@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 2100b157d037db724beb67208ca70807
+  docChecksum: 949062ad9c8cbb3e270411e43e359c20
   docVersion: 1.56.0
-  speakeasyVersion: 1.642.1
-  generationVersion: 2.731.4
+  speakeasyVersion: 1.642.2
+  generationVersion: 2.731.6
   releaseVersion: 0.25.4
   configChecksum: 853d1b859009f3eb0de1df23d43a5fac
 features:
@@ -22,7 +22,7 @@ features:
     nameOverrides: 2.81.3
     nullables: 0.0.0
     retries: 2.81.4
-    unions: 2.82.1
+    unions: 2.82.2
 generatedFiles:
   - .gitattributes
   - USAGE.md
