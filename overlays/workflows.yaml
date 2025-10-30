@@ -3,20 +3,85 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Workflows Overlay
   version: 0.0.0
+
+# ==============================================================================
+# WORKFLOWS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Manages workflow executions and pipeline runs in the Seqera Platform.
+# Workflows represent individual executions of Nextflow pipelines with
+# execution status, parameters, and monitoring information.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example: Basic workflow launch
+# resource "seqera_workflows" "example" {
+#   workspace_id = seqera_workspace.main.id
+#   compute_env_id = seqera_compute_env.aws.id
+#   pipeline = "https://github.com/nextflow-io/hello"
+#   work_dir = "s3://my-bucket/work"
+# }
+#
+# ==============================================================================
+
 actions:
-  # Workflows entity operations
+  # ============================================================================
+  # ENTITY CONFIGURATION
+  # ============================================================================
+
+  # Entity schema configuration for Workflows
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["x-speakeasy-entity"]
+    remove: true
+  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]
+    update:
+      x-speakeasy-entity: Workflows
+      x-speakeasy-entity-description: |
+        Manage workflow executions and pipeline runs.
+
+        Workflows represent individual executions of Nextflow pipelines,
+        containing execution status, parameters, results, and monitoring
+        information for computational workflows.
+
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]
+    update:
+      x-speakeasy-entity: Workflows
+
+  # ============================================================================
+  # ENTITY OPERATIONS (CRUD)
+  # ============================================================================
+
+  # CREATE - POST /workflow/launch
   - target: $["paths"]["/workflow/launch"]["post"]
     update:
       x-speakeasy-entity-operation: Workflows#create
+
+  # READ - GET /workflow/{workflowId}
   - target: $["paths"]["/workflow/{workflowId}"]["get"]
     update:
       x-speakeasy-entity-operation: Workflows#read
+
+  # DELETE - DELETE /workflow/{workflowId}
   - target: $["paths"]["/workflow/{workflowId}"]["delete"]
     update:
       x-speakeasy-entity-operation: Workflows#delete
 
-  # Add retry mechanism for workflow launch with shorter intervals for 400 errors
-  # This handles cases where a compute environment is not ready and is in a creating state
+  # Workflow star operations grouping (non-entity operations)
+  - target: $["paths"]["/workflow/{workflowId}/star"]["get"]
+    update:
+      x-speakeasy-group: WorkflowStar
+  - target: $["paths"]["/workflow/{workflowId}/star"]["post"]
+    update:
+      x-speakeasy-group: WorkflowStar
+  - target: $["paths"]["/workflow/{workflowId}/star"]["delete"]
+    update:
+      x-speakeasy-group: WorkflowStar
+
+  # ============================================================================
+  # RETRY CONFIGURATION
+  # ============================================================================
+
+  # Add retry mechanism for workflow launch when compute environment is not ready
   - target: $.paths["/workflow/launch"].post
     update:
       x-speakeasy-retries:
@@ -29,135 +94,79 @@ actions:
         statusCodes:
           - 400
 
-  # Workflow star operations grouping
-  - target: $["paths"]["/workflow/{workflowId}/star"]["get"]
-    update:
-      x-speakeasy-group: WorkflowStar
-  - target: $["paths"]["/workflow/{workflowId}/star"]["post"]
-    update:
-      x-speakeasy-group: WorkflowStar
-  - target: $["paths"]["/workflow/{workflowId}/star"]["delete"]
-    update:
-      x-speakeasy-group: WorkflowStar
+  # ============================================================================
+  # SCHEMA DESCRIPTIONS
+  # ============================================================================
 
-  # Workflow entity schema annotations
-  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]["properties"]["x-speakeasy-entity"]
-    remove: true
-  - target: $["components"]["schemas"]["DescribeWorkflowResponse"]
+  # WorkflowDbDto schema description
+  - target: $.components.schemas.WorkflowDbDto
     update:
-      x-speakeasy-entity: Workflows
-      x-speakeasy-entity-description: |
-        Manage workflow executions and pipeline runs.
+      description: |
+        Represents a workflow execution record.
+        Contains execution status, metadata, and results from pipeline
+        runs including logs and performance metrics.
 
-        Workflows represent individual executions of Nextflow pipelines,
-        containing execution status, parameters, results, and monitoring
-        information for computational workflows.
-  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]
+  # WorkflowDbDto field descriptions
+  - target: $.components.schemas.WorkflowDbDto.properties.id
     update:
-      x-speakeasy-entity: Workflows
-
-  # Remove deprecated workflow properties
-  - target: $["components"]["schemas"]["Workflow"]["properties"]["fusion"]
-    remove: true
-  - target: $["components"]["schemas"]["Workflow"]["properties"]["wave"]
-    remove: true
-
-  # WorkflowLoad schema modifications
-  - target: $["components"]["schemas"]["WorkflowLoad"]["required"][*]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["required"]
+      description: Unique identifier for the workflow execution
+  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
     update:
-      - aborted
-      - cached
-      - cpuLoad
-      - cpuTime
-      - cpus
-      - failed
-      - invCtxSwitch
-      - loadCpus
-      - loadMemory
-      - loadTasks
-      - memoryReq
-      - memoryRss
-      - peakCpus
-      - peakMemory
-      - peakTasks
-      - pending
-      - readBytes
-      - running
-      - submitted
-      - succeeded
-      - volCtxSwitch
-      - writeBytes
-
-  # Remove deprecated WorkflowLoad properties
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["retries"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["ignored"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["version"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpus"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuTime"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuLoad"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryRss"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryReq"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryConsumption"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netReadBytes"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netWriteBytes"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netVolCtxSwitch"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netInvCtxSwitch"]
-    remove: true
-  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCost"]
-    remove: true
-
-  # ProcessLoad schema modifications
-  - target: $["components"]["schemas"]["ProcessLoad"]["required"][*]
-    remove: true
-  - target: $["components"]["schemas"]["ProcessLoad"]["required"]
+      description: Numeric identifier of the user who owns this workflow
+  - target: $.components.schemas.WorkflowDbDto.properties.submit
     update:
-      - aborted
-      - cached
-      - cpuLoad
-      - cpuTime
-      - cpus
-      - failed
-      - invCtxSwitch
-      - loadCpus
-      - loadMemory
-      - loadTasks
-      - memoryReq
-      - memoryRss
-      - peakCpus
-      - peakMemory
-      - peakTasks
-      - pending
-      - process
-      - readBytes
-      - running
-      - submitted
-      - succeeded
-      - volCtxSwitch
-      - writeBytes
-  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["retries"]
-    remove: true
-  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["ignored"]
-    remove: true
-  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["version"]
-    remove: true
+      description: Timestamp when the workflow was submitted for execution
+  - target: $.components.schemas.WorkflowDbDto.properties.start
+    update:
+      description: Timestamp when the workflow execution actually started
+  - target: $.components.schemas.WorkflowDbDto.properties.complete
+    update:
+      description: Timestamp when the workflow execution completed
+  - target: $.components.schemas.WorkflowDbDto.properties.messages
+    update:
+      description: Array of status messages and logs from workflow execution
 
-  # Request examples for WorkflowLaunchRequest
+  # ============================================================================
+  # READ-ONLY FIELDS
+  # ============================================================================
+
+  # Mark server-managed fields as read-only in WorkflowDbDto
+  - target: $.components.schemas.WorkflowDbDto.properties.id
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.submit
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.start
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.complete
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.dateCreated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.lastUpdated
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.deleted
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.status
+    update:
+      x-speakeasy-param-readonly: true
+  - target: $.components.schemas.WorkflowDbDto.properties.messages
+    update:
+      x-speakeasy-param-readonly: true
+
+  # ============================================================================
+  # REQUEST EXAMPLES
+  # ============================================================================
+
+  # Provide realistic examples for WorkflowLaunchRequest documentation
   - target: $.components.schemas.WorkflowLaunchRequest.properties.pipeline
     update:
       example: "https://github.com/nextflow-io/hello"
@@ -235,66 +244,197 @@ actions:
   - target: $.components.schemas.WorkflowLaunchRequest.properties.headJobMemoryMb
     update:
       example: 4096
-  - target: $.components.schemas.WorkflowLaunchRequest.properties.dateCreated
-    update:
-      example: "2024-07-23T10:30:00Z"
 
-  # Schema description
-  - target: $.components.schemas.WorkflowDbDto
-    update:
-      description: |
-        Represents a workflow execution record.
-        Contains execution status, metadata, and results from pipeline
-        runs including logs and performance metrics.
+  # Note: Fields like sessionId, resumeDir, optimizationId, dateCreated are removed in cleanup section
 
-  # Field descriptions for WorkflowDbDto
-  - target: $.components.schemas.WorkflowDbDto.properties.id
-    update:
-      description: Unique identifier for the workflow execution
-  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
-    update:
-      description: Numeric identifier of the user who owns this workflow
-  - target: $.components.schemas.WorkflowDbDto.properties.submit
-    update:
-      description: Timestamp when the workflow was submitted for execution
-  - target: $.components.schemas.WorkflowDbDto.properties.start
-    update:
-      description: Timestamp when the workflow execution actually started
-  - target: $.components.schemas.WorkflowDbDto.properties.complete
-    update:
-      description: Timestamp when the workflow execution completed
-  - target: $.components.schemas.WorkflowDbDto.properties.messages
-    update:
-      description: Array of status messages and logs from workflow execution
+  # ============================================================================
+  # CLEANUP - Remove unmanageable, internal, and deprecated fields
+  # ============================================================================
 
-  # Mark server-managed fields as read-only in WorkflowDbDto
-  - target: $.components.schemas.WorkflowDbDto.properties.id
+  # Remove internal/computed fields from WorkflowLaunchRequest that aren't user-configurable
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["id"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["sessionId"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["resumeDir"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["resumeCommitId"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["launchContainer"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["optimizationId"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["optimizationTargets"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLaunchRequest"]["properties"]["dateCreated"]
+    remove: true
+
+  # Remove deprecated workflow properties
+  - target: $["components"]["schemas"]["Workflow"]["properties"]["fusion"]
+    remove: true
+  - target: $["components"]["schemas"]["Workflow"]["properties"]["wave"]
+    remove: true
+
+  # Remove runtime data fields from DescribeWorkflowResponse
+  # These fields contain execution state that shouldn't be managed by Terraform
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.progress
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.messages
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.jobInfo
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.platform
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.optimized
+    remove: true
+
+  # Remove runtime organizational context from DescribeWorkflowResponse
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.orgId
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.orgName
+    remove: true
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.workspaceName
+    remove: true
+
+  # Remove runtime label associations from DescribeWorkflowResponse
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.labels
+    remove: true
+
+  # Remove additional runtime fields from WorkflowDbDto
+  - target: $.components.schemas.WorkflowDbDto.properties.userName
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.commitId
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.scriptId
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.projectDir
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.homeDir
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.launchDir
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.container
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.containerEngine
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.scriptFile
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.duration
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.exitStatus
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.success
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.manifest
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.nextflow
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.stats
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.errorMessage
+    remove: true
+  - target: $.components.schemas.WorkflowDbDto.properties.errorReport
+    remove: true
+
+  # ============================================================================
+  # WORKFLOW LOAD SCHEMA MODIFICATIONS
+  # ============================================================================
+
+  # WorkflowLoad required fields configuration
+  - target: $["components"]["schemas"]["WorkflowLoad"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["required"]
     update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+      - aborted
+      - cached
+      - cpuLoad
+      - cpuTime
+      - cpus
+      - failed
+      - invCtxSwitch
+      - loadCpus
+      - loadMemory
+      - loadTasks
+      - memoryReq
+      - memoryRss
+      - peakCpus
+      - peakMemory
+      - peakTasks
+      - pending
+      - readBytes
+      - running
+      - submitted
+      - succeeded
+      - volCtxSwitch
+      - writeBytes
+
+  # Remove deprecated WorkflowLoad properties
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["retries"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["ignored"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["version"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpus"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuTime"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCpuLoad"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryRss"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryReq"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netMemoryConsumption"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netReadBytes"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netWriteBytes"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netVolCtxSwitch"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netInvCtxSwitch"]
+    remove: true
+  - target: $["components"]["schemas"]["WorkflowLoad"]["properties"]["netCost"]
+    remove: true
+
+  # ============================================================================
+  # PROCESS LOAD SCHEMA MODIFICATIONS
+  # ============================================================================
+
+  # ProcessLoad required fields configuration
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"][*]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["required"]
     update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.submit
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.start
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.complete
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.dateCreated
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.lastUpdated
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.deleted
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.status
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.WorkflowDbDto.properties.messages
-    update:
-      x-speakeasy-param-readonly: true
+      - aborted
+      - cached
+      - cpuLoad
+      - cpuTime
+      - cpus
+      - failed
+      - invCtxSwitch
+      - loadCpus
+      - loadMemory
+      - loadTasks
+      - memoryReq
+      - memoryRss
+      - peakCpus
+      - peakMemory
+      - peakTasks
+      - pending
+      - process
+      - readBytes
+      - running
+      - submitted
+      - succeeded
+      - volCtxSwitch
+      - writeBytes
+
+  # Remove deprecated ProcessLoad properties
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["retries"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["ignored"]
+    remove: true
+  - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["version"]
+    remove: true

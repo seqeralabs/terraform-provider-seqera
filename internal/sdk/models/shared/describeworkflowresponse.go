@@ -3,17 +3,8 @@
 package shared
 
 type DescribeWorkflowResponse struct {
-	Workflow      *Workflow           `json:"workflow,omitempty"`
-	Progress      *ProgressData       `json:"progress,omitempty"`
-	Platform      *ComputePlatformDto `json:"platform,omitempty"`
-	JobInfo       *JobInfoDto         `json:"jobInfo,omitempty"`
-	OrgID         *int64              `json:"orgId,omitempty"`
-	OrgName       *string             `json:"orgName,omitempty"`
-	WorkspaceID   *int64              `json:"workspaceId,omitempty"`
-	WorkspaceName *string             `json:"workspaceName,omitempty"`
-	Labels        []LabelDbDto        `json:"labels,omitempty"`
-	Optimized     *bool               `json:"optimized,omitempty"`
-	Messages      []string            `json:"messages,omitempty"`
+	Workflow    *Workflow `json:"workflow,omitempty"`
+	WorkspaceID *int64    `json:"workspaceId,omitempty"`
 }
 
 func (d *DescribeWorkflowResponse) GetWorkflow() *Workflow {
@@ -23,72 +14,9 @@ func (d *DescribeWorkflowResponse) GetWorkflow() *Workflow {
 	return d.Workflow
 }
 
-func (d *DescribeWorkflowResponse) GetProgress() *ProgressData {
-	if d == nil {
-		return nil
-	}
-	return d.Progress
-}
-
-func (d *DescribeWorkflowResponse) GetPlatform() *ComputePlatformDto {
-	if d == nil {
-		return nil
-	}
-	return d.Platform
-}
-
-func (d *DescribeWorkflowResponse) GetJobInfo() *JobInfoDto {
-	if d == nil {
-		return nil
-	}
-	return d.JobInfo
-}
-
-func (d *DescribeWorkflowResponse) GetOrgID() *int64 {
-	if d == nil {
-		return nil
-	}
-	return d.OrgID
-}
-
-func (d *DescribeWorkflowResponse) GetOrgName() *string {
-	if d == nil {
-		return nil
-	}
-	return d.OrgName
-}
-
 func (d *DescribeWorkflowResponse) GetWorkspaceID() *int64 {
 	if d == nil {
 		return nil
 	}
 	return d.WorkspaceID
-}
-
-func (d *DescribeWorkflowResponse) GetWorkspaceName() *string {
-	if d == nil {
-		return nil
-	}
-	return d.WorkspaceName
-}
-
-func (d *DescribeWorkflowResponse) GetLabels() []LabelDbDto {
-	if d == nil {
-		return nil
-	}
-	return d.Labels
-}
-
-func (d *DescribeWorkflowResponse) GetOptimized() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.Optimized
-}
-
-func (d *DescribeWorkflowResponse) GetMessages() []string {
-	if d == nil {
-		return nil
-	}
-	return d.Messages
 }

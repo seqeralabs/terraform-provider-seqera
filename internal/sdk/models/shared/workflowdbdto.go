@@ -29,9 +29,6 @@ type WorkflowDbDto struct {
 	SessionID         *string         `json:"sessionId,omitempty"`
 	Profile           *string         `json:"profile,omitempty"`
 	WorkDir           *string         `json:"workDir,omitempty"`
-	CommitID          *string         `json:"commitId,omitempty"`
-	UserName          *string         `json:"userName,omitempty"`
-	ScriptID          *string         `json:"scriptId,omitempty"`
 	Revision          *string         `json:"revision,omitempty"`
 	CommandLine       *string         `json:"commandLine,omitempty"`
 	ProjectName       *string         `json:"projectName,omitempty"`
@@ -42,23 +39,9 @@ type WorkflowDbDto struct {
 	ConfigFiles       []string        `json:"configFiles,omitempty"`
 	Params            map[string]any  `json:"params,omitempty"`
 	ConfigText        *string         `json:"configText,omitempty"`
-	Manifest          *WfManifest     `json:"manifest,omitempty"`
-	Nextflow          *WfNextflow     `json:"nextflow,omitempty"`
-	Stats             *WfStats        `json:"stats,omitempty"`
-	ErrorMessage      *string         `json:"errorMessage,omitempty"`
-	ErrorReport       *string         `json:"errorReport,omitempty"`
 	Deleted           *bool           `json:"deleted,omitempty"`
-	ProjectDir        *string         `json:"projectDir,omitempty"`
-	HomeDir           *string         `json:"homeDir,omitempty"`
-	Container         *string         `json:"container,omitempty"`
 	Repository        *string         `json:"repository,omitempty"`
-	ContainerEngine   *string         `json:"containerEngine,omitempty"`
-	ScriptFile        *string         `json:"scriptFile,omitempty"`
-	LaunchDir         *string         `json:"launchDir,omitempty"`
-	Duration          *int64          `json:"duration,omitempty"`
-	ExitStatus        *int            `json:"exitStatus,omitempty"`
 	Resume            *bool           `json:"resume,omitempty"`
-	Success           *bool           `json:"success,omitempty"`
 }
 
 func (w WorkflowDbDto) MarshalJSON() ([]byte, error) {
@@ -156,27 +139,6 @@ func (w *WorkflowDbDto) GetWorkDir() *string {
 	return w.WorkDir
 }
 
-func (w *WorkflowDbDto) GetCommitID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.CommitID
-}
-
-func (w *WorkflowDbDto) GetUserName() *string {
-	if w == nil {
-		return nil
-	}
-	return w.UserName
-}
-
-func (w *WorkflowDbDto) GetScriptID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ScriptID
-}
-
 func (w *WorkflowDbDto) GetRevision() *string {
 	if w == nil {
 		return nil
@@ -247,67 +209,11 @@ func (w *WorkflowDbDto) GetConfigText() *string {
 	return w.ConfigText
 }
 
-func (w *WorkflowDbDto) GetManifest() *WfManifest {
-	if w == nil {
-		return nil
-	}
-	return w.Manifest
-}
-
-func (w *WorkflowDbDto) GetNextflow() *WfNextflow {
-	if w == nil {
-		return nil
-	}
-	return w.Nextflow
-}
-
-func (w *WorkflowDbDto) GetStats() *WfStats {
-	if w == nil {
-		return nil
-	}
-	return w.Stats
-}
-
-func (w *WorkflowDbDto) GetErrorMessage() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ErrorMessage
-}
-
-func (w *WorkflowDbDto) GetErrorReport() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ErrorReport
-}
-
 func (w *WorkflowDbDto) GetDeleted() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Deleted
-}
-
-func (w *WorkflowDbDto) GetProjectDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ProjectDir
-}
-
-func (w *WorkflowDbDto) GetHomeDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.HomeDir
-}
-
-func (w *WorkflowDbDto) GetContainer() *string {
-	if w == nil {
-		return nil
-	}
-	return w.Container
 }
 
 func (w *WorkflowDbDto) GetRepository() *string {
@@ -317,51 +223,9 @@ func (w *WorkflowDbDto) GetRepository() *string {
 	return w.Repository
 }
 
-func (w *WorkflowDbDto) GetContainerEngine() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ContainerEngine
-}
-
-func (w *WorkflowDbDto) GetScriptFile() *string {
-	if w == nil {
-		return nil
-	}
-	return w.ScriptFile
-}
-
-func (w *WorkflowDbDto) GetLaunchDir() *string {
-	if w == nil {
-		return nil
-	}
-	return w.LaunchDir
-}
-
-func (w *WorkflowDbDto) GetDuration() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.Duration
-}
-
-func (w *WorkflowDbDto) GetExitStatus() *int {
-	if w == nil {
-		return nil
-	}
-	return w.ExitStatus
-}
-
 func (w *WorkflowDbDto) GetResume() *bool {
 	if w == nil {
 		return nil
 	}
 	return w.Resume
-}
-
-func (w *WorkflowDbDto) GetSuccess() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.Success
 }

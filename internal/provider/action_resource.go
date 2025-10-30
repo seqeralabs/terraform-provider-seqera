@@ -50,14 +50,9 @@ type ActionResource struct {
 type ActionResourceModel struct {
 	ActionID    types.String                  `tfsdk:"action_id"`
 	Config      *tfTypes.ActionConfigType     `tfsdk:"config"`
-	DateCreated types.String                  `tfsdk:"date_created"`
-	Event       *tfTypes.ActionEventType      `tfsdk:"event"`
 	HookID      types.String                  `tfsdk:"hook_id"`
 	HookURL     types.String                  `tfsdk:"hook_url"`
 	ID          types.String                  `tfsdk:"id"`
-	Labels      []tfTypes.LabelDbDto          `tfsdk:"labels"`
-	LastSeen    types.String                  `tfsdk:"last_seen"`
-	LastUpdated types.String                  `tfsdk:"last_updated"`
 	Launch      tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
 	Message     types.String                  `tfsdk:"message"`
 	Name        types.String                  `tfsdk:"name"`
@@ -114,73 +109,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 				},
 			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"event": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"github": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"commit_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"commit_message": schema.StringAttribute{
-								Computed: true,
-							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-							"pusher_email": schema.StringAttribute{
-								Computed: true,
-							},
-							"pusher_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"ref": schema.StringAttribute{
-								Computed: true,
-							},
-							"timestamp": schema.StringAttribute{
-								Computed: true,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tower"),
-							}...),
-						},
-					},
-					"tower": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-							"timestamp": schema.StringAttribute{
-								Computed: true,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
-							},
-							"workflow_id": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("github"),
-							}...),
-						},
-					},
-				},
-			},
 			"hook_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Identifier for the webhook associated with this action`,
@@ -192,52 +120,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the action`,
-			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-							Validators: []validator.String{
-								validators.IsRFC3339(),
-							},
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
-			"last_seen": schema.StringAttribute{
-				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"launch": schema.SingleNestedAttribute{
 				Required: true,
@@ -2427,12 +2309,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"date_created": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
 						Validators: []validator.String{
 							validators.IsRFC3339(),
 						},
@@ -2483,12 +2359,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"launch_container": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
 					},
 					"main_script": schema.StringAttribute{
 						Computed: true,
@@ -2501,21 +2371,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"optimization_id": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
 					},
 					"optimization_targets": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
 					},
 					"params_text": schema.StringAttribute{
 						Computed: true,
@@ -2603,12 +2461,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"session_id": schema.StringAttribute{
 						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							stringplanmodifier.RequiresReplaceIfConfigured(),
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Requires replacement if changed.`,
 					},
 					"stub_run": schema.BoolAttribute{
 						Computed: true,
@@ -2639,7 +2491,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Requires replacement if changed.`,
 					},
 					"work_dir": schema.StringAttribute{
-						Required: true,
+						Computed: true,
+						Optional: true,
 						PlanModifiers: []planmodifier.String{
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

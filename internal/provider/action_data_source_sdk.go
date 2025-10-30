@@ -31,45 +31,9 @@ func (r *ActionDataSourceModel) RefreshFromSharedActionResponseDto(ctx context.C
 				}
 			}
 		}
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		if resp.Event != nil {
-			r.Event = &tfTypes.ActionEventType{}
-			if resp.Event.ActionTowerActionEvent != nil {
-				r.Event.Tower = &tfTypes.ActionTowerActionEvent{}
-				r.Event.Tower.Discriminator = types.StringPointerValue(resp.Event.ActionTowerActionEvent.Discriminator)
-				r.Event.Tower.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.ActionTowerActionEvent.Timestamp))
-				r.Event.Tower.WorkflowID = types.StringPointerValue(resp.Event.ActionTowerActionEvent.WorkflowID)
-			}
-			if resp.Event.GithubActionEvent != nil {
-				r.Event.Github = &tfTypes.GithubActionEvent{}
-				r.Event.Github.CommitID = types.StringPointerValue(resp.Event.GithubActionEvent.CommitID)
-				r.Event.Github.CommitMessage = types.StringPointerValue(resp.Event.GithubActionEvent.CommitMessage)
-				r.Event.Github.Discriminator = types.StringPointerValue(resp.Event.GithubActionEvent.Discriminator)
-				r.Event.Github.PusherEmail = types.StringPointerValue(resp.Event.GithubActionEvent.PusherEmail)
-				r.Event.Github.PusherName = types.StringPointerValue(resp.Event.GithubActionEvent.PusherName)
-				r.Event.Github.Ref = types.StringPointerValue(resp.Event.GithubActionEvent.Ref)
-				r.Event.Github.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.GithubActionEvent.Timestamp))
-			}
-		}
 		r.HookID = types.StringPointerValue(resp.HookID)
 		r.HookURL = types.StringPointerValue(resp.HookURL)
 		r.ID = types.StringPointerValue(resp.ID)
-		r.Labels = []tfTypes.LabelDbDto{}
-
-		for _, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-
-			r.Labels = append(r.Labels, labels)
-		}
-		r.LastSeen = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastSeen))
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		if resp.Launch == nil {
 			r.Launch = nil
 		} else {

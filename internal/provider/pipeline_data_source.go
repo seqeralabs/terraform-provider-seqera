@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 )
 
@@ -29,29 +28,17 @@ type PipelineDataSource struct {
 
 // PipelineDataSourceModel describes the data model.
 type PipelineDataSourceModel struct {
-	Attributes          []types.String           `queryParam:"style=form,explode=false,name=attributes" tfsdk:"attributes"`
-	ComputeEnv          *tfTypes.ComputeEnvDbDto `tfsdk:"compute_env"`
-	Deleted             types.Bool               `tfsdk:"deleted"`
-	Description         types.String             `tfsdk:"description"`
-	Icon                types.String             `tfsdk:"icon"`
-	Labels              []tfTypes.LabelDbDto     `tfsdk:"labels"`
-	LastUpdated         types.String             `tfsdk:"last_updated"`
-	Name                types.String             `tfsdk:"name"`
-	OptimizationID      types.String             `tfsdk:"optimization_id"`
-	OptimizationStatus  types.String             `tfsdk:"optimization_status"`
-	OptimizationTargets types.String             `tfsdk:"optimization_targets"`
-	OrgID               types.Int64              `tfsdk:"org_id"`
-	OrgName             types.String             `tfsdk:"org_name"`
-	PipelineID          types.Int64              `tfsdk:"pipeline_id"`
-	Repository          types.String             `tfsdk:"repository"`
-	SourceWorkspaceID   types.Int64              `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
-	UserFirstName       types.String             `tfsdk:"user_first_name"`
-	UserID              types.Int64              `tfsdk:"user_id"`
-	UserLastName        types.String             `tfsdk:"user_last_name"`
-	UserName            types.String             `tfsdk:"user_name"`
-	Visibility          types.String             `tfsdk:"visibility"`
-	WorkspaceID         types.Int64              `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceName       types.String             `tfsdk:"workspace_name"`
+	Attributes        []types.String `queryParam:"style=form,explode=false,name=attributes" tfsdk:"attributes"`
+	Description       types.String   `tfsdk:"description"`
+	Icon              types.String   `tfsdk:"icon"`
+	Name              types.String   `tfsdk:"name"`
+	PipelineID        types.Int64    `tfsdk:"pipeline_id"`
+	Repository        types.String   `tfsdk:"repository"`
+	SourceWorkspaceID types.Int64    `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
+	UserFirstName     types.String   `tfsdk:"user_first_name"`
+	UserID            types.Int64    `tfsdk:"user_id"`
+	UserName          types.String   `tfsdk:"user_name"`
+	WorkspaceID       types.Int64    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -70,26 +57,6 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				ElementType: types.StringType,
 				Description: `Additional attribute values to include in the response (` + "`" + `labels` + "`" + `, ` + "`" + `optimized` + "`" + ` status, ` + "`" + `computeEnv` + "`" + `). Returns an empty value (` + "`" + `labels: null` + "`" + `, etc.) if omitted.`,
 			},
-			"compute_env": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"id": schema.StringAttribute{
-						Computed: true,
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-					},
-					"platform": schema.StringAttribute{
-						Computed: true,
-					},
-					"region": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-			},
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Detailed description of the pipeline's purpose and functionality`,
@@ -98,58 +65,9 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Computed:    true,
 				Description: `Icon identifier or URL for visual representation`,
 			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Display name for the pipeline`,
-			},
-			"optimization_id": schema.StringAttribute{
-				Computed: true,
-			},
-			"optimization_status": schema.StringAttribute{
-				Computed: true,
-			},
-			"optimization_targets": schema.StringAttribute{
-				Computed: true,
-			},
-			"org_id": schema.Int64Attribute{
-				Computed: true,
-			},
-			"org_name": schema.StringAttribute{
-				Computed: true,
 			},
 			"pipeline_id": schema.Int64Attribute{
 				Computed:    true,
@@ -164,29 +82,17 @@ func (r *PipelineDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				Description: `Source Optional workspace numeric identifier`,
 			},
 			"user_first_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `First name of the user who created the pipeline`,
+				Computed: true,
 			},
 			"user_id": schema.Int64Attribute{
-				Computed:    true,
-				Description: `Numeric identifier of the user who created the pipeline`,
-			},
-			"user_last_name": schema.StringAttribute{
 				Computed: true,
 			},
 			"user_name": schema.StringAttribute{
-				Computed:    true,
-				Description: `Username of the pipeline creator`,
-			},
-			"visibility": schema.StringAttribute{
 				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,
 				Description: `Workspace numeric identifier`,
-			},
-			"workspace_name": schema.StringAttribute{
-				Computed: true,
 			},
 		},
 	}

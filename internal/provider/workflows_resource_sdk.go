@@ -12,128 +12,12 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
-	"time"
 )
 
 func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx context.Context, resp *shared.DescribeWorkflowResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.JobInfo == nil {
-			r.JobInfo = nil
-		} else {
-			r.JobInfo = &tfTypes.JobInfoDto{}
-			r.JobInfo.ExitCode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.JobInfo.ExitCode))
-			r.JobInfo.ID = types.Int64PointerValue(resp.JobInfo.ID)
-			r.JobInfo.Message = types.StringPointerValue(resp.JobInfo.Message)
-			r.JobInfo.OperationID = types.StringPointerValue(resp.JobInfo.OperationID)
-			r.JobInfo.Status = types.StringPointerValue(resp.JobInfo.Status)
-		}
-		r.Labels = []tfTypes.LabelDbDto{}
-
-		for _, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-
-			r.Labels = append(r.Labels, labels)
-		}
-		r.Messages = make([]types.String, 0, len(resp.Messages))
-		for _, v := range resp.Messages {
-			r.Messages = append(r.Messages, types.StringValue(v))
-		}
-		r.Optimized = types.BoolPointerValue(resp.Optimized)
-		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.OrgName = types.StringPointerValue(resp.OrgName)
-		if resp.Platform == nil {
-			r.Platform = nil
-		} else {
-			r.Platform = &tfTypes.ComputePlatformDto{}
-			r.Platform.ID = types.StringPointerValue(resp.Platform.ID)
-			r.Platform.Name = types.StringPointerValue(resp.Platform.Name)
-		}
-		if resp.Progress == nil {
-			r.Progress = nil
-		} else {
-			r.Progress = &tfTypes.ProgressData{}
-			r.Progress.ProcessesProgress = []tfTypes.ProcessLoad{}
-
-			for _, processesProgressItem := range resp.Progress.ProcessesProgress {
-				var processesProgress tfTypes.ProcessLoad
-
-				processesProgress.Aborted = types.Int64Value(processesProgressItem.Aborted)
-				processesProgress.Cached = types.Int64Value(processesProgressItem.Cached)
-				processesProgress.CPUEfficiency = types.Float32PointerValue(processesProgressItem.CPUEfficiency)
-				processesProgress.CPULoad = types.Int64Value(processesProgressItem.CPULoad)
-				processesProgress.Cpus = types.Int64Value(processesProgressItem.Cpus)
-				processesProgress.CPUTime = types.Int64Value(processesProgressItem.CPUTime)
-				processesProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.DateCreated))
-				processesProgress.Failed = types.Int64Value(processesProgressItem.Failed)
-				processesProgress.InvCtxSwitch = types.Int64Value(processesProgressItem.InvCtxSwitch)
-				processesProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(processesProgressItem.LastUpdated))
-				processesProgress.LoadCpus = types.Int64Value(processesProgressItem.LoadCpus)
-				processesProgress.LoadMemory = types.Int64Value(processesProgressItem.LoadMemory)
-				processesProgress.LoadTasks = types.Int64Value(processesProgressItem.LoadTasks)
-				processesProgress.MemoryEfficiency = types.Float32PointerValue(processesProgressItem.MemoryEfficiency)
-				processesProgress.MemoryReq = types.Int64Value(processesProgressItem.MemoryReq)
-				processesProgress.MemoryRss = types.Int64Value(processesProgressItem.MemoryRss)
-				processesProgress.PeakCpus = types.Int64Value(processesProgressItem.PeakCpus)
-				processesProgress.PeakMemory = types.Int64Value(processesProgressItem.PeakMemory)
-				processesProgress.PeakTasks = types.Int64Value(processesProgressItem.PeakTasks)
-				processesProgress.Pending = types.Int64Value(processesProgressItem.Pending)
-				processesProgress.Process = types.StringValue(processesProgressItem.Process)
-				processesProgress.ReadBytes = types.Int64Value(processesProgressItem.ReadBytes)
-				processesProgress.Running = types.Int64Value(processesProgressItem.Running)
-				processesProgress.Submitted = types.Int64Value(processesProgressItem.Submitted)
-				processesProgress.Succeeded = types.Int64Value(processesProgressItem.Succeeded)
-				processesProgress.VolCtxSwitch = types.Int64Value(processesProgressItem.VolCtxSwitch)
-				processesProgress.WriteBytes = types.Int64Value(processesProgressItem.WriteBytes)
-
-				r.Progress.ProcessesProgress = append(r.Progress.ProcessesProgress, processesProgress)
-			}
-			r.Progress.TotalProcesses = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Progress.TotalProcesses))
-			if resp.Progress.WorkflowProgress == nil {
-				r.Progress.WorkflowProgress = nil
-			} else {
-				r.Progress.WorkflowProgress = &tfTypes.WorkflowLoad{}
-				r.Progress.WorkflowProgress.Aborted = types.Int64Value(resp.Progress.WorkflowProgress.Aborted)
-				r.Progress.WorkflowProgress.Cached = types.Int64Value(resp.Progress.WorkflowProgress.Cached)
-				r.Progress.WorkflowProgress.Cost = types.Float64PointerValue(resp.Progress.WorkflowProgress.Cost)
-				r.Progress.WorkflowProgress.CPUEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.CPUEfficiency)
-				r.Progress.WorkflowProgress.CPULoad = types.Int64Value(resp.Progress.WorkflowProgress.CPULoad)
-				r.Progress.WorkflowProgress.Cpus = types.Int64Value(resp.Progress.WorkflowProgress.Cpus)
-				r.Progress.WorkflowProgress.CPUTime = types.Int64Value(resp.Progress.WorkflowProgress.CPUTime)
-				r.Progress.WorkflowProgress.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.DateCreated))
-				r.Progress.WorkflowProgress.Executors = make([]types.String, 0, len(resp.Progress.WorkflowProgress.Executors))
-				for _, v := range resp.Progress.WorkflowProgress.Executors {
-					r.Progress.WorkflowProgress.Executors = append(r.Progress.WorkflowProgress.Executors, types.StringValue(v))
-				}
-				r.Progress.WorkflowProgress.Failed = types.Int64Value(resp.Progress.WorkflowProgress.Failed)
-				r.Progress.WorkflowProgress.InvCtxSwitch = types.Int64Value(resp.Progress.WorkflowProgress.InvCtxSwitch)
-				r.Progress.WorkflowProgress.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Progress.WorkflowProgress.LastUpdated))
-				r.Progress.WorkflowProgress.LoadCpus = types.Int64Value(resp.Progress.WorkflowProgress.LoadCpus)
-				r.Progress.WorkflowProgress.LoadMemory = types.Int64Value(resp.Progress.WorkflowProgress.LoadMemory)
-				r.Progress.WorkflowProgress.LoadTasks = types.Int64Value(resp.Progress.WorkflowProgress.LoadTasks)
-				r.Progress.WorkflowProgress.MemoryEfficiency = types.Float32PointerValue(resp.Progress.WorkflowProgress.MemoryEfficiency)
-				r.Progress.WorkflowProgress.MemoryReq = types.Int64Value(resp.Progress.WorkflowProgress.MemoryReq)
-				r.Progress.WorkflowProgress.MemoryRss = types.Int64Value(resp.Progress.WorkflowProgress.MemoryRss)
-				r.Progress.WorkflowProgress.PeakCpus = types.Int64Value(resp.Progress.WorkflowProgress.PeakCpus)
-				r.Progress.WorkflowProgress.PeakMemory = types.Int64Value(resp.Progress.WorkflowProgress.PeakMemory)
-				r.Progress.WorkflowProgress.PeakTasks = types.Int64Value(resp.Progress.WorkflowProgress.PeakTasks)
-				r.Progress.WorkflowProgress.Pending = types.Int64Value(resp.Progress.WorkflowProgress.Pending)
-				r.Progress.WorkflowProgress.ReadBytes = types.Int64Value(resp.Progress.WorkflowProgress.ReadBytes)
-				r.Progress.WorkflowProgress.Running = types.Int64Value(resp.Progress.WorkflowProgress.Running)
-				r.Progress.WorkflowProgress.Submitted = types.Int64Value(resp.Progress.WorkflowProgress.Submitted)
-				r.Progress.WorkflowProgress.Succeeded = types.Int64Value(resp.Progress.WorkflowProgress.Succeeded)
-				r.Progress.WorkflowProgress.VolCtxSwitch = types.Int64Value(resp.Progress.WorkflowProgress.VolCtxSwitch)
-				r.Progress.WorkflowProgress.WriteBytes = types.Int64Value(resp.Progress.WorkflowProgress.WriteBytes)
-			}
-		}
 		if resp.Workflow == nil {
 			r.Workflow = nil
 		} else {
@@ -238,7 +122,6 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			r.Workflow.WorkDir = types.StringValue(resp.Workflow.WorkDir)
 		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
-		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
 	}
 
 	return diags
@@ -376,12 +259,6 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		revision = nil
 	}
-	sessionID := new(string)
-	if !r.SessionID.IsUnknown() && !r.SessionID.IsNull() {
-		*sessionID = r.SessionID.ValueString()
-	} else {
-		sessionID = nil
-	}
 	configProfiles := make([]string, 0, len(r.ConfigProfiles))
 	for _, configProfilesItem := range r.ConfigProfiles {
 		configProfiles = append(configProfiles, configProfilesItem.ValueString())
@@ -460,18 +337,6 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		stubRun = nil
 	}
-	optimizationID := new(string)
-	if !r.OptimizationID.IsUnknown() && !r.OptimizationID.IsNull() {
-		*optimizationID = r.OptimizationID.ValueString()
-	} else {
-		optimizationID = nil
-	}
-	optimizationTargets := new(string)
-	if !r.OptimizationTargets.IsUnknown() && !r.OptimizationTargets.IsNull() {
-		*optimizationTargets = r.OptimizationTargets.ValueString()
-	} else {
-		optimizationTargets = nil
-	}
 	labelIds := make([]int64, 0, len(r.LabelIds))
 	for _, labelIdsItem := range r.LabelIds {
 		labelIds = append(labelIds, labelIdsItem.ValueInt64())
@@ -488,46 +353,29 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		headJobMemoryMb = nil
 	}
-	launchContainer := new(string)
-	if !r.LaunchContainer.IsUnknown() && !r.LaunchContainer.IsNull() {
-		*launchContainer = r.LaunchContainer.ValueString()
-	} else {
-		launchContainer = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.DateCreated.IsUnknown() && !r.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
 	out := shared.WorkflowLaunchRequest{
-		ComputeEnvID:        computeEnvID,
-		RunName:             runName,
-		Pipeline:            pipeline,
-		WorkDir:             workDir,
-		Revision:            revision,
-		SessionID:           sessionID,
-		ConfigProfiles:      configProfiles,
-		UserSecrets:         userSecrets,
-		WorkspaceSecrets:    workspaceSecrets,
-		ConfigText:          configText,
-		TowerConfig:         towerConfig,
-		ParamsText:          paramsText,
-		PreRunScript:        preRunScript,
-		PostRunScript:       postRunScript,
-		MainScript:          mainScript,
-		EntryName:           entryName,
-		SchemaName:          schemaName,
-		Resume:              resume,
-		PullLatest:          pullLatest,
-		StubRun:             stubRun,
-		OptimizationID:      optimizationID,
-		OptimizationTargets: optimizationTargets,
-		LabelIds:            labelIds,
-		HeadJobCpus:         headJobCpus,
-		HeadJobMemoryMb:     headJobMemoryMb,
-		LaunchContainer:     launchContainer,
-		DateCreated:         dateCreated,
+		ComputeEnvID:     computeEnvID,
+		RunName:          runName,
+		Pipeline:         pipeline,
+		WorkDir:          workDir,
+		Revision:         revision,
+		ConfigProfiles:   configProfiles,
+		UserSecrets:      userSecrets,
+		WorkspaceSecrets: workspaceSecrets,
+		ConfigText:       configText,
+		TowerConfig:      towerConfig,
+		ParamsText:       paramsText,
+		PreRunScript:     preRunScript,
+		PostRunScript:    postRunScript,
+		MainScript:       mainScript,
+		EntryName:        entryName,
+		SchemaName:       schemaName,
+		Resume:           resume,
+		PullLatest:       pullLatest,
+		StubRun:          stubRun,
+		LabelIds:         labelIds,
+		HeadJobCpus:      headJobCpus,
+		HeadJobMemoryMb:  headJobMemoryMb,
 	}
 
 	return &out, diags

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
-	"time"
-)
-
 // DataStudioDto - Represents a Studio session for interactive data analysis.
 // Contains configuration and runtime information for Jupyter-based
 // computational environments.
@@ -14,42 +9,13 @@ type DataStudioDto struct {
 	// Unique identifier for the Studio session
 	SessionID *string `json:"sessionId,omitempty"`
 	// Numeric identifier of the workspace containing the Studio
-	WorkspaceID      *int64                         `json:"workspaceId,omitempty"`
-	ParentCheckpoint *DataStudioDtoParentCheckpoint `json:"parentCheckpoint,omitempty"`
-	User             *StudioUser                    `json:"user,omitempty"`
+	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Display name for the Studio session
 	Name *string `json:"name,omitempty"`
 	// Description of the Studio session's purpose
-	Description *string `json:"description,omitempty"`
-	// URL to access the running Studio instance
-	StudioURL              *string                  `json:"studioUrl,omitempty"`
-	ComputeEnv             *DataStudioComputeEnvDto `json:"computeEnv,omitempty"`
-	Template               *DataStudioTemplate      `json:"template,omitempty"`
-	Configuration          *DataStudioConfiguration `json:"configuration,omitempty"`
-	DateCreated            *time.Time               `json:"dateCreated,omitempty"`
-	LastUpdated            *time.Time               `json:"lastUpdated,omitempty"`
-	LastStarted            *time.Time               `json:"lastStarted,omitempty"`
-	EffectiveLifespanHours *int                     `json:"effectiveLifespanHours,omitempty"`
-	ActiveConnections      []ActiveConnection       `json:"activeConnections,omitempty"`
-	StatusInfo             *DataStudioStatusInfo    `json:"statusInfo,omitempty"`
-	WaveBuildURL           *string                  `json:"waveBuildUrl,omitempty"`
-	BaseImage              *string                  `json:"baseImage,omitempty"`
-	CustomImage            *bool                    `json:"customImage,omitempty"`
-	IsPrivate              *bool                    `json:"isPrivate,omitempty"`
-	MountedDataLinks       []DataLinkDto            `json:"mountedDataLinks,omitempty"`
-	Progress               []DataStudioProgressStep `json:"progress,omitempty"`
-	Labels                 []LabelDbDto             `json:"labels,omitempty"`
-}
-
-func (d DataStudioDto) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(d, "", false)
-}
-
-func (d *DataStudioDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Description   *string                  `json:"description,omitempty"`
+	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
+	IsPrivate     *bool                    `json:"isPrivate,omitempty"`
 }
 
 func (d *DataStudioDto) GetSessionID() *string {
@@ -66,20 +32,6 @@ func (d *DataStudioDto) GetWorkspaceID() *int64 {
 	return d.WorkspaceID
 }
 
-func (d *DataStudioDto) GetParentCheckpoint() *DataStudioDtoParentCheckpoint {
-	if d == nil {
-		return nil
-	}
-	return d.ParentCheckpoint
-}
-
-func (d *DataStudioDto) GetUser() *StudioUser {
-	if d == nil {
-		return nil
-	}
-	return d.User
-}
-
 func (d *DataStudioDto) GetName() *string {
 	if d == nil {
 		return nil
@@ -94,27 +46,6 @@ func (d *DataStudioDto) GetDescription() *string {
 	return d.Description
 }
 
-func (d *DataStudioDto) GetStudioURL() *string {
-	if d == nil {
-		return nil
-	}
-	return d.StudioURL
-}
-
-func (d *DataStudioDto) GetComputeEnv() *DataStudioComputeEnvDto {
-	if d == nil {
-		return nil
-	}
-	return d.ComputeEnv
-}
-
-func (d *DataStudioDto) GetTemplate() *DataStudioTemplate {
-	if d == nil {
-		return nil
-	}
-	return d.Template
-}
-
 func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
 	if d == nil {
 		return nil
@@ -122,93 +53,9 @@ func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {
 	return d.Configuration
 }
 
-func (d *DataStudioDto) GetDateCreated() *time.Time {
-	if d == nil {
-		return nil
-	}
-	return d.DateCreated
-}
-
-func (d *DataStudioDto) GetLastUpdated() *time.Time {
-	if d == nil {
-		return nil
-	}
-	return d.LastUpdated
-}
-
-func (d *DataStudioDto) GetLastStarted() *time.Time {
-	if d == nil {
-		return nil
-	}
-	return d.LastStarted
-}
-
-func (d *DataStudioDto) GetEffectiveLifespanHours() *int {
-	if d == nil {
-		return nil
-	}
-	return d.EffectiveLifespanHours
-}
-
-func (d *DataStudioDto) GetActiveConnections() []ActiveConnection {
-	if d == nil {
-		return nil
-	}
-	return d.ActiveConnections
-}
-
-func (d *DataStudioDto) GetStatusInfo() *DataStudioStatusInfo {
-	if d == nil {
-		return nil
-	}
-	return d.StatusInfo
-}
-
-func (d *DataStudioDto) GetWaveBuildURL() *string {
-	if d == nil {
-		return nil
-	}
-	return d.WaveBuildURL
-}
-
-func (d *DataStudioDto) GetBaseImage() *string {
-	if d == nil {
-		return nil
-	}
-	return d.BaseImage
-}
-
-func (d *DataStudioDto) GetCustomImage() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.CustomImage
-}
-
 func (d *DataStudioDto) GetIsPrivate() *bool {
 	if d == nil {
 		return nil
 	}
 	return d.IsPrivate
-}
-
-func (d *DataStudioDto) GetMountedDataLinks() []DataLinkDto {
-	if d == nil {
-		return nil
-	}
-	return d.MountedDataLinks
-}
-
-func (d *DataStudioDto) GetProgress() []DataStudioProgressStep {
-	if d == nil {
-		return nil
-	}
-	return d.Progress
-}
-
-func (d *DataStudioDto) GetLabels() []LabelDbDto {
-	if d == nil {
-		return nil
-	}
-	return d.Labels
 }

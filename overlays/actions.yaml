@@ -3,23 +3,41 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Actions Overlay
   version: 0.0.0
-actions:
-  ####################################################################
-  ####                   Action Entity Operations                 ####
-  ####################################################################
-  - target: $.paths["/actions"].post
-    update:
-      x-speakeasy-entity-operation: Action#create
-  - target: $.paths["/actions/{actionId}"].get
-    update:
-      x-speakeasy-entity-operation: Action#read
-  - target: $.paths["/actions/{actionId}"].delete
-    update:
-      x-speakeasy-entity-operation: Action#delete
 
-  ####################################################################
-  ####                   Action Entity Schema                     ####
-  ####################################################################
+# ==============================================================================
+# ACTIONS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Manages pipeline actions for event-based workflow automation in Seqera Platform.
+# Actions enable event-based pipeline execution, such as triggering a pipeline
+# launch with a GitHub webhook whenever the pipeline repository is updated.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example: GitHub webhook action
+# resource "seqera_action" "github_webhook" {
+#   workspace_id = seqera_workspace.main.id
+#   name = "my-github-action"
+#   source = "github"
+#   config = {
+#     # GitHub config
+#   }
+#   launch = {
+#     pipeline = "https://github.com/myorg/pipeline"
+#     compute_env_id = seqera_compute_env.aws.id
+#     work_dir = "s3://my-bucket/work"
+#   }
+# }
+#
+# ==============================================================================
+
+actions:
+  # ============================================================================
+  # ENTITY CONFIGURATION
+  # ============================================================================
+
+  # Entity schema configuration for Actions
   - target: $.components.schemas.ActionResponseDto
     update:
       x-speakeasy-entity: Action
@@ -38,70 +56,104 @@ actions:
         Contains action configuration, triggers, and execution settings
         for automated pipeline workflows.
 
-  ####################################################################
-  ####              Action Field Descriptions & Ordering          ####
-  ####################################################################
-  # Field descriptions and ordering for ActionResponseDto
+  # ============================================================================
+  # ENTITY OPERATIONS (CRUD)
+  # ============================================================================
+
+  # CREATE - POST /actions
+  - target: $.paths["/actions"].post
+    update:
+      x-speakeasy-entity-operation: Action#create
+
+  # READ - GET /actions/{actionId}
+  - target: $.paths["/actions/{actionId}"].get
+    update:
+      x-speakeasy-entity-operation: Action#read
+
+  # DELETE - DELETE /actions/{actionId}
+  - target: $.paths["/actions/{actionId}"].delete
+    update:
+      x-speakeasy-entity-operation: Action#delete
+
+  # ============================================================================
+  # SCHEMA DESCRIPTIONS
+  # ============================================================================
+
+  # ActionResponseDto field descriptions and ordering
   - target: $.components.schemas.ActionResponseDto.properties.id
     update:
       description: Unique identifier for the action
       x-speakeasy-param-ordering: 1
+
   - target: $.components.schemas.ActionResponseDto.properties.name
     update:
       description: Human-readable name for the action
       x-speakeasy-param-ordering: 2
+
   - target: $.components.schemas.ActionResponseDto.properties.source
     update:
-      description: Source system or trigger that initiated the action
+      description: Event source that triggers this action (e.g., github, tower)
       x-speakeasy-param-ordering: 3
+
+  - target: $.components.schemas.ActionResponseDto.properties.config
+    update:
+      description: Configuration type and settings for the action trigger
+      x-speakeasy-param-ordering: 4
+
+  - target: $.components.schemas.ActionResponseDto.properties.launch
+    update:
+      description: Launch configuration and parameters for the pipeline execution
+      x-speakeasy-param-ordering: 5
+
   - target: $.components.schemas.ActionResponseDto.properties.status
     update:
       description: Current execution status of the action
-      x-speakeasy-param-ordering: 4
-  - target: $.components.schemas.ActionResponseDto.properties.launch
-    update:
-      description: Launch configuration and parameters for the action
-      x-speakeasy-param-ordering: 5
-  - target: $.components.schemas.ActionResponseDto.properties.config
-    update:
-      description: Configuration type and settings for the action
       x-speakeasy-param-ordering: 6
+
   - target: $.components.schemas.ActionResponseDto.properties.hookId
     update:
       description: Identifier for the webhook associated with this action
       x-speakeasy-param-ordering: 7
+
   - target: $.components.schemas.ActionResponseDto.properties.hookUrl
     update:
       description: URL endpoint for the webhook that triggers this action
       x-speakeasy-param-ordering: 8
+
   - target: $.components.schemas.ActionResponseDto.properties.message
     update:
       description: Status or informational message about the action
       x-speakeasy-param-ordering: 9
 
-  ####################################################################
-  ####              Server-Managed Read-Only Fields               ####
-  ####################################################################
+  # ============================================================================
+  # READ-ONLY FIELDS
+  # ============================================================================
+
   # Mark server-managed fields as read-only in ActionResponseDto
   - target: $.components.schemas.ActionResponseDto.properties.id
     update:
       x-speakeasy-param-readonly: true
+
   - target: $.components.schemas.ActionResponseDto.properties.hookId
     update:
       x-speakeasy-param-readonly: true
+
   - target: $.components.schemas.ActionResponseDto.properties.hookUrl
     update:
       x-speakeasy-param-readonly: true
+
   - target: $.components.schemas.ActionResponseDto.properties.message
     update:
       x-speakeasy-param-readonly: true
+
   - target: $.components.schemas.ActionResponseDto.properties.status
     update:
       x-speakeasy-param-readonly: true
 
-  ####################################################################
-  ####              Discriminator Field Fixes                     ####
-  ####################################################################
+  # ============================================================================
+  # DISCRIMINATOR FIELD FIXES
+  # ============================================================================
+
   # Remove readOnly from discriminator fields to allow setting them
   - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
     remove: true
@@ -114,4 +166,24 @@ actions:
   - target: $["components"]["schemas"]["GithubActionConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["GithubActionEvent"]["properties"]["discriminator"]["readOnly"]
+    remove: true
+
+  # ============================================================================
+  # CLEANUP - Remove runtime and transient fields
+  # ============================================================================
+
+  # Remove last event data (runtime execution information)
+  - target: $.components.schemas.ActionResponseDto.properties.event
+    remove: true
+
+  # Remove timestamp fields
+  - target: $.components.schemas.ActionResponseDto.properties.lastSeen
+    remove: true
+  - target: $.components.schemas.ActionResponseDto.properties.dateCreated
+    remove: true
+  - target: $.components.schemas.ActionResponseDto.properties.lastUpdated
+    remove: true
+
+  # Remove runtime label associations (managed separately)
+  - target: $.components.schemas.ActionResponseDto.properties.labels
     remove: true

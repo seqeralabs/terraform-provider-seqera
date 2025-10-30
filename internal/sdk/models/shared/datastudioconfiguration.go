@@ -3,12 +3,16 @@
 package shared
 
 type DataStudioConfiguration struct {
-	Gpu              *int     `json:"gpu,omitempty"`
-	CPU              *int     `json:"cpu,omitempty"`
+	// Number of GPUs to allocate
+	Gpu *int `json:"gpu,omitempty"`
+	// Number of CPU cores to allocate
+	CPU *int `json:"cpu,omitempty"`
+	// Memory allocation for the Studio session in megabytes (MB).
 	Memory           *int     `json:"memory,omitempty"`
 	MountData        []string `json:"mountData,omitempty"`
 	CondaEnvironment *string  `json:"condaEnvironment,omitempty"`
-	LifespanHours    *int     `json:"lifespanHours,omitempty"`
+	// Maximum lifespan of the Studio session in hours
+	LifespanHours *int `json:"lifespanHours,omitempty"`
 }
 
 func (d *DataStudioConfiguration) GetGpu() *int {

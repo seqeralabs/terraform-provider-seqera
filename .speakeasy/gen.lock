@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: e9a2b657fe1db3fa0a5d2f651853cfe9
+  docChecksum: a65a3a7957cf5bbe3e88935221bd1bda
   docVersion: 1.56.0
   speakeasyVersion: 1.643.3
   generationVersion: 2.731.9
@@ -259,10 +259,7 @@ generatedFiles:
   - internal/provider/typeconvert/int.go
   - internal/provider/types/access_token.go
   - internal/provider/types/action_config_type.go
-  - internal/provider/types/action_event_type.go
   - internal/provider/types/action_tower_action_config.go
-  - internal/provider/types/action_tower_action_event.go
-  - internal/provider/types/active_connection.go
   - internal/provider/types/agent_security_keys.go
   - internal/provider/types/altair_pbs_configuration.go
   - internal/provider/types/amazon_eks_cluster_configuration.go
@@ -286,20 +283,12 @@ generatedFiles:
   - internal/provider/types/compute_config.go
   - internal/provider/types/compute_env.go
   - internal/provider/types/compute_env_compute_config.go
-  - internal/provider/types/compute_env_db_dto.go
   - internal/provider/types/compute_env_response_dto.go
-  - internal/provider/types/compute_platform_dto.go
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
   - internal/provider/types/container_registry_keys1.go
   - internal/provider/types/data_link_credentials.go
-  - internal/provider/types/data_link_dto.go
-  - internal/provider/types/data_studio_compute_env_dto.go
   - internal/provider/types/data_studio_configuration.go
-  - internal/provider/types/data_studio_dto_parent_checkpoint.go
-  - internal/provider/types/data_studio_progress_step.go
-  - internal/provider/types/data_studio_status_info.go
-  - internal/provider/types/data_studio_template.go
   - internal/provider/types/dataset.go
   - internal/provider/types/forge_config.go
   - internal/provider/types/git_hub_security_keys.go
@@ -309,7 +298,6 @@ generatedFiles:
   - internal/provider/types/gitea_security_keys.go
   - internal/provider/types/gitea_security_keys1.go
   - internal/provider/types/github_action_config.go
-  - internal/provider/types/github_action_event.go
   - internal/provider/types/github_credential_keys.go
   - internal/provider/types/gitlab_credential_keys.go
   - internal/provider/types/google_batch_service_configuration.go
@@ -319,7 +307,6 @@ generatedFiles:
   - internal/provider/types/google_security_keys.go
   - internal/provider/types/google_security_keys1.go
   - internal/provider/types/ibmlsf_configuration.go
-  - internal/provider/types/job_info_dto.go
   - internal/provider/types/k8s_security_keys.go
   - internal/provider/types/k8s_security_keys1.go
   - internal/provider/types/kubernetes_compute_configuration.go
@@ -328,8 +315,6 @@ generatedFiles:
   - internal/provider/types/launch.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/org_and_workspace_dto.go
-  - internal/provider/types/process_load.go
-  - internal/provider/types/progress_data.go
   - internal/provider/types/security_keys.go
   - internal/provider/types/security_keys_output.go
   - internal/provider/types/seqera_compute_configuration.go
@@ -339,7 +324,6 @@ generatedFiles:
   - internal/provider/types/ssh_credential_keys.go
   - internal/provider/types/ssh_security_keys.go
   - internal/provider/types/ssh_security_keys1.go
-  - internal/provider/types/studio_user.go
   - internal/provider/types/tower_agent_credential_keys.go
   - internal/provider/types/univa_grid_engine_configuration.go
   - internal/provider/types/wf_manifest.go
@@ -348,7 +332,6 @@ generatedFiles:
   - internal/provider/types/workflow.go
   - internal/provider/types/workflow_launch_request.go
   - internal/provider/types/workflow_launch_request1.go
-  - internal/provider/types/workflow_load.go
   - internal/provider/types/workspace_db_dto.go
   - internal/provider/user_data_source.go
   - internal/provider/user_data_source_sdk.go
@@ -635,7 +618,6 @@ generatedFiles:
   - internal/sdk/models/shared/actionresponsedto.go
   - internal/sdk/models/shared/actionsource.go
   - internal/sdk/models/shared/actionstatus.go
-  - internal/sdk/models/shared/activeconnection.go
   - internal/sdk/models/shared/addmemberrequest.go
   - internal/sdk/models/shared/addmemberresponse.go
   - internal/sdk/models/shared/addparticipantrequest.go
@@ -660,12 +642,10 @@ generatedFiles:
   - internal/sdk/models/shared/codecommitcredential.go
   - internal/sdk/models/shared/computeconfig.go
   - internal/sdk/models/shared/computeenvcomputeconfiginput.go
-  - internal/sdk/models/shared/computeenvdbdto.go
   - internal/sdk/models/shared/computeenvqueryattribute.go
   - internal/sdk/models/shared/computeenvresponsedto.go
   - internal/sdk/models/shared/computeenvstatus.go
   - internal/sdk/models/shared/computeplatform.go
-  - internal/sdk/models/shared/computeplatformdto.go
   - internal/sdk/models/shared/computeregion.go
   - internal/sdk/models/shared/configenvvariable.go
   - internal/sdk/models/shared/containerdata.go
@@ -747,17 +727,13 @@ generatedFiles:
   - internal/sdk/models/shared/datasetversiondbdto.go
   - internal/sdk/models/shared/datastudiocheckpointdto.go
   - internal/sdk/models/shared/datastudiocheckpointupdaterequest.go
-  - internal/sdk/models/shared/datastudiocomputeenvdto.go
   - internal/sdk/models/shared/datastudioconfiguration.go
   - internal/sdk/models/shared/datastudiocreaterequest.go
   - internal/sdk/models/shared/datastudiocreateresponse.go
   - internal/sdk/models/shared/datastudiodto.go
-  - internal/sdk/models/shared/datastudiodtoparentcheckpoint.go
   - internal/sdk/models/shared/datastudiolistcheckpointsresponse.go
   - internal/sdk/models/shared/datastudiolistresponse.go
   - internal/sdk/models/shared/datastudiomountedlinksresponse.go
-  - internal/sdk/models/shared/datastudioprogressstep.go
-  - internal/sdk/models/shared/datastudioprogressstepstatus.go
   - internal/sdk/models/shared/datastudioqueryattribute.go
   - internal/sdk/models/shared/datastudiostartrequest.go
   - internal/sdk/models/shared/datastudiostartresponse.go
@@ -825,7 +801,6 @@ generatedFiles:
   - internal/sdk/models/shared/instancetype.go
   - internal/sdk/models/shared/iteratorstring.go
   - internal/sdk/models/shared/jobcleanuppolicy.go
-  - internal/sdk/models/shared/jobinfodto.go
   - internal/sdk/models/shared/jobqueue.go
   - internal/sdk/models/shared/k8splatformmetainfo.go
   - internal/sdk/models/shared/kubernetescredential.go
@@ -876,7 +851,6 @@ generatedFiles:
   - internal/sdk/models/shared/participanttype.go
   - internal/sdk/models/shared/pipelinedbdto.go
   - internal/sdk/models/shared/pipelineinfo.go
-  - internal/sdk/models/shared/pipelineoptimizationstatus.go
   - internal/sdk/models/shared/pipelinequeryattribute.go
   - internal/sdk/models/shared/pipelineschemaattributes.go
   - internal/sdk/models/shared/pipelineschemaresponse.go
@@ -1023,7 +997,7 @@ examples:
         query:
           workspaceId: 547784
       requestBody:
-        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "<value>", "source": "tower", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -1057,7 +1031,7 @@ examples:
         path:
           actionId: "<id>"
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2162,7 +2136,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -2205,7 +2179,7 @@ examples:
         path:
           pipelineId: 936263
       requestBody:
-        application/json: {"name": "rna-seq-analysis", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"name": "rna-seq-analysis", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -2286,10 +2260,10 @@ examples:
   CreateDataStudio:
     speakeasy-default-create-data-studio:
       requestBody:
-        application/json: {"name": "my-jupyter-studio", "description": "Jupyter studio for data analysis and visualization", "dataStudioToolUrl": "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8", "computeEnvId": "compute-env-id"}
+        application/json: {"name": "my-jupyter-studio", "description": "Jupyter studio for data analysis and visualization", "dataStudioToolUrl": "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8", "computeEnvId": "compute-env-id", "configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
       responses:
         "200":
-          application/json: {}
+          application/json: {"studio": {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}}
         "400":
           application/json: {"message": "<value>"}
   ListMountedDataLinkIds:
@@ -2312,7 +2286,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
         "404":
           application/json: {"message": "<value>"}
   DeleteDataStudio:
@@ -2364,7 +2338,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
         "400":
           application/json: {"message": "<value>"}
   StartDataStudio:
@@ -2373,7 +2347,7 @@ examples:
         path:
           sessionId: "<id>"
       requestBody:
-        application/json: {}
+        application/json: {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
       responses:
         "200":
           application/json: {"jobSubmitted": true, "sessionId": "<id>", "statusInfo": {}}
@@ -2537,7 +2511,7 @@ examples:
         query:
           workspaceId: 714137
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096, "dateCreated": "2024-07-23T10:30:00Z"}}
+        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}

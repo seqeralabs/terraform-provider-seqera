@@ -34,9 +34,9 @@ resource "seqera_studios" "my_studios" {
   configuration = {
     conda_environment = "...my_conda_environment..."
     cpu               = 2
-    gpu               = 8
+    gpu               = 0
     lifespan_hours    = 2
-    memory            = 3
+    memory            = 4096
     mount_data = [
       "..."
     ]
@@ -76,24 +76,7 @@ resource "seqera_studios" "my_studios" {
 
 ### Read-Only
 
-- `active_connections` (Attributes List) (see [below for nested schema](#nestedatt--active_connections))
-- `base_image` (String)
-- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--compute_env))
-- `custom_image` (Boolean)
-- `date_created` (String)
-- `effective_lifespan_hours` (Number)
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
-- `last_started` (String)
-- `last_updated` (String)
-- `mounted_data_links` (Attributes List) (see [below for nested schema](#nestedatt--mounted_data_links))
-- `parent_checkpoint` (Attributes) (see [below for nested schema](#nestedatt--parent_checkpoint))
-- `progress` (Attributes List) (see [below for nested schema](#nestedatt--progress))
 - `session_id` (String) Unique identifier for the Studio session
-- `status_info` (Attributes) (see [below for nested schema](#nestedatt--status_info))
-- `studio_url` (String) URL to access the running Studio instance
-- `template` (Attributes) (see [below for nested schema](#nestedatt--template))
-- `user` (Attributes) (see [below for nested schema](#nestedatt--user))
-- `wave_build_url` (String)
 
 <a id="nestedatt--configuration"></a>
 ### Nested Schema for `configuration`
@@ -101,131 +84,11 @@ resource "seqera_studios" "my_studios" {
 Optional:
 
 - `conda_environment` (String) Requires replacement if changed.
-- `cpu` (Number) Requires replacement if changed.
-- `gpu` (Number) Requires replacement if changed.
-- `lifespan_hours` (Number) Requires replacement if changed.
-- `memory` (Number) Requires replacement if changed.
+- `cpu` (Number) Number of CPU cores to allocate. Requires replacement if changed.
+- `gpu` (Number) Number of GPUs to allocate. Requires replacement if changed.
+- `lifespan_hours` (Number) Maximum lifespan of the Studio session in hours. Requires replacement if changed.
+- `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Requires replacement if changed.
 - `mount_data` (List of String) Requires replacement if changed.
-
-
-<a id="nestedatt--active_connections"></a>
-### Nested Schema for `active_connections`
-
-Read-Only:
-
-- `avatar` (String)
-- `email` (String)
-- `id` (Number)
-- `last_active` (String)
-- `user_name` (String)
-
-
-<a id="nestedatt--compute_env"></a>
-### Nested Schema for `compute_env`
-
-Read-Only:
-
-- `credentials_id` (String)
-- `id` (String)
-- `name` (String)
-- `platform` (String)
-- `region` (String)
-- `work_dir` (String)
-
-
-<a id="nestedatt--labels"></a>
-### Nested Schema for `labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label
-
-
-<a id="nestedatt--mounted_data_links"></a>
-### Nested Schema for `mounted_data_links`
-
-Read-Only:
-
-- `credentials` (Attributes List) Array of credentials required to access the data link (see [below for nested schema](#nestedatt--mounted_data_links--credentials))
-- `data_link_id` (String) Unique identifier for the data link
-- `description` (String) Description of the data link's purpose and contents
-- `hidden` (Boolean)
-- `message` (String)
-- `name` (String) Display name for the data link connection
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
-- `public_accessible` (Boolean)
-- `region` (String) Geographic region where the data link is hosted
-- `resource_ref` (String) Reference identifier for the external resource
-- `status` (String) must be one of ["VALID", "INVALID"]
-- `type` (String) must be "bucket"
-
-<a id="nestedatt--mounted_data_links--credentials"></a>
-### Nested Schema for `mounted_data_links.credentials`
-
-Read-Only:
-
-- `id` (String)
-- `name` (String)
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
-
-
-
-<a id="nestedatt--parent_checkpoint"></a>
-### Nested Schema for `parent_checkpoint`
-
-Read-Only:
-
-- `checkpoint_id` (Number)
-- `checkpoint_name` (String)
-- `session_id` (String)
-- `studio_name` (String)
-
-
-<a id="nestedatt--progress"></a>
-### Nested Schema for `progress`
-
-Read-Only:
-
-- `message` (String)
-- `status` (String) must be one of ["pending", "in-progress", "succeeded", "errored"]
-- `warnings` (List of String)
-
-
-<a id="nestedatt--status_info"></a>
-### Nested Schema for `status_info`
-
-Read-Only:
-
-- `last_update` (String)
-- `message` (String)
-- `status` (String) must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]
-
-
-<a id="nestedatt--template"></a>
-### Nested Schema for `template`
-
-Read-Only:
-
-- `icon` (String)
-- `repository` (String)
-- `status` (String) must be one of ["recommended", "deprecated", "experimental", "unsupported"]
-- `tool` (String)
-
-
-<a id="nestedatt--user"></a>
-### Nested Schema for `user`
-
-Read-Only:
-
-- `avatar` (String)
-- `email` (String)
-- `id` (Number)
-- `user_name` (String)
 
 ## Import
 

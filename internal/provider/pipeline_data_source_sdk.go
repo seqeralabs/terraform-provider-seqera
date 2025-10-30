@@ -6,8 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -31,52 +29,15 @@ func (r *PipelineDataSourceModel) RefreshFromSharedPipelineDbDto(ctx context.Con
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.ComputeEnv == nil {
-			r.ComputeEnv = nil
-		} else {
-			r.ComputeEnv = &tfTypes.ComputeEnvDbDto{}
-			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
-			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
-			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
-			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
-		}
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Icon = types.StringPointerValue(resp.Icon)
-		r.Labels = []tfTypes.LabelDbDto{}
-
-		for _, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-
-			r.Labels = append(r.Labels, labels)
-		}
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.Name = types.StringPointerValue(resp.Name)
-		r.OptimizationID = types.StringPointerValue(resp.OptimizationID)
-		if resp.OptimizationStatus != nil {
-			r.OptimizationStatus = types.StringValue(string(*resp.OptimizationStatus))
-		} else {
-			r.OptimizationStatus = types.StringNull()
-		}
-		r.OptimizationTargets = types.StringPointerValue(resp.OptimizationTargets)
-		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.OrgName = types.StringPointerValue(resp.OrgName)
 		r.PipelineID = types.Int64PointerValue(resp.PipelineID)
 		r.Repository = types.StringPointerValue(resp.Repository)
 		r.UserFirstName = types.StringPointerValue(resp.UserFirstName)
 		r.UserID = types.Int64PointerValue(resp.UserID)
-		r.UserLastName = types.StringPointerValue(resp.UserLastName)
 		r.UserName = types.StringPointerValue(resp.UserName)
-		r.Visibility = types.StringPointerValue(resp.Visibility)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
-		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
 	}
 
 	return diags

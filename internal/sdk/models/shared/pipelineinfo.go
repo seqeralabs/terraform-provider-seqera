@@ -3,45 +3,7 @@
 package shared
 
 type PipelineInfo struct {
-	ProjectName        *string     `json:"projectName,omitempty"`
-	SimpleName         *string     `json:"simpleName,omitempty"`
-	RepositoryURL      *string     `json:"repositoryUrl,omitempty"`
-	CloneURL           *string     `json:"cloneUrl,omitempty"`
-	RepositoryProvider *string     `json:"provider,omitempty"`
-	ConfigFiles        []string    `json:"configFiles,omitempty"`
-	WorkDirs           []string    `json:"workDirs,omitempty"`
-	Revisions          []string    `json:"revisions,omitempty"`
-	Profiles           []string    `json:"profiles,omitempty"`
-	Manifest           *WfManifest `json:"manifest,omitempty"`
-	Warnings           []string    `json:"warnings,omitempty"`
-}
-
-func (p *PipelineInfo) GetProjectName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.ProjectName
-}
-
-func (p *PipelineInfo) GetSimpleName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.SimpleName
-}
-
-func (p *PipelineInfo) GetRepositoryURL() *string {
-	if p == nil {
-		return nil
-	}
-	return p.RepositoryURL
-}
-
-func (p *PipelineInfo) GetCloneURL() *string {
-	if p == nil {
-		return nil
-	}
-	return p.CloneURL
+	RepositoryProvider *string `json:"provider,omitempty"`
 }
 
 func (p *PipelineInfo) GetRepositoryProvider() *string {
@@ -49,46 +11,4 @@ func (p *PipelineInfo) GetRepositoryProvider() *string {
 		return nil
 	}
 	return p.RepositoryProvider
-}
-
-func (p *PipelineInfo) GetConfigFiles() []string {
-	if p == nil {
-		return nil
-	}
-	return p.ConfigFiles
-}
-
-func (p *PipelineInfo) GetWorkDirs() []string {
-	if p == nil {
-		return nil
-	}
-	return p.WorkDirs
-}
-
-func (p *PipelineInfo) GetRevisions() []string {
-	if p == nil {
-		return nil
-	}
-	return p.Revisions
-}
-
-func (p *PipelineInfo) GetProfiles() []string {
-	if p == nil {
-		return nil
-	}
-	return p.Profiles
-}
-
-func (p *PipelineInfo) GetManifest() *WfManifest {
-	if p == nil {
-		return nil
-	}
-	return p.Manifest
-}
-
-func (p *PipelineInfo) GetWarnings() []string {
-	if p == nil {
-		return nil
-	}
-	return p.Warnings
 }

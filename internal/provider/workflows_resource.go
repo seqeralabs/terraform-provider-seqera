@@ -42,47 +42,33 @@ type WorkflowsResource struct {
 
 // WorkflowsResourceModel describes the resource data model.
 type WorkflowsResourceModel struct {
-	ComputeEnvID        types.String                `tfsdk:"compute_env_id"`
-	ConfigProfiles      []types.String              `tfsdk:"config_profiles"`
-	ConfigText          types.String                `tfsdk:"config_text"`
-	DateCreated         types.String                `tfsdk:"date_created"`
-	EntryName           types.String                `tfsdk:"entry_name"`
-	Force               types.Bool                  `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
-	HeadJobCpus         types.Int32                 `tfsdk:"head_job_cpus"`
-	HeadJobMemoryMb     types.Int32                 `tfsdk:"head_job_memory_mb"`
-	JobInfo             *tfTypes.JobInfoDto         `tfsdk:"job_info"`
-	LabelIds            []types.Int64               `tfsdk:"label_ids"`
-	Labels              []tfTypes.LabelDbDto        `tfsdk:"labels"`
-	LaunchContainer     types.String                `tfsdk:"launch_container"`
-	MainScript          types.String                `tfsdk:"main_script"`
-	Messages            []types.String              `tfsdk:"messages"`
-	OptimizationID      types.String                `tfsdk:"optimization_id"`
-	OptimizationTargets types.String                `tfsdk:"optimization_targets"`
-	Optimized           types.Bool                  `tfsdk:"optimized"`
-	OrgID               types.Int64                 `tfsdk:"org_id"`
-	OrgName             types.String                `tfsdk:"org_name"`
-	ParamsText          types.String                `tfsdk:"params_text"`
-	Pipeline            types.String                `tfsdk:"pipeline"`
-	Platform            *tfTypes.ComputePlatformDto `tfsdk:"platform"`
-	PostRunScript       types.String                `tfsdk:"post_run_script"`
-	PreRunScript        types.String                `tfsdk:"pre_run_script"`
-	Progress            *tfTypes.ProgressData       `tfsdk:"progress"`
-	PullLatest          types.Bool                  `tfsdk:"pull_latest"`
-	Resume              types.Bool                  `tfsdk:"resume"`
-	Revision            types.String                `tfsdk:"revision"`
-	RunName             types.String                `tfsdk:"run_name"`
-	SchemaName          types.String                `tfsdk:"schema_name"`
-	SessionID           types.String                `tfsdk:"session_id"`
-	SourceWorkspaceID   types.Int64                 `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
-	StubRun             types.Bool                  `tfsdk:"stub_run"`
-	TowerConfig         types.String                `tfsdk:"tower_config"`
-	UserSecrets         []types.String              `tfsdk:"user_secrets"`
-	WorkDir             types.String                `tfsdk:"work_dir"`
-	Workflow            *tfTypes.Workflow           `tfsdk:"workflow"`
-	WorkflowID          types.String                `tfsdk:"workflow_id"`
-	WorkspaceID         types.Int64                 `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceName       types.String                `tfsdk:"workspace_name"`
-	WorkspaceSecrets    []types.String              `tfsdk:"workspace_secrets"`
+	ComputeEnvID      types.String      `tfsdk:"compute_env_id"`
+	ConfigProfiles    []types.String    `tfsdk:"config_profiles"`
+	ConfigText        types.String      `tfsdk:"config_text"`
+	EntryName         types.String      `tfsdk:"entry_name"`
+	Force             types.Bool        `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
+	HeadJobCpus       types.Int32       `tfsdk:"head_job_cpus"`
+	HeadJobMemoryMb   types.Int32       `tfsdk:"head_job_memory_mb"`
+	LabelIds          []types.Int64     `tfsdk:"label_ids"`
+	MainScript        types.String      `tfsdk:"main_script"`
+	ParamsText        types.String      `tfsdk:"params_text"`
+	Pipeline          types.String      `tfsdk:"pipeline"`
+	PostRunScript     types.String      `tfsdk:"post_run_script"`
+	PreRunScript      types.String      `tfsdk:"pre_run_script"`
+	PullLatest        types.Bool        `tfsdk:"pull_latest"`
+	Resume            types.Bool        `tfsdk:"resume"`
+	Revision          types.String      `tfsdk:"revision"`
+	RunName           types.String      `tfsdk:"run_name"`
+	SchemaName        types.String      `tfsdk:"schema_name"`
+	SourceWorkspaceID types.Int64       `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
+	StubRun           types.Bool        `tfsdk:"stub_run"`
+	TowerConfig       types.String      `tfsdk:"tower_config"`
+	UserSecrets       []types.String    `tfsdk:"user_secrets"`
+	WorkDir           types.String      `tfsdk:"work_dir"`
+	Workflow          *tfTypes.Workflow `tfsdk:"workflow"`
+	WorkflowID        types.String      `tfsdk:"workflow_id"`
+	WorkspaceID       types.Int64       `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceSecrets  []types.String    `tfsdk:"workspace_secrets"`
 }
 
 func (r *WorkflowsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -115,16 +101,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"date_created": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
 			"entry_name": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -150,26 +126,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"job_info": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"exit_code": schema.Int32Attribute{
-						Computed: true,
-					},
-					"id": schema.Int64Attribute{
-						Computed: true,
-					},
-					"message": schema.StringAttribute{
-						Computed: true,
-					},
-					"operation_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"status": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
@@ -178,80 +134,12 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				ElementType: types.Int64Type,
 				Description: `Requires replacement if changed.`,
 			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-							Validators: []validator.String{
-								validators.IsRFC3339(),
-							},
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
-			"launch_container": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
 			"main_script": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
-			},
-			"messages": schema.ListAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
-			},
-			"optimization_id": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"optimization_targets": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
-			"optimized": schema.BoolAttribute{
-				Computed: true,
-			},
-			"org_id": schema.Int64Attribute{
-				Computed: true,
-			},
-			"org_name": schema.StringAttribute{
-				Computed: true,
 			},
 			"params_text": schema.StringAttribute{
 				Optional: true,
@@ -267,17 +155,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"platform": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"id": schema.StringAttribute{
-						Computed: true,
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
 			"post_run_script": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -291,214 +168,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
-			},
-			"progress": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"processes_progress": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"aborted": schema.Int64Attribute{
-									Computed: true,
-								},
-								"cached": schema.Int64Attribute{
-									Computed: true,
-								},
-								"cpu_efficiency": schema.Float32Attribute{
-									Computed: true,
-								},
-								"cpu_load": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"cpu_time": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"cpus": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"date_created": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										validators.IsRFC3339(),
-									},
-								},
-								"failed": schema.Int64Attribute{
-									Computed: true,
-								},
-								"inv_ctx_switch": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"last_updated": schema.StringAttribute{
-									Computed: true,
-									Validators: []validator.String{
-										validators.IsRFC3339(),
-									},
-								},
-								"load_cpus": schema.Int64Attribute{
-									Computed: true,
-								},
-								"load_memory": schema.Int64Attribute{
-									Computed: true,
-								},
-								"load_tasks": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"memory_efficiency": schema.Float32Attribute{
-									Computed: true,
-								},
-								"memory_req": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"memory_rss": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"peak_cpus": schema.Int64Attribute{
-									Computed: true,
-								},
-								"peak_memory": schema.Int64Attribute{
-									Computed: true,
-								},
-								"peak_tasks": schema.Int64Attribute{
-									Computed: true,
-								},
-								"pending": schema.Int64Attribute{
-									Computed: true,
-								},
-								"process": schema.StringAttribute{
-									Computed: true,
-								},
-								"read_bytes": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"running": schema.Int64Attribute{
-									Computed: true,
-								},
-								"submitted": schema.Int64Attribute{
-									Computed: true,
-								},
-								"succeeded": schema.Int64Attribute{
-									Computed: true,
-								},
-								"vol_ctx_switch": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-								"write_bytes": schema.Int64Attribute{
-									Computed:           true,
-									DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-								},
-							},
-						},
-					},
-					"total_processes": schema.Int32Attribute{
-						Computed: true,
-					},
-					"workflow_progress": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"aborted": schema.Int64Attribute{
-								Computed: true,
-							},
-							"cached": schema.Int64Attribute{
-								Computed: true,
-							},
-							"cost": schema.Float64Attribute{
-								Computed: true,
-							},
-							"cpu_efficiency": schema.Float32Attribute{
-								Computed: true,
-							},
-							"cpu_load": schema.Int64Attribute{
-								Computed: true,
-							},
-							"cpu_time": schema.Int64Attribute{
-								Computed: true,
-							},
-							"cpus": schema.Int64Attribute{
-								Computed: true,
-							},
-							"date_created": schema.StringAttribute{
-								Computed: true,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
-							},
-							"executors": schema.ListAttribute{
-								Computed:    true,
-								ElementType: types.StringType,
-							},
-							"failed": schema.Int64Attribute{
-								Computed: true,
-							},
-							"inv_ctx_switch": schema.Int64Attribute{
-								Computed: true,
-							},
-							"last_updated": schema.StringAttribute{
-								Computed: true,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
-							},
-							"load_cpus": schema.Int64Attribute{
-								Computed: true,
-							},
-							"load_memory": schema.Int64Attribute{
-								Computed: true,
-							},
-							"load_tasks": schema.Int64Attribute{
-								Computed: true,
-							},
-							"memory_efficiency": schema.Float32Attribute{
-								Computed: true,
-							},
-							"memory_req": schema.Int64Attribute{
-								Computed: true,
-							},
-							"memory_rss": schema.Int64Attribute{
-								Computed: true,
-							},
-							"peak_cpus": schema.Int64Attribute{
-								Computed: true,
-							},
-							"peak_memory": schema.Int64Attribute{
-								Computed: true,
-							},
-							"peak_tasks": schema.Int64Attribute{
-								Computed: true,
-							},
-							"pending": schema.Int64Attribute{
-								Computed: true,
-							},
-							"read_bytes": schema.Int64Attribute{
-								Computed: true,
-							},
-							"running": schema.Int64Attribute{
-								Computed: true,
-							},
-							"submitted": schema.Int64Attribute{
-								Computed: true,
-							},
-							"succeeded": schema.Int64Attribute{
-								Computed: true,
-							},
-							"vol_ctx_switch": schema.Int64Attribute{
-								Computed: true,
-							},
-							"write_bytes": schema.Int64Attribute{
-								Computed: true,
-							},
-						},
-					},
-				},
 			},
 			"pull_latest": schema.BoolAttribute{
 				Optional: true,
@@ -535,13 +204,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"session_id": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Requires replacement if changed.`,
-			},
 			"source_workspace_id": schema.Int64Attribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Int64{
@@ -572,7 +234,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Description: `Requires replacement if changed.`,
 			},
 			"work_dir": schema.StringAttribute{
-				Required: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
@@ -853,9 +515,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
 				},
 				Description: `Workspace numeric identifier. Requires replacement if changed.`,
-			},
-			"workspace_name": schema.StringAttribute{
-				Computed: true,
 			},
 			"workspace_secrets": schema.ListAttribute{
 				Optional: true,
