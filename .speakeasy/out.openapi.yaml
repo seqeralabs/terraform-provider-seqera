@@ -10181,7 +10181,7 @@ components:
           x-speakeasy-param-readonly: true
         launch:
           $ref: "#/components/schemas/Launch"
-          description: Launch configuration and parameters for the action
+          description: Launch configuration and parameters for the pipeline execution
           x-speakeasy-param-ordering: 5
         name:
           type: string
@@ -10204,32 +10204,17 @@ components:
           x-speakeasy-param-readonly: true
         source:
           $ref: "#/components/schemas/Action.Source"
-          description: Source system or trigger that initiated the action
+          description: Event source that triggers this action (e.g., github, tower)
           x-speakeasy-param-ordering: 3
         status:
           $ref: "#/components/schemas/Action.Status"
           description: Current execution status of the action
-          x-speakeasy-param-ordering: 4
+          x-speakeasy-param-ordering: 6
           x-speakeasy-param-readonly: true
         config:
           $ref: "#/components/schemas/Action.ConfigType"
-          description: Configuration type and settings for the action
-          x-speakeasy-param-ordering: 6
-        event:
-          $ref: "#/components/schemas/Action.EventType"
-        lastSeen:
-          type: string
-          format: date-time
-        dateCreated:
-          type: string
-          format: date-time
-        lastUpdated:
-          type: string
-          format: date-time
-        labels:
-          type: array
-          items:
-            $ref: "#/components/schemas/LabelDbDto"
+          description: Configuration type and settings for the action trigger
+          x-speakeasy-param-ordering: 4
       x-speakeasy-entity: Action
       x-speakeasy-entity-version: 1
       x-speakeasy-entity-description: |
@@ -11794,14 +11779,20 @@ components:
           minimum: 0
           type: integer
           format: int32
+          description: Number of GPUs to allocate
+          example: 0
         cpu:
           minimum: 0
           type: integer
           format: int32
+          description: Number of CPU cores to allocate
+          example: 2
         memory:
           minimum: 0
           type: integer
           format: int32
+          description: Memory allocation for the Studio session in megabytes (MB).
+          example: 4096
         mountData:
           type: array
           items:
@@ -11813,6 +11804,8 @@ components:
           minimum: 0
           type: integer
           format: int32
+          description: Maximum lifespan of the Studio session in hours
+          example: 2
       x-speakeasy-entity: Studios
       x-speakeasy-entity-description: |
         Studios is a unified platform where you can host a combination of
@@ -11893,67 +11886,16 @@ components:
           type: integer
           format: int64
           description: Numeric identifier of the workspace containing the Studio
-        parentCheckpoint:
-          $ref: "#/components/schemas/DataStudioDto.ParentCheckpoint"
-          description: Reference to the parent checkpoint for session restoration
-        user:
-          $ref: "#/components/schemas/StudioUser"
-          description: User information for the Studio session owner
         name:
           type: string
           description: Display name for the Studio session
         description:
           type: string
           description: Description of the Studio session's purpose
-        studioUrl:
-          type: string
-          description: URL to access the running Studio instance
-        computeEnv:
-          $ref: "#/components/schemas/DataStudioComputeEnvDto"
-          description: Compute environment configuration for the Studio
-        template:
-          $ref: "#/components/schemas/DataStudioTemplate"
         configuration:
           $ref: "#/components/schemas/DataStudioConfiguration"
-        dateCreated:
-          type: string
-          format: date-time
-        lastUpdated:
-          type: string
-          format: date-time
-        lastStarted:
-          type: string
-          format: date-time
-        effectiveLifespanHours:
-          type: integer
-          format: int32
-        activeConnections:
-          type: array
-          items:
-            $ref: "#/components/schemas/ActiveConnection"
-        statusInfo:
-          $ref: "#/components/schemas/DataStudioStatusInfo"
-        waveBuildUrl:
-          type: string
-        baseImage:
-          type: string
-        customImage:
-          type: boolean
         isPrivate:
           type: boolean
-        mountedDataLinks:
-          type: array
-          items:
-            $ref: "#/components/schemas/DataLinkDto"
-        progress:
-          type: array
-          items:
-            $ref: "#/components/schemas/DataStudioProgressStep"
-        labels:
-          type: array
-          nullable: true
-          items:
-            $ref: "#/components/schemas/LabelDbDto"
       x-speakeasy-entity: Studios
       description: |
         Represents a Studio session for interactive data analysis.
@@ -12329,32 +12271,9 @@ components:
       properties:
         workflow:
           $ref: "#/components/schemas/Workflow"
-        progress:
-          $ref: "#/components/schemas/ProgressData"
-        platform:
-          $ref: "#/components/schemas/ComputePlatformDto"
-        jobInfo:
-          $ref: "#/components/schemas/JobInfoDto"
-        orgId:
-          type: integer
-          format: int64
-        orgName:
-          type: string
         workspaceId:
           type: integer
           format: int64
-        workspaceName:
-          type: string
-        labels:
-          type: array
-          items:
-            $ref: "#/components/schemas/LabelDbDto"
-        optimized:
-          type: boolean
-        messages:
-          type: array
-          items:
-            type: string
       x-speakeasy-entity: Workflows
       x-speakeasy-entity-description: |
         Manage workflow executions and pipeline runs.
@@ -13857,50 +13776,13 @@ components:
         userId:
           type: integer
           format: int64
-          description: Numeric identifier of the user who created the pipeline
-          x-speakeasy-param-ordering: 6
-          x-speakeasy-param-readonly: true
         userName:
           type: string
-          description: Username of the pipeline creator
-          x-speakeasy-param-ordering: 7
-          x-speakeasy-param-readonly: true
         userFirstName:
-          type: string
-          description: First name of the user who created the pipeline
-          x-speakeasy-param-ordering: 8
-          x-speakeasy-param-readonly: true
-        userLastName:
-          type: string
-        orgId:
-          type: integer
-          format: int64
-        orgName:
           type: string
         workspaceId:
           type: integer
           format: int64
-        workspaceName:
-          type: string
-        visibility:
-          type: string
-        deleted:
-          type: boolean
-        lastUpdated:
-          type: string
-          format: date-time
-        optimizationId:
-          type: string
-        optimizationTargets:
-          type: string
-        optimizationStatus:
-          $ref: "#/components/schemas/PipelineOptimizationStatus"
-        labels:
-          type: array
-          items:
-            $ref: "#/components/schemas/LabelDbDto"
-        computeEnv:
-          $ref: "#/components/schemas/ComputeEnvDbDto"
       x-speakeasy-entity: Pipeline
       x-speakeasy-entity-description: |
         Manage Nextflow pipeline definitions and configurations.
@@ -13915,39 +13797,9 @@ components:
     PipelineInfo:
       type: object
       properties:
-        projectName:
-          type: string
-        simpleName:
-          type: string
-        repositoryUrl:
-          type: string
-        cloneUrl:
-          type: string
         provider:
           type: string
           x-speakeasy-name-override: repositoryProvider
-        configFiles:
-          type: array
-          items:
-            type: string
-        workDirs:
-          type: array
-          items:
-            type: string
-        revisions:
-          type: array
-          items:
-            type: string
-        profiles:
-          type: array
-          items:
-            type: string
-        manifest:
-          $ref: "#/components/schemas/WfManifest"
-        warnings:
-          type: array
-          items:
-            type: string
     PipelineOptimizationStatus:
       type: string
       enum:
@@ -15425,12 +15277,6 @@ components:
           type: string
         workDir:
           type: string
-        commitId:
-          type: string
-        userName:
-          type: string
-        scriptId:
-          type: string
         revision:
           type: string
         commandLine:
@@ -15455,42 +15301,12 @@ components:
           additionalProperties: true
         configText:
           type: string
-        manifest:
-          $ref: "#/components/schemas/WfManifest"
-        nextflow:
-          $ref: "#/components/schemas/WfNextflow"
-        stats:
-          $ref: "#/components/schemas/WfStats"
-        errorMessage:
-          type: string
-        errorReport:
-          type: string
         deleted:
           type: boolean
           x-speakeasy-param-readonly: true
-        projectDir:
-          type: string
-        homeDir:
-          type: string
-        container:
-          type: string
         repository:
           type: string
-        containerEngine:
-          type: string
-        scriptFile:
-          type: string
-        launchDir:
-          type: string
-        duration:
-          type: integer
-          format: int64
-        exitStatus:
-          type: integer
-          format: int32
         resume:
-          type: boolean
-        success:
           type: boolean
       description: |
         Represents a workflow execution record.
@@ -15501,6 +15317,7 @@ components:
       properties:
         computeEnvId:
           type: string
+          x-speakeasy-param-optional: true
           example: "4g09tT4pW4JFUvXTHdB6zP"
         runName:
           type: string
@@ -15510,12 +15327,11 @@ components:
           example: "https://github.com/nextflow-io/hello"
         workDir:
           type: string
+          x-speakeasy-param-optional: true
           example: "s3://my-bucket/work"
         revision:
           type: string
           example: "main"
-        sessionId:
-          type: string
         configProfiles:
           type: array
           items:
@@ -15579,10 +15395,6 @@ components:
         stubRun:
           type: boolean
           example: false
-        optimizationId:
-          type: string
-        optimizationTargets:
-          type: string
         labelIds:
           type: array
           items:
@@ -15597,12 +15409,6 @@ components:
           type: integer
           format: int32
           example: 4096
-        launchContainer:
-          type: string
-        dateCreated:
-          type: string
-          format: date-time
-          example: "2024-07-23T10:30:00Z"
       required:
         - workDir
       x-speakeasy-entity: Workflows

@@ -49,14 +49,9 @@ data "seqera_action" "my_action" {
 ### Read-Only
 
 - `config` (Attributes) (see [below for nested schema](#nestedatt--config))
-- `date_created` (String)
-- `event` (Attributes) (see [below for nested schema](#nestedatt--event))
 - `hook_id` (String) Identifier for the webhook associated with this action
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
-- `last_seen` (String)
-- `last_updated` (String)
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
 - `message` (String) Status or informational message about the action
 - `name` (String) Human-readable name for the action
@@ -87,52 +82,6 @@ Read-Only:
 
 - `discriminator` (String)
 
-
-
-<a id="nestedatt--event"></a>
-### Nested Schema for `event`
-
-Read-Only:
-
-- `github` (Attributes) (see [below for nested schema](#nestedatt--event--github))
-- `tower` (Attributes) (see [below for nested schema](#nestedatt--event--tower))
-
-<a id="nestedatt--event--github"></a>
-### Nested Schema for `event.github`
-
-Read-Only:
-
-- `commit_id` (String)
-- `commit_message` (String)
-- `discriminator` (String)
-- `pusher_email` (String)
-- `pusher_name` (String)
-- `ref` (String)
-- `timestamp` (String)
-
-
-<a id="nestedatt--event--tower"></a>
-### Nested Schema for `event.tower`
-
-Read-Only:
-
-- `discriminator` (String)
-- `timestamp` (String)
-- `workflow_id` (String)
-
-
-
-<a id="nestedatt--labels"></a>
-### Nested Schema for `labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label
 
 
 <a id="nestedatt--launch"></a>

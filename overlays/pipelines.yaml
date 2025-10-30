@@ -3,26 +3,40 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Pipelines Overlay
   version: 0.0.0
-actions:
-  ####################################################################
-  ####                 Pipeline Entity Operations                 ####
-  ####################################################################
-  - target: $.paths["/pipelines"].post
-    update:
-      x-speakeasy-entity-operation: Pipeline#create
-  - target: $.paths["/pipelines/{pipelineId}"].get
-    update:
-      x-speakeasy-entity-operation: Pipeline#read
-  - target: $.paths["/pipelines/{pipelineId}"].put
-    update:
-      x-speakeasy-entity-operation: Pipeline#update
-  - target: $.paths["/pipelines/{pipelineId}"].delete
-    update:
-      x-speakeasy-entity-operation: Pipeline#delete
 
-  ####################################################################
-  ####                 Pipeline Entity Schema                     ####
-  ####################################################################
+# ==============================================================================
+# PIPELINES RESOURCE OVERLAY
+# ==============================================================================
+#
+# Manages Nextflow pipeline definitions and configurations in Seqera Platform.
+# Pipelines define reusable workflow templates with parameters, compute
+# environment settings, and execution configurations for scalable bioinformatics
+# and data processing workflows.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example: Basic pipeline definition
+# resource "seqera_pipeline" "rnaseq" {
+#   workspace_id = seqera_workspace.main.id
+#   name = "rna-seq-analysis"
+#   description = "RNA sequencing analysis pipeline"
+#   launch = {
+#     pipeline = "https://github.com/myorg/rna-seq-pipeline"
+#     revision = "main"
+#     compute_env_id = seqera_compute_env.aws.id  # Optional
+#     work_dir = "s3://my-bucket/work"  # Optional
+#   }
+# }
+#
+# ==============================================================================
+
+actions:
+  # ============================================================================
+  # ENTITY CONFIGURATION
+  # ============================================================================
+
+  # Entity schema configuration for Pipelines
   - target: $.components.schemas.PipelineDbDto
     update:
       x-speakeasy-entity: Pipeline
@@ -37,63 +51,38 @@ actions:
         Contains pipeline metadata, configuration settings, and execution parameters
         for Nextflow workflows.
 
-  ####################################################################
-  ####            Pipeline Field Descriptions & Ordering          ####
-  ####################################################################
-  # Field descriptions and ordering for PipelineDbDto
-  - target: $.components.schemas.PipelineDbDto.properties.pipelineId
+  - target: $.components.schemas.CreatePipelineResponse
     update:
-      description: Unique numeric identifier for the pipeline
-      x-speakeasy-param-ordering: 1
-  - target: $.components.schemas.PipelineDbDto.properties.name
-    update:
-      description: Display name for the pipeline
-      x-speakeasy-param-ordering: 2
-  - target: $.components.schemas.PipelineDbDto.properties.description
-    update:
-      description: Detailed description of the pipeline's purpose and functionality
-      x-speakeasy-param-ordering: 3
-  - target: $.components.schemas.PipelineDbDto.properties.repository
-    update:
-      description: Git repository URL containing the pipeline source code
-      x-speakeasy-param-ordering: 4
-  - target: $.components.schemas.PipelineDbDto.properties.icon
-    update:
-      description: Icon identifier or URL for visual representation
-      x-speakeasy-param-ordering: 5
-  - target: $.components.schemas.PipelineDbDto.properties.userId
-    update:
-      description: Numeric identifier of the user who created the pipeline
-      x-speakeasy-param-ordering: 6
-  - target: $.components.schemas.PipelineDbDto.properties.userName
-    update:
-      description: Username of the pipeline creator
-      x-speakeasy-param-ordering: 7
-  - target: $.components.schemas.PipelineDbDto.properties.userFirstName
-    update:
-      description: First name of the user who created the pipeline
-      x-speakeasy-param-ordering: 8
+      x-speakeasy-entity: Pipelines
 
-  ####################################################################
-  ####            Server-Managed Read-Only Fields                 ####
-  ####################################################################
-  # Mark server-managed fields as read-only in PipelineDbDto
-  - target: $.components.schemas.PipelineDbDto.properties.pipelineId
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.PipelineDbDto.properties.userId
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.PipelineDbDto.properties.userName
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.PipelineDbDto.properties.userFirstName
-    update:
-      x-speakeasy-param-readonly: true
+  # ============================================================================
+  # ENTITY OPERATIONS (CRUD)
+  # ============================================================================
 
-  ####################################################################
-  ####               Pipeline Name Validators                     ####
-  ####################################################################
+  # CREATE - POST /pipelines
+  - target: $.paths["/pipelines"].post
+    update:
+      x-speakeasy-entity-operation: Pipeline#create
+
+  # READ - GET /pipelines/{pipelineId}
+  - target: $.paths["/pipelines/{pipelineId}"].get
+    update:
+      x-speakeasy-entity-operation: Pipeline#read
+
+  # UPDATE - PUT /pipelines/{pipelineId}
+  - target: $.paths["/pipelines/{pipelineId}"].put
+    update:
+      x-speakeasy-entity-operation: Pipeline#update
+
+  # DELETE - DELETE /pipelines/{pipelineId}
+  - target: $.paths["/pipelines/{pipelineId}"].delete
+    update:
+      x-speakeasy-entity-operation: Pipeline#delete
+
+  # ============================================================================
+  # FIELD VALIDATORS
+  # ============================================================================
+
   # Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric
   # characters separated by dashes, dots or underscores
   - target: $.components.schemas.PipelineCreateRequest.properties.name
@@ -111,20 +100,11 @@ actions:
       example: "rna-seq-analysis"
       x-speakeasy-plan-validators: PipelineNameValidator
 
-  ####################################################################
-  ####                  Request Examples                          ####
-  ####################################################################
-  - target: $.components.schemas.PipelineCreateRequest.properties.description
-    update:
-      example: "RNA sequencing analysis pipeline for differential gene expression"
-  - target: $.components.schemas.PipelineCreateRequest.properties.repository
-    update:
-      example: "https://github.com/myorg/rna-seq-pipeline"
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
 
-  ####################################################################
-  ####               Parameter Configuration                      ####
-  ####################################################################
-  # Mark workspaceId as required for pipelines GET endpoint to fix import
+  # Make workspaceId required for pipelines GET endpoint to fix import
   - target: $.paths["/pipelines/{pipelineId}"].get.parameters[?(@.name == "workspaceId")]
     update:
       name: workspaceId
@@ -135,15 +115,145 @@ actions:
         type: integer
         format: int64
 
-  ####################################################################
-  ####                Schema Overrides                            ####
-  ####################################################################
-  # Pipeline request schema annotations
-  - target: $.components.schemas.CreatePipelineResponse
+  # Remove required fields from WorkflowLaunchRequest to make them optional
+  # This allows pipelines to be created without specifying compute env and work dir
+  - target: $.components.schemas.WorkflowLaunchRequest
     update:
-      x-speakeasy-entity: Pipelines
+      required: []
 
-  # Rename provider field to avoid conflicts
+  # Make workDir optional in WorkflowLaunchRequest
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.workDir
+    update:
+      x-speakeasy-param-optional: true
+
+  # Make computeEnvId optional in WorkflowLaunchRequest
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.computeEnvId
+    update:
+      x-speakeasy-param-optional: true
+
+  # Rename provider field to avoid conflicts with Terraform provider keyword
   - target: $.components.schemas.PipelineInfo.properties.provider
     update:
       x-speakeasy-name-override: repositoryProvider
+
+  # ============================================================================
+  # SCHEMA DESCRIPTIONS
+  # ============================================================================
+
+  # PipelineDbDto field descriptions and ordering
+  - target: $.components.schemas.PipelineDbDto.properties.pipelineId
+    update:
+      description: Unique numeric identifier for the pipeline
+      x-speakeasy-param-ordering: 1
+
+  - target: $.components.schemas.PipelineDbDto.properties.name
+    update:
+      description: Display name for the pipeline
+      x-speakeasy-param-ordering: 2
+
+  - target: $.components.schemas.PipelineDbDto.properties.description
+    update:
+      description: Detailed description of the pipeline's purpose and functionality
+      x-speakeasy-param-ordering: 3
+
+  - target: $.components.schemas.PipelineDbDto.properties.repository
+    update:
+      description: Git repository URL containing the pipeline source code
+      x-speakeasy-param-ordering: 4
+
+  - target: $.components.schemas.PipelineDbDto.properties.icon
+    update:
+      description: Icon identifier or URL for visual representation
+      x-speakeasy-param-ordering: 5
+
+  # Note: User fields (userId, userName, userFirstName, userLastName) are removed in cleanup section
+
+  # ============================================================================
+  # READ-ONLY FIELDS
+  # ============================================================================
+
+  # Mark server-managed ID field as read-only in PipelineDbDto
+  # Note: User fields (userId, userName, userFirstName) are removed entirely in cleanup section
+  - target: $.components.schemas.PipelineDbDto.properties.pipelineId
+    update:
+      x-speakeasy-param-readonly: true
+
+  # ============================================================================
+  # REQUEST EXAMPLES
+  # ============================================================================
+
+  # Provide realistic examples for PipelineCreateRequest documentation
+  - target: $.components.schemas.PipelineCreateRequest.properties.description
+    update:
+      example: "RNA sequencing analysis pipeline for differential gene expression"
+
+  - target: $.components.schemas.PipelineCreateRequest.properties.repository
+    update:
+      example: "https://github.com/myorg/rna-seq-pipeline"
+
+  # ============================================================================
+  # CLEANUP - Remove transient and runtime fields
+  # ============================================================================
+
+  # Remove user information fields (already readonly, but should not be in schema)
+  - target: $.components.schemas.PipelineDbDto.properties.userLastName
+    remove: true
+
+  # Remove runtime organizational context fields
+  - target: $.components.schemas.PipelineDbDto.properties.orgId
+    remove: true
+  - target: $.components.schemas.PipelineDbDto.properties.orgName
+    remove: true
+  - target: $.components.schemas.PipelineDbDto.properties.workspaceName
+    remove: true
+
+  # Remove internal deletion flag
+  - target: $.components.schemas.PipelineDbDto.properties.deleted
+    remove: true
+
+  # Remove timestamp fields
+  - target: $.components.schemas.PipelineDbDto.properties.lastUpdated
+    remove: true
+
+  # Remove runtime optimization data
+  - target: $.components.schemas.PipelineDbDto.properties.optimizationId
+    remove: true
+  - target: $.components.schemas.PipelineDbDto.properties.optimizationTargets
+    remove: true
+  - target: $.components.schemas.PipelineDbDto.properties.optimizationStatus
+    remove: true
+
+  # Remove runtime label associations (managed separately)
+  - target: $.components.schemas.PipelineDbDto.properties.labels
+    remove: true
+
+  # Remove expanded compute environment reference (use computeEnvId instead)
+  - target: $.components.schemas.PipelineDbDto.properties.computeEnv
+    remove: true
+
+  # Remove computed/inherited field
+  - target: $.components.schemas.PipelineDbDto.properties.visibility
+    remove: true
+
+  # Remove computed repository information from PipelineInfo
+  # These fields are discovered from the git repository, not user-provided
+  - target: $.components.schemas.PipelineInfo.properties.projectName
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.simpleName
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.repositoryUrl
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.cloneUrl
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.configFiles
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.workDirs
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.revisions
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.profiles
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.manifest
+    remove: true
+  - target: $.components.schemas.PipelineInfo.properties.warnings
+    remove: true

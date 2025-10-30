@@ -33,7 +33,6 @@ resource "seqera_action" "my_action" {
       "aws",
     ]
     config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
-    date_created       = "2024-07-23T10:30:00Z"
     entry_name         = "main.nf"
     head_job_cpus      = 2
     head_job_memory_mb = 4096
@@ -42,22 +41,18 @@ resource "seqera_action" "my_action" {
       1002,
       1003,
     ]
-    launch_container     = "...my_launch_container..."
-    main_script          = "main.nf"
-    optimization_id      = "...my_optimization_id..."
-    optimization_targets = "...my_optimization_targets..."
-    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
-    pipeline             = "https://github.com/nextflow-io/hello"
-    post_run_script      = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
-    pre_run_script       = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-    pull_latest          = true
-    resume               = true
-    revision             = "main"
-    run_name             = "nextflow-hello"
-    schema_name          = "nextflow_schema.json"
-    session_id           = "...my_session_id..."
-    stub_run             = false
-    tower_config         = "...my_tower_config..."
+    main_script     = "main.nf"
+    params_text     = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
+    pipeline        = "https://github.com/nextflow-io/hello"
+    post_run_script = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
+    pre_run_script  = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
+    pull_latest     = true
+    resume          = true
+    revision        = "main"
+    run_name        = "nextflow-hello"
+    schema_name     = "nextflow_schema.json"
+    stub_run        = false
+    tower_config    = "...my_tower_config..."
     user_secrets = [
       "MY_API_KEY",
       "DATABASE_PASSWORD",
@@ -88,38 +83,25 @@ resource "seqera_action" "my_action" {
 
 - `action_id` (String) Action string identifier
 - `config` (Attributes) (see [below for nested schema](#nestedatt--config))
-- `date_created` (String)
-- `event` (Attributes) (see [below for nested schema](#nestedatt--event))
 - `hook_id` (String) Identifier for the webhook associated with this action
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
-- `last_seen` (String)
-- `last_updated` (String)
 - `message` (String) Status or informational message about the action
 - `status` (String) must be one of ["CREATING", "ACTIVE", "ERROR", "PAUSED"]
 
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`
 
-Required:
-
-- `work_dir` (String) Requires replacement if changed.
-
 Optional:
 
 - `compute_env_id` (String) Requires replacement if changed.
 - `config_profiles` (List of String) Requires replacement if changed.
 - `config_text` (String) Requires replacement if changed.
-- `date_created` (String) Requires replacement if changed.
 - `entry_name` (String) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
-- `launch_container` (String) Requires replacement if changed.
 - `main_script` (String) Requires replacement if changed.
-- `optimization_id` (String) Requires replacement if changed.
-- `optimization_targets` (String) Requires replacement if changed.
 - `params_text` (String) Requires replacement if changed.
 - `pipeline` (String) Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
@@ -129,18 +111,23 @@ Optional:
 - `revision` (String) Requires replacement if changed.
 - `run_name` (String) Requires replacement if changed.
 - `schema_name` (String) Requires replacement if changed.
-- `session_id` (String) Requires replacement if changed.
 - `stub_run` (Boolean) Requires replacement if changed.
 - `tower_config` (String) Requires replacement if changed.
 - `user_secrets` (List of String) Requires replacement if changed.
+- `work_dir` (String) Requires replacement if changed.
 - `workspace_secrets` (List of String) Requires replacement if changed.
 
 Read-Only:
 
 - `compute_env` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env))
+- `date_created` (String)
 - `id` (String)
 - `last_updated` (String)
+- `launch_container` (String)
+- `optimization_id` (String)
+- `optimization_targets` (String)
 - `resume_launch_id` (String)
+- `session_id` (String)
 
 <a id="nestedatt--launch--compute_env"></a>
 ### Nested Schema for `launch.compute_env`
@@ -897,53 +884,6 @@ Read-Only:
 Read-Only:
 
 - `discriminator` (String)
-
-
-
-<a id="nestedatt--event"></a>
-### Nested Schema for `event`
-
-Read-Only:
-
-- `github` (Attributes) (see [below for nested schema](#nestedatt--event--github))
-- `tower` (Attributes) (see [below for nested schema](#nestedatt--event--tower))
-
-<a id="nestedatt--event--github"></a>
-### Nested Schema for `event.github`
-
-Read-Only:
-
-- `commit_id` (String)
-- `commit_message` (String)
-- `discriminator` (String)
-- `pusher_email` (String)
-- `pusher_name` (String)
-- `ref` (String)
-- `timestamp` (String)
-
-
-<a id="nestedatt--event--tower"></a>
-### Nested Schema for `event.tower`
-
-Read-Only:
-
-- `discriminator` (String)
-- `timestamp` (String)
-- `workflow_id` (String)
-
-
-
-<a id="nestedatt--labels"></a>
-### Nested Schema for `labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label
 
 ## Import
 

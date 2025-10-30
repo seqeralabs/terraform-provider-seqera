@@ -27,7 +27,6 @@ resource "seqera_workflows" "my_workflows" {
     "aws",
   ]
   config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
-  date_created       = "2024-07-23T10:30:00Z"
   entry_name         = "main.nf"
   force              = false
   head_job_cpus      = 2
@@ -37,23 +36,19 @@ resource "seqera_workflows" "my_workflows" {
     1002,
     1003,
   ]
-  launch_container     = "...my_launch_container..."
-  main_script          = "main.nf"
-  optimization_id      = "...my_optimization_id..."
-  optimization_targets = "...my_optimization_targets..."
-  params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
-  pipeline             = "https://github.com/nextflow-io/hello"
-  post_run_script      = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
-  pre_run_script       = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-  pull_latest          = true
-  resume               = true
-  revision             = "main"
-  run_name             = "nextflow-hello"
-  schema_name          = "nextflow_schema.json"
-  session_id           = "...my_session_id..."
-  source_workspace_id  = 2
-  stub_run             = false
-  tower_config         = "...my_tower_config..."
+  main_script         = "main.nf"
+  params_text         = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
+  pipeline            = "https://github.com/nextflow-io/hello"
+  post_run_script     = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
+  pre_run_script      = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
+  pull_latest         = true
+  resume              = true
+  revision            = "main"
+  run_name            = "nextflow-hello"
+  schema_name         = "nextflow_schema.json"
+  source_workspace_id = 2
+  stub_run            = false
+  tower_config        = "...my_tower_config..."
   user_secrets = [
     "MY_API_KEY",
     "DATABASE_PASSWORD",
@@ -72,7 +67,6 @@ resource "seqera_workflows" "my_workflows" {
 
 ### Required
 
-- `work_dir` (String) Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
@@ -80,16 +74,12 @@ resource "seqera_workflows" "my_workflows" {
 - `compute_env_id` (String) Requires replacement if changed.
 - `config_profiles` (List of String) Requires replacement if changed.
 - `config_text` (String) Requires replacement if changed.
-- `date_created` (String) Requires replacement if changed.
 - `entry_name` (String) Requires replacement if changed.
 - `force` (Boolean) Force the deletion even if the workflow is active
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
-- `launch_container` (String) Requires replacement if changed.
 - `main_script` (String) Requires replacement if changed.
-- `optimization_id` (String) Requires replacement if changed.
-- `optimization_targets` (String) Requires replacement if changed.
 - `params_text` (String) Requires replacement if changed.
 - `pipeline` (String) Requires replacement if changed.
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
@@ -99,139 +89,17 @@ resource "seqera_workflows" "my_workflows" {
 - `revision` (String) Requires replacement if changed.
 - `run_name` (String) Requires replacement if changed.
 - `schema_name` (String) Requires replacement if changed.
-- `session_id` (String) Requires replacement if changed.
 - `source_workspace_id` (Number) Source Optional workspace numeric identifier. Requires replacement if changed.
 - `stub_run` (Boolean) Requires replacement if changed.
 - `tower_config` (String) Requires replacement if changed.
 - `user_secrets` (List of String) Requires replacement if changed.
+- `work_dir` (String) Requires replacement if changed.
 - `workspace_secrets` (List of String) Requires replacement if changed.
 
 ### Read-Only
 
-- `job_info` (Attributes) (see [below for nested schema](#nestedatt--job_info))
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
-- `messages` (List of String)
-- `optimized` (Boolean)
-- `org_id` (Number)
-- `org_name` (String)
-- `platform` (Attributes) (see [below for nested schema](#nestedatt--platform))
-- `progress` (Attributes) (see [below for nested schema](#nestedatt--progress))
 - `workflow` (Attributes) (see [below for nested schema](#nestedatt--workflow))
 - `workflow_id` (String) Workflow string identifier
-- `workspace_name` (String)
-
-<a id="nestedatt--job_info"></a>
-### Nested Schema for `job_info`
-
-Read-Only:
-
-- `exit_code` (Number)
-- `id` (Number)
-- `message` (String)
-- `operation_id` (String)
-- `status` (String)
-
-
-<a id="nestedatt--labels"></a>
-### Nested Schema for `labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label
-
-
-<a id="nestedatt--platform"></a>
-### Nested Schema for `platform`
-
-Read-Only:
-
-- `id` (String)
-- `name` (String)
-
-
-<a id="nestedatt--progress"></a>
-### Nested Schema for `progress`
-
-Read-Only:
-
-- `processes_progress` (Attributes List) (see [below for nested schema](#nestedatt--progress--processes_progress))
-- `total_processes` (Number)
-- `workflow_progress` (Attributes) (see [below for nested schema](#nestedatt--progress--workflow_progress))
-
-<a id="nestedatt--progress--processes_progress"></a>
-### Nested Schema for `progress.processes_progress`
-
-Read-Only:
-
-- `aborted` (Number)
-- `cached` (Number)
-- `cpu_efficiency` (Number)
-- `cpu_load` (Number, Deprecated)
-- `cpu_time` (Number, Deprecated)
-- `cpus` (Number, Deprecated)
-- `date_created` (String)
-- `failed` (Number)
-- `inv_ctx_switch` (Number, Deprecated)
-- `last_updated` (String)
-- `load_cpus` (Number)
-- `load_memory` (Number)
-- `load_tasks` (Number, Deprecated)
-- `memory_efficiency` (Number)
-- `memory_req` (Number, Deprecated)
-- `memory_rss` (Number, Deprecated)
-- `peak_cpus` (Number)
-- `peak_memory` (Number)
-- `peak_tasks` (Number)
-- `pending` (Number)
-- `process` (String)
-- `read_bytes` (Number, Deprecated)
-- `running` (Number)
-- `submitted` (Number)
-- `succeeded` (Number)
-- `vol_ctx_switch` (Number, Deprecated)
-- `write_bytes` (Number, Deprecated)
-
-
-<a id="nestedatt--progress--workflow_progress"></a>
-### Nested Schema for `progress.workflow_progress`
-
-Read-Only:
-
-- `aborted` (Number)
-- `cached` (Number)
-- `cost` (Number)
-- `cpu_efficiency` (Number)
-- `cpu_load` (Number)
-- `cpu_time` (Number)
-- `cpus` (Number)
-- `date_created` (String)
-- `executors` (List of String)
-- `failed` (Number)
-- `inv_ctx_switch` (Number)
-- `last_updated` (String)
-- `load_cpus` (Number)
-- `load_memory` (Number)
-- `load_tasks` (Number)
-- `memory_efficiency` (Number)
-- `memory_req` (Number)
-- `memory_rss` (Number)
-- `peak_cpus` (Number)
-- `peak_memory` (Number)
-- `peak_tasks` (Number)
-- `pending` (Number)
-- `read_bytes` (Number)
-- `running` (Number)
-- `submitted` (Number)
-- `succeeded` (Number)
-- `vol_ctx_switch` (Number)
-- `write_bytes` (Number)
-
-
 
 <a id="nestedatt--workflow"></a>
 ### Nested Schema for `workflow`

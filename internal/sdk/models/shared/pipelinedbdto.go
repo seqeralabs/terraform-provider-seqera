@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
-	"time"
-)
-
 // PipelineDbDto - Represents a pipeline configuration in the Seqera Platform.
 // Contains pipeline metadata, configuration settings, and execution parameters
 // for Nextflow workflows.
@@ -20,37 +15,11 @@ type PipelineDbDto struct {
 	// Icon identifier or URL for visual representation
 	Icon *string `json:"icon,omitempty"`
 	// Git repository URL containing the pipeline source code
-	Repository *string `json:"repository,omitempty"`
-	// Numeric identifier of the user who created the pipeline
-	UserID *int64 `json:"userId,omitempty"`
-	// Username of the pipeline creator
-	UserName *string `json:"userName,omitempty"`
-	// First name of the user who created the pipeline
-	UserFirstName       *string                     `json:"userFirstName,omitempty"`
-	UserLastName        *string                     `json:"userLastName,omitempty"`
-	OrgID               *int64                      `json:"orgId,omitempty"`
-	OrgName             *string                     `json:"orgName,omitempty"`
-	WorkspaceID         *int64                      `json:"workspaceId,omitempty"`
-	WorkspaceName       *string                     `json:"workspaceName,omitempty"`
-	Visibility          *string                     `json:"visibility,omitempty"`
-	Deleted             *bool                       `json:"deleted,omitempty"`
-	LastUpdated         *time.Time                  `json:"lastUpdated,omitempty"`
-	OptimizationID      *string                     `json:"optimizationId,omitempty"`
-	OptimizationTargets *string                     `json:"optimizationTargets,omitempty"`
-	OptimizationStatus  *PipelineOptimizationStatus `json:"optimizationStatus,omitempty"`
-	Labels              []LabelDbDto                `json:"labels,omitempty"`
-	ComputeEnv          *ComputeEnvDbDto            `json:"computeEnv,omitempty"`
-}
-
-func (p PipelineDbDto) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(p, "", false)
-}
-
-func (p *PipelineDbDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Repository    *string `json:"repository,omitempty"`
+	UserID        *int64  `json:"userId,omitempty"`
+	UserName      *string `json:"userName,omitempty"`
+	UserFirstName *string `json:"userFirstName,omitempty"`
+	WorkspaceID   *int64  `json:"workspaceId,omitempty"`
 }
 
 func (p *PipelineDbDto) GetPipelineID() *int64 {
@@ -109,93 +78,9 @@ func (p *PipelineDbDto) GetUserFirstName() *string {
 	return p.UserFirstName
 }
 
-func (p *PipelineDbDto) GetUserLastName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.UserLastName
-}
-
-func (p *PipelineDbDto) GetOrgID() *int64 {
-	if p == nil {
-		return nil
-	}
-	return p.OrgID
-}
-
-func (p *PipelineDbDto) GetOrgName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.OrgName
-}
-
 func (p *PipelineDbDto) GetWorkspaceID() *int64 {
 	if p == nil {
 		return nil
 	}
 	return p.WorkspaceID
-}
-
-func (p *PipelineDbDto) GetWorkspaceName() *string {
-	if p == nil {
-		return nil
-	}
-	return p.WorkspaceName
-}
-
-func (p *PipelineDbDto) GetVisibility() *string {
-	if p == nil {
-		return nil
-	}
-	return p.Visibility
-}
-
-func (p *PipelineDbDto) GetDeleted() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.Deleted
-}
-
-func (p *PipelineDbDto) GetLastUpdated() *time.Time {
-	if p == nil {
-		return nil
-	}
-	return p.LastUpdated
-}
-
-func (p *PipelineDbDto) GetOptimizationID() *string {
-	if p == nil {
-		return nil
-	}
-	return p.OptimizationID
-}
-
-func (p *PipelineDbDto) GetOptimizationTargets() *string {
-	if p == nil {
-		return nil
-	}
-	return p.OptimizationTargets
-}
-
-func (p *PipelineDbDto) GetOptimizationStatus() *PipelineOptimizationStatus {
-	if p == nil {
-		return nil
-	}
-	return p.OptimizationStatus
-}
-
-func (p *PipelineDbDto) GetLabels() []LabelDbDto {
-	if p == nil {
-		return nil
-	}
-	return p.Labels
-}
-
-func (p *PipelineDbDto) GetComputeEnv() *ComputeEnvDbDto {
-	if p == nil {
-		return nil
-	}
-	return p.ComputeEnv
 }

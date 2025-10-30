@@ -29,29 +29,12 @@ type StudiosDataSource struct {
 
 // StudiosDataSourceModel describes the data model.
 type StudiosDataSourceModel struct {
-	ActiveConnections      []tfTypes.ActiveConnection             `tfsdk:"active_connections"`
-	BaseImage              types.String                           `tfsdk:"base_image"`
-	ComputeEnv             *tfTypes.DataStudioComputeEnvDto       `tfsdk:"compute_env"`
-	Configuration          *tfTypes.DataStudioConfiguration       `tfsdk:"configuration"`
-	CustomImage            types.Bool                             `tfsdk:"custom_image"`
-	DateCreated            types.String                           `tfsdk:"date_created"`
-	Description            types.String                           `tfsdk:"description"`
-	EffectiveLifespanHours types.Int32                            `tfsdk:"effective_lifespan_hours"`
-	IsPrivate              types.Bool                             `tfsdk:"is_private"`
-	Labels                 []tfTypes.LabelDbDto                   `tfsdk:"labels"`
-	LastStarted            types.String                           `tfsdk:"last_started"`
-	LastUpdated            types.String                           `tfsdk:"last_updated"`
-	MountedDataLinks       []tfTypes.DataLinkDto                  `tfsdk:"mounted_data_links"`
-	Name                   types.String                           `tfsdk:"name"`
-	ParentCheckpoint       *tfTypes.DataStudioDtoParentCheckpoint `tfsdk:"parent_checkpoint"`
-	Progress               []tfTypes.DataStudioProgressStep       `tfsdk:"progress"`
-	SessionID              types.String                           `tfsdk:"session_id"`
-	StatusInfo             *tfTypes.DataStudioStatusInfo          `tfsdk:"status_info"`
-	StudioURL              types.String                           `tfsdk:"studio_url"`
-	Template               *tfTypes.DataStudioTemplate            `tfsdk:"template"`
-	User                   *tfTypes.StudioUser                    `tfsdk:"user"`
-	WaveBuildURL           types.String                           `tfsdk:"wave_build_url"`
-	WorkspaceID            types.Int64                            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Configuration *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
+	Description   types.String                     `tfsdk:"description"`
+	IsPrivate     types.Bool                       `tfsdk:"is_private"`
+	Name          types.String                     `tfsdk:"name"`
+	SessionID     types.String                     `tfsdk:"session_id"`
+	WorkspaceID   types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 // Metadata returns the data source type name.
@@ -65,54 +48,6 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 		MarkdownDescription: "Studios is a unified platform where you can host a combination of\ncontainer images and compute environments for interactive analysis using\nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive\nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote:\nOn Seqera Cloud, the free tier permits only one running Studio session at a time.\nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n",
 
 		Attributes: map[string]schema.Attribute{
-			"active_connections": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"avatar": schema.StringAttribute{
-							Computed: true,
-						},
-						"email": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.Int64Attribute{
-							Computed: true,
-						},
-						"last_active": schema.StringAttribute{
-							Computed: true,
-						},
-						"user_name": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
-			},
-			"base_image": schema.StringAttribute{
-				Computed: true,
-			},
-			"compute_env": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"credentials_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"id": schema.StringAttribute{
-						Computed: true,
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-					},
-					"platform": schema.StringAttribute{
-						Computed: true,
-					},
-					"region": schema.StringAttribute{
-						Computed: true,
-					},
-					"work_dir": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
 			"configuration": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
@@ -120,16 +55,20 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						Computed: true,
 					},
 					"cpu": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Number of CPU cores to allocate`,
 					},
 					"gpu": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Number of GPUs to allocate`,
 					},
 					"lifespan_hours": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Maximum lifespan of the Studio session in hours`,
 					},
 					"memory": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Memory allocation for the Studio session in megabytes (MB).`,
 					},
 					"mount_data": schema.ListAttribute{
 						Computed:    true,
@@ -137,217 +76,20 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 				},
 			},
-			"custom_image": schema.BoolAttribute{
-				Computed: true,
-			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-			},
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Description of the Studio session's purpose`,
 			},
-			"effective_lifespan_hours": schema.Int32Attribute{
-				Computed: true,
-			},
 			"is_private": schema.BoolAttribute{
 				Computed: true,
-			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
-			"last_started": schema.StringAttribute{
-				Computed: true,
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-			},
-			"mounted_data_links": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"credentials": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"provider_type": schema.StringAttribute{
-										Computed: true,
-									},
-								},
-							},
-							Description: `Array of credentials required to access the data link`,
-						},
-						"data_link_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Unique identifier for the data link`,
-						},
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Description of the data link's purpose and contents`,
-						},
-						"hidden": schema.BoolAttribute{
-							Computed: true,
-						},
-						"message": schema.StringAttribute{
-							Computed: true,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Display name for the data link connection`,
-						},
-						"provider_type": schema.StringAttribute{
-							Computed: true,
-						},
-						"public_accessible": schema.BoolAttribute{
-							Computed: true,
-						},
-						"region": schema.StringAttribute{
-							Computed:    true,
-							Description: `Geographic region where the data link is hosted`,
-						},
-						"resource_ref": schema.StringAttribute{
-							Computed:    true,
-							Description: `Reference identifier for the external resource`,
-						},
-						"status": schema.StringAttribute{
-							Computed: true,
-						},
-						"type": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Display name for the Studio session`,
 			},
-			"parent_checkpoint": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"checkpoint_id": schema.Int64Attribute{
-						Computed: true,
-					},
-					"checkpoint_name": schema.StringAttribute{
-						Computed: true,
-					},
-					"session_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"studio_name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"progress": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"message": schema.StringAttribute{
-							Computed: true,
-						},
-						"status": schema.StringAttribute{
-							Computed: true,
-						},
-						"warnings": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-						},
-					},
-				},
-			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Studio session numeric identifier`,
-			},
-			"status_info": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"last_update": schema.StringAttribute{
-						Computed: true,
-					},
-					"message": schema.StringAttribute{
-						Computed: true,
-					},
-					"status": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"studio_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `URL to access the running Studio instance`,
-			},
-			"template": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"icon": schema.StringAttribute{
-						Computed: true,
-					},
-					"repository": schema.StringAttribute{
-						Computed: true,
-					},
-					"status": schema.StringAttribute{
-						Computed: true,
-					},
-					"tool": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"user": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"avatar": schema.StringAttribute{
-						Computed: true,
-					},
-					"email": schema.StringAttribute{
-						Computed: true,
-					},
-					"id": schema.Int64Attribute{
-						Computed: true,
-					},
-					"user_name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"wave_build_url": schema.StringAttribute{
-				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Computed:    true,

@@ -16,31 +16,6 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ActiveConnections = []tfTypes.ActiveConnection{}
-
-		for _, activeConnectionsItem := range resp.ActiveConnections {
-			var activeConnections tfTypes.ActiveConnection
-
-			activeConnections.Avatar = types.StringValue(activeConnectionsItem.Avatar)
-			activeConnections.Email = types.StringValue(activeConnectionsItem.Email)
-			activeConnections.ID = types.Int64Value(activeConnectionsItem.ID)
-			activeConnections.LastActive = types.StringValue(typeconvert.TimeToString(activeConnectionsItem.LastActive))
-			activeConnections.UserName = types.StringValue(activeConnectionsItem.UserName)
-
-			r.ActiveConnections = append(r.ActiveConnections, activeConnections)
-		}
-		r.BaseImage = types.StringPointerValue(resp.BaseImage)
-		if resp.ComputeEnv == nil {
-			r.ComputeEnv = nil
-		} else {
-			r.ComputeEnv = &tfTypes.DataStudioComputeEnvDto{}
-			r.ComputeEnv.CredentialsID = types.StringPointerValue(resp.ComputeEnv.CredentialsID)
-			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
-			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
-			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
-			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
-			r.ComputeEnv.WorkDir = types.StringPointerValue(resp.ComputeEnv.WorkDir)
-		}
 		if resp.Configuration == nil {
 			r.Configuration = nil
 		} else {
@@ -55,136 +30,10 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 				r.Configuration.MountData = append(r.Configuration.MountData, types.StringValue(v))
 			}
 		}
-		r.CustomImage = types.BoolPointerValue(resp.CustomImage)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Description = types.StringPointerValue(resp.Description)
-		r.EffectiveLifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.EffectiveLifespanHours))
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
-		if resp.Labels != nil {
-			r.Labels = []tfTypes.LabelDbDto{}
-
-			for _, labelsItem := range resp.Labels {
-				var labels tfTypes.LabelDbDto
-
-				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-				labels.ID = types.Int64PointerValue(labelsItem.ID)
-				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-				labels.Name = types.StringPointerValue(labelsItem.Name)
-				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-				labels.Value = types.StringPointerValue(labelsItem.Value)
-
-				r.Labels = append(r.Labels, labels)
-			}
-		}
-		r.LastStarted = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastStarted))
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.MountedDataLinks = []tfTypes.DataLinkDto{}
-
-		for _, mountedDataLinksItem := range resp.MountedDataLinks {
-			var mountedDataLinks tfTypes.DataLinkDto
-
-			mountedDataLinks.Credentials = []tfTypes.DataLinkCredentials{}
-
-			for _, credentialsItem := range mountedDataLinksItem.Credentials {
-				var credentials tfTypes.DataLinkCredentials
-
-				credentials.ID = types.StringValue(credentialsItem.ID)
-				credentials.Name = types.StringValue(credentialsItem.Name)
-				credentials.ProviderType = types.StringValue(string(credentialsItem.ProviderType))
-
-				mountedDataLinks.Credentials = append(mountedDataLinks.Credentials, credentials)
-			}
-			mountedDataLinks.DataLinkID = types.StringPointerValue(mountedDataLinksItem.DataLinkID)
-			mountedDataLinks.Description = types.StringPointerValue(mountedDataLinksItem.Description)
-			mountedDataLinks.Hidden = types.BoolPointerValue(mountedDataLinksItem.Hidden)
-			mountedDataLinks.Message = types.StringPointerValue(mountedDataLinksItem.Message)
-			mountedDataLinks.Name = types.StringPointerValue(mountedDataLinksItem.Name)
-			if mountedDataLinksItem.ProviderType != nil {
-				mountedDataLinks.ProviderType = types.StringValue(string(*mountedDataLinksItem.ProviderType))
-			} else {
-				mountedDataLinks.ProviderType = types.StringNull()
-			}
-			mountedDataLinks.PublicAccessible = types.BoolPointerValue(mountedDataLinksItem.PublicAccessible)
-			mountedDataLinks.Region = types.StringPointerValue(mountedDataLinksItem.Region)
-			mountedDataLinks.ResourceRef = types.StringPointerValue(mountedDataLinksItem.ResourceRef)
-			if mountedDataLinksItem.Status != nil {
-				mountedDataLinks.Status = types.StringValue(string(*mountedDataLinksItem.Status))
-			} else {
-				mountedDataLinks.Status = types.StringNull()
-			}
-			if mountedDataLinksItem.Type != nil {
-				mountedDataLinks.Type = types.StringValue(string(*mountedDataLinksItem.Type))
-			} else {
-				mountedDataLinks.Type = types.StringNull()
-			}
-
-			r.MountedDataLinks = append(r.MountedDataLinks, mountedDataLinks)
-		}
 		r.Name = types.StringPointerValue(resp.Name)
-		if resp.ParentCheckpoint == nil {
-			r.ParentCheckpoint = nil
-		} else {
-			r.ParentCheckpoint = &tfTypes.DataStudioDtoParentCheckpoint{}
-			r.ParentCheckpoint.CheckpointID = types.Int64PointerValue(resp.ParentCheckpoint.CheckpointID)
-			r.ParentCheckpoint.CheckpointName = types.StringPointerValue(resp.ParentCheckpoint.CheckpointName)
-			r.ParentCheckpoint.SessionID = types.StringPointerValue(resp.ParentCheckpoint.SessionID)
-			r.ParentCheckpoint.StudioName = types.StringPointerValue(resp.ParentCheckpoint.StudioName)
-		}
-		r.Progress = []tfTypes.DataStudioProgressStep{}
-
-		for _, progressItem := range resp.Progress {
-			var progress tfTypes.DataStudioProgressStep
-
-			progress.Message = types.StringPointerValue(progressItem.Message)
-			if progressItem.Status != nil {
-				progress.Status = types.StringValue(string(*progressItem.Status))
-			} else {
-				progress.Status = types.StringNull()
-			}
-			progress.Warnings = make([]types.String, 0, len(progressItem.Warnings))
-			for _, v := range progressItem.Warnings {
-				progress.Warnings = append(progress.Warnings, types.StringValue(v))
-			}
-
-			r.Progress = append(r.Progress, progress)
-		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
-		if resp.StatusInfo == nil {
-			r.StatusInfo = nil
-		} else {
-			r.StatusInfo = &tfTypes.DataStudioStatusInfo{}
-			r.StatusInfo.LastUpdate = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StatusInfo.LastUpdate))
-			r.StatusInfo.Message = types.StringPointerValue(resp.StatusInfo.Message)
-			if resp.StatusInfo.Status != nil {
-				r.StatusInfo.Status = types.StringValue(string(*resp.StatusInfo.Status))
-			} else {
-				r.StatusInfo.Status = types.StringNull()
-			}
-		}
-		r.StudioURL = types.StringPointerValue(resp.StudioURL)
-		if resp.Template == nil {
-			r.Template = nil
-		} else {
-			r.Template = &tfTypes.DataStudioTemplate{}
-			r.Template.Icon = types.StringPointerValue(resp.Template.Icon)
-			r.Template.Repository = types.StringPointerValue(resp.Template.Repository)
-			if resp.Template.Status != nil {
-				r.Template.Status = types.StringValue(string(*resp.Template.Status))
-			} else {
-				r.Template.Status = types.StringNull()
-			}
-			r.Template.Tool = types.StringPointerValue(resp.Template.Tool)
-		}
-		if resp.User == nil {
-			r.User = nil
-		} else {
-			r.User = &tfTypes.StudioUser{}
-			r.User.Avatar = types.StringValue(resp.User.Avatar)
-			r.User.Email = types.StringValue(resp.User.Email)
-			r.User.ID = types.Int64Value(resp.User.ID)
-			r.User.UserName = types.StringValue(resp.User.UserName)
-		}
-		r.WaveBuildURL = types.StringPointerValue(resp.WaveBuildURL)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 

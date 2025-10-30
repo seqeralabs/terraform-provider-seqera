@@ -27,7 +27,6 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -46,35 +45,18 @@ type StudiosResource struct {
 
 // StudiosResourceModel describes the resource data model.
 type StudiosResourceModel struct {
-	ActiveConnections      []tfTypes.ActiveConnection             `tfsdk:"active_connections"`
-	AutoStart              types.Bool                             `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
-	BaseImage              types.String                           `tfsdk:"base_image"`
-	ComputeEnv             *tfTypes.DataStudioComputeEnvDto       `tfsdk:"compute_env"`
-	ComputeEnvID           types.String                           `tfsdk:"compute_env_id"`
-	Configuration          *tfTypes.DataStudioConfiguration       `tfsdk:"configuration"`
-	CustomImage            types.Bool                             `tfsdk:"custom_image"`
-	DataStudioToolURL      types.String                           `tfsdk:"data_studio_tool_url"`
-	DateCreated            types.String                           `tfsdk:"date_created"`
-	Description            types.String                           `tfsdk:"description"`
-	EffectiveLifespanHours types.Int32                            `tfsdk:"effective_lifespan_hours"`
-	InitialCheckpointID    types.Int64                            `tfsdk:"initial_checkpoint_id"`
-	IsPrivate              types.Bool                             `tfsdk:"is_private"`
-	LabelIds               []types.Int64                          `tfsdk:"label_ids"`
-	Labels                 []tfTypes.LabelDbDto                   `tfsdk:"labels"`
-	LastStarted            types.String                           `tfsdk:"last_started"`
-	LastUpdated            types.String                           `tfsdk:"last_updated"`
-	MountedDataLinks       []tfTypes.DataLinkDto                  `tfsdk:"mounted_data_links"`
-	Name                   types.String                           `tfsdk:"name"`
-	ParentCheckpoint       *tfTypes.DataStudioDtoParentCheckpoint `tfsdk:"parent_checkpoint"`
-	Progress               []tfTypes.DataStudioProgressStep       `tfsdk:"progress"`
-	SessionID              types.String                           `tfsdk:"session_id"`
-	Spot                   types.Bool                             `tfsdk:"spot"`
-	StatusInfo             *tfTypes.DataStudioStatusInfo          `tfsdk:"status_info"`
-	StudioURL              types.String                           `tfsdk:"studio_url"`
-	Template               *tfTypes.DataStudioTemplate            `tfsdk:"template"`
-	User                   *tfTypes.StudioUser                    `tfsdk:"user"`
-	WaveBuildURL           types.String                           `tfsdk:"wave_build_url"`
-	WorkspaceID            types.Int64                            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
+	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
+	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
+	DataStudioToolURL   types.String                     `tfsdk:"data_studio_tool_url"`
+	Description         types.String                     `tfsdk:"description"`
+	InitialCheckpointID types.Int64                      `tfsdk:"initial_checkpoint_id"`
+	IsPrivate           types.Bool                       `tfsdk:"is_private"`
+	LabelIds            []types.Int64                    `tfsdk:"label_ids"`
+	Name                types.String                     `tfsdk:"name"`
+	SessionID           types.String                     `tfsdk:"session_id"`
+	Spot                types.Bool                       `tfsdk:"spot"`
+	WorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *StudiosResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,63 +67,12 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Studios is a unified platform where you can host a combination of\ncontainer images and compute environments for interactive analysis using\nyour preferred tools, like JupyterLab, an R-IDE, Visual Studio Code IDEs,\nor Xpra remote desktops. Each Studio session is an individual interactive\nenvironment that encapsulates the live environment for dynamic data analysis.\n\nNote:\nOn Seqera Cloud, the free tier permits only one running Studio session at a time.\nTo run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.\n",
 		Attributes: map[string]schema.Attribute{
-			"active_connections": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"avatar": schema.StringAttribute{
-							Computed: true,
-						},
-						"email": schema.StringAttribute{
-							Computed: true,
-						},
-						"id": schema.Int64Attribute{
-							Computed: true,
-						},
-						"last_active": schema.StringAttribute{
-							Computed: true,
-							Validators: []validator.String{
-								validators.IsRFC3339(),
-							},
-						},
-						"user_name": schema.StringAttribute{
-							Computed: true,
-						},
-					},
-				},
-			},
 			"auto_start": schema.BoolAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.`,
-			},
-			"base_image": schema.StringAttribute{
-				Computed: true,
-			},
-			"compute_env": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"credentials_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"id": schema.StringAttribute{
-						Computed: true,
-					},
-					"name": schema.StringAttribute{
-						Computed: true,
-					},
-					"platform": schema.StringAttribute{
-						Computed: true,
-					},
-					"region": schema.StringAttribute{
-						Computed: true,
-					},
-					"work_dir": schema.StringAttribute{
-						Computed: true,
-					},
-				},
 			},
 			"compute_env_id": schema.StringAttribute{
 				Required: true,
@@ -180,7 +111,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Number of CPU cores to allocate. Requires replacement if changed.`,
 					},
 					"gpu": schema.Int32Attribute{
 						Computed: true,
@@ -189,7 +120,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Number of GPUs to allocate. Requires replacement if changed.`,
 					},
 					"lifespan_hours": schema.Int32Attribute{
 						Computed: true,
@@ -198,7 +129,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Maximum lifespan of the Studio session in hours. Requires replacement if changed.`,
 					},
 					"memory": schema.Int32Attribute{
 						Computed: true,
@@ -207,7 +138,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Memory allocation for the Studio session in megabytes (MB). Requires replacement if changed.`,
 					},
 					"mount_data": schema.ListAttribute{
 						Computed: true,
@@ -222,9 +153,6 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 				Description: `Requires replacement if changed.`,
 			},
-			"custom_image": schema.BoolAttribute{
-				Computed: true,
-			},
 			"data_studio_tool_url": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
@@ -233,12 +161,6 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtLeast(1),
-				},
-			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
 				},
 			},
 			"description": schema.StringAttribute{
@@ -252,9 +174,6 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2048),
 				},
-			},
-			"effective_lifespan_hours": schema.Int32Attribute{
-				Computed: true,
 			},
 			"initial_checkpoint_id": schema.Int64Attribute{
 				Optional: true,
@@ -280,145 +199,6 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				ElementType: types.Int64Type,
 				Description: `Requires replacement if changed.`,
 			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-							Validators: []validator.String{
-								validators.IsRFC3339(),
-							},
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
-			"last_started": schema.StringAttribute{
-				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
-			},
-			"mounted_data_links": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"credentials": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"id": schema.StringAttribute{
-										Computed: true,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-									},
-									"provider_type": schema.StringAttribute{
-										Computed:    true,
-										Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"aws",
-												"google",
-												"azure",
-												"azure_entra",
-												"seqeracompute",
-											),
-										},
-									},
-								},
-							},
-							Description: `Array of credentials required to access the data link`,
-						},
-						"data_link_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Unique identifier for the data link`,
-						},
-						"description": schema.StringAttribute{
-							Computed:    true,
-							Description: `Description of the data link's purpose and contents`,
-						},
-						"hidden": schema.BoolAttribute{
-							Computed: true,
-						},
-						"message": schema.StringAttribute{
-							Computed: true,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Display name for the data link connection`,
-						},
-						"provider_type": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"aws",
-									"google",
-									"azure",
-									"azure_entra",
-									"seqeracompute",
-								),
-							},
-						},
-						"public_accessible": schema.BoolAttribute{
-							Computed: true,
-						},
-						"region": schema.StringAttribute{
-							Computed:    true,
-							Description: `Geographic region where the data link is hosted`,
-						},
-						"resource_ref": schema.StringAttribute{
-							Computed:    true,
-							Description: `Reference identifier for the external resource`,
-						},
-						"status": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be one of ["VALID", "INVALID"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"VALID",
-									"INVALID",
-								),
-							},
-						},
-						"type": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be "bucket"`,
-							Validators: []validator.String{
-								stringvalidator.OneOf("bucket"),
-							},
-						},
-					},
-				},
-			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
@@ -428,49 +208,6 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Description: `Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 80),
-				},
-			},
-			"parent_checkpoint": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"checkpoint_id": schema.Int64Attribute{
-						Computed: true,
-					},
-					"checkpoint_name": schema.StringAttribute{
-						Computed: true,
-					},
-					"session_id": schema.StringAttribute{
-						Computed: true,
-					},
-					"studio_name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"progress": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"message": schema.StringAttribute{
-							Computed: true,
-						},
-						"status": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be one of ["pending", "in-progress", "succeeded", "errored"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"pending",
-									"in-progress",
-									"succeeded",
-									"errored",
-								),
-							},
-						},
-						"warnings": schema.ListAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-						},
-					},
 				},
 			},
 			"session_id": schema.StringAttribute{
@@ -483,85 +220,6 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
-			},
-			"status_info": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"last_update": schema.StringAttribute{
-						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
-					},
-					"message": schema.StringAttribute{
-						Computed: true,
-					},
-					"status": schema.StringAttribute{
-						Computed:    true,
-						Description: `must be one of ["starting", "running", "stopping", "stopped", "errored", "building", "buildFailed"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"starting",
-								"running",
-								"stopping",
-								"stopped",
-								"errored",
-								"building",
-								"buildFailed",
-							),
-						},
-					},
-				},
-			},
-			"studio_url": schema.StringAttribute{
-				Computed:    true,
-				Description: `URL to access the running Studio instance`,
-			},
-			"template": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"icon": schema.StringAttribute{
-						Computed: true,
-					},
-					"repository": schema.StringAttribute{
-						Computed: true,
-					},
-					"status": schema.StringAttribute{
-						Computed:    true,
-						Description: `must be one of ["recommended", "deprecated", "experimental", "unsupported"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"recommended",
-								"deprecated",
-								"experimental",
-								"unsupported",
-							),
-						},
-					},
-					"tool": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"user": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"avatar": schema.StringAttribute{
-						Computed: true,
-					},
-					"email": schema.StringAttribute{
-						Computed: true,
-					},
-					"id": schema.Int64Attribute{
-						Computed: true,
-					},
-					"user_name": schema.StringAttribute{
-						Computed: true,
-					},
-				},
-			},
-			"wave_build_url": schema.StringAttribute{
-				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Computed: true,

@@ -2,11 +2,6 @@
 
 package shared
 
-import (
-	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
-	"time"
-)
-
 // ActionResponseDto - Represents a pipeline action in the Seqera Platform.
 // Contains action configuration, triggers, and execution settings
 // for automated pipeline workflows.
@@ -21,26 +16,10 @@ type ActionResponseDto struct {
 	// URL endpoint for the webhook that triggers this action
 	HookURL *string `json:"hookUrl,omitempty"`
 	// Status or informational message about the action
-	Message     *string           `json:"message,omitempty"`
-	Source      *ActionSource     `json:"source,omitempty"`
-	Status      *ActionStatus     `json:"status,omitempty"`
-	Config      *ActionConfigType `json:"config,omitempty"`
-	Event       *ActionEventType  `json:"event,omitempty"`
-	LastSeen    *time.Time        `json:"lastSeen,omitempty"`
-	DateCreated *time.Time        `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time        `json:"lastUpdated,omitempty"`
-	Labels      []LabelDbDto      `json:"labels,omitempty"`
-}
-
-func (a ActionResponseDto) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *ActionResponseDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	Message *string           `json:"message,omitempty"`
+	Source  *ActionSource     `json:"source,omitempty"`
+	Status  *ActionStatus     `json:"status,omitempty"`
+	Config  *ActionConfigType `json:"config,omitempty"`
 }
 
 func (a *ActionResponseDto) GetID() *string {
@@ -118,53 +97,4 @@ func (a *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
 		return v.ActionTowerActionConfig
 	}
 	return nil
-}
-
-func (a *ActionResponseDto) GetEvent() *ActionEventType {
-	if a == nil {
-		return nil
-	}
-	return a.Event
-}
-
-func (a *ActionResponseDto) GetEventGithub() *GithubActionEvent {
-	if v := a.GetEvent(); v != nil {
-		return v.GithubActionEvent
-	}
-	return nil
-}
-
-func (a *ActionResponseDto) GetEventTower() *ActionTowerActionEvent {
-	if v := a.GetEvent(); v != nil {
-		return v.ActionTowerActionEvent
-	}
-	return nil
-}
-
-func (a *ActionResponseDto) GetLastSeen() *time.Time {
-	if a == nil {
-		return nil
-	}
-	return a.LastSeen
-}
-
-func (a *ActionResponseDto) GetDateCreated() *time.Time {
-	if a == nil {
-		return nil
-	}
-	return a.DateCreated
-}
-
-func (a *ActionResponseDto) GetLastUpdated() *time.Time {
-	if a == nil {
-		return nil
-	}
-	return a.LastUpdated
-}
-
-func (a *ActionResponseDto) GetLabels() []LabelDbDto {
-	if a == nil {
-		return nil
-	}
-	return a.Labels
 }

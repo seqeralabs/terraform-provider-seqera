@@ -10,7 +10,6 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
-	"time"
 )
 
 func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Context, resp *shared.ActionResponseDto) diag.Diagnostics {
@@ -32,45 +31,9 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				}
 			}
 		}
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		if resp.Event != nil {
-			r.Event = &tfTypes.ActionEventType{}
-			if resp.Event.GithubActionEvent != nil {
-				r.Event.Github = &tfTypes.GithubActionEvent{}
-				r.Event.Github.CommitID = types.StringPointerValue(resp.Event.GithubActionEvent.CommitID)
-				r.Event.Github.CommitMessage = types.StringPointerValue(resp.Event.GithubActionEvent.CommitMessage)
-				r.Event.Github.Discriminator = types.StringPointerValue(resp.Event.GithubActionEvent.Discriminator)
-				r.Event.Github.PusherEmail = types.StringPointerValue(resp.Event.GithubActionEvent.PusherEmail)
-				r.Event.Github.PusherName = types.StringPointerValue(resp.Event.GithubActionEvent.PusherName)
-				r.Event.Github.Ref = types.StringPointerValue(resp.Event.GithubActionEvent.Ref)
-				r.Event.Github.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.GithubActionEvent.Timestamp))
-			}
-			if resp.Event.ActionTowerActionEvent != nil {
-				r.Event.Tower = &tfTypes.ActionTowerActionEvent{}
-				r.Event.Tower.Discriminator = types.StringPointerValue(resp.Event.ActionTowerActionEvent.Discriminator)
-				r.Event.Tower.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Event.ActionTowerActionEvent.Timestamp))
-				r.Event.Tower.WorkflowID = types.StringPointerValue(resp.Event.ActionTowerActionEvent.WorkflowID)
-			}
-		}
 		r.HookID = types.StringPointerValue(resp.HookID)
 		r.HookURL = types.StringPointerValue(resp.HookURL)
 		r.ID = types.StringPointerValue(resp.ID)
-		r.Labels = []tfTypes.LabelDbDto{}
-
-		for _, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-
-			r.Labels = append(r.Labels, labels)
-		}
-		r.LastSeen = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastSeen))
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		if resp.Launch != nil {
 			launchPriorData := r.Launch
 			if resp.Launch.ComputeEnv == nil {
@@ -885,12 +848,6 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		revision = nil
 	}
-	sessionID := new(string)
-	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
-		*sessionID = r.Launch.SessionID.ValueString()
-	} else {
-		sessionID = nil
-	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
 	for _, configProfilesItem := range r.Launch.ConfigProfiles {
 		configProfiles = append(configProfiles, configProfilesItem.ValueString())
@@ -969,18 +926,6 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		stubRun = nil
 	}
-	optimizationID := new(string)
-	if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
-		*optimizationID = r.Launch.OptimizationID.ValueString()
-	} else {
-		optimizationID = nil
-	}
-	optimizationTargets := new(string)
-	if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
-		*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
-	} else {
-		optimizationTargets = nil
-	}
 	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
 	for _, labelIdsItem := range r.Launch.LabelIds {
 		labelIds = append(labelIds, labelIdsItem.ValueInt64())
@@ -997,46 +942,29 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		headJobMemoryMb = nil
 	}
-	launchContainer := new(string)
-	if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
-		*launchContainer = r.Launch.LaunchContainer.ValueString()
-	} else {
-		launchContainer = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
 	launch := shared.WorkflowLaunchRequest{
-		ComputeEnvID:        computeEnvID,
-		RunName:             runName,
-		Pipeline:            pipeline,
-		WorkDir:             workDir,
-		Revision:            revision,
-		SessionID:           sessionID,
-		ConfigProfiles:      configProfiles,
-		UserSecrets:         userSecrets,
-		WorkspaceSecrets:    workspaceSecrets,
-		ConfigText:          configText,
-		TowerConfig:         towerConfig,
-		ParamsText:          paramsText,
-		PreRunScript:        preRunScript,
-		PostRunScript:       postRunScript,
-		MainScript:          mainScript,
-		EntryName:           entryName,
-		SchemaName:          schemaName,
-		Resume:              resume,
-		PullLatest:          pullLatest,
-		StubRun:             stubRun,
-		OptimizationID:      optimizationID,
-		OptimizationTargets: optimizationTargets,
-		LabelIds:            labelIds,
-		HeadJobCpus:         headJobCpus,
-		HeadJobMemoryMb:     headJobMemoryMb,
-		LaunchContainer:     launchContainer,
-		DateCreated:         dateCreated,
+		ComputeEnvID:     computeEnvID,
+		RunName:          runName,
+		Pipeline:         pipeline,
+		WorkDir:          workDir,
+		Revision:         revision,
+		ConfigProfiles:   configProfiles,
+		UserSecrets:      userSecrets,
+		WorkspaceSecrets: workspaceSecrets,
+		ConfigText:       configText,
+		TowerConfig:      towerConfig,
+		ParamsText:       paramsText,
+		PreRunScript:     preRunScript,
+		PostRunScript:    postRunScript,
+		MainScript:       mainScript,
+		EntryName:        entryName,
+		SchemaName:       schemaName,
+		Resume:           resume,
+		PullLatest:       pullLatest,
+		StubRun:          stubRun,
+		LabelIds:         labelIds,
+		HeadJobCpus:      headJobCpus,
+		HeadJobMemoryMb:  headJobMemoryMb,
 	}
 	out := shared.CreateActionRequest{
 		Name:   name,

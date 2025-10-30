@@ -32,14 +32,9 @@ type ActionDataSourceModel struct {
 	ActionID    types.String              `tfsdk:"action_id"`
 	Attributes  []types.String            `queryParam:"style=form,explode=true,name=attributes" tfsdk:"attributes"`
 	Config      *tfTypes.ActionConfigType `tfsdk:"config"`
-	DateCreated types.String              `tfsdk:"date_created"`
-	Event       *tfTypes.ActionEventType  `tfsdk:"event"`
 	HookID      types.String              `tfsdk:"hook_id"`
 	HookURL     types.String              `tfsdk:"hook_url"`
 	ID          types.String              `tfsdk:"id"`
-	Labels      []tfTypes.LabelDbDto      `tfsdk:"labels"`
-	LastSeen    types.String              `tfsdk:"last_seen"`
-	LastUpdated types.String              `tfsdk:"last_updated"`
 	Launch      *tfTypes.Launch           `tfsdk:"launch"`
 	Message     types.String              `tfsdk:"message"`
 	Name        types.String              `tfsdk:"name"`
@@ -93,54 +88,6 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-			},
-			"event": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"github": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"commit_id": schema.StringAttribute{
-								Computed: true,
-							},
-							"commit_message": schema.StringAttribute{
-								Computed: true,
-							},
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-							"pusher_email": schema.StringAttribute{
-								Computed: true,
-							},
-							"pusher_name": schema.StringAttribute{
-								Computed: true,
-							},
-							"ref": schema.StringAttribute{
-								Computed: true,
-							},
-							"timestamp": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"tower": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
-								Computed: true,
-							},
-							"timestamp": schema.StringAttribute{
-								Computed: true,
-							},
-							"workflow_id": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-				},
-			},
 			"hook_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Identifier for the webhook associated with this action`,
@@ -152,43 +99,6 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the action`,
-			},
-			"labels": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"date_created": schema.StringAttribute{
-							Computed:    true,
-							Description: `Timestamp when the label was created`,
-						},
-						"id": schema.Int64Attribute{
-							Computed:    true,
-							Description: `Unique numeric identifier for the label`,
-						},
-						"is_default": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a default system label`,
-						},
-						"name": schema.StringAttribute{
-							Computed:    true,
-							Description: `Name or key of the label`,
-						},
-						"resource": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag indicating if this is a resource-level label`,
-						},
-						"value": schema.StringAttribute{
-							Computed:    true,
-							Description: `Value associated with the label`,
-						},
-					},
-				},
-			},
-			"last_seen": schema.StringAttribute{
-				Computed: true,
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
 			},
 			"launch": schema.SingleNestedAttribute{
 				Computed: true,

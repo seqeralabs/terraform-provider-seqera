@@ -6,11 +6,8 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
-	"time"
 )
 
 func (r *PipelineResourceModel) RefreshFromSharedCreatePipelineResponse(ctx context.Context, resp *shared.CreatePipelineResponse) diag.Diagnostics {
@@ -47,52 +44,15 @@ func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Conte
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.ComputeEnv == nil {
-			r.ComputeEnv = nil
-		} else {
-			r.ComputeEnv = &tfTypes.ComputeEnvDbDto{}
-			r.ComputeEnv.ID = types.StringPointerValue(resp.ComputeEnv.ID)
-			r.ComputeEnv.Name = types.StringPointerValue(resp.ComputeEnv.Name)
-			r.ComputeEnv.Platform = types.StringPointerValue(resp.ComputeEnv.Platform)
-			r.ComputeEnv.Region = types.StringPointerValue(resp.ComputeEnv.Region)
-		}
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.Icon = types.StringPointerValue(resp.Icon)
-		r.Labels = []tfTypes.LabelDbDto{}
-
-		for _, labelsItem := range resp.Labels {
-			var labels tfTypes.LabelDbDto
-
-			labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
-			labels.ID = types.Int64PointerValue(labelsItem.ID)
-			labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
-			labels.Name = types.StringPointerValue(labelsItem.Name)
-			labels.Resource = types.BoolPointerValue(labelsItem.Resource)
-			labels.Value = types.StringPointerValue(labelsItem.Value)
-
-			r.Labels = append(r.Labels, labels)
-		}
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.Name = types.StringPointerValue(resp.Name)
-		r.OptimizationID = types.StringPointerValue(resp.OptimizationID)
-		if resp.OptimizationStatus != nil {
-			r.OptimizationStatus = types.StringValue(string(*resp.OptimizationStatus))
-		} else {
-			r.OptimizationStatus = types.StringNull()
-		}
-		r.OptimizationTargets = types.StringPointerValue(resp.OptimizationTargets)
-		r.OrgID = types.Int64PointerValue(resp.OrgID)
-		r.OrgName = types.StringPointerValue(resp.OrgName)
 		r.PipelineID = types.Int64PointerValue(resp.PipelineID)
 		r.Repository = types.StringPointerValue(resp.Repository)
 		r.UserFirstName = types.StringPointerValue(resp.UserFirstName)
 		r.UserID = types.Int64PointerValue(resp.UserID)
-		r.UserLastName = types.StringPointerValue(resp.UserLastName)
 		r.UserName = types.StringPointerValue(resp.UserName)
-		r.Visibility = types.StringPointerValue(resp.Visibility)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
-		r.WorkspaceName = types.StringPointerValue(resp.WorkspaceName)
 	}
 
 	return diags
@@ -247,12 +207,6 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		revision = nil
 	}
-	sessionID := new(string)
-	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
-		*sessionID = r.Launch.SessionID.ValueString()
-	} else {
-		sessionID = nil
-	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
 	for _, configProfilesItem := range r.Launch.ConfigProfiles {
 		configProfiles = append(configProfiles, configProfilesItem.ValueString())
@@ -331,18 +285,6 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		stubRun = nil
 	}
-	optimizationID := new(string)
-	if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
-		*optimizationID = r.Launch.OptimizationID.ValueString()
-	} else {
-		optimizationID = nil
-	}
-	optimizationTargets := new(string)
-	if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
-		*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
-	} else {
-		optimizationTargets = nil
-	}
 	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
 	for _, labelIdsItem := range r.Launch.LabelIds {
 		labelIds = append(labelIds, labelIdsItem.ValueInt64())
@@ -359,46 +301,29 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		headJobMemoryMb = nil
 	}
-	launchContainer := new(string)
-	if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
-		*launchContainer = r.Launch.LaunchContainer.ValueString()
-	} else {
-		launchContainer = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
 	launch := shared.WorkflowLaunchRequest{
-		ComputeEnvID:        computeEnvID,
-		RunName:             runName,
-		Pipeline:            pipeline,
-		WorkDir:             workDir,
-		Revision:            revision,
-		SessionID:           sessionID,
-		ConfigProfiles:      configProfiles,
-		UserSecrets:         userSecrets,
-		WorkspaceSecrets:    workspaceSecrets,
-		ConfigText:          configText,
-		TowerConfig:         towerConfig,
-		ParamsText:          paramsText,
-		PreRunScript:        preRunScript,
-		PostRunScript:       postRunScript,
-		MainScript:          mainScript,
-		EntryName:           entryName,
-		SchemaName:          schemaName,
-		Resume:              resume,
-		PullLatest:          pullLatest,
-		StubRun:             stubRun,
-		OptimizationID:      optimizationID,
-		OptimizationTargets: optimizationTargets,
-		LabelIds:            labelIds,
-		HeadJobCpus:         headJobCpus,
-		HeadJobMemoryMb:     headJobMemoryMb,
-		LaunchContainer:     launchContainer,
-		DateCreated:         dateCreated,
+		ComputeEnvID:     computeEnvID,
+		RunName:          runName,
+		Pipeline:         pipeline,
+		WorkDir:          workDir,
+		Revision:         revision,
+		ConfigProfiles:   configProfiles,
+		UserSecrets:      userSecrets,
+		WorkspaceSecrets: workspaceSecrets,
+		ConfigText:       configText,
+		TowerConfig:      towerConfig,
+		ParamsText:       paramsText,
+		PreRunScript:     preRunScript,
+		PostRunScript:    postRunScript,
+		MainScript:       mainScript,
+		EntryName:        entryName,
+		SchemaName:       schemaName,
+		Resume:           resume,
+		PullLatest:       pullLatest,
+		StubRun:          stubRun,
+		LabelIds:         labelIds,
+		HeadJobCpus:      headJobCpus,
+		HeadJobMemoryMb:  headJobMemoryMb,
 	}
 	labelIds1 := make([]int64, 0, len(r.LabelIds))
 	for _, labelIdsItem1 := range r.LabelIds {
@@ -464,12 +389,6 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		revision = nil
 	}
-	sessionID := new(string)
-	if !r.Launch.SessionID.IsUnknown() && !r.Launch.SessionID.IsNull() {
-		*sessionID = r.Launch.SessionID.ValueString()
-	} else {
-		sessionID = nil
-	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
 	for _, configProfilesItem := range r.Launch.ConfigProfiles {
 		configProfiles = append(configProfiles, configProfilesItem.ValueString())
@@ -548,18 +467,6 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		stubRun = nil
 	}
-	optimizationID := new(string)
-	if !r.Launch.OptimizationID.IsUnknown() && !r.Launch.OptimizationID.IsNull() {
-		*optimizationID = r.Launch.OptimizationID.ValueString()
-	} else {
-		optimizationID = nil
-	}
-	optimizationTargets := new(string)
-	if !r.Launch.OptimizationTargets.IsUnknown() && !r.Launch.OptimizationTargets.IsNull() {
-		*optimizationTargets = r.Launch.OptimizationTargets.ValueString()
-	} else {
-		optimizationTargets = nil
-	}
 	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
 	for _, labelIdsItem := range r.Launch.LabelIds {
 		labelIds = append(labelIds, labelIdsItem.ValueInt64())
@@ -576,46 +483,29 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		headJobMemoryMb = nil
 	}
-	launchContainer := new(string)
-	if !r.Launch.LaunchContainer.IsUnknown() && !r.Launch.LaunchContainer.IsNull() {
-		*launchContainer = r.Launch.LaunchContainer.ValueString()
-	} else {
-		launchContainer = nil
-	}
-	dateCreated := new(time.Time)
-	if !r.Launch.DateCreated.IsUnknown() && !r.Launch.DateCreated.IsNull() {
-		*dateCreated, _ = time.Parse(time.RFC3339Nano, r.Launch.DateCreated.ValueString())
-	} else {
-		dateCreated = nil
-	}
 	launch = &shared.WorkflowLaunchRequest{
-		ComputeEnvID:        computeEnvID,
-		RunName:             runName,
-		Pipeline:            pipeline,
-		WorkDir:             workDir,
-		Revision:            revision,
-		SessionID:           sessionID,
-		ConfigProfiles:      configProfiles,
-		UserSecrets:         userSecrets,
-		WorkspaceSecrets:    workspaceSecrets,
-		ConfigText:          configText,
-		TowerConfig:         towerConfig,
-		ParamsText:          paramsText,
-		PreRunScript:        preRunScript,
-		PostRunScript:       postRunScript,
-		MainScript:          mainScript,
-		EntryName:           entryName,
-		SchemaName:          schemaName,
-		Resume:              resume,
-		PullLatest:          pullLatest,
-		StubRun:             stubRun,
-		OptimizationID:      optimizationID,
-		OptimizationTargets: optimizationTargets,
-		LabelIds:            labelIds,
-		HeadJobCpus:         headJobCpus,
-		HeadJobMemoryMb:     headJobMemoryMb,
-		LaunchContainer:     launchContainer,
-		DateCreated:         dateCreated,
+		ComputeEnvID:     computeEnvID,
+		RunName:          runName,
+		Pipeline:         pipeline,
+		WorkDir:          workDir,
+		Revision:         revision,
+		ConfigProfiles:   configProfiles,
+		UserSecrets:      userSecrets,
+		WorkspaceSecrets: workspaceSecrets,
+		ConfigText:       configText,
+		TowerConfig:      towerConfig,
+		ParamsText:       paramsText,
+		PreRunScript:     preRunScript,
+		PostRunScript:    postRunScript,
+		MainScript:       mainScript,
+		EntryName:        entryName,
+		SchemaName:       schemaName,
+		Resume:           resume,
+		PullLatest:       pullLatest,
+		StubRun:          stubRun,
+		LabelIds:         labelIds,
+		HeadJobCpus:      headJobCpus,
+		HeadJobMemoryMb:  headJobMemoryMb,
 	}
 	labelIds1 := make([]int64, 0, len(r.LabelIds))
 	for _, labelIdsItem1 := range r.LabelIds {

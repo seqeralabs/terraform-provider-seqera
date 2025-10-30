@@ -3,41 +3,39 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Studios Overlay
   version: 0.0.0
+
+# ==============================================================================
+# STUDIOS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Manages Data Studios for interactive analysis in the Seqera Platform.
+# Studios provide a unified platform for hosting container images and compute
+# environments for interactive tools like JupyterLab, R-IDE, VS Code, or Xpra.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example: Basic Jupyter studio
+# resource "seqera_studios" "jupyter" {
+#   workspace_id = seqera_workspace.main.id
+#   name = "my-jupyter-studio"
+#   compute_env_id = seqera_compute_env.aws.id
+#   data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
+#   configuration = {
+#     cpu = 2
+#     memory = 4096  # Memory in megabytes (4096 MB = 4 GB)
+#     lifespan_hours = 2
+#   }
+# }
+#
+# ==============================================================================
+
 actions:
-  # Studios entity operations
-  - target: $["paths"]["/studios"]["post"]
-    update:
-      x-speakeasy-entity-operation: Studios#create
-  - target: $["paths"]["/studios/{sessionId}"]["get"]
-    update:
-      x-speakeasy-entity-operation: Studios#read
-  - target: $["paths"]["/studios/{sessionId}"]["delete"]
-    update:
-      x-speakeasy-entity-operation: Studios#delete
+  # ============================================================================
+  # ENTITY CONFIGURATION
+  # ============================================================================
 
-  # Add retry mechanism for data studios creation
-  # This handles cases where a compute environment is not ready and is in a creating state
-  - target: $.paths["/studios"].post
-    update:
-      x-speakeasy-retries:
-        strategy: backoff
-        backoff:
-          initialInterval: 5000 # 5 seconds
-          maxInterval: 5000 # 5 seconds (fixed interval)
-          maxElapsedTime: 30000 # 30 seconds
-          exponent: 1.0 # No exponential backoff, fixed interval
-        statusCodes:
-          - 400
-
-  # Studios parameter configurations
-  - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-  - target: $["paths"]["/studios/{sessionId}"]["delete"]["parameters"][0]
-    update:
-      x-speakeasy-param-optional: true
-
-  # Studios entity schema annotations
+  # Entity schema configuration for Studios
   - target: $["components"]["schemas"]["DataStudioConfiguration"]
     update:
       x-speakeasy-entity: Studios
@@ -52,7 +50,6 @@ actions:
         On Seqera Cloud, the free tier permits only one running Studio session at a time.
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 
-
   - target: $["components"]["schemas"]["DataStudioCreateRequest"]
     update:
       x-speakeasy-entity: Studios
@@ -66,29 +63,46 @@ actions:
         Note:
         On Seqera Cloud, the free tier permits only one running Studio session at a time.
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
+
   - target: $["components"]["schemas"]["DataStudioDto"]
     update:
       x-speakeasy-entity: Studios
 
-  # DataStudioDto property configurations
-  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
-    update:
-      x-speakeasy-param-readonly: true
-  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
-    update:
-      x-speakeasy-name-override: sessionId
+  # ============================================================================
+  # ENTITY OPERATIONS (CRUD)
+  # ============================================================================
 
-  # DataStudioCreateRequest parameter configuration
-  - target: $.components.schemas.DataStudioCreateRequest.properties.sessionId
+  # CREATE - POST /studios
+  - target: $["paths"]["/studios"]["post"]
     update:
-      x-speakeasy-param-optional: true
+      x-speakeasy-entity-operation: Studios#create
 
-  # Remove environment property
-  - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
-    remove: true
-  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+  # READ - GET /studios/{sessionId}
+  - target: $["paths"]["/studios/{sessionId}"]["get"]
     update:
-      x-speakeasy-param-optional: true
+      x-speakeasy-entity-operation: Studios#read
+
+  # DELETE - DELETE /studios/{sessionId}
+  - target: $["paths"]["/studios/{sessionId}"]["delete"]
+    update:
+      x-speakeasy-entity-operation: Studios#delete
+
+  # ============================================================================
+  # RETRY CONFIGURATION
+  # ============================================================================
+
+  # Add retry mechanism for studios creation when compute environment is not ready
+  - target: $.paths["/studios"].post
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000 # 5 seconds
+          maxInterval: 5000 # 5 seconds (fixed interval)
+          maxElapsedTime: 30000 # 30 seconds
+          exponent: 1.0 # No exponential backoff, fixed interval
+        statusCodes:
+          - 400
 
   # Add retry mechanism for studios deletion when studio needs to be stopped first
   - target: $.paths["/studios/{sessionId}"].delete
@@ -108,7 +122,79 @@ actions:
     update:
       description: "Bad Request - Studio must be stopped, errored, or build failed before deletion"
 
-  # Request examples for Studios
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
+
+  # Make sessionId optional and configure as read-only
+  - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
+    update:
+      x-speakeasy-param-readonly: true
+      x-speakeasy-name-override: sessionId
+      x-speakeasy-param-optional: true
+
+  - target: $.components.schemas.DataStudioCreateRequest.properties.sessionId
+    update:
+      x-speakeasy-param-optional: true
+
+  # Studios parameter configurations for GET and DELETE operations
+  - target: $["paths"]["/studios/{sessionId}"]["get"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  - target: $["paths"]["/studios/{sessionId}"]["delete"]["parameters"][0]
+    update:
+      x-speakeasy-param-optional: true
+
+  # ============================================================================
+  # SCHEMA DESCRIPTIONS
+  # ============================================================================
+
+  # DataStudioDto schema description
+  - target: $.components.schemas.DataStudioDto
+    update:
+      description: |
+        Represents a Studio session for interactive data analysis.
+        Contains configuration and runtime information for Jupyter-based
+        computational environments.
+
+  # DataStudioDto field descriptions (only for manageable fields)
+  - target: $.components.schemas.DataStudioDto.properties.sessionId
+    update:
+      description: Unique identifier for the Studio session
+  - target: $.components.schemas.DataStudioDto.properties.workspaceId
+    update:
+      description: Numeric identifier of the workspace containing the Studio
+  - target: $.components.schemas.DataStudioDto.properties.name
+    update:
+      description: Display name for the Studio session
+  - target: $.components.schemas.DataStudioDto.properties.description
+    update:
+      description: Description of the Studio session's purpose
+
+  # DataStudioConfiguration field descriptions
+  - target: $.components.schemas.DataStudioConfiguration.properties.memory
+    update:
+      description: Memory allocation for the Studio session in megabytes (MB).
+      example: 4096
+  - target: $.components.schemas.DataStudioConfiguration.properties.cpu
+    update:
+      description: Number of CPU cores to allocate
+      example: 2
+  - target: $.components.schemas.DataStudioConfiguration.properties.gpu
+    update:
+      description: Number of GPUs to allocate
+      example: 0
+  - target: $.components.schemas.DataStudioConfiguration.properties.lifespanHours
+    update:
+      description: Maximum lifespan of the Studio session in hours
+      example: 2
+
+  # ============================================================================
+  # REQUEST EXAMPLES
+  # ============================================================================
+
+  # Provide realistic examples for DataStudioCreateRequest documentation
   - target: $.components.schemas.DataStudioCreateRequest.properties.name
     update:
       example: "my-jupyter-studio"
@@ -122,36 +208,72 @@ actions:
     update:
       example: "compute-env-id"
 
-  # Schema description
-  - target: $.components.schemas.DataStudioDto
-    update:
-      description: |
-        Represents a Studio session for interactive data analysis.
-        Contains configuration and runtime information for Jupyter-based
-        computational environments.
+  # ============================================================================
+  # CLEANUP - Remove transient, runtime, and unmanageable fields
+  # ============================================================================
 
-  # Field descriptions for DataStudioDto
-  - target: $.components.schemas.DataStudioDto.properties.sessionId
-    update:
-      description: Unique identifier for the Studio session
-  - target: $.components.schemas.DataStudioDto.properties.workspaceId
-    update:
-      description: Numeric identifier of the workspace containing the Studio
+  # Remove environment property from configuration that cannot be managed
+  - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
+    remove: true
+
+  # Remove runtime checkpoint reference
   - target: $.components.schemas.DataStudioDto.properties.parentCheckpoint
-    update:
-      description: Reference to the parent checkpoint for session restoration
+    remove: true
+
+  # Remove user information (runtime data)
   - target: $.components.schemas.DataStudioDto.properties.user
-    update:
-      description: User information for the Studio session owner
-  - target: $.components.schemas.DataStudioDto.properties.name
-    update:
-      description: Display name for the Studio session
-  - target: $.components.schemas.DataStudioDto.properties.description
-    update:
-      description: Description of the Studio session's purpose
+    remove: true
+
+  # Remove dynamically generated URL
   - target: $.components.schemas.DataStudioDto.properties.studioUrl
-    update:
-      description: URL to access the running Studio instance
+    remove: true
+
+  # Remove expanded compute environment reference
   - target: $.components.schemas.DataStudioDto.properties.computeEnv
-    update:
-      description: Compute environment configuration for the Studio
+    remove: true
+
+  # Remove runtime template information
+  - target: $.components.schemas.DataStudioDto.properties.template
+    remove: true
+
+  # Remove timestamp fields
+  - target: $.components.schemas.DataStudioDto.properties.dateCreated
+    remove: true
+  - target: $.components.schemas.DataStudioDto.properties.lastUpdated
+    remove: true
+  - target: $.components.schemas.DataStudioDto.properties.lastStarted
+    remove: true
+
+  # Remove computed lifespan field
+  - target: $.components.schemas.DataStudioDto.properties.effectiveLifespanHours
+    remove: true
+
+  # Remove runtime connection state
+  - target: $.components.schemas.DataStudioDto.properties.activeConnections
+    remove: true
+
+  # Remove runtime status information
+  - target: $.components.schemas.DataStudioDto.properties.statusInfo
+    remove: true
+
+  # Remove runtime build URL
+  - target: $.components.schemas.DataStudioDto.properties.waveBuildUrl
+    remove: true
+
+  # Remove runtime image information
+  - target: $.components.schemas.DataStudioDto.properties.baseImage
+    remove: true
+  - target: $.components.schemas.DataStudioDto.properties.customImage
+    remove: true
+
+  # Remove runtime mounted data links
+  - target: $.components.schemas.DataStudioDto.properties.mountedDataLinks
+    remove: true
+
+  # Remove runtime progress steps
+  - target: $.components.schemas.DataStudioDto.properties.progress
+    remove: true
+
+  # Remove runtime label associations (managed separately)
+  - target: $.components.schemas.DataStudioDto.properties.labels
+    remove: true

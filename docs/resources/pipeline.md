@@ -33,7 +33,6 @@ resource "seqera_pipeline" "my_pipeline" {
       "aws",
     ]
     config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
-    date_created       = "2024-07-23T10:30:00Z"
     entry_name         = "main.nf"
     head_job_cpus      = 2
     head_job_memory_mb = 4096
@@ -42,22 +41,18 @@ resource "seqera_pipeline" "my_pipeline" {
       1002,
       1003,
     ]
-    launch_container     = "...my_launch_container..."
-    main_script          = "main.nf"
-    optimization_id      = "...my_optimization_id..."
-    optimization_targets = "...my_optimization_targets..."
-    params_text          = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
-    pipeline             = "https://github.com/nextflow-io/hello"
-    post_run_script      = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
-    pre_run_script       = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-    pull_latest          = true
-    resume               = true
-    revision             = "main"
-    run_name             = "nextflow-hello"
-    schema_name          = "nextflow_schema.json"
-    session_id           = "...my_session_id..."
-    stub_run             = false
-    tower_config         = "...my_tower_config..."
+    main_script     = "main.nf"
+    params_text     = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
+    pipeline        = "https://github.com/nextflow-io/hello"
+    post_run_script = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
+    pre_run_script  = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
+    pull_latest     = true
+    resume          = true
+    revision        = "main"
+    run_name        = "nextflow-hello"
+    schema_name     = "nextflow_schema.json"
+    stub_run        = false
+    tower_config    = "...my_tower_config..."
     user_secrets = [
       "MY_API_KEY",
       "DATABASE_PASSWORD",
@@ -90,45 +85,25 @@ resource "seqera_pipeline" "my_pipeline" {
 
 ### Read-Only
 
-- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--compute_env))
-- `deleted` (Boolean)
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
-- `last_updated` (String)
-- `optimization_id` (String)
-- `optimization_status` (String) must be one of ["OPTIMIZED", "OPTIMIZABLE", "UNAVAILABLE"]
-- `optimization_targets` (String)
-- `org_id` (Number)
-- `org_name` (String)
 - `pipeline_id` (Number) Unique numeric identifier for the pipeline
 - `repository` (String) Git repository URL containing the pipeline source code
-- `user_first_name` (String) First name of the user who created the pipeline
-- `user_id` (Number) Numeric identifier of the user who created the pipeline
-- `user_last_name` (String)
-- `user_name` (String) Username of the pipeline creator
-- `visibility` (String)
-- `workspace_name` (String)
+- `user_first_name` (String)
+- `user_id` (Number)
+- `user_name` (String)
 
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`
-
-Required:
-
-- `work_dir` (String)
 
 Optional:
 
 - `compute_env_id` (String)
 - `config_profiles` (List of String)
 - `config_text` (String)
-- `date_created` (String)
 - `entry_name` (String)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `label_ids` (List of Number)
-- `launch_container` (String)
 - `main_script` (String)
-- `optimization_id` (String)
-- `optimization_targets` (String)
 - `params_text` (String)
 - `pipeline` (String)
 - `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
@@ -138,35 +113,11 @@ Optional:
 - `revision` (String)
 - `run_name` (String)
 - `schema_name` (String)
-- `session_id` (String)
 - `stub_run` (Boolean)
 - `tower_config` (String)
 - `user_secrets` (List of String)
+- `work_dir` (String)
 - `workspace_secrets` (List of String)
-
-
-<a id="nestedatt--compute_env"></a>
-### Nested Schema for `compute_env`
-
-Read-Only:
-
-- `id` (String)
-- `name` (String)
-- `platform` (String)
-- `region` (String)
-
-
-<a id="nestedatt--labels"></a>
-### Nested Schema for `labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label
 
 ## Import
 

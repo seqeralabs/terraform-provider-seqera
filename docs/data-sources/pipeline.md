@@ -43,46 +43,11 @@ data "seqera_pipeline" "my_pipeline" {
 
 ### Read-Only
 
-- `compute_env` (Attributes) (see [below for nested schema](#nestedatt--compute_env))
-- `deleted` (Boolean)
 - `description` (String) Detailed description of the pipeline's purpose and functionality
 - `icon` (String) Icon identifier or URL for visual representation
-- `labels` (Attributes List) (see [below for nested schema](#nestedatt--labels))
-- `last_updated` (String)
 - `name` (String) Display name for the pipeline
-- `optimization_id` (String)
-- `optimization_status` (String)
-- `optimization_targets` (String)
-- `org_id` (Number)
-- `org_name` (String)
 - `pipeline_id` (Number) Pipeline numeric identifier
 - `repository` (String) Git repository URL containing the pipeline source code
-- `user_first_name` (String) First name of the user who created the pipeline
-- `user_id` (Number) Numeric identifier of the user who created the pipeline
-- `user_last_name` (String)
-- `user_name` (String) Username of the pipeline creator
-- `visibility` (String)
-- `workspace_name` (String)
-
-<a id="nestedatt--compute_env"></a>
-### Nested Schema for `compute_env`
-
-Read-Only:
-
-- `id` (String)
-- `name` (String)
-- `platform` (String)
-- `region` (String)
-
-
-<a id="nestedatt--labels"></a>
-### Nested Schema for `labels`
-
-Read-Only:
-
-- `date_created` (String) Timestamp when the label was created
-- `id` (Number) Unique numeric identifier for the label
-- `is_default` (Boolean) Flag indicating if this is a default system label
-- `name` (String) Name or key of the label
-- `resource` (Boolean) Flag indicating if this is a resource-level label
-- `value` (String) Value associated with the label
+- `user_first_name` (String)
+- `user_id` (Number)
+- `user_name` (String)
