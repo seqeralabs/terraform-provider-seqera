@@ -249,30 +249,40 @@ Read-Only:
 
 Read-Only:
 
-- `cli_path` (String)
-- `compute_job_role` (String)
-- `compute_queue` (String)
+- `cli_path` (String) Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+- `compute_job_role` (String) IAM role ARN for compute jobs. Jobs assume this role during execution.
+Must have permissions for S3, CloudWatch, etc.
+Format: arn:aws:iam::account-id:role/role-name
+- `compute_queue` (String) Name of the AWS Batch compute queue
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_batch--environment))
-- `execution_role` (String)
+- `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
+Must have permissions for ECR and CloudWatch Logs.
+Format: arn:aws:iam::account-id:role/role-name
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_batch--forge))
-- `fusion2_enabled` (Boolean)
 - `fusion_snapshots` (Boolean)
-- `head_job_cpus` (Number)
-- `head_job_memory_mb` (Number)
-- `head_job_role` (String)
-- `head_queue` (String)
+- `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1)
+- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024)
+- `head_job_role` (String) IAM role ARN for the head job.
+Format: arn:aws:iam::account-id:role/role-name
+- `head_queue` (String) Name of the head job queue
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
 - `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nvnme_storage_enabled` (Boolean)
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String)
+- `region` (String) AWS region where the Batch compute environment will be created.
+Examples: us-east-1, eu-west-1, ap-southeast-2
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--aws_batch--environment"></a>
@@ -291,36 +301,65 @@ Read-Only:
 
 Read-Only:
 
-- `alloc_strategy` (String)
+- `alloc_strategy` (String) Strategy for allocating compute resources:
+- BEST_FIT: Selects instance type that best fits job requirements
+- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
 - `allow_buckets` (List of String)
 - `arm64_enabled` (Boolean)
-- `bid_percentage` (Number)
-- `dispose_on_deletion` (Boolean)
+- `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+this field empty.
+
+Must be a whole number between 0 and 100 (inclusive).
+- `dispose_on_deletion` (Boolean) Dispose of AWS Batch resources when compute environment is deleted.
 - `dragen_ami_id` (String)
 - `dragen_enabled` (Boolean)
 - `dragen_instance_type` (String)
-- `ebs_auto_scale` (Boolean)
-- `ebs_block_size` (Number)
+- `ebs_auto_scale` (Boolean) Enable automatic EBS volume expansion.
+When enabled, EBS volumes automatically expand as needed.
+- `ebs_block_size` (Number) Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
 - `ebs_boot_size` (Number)
-- `ec2_key_pair` (String)
+- `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
+Key pair must exist in the specified region.
 - `ecs_config` (String)
-- `efs_create` (Boolean)
-- `efs_id` (String)
-- `efs_mount` (String)
-- `fargate_head_enabled` (Boolean)
-- `fsx_mount` (String)
-- `fsx_name` (String)
-- `fsx_size` (Number)
-- `fusion_enabled` (Boolean)
-- `gpu_enabled` (Boolean)
+- `efs_create` (Boolean) Automatically create an EFS file system
+- `efs_id` (String) EFS file system ID to mount.
+Format: fs- followed by hexadecimal characters.
+EFS must be in the same VPC and region.
+- `efs_mount` (String) Path where EFS will be mounted in the container.
+- `fargate_head_enabled` (Boolean) Use Fargate for head job instead of EC2.
+Reduces costs by running head job on serverless compute.
+Only applicable when using EC2 for worker jobs.
+- `fsx_mount` (String) Path where FSx will be mounted in the container.
+- `fsx_name` (String) FSx for Lustre file system name.
+- `fsx_size` (Number) Size of FSx file system in GB.
+- `gpu_enabled` (Boolean) Enable GPU support for compute instances.
+When enabled, GPU-capable instance types will be selected.
 - `image_id` (String)
-- `instance_types` (List of String)
-- `max_cpus` (Number)
-- `min_cpus` (Number)
-- `security_groups` (List of String)
-- `subnets` (List of String)
-- `type` (String)
-- `vpc_id` (String)
+- `instance_types` (List of String) List of EC2 instance types to use.
+Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+Default: ["optimal"] - AWS Batch selects appropriate instances
+- `max_cpus` (Number) Maximum number of CPUs available in the compute environment.
+Subject to AWS service quotas.
+- `min_cpus` (Number) Minimum number of CPUs to maintain in the compute environment.
+Setting to 0 allows environment to scale to zero when idle.
+- `security_groups` (List of String) List of security group IDs to attach to compute instances.
+Security groups must allow necessary network access.
+- `subnets` (List of String) List of subnet IDs for compute instances.
+Subnets must be in the specified VPC. Use multiple subnets for high availability.
+Must have sufficient IP addresses.
+- `type` (String) Type of compute instances to provision:
+- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+- EC2: Use On-Demand EC2 instances (reliable, higher cost)
+- FARGATE: Use AWS Fargate serverless compute
+- `vpc_id` (String) VPC ID where compute environment will be deployed.
+Format: vpc- followed by hexadecimal characters
 
 
 
@@ -333,8 +372,9 @@ Read-Only:
 - `arm64_enabled` (Boolean)
 - `ebs_boot_size` (Number)
 - `ec2_key_pair` (String)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--aws_cloud--environment))
-- `fusion2_enabled` (Boolean)
 - `gpu_enabled` (Boolean)
 - `image_id` (String)
 - `instance_profile_arn` (String)
@@ -346,7 +386,6 @@ Read-Only:
 - `region` (String)
 - `security_groups` (List of String)
 - `subnet_id` (String)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--aws_cloud--environment"></a>
@@ -369,9 +408,10 @@ Read-Only:
 - `auto_pool_mode` (Boolean, Deprecated)
 - `delete_jobs_on_completion` (String)
 - `delete_pools_on_completion` (Boolean)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--azure_batch--forge))
-- `fusion2_enabled` (Boolean)
 - `head_pool` (String)
 - `managed_identity_client_id` (String)
 - `nextflow_config` (String) Nextflow configuration settings and parameters
@@ -379,7 +419,6 @@ Read-Only:
 - `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String)
 - `token_duration` (String)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--azure_batch--environment"></a>
@@ -413,8 +452,9 @@ Read-Only:
 
 - `cluster_name` (String) The AWS EKS cluster name
 - `compute_service_account` (String)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--eks_platform--environment))
-- `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `head_pod_spec` (String)
@@ -430,7 +470,6 @@ Read-Only:
 - `ssl_cert` (String)
 - `storage_claim_name` (String)
 - `storage_mount_path` (String)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--eks_platform--environment"></a>
@@ -452,8 +491,9 @@ Read-Only:
 
 - `cluster_name` (String) The GKE cluster name
 - `compute_service_account` (String)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--gke_platform--environment))
-- `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_memory_mb` (Number)
 - `head_pod_spec` (String)
@@ -469,7 +509,6 @@ Read-Only:
 - `ssl_cert` (String)
 - `storage_claim_name` (String)
 - `storage_mount_path` (String)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--gke_platform--environment"></a>
@@ -494,8 +533,9 @@ Read-Only:
 - `copy_image` (String)
 - `cpu_platform` (String)
 - `debug_mode` (Number)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean)
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--google_batch--environment))
-- `fusion2_enabled` (Boolean)
 - `head_job_cpus` (Number)
 - `head_job_instance_template` (String)
 - `head_job_memory_mb` (Number)
@@ -515,7 +555,6 @@ Read-Only:
 - `ssh_image` (String)
 - `subnetwork` (String)
 - `use_private_address` (Boolean)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--google_batch--environment"></a>
@@ -676,30 +715,40 @@ Read-Only:
 
 Read-Only:
 
-- `cli_path` (String)
-- `compute_job_role` (String)
-- `compute_queue` (String)
+- `cli_path` (String) Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+- `compute_job_role` (String) IAM role ARN for compute jobs. Jobs assume this role during execution.
+Must have permissions for S3, CloudWatch, etc.
+Format: arn:aws:iam::account-id:role/role-name
+- `compute_queue` (String) Name of the AWS Batch compute queue
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
 - `environment` (Attributes List) Array of environment variables for the compute environment (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform--environment))
-- `execution_role` (String)
+- `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
+Must have permissions for ECR and CloudWatch Logs.
+Format: arn:aws:iam::account-id:role/role-name
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--launch--compute_env--config--seqeracompute_platform--forge))
-- `fusion2_enabled` (Boolean)
 - `fusion_snapshots` (Boolean)
-- `head_job_cpus` (Number)
-- `head_job_memory_mb` (Number)
-- `head_job_role` (String)
-- `head_queue` (String)
+- `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1)
+- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024)
+- `head_job_role` (String) IAM role ARN for the head job.
+Format: arn:aws:iam::account-id:role/role-name
+- `head_queue` (String) Name of the head job queue
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
 - `nextflow_config` (String) Nextflow configuration settings and parameters
 - `nvnme_storage_enabled` (Boolean)
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
-- `region` (String)
+- `region` (String) AWS region where the Batch compute environment will be created.
+Examples: us-east-1, eu-west-1, ap-southeast-2
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
-- `wave_enabled` (Boolean)
 - `work_dir` (String) Working directory path for workflow execution
 
 <a id="nestedatt--launch--compute_env--config--seqeracompute_platform--environment"></a>
@@ -718,36 +767,65 @@ Read-Only:
 
 Read-Only:
 
-- `alloc_strategy` (String)
+- `alloc_strategy` (String) Strategy for allocating compute resources:
+- BEST_FIT: Selects instance type that best fits job requirements
+- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
 - `allow_buckets` (List of String)
 - `arm64_enabled` (Boolean)
-- `bid_percentage` (Number)
-- `dispose_on_deletion` (Boolean)
+- `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+this field empty.
+
+Must be a whole number between 0 and 100 (inclusive).
+- `dispose_on_deletion` (Boolean) Dispose of AWS Batch resources when compute environment is deleted.
 - `dragen_ami_id` (String)
 - `dragen_enabled` (Boolean)
 - `dragen_instance_type` (String)
-- `ebs_auto_scale` (Boolean)
-- `ebs_block_size` (Number)
+- `ebs_auto_scale` (Boolean) Enable automatic EBS volume expansion.
+When enabled, EBS volumes automatically expand as needed.
+- `ebs_block_size` (Number) Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
 - `ebs_boot_size` (Number)
-- `ec2_key_pair` (String)
+- `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
+Key pair must exist in the specified region.
 - `ecs_config` (String)
-- `efs_create` (Boolean)
-- `efs_id` (String)
-- `efs_mount` (String)
-- `fargate_head_enabled` (Boolean)
-- `fsx_mount` (String)
-- `fsx_name` (String)
-- `fsx_size` (Number)
-- `fusion_enabled` (Boolean)
-- `gpu_enabled` (Boolean)
+- `efs_create` (Boolean) Automatically create an EFS file system
+- `efs_id` (String) EFS file system ID to mount.
+Format: fs- followed by hexadecimal characters.
+EFS must be in the same VPC and region.
+- `efs_mount` (String) Path where EFS will be mounted in the container.
+- `fargate_head_enabled` (Boolean) Use Fargate for head job instead of EC2.
+Reduces costs by running head job on serverless compute.
+Only applicable when using EC2 for worker jobs.
+- `fsx_mount` (String) Path where FSx will be mounted in the container.
+- `fsx_name` (String) FSx for Lustre file system name.
+- `fsx_size` (Number) Size of FSx file system in GB.
+- `gpu_enabled` (Boolean) Enable GPU support for compute instances.
+When enabled, GPU-capable instance types will be selected.
 - `image_id` (String)
-- `instance_types` (List of String)
-- `max_cpus` (Number)
-- `min_cpus` (Number)
-- `security_groups` (List of String)
-- `subnets` (List of String)
-- `type` (String)
-- `vpc_id` (String)
+- `instance_types` (List of String) List of EC2 instance types to use.
+Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+Default: ["optimal"] - AWS Batch selects appropriate instances
+- `max_cpus` (Number) Maximum number of CPUs available in the compute environment.
+Subject to AWS service quotas.
+- `min_cpus` (Number) Minimum number of CPUs to maintain in the compute environment.
+Setting to 0 allows environment to scale to zero when idle.
+- `security_groups` (List of String) List of security group IDs to attach to compute instances.
+Security groups must allow necessary network access.
+- `subnets` (List of String) List of subnet IDs for compute instances.
+Subnets must be in the specified VPC. Use multiple subnets for high availability.
+Must have sufficient IP addresses.
+- `type` (String) Type of compute instances to provision:
+- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+- EC2: Use On-Demand EC2 instances (reliable, higher cost)
+- FARGATE: Use AWS Fargate serverless compute
+- `vpc_id` (String) VPC ID where compute environment will be deployed.
+Format: vpc- followed by hexadecimal characters
 
 
 

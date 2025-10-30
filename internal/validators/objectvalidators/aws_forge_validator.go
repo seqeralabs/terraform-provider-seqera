@@ -14,7 +14,7 @@ type ObjectAwsForgeValidatorValidator struct{}
 
 // Description describes the validation in plain text formatting.
 func (v ObjectAwsForgeValidatorValidator) Description(_ context.Context) string {
-	return "Validates AWS Batch Forge configuration rules: 1) If forge and fusion2 are enabled, cli_path must not be set, 2) If fusion2 is enabled, wave must be enabled"
+	return "Validates AWS Batch Forge configuration rules: 1) If forge and enable_fusion are enabled, cli_path must not be set, 2) If enable_fusion is enabled, enable_wave must be enabled"
 }
 
 // MarkdownDescription describes the validation in Markdown formatting.
@@ -37,13 +37,13 @@ func (v ObjectAwsForgeValidatorValidator) ValidateObject(ctx context.Context, re
 		return
 	}
 
-	// Rule 1: If forge is set (has a type) AND fusion2 is enabled, cli_path must not be set
+	// Rule 1: If forge is set (has a type) AND enable_fusion is enabled, cli_path must not be set
 	forgeEnabled := awsBatchConfig.Forge != nil &&
 		!awsBatchConfig.Forge.Type.IsNull() &&
 		!awsBatchConfig.Forge.Type.IsUnknown() &&
 		awsBatchConfig.Forge.Type.ValueString() != ""
 
-	fusion2Enabled := !awsBatchConfig.Fusion2Enabled.IsNull() && awsBatchConfig.Fusion2Enabled.ValueBool()
+	fusion2Enabled := !awsBatchConfig.EnableFusion.IsNull() && awsBatchConfig.EnableFusion.ValueBool()
 
 	if forgeEnabled && fusion2Enabled {
 		// Both Forge and Fusion2 are enabled - validate cli_path is not set
@@ -54,19 +54,19 @@ func (v ObjectAwsForgeValidatorValidator) ValidateObject(ctx context.Context, re
 			resp.Diagnostics.AddAttributeError(
 				req.Path.AtName("cli_path"),
 				"Invalid AWS Batch Configuration",
-				"When Forge and Fusion2 are enabled, cli_path must not be set as Forge will manage the CLI path automatically.",
+				"When Forge and Fusion2 (enable_fusion) are enabled, cli_path must not be set as Forge will manage the CLI path automatically.",
 			)
 		}
 	}
 
-	// Rule 2: If fusion2_enabled is set, wave must be enabled
-	if !awsBatchConfig.Fusion2Enabled.IsNull() && awsBatchConfig.Fusion2Enabled.ValueBool() {
+	// Rule 2: If enable_fusion is set, wave must be enabled
+	if !awsBatchConfig.EnableFusion.IsNull() && awsBatchConfig.EnableFusion.ValueBool() {
 		// Fusion2 is enabled - validate wave is enabled
-		if awsBatchConfig.WaveEnabled.IsNull() || !awsBatchConfig.WaveEnabled.ValueBool() {
+		if awsBatchConfig.EnableWave.IsNull() || !awsBatchConfig.EnableWave.ValueBool() {
 			resp.Diagnostics.AddAttributeError(
-				req.Path.AtName("wave_enabled"),
+				req.Path.AtName("enable_wave"),
 				"Invalid AWS Batch Configuration",
-				"When Fusion2 is enabled, Wave must also be enabled.",
+				"When Fusion2 (enable_fusion) is enabled, Wave (enable_wave) must also be enabled.",
 			)
 		}
 	}

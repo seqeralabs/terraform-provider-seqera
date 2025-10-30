@@ -12,8 +12,9 @@ type GoogleBatchServiceConfiguration struct {
 	CopyImage                   types.String            `tfsdk:"copy_image"`
 	CPUPlatform                 types.String            `tfsdk:"cpu_platform"`
 	DebugMode                   types.Int32             `tfsdk:"debug_mode"`
+	EnableFusion                types.Bool              `tfsdk:"enable_fusion"`
+	EnableWave                  types.Bool              `tfsdk:"enable_wave"`
 	Environment                 []ConfigEnvVariable     `tfsdk:"environment"`
-	Fusion2Enabled              types.Bool              `tfsdk:"fusion2_enabled"`
 	HeadJobCpus                 types.Int32             `tfsdk:"head_job_cpus"`
 	HeadJobInstanceTemplate     types.String            `tfsdk:"head_job_instance_template"`
 	HeadJobMemoryMb             types.Int32             `tfsdk:"head_job_memory_mb"`
@@ -33,6 +34,5 @@ type GoogleBatchServiceConfiguration struct {
 	SSHImage                    types.String            `tfsdk:"ssh_image"`
 	Subnetwork                  types.String            `tfsdk:"subnetwork"`
 	UsePrivateAddress           types.Bool              `tfsdk:"use_private_address"`
-	WaveEnabled                 types.Bool              `tfsdk:"wave_enabled"`
 	WorkDir                     types.String            `tfsdk:"work_dir"`
 }

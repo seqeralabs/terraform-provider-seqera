@@ -11,8 +11,9 @@ type AWSCloudConfiguration struct {
 	Arm64Enabled       types.Bool          `tfsdk:"arm64_enabled"`
 	EbsBootSize        types.Int32         `tfsdk:"ebs_boot_size"`
 	Ec2KeyPair         types.String        `tfsdk:"ec2_key_pair"`
+	EnableFusion       types.Bool          `tfsdk:"enable_fusion"`
+	EnableWave         types.Bool          `tfsdk:"enable_wave"`
 	Environment        []ConfigEnvVariable `tfsdk:"environment"`
-	Fusion2Enabled     types.Bool          `tfsdk:"fusion2_enabled"`
 	GpuEnabled         types.Bool          `tfsdk:"gpu_enabled"`
 	ImageID            types.String        `tfsdk:"image_id"`
 	InstanceProfileArn types.String        `tfsdk:"instance_profile_arn"`
@@ -24,6 +25,5 @@ type AWSCloudConfiguration struct {
 	Region             types.String        `tfsdk:"region"`
 	SecurityGroups     []types.String      `tfsdk:"security_groups"`
 	SubnetID           types.String        `tfsdk:"subnet_id"`
-	WaveEnabled        types.Bool          `tfsdk:"wave_enabled"`
 	WorkDir            types.String        `tfsdk:"work_dir"`
 }

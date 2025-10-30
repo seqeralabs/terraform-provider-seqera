@@ -18,90 +18,163 @@ on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
 ## Example Usage
 
 ```terraform
-resource "seqera_aws_compute_env" "my_awscomputeenv" {
+# AWS Compute Environment Examples
+#
+# AWS compute environments define the execution platform where pipelines run.
+# Supports AWS Batch, AWS Cloud, and EKS platforms.
+
+# Example 1: Minimal AWS Batch configuration
+# Simplest setup with just required fields
+resource "seqera_aws_compute_env" "minimal" {
+  name           = "aws-batch-minimal"
+  workspace_id   = seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
   config = {
-    cli_path             = "...my_cli_path..."
-    compute_job_role     = "...my_compute_job_role..."
-    compute_queue        = "...my_compute_queue..."
-    dragen_instance_type = "...my_dragen_instance_type..."
-    dragen_queue         = "...my_dragen_queue..."
-    environment = [
-      {
-        compute = false
-        head    = true
-        name    = "...my_name..."
-        value   = "...my_value..."
-      }
-    ]
-    execution_role = "...my_execution_role..."
-    forge = {
-      alloc_strategy = "BEST_FIT_PROGRESSIVE"
-      allow_buckets = [
-        "..."
-      ]
-      arm64_enabled        = true
-      bid_percentage       = 8
-      dispose_on_deletion  = false
-      dragen_ami_id        = "...my_dragen_ami_id..."
-      dragen_enabled       = true
-      dragen_instance_type = "...my_dragen_instance_type..."
-      ebs_auto_scale       = false
-      ebs_block_size       = 2
-      ebs_boot_size        = 3
-      ec2_key_pair         = "...my_ec2_key_pair..."
-      ecs_config           = "...my_ecs_config..."
-      efs_create           = true
-      efs_id               = "...my_efs_id..."
-      efs_mount            = "...my_efs_mount..."
-      fargate_head_enabled = true
-      fsx_mount            = "...my_fsx_mount..."
-      fsx_name             = "...my_fsx_name..."
-      fsx_size             = 8
-      fusion_enabled       = true
-      gpu_enabled          = true
-      image_id             = "...my_image_id..."
-      instance_types = [
-        "..."
-      ]
-      max_cpus = 4
-      min_cpus = 1
-      security_groups = [
-        "..."
-      ]
-      subnets = [
-        "..."
-      ]
-      type   = "EC2"
-      vpc_id = "...my_vpc_id..."
-    }
-    fusion_snapshots      = false
-    fusion2_enabled       = true
-    head_job_cpus         = 9
-    head_job_memory_mb    = 3
-    head_job_role         = "...my_head_job_role..."
-    head_queue            = "...my_head_queue..."
-    log_group             = "...my_log_group..."
-    lustre_id             = "...my_lustre_id..."
-    nextflow_config       = "...my_nextflow_config..."
-    nvnme_storage_enabled = true
-    post_run_script       = "...my_post_run_script..."
-    pre_run_script        = "...my_pre_run_script..."
-    region                = "...my_region..."
-    storage_type          = "...my_storage_type..."
-    volumes = [
-      "..."
-    ]
-    wave_enabled = false
-    work_dir     = "...my_work_dir..."
+    region   = "us-east-1"
+    work_dir = "s3://my-nextflow-bucket/work"
   }
-  credentials_id = "...my_credentials_id..."
-  description    = "...my_description..."
-  label_ids = [
-    1
-  ]
-  name         = "...my_name..."
-  platform     = "aws-batch"
-  workspace_id = 7
+}
+
+# Example 2: AWS Batch with Spot instances
+# Cost-optimized setup using Spot instances
+resource "seqera_aws_compute_env" "spot" {
+  name           = "aws-batch-spot"
+  workspace_id   = seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region        = "us-east-1"
+    work_dir      = "s3://my-bucket/work"
+    enable_fusion = true
+    enable_wave   = false # Set explicitly when enable_wave is true
+
+    forge = {
+      type                = "SPOT"
+      allocation_strategy = "SPOT_CAPACITY_OPTIMIZED"
+      bid_percentage      = 70
+      min_cpus            = 0
+      max_cpus            = 512
+      instance_types      = ["m5.xlarge", "m5.2xlarge", "c5.xlarge"]
+      ebs_auto_scale      = true
+    }
+  }
+}
+
+# Example 3: Production with VPC, IAM, and EFS
+# Full production configuration
+resource "seqera_aws_compute_env" "production" {
+  name           = "aws-batch-prod"
+  workspace_id   = seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+  description    = "Production AWS Batch environment"
+
+  config = {
+    region           = "us-east-1"
+    work_dir         = "s3://prod-bucket/work"
+    compute_job_role = "arn:aws:iam::123456789012:role/BatchJobRole"
+    execution_role   = "arn:aws:iam::123456789012:role/BatchExecutionRole"
+    enable_fusion    = true
+    enable_wave      = true
+
+    pre_run_script = <<-EOF
+      #!/bin/bash
+      echo "Loading modules..."
+      module load nextflow/23.10.0
+    EOF
+
+    post_run_script = <<-EOF
+      #!/bin/bash
+      echo "Archiving results..."
+      aws s3 sync /tmp/results s3://archive-bucket/
+    EOF
+
+    forge = {
+      type            = "EC2"
+      min_cpus        = 8
+      max_cpus        = 512
+      instance_types  = ["m5.2xlarge", "m5.4xlarge"]
+      ebs_block_size  = 100
+      vpc_id          = "vpc-1234567890abcdef0"
+      subnets         = ["subnet-12345", "subnet-67890"]
+      security_groups = ["sg-12345678"]
+      efs_id          = "fs-1234567890abcdef0"
+      efs_mount       = "/mnt/efs"
+    }
+  }
+}
+
+# Example 4: GPU-enabled compute environment
+# Configured for GPU workloads
+resource "seqera_aws_compute_env" "gpu" {
+  name           = "aws-batch-gpu"
+  workspace_id   = seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region        = "us-east-1"
+    work_dir      = "s3://gpu-bucket/work"
+    enable_fusion = true
+    enable_wave   = true
+
+    forge = {
+      type           = "EC2"
+      gpu_enabled    = true
+      instance_types = ["p3.2xlarge", "p3.8xlarge"]
+      max_cpus       = 256
+      ebs_block_size = 200
+    }
+  }
+}
+
+# Example 5: FSx Lustre for high-performance storage
+# Uses FSx for Lustre for fast parallel file system
+resource "seqera_aws_compute_env" "fsx" {
+  name           = "aws-batch-fsx"
+  workspace_id   = seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region        = "us-east-1"
+    work_dir      = "s3://my-bucket/work"
+    enable_fusion = true
+    enable_wave   = true
+
+    forge = {
+      type      = "EC2"
+      max_cpus  = 512
+      fsx_name  = "my-fsx-filesystem"
+      fsx_mount = "/fsx"
+      fsx_size  = 1200
+    }
+  }
+}
+
+# Example 6: Fargate head job
+# Uses Fargate for head job to reduce costs
+resource "seqera_aws_compute_env" "fargate_head" {
+  name           = "aws-batch-fargate-head"
+  workspace_id   = seqera_workspace.main.id
+  platform       = "aws-batch"
+  credentials_id = seqera_aws_credential.main.credentials_id
+
+  config = {
+    region        = "us-east-1"
+    work_dir      = "s3://my-bucket/work"
+    enable_fusion = true
+    enable_wave   = true
+
+    forge = {
+      type                 = "EC2"
+      max_cpus             = 256
+      fargate_head_enabled = true
+    }
+  }
 }
 ```
 
@@ -136,34 +209,47 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
 
 Required:
 
-- `region` (String)
+- `region` (String) AWS region where the Batch compute environment will be created.
+Examples: us-east-1, eu-west-1, ap-southeast-2
 
 Optional:
 
-- `cli_path` (String)
-- `compute_job_role` (String)
-- `compute_queue` (String)
+- `cli_path` (String) Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+- `compute_job_role` (String) IAM role ARN for compute jobs. Jobs assume this role during execution.
+Must have permissions for S3, CloudWatch, etc.
+Format: arn:aws:iam::account-id:role/role-name
+- `compute_queue` (String) Name of the AWS Batch compute queue
 - `dragen_instance_type` (String)
 - `dragen_queue` (String)
+- `enable_fusion` (Boolean)
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
 - `environment` (Attributes List) (see [below for nested schema](#nestedatt--config--environment))
-- `execution_role` (String)
+- `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
+Must have permissions for ECR and CloudWatch Logs.
+Format: arn:aws:iam::account-id:role/role-name
 - `forge` (Attributes) (see [below for nested schema](#nestedatt--config--forge))
-- `fusion2_enabled` (Boolean)
 - `fusion_snapshots` (Boolean)
-- `head_job_cpus` (Number)
-- `head_job_memory_mb` (Number)
-- `head_job_role` (String)
-- `head_queue` (String)
+- `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1)
+- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024)
+- `head_job_role` (String) IAM role ARN for the head job.
+Format: arn:aws:iam::account-id:role/role-name
+- `head_queue` (String) Name of the head job queue
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
 - `nextflow_config` (String)
 - `nvnme_storage_enabled` (Boolean)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Bash script to run after workflow execution completes.
+Use for cleanup, archiving results, sending notifications, etc.
+- `pre_run_script` (String) Bash script to run before workflow execution begins.
+Use for environment setup, loading modules, downloading reference data, etc.
 - `storage_type` (String, Deprecated)
 - `volumes` (List of String)
-- `wave_enabled` (Boolean)
-- `work_dir` (String)
+- `work_dir` (String) S3 bucket path for Nextflow work directory where intermediate files will be stored.
+Format: s3://bucket-name/path
 
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`
@@ -181,36 +267,69 @@ Optional:
 
 Optional:
 
-- `alloc_strategy` (String) must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]
+- `alloc_strategy` (String) Strategy for allocating compute resources:
+- BEST_FIT: Selects instance type that best fits job requirements
+- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
+must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]
 - `allow_buckets` (List of String)
 - `arm64_enabled` (Boolean)
-- `bid_percentage` (Number)
-- `dispose_on_deletion` (Boolean)
+- `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+this field empty.
+
+Must be a whole number between 0 and 100 (inclusive).
+- `dispose_on_deletion` (Boolean) Dispose of AWS Batch resources when compute environment is deleted.
 - `dragen_ami_id` (String)
 - `dragen_enabled` (Boolean)
 - `dragen_instance_type` (String)
-- `ebs_auto_scale` (Boolean)
-- `ebs_block_size` (Number)
+- `ebs_auto_scale` (Boolean) Enable automatic EBS volume expansion.
+When enabled, EBS volumes automatically expand as needed.
+- `ebs_block_size` (Number) Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
 - `ebs_boot_size` (Number)
-- `ec2_key_pair` (String)
+- `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
+Key pair must exist in the specified region.
 - `ecs_config` (String)
-- `efs_create` (Boolean)
-- `efs_id` (String)
-- `efs_mount` (String)
-- `fargate_head_enabled` (Boolean)
-- `fsx_mount` (String)
-- `fsx_name` (String)
-- `fsx_size` (Number)
-- `fusion_enabled` (Boolean)
-- `gpu_enabled` (Boolean)
+- `efs_create` (Boolean) Automatically create an EFS file system
+- `efs_id` (String) EFS file system ID to mount.
+Format: fs- followed by hexadecimal characters.
+EFS must be in the same VPC and region.
+- `efs_mount` (String) Path where EFS will be mounted in the container.
+- `fargate_head_enabled` (Boolean) Use Fargate for head job instead of EC2.
+Reduces costs by running head job on serverless compute.
+Only applicable when using EC2 for worker jobs.
+- `fsx_mount` (String) Path where FSx will be mounted in the container.
+- `fsx_name` (String) FSx for Lustre file system name.
+- `fsx_size` (Number) Size of FSx file system in GB.
+- `gpu_enabled` (Boolean) Enable GPU support for compute instances.
+When enabled, GPU-capable instance types will be selected.
 - `image_id` (String)
-- `instance_types` (List of String)
-- `max_cpus` (Number) Not Null
-- `min_cpus` (Number) Not Null
-- `security_groups` (List of String)
-- `subnets` (List of String)
-- `type` (String) Not Null; must be one of ["SPOT", "EC2"]
-- `vpc_id` (String)
+- `instance_types` (List of String) List of EC2 instance types to use.
+Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+Default: ["optimal"] - AWS Batch selects appropriate instances
+- `max_cpus` (Number) Maximum number of CPUs available in the compute environment.
+Subject to AWS service quotas.
+Not Null
+- `min_cpus` (Number) Minimum number of CPUs to maintain in the compute environment.
+Setting to 0 allows environment to scale to zero when idle.
+Not Null
+- `security_groups` (List of String) List of security group IDs to attach to compute instances.
+Security groups must allow necessary network access.
+- `subnets` (List of String) List of subnet IDs for compute instances.
+Subnets must be in the specified VPC. Use multiple subnets for high availability.
+Must have sufficient IP addresses.
+- `type` (String) Type of compute instances to provision:
+- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+- EC2: Use On-Demand EC2 instances (reliable, higher cost)
+- FARGATE: Use AWS Fargate serverless compute
+Not Null; must be one of ["SPOT", "EC2"]
+- `vpc_id` (String) VPC ID where compute environment will be deployed.
+Format: vpc- followed by hexadecimal characters
 
 ## Import
 

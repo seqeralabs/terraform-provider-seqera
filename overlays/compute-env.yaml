@@ -199,6 +199,11 @@ actions:
   - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
     remove: true
 
+  # Remove confusing fusionEnabled from ForgeConfig
+  # Use enable_fusion at the compute config level instead (e.g., AwsBatchConfig.enable_fusion)
+  - target: $.components.schemas.ForgeConfig.properties.fusionEnabled
+    remove: true
+
   # ComputeConfig discriminator and state change handling
   - target: $.components.schemas.ComputeConfig.properties.discriminator
     update:
@@ -251,14 +256,90 @@ actions:
     update:
       x-speakeasy-plan-validators: awsForgeValidator
 
-  # Add Azure Batch work directory validator
+  # Add Azure Batch work directory pattern validation
   # Must be a valid Azure Blob container URL with az:// prefix
   - target: $.components.schemas.AzBatchConfig.properties.workDir
     update:
       title: "Azure Batch Work Directory"
       description: "Must be a valid Azure Blob container URL with format az://container-name/path"
       example: "az://my-container/work"
-      x-speakeasy-plan-validators: AzureBatchWorkDirValidator
+      pattern: "^az://.+"
+
+  # Add bid percentage constraints and description for AWS Forge configuration
+  - target: $.components.schemas.ForgeConfig.properties.bidPercentage
+    update:
+      title: "Bid Percentage"
+      description: |
+        The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+        for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+        then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+        You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+        field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+        this field empty.
+
+        Must be a whole number between 0 and 100 (inclusive).
+      example: 20
+      minimum: 0
+      maximum: 100
+
+  # Add wave_enabled validator to ensure fusion2_enabled is explicitly set
+  - target: $.components.schemas.AwsBatchConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Enable Wave containers for this compute environment. Wave provides container provisioning
+        and augmentation capabilities for Nextflow workflows.
+
+        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+        Note: If Fusion2 is enabled, Wave must also be enabled.
+      x-speakeasy-plan-validators: WaveEnabledValidator
+
+  # ============================================================================
+  # FIELD RENAMES - Consistent naming conventions
+  # ============================================================================
+
+  # Rename waveEnabled -> enable_wave across all compute configs
+  - target: $.components.schemas.AwsBatchConfig.properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.AwsCloudConfig.properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.AzBatchConfig.properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+  - target: $.components.schemas.SeqeraComputeConfig.properties.waveEnabled
+    update:
+      x-speakeasy-name-override: enable_wave
+
+  # Rename fusion2Enabled -> enable_fusion across all compute configs
+  - target: $.components.schemas.AwsBatchConfig.properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
+  - target: $.components.schemas.AwsCloudConfig.properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
+  - target: $.components.schemas.AzBatchConfig.properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
+  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
+  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
+  - target: $.components.schemas.GoogleBatchConfig.properties.fusion2Enabled
+    update:
+      x-speakeasy-name-override: enable_fusion
 
   # Schema description
   - target: $.components.schemas.ComputeConfig

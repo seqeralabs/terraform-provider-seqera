@@ -25,6 +25,7 @@ sources:
             - location: overlays/credentials-kubernetes.yaml
             - location: overlays/compute-env.yaml
             - location: overlays/aws-compute-env.yaml
+            - location: overlays/aws-batch-compute-env-v2.yaml
             - location: overlays/datasets.yaml
             - location: overlays/labels.yaml
             - location: overlays/orgs.yaml
