@@ -79,7 +79,7 @@ resource "seqera_compute_env" "my_computeenv" {
 ### Required
 
 - `compute_env` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env))
-- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
 

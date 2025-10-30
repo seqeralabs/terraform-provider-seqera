@@ -723,6 +723,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation: ComputeEnv#update
     delete:
       summary: Delete compute environment
       description: Deletes the compute environment identified by the given `computeEnvId`.
@@ -9738,6 +9739,19 @@ paths:
       x-speakeasy-name-override: CreateAWSBatchCE
       summary: Create AWS compute environment
       description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000
+          maxInterval: 5000
+          maxElapsedTime: 30000
+          exponent: 1.0
+        statusCodes:
+          - 429
+          - 500
+          - 502
+          - 503
+          - 504
       tags:
         - compute-envs
       operationId: CreateAWSBatchCE
@@ -9872,6 +9886,19 @@ paths:
       x-speakeasy-name-override: CreateAWSComputeEnv
       summary: Create AWS compute environment
       description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000
+          maxInterval: 5000
+          maxElapsedTime: 30000
+          exponent: 1.0
+        statusCodes:
+          - 429
+          - 500
+          - 502
+          - 503
+          - 504
       tags:
         - compute-envs
       operationId: CreateAWSComputeEnv

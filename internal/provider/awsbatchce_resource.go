@@ -37,7 +37,6 @@ import (
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
-	"strings"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -884,16 +883,7 @@ func (r *AWSBatchCEResource) Create(ctx context.Context, req resource.CreateRequ
 	}
 	res, err := r.client.ComputeEnvs.CreateAWSBatchCE(ctx, *request)
 	if err != nil {
-		// Provide a more specific error message for known error types
-		errorSummary := "failure to invoke API"
-		errorDetail := err.Error()
-
-		// Check if this is a resource already exists error (409 conflict)
-		if strings.Contains(errorDetail, "already exists") {
-			errorSummary = "Resource already exists"
-		}
-
-		resp.Diagnostics.AddError(errorSummary, errorDetail)
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

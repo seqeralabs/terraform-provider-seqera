@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 70a8e30d847a2f6185402ec7a3d11a5f
+  docChecksum: 0407be6e2087bd5900494d830fced8fc
   docVersion: 1.56.0
   speakeasyVersion: 1.643.2
   generationVersion: 2.731.6
@@ -139,9 +139,11 @@ generatedFiles:
   - internal/provider/action_resource_sdk.go
   - internal/provider/awsbatchce_data_source.go
   - internal/provider/awsbatchce_data_source_sdk.go
+  - internal/provider/awsbatchce_resource.go
   - internal/provider/awsbatchce_resource_sdk.go
   - internal/provider/awscomputeenv_data_source.go
   - internal/provider/awscomputeenv_data_source_sdk.go
+  - internal/provider/awscomputeenv_resource.go
   - internal/provider/awscomputeenv_resource_sdk.go
   - internal/provider/awscredential_data_source.go
   - internal/provider/awscredential_data_source_sdk.go

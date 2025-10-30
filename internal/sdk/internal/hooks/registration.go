@@ -14,11 +14,6 @@ func initHooks(h *Hooks) {
 	genericResourceErrorHook := &GenericResourceErrorHook{}
 	h.registerAfterSuccessHook(genericResourceErrorHook)
 
-	// Register conflict error hook to provide clear messages for 409 errors
-	// This helps users understand when a resource already exists
-	conflictErrorHook := &ConflictErrorHook{}
-	h.registerAfterErrorHook(conflictErrorHook)
-
 	// Register compute environment status polling hook to wait for AVAILABLE status
 	computeEnvStatusHook := &ComputeEnvStatusHook{}
 	h.registerAfterSuccessHook(computeEnvStatusHook)
