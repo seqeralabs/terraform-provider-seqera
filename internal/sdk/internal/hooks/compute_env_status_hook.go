@@ -107,9 +107,9 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 	authHeader string,
 ) (string, error) {
 	const (
-		maxAttempts     = 60              // Maximum number of polling attempts
-		pollInterval    = 5 * time.Second // Time between polling attempts
-		initialWait     = 2 * time.Second // Initial wait before first poll
+		maxAttempts  = 60              // Maximum number of polling attempts
+		pollInterval = 5 * time.Second // Time between polling attempts
+		initialWait  = 2 * time.Second // Initial wait before first poll
 	)
 
 	// Wait a bit before starting to poll - gives the API time to initialize
