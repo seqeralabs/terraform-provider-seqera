@@ -23,6 +23,7 @@ actions:
   - target: $.components.schemas.ActionResponseDto
     update:
       x-speakeasy-entity: Action
+      x-speakeasy-entity-version: 1
       x-speakeasy-entity-description: |
         Manage pipeline actions for event-based workflow automation.
 

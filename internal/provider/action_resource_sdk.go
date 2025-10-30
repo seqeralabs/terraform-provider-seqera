@@ -85,6 +85,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.AwsBatch.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.ComputeQueue)
 					r.Launch.ComputeEnv.Config.AwsBatch.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.DragenInstanceType)
 					r.Launch.ComputeEnv.Config.AwsBatch.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.DragenQueue)
+					r.Launch.ComputeEnv.Config.AwsBatch.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.EnableFusion)
+					r.Launch.ComputeEnv.Config.AwsBatch.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Environment {
@@ -129,7 +131,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxMount)
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxName)
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FsxSize))
-						r.Launch.ComputeEnv.Config.AwsBatch.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.FusionEnabled)
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.GpuEnabled)
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.ImageID)
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.InstanceTypes))
@@ -149,7 +150,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.Type))
 						r.Launch.ComputeEnv.Config.AwsBatch.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Forge.VpcID)
 					}
-					r.Launch.ComputeEnv.Config.AwsBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Fusion2Enabled)
 					r.Launch.ComputeEnv.Config.AwsBatch.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.FusionSnapshots)
 					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.HeadJobCpus))
 					r.Launch.ComputeEnv.Config.AwsBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.HeadJobMemoryMb))
@@ -158,7 +158,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.AwsBatch.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.LogGroup)
 					r.Launch.ComputeEnv.Config.AwsBatch.LustreID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.LustreID)
 					r.Launch.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.NvnmeStorageEnabled)
+					r.Launch.ComputeEnv.Config.AwsBatch.NvmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.NvmeStorageEnabled)
 					r.Launch.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.PostRunScript)
 					r.Launch.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.PreRunScript)
 					r.Launch.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Region)
@@ -167,7 +167,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					for _, v := range resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.Volumes {
 						r.Launch.ComputeEnv.Config.AwsBatch.Volumes = append(r.Launch.ComputeEnv.Config.AwsBatch.Volumes, types.StringValue(v))
 					}
-					r.Launch.ComputeEnv.Config.AwsBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.WaveEnabled)
 					r.Launch.ComputeEnv.Config.AwsBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSBatchConfiguration.WorkDir)
 				}
 				if resp.Launch.ComputeEnv.Config.AWSCloudConfiguration != nil {
@@ -179,6 +178,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.AwsCloud.Arm64Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Arm64Enabled)
 					r.Launch.ComputeEnv.Config.AwsCloud.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EbsBootSize))
 					r.Launch.ComputeEnv.Config.AwsCloud.Ec2KeyPair = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Ec2KeyPair)
+					r.Launch.ComputeEnv.Config.AwsCloud.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EnableFusion)
+					r.Launch.ComputeEnv.Config.AwsCloud.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem1 := range resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Environment {
@@ -191,7 +192,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 
 						r.Launch.ComputeEnv.Config.AwsCloud.Environment = append(r.Launch.ComputeEnv.Config.AwsCloud.Environment, environment1)
 					}
-					r.Launch.ComputeEnv.Config.AwsCloud.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.Fusion2Enabled)
 					r.Launch.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
 					r.Launch.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
 					r.Launch.ComputeEnv.Config.AwsCloud.InstanceProfileArn = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.InstanceProfileArn)
@@ -206,7 +206,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 						r.Launch.ComputeEnv.Config.AwsCloud.SecurityGroups = append(r.Launch.ComputeEnv.Config.AwsCloud.SecurityGroups, types.StringValue(v))
 					}
 					r.Launch.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.SubnetID)
-					r.Launch.ComputeEnv.Config.AwsCloud.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.WaveEnabled)
 					r.Launch.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AWSCloudConfiguration.WorkDir)
 				}
 				if resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration != nil {
@@ -216,6 +215,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeQueue)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.DragenInstanceType)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.DragenQueue)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.EnableFusion)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem2 := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Environment {
@@ -260,7 +261,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
-						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.FusionEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FusionEnabled)
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
@@ -280,7 +280,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
 					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Fusion2Enabled)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.FusionSnapshots)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobCpus))
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobMemoryMb))
@@ -289,7 +288,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.LogGroup = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.LogGroup)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.LustreID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.LustreID)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.NvnmeStorageEnabled)
+					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.NvmeStorageEnabled)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.PostRunScript)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.PreRunScript)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Region)
@@ -298,7 +297,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					for _, v := range resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.Volumes {
 						r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes = append(r.Launch.ComputeEnv.Config.SeqeracomputePlatform.Volumes, types.StringValue(v))
 					}
-					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.WaveEnabled)
 					r.Launch.ComputeEnv.Config.SeqeracomputePlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.SeqeraComputeConfiguration.WorkDir)
 				}
 				if resp.Launch.ComputeEnv.Config.GoogleLifeSciencesConfiguration != nil {
@@ -351,6 +349,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
 					r.Launch.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
 					r.Launch.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
+					r.Launch.ComputeEnv.Config.GoogleBatch.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.EnableFusion)
+					r.Launch.ComputeEnv.Config.GoogleBatch.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem4 := range resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Environment {
@@ -363,7 +363,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 
 						r.Launch.ComputeEnv.Config.GoogleBatch.Environment = append(r.Launch.ComputeEnv.Config.GoogleBatch.Environment, environment4)
 					}
-					r.Launch.ComputeEnv.Config.GoogleBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Fusion2Enabled)
 					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobCpus))
 					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobInstanceTemplate = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobInstanceTemplate)
 					r.Launch.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.HeadJobMemoryMb))
@@ -388,7 +387,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.GoogleBatch.SSHImage = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHImage)
 					r.Launch.ComputeEnv.Config.GoogleBatch.Subnetwork = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.Subnetwork)
 					r.Launch.ComputeEnv.Config.GoogleBatch.UsePrivateAddress = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.UsePrivateAddress)
-					r.Launch.ComputeEnv.Config.GoogleBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.WaveEnabled)
 					r.Launch.ComputeEnv.Config.GoogleBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleBatchServiceConfiguration.WorkDir)
 				}
 				if resp.Launch.ComputeEnv.Config.AzureBatchConfiguration != nil {
@@ -400,6 +398,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 						r.Launch.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringNull()
 					}
 					r.Launch.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
+					r.Launch.ComputeEnv.Config.AzureBatch.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.EnableFusion)
+					r.Launch.ComputeEnv.Config.AzureBatch.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem5 := range resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Environment {
@@ -425,7 +425,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
 						r.Launch.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
 					}
-					r.Launch.ComputeEnv.Config.AzureBatch.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Fusion2Enabled)
 					r.Launch.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
 					r.Launch.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
 					r.Launch.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
@@ -433,7 +432,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
 					r.Launch.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.Region)
 					r.Launch.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
-					r.Launch.ComputeEnv.Config.AzureBatch.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.WaveEnabled)
 					r.Launch.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
 				}
 				if resp.Launch.ComputeEnv.Config.IBMLSFConfiguration != nil {
@@ -534,6 +532,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
 					r.Launch.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
 					r.Launch.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
+					r.Launch.ComputeEnv.Config.EksPlatform.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.EnableFusion)
+					r.Launch.ComputeEnv.Config.EksPlatform.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem9 := range resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
@@ -546,7 +546,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 
 						r.Launch.ComputeEnv.Config.EksPlatform.Environment = append(r.Launch.ComputeEnv.Config.EksPlatform.Environment, environment9)
 					}
-					r.Launch.ComputeEnv.Config.EksPlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.Fusion2Enabled)
 					r.Launch.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
 					r.Launch.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobMemoryMb))
 					r.Launch.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadPodSpec)
@@ -566,13 +565,14 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.EksPlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.SslCert)
 					r.Launch.ComputeEnv.Config.EksPlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageClaimName)
 					r.Launch.ComputeEnv.Config.EksPlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageMountPath)
-					r.Launch.ComputeEnv.Config.EksPlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.WaveEnabled)
 					r.Launch.ComputeEnv.Config.EksPlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.AmazonEKSClusterConfiguration.WorkDir)
 				}
 				if resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration != nil {
 					r.Launch.ComputeEnv.Config.GkePlatform = &tfTypes.GoogleGKEClusterConfiguration{}
 					r.Launch.ComputeEnv.Config.GkePlatform.ClusterName = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.ClusterName)
 					r.Launch.ComputeEnv.Config.GkePlatform.ComputeServiceAccount = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.ComputeServiceAccount)
+					r.Launch.ComputeEnv.Config.GkePlatform.EnableFusion = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.EnableFusion)
+					r.Launch.ComputeEnv.Config.GkePlatform.EnableWave = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.EnableWave)
 					r.Launch.ComputeEnv.Config.GkePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem10 := range resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Environment {
@@ -585,7 +585,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 
 						r.Launch.ComputeEnv.Config.GkePlatform.Environment = append(r.Launch.ComputeEnv.Config.GkePlatform.Environment, environment10)
 					}
-					r.Launch.ComputeEnv.Config.GkePlatform.Fusion2Enabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.Fusion2Enabled)
 					r.Launch.ComputeEnv.Config.GkePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobCpus))
 					r.Launch.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadJobMemoryMb))
 					r.Launch.ComputeEnv.Config.GkePlatform.HeadPodSpec = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.HeadPodSpec)
@@ -605,7 +604,6 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 					r.Launch.ComputeEnv.Config.GkePlatform.SslCert = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.SslCert)
 					r.Launch.ComputeEnv.Config.GkePlatform.StorageClaimName = types.StringValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageClaimName)
 					r.Launch.ComputeEnv.Config.GkePlatform.StorageMountPath = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.StorageMountPath)
-					r.Launch.ComputeEnv.Config.GkePlatform.WaveEnabled = types.BoolPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.WaveEnabled)
 					r.Launch.ComputeEnv.Config.GkePlatform.WorkDir = types.StringPointerValue(resp.Launch.ComputeEnv.Config.GoogleGKEClusterConfiguration.WorkDir)
 				}
 				if resp.Launch.ComputeEnv.Config.UnivaGridEngineConfiguration != nil {

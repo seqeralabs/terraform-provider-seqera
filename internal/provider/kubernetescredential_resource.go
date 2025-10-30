@@ -60,7 +60,10 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{

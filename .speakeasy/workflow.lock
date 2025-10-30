@@ -1,9 +1,9 @@
-speakeasyVersion: 1.642.2
+speakeasyVersion: 1.643.3
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:7efd95ffc1cfb1f3f1218b728015fd932b9fa3793cd02033364a760551a72a40
-        sourceBlobDigest: sha256:f4f89d4c338b877417861be5d1c513f30b0782307d6e1411cb6d1d4f84cbf6af
+        sourceRevisionDigest: sha256:f62682832e3e5f4b238f5171f569acbed71dd84a95a156648e218854fe1e18dc
+        sourceBlobDigest: sha256:e54b9f67aad2560ad66ed267d07f5d27add979be650241f03fa78d3284e9f3d6
         tags:
             - latest
             - 1.56.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:7efd95ffc1cfb1f3f1218b728015fd932b9fa3793cd02033364a760551a72a40
-        sourceBlobDigest: sha256:f4f89d4c338b877417861be5d1c513f30b0782307d6e1411cb6d1d4f84cbf6af
+        sourceRevisionDigest: sha256:f62682832e3e5f4b238f5171f569acbed71dd84a95a156648e218854fe1e18dc
+        sourceBlobDigest: sha256:e54b9f67aad2560ad66ed267d07f5d27add979be650241f03fa78d3284e9f3d6
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -40,6 +40,7 @@ workflow:
                 - location: overlays/credentials-tower-agent.yaml
                 - location: overlays/credentials-kubernetes.yaml
                 - location: overlays/compute-env.yaml
+                - location: overlays/compute-env-aws-batch.yaml
                 - location: overlays/aws-compute-env.yaml
                 - location: overlays/datasets.yaml
                 - location: overlays/labels.yaml

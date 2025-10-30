@@ -117,13 +117,13 @@ resource "seqera_aws_credential" "environment_credentials" {
 
 ### Required
 
-- `access_key` (String) AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary). Requires replacement if changed.
+- `access_key` (String) AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
 - `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
-- `secret_key` (String, Sensitive) AWS secret access key (required, sensitive). Must be at least 40 characters. Requires replacement if changed.
+- `secret_key` (String, Sensitive) AWS secret access key (required, sensitive). Must be at least 40 characters.
 
 ### Optional
 
-- `assume_role_arn` (String) IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Requires replacement if changed.
+- `assume_role_arn` (String) IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only

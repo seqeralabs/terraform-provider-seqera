@@ -32,6 +32,8 @@ resource "seqera_compute_env" "my_computeenv" {
         auto_pool_mode             = false
         delete_jobs_on_completion  = "on_success"
         delete_pools_on_completion = false
+        enable_fusion              = true
+        enable_wave                = false
         environment = [
           {
             compute = false
@@ -49,7 +51,6 @@ resource "seqera_compute_env" "my_computeenv" {
           vm_count            = 2
           vm_type             = "...my_vm_type..."
         }
-        fusion2_enabled            = false
         head_pool                  = "...my_head_pool..."
         managed_identity_client_id = "...my_managed_identity_client_id..."
         nextflow_config            = "...my_nextflow_config..."
@@ -57,7 +58,6 @@ resource "seqera_compute_env" "my_computeenv" {
         pre_run_script             = "...my_pre_run_script..."
         region                     = "...my_region..."
         token_duration             = "...my_token_duration..."
-        wave_enabled               = true
         work_dir                   = "...my_work_dir..."
       }
     }
@@ -178,31 +178,48 @@ Optional:
 
 Optional:
 
-- `cli_path` (String) Requires replacement if changed.
-- `compute_job_role` (String) Requires replacement if changed.
-- `compute_queue` (String) Requires replacement if changed.
+- `cli_path` (String) Path to AWS CLI on compute instances. AWS CLI must be available at this path. Requires replacement if changed.
+- `compute_job_role` (String) IAM role ARN for compute jobs. Jobs assume this role during execution.
+Must have permissions for S3, CloudWatch, etc.
+Format: arn:aws:iam::account-id:role/role-name
+Requires replacement if changed.
+- `compute_queue` (String) Name of the AWS Batch compute queue. Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
+- `enable_fusion` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--environment))
-- `execution_role` (String) Requires replacement if changed.
+- `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
+Must have permissions for ECR and CloudWatch Logs.
+Format: arn:aws:iam::account-id:role/role-name
+Requires replacement if changed.
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch--forge))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
-- `head_job_role` (String) Requires replacement if changed.
-- `head_queue` (String) Requires replacement if changed.
+- `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
+- `head_job_role` (String) IAM role ARN for the head job.
+Format: arn:aws:iam::account-id:role/role-name
+Requires replacement if changed.
+- `head_queue` (String) Name of the head job queue. Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
+- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
+When enabled, NVMe storage volumes are automatically mounted and configured.
+Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
+- `region` (String) AWS region where the Batch compute environment will be created.
+Examples: us-east-1, eu-west-1, ap-southeast-2
+Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_batch--environment"></a>
 ### Nested Schema for `compute_env.config.aws_batch.environment`
@@ -220,36 +237,79 @@ Optional:
 
 Optional:
 
-- `alloc_strategy` (String) must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.
+- `alloc_strategy` (String) Strategy for allocating compute resources:
+- BEST_FIT: Selects instance type that best fits job requirements
+- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
+must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.
 - `allow_buckets` (List of String) Requires replacement if changed.
 - `arm64_enabled` (Boolean) Requires replacement if changed.
-- `bid_percentage` (Number) Requires replacement if changed.
-- `dispose_on_deletion` (Boolean) Requires replacement if changed.
+- `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+this field empty.
+
+Must be a whole number between 0 and 100 (inclusive).
+Requires replacement if changed.
+- `dispose_on_deletion` (Boolean) Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.
 - `dragen_ami_id` (String) Requires replacement if changed.
 - `dragen_enabled` (Boolean) Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
-- `ebs_auto_scale` (Boolean) Requires replacement if changed.
-- `ebs_block_size` (Number) Requires replacement if changed.
+- `ebs_auto_scale` (Boolean) Enable automatic EBS volume expansion.
+When enabled, EBS volumes automatically expand as needed.
+Requires replacement if changed.
+- `ebs_block_size` (Number) Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.
 - `ebs_boot_size` (Number) Requires replacement if changed.
-- `ec2_key_pair` (String) Requires replacement if changed.
+- `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
+Key pair must exist in the specified region.
+Requires replacement if changed.
 - `ecs_config` (String) Requires replacement if changed.
-- `efs_create` (Boolean) Requires replacement if changed.
-- `efs_id` (String) Requires replacement if changed.
-- `efs_mount` (String) Requires replacement if changed.
-- `fargate_head_enabled` (Boolean) Requires replacement if changed.
-- `fsx_mount` (String) Requires replacement if changed.
-- `fsx_name` (String) Requires replacement if changed.
-- `fsx_size` (Number) Requires replacement if changed.
-- `fusion_enabled` (Boolean) Requires replacement if changed.
-- `gpu_enabled` (Boolean) Requires replacement if changed.
+- `efs_create` (Boolean) Automatically create an EFS file system. Requires replacement if changed.
+- `efs_id` (String) EFS file system ID to mount.
+Format: fs- followed by hexadecimal characters.
+EFS must be in the same VPC and region.
+Requires replacement if changed.
+- `efs_mount` (String) Path where EFS will be mounted in the container. Requires replacement if changed.
+- `fargate_head_enabled` (Boolean) Use Fargate for head job instead of EC2.
+Reduces costs by running head job on serverless compute.
+Only applicable when using EC2 for worker jobs.
+Requires replacement if changed.
+- `fsx_mount` (String) Path where FSx will be mounted in the container. Requires replacement if changed.
+- `fsx_name` (String) FSx for Lustre file system name. Requires replacement if changed.
+- `fsx_size` (Number) Size of FSx file system in GB. Requires replacement if changed.
+- `gpu_enabled` (Boolean) Enable GPU support for compute instances.
+When enabled, GPU-capable instance types will be selected.
+Requires replacement if changed.
 - `image_id` (String) Requires replacement if changed.
-- `instance_types` (List of String) Requires replacement if changed.
-- `max_cpus` (Number) Not Null; Requires replacement if changed.
-- `min_cpus` (Number) Not Null; Requires replacement if changed.
-- `security_groups` (List of String) Requires replacement if changed.
-- `subnets` (List of String) Requires replacement if changed.
-- `type` (String) Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
-- `vpc_id` (String) Requires replacement if changed.
+- `instance_types` (List of String) List of EC2 instance types to use.
+Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+Default: ["optimal"] - AWS Batch selects appropriate instances
+Requires replacement if changed.
+- `max_cpus` (Number) Maximum number of CPUs available in the compute environment.
+Subject to AWS service quotas.
+Not Null; Requires replacement if changed.
+- `min_cpus` (Number) Minimum number of CPUs to maintain in the compute environment.
+Setting to 0 allows environment to scale to zero when idle.
+Requires replacement if changed.
+- `security_groups` (List of String) List of security group IDs to attach to compute instances.
+Security groups must allow necessary network access.
+Requires replacement if changed.
+- `subnets` (List of String) List of subnet IDs for compute instances.
+Subnets must be in the specified VPC. Use multiple subnets for high availability.
+Must have sufficient IP addresses.
+Requires replacement if changed.
+- `type` (String) Type of compute instances to provision:
+- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+- EC2: Use On-Demand EC2 instances (reliable, higher cost)
+- FARGATE: Use AWS Fargate serverless compute
+Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
+- `vpc_id` (String) VPC ID where compute environment will be deployed.
+Format: vpc- followed by hexadecimal characters
+Requires replacement if changed.
 
 
 
@@ -262,8 +322,9 @@ Optional:
 - `arm64_enabled` (Boolean) Requires replacement if changed.
 - `ebs_boot_size` (Number) Requires replacement if changed.
 - `ec2_key_pair` (String) Requires replacement if changed.
+- `enable_fusion` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `gpu_enabled` (Boolean) Requires replacement if changed.
 - `image_id` (String) Requires replacement if changed.
 - `instance_profile_arn` (String) Requires replacement if changed.
@@ -275,8 +336,7 @@ Optional:
 - `region` (String) Not Null; Requires replacement if changed.
 - `security_groups` (List of String) Requires replacement if changed.
 - `subnet_id` (String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_cloud--environment"></a>
 ### Nested Schema for `compute_env.config.aws_cloud.environment`
@@ -298,9 +358,10 @@ Optional:
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
+- `enable_fusion` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_pool` (String) Requires replacement if changed.
 - `managed_identity_client_id` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
@@ -308,8 +369,7 @@ Optional:
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) Not Null; Requires replacement if changed.
 - `token_duration` (String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--azure_batch--environment"></a>
 ### Nested Schema for `compute_env.config.azure_batch.environment`
@@ -342,8 +402,9 @@ Optional:
 
 - `cluster_name` (String) The AWS EKS cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
+- `enable_fusion` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
@@ -359,8 +420,7 @@ Optional:
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
 - `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--eks_platform--environment"></a>
 ### Nested Schema for `compute_env.config.eks_platform.environment`
@@ -381,8 +441,9 @@ Optional:
 
 - `cluster_name` (String) The GKE cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
+- `enable_fusion` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
@@ -398,8 +459,7 @@ Optional:
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
 - `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--gke_platform--environment"></a>
 ### Nested Schema for `compute_env.config.gke_platform.environment`
@@ -423,8 +483,9 @@ Optional:
 - `copy_image` (String) Requires replacement if changed.
 - `cpu_platform` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
+- `enable_fusion` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_instance_template` (String) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
@@ -444,8 +505,7 @@ Optional:
 - `ssh_image` (String) Requires replacement if changed.
 - `subnetwork` (String) Requires replacement if changed.
 - `use_private_address` (Boolean) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_batch--environment"></a>
 ### Nested Schema for `compute_env.config.google_batch.environment`
@@ -483,7 +543,7 @@ Optional:
 - `ssh_daemon` (Boolean) Requires replacement if changed.
 - `ssh_image` (String) Requires replacement if changed.
 - `use_private_address` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 - `zones` (List of String) Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_lifesciences--environment"></a>
@@ -519,7 +579,7 @@ Optional:
 - `ssl_cert` (String) Not Null; Requires replacement if changed.
 - `storage_claim_name` (String) Not Null; Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--k8s_platform--environment"></a>
 ### Nested Schema for `compute_env.config.k8s_platform.environment`
@@ -605,31 +665,48 @@ Optional:
 
 Optional:
 
-- `cli_path` (String) Requires replacement if changed.
-- `compute_job_role` (String) Requires replacement if changed.
-- `compute_queue` (String) Requires replacement if changed.
+- `cli_path` (String) Path to AWS CLI on compute instances. AWS CLI must be available at this path. Requires replacement if changed.
+- `compute_job_role` (String) IAM role ARN for compute jobs. Jobs assume this role during execution.
+Must have permissions for S3, CloudWatch, etc.
+Format: arn:aws:iam::account-id:role/role-name
+Requires replacement if changed.
+- `compute_queue` (String) Name of the AWS Batch compute queue. Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
+- `enable_fusion` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--environment))
-- `execution_role` (String) Requires replacement if changed.
+- `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
+Must have permissions for ECR and CloudWatch Logs.
+Format: arn:aws:iam::account-id:role/role-name
+Requires replacement if changed.
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform--forge))
-- `fusion2_enabled` (Boolean) Requires replacement if changed.
 - `fusion_snapshots` (Boolean) Requires replacement if changed.
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
-- `head_job_role` (String) Requires replacement if changed.
-- `head_queue` (String) Requires replacement if changed.
+- `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
+- `head_job_role` (String) IAM role ARN for the head job.
+Format: arn:aws:iam::account-id:role/role-name
+Requires replacement if changed.
+- `head_queue` (String) Name of the head job queue. Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
+- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
+When enabled, NVMe storage volumes are automatically mounted and configured.
+Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
+- `region` (String) AWS region where the Batch compute environment will be created.
+Examples: us-east-1, eu-west-1, ap-southeast-2
+Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
-- `wave_enabled` (Boolean) Requires replacement if changed.
-- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--seqeracompute_platform--environment"></a>
 ### Nested Schema for `compute_env.config.seqeracompute_platform.environment`
@@ -647,36 +724,79 @@ Optional:
 
 Optional:
 
-- `alloc_strategy` (String) must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.
+- `alloc_strategy` (String) Strategy for allocating compute resources:
+- BEST_FIT: Selects instance type that best fits job requirements
+- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
+must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.
 - `allow_buckets` (List of String) Requires replacement if changed.
 - `arm64_enabled` (Boolean) Requires replacement if changed.
-- `bid_percentage` (Number) Requires replacement if changed.
-- `dispose_on_deletion` (Boolean) Requires replacement if changed.
+- `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+this field empty.
+
+Must be a whole number between 0 and 100 (inclusive).
+Requires replacement if changed.
+- `dispose_on_deletion` (Boolean) Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.
 - `dragen_ami_id` (String) Requires replacement if changed.
 - `dragen_enabled` (Boolean) Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
-- `ebs_auto_scale` (Boolean) Requires replacement if changed.
-- `ebs_block_size` (Number) Requires replacement if changed.
+- `ebs_auto_scale` (Boolean) Enable automatic EBS volume expansion.
+When enabled, EBS volumes automatically expand as needed.
+Requires replacement if changed.
+- `ebs_block_size` (Number) Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.
 - `ebs_boot_size` (Number) Requires replacement if changed.
-- `ec2_key_pair` (String) Requires replacement if changed.
+- `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
+Key pair must exist in the specified region.
+Requires replacement if changed.
 - `ecs_config` (String) Requires replacement if changed.
-- `efs_create` (Boolean) Requires replacement if changed.
-- `efs_id` (String) Requires replacement if changed.
-- `efs_mount` (String) Requires replacement if changed.
-- `fargate_head_enabled` (Boolean) Requires replacement if changed.
-- `fsx_mount` (String) Requires replacement if changed.
-- `fsx_name` (String) Requires replacement if changed.
-- `fsx_size` (Number) Requires replacement if changed.
-- `fusion_enabled` (Boolean) Requires replacement if changed.
-- `gpu_enabled` (Boolean) Requires replacement if changed.
+- `efs_create` (Boolean) Automatically create an EFS file system. Requires replacement if changed.
+- `efs_id` (String) EFS file system ID to mount.
+Format: fs- followed by hexadecimal characters.
+EFS must be in the same VPC and region.
+Requires replacement if changed.
+- `efs_mount` (String) Path where EFS will be mounted in the container. Requires replacement if changed.
+- `fargate_head_enabled` (Boolean) Use Fargate for head job instead of EC2.
+Reduces costs by running head job on serverless compute.
+Only applicable when using EC2 for worker jobs.
+Requires replacement if changed.
+- `fsx_mount` (String) Path where FSx will be mounted in the container. Requires replacement if changed.
+- `fsx_name` (String) FSx for Lustre file system name. Requires replacement if changed.
+- `fsx_size` (Number) Size of FSx file system in GB. Requires replacement if changed.
+- `gpu_enabled` (Boolean) Enable GPU support for compute instances.
+When enabled, GPU-capable instance types will be selected.
+Requires replacement if changed.
 - `image_id` (String) Requires replacement if changed.
-- `instance_types` (List of String) Requires replacement if changed.
-- `max_cpus` (Number) Not Null; Requires replacement if changed.
-- `min_cpus` (Number) Not Null; Requires replacement if changed.
-- `security_groups` (List of String) Requires replacement if changed.
-- `subnets` (List of String) Requires replacement if changed.
-- `type` (String) Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
-- `vpc_id` (String) Requires replacement if changed.
+- `instance_types` (List of String) List of EC2 instance types to use.
+Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+Default: ["optimal"] - AWS Batch selects appropriate instances
+Requires replacement if changed.
+- `max_cpus` (Number) Maximum number of CPUs available in the compute environment.
+Subject to AWS service quotas.
+Not Null; Requires replacement if changed.
+- `min_cpus` (Number) Minimum number of CPUs to maintain in the compute environment.
+Setting to 0 allows environment to scale to zero when idle.
+Requires replacement if changed.
+- `security_groups` (List of String) List of security group IDs to attach to compute instances.
+Security groups must allow necessary network access.
+Requires replacement if changed.
+- `subnets` (List of String) List of subnet IDs for compute instances.
+Subnets must be in the specified VPC. Use multiple subnets for high availability.
+Must have sufficient IP addresses.
+Requires replacement if changed.
+- `type` (String) Type of compute instances to provision:
+- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+- EC2: Use On-Demand EC2 instances (reliable, higher cost)
+- FARGATE: Use AWS Fargate serverless compute
+Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.
+- `vpc_id` (String) VPC ID where compute environment will be deployed.
+Format: vpc- followed by hexadecimal characters
+Requires replacement if changed.
 
 
 

@@ -8,6 +8,10 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
+// ForgeConfigType - Type of compute instances to provision:
+// - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+// - EC2: Use On-Demand EC2 instances (reliable, higher cost)
+// - FARGATE: Use AWS Fargate serverless compute
 type ForgeConfigType string
 
 const (
@@ -34,6 +38,12 @@ func (e *ForgeConfigType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// AllocStrategy - Strategy for allocating compute resources:
+// - BEST_FIT: Selects instance type that best fits job requirements
+// - BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+// - SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+// - SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+// Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
 type AllocStrategy string
 
 const (
@@ -67,36 +77,106 @@ func (e *AllocStrategy) UnmarshalJSON(data []byte) error {
 }
 
 type ForgeConfig struct {
-	Type               ForgeConfigType `json:"type"`
-	MinCpus            int             `json:"minCpus"`
-	MaxCpus            int             `json:"maxCpus"`
-	GpuEnabled         *bool           `json:"gpuEnabled,omitempty"`
-	EbsAutoScale       *bool           `json:"ebsAutoScale,omitempty"`
-	InstanceTypes      []string        `json:"instanceTypes,omitempty"`
-	AllocStrategy      *AllocStrategy  `json:"allocStrategy,omitempty"`
-	ImageID            *string         `json:"imageId,omitempty"`
-	VpcID              *string         `json:"vpcId,omitempty"`
-	Subnets            []string        `json:"subnets,omitempty"`
-	SecurityGroups     []string        `json:"securityGroups,omitempty"`
-	FsxMount           *string         `json:"fsxMount,omitempty"`
-	FsxName            *string         `json:"fsxName,omitempty"`
-	FsxSize            *int            `json:"fsxSize,omitempty"`
-	DisposeOnDeletion  *bool           `json:"disposeOnDeletion,omitempty"`
-	Ec2KeyPair         *string         `json:"ec2KeyPair,omitempty"`
-	AllowBuckets       []string        `json:"allowBuckets,omitempty"`
-	EbsBlockSize       *int            `json:"ebsBlockSize,omitempty"`
-	FusionEnabled      *bool           `json:"fusionEnabled,omitempty"`
-	BidPercentage      *int            `json:"bidPercentage,omitempty"`
-	EfsCreate          *bool           `json:"efsCreate,omitempty"`
-	EfsID              *string         `json:"efsId,omitempty"`
-	EfsMount           *string         `json:"efsMount,omitempty"`
-	DragenEnabled      *bool           `json:"dragenEnabled,omitempty"`
-	DragenAmiID        *string         `json:"dragenAmiId,omitempty"`
-	EbsBootSize        *int            `json:"ebsBootSize,omitempty"`
-	EcsConfig          *string         `json:"ecsConfig,omitempty"`
-	FargateHeadEnabled *bool           `json:"fargateHeadEnabled,omitempty"`
-	Arm64Enabled       *bool           `json:"arm64Enabled,omitempty"`
-	DragenInstanceType *string         `json:"dragenInstanceType,omitempty"`
+	// Type of compute instances to provision:
+	// - SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)
+	// - EC2: Use On-Demand EC2 instances (reliable, higher cost)
+	// - FARGATE: Use AWS Fargate serverless compute
+	//
+	Type ForgeConfigType `json:"type"`
+	// Minimum number of CPUs to maintain in the compute environment.
+	// Setting to 0 allows environment to scale to zero when idle.
+	//
+	MinCpus int `json:"minCpus"`
+	// Maximum number of CPUs available in the compute environment.
+	// Subject to AWS service quotas.
+	//
+	MaxCpus int `json:"maxCpus"`
+	// Enable GPU support for compute instances.
+	// When enabled, GPU-capable instance types will be selected.
+	//
+	GpuEnabled *bool `json:"gpuEnabled,omitempty"`
+	// Enable automatic EBS volume expansion.
+	// When enabled, EBS volumes automatically expand as needed.
+	//
+	EbsAutoScale *bool `json:"ebsAutoScale,omitempty"`
+	// List of EC2 instance types to use.
+	// Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
+	// Default: ["optimal"] - AWS Batch selects appropriate instances
+	//
+	InstanceTypes []string `json:"instanceTypes,omitempty"`
+	// Strategy for allocating compute resources:
+	// - BEST_FIT: Selects instance type that best fits job requirements
+	// - BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively
+	// - SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity
+	// - SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
+	// Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
+	//
+	AllocStrategy *AllocStrategy `json:"allocStrategy,omitempty"`
+	ImageID       *string        `json:"imageId,omitempty"`
+	// VPC ID where compute environment will be deployed.
+	// Format: vpc- followed by hexadecimal characters
+	//
+	VpcID *string `json:"vpcId,omitempty"`
+	// List of subnet IDs for compute instances.
+	// Subnets must be in the specified VPC. Use multiple subnets for high availability.
+	// Must have sufficient IP addresses.
+	//
+	Subnets []string `json:"subnets,omitempty"`
+	// List of security group IDs to attach to compute instances.
+	// Security groups must allow necessary network access.
+	//
+	SecurityGroups []string `json:"securityGroups,omitempty"`
+	// Path where FSx will be mounted in the container.
+	//
+	FsxMount *string `json:"fsxMount,omitempty"`
+	// FSx for Lustre file system name.
+	//
+	FsxName *string `json:"fsxName,omitempty"`
+	// Size of FSx file system in GB.
+	//
+	FsxSize *int `json:"fsxSize,omitempty"`
+	// Dispose of AWS Batch resources when compute environment is deleted.
+	//
+	DisposeOnDeletion *bool `json:"disposeOnDeletion,omitempty"`
+	// EC2 key pair name for SSH access to compute instances.
+	// Key pair must exist in the specified region.
+	//
+	Ec2KeyPair   *string  `json:"ec2KeyPair,omitempty"`
+	AllowBuckets []string `json:"allowBuckets,omitempty"`
+	// Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
+	//
+	EbsBlockSize *int `json:"ebsBlockSize,omitempty"`
+	// The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
+	// for that instance type before instances are launched. For example, if your maximum percentage is 20%,
+	// then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
+	// You always pay the lowest (market) price and never more than your maximum percentage. If you leave this
+	// field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving
+	// this field empty.
+	//
+	// Must be a whole number between 0 and 100 (inclusive).
+	//
+	BidPercentage *int `json:"bidPercentage,omitempty"`
+	// Automatically create an EFS file system
+	EfsCreate *bool `json:"efsCreate,omitempty"`
+	// EFS file system ID to mount.
+	// Format: fs- followed by hexadecimal characters.
+	// EFS must be in the same VPC and region.
+	//
+	EfsID *string `json:"efsId,omitempty"`
+	// Path where EFS will be mounted in the container.
+	//
+	EfsMount      *string `json:"efsMount,omitempty"`
+	DragenEnabled *bool   `json:"dragenEnabled,omitempty"`
+	DragenAmiID   *string `json:"dragenAmiId,omitempty"`
+	EbsBootSize   *int    `json:"ebsBootSize,omitempty"`
+	EcsConfig     *string `json:"ecsConfig,omitempty"`
+	// Use Fargate for head job instead of EC2.
+	// Reduces costs by running head job on serverless compute.
+	// Only applicable when using EC2 for worker jobs.
+	//
+	FargateHeadEnabled *bool   `json:"fargateHeadEnabled,omitempty"`
+	Arm64Enabled       *bool   `json:"arm64Enabled,omitempty"`
+	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
 }
 
 func (f ForgeConfig) MarshalJSON() ([]byte, error) {
@@ -234,13 +314,6 @@ func (f *ForgeConfig) GetEbsBlockSize() *int {
 		return nil
 	}
 	return f.EbsBlockSize
-}
-
-func (f *ForgeConfig) GetFusionEnabled() *bool {
-	if f == nil {
-		return nil
-	}
-	return f.FusionEnabled
 }
 
 func (f *ForgeConfig) GetBidPercentage() *int {

@@ -53,7 +53,10 @@ func (r *ContainerRegistryCredentialResource) Schema(ctx context.Context, req re
 		MarkdownDescription: "Manage container registry credentials in Seqera platform using this resource.\n\nContainer registry credentials store authentication information for accessing\ncontainer registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{

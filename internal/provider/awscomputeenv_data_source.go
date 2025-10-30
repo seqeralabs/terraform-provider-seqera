@@ -69,19 +69,35 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"cli_path": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Path to AWS CLI on compute instances. AWS CLI must be available at this path.`,
 					},
 					"compute_job_role": schema.StringAttribute{
 						Computed: true,
+						MarkdownDescription: `IAM role ARN for compute jobs. Jobs assume this role during execution.` + "\n" +
+							`Must have permissions for S3, CloudWatch, etc.` + "\n" +
+							`Format: arn:aws:iam::account-id:role/role-name`,
 					},
 					"compute_queue": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Name of the AWS Batch compute queue`,
 					},
 					"dragen_instance_type": schema.StringAttribute{
 						Computed: true,
 					},
 					"dragen_queue": schema.StringAttribute{
 						Computed: true,
+					},
+					"enable_fusion": schema.BoolAttribute{
+						Computed: true,
+					},
+					"enable_wave": schema.BoolAttribute{
+						Computed: true,
+						MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
+							`and augmentation capabilities for Nextflow workflows.` + "\n" +
+							`` + "\n" +
+							`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
+							`Note: If Fusion2 is enabled, Wave must also be enabled.`,
 					},
 					"environment": schema.ListNestedAttribute{
 						Computed: true,
@@ -104,12 +120,21 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 					},
 					"execution_role": schema.StringAttribute{
 						Computed: true,
+						MarkdownDescription: `IAM role ARN for Batch execution (pulling container images, writing logs).` + "\n" +
+							`Must have permissions for ECR and CloudWatch Logs.` + "\n" +
+							`Format: arn:aws:iam::account-id:role/role-name`,
 					},
 					"forge": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"alloc_strategy": schema.StringAttribute{
 								Computed: true,
+								MarkdownDescription: `Strategy for allocating compute resources:` + "\n" +
+									`- BEST_FIT: Selects instance type that best fits job requirements` + "\n" +
+									`- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively` + "\n" +
+									`- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity` + "\n" +
+									`- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity` + "\n" +
+									`Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT`,
 							},
 							"allow_buckets": schema.ListAttribute{
 								Computed:    true,
@@ -120,9 +145,18 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 							},
 							"bid_percentage": schema.Int32Attribute{
 								Computed: true,
+								MarkdownDescription: `The maximum percentage that a Spot Instance price can be when compared with the On-Demand price` + "\n" +
+									`for that instance type before instances are launched. For example, if your maximum percentage is 20%,` + "\n" +
+									`then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.` + "\n" +
+									`You always pay the lowest (market) price and never more than your maximum percentage. If you leave this` + "\n" +
+									`field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving` + "\n" +
+									`this field empty.` + "\n" +
+									`` + "\n" +
+									`Must be a whole number between 0 and 100 (inclusive).`,
 							},
 							"dispose_on_deletion": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Dispose of AWS Batch resources when compute environment is deleted.`,
 							},
 							"dragen_ami_id": schema.StringAttribute{
 								Computed: true,
@@ -135,45 +169,60 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 							},
 							"ebs_auto_scale": schema.BoolAttribute{
 								Computed: true,
+								MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
+									`When enabled, EBS volumes automatically expand as needed.`,
 							},
 							"ebs_block_size": schema.Int32Attribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).`,
 							},
 							"ebs_boot_size": schema.Int32Attribute{
 								Computed: true,
 							},
 							"ec2_key_pair": schema.StringAttribute{
 								Computed: true,
+								MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
+									`Key pair must exist in the specified region.`,
 							},
 							"ecs_config": schema.StringAttribute{
 								Computed: true,
 							},
 							"efs_create": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Automatically create an EFS file system`,
 							},
 							"efs_id": schema.StringAttribute{
 								Computed: true,
+								MarkdownDescription: `EFS file system ID to mount.` + "\n" +
+									`Format: fs- followed by hexadecimal characters.` + "\n" +
+									`EFS must be in the same VPC and region.`,
 							},
 							"efs_mount": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Path where EFS will be mounted in the container.`,
 							},
 							"fargate_head_enabled": schema.BoolAttribute{
 								Computed: true,
+								MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
+									`Reduces costs by running head job on serverless compute.` + "\n" +
+									`Only applicable when using EC2 for worker jobs.`,
 							},
 							"fsx_mount": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Path where FSx will be mounted in the container.`,
 							},
 							"fsx_name": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `FSx for Lustre file system name.`,
 							},
 							"fsx_size": schema.Int32Attribute{
-								Computed: true,
-							},
-							"fusion_enabled": schema.BoolAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Size of FSx file system in GB.`,
 							},
 							"gpu_enabled": schema.BoolAttribute{
 								Computed: true,
+								MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
+									`When enabled, GPU-capable instance types will be selected.`,
 							},
 							"image_id": schema.StringAttribute{
 								Computed: true,
@@ -181,46 +230,66 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 							"instance_types": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
+								MarkdownDescription: `List of EC2 instance types to use.` + "\n" +
+									`Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]` + "\n" +
+									`Default: ["optimal"] - AWS Batch selects appropriate instances`,
 							},
 							"max_cpus": schema.Int32Attribute{
 								Computed: true,
+								MarkdownDescription: `Maximum number of CPUs available in the compute environment.` + "\n" +
+									`Subject to AWS service quotas.`,
 							},
 							"min_cpus": schema.Int32Attribute{
 								Computed: true,
+								MarkdownDescription: `Minimum number of CPUs to maintain in the compute environment.` + "\n" +
+									`Setting to 0 allows environment to scale to zero when idle.`,
 							},
 							"security_groups": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
+								MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
+									`Security groups must allow necessary network access.`,
 							},
 							"subnets": schema.ListAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
+								MarkdownDescription: `List of subnet IDs for compute instances.` + "\n" +
+									`Subnets must be in the specified VPC. Use multiple subnets for high availability.` + "\n" +
+									`Must have sufficient IP addresses.`,
 							},
 							"type": schema.StringAttribute{
 								Computed: true,
+								MarkdownDescription: `Type of compute instances to provision:` + "\n" +
+									`- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)` + "\n" +
+									`- EC2: Use On-Demand EC2 instances (reliable, higher cost)` + "\n" +
+									`- FARGATE: Use AWS Fargate serverless compute`,
 							},
 							"vpc_id": schema.StringAttribute{
 								Computed: true,
+								MarkdownDescription: `VPC ID where compute environment will be deployed.` + "\n" +
+									`Format: vpc- followed by hexadecimal characters`,
 							},
 						},
 					},
 					"fusion_snapshots": schema.BoolAttribute{
 						Computed: true,
 					},
-					"fusion2_enabled": schema.BoolAttribute{
-						Computed: true,
-					},
 					"head_job_cpus": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Number of CPUs allocated for the head job (default: 1)`,
 					},
 					"head_job_memory_mb": schema.Int32Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Memory allocation for the head job in MB (default: 1024)`,
 					},
 					"head_job_role": schema.StringAttribute{
 						Computed: true,
+						MarkdownDescription: `IAM role ARN for the head job.` + "\n" +
+							`Format: arn:aws:iam::account-id:role/role-name`,
 					},
 					"head_queue": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Name of the head job queue`,
 					},
 					"log_group": schema.StringAttribute{
 						Computed: true,
@@ -232,19 +301,25 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 					"nextflow_config": schema.StringAttribute{
 						Computed: true,
 					},
-					"nvnme_storage_enabled": schema.BoolAttribute{
+					"nvme_storage_enabled": schema.BoolAttribute{
 						Computed: true,
+						MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+							`When enabled, NVMe storage volumes are automatically mounted and configured.`,
 					},
 					"post_run_script": schema.StringAttribute{
-						Computed:    true,
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Computed: true,
+						MarkdownDescription: `Bash script to run after workflow execution completes.` + "\n" +
+							`Use for cleanup, archiving results, sending notifications, etc.`,
 					},
 					"pre_run_script": schema.StringAttribute{
-						Computed:    true,
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Computed: true,
+						MarkdownDescription: `Bash script to run before workflow execution begins.` + "\n" +
+							`Use for environment setup, loading modules, downloading reference data, etc.`,
 					},
 					"region": schema.StringAttribute{
 						Computed: true,
+						MarkdownDescription: `AWS region where the Batch compute environment will be created.` + "\n" +
+							`Examples: us-east-1, eu-west-1, ap-southeast-2`,
 					},
 					"storage_type": schema.StringAttribute{
 						Computed:           true,
@@ -254,11 +329,10 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 						Computed:    true,
 						ElementType: types.StringType,
 					},
-					"wave_enabled": schema.BoolAttribute{
-						Computed: true,
-					},
 					"work_dir": schema.StringAttribute{
 						Computed: true,
+						MarkdownDescription: `S3 bucket path for Nextflow work directory where intermediate files will be stored.` + "\n" +
+							`Format: s3://bucket-name/path`,
 					},
 				},
 			},

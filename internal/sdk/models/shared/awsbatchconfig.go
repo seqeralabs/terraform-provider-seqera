@@ -9,32 +9,68 @@ type AwsBatchConfig struct {
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
 	// property to select the compute config platform
-	Discriminator      *string `json:"discriminator,omitempty"`
-	Region             string  `json:"region"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// AWS region where the Batch compute environment will be created.
+	// Examples: us-east-1, eu-west-1, ap-southeast-2
+	//
+	Region string `json:"region"`
+	// Name of the AWS Batch compute queue
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
-	ComputeJobRole     *string `json:"computeJobRole,omitempty"`
-	ExecutionRole      *string `json:"executionRole,omitempty"`
-	HeadQueue          *string `json:"headQueue,omitempty"`
-	HeadJobRole        *string `json:"headJobRole,omitempty"`
-	CliPath            *string `json:"cliPath,omitempty"`
-	WorkDir            *string `json:"workDir,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// IAM role ARN for compute jobs. Jobs assume this role during execution.
+	// Must have permissions for S3, CloudWatch, etc.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	ComputeJobRole *string `json:"computeJobRole,omitempty"`
+	// IAM role ARN for Batch execution (pulling container images, writing logs).
+	// Must have permissions for ECR and CloudWatch Logs.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	ExecutionRole *string `json:"executionRole,omitempty"`
+	// Name of the head job queue
+	HeadQueue *string `json:"headQueue,omitempty"`
+	// IAM role ARN for the head job.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	HeadJobRole *string `json:"headJobRole,omitempty"`
+	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+	//
+	CliPath *string `json:"cliPath,omitempty"`
+	// S3 bucket path for Nextflow work directory where intermediate files will be stored.
+	// Format: s3://bucket-name/path
+	//
+	WorkDir *string `json:"workDir,omitempty"`
+	// Bash script to run before workflow execution begins.
+	// Use for environment setup, loading modules, downloading reference data, etc.
+	//
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript       *string             `json:"postRunScript,omitempty"`
-	HeadJobCpus         *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb     *int                `json:"headJobMemoryMb,omitempty"`
-	Environment         []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled         *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled      *bool               `json:"fusion2Enabled,omitempty"`
-	NvnmeStorageEnabled *bool               `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup            *string             `json:"logGroup,omitempty"`
-	NextflowConfig      *string             `json:"nextflowConfig,omitempty"`
-	FusionSnapshots     *bool               `json:"fusionSnapshots,omitempty"`
-	Forge               *ForgeConfig        `json:"forge,omitempty"`
-	ForgedResources     []map[string]any    `json:"forgedResources,omitempty"`
+	// Bash script to run after workflow execution completes.
+	// Use for cleanup, archiving results, sending notifications, etc.
+	//
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Number of CPUs allocated for the head job (default: 1)
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the head job in MB (default: 1024)
+	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
+	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable NVMe instance storage for high-performance I/O.
+	// When enabled, NVMe storage volumes are automatically mounted and configured.
+	//
+	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string          `json:"logGroup,omitempty"`
+	NextflowConfig     *string          `json:"nextflowConfig,omitempty"`
+	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
+	Forge              *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (a *AwsBatchConfig) GetStorageType() *string {
@@ -170,25 +206,25 @@ func (a *AwsBatchConfig) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AwsBatchConfig) GetWaveEnabled() *bool {
+func (a *AwsBatchConfig) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.WaveEnabled
+	return a.EnableWave
 }
 
-func (a *AwsBatchConfig) GetFusion2Enabled() *bool {
+func (a *AwsBatchConfig) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.Fusion2Enabled
+	return a.EnableFusion
 }
 
-func (a *AwsBatchConfig) GetNvnmeStorageEnabled() *bool {
+func (a *AwsBatchConfig) GetNvmeStorageEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.NvnmeStorageEnabled
+	return a.NvmeStorageEnabled
 }
 
 func (a *AwsBatchConfig) GetLogGroup() *string {

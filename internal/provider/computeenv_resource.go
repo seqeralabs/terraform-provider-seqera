@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -31,7 +32,9 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
+	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -41,7 +44,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &ComputeEnvResource{}
-var _ resource.ResourceWithImportState = &ComputeEnvResource{}
+var _ resource.ResourceWithUpgradeState = &ComputeEnvResource{}
 
 func NewComputeEnvResource() resource.Resource {
 	return &ComputeEnvResource{}
@@ -68,6 +71,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,
@@ -308,7 +312,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Path to AWS CLI on compute instances. AWS CLI must be available at this path. Requires replacement if changed.`,
 									},
 									"compute_job_role": schema.StringAttribute{
 										Computed: true,
@@ -317,7 +321,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `IAM role ARN for compute jobs. Jobs assume this role during execution.` + "\n" +
+											`Must have permissions for S3, CloudWatch, etc.` + "\n" +
+											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"compute_queue": schema.StringAttribute{
 										Computed: true,
@@ -326,7 +333,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Name of the AWS Batch compute queue. Requires replacement if changed.`,
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -345,6 +352,32 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
+											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+											`` + "\n" +
+											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
+											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.WaveEnabledValidator(),
+										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -409,7 +442,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `IAM role ARN for Batch execution (pulling container images, writing logs).` + "\n" +
+											`Must have permissions for ECR and CloudWatch Logs.` + "\n" +
+											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"forge": schema.SingleNestedAttribute{
 										Computed: true,
@@ -426,7 +462,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.`,
+												MarkdownDescription: `Strategy for allocating compute resources:` + "\n" +
+													`- BEST_FIT: Selects instance type that best fits job requirements` + "\n" +
+													`- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively` + "\n" +
+													`- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity` + "\n" +
+													`- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity` + "\n" +
+													`Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT` + "\n" +
+													`must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"BEST_FIT",
@@ -462,7 +504,18 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `The maximum percentage that a Spot Instance price can be when compared with the On-Demand price` + "\n" +
+													`for that instance type before instances are launched. For example, if your maximum percentage is 20%,` + "\n" +
+													`then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.` + "\n" +
+													`You always pay the lowest (market) price and never more than your maximum percentage. If you leave this` + "\n" +
+													`field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving` + "\n" +
+													`this field empty.` + "\n" +
+													`` + "\n" +
+													`Must be a whole number between 0 and 100 (inclusive).` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													int32validator.AtMost(100),
+												},
 											},
 											"dispose_on_deletion": schema.BoolAttribute{
 												Computed: true,
@@ -471,7 +524,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.`,
 											},
 											"dragen_ami_id": schema.StringAttribute{
 												Computed: true,
@@ -507,7 +560,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
+													`When enabled, EBS volumes automatically expand as needed.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"ebs_block_size": schema.Int32Attribute{
 												Computed: true,
@@ -516,7 +571,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.`,
 											},
 											"ebs_boot_size": schema.Int32Attribute{
 												Computed: true,
@@ -534,7 +589,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
+													`Key pair must exist in the specified region.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"ecs_config": schema.StringAttribute{
 												Computed: true,
@@ -552,7 +609,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Automatically create an EFS file system. Requires replacement if changed.`,
 											},
 											"efs_id": schema.StringAttribute{
 												Computed: true,
@@ -561,7 +618,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `EFS file system ID to mount.` + "\n" +
+													`Format: fs- followed by hexadecimal characters.` + "\n" +
+													`EFS must be in the same VPC and region.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"efs_mount": schema.StringAttribute{
 												Computed: true,
@@ -570,7 +630,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Path where EFS will be mounted in the container. Requires replacement if changed.`,
 											},
 											"fargate_head_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -579,7 +639,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
+													`Reduces costs by running head job on serverless compute.` + "\n" +
+													`Only applicable when using EC2 for worker jobs.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"fsx_mount": schema.StringAttribute{
 												Computed: true,
@@ -588,7 +651,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Path where FSx will be mounted in the container. Requires replacement if changed.`,
 											},
 											"fsx_name": schema.StringAttribute{
 												Computed: true,
@@ -597,7 +660,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `FSx for Lustre file system name. Requires replacement if changed.`,
 											},
 											"fsx_size": schema.Int32Attribute{
 												Computed: true,
@@ -606,16 +669,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
-											},
-											"fusion_enabled": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.Bool{
-													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-												},
-												Description: `Requires replacement if changed.`,
+												Description: `Size of FSx file system in GB. Requires replacement if changed.`,
 											},
 											"gpu_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -624,7 +678,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
+													`When enabled, GPU-capable instance types will be selected.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"image_id": schema.StringAttribute{
 												Computed: true,
@@ -643,7 +699,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `List of EC2 instance types to use.` + "\n" +
+													`Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]` + "\n" +
+													`Default: ["optimal"] - AWS Batch selects appropriate instances` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"max_cpus": schema.Int32Attribute{
 												Computed: true,
@@ -652,7 +711,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Not Null; Requires replacement if changed.`,
+												MarkdownDescription: `Maximum number of CPUs available in the compute environment.` + "\n" +
+													`Subject to AWS service quotas.` + "\n" +
+													`Not Null; Requires replacement if changed.`,
 												Validators: []validator.Int32{
 													speakeasy_int32validators.NotNull(),
 												},
@@ -664,10 +725,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Not Null; Requires replacement if changed.`,
-												Validators: []validator.Int32{
-													speakeasy_int32validators.NotNull(),
-												},
+												MarkdownDescription: `Minimum number of CPUs to maintain in the compute environment.` + "\n" +
+													`Setting to 0 allows environment to scale to zero when idle.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"security_groups": schema.ListAttribute{
 												Computed: true,
@@ -677,7 +737,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
+													`Security groups must allow necessary network access.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"subnets": schema.ListAttribute{
 												Computed: true,
@@ -687,7 +749,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `List of subnet IDs for compute instances.` + "\n" +
+													`Subnets must be in the specified VPC. Use multiple subnets for high availability.` + "\n" +
+													`Must have sufficient IP addresses.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"type": schema.StringAttribute{
 												Computed: true,
@@ -696,7 +761,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
+												MarkdownDescription: `Type of compute instances to provision:` + "\n" +
+													`- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)` + "\n" +
+													`- EC2: Use On-Demand EC2 instances (reliable, higher cost)` + "\n" +
+													`- FARGATE: Use AWS Fargate serverless compute` + "\n" +
+													`Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													speakeasy_stringvalidators.NotNull(),
 													stringvalidator.OneOf(
@@ -712,21 +781,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `VPC ID where compute environment will be deployed.` + "\n" +
+													`Format: vpc- followed by hexadecimal characters` + "\n" +
+													`Requires replacement if changed.`,
 											},
 										},
 										Description: `Requires replacement if changed.`,
 									},
 									"fusion_snapshots": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
@@ -742,7 +804,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int32planmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.`,
 									},
 									"head_job_memory_mb": schema.Int32Attribute{
 										Computed: true,
@@ -751,7 +813,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int32planmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.`,
 									},
 									"head_job_role": schema.StringAttribute{
 										Computed: true,
@@ -760,7 +822,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `IAM role ARN for the head job.` + "\n" +
+											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"head_queue": schema.StringAttribute{
 										Computed: true,
@@ -769,7 +833,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Name of the head job queue. Requires replacement if changed.`,
 									},
 									"log_group": schema.StringAttribute{
 										Computed: true,
@@ -799,14 +863,16 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
-									"nvnme_storage_enabled": schema.BoolAttribute{
+									"nvme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+											`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -833,7 +899,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										MarkdownDescription: `AWS region where the Batch compute environment will be created.` + "\n" +
+											`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
+											`Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -858,15 +926,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
 									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -874,7 +933,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -942,6 +1004,24 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -997,15 +1077,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
 									},
 									"gpu_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1110,15 +1181,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1126,7 +1188,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -1183,6 +1248,24 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 									"delete_pools_on_completion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
@@ -1307,15 +1390,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"head_pool": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1382,15 +1456,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1398,7 +1463,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -1446,6 +1514,24 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1504,15 +1590,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -1674,15 +1751,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1690,7 +1758,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -1738,6 +1809,24 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1796,15 +1885,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -1966,15 +2046,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -1982,7 +2053,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -2057,6 +2131,24 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -2112,15 +2204,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -2294,15 +2377,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -2310,7 +2384,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -2566,7 +2643,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"zones": schema.ListAttribute{
 										Computed: true,
@@ -2826,7 +2906,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -3298,7 +3381,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Path to AWS CLI on compute instances. AWS CLI must be available at this path. Requires replacement if changed.`,
 									},
 									"compute_job_role": schema.StringAttribute{
 										Computed: true,
@@ -3307,7 +3390,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `IAM role ARN for compute jobs. Jobs assume this role during execution.` + "\n" +
+											`Must have permissions for S3, CloudWatch, etc.` + "\n" +
+											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"compute_queue": schema.StringAttribute{
 										Computed: true,
@@ -3316,7 +3402,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Name of the AWS Batch compute queue. Requires replacement if changed.`,
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -3335,6 +3421,32 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
+											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+											`` + "\n" +
+											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
+											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.WaveEnabledValidator(),
+										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -3399,7 +3511,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `IAM role ARN for Batch execution (pulling container images, writing logs).` + "\n" +
+											`Must have permissions for ECR and CloudWatch Logs.` + "\n" +
+											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"forge": schema.SingleNestedAttribute{
 										Computed: true,
@@ -3416,7 +3531,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.`,
+												MarkdownDescription: `Strategy for allocating compute resources:` + "\n" +
+													`- BEST_FIT: Selects instance type that best fits job requirements` + "\n" +
+													`- BEST_FIT_PROGRESSIVE: Similar to BEST_FIT but widens search progressively` + "\n" +
+													`- SPOT_CAPACITY_OPTIMIZED: For Spot instances, selects from pools with optimal capacity` + "\n" +
+													`- SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity` + "\n" +
+													`Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT` + "\n" +
+													`must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"BEST_FIT",
@@ -3452,7 +3573,18 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `The maximum percentage that a Spot Instance price can be when compared with the On-Demand price` + "\n" +
+													`for that instance type before instances are launched. For example, if your maximum percentage is 20%,` + "\n" +
+													`then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.` + "\n" +
+													`You always pay the lowest (market) price and never more than your maximum percentage. If you leave this` + "\n" +
+													`field empty, the default value is 100% of the On-Demand price. For most use cases, we recommend leaving` + "\n" +
+													`this field empty.` + "\n" +
+													`` + "\n" +
+													`Must be a whole number between 0 and 100 (inclusive).` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													int32validator.AtMost(100),
+												},
 											},
 											"dispose_on_deletion": schema.BoolAttribute{
 												Computed: true,
@@ -3461,7 +3593,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.`,
 											},
 											"dragen_ami_id": schema.StringAttribute{
 												Computed: true,
@@ -3497,7 +3629,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
+													`When enabled, EBS volumes automatically expand as needed.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"ebs_block_size": schema.Int32Attribute{
 												Computed: true,
@@ -3506,7 +3640,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.`,
 											},
 											"ebs_boot_size": schema.Int32Attribute{
 												Computed: true,
@@ -3524,7 +3658,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
+													`Key pair must exist in the specified region.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"ecs_config": schema.StringAttribute{
 												Computed: true,
@@ -3542,7 +3678,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Automatically create an EFS file system. Requires replacement if changed.`,
 											},
 											"efs_id": schema.StringAttribute{
 												Computed: true,
@@ -3551,7 +3687,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `EFS file system ID to mount.` + "\n" +
+													`Format: fs- followed by hexadecimal characters.` + "\n" +
+													`EFS must be in the same VPC and region.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"efs_mount": schema.StringAttribute{
 												Computed: true,
@@ -3560,7 +3699,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Path where EFS will be mounted in the container. Requires replacement if changed.`,
 											},
 											"fargate_head_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -3569,7 +3708,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
+													`Reduces costs by running head job on serverless compute.` + "\n" +
+													`Only applicable when using EC2 for worker jobs.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"fsx_mount": schema.StringAttribute{
 												Computed: true,
@@ -3578,7 +3720,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `Path where FSx will be mounted in the container. Requires replacement if changed.`,
 											},
 											"fsx_name": schema.StringAttribute{
 												Computed: true,
@@ -3587,7 +3729,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												Description: `FSx for Lustre file system name. Requires replacement if changed.`,
 											},
 											"fsx_size": schema.Int32Attribute{
 												Computed: true,
@@ -3596,16 +3738,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
-											},
-											"fusion_enabled": schema.BoolAttribute{
-												Computed: true,
-												Optional: true,
-												PlanModifiers: []planmodifier.Bool{
-													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-												},
-												Description: `Requires replacement if changed.`,
+												Description: `Size of FSx file system in GB. Requires replacement if changed.`,
 											},
 											"gpu_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -3614,7 +3747,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
+													`When enabled, GPU-capable instance types will be selected.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"image_id": schema.StringAttribute{
 												Computed: true,
@@ -3633,7 +3768,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `List of EC2 instance types to use.` + "\n" +
+													`Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]` + "\n" +
+													`Default: ["optimal"] - AWS Batch selects appropriate instances` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"max_cpus": schema.Int32Attribute{
 												Computed: true,
@@ -3642,7 +3780,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Not Null; Requires replacement if changed.`,
+												MarkdownDescription: `Maximum number of CPUs available in the compute environment.` + "\n" +
+													`Subject to AWS service quotas.` + "\n" +
+													`Not Null; Requires replacement if changed.`,
 												Validators: []validator.Int32{
 													speakeasy_int32validators.NotNull(),
 												},
@@ -3654,10 +3794,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													int32planmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
-												Description: `Not Null; Requires replacement if changed.`,
-												Validators: []validator.Int32{
-													speakeasy_int32validators.NotNull(),
-												},
+												MarkdownDescription: `Minimum number of CPUs to maintain in the compute environment.` + "\n" +
+													`Setting to 0 allows environment to scale to zero when idle.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"security_groups": schema.ListAttribute{
 												Computed: true,
@@ -3667,7 +3806,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
+													`Security groups must allow necessary network access.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"subnets": schema.ListAttribute{
 												Computed: true,
@@ -3677,7 +3818,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `List of subnet IDs for compute instances.` + "\n" +
+													`Subnets must be in the specified VPC. Use multiple subnets for high availability.` + "\n" +
+													`Must have sufficient IP addresses.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"type": schema.StringAttribute{
 												Computed: true,
@@ -3686,7 +3830,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
+												MarkdownDescription: `Type of compute instances to provision:` + "\n" +
+													`- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)` + "\n" +
+													`- EC2: Use On-Demand EC2 instances (reliable, higher cost)` + "\n" +
+													`- FARGATE: Use AWS Fargate serverless compute` + "\n" +
+													`Not Null; must be one of ["SPOT", "EC2"]; Requires replacement if changed.`,
 												Validators: []validator.String{
 													speakeasy_stringvalidators.NotNull(),
 													stringvalidator.OneOf(
@@ -3702,21 +3850,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `VPC ID where compute environment will be deployed.` + "\n" +
+													`Format: vpc- followed by hexadecimal characters` + "\n" +
+													`Requires replacement if changed.`,
 											},
 										},
 										Description: `Requires replacement if changed.`,
 									},
 									"fusion_snapshots": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
@@ -3732,7 +3873,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int32planmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.`,
 									},
 									"head_job_memory_mb": schema.Int32Attribute{
 										Computed: true,
@@ -3741,7 +3882,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int32planmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.`,
 									},
 									"head_job_role": schema.StringAttribute{
 										Computed: true,
@@ -3750,7 +3891,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `IAM role ARN for the head job.` + "\n" +
+											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"head_queue": schema.StringAttribute{
 										Computed: true,
@@ -3759,7 +3902,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Name of the head job queue. Requires replacement if changed.`,
 									},
 									"log_group": schema.StringAttribute{
 										Computed: true,
@@ -3789,14 +3932,16 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
-									"nvnme_storage_enabled": schema.BoolAttribute{
+									"nvme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+											`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3823,7 +3968,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										MarkdownDescription: `AWS region where the Batch compute environment will be created.` + "\n" +
+											`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
+											`Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -3848,15 +3995,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
 									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Requires replacement if changed.`,
-									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
@@ -3864,7 +4002,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `Working directory path for workflow execution. Requires replacement if changed.`,
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 								},
 								Description: `Requires replacement if changed.`,
@@ -4845,4 +4986,10 @@ func (r *ComputeEnvResource) ImportState(ctx context.Context, req resource.Impor
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("compute_env_id"), data.ComputeEnvID)...)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
+}
+
+func (r *ComputeEnvResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV0},
+	}
 }

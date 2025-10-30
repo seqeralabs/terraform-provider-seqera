@@ -5,6 +5,8 @@ resource "seqera_compute_env" "my_computeenv" {
         auto_pool_mode             = false
         delete_jobs_on_completion  = "on_success"
         delete_pools_on_completion = false
+        enable_fusion              = true
+        enable_wave                = false
         environment = [
           {
             compute = false
@@ -22,7 +24,6 @@ resource "seqera_compute_env" "my_computeenv" {
           vm_count            = 2
           vm_type             = "...my_vm_type..."
         }
-        fusion2_enabled            = false
         head_pool                  = "...my_head_pool..."
         managed_identity_client_id = "...my_managed_identity_client_id..."
         nextflow_config            = "...my_nextflow_config..."
@@ -30,7 +31,6 @@ resource "seqera_compute_env" "my_computeenv" {
         pre_run_script             = "...my_pre_run_script..."
         region                     = "...my_region..."
         token_duration             = "...my_token_duration..."
-        wave_enabled               = true
         work_dir                   = "...my_work_dir..."
       }
     }

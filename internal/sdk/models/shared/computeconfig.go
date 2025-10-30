@@ -457,9 +457,9 @@ type GoogleGKEClusterConfiguration struct {
 	// The GKE cluster region - or - zone
 	Region string `json:"region"`
 	// The GKE cluster name
-	ClusterName    string `json:"clusterName"`
-	Fusion2Enabled *bool  `json:"fusion2Enabled,omitempty"`
-	WaveEnabled    *bool  `json:"waveEnabled,omitempty"`
+	ClusterName  string `json:"clusterName"`
+	EnableFusion *bool  `json:"fusion2Enabled,omitempty"`
+	EnableWave   *bool  `json:"waveEnabled,omitempty"`
 }
 
 func (g GoogleGKEClusterConfiguration) MarshalJSON() ([]byte, error) {
@@ -613,18 +613,18 @@ func (g *GoogleGKEClusterConfiguration) GetClusterName() string {
 	return g.ClusterName
 }
 
-func (g *GoogleGKEClusterConfiguration) GetFusion2Enabled() *bool {
+func (g *GoogleGKEClusterConfiguration) GetEnableFusion() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.Fusion2Enabled
+	return g.EnableFusion
 }
 
-func (g *GoogleGKEClusterConfiguration) GetWaveEnabled() *bool {
+func (g *GoogleGKEClusterConfiguration) GetEnableWave() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.WaveEnabled
+	return g.EnableWave
 }
 
 type AmazonEKSClusterConfiguration struct {
@@ -655,9 +655,9 @@ type AmazonEKSClusterConfiguration struct {
 	// AWS region
 	Region string `json:"region"`
 	// The AWS EKS cluster name
-	ClusterName    string `json:"clusterName"`
-	WaveEnabled    *bool  `json:"waveEnabled,omitempty"`
-	Fusion2Enabled *bool  `json:"fusion2Enabled,omitempty"`
+	ClusterName  string `json:"clusterName"`
+	EnableWave   *bool  `json:"waveEnabled,omitempty"`
+	EnableFusion *bool  `json:"fusion2Enabled,omitempty"`
 }
 
 func (a AmazonEKSClusterConfiguration) MarshalJSON() ([]byte, error) {
@@ -811,18 +811,18 @@ func (a *AmazonEKSClusterConfiguration) GetClusterName() string {
 	return a.ClusterName
 }
 
-func (a *AmazonEKSClusterConfiguration) GetWaveEnabled() *bool {
+func (a *AmazonEKSClusterConfiguration) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.WaveEnabled
+	return a.EnableWave
 }
 
-func (a *AmazonEKSClusterConfiguration) GetFusion2Enabled() *bool {
+func (a *AmazonEKSClusterConfiguration) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.Fusion2Enabled
+	return a.EnableFusion
 }
 
 type KubernetesComputeConfiguration struct {
@@ -1311,9 +1311,9 @@ type AzureBatchConfiguration struct {
 	DeleteJobsOnCompletion  *JobCleanupPolicy   `json:"deleteJobsOnCompletion,omitempty"`
 	DeletePoolsOnCompletion *bool               `json:"deletePoolsOnCompletion,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled    *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled *bool               `json:"fusion2Enabled,omitempty"`
+	Environment  []ConfigEnvVariable `json:"environment,omitempty"`
+	EnableWave   *bool               `json:"waveEnabled,omitempty"`
+	EnableFusion *bool               `json:"fusion2Enabled,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
 	ManagedIdentityClientID *string `json:"managedIdentityClientId,omitempty"`
@@ -1414,18 +1414,18 @@ func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AzureBatchConfiguration) GetWaveEnabled() *bool {
+func (a *AzureBatchConfiguration) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.WaveEnabled
+	return a.EnableWave
 }
 
-func (a *AzureBatchConfiguration) GetFusion2Enabled() *bool {
+func (a *AzureBatchConfiguration) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.Fusion2Enabled
+	return a.EnableFusion
 }
 
 func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
@@ -1471,8 +1471,8 @@ type GoogleBatchServiceConfiguration struct {
 	NfsMount       *string `json:"nfsMount,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment                 []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled                 *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled              *bool               `json:"fusion2Enabled,omitempty"`
+	EnableWave                  *bool               `json:"waveEnabled,omitempty"`
+	EnableFusion                *bool               `json:"fusion2Enabled,omitempty"`
 	ServiceAccount              *string             `json:"serviceAccount,omitempty"`
 	Network                     *string             `json:"network,omitempty"`
 	Subnetwork                  *string             `json:"subnetwork,omitempty"`
@@ -1645,18 +1645,18 @@ func (g *GoogleBatchServiceConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return g.Environment
 }
 
-func (g *GoogleBatchServiceConfiguration) GetWaveEnabled() *bool {
+func (g *GoogleBatchServiceConfiguration) GetEnableWave() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.WaveEnabled
+	return g.EnableWave
 }
 
-func (g *GoogleBatchServiceConfiguration) GetFusion2Enabled() *bool {
+func (g *GoogleBatchServiceConfiguration) GetEnableFusion() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.Fusion2Enabled
+	return g.EnableFusion
 }
 
 func (g *GoogleBatchServiceConfiguration) GetServiceAccount() *string {
@@ -1897,30 +1897,59 @@ type SeqeraComputeConfiguration struct {
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator      *string `json:"discriminator,omitempty"`
-	Region             string  `json:"region"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// AWS region where the Batch compute environment will be created.
+	// Examples: us-east-1, eu-west-1, ap-southeast-2
+	//
+	Region string `json:"region"`
+	// Name of the AWS Batch compute queue
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
-	ComputeJobRole     *string `json:"computeJobRole,omitempty"`
-	ExecutionRole      *string `json:"executionRole,omitempty"`
-	HeadQueue          *string `json:"headQueue,omitempty"`
-	HeadJobRole        *string `json:"headJobRole,omitempty"`
-	CliPath            *string `json:"cliPath,omitempty"`
+	// IAM role ARN for compute jobs. Jobs assume this role during execution.
+	// Must have permissions for S3, CloudWatch, etc.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	ComputeJobRole *string `json:"computeJobRole,omitempty"`
+	// IAM role ARN for Batch execution (pulling container images, writing logs).
+	// Must have permissions for ECR and CloudWatch Logs.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	ExecutionRole *string `json:"executionRole,omitempty"`
+	// Name of the head job queue
+	HeadQueue *string `json:"headQueue,omitempty"`
+	// IAM role ARN for the head job.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	HeadJobRole *string `json:"headJobRole,omitempty"`
+	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+	//
+	CliPath *string `json:"cliPath,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
-	PostRunScript   *string `json:"postRunScript,omitempty"`
-	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Number of CPUs allocated for the head job (default: 1)
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the head job in MB (default: 1024)
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment         []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled         *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled      *bool               `json:"fusion2Enabled,omitempty"`
-	NvnmeStorageEnabled *bool               `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup            *string             `json:"logGroup,omitempty"`
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable NVMe instance storage for high-performance I/O.
+	// When enabled, NVMe storage volumes are automatically mounted and configured.
+	//
+	NvmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string `json:"logGroup,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
@@ -2072,25 +2101,25 @@ func (s *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return s.Environment
 }
 
-func (s *SeqeraComputeConfiguration) GetWaveEnabled() *bool {
+func (s *SeqeraComputeConfiguration) GetEnableWave() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.WaveEnabled
+	return s.EnableWave
 }
 
-func (s *SeqeraComputeConfiguration) GetFusion2Enabled() *bool {
+func (s *SeqeraComputeConfiguration) GetEnableFusion() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.Fusion2Enabled
+	return s.EnableFusion
 }
 
-func (s *SeqeraComputeConfiguration) GetNvnmeStorageEnabled() *bool {
+func (s *SeqeraComputeConfiguration) GetNvmeStorageEnabled() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.NvnmeStorageEnabled
+	return s.NvmeStorageEnabled
 }
 
 func (s *SeqeraComputeConfiguration) GetLogGroup() *string {
@@ -2145,8 +2174,8 @@ type AWSCloudConfiguration struct {
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Array of environment variables for the compute environment
 	Environment        []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled        *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled     *bool               `json:"fusion2Enabled,omitempty"`
+	EnableWave         *bool               `json:"waveEnabled,omitempty"`
+	EnableFusion       *bool               `json:"fusion2Enabled,omitempty"`
 	LogGroup           *string             `json:"logGroup,omitempty"`
 	Arm64Enabled       *bool               `json:"arm64Enabled,omitempty"`
 	GpuEnabled         *bool               `json:"gpuEnabled,omitempty"`
@@ -2239,18 +2268,18 @@ func (a *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AWSCloudConfiguration) GetWaveEnabled() *bool {
+func (a *AWSCloudConfiguration) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.WaveEnabled
+	return a.EnableWave
 }
 
-func (a *AWSCloudConfiguration) GetFusion2Enabled() *bool {
+func (a *AWSCloudConfiguration) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.Fusion2Enabled
+	return a.EnableFusion
 }
 
 func (a *AWSCloudConfiguration) GetLogGroup() *string {
@@ -2323,30 +2352,59 @@ type AWSBatchConfiguration struct {
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator      *string `json:"discriminator,omitempty"`
-	Region             string  `json:"region"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// AWS region where the Batch compute environment will be created.
+	// Examples: us-east-1, eu-west-1, ap-southeast-2
+	//
+	Region string `json:"region"`
+	// Name of the AWS Batch compute queue
 	ComputeQueue       *string `json:"computeQueue,omitempty"`
 	DragenQueue        *string `json:"dragenQueue,omitempty"`
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
-	ComputeJobRole     *string `json:"computeJobRole,omitempty"`
-	ExecutionRole      *string `json:"executionRole,omitempty"`
-	HeadQueue          *string `json:"headQueue,omitempty"`
-	HeadJobRole        *string `json:"headJobRole,omitempty"`
-	CliPath            *string `json:"cliPath,omitempty"`
+	// IAM role ARN for compute jobs. Jobs assume this role during execution.
+	// Must have permissions for S3, CloudWatch, etc.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	ComputeJobRole *string `json:"computeJobRole,omitempty"`
+	// IAM role ARN for Batch execution (pulling container images, writing logs).
+	// Must have permissions for ECR and CloudWatch Logs.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	ExecutionRole *string `json:"executionRole,omitempty"`
+	// Name of the head job queue
+	HeadQueue *string `json:"headQueue,omitempty"`
+	// IAM role ARN for the head job.
+	// Format: arn:aws:iam::account-id:role/role-name
+	//
+	HeadJobRole *string `json:"headJobRole,omitempty"`
+	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
+	//
+	CliPath *string `json:"cliPath,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
-	PostRunScript   *string `json:"postRunScript,omitempty"`
-	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Number of CPUs allocated for the head job (default: 1)
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the head job in MB (default: 1024)
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 	// Array of environment variables for the compute environment
-	Environment         []ConfigEnvVariable `json:"environment,omitempty"`
-	WaveEnabled         *bool               `json:"waveEnabled,omitempty"`
-	Fusion2Enabled      *bool               `json:"fusion2Enabled,omitempty"`
-	NvnmeStorageEnabled *bool               `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup            *string             `json:"logGroup,omitempty"`
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable NVMe instance storage for high-performance I/O.
+	// When enabled, NVMe storage volumes are automatically mounted and configured.
+	//
+	NvmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string `json:"logGroup,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
@@ -2498,25 +2556,25 @@ func (a *AWSBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
 	return a.Environment
 }
 
-func (a *AWSBatchConfiguration) GetWaveEnabled() *bool {
+func (a *AWSBatchConfiguration) GetEnableWave() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.WaveEnabled
+	return a.EnableWave
 }
 
-func (a *AWSBatchConfiguration) GetFusion2Enabled() *bool {
+func (a *AWSBatchConfiguration) GetEnableFusion() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.Fusion2Enabled
+	return a.EnableFusion
 }
 
-func (a *AWSBatchConfiguration) GetNvnmeStorageEnabled() *bool {
+func (a *AWSBatchConfiguration) GetNvmeStorageEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.NvnmeStorageEnabled
+	return a.NvmeStorageEnabled
 }
 
 func (a *AWSBatchConfiguration) GetLogGroup() *string {

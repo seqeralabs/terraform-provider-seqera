@@ -72,6 +72,7 @@ Available configuration:
 ### Resources
 
 * [seqera_action](docs/resources/action.md)
+* [seqera_aws_batch_ce](docs/resources/aws_batch_ce.md)
 * [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
 * [seqera_aws_credential](docs/resources/aws_credential.md)
 * [seqera_azure_credential](docs/resources/azure_credential.md)
@@ -102,6 +103,7 @@ Available configuration:
 ### Data Sources
 
 * [seqera_action](docs/data-sources/action.md)
+* [seqera_aws_batch_ce](docs/data-sources/aws_batch_ce.md)
 * [seqera_aws_compute_env](docs/data-sources/aws_compute_env.md)
 * [seqera_aws_credential](docs/data-sources/aws_credential.md)
 * [seqera_azure_credential](docs/data-sources/azure_credential.md)

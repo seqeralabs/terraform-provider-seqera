@@ -57,7 +57,10 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 				Description: `Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
