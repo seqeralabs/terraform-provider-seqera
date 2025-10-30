@@ -1,9 +1,9 @@
-speakeasyVersion: 1.643.2
+speakeasyVersion: 1.643.3
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:f512b477522fe16def1ea0dce758aaa8474ff738c4a63eafb21c966593105bbe
-        sourceBlobDigest: sha256:c4a88e77d35bd263ca5acab5fb2a68afd626d2eb0ce7f17957b6e6d7783efd7a
+        sourceRevisionDigest: sha256:f62682832e3e5f4b238f5171f569acbed71dd84a95a156648e218854fe1e18dc
+        sourceBlobDigest: sha256:e54b9f67aad2560ad66ed267d07f5d27add979be650241f03fa78d3284e9f3d6
         tags:
             - latest
             - 1.56.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:f512b477522fe16def1ea0dce758aaa8474ff738c4a63eafb21c966593105bbe
-        sourceBlobDigest: sha256:c4a88e77d35bd263ca5acab5fb2a68afd626d2eb0ce7f17957b6e6d7783efd7a
+        sourceRevisionDigest: sha256:f62682832e3e5f4b238f5171f569acbed71dd84a95a156648e218854fe1e18dc
+        sourceBlobDigest: sha256:e54b9f67aad2560ad66ed267d07f5d27add979be650241f03fa78d3284e9f3d6
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

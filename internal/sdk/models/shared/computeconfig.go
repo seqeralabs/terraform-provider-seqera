@@ -1943,10 +1943,13 @@ type SeqeraComputeConfiguration struct {
 	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 	// Note: If Fusion2 is enabled, Wave must also be enabled.
 	//
-	EnableWave          *bool   `json:"waveEnabled,omitempty"`
-	EnableFusion        *bool   `json:"fusion2Enabled,omitempty"`
-	NvnmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup            *string `json:"logGroup,omitempty"`
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable NVMe instance storage for high-performance I/O.
+	// When enabled, NVMe storage volumes are automatically mounted and configured.
+	//
+	NvmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string `json:"logGroup,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
@@ -2112,11 +2115,11 @@ func (s *SeqeraComputeConfiguration) GetEnableFusion() *bool {
 	return s.EnableFusion
 }
 
-func (s *SeqeraComputeConfiguration) GetNvnmeStorageEnabled() *bool {
+func (s *SeqeraComputeConfiguration) GetNvmeStorageEnabled() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.NvnmeStorageEnabled
+	return s.NvmeStorageEnabled
 }
 
 func (s *SeqeraComputeConfiguration) GetLogGroup() *string {
@@ -2395,10 +2398,13 @@ type AWSBatchConfiguration struct {
 	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 	// Note: If Fusion2 is enabled, Wave must also be enabled.
 	//
-	EnableWave          *bool   `json:"waveEnabled,omitempty"`
-	EnableFusion        *bool   `json:"fusion2Enabled,omitempty"`
-	NvnmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup            *string `json:"logGroup,omitempty"`
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable NVMe instance storage for high-performance I/O.
+	// When enabled, NVMe storage volumes are automatically mounted and configured.
+	//
+	NvmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string `json:"logGroup,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
@@ -2564,11 +2570,11 @@ func (a *AWSBatchConfiguration) GetEnableFusion() *bool {
 	return a.EnableFusion
 }
 
-func (a *AWSBatchConfiguration) GetNvnmeStorageEnabled() *bool {
+func (a *AWSBatchConfiguration) GetNvmeStorageEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.NvnmeStorageEnabled
+	return a.NvmeStorageEnabled
 }
 
 func (a *AWSBatchConfiguration) GetLogGroup() *string {

@@ -95,7 +95,7 @@ func (r *AWSBatchCEDataSourceModel) RefreshFromSharedAWSBatchCEComputeConfig(ctx
 		r.Config.LogGroup = types.StringPointerValue(resp.Config.LogGroup)
 		r.Config.LustreID = types.StringPointerValue(resp.Config.LustreID)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
-		r.Config.NvnmeStorageEnabled = types.BoolPointerValue(resp.Config.NvnmeStorageEnabled)
+		r.Config.NvmeStorageEnabled = types.BoolPointerValue(resp.Config.NvmeStorageEnabled)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)

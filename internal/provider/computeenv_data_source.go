@@ -366,8 +366,10 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 										Computed:    true,
 										Description: `Nextflow configuration settings and parameters`,
 									},
-									"nvnme_storage_enabled": schema.BoolAttribute{
+									"nvme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
+										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+											`When enabled, NVMe storage volumes are automatically mounted and configured.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed:    true,
@@ -1415,8 +1417,10 @@ func (r *ComputeEnvDataSource) Schema(ctx context.Context, req datasource.Schema
 										Computed:    true,
 										Description: `Nextflow configuration settings and parameters`,
 									},
-									"nvnme_storage_enabled": schema.BoolAttribute{
+									"nvme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
+										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+											`When enabled, NVMe storage volumes are automatically mounted and configured.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed:    true,

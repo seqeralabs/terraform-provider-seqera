@@ -177,7 +177,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsBatch.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.LogGroup)
 					r.ComputeEnv.Config.AwsBatch.LustreID = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.LustreID)
 					r.ComputeEnv.Config.AwsBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NvnmeStorageEnabled)
+					r.ComputeEnv.Config.AwsBatch.NvmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.NvmeStorageEnabled)
 					r.ComputeEnv.Config.AwsBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PostRunScript)
 					r.ComputeEnv.Config.AwsBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.PreRunScript)
 					r.ComputeEnv.Config.AwsBatch.Region = types.StringValue(resp.ComputeEnv.Config.AWSBatchConfiguration.Region)
@@ -575,7 +575,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.LogGroup)
 					r.ComputeEnv.Config.SeqeracomputePlatform.LustreID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.LustreID)
 					r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NvnmeStorageEnabled)
+					r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NvmeStorageEnabled)
 					r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PostRunScript)
 					r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PreRunScript)
 					r.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Region)
@@ -932,11 +932,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion = nil
 		}
-		nvnmeStorageEnabled := new(bool)
-		if !r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.IsNull() {
-			*nvnmeStorageEnabled = r.ComputeEnv.Config.AwsBatch.NvnmeStorageEnabled.ValueBool()
+		nvmeStorageEnabled := new(bool)
+		if !r.ComputeEnv.Config.AwsBatch.NvmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.NvmeStorageEnabled.IsNull() {
+			*nvmeStorageEnabled = r.ComputeEnv.Config.AwsBatch.NvmeStorageEnabled.ValueBool()
 		} else {
-			nvnmeStorageEnabled = nil
+			nvmeStorageEnabled = nil
 		}
 		logGroup := new(string)
 		if !r.ComputeEnv.Config.AwsBatch.LogGroup.IsUnknown() && !r.ComputeEnv.Config.AwsBatch.LogGroup.IsNull() {
@@ -1146,31 +1146,31 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			}
 		}
 		awsBatchConfiguration = &shared.AWSBatchConfiguration{
-			StorageType:         storageType,
-			LustreID:            lustreID,
-			Volumes:             volumes,
-			Region:              region,
-			ComputeQueue:        computeQueue,
-			DragenQueue:         dragenQueue,
-			DragenInstanceType:  dragenInstanceType,
-			ComputeJobRole:      computeJobRole,
-			ExecutionRole:       executionRole,
-			HeadQueue:           headQueue,
-			HeadJobRole:         headJobRole,
-			CliPath:             cliPath,
-			WorkDir:             workDir,
-			PreRunScript:        preRunScript,
-			PostRunScript:       postRunScript,
-			HeadJobCpus:         headJobCpus,
-			HeadJobMemoryMb:     headJobMemoryMb,
-			Environment:         environment,
-			EnableWave:          enableWave,
-			EnableFusion:        enableFusion,
-			NvnmeStorageEnabled: nvnmeStorageEnabled,
-			LogGroup:            logGroup,
-			NextflowConfig:      nextflowConfig,
-			FusionSnapshots:     fusionSnapshots,
-			Forge:               forge,
+			StorageType:        storageType,
+			LustreID:           lustreID,
+			Volumes:            volumes,
+			Region:             region,
+			ComputeQueue:       computeQueue,
+			DragenQueue:        dragenQueue,
+			DragenInstanceType: dragenInstanceType,
+			ComputeJobRole:     computeJobRole,
+			ExecutionRole:      executionRole,
+			HeadQueue:          headQueue,
+			HeadJobRole:        headJobRole,
+			CliPath:            cliPath,
+			WorkDir:            workDir,
+			PreRunScript:       preRunScript,
+			PostRunScript:      postRunScript,
+			HeadJobCpus:        headJobCpus,
+			HeadJobMemoryMb:    headJobMemoryMb,
+			Environment:        environment,
+			EnableWave:         enableWave,
+			EnableFusion:       enableFusion,
+			NvmeStorageEnabled: nvmeStorageEnabled,
+			LogGroup:           logGroup,
+			NextflowConfig:     nextflowConfig,
+			FusionSnapshots:    fusionSnapshots,
+			Forge:              forge,
 		}
 	}
 	if awsBatchConfiguration != nil {
@@ -1485,11 +1485,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			enableFusion2 = nil
 		}
-		nvnmeStorageEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled.IsNull() {
-			*nvnmeStorageEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.NvnmeStorageEnabled.ValueBool()
+		nvmeStorageEnabled1 := new(bool)
+		if !r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled.IsNull() {
+			*nvmeStorageEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled.ValueBool()
 		} else {
-			nvnmeStorageEnabled1 = nil
+			nvmeStorageEnabled1 = nil
 		}
 		logGroup2 := new(string)
 		if !r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.IsNull() {
@@ -1699,31 +1699,31 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			}
 		}
 		seqeraComputeConfiguration = &shared.SeqeraComputeConfiguration{
-			StorageType:         storageType1,
-			LustreID:            lustreId1,
-			Volumes:             volumes1,
-			Region:              region2,
-			ComputeQueue:        computeQueue1,
-			DragenQueue:         dragenQueue1,
-			DragenInstanceType:  dragenInstanceType2,
-			ComputeJobRole:      computeJobRole1,
-			ExecutionRole:       executionRole1,
-			HeadQueue:           headQueue1,
-			HeadJobRole:         headJobRole1,
-			CliPath:             cliPath1,
-			WorkDir:             workDir2,
-			PreRunScript:        preRunScript2,
-			PostRunScript:       postRunScript2,
-			HeadJobCpus:         headJobCpus1,
-			HeadJobMemoryMb:     headJobMemoryMb1,
-			Environment:         environment2,
-			EnableWave:          enableWave2,
-			EnableFusion:        enableFusion2,
-			NvnmeStorageEnabled: nvnmeStorageEnabled1,
-			LogGroup:            logGroup2,
-			NextflowConfig:      nextflowConfig2,
-			FusionSnapshots:     fusionSnapshots1,
-			Forge:               forge1,
+			StorageType:        storageType1,
+			LustreID:           lustreId1,
+			Volumes:            volumes1,
+			Region:             region2,
+			ComputeQueue:       computeQueue1,
+			DragenQueue:        dragenQueue1,
+			DragenInstanceType: dragenInstanceType2,
+			ComputeJobRole:     computeJobRole1,
+			ExecutionRole:      executionRole1,
+			HeadQueue:          headQueue1,
+			HeadJobRole:        headJobRole1,
+			CliPath:            cliPath1,
+			WorkDir:            workDir2,
+			PreRunScript:       preRunScript2,
+			PostRunScript:      postRunScript2,
+			HeadJobCpus:        headJobCpus1,
+			HeadJobMemoryMb:    headJobMemoryMb1,
+			Environment:        environment2,
+			EnableWave:         enableWave2,
+			EnableFusion:       enableFusion2,
+			NvmeStorageEnabled: nvmeStorageEnabled1,
+			LogGroup:           logGroup2,
+			NextflowConfig:     nextflowConfig2,
+			FusionSnapshots:    fusionSnapshots1,
+			Forge:              forge1,
 		}
 	}
 	if seqeraComputeConfiguration != nil {

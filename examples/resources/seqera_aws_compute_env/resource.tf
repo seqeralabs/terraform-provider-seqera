@@ -62,19 +62,19 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
       type   = "SPOT"
       vpc_id = "vpc-1234567890abcdef0"
     }
-    fusion_snapshots      = false
-    head_job_cpus         = 4
-    head_job_memory_mb    = 8192
-    head_job_role         = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
-    head_queue            = "...my_head_queue..."
-    log_group             = "...my_log_group..."
-    lustre_id             = "...my_lustre_id..."
-    nextflow_config       = "...my_nextflow_config..."
-    nvnme_storage_enabled = true
-    post_run_script       = "...my_post_run_script..."
-    pre_run_script        = "...my_pre_run_script..."
-    region                = "us-east-1"
-    storage_type          = "...my_storage_type..."
+    fusion_snapshots     = false
+    head_job_cpus        = 4
+    head_job_memory_mb   = 8192
+    head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
+    head_queue           = "...my_head_queue..."
+    log_group            = "...my_log_group..."
+    lustre_id            = "...my_lustre_id..."
+    nextflow_config      = "...my_nextflow_config..."
+    nvme_storage_enabled = true
+    post_run_script      = "...my_post_run_script..."
+    pre_run_script       = "...my_pre_run_script..."
+    region               = "us-east-1"
+    storage_type         = "...my_storage_type..."
     volumes = [
       "..."
     ]

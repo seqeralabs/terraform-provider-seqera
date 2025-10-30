@@ -28,12 +28,13 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &ActionResource{}
-var _ resource.ResourceWithImportState = &ActionResource{}
+var _ resource.ResourceWithUpgradeState = &ActionResource{}
 
 func NewActionResource() resource.Resource {
 	return &ActionResource{}
@@ -72,6 +73,7 @@ func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage pipeline actions for event-based workflow automation.\n\nThis resource allows the management of pipeline actions. Actions enable event-based\npipeline execution, such as triggering a pipeline launch with a GitHub webhook whenever\nthe pipeline repository is updated.\n\nSeqera Platform currently offers support for native GitHub webhooks and a general\nTower webhook that can be invoked programmatically.\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"action_id": schema.StringAttribute{
 				Computed:    true,
@@ -679,8 +681,13 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Description: `Nextflow configuration settings and parameters`,
 											},
-											"nvnme_storage_enabled": schema.BoolAttribute{
+											"nvme_storage_enabled": schema.BoolAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
+												MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+													`When enabled, NVMe storage volumes are automatically mounted and configured.`,
 											},
 											"post_run_script": schema.StringAttribute{
 												Computed:    true,
@@ -2063,8 +2070,13 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 												Computed:    true,
 												Description: `Nextflow configuration settings and parameters`,
 											},
-											"nvnme_storage_enabled": schema.BoolAttribute{
+											"nvme_storage_enabled": schema.BoolAttribute{
 												Computed: true,
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
+												MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+													`When enabled, NVMe storage volumes are automatically mounted and configured.`,
 											},
 											"post_run_script": schema.StringAttribute{
 												Computed:    true,
@@ -2936,4 +2948,10 @@ func (r *ActionResource) Delete(ctx context.Context, req resource.DeleteRequest,
 
 func (r *ActionResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("action_id"), req.ID)...)
+}
+
+func (r *ActionResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.ActionStateUpgraderV0},
+	}
 }

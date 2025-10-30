@@ -80,7 +80,8 @@ If you encounter API errors that are not documented as known issues, please crea
 
 ## Resource State Issues
 
-### Credentials Drift Detection
+### Credentials Drift Detection (resolved v0.26.0)
+
 The `seqera_credential` resource may show continuous updates in Terraform plans due to state drift detection issues:
 
 ```hcl
@@ -98,3 +99,13 @@ The `seqera_credential` resource may show continuous updates in Terraform plans 
 ```
 
 This is a known issue and work in progress. The resource will continue to function correctly despite these continuous updates.
+
+## Compute environment Renaming
+
+Currently it is not possible to rename a compute environment without recreation.
+
+This will be addressed in  v0.26.1
+
+## Labels Race Condition
+
+Labels can be created by terraform even if a label exists with the same name, this similar behaviour exists in the platform also

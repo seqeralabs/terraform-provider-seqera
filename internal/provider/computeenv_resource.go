@@ -32,6 +32,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
@@ -43,7 +44,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &ComputeEnvResource{}
-var _ resource.ResourceWithImportState = &ComputeEnvResource{}
+var _ resource.ResourceWithUpgradeState = &ComputeEnvResource{}
 
 func NewComputeEnvResource() resource.Resource {
 	return &ComputeEnvResource{}
@@ -69,7 +70,8 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Seqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and\non-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
+		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
 				Required: true,
@@ -861,14 +863,16 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
-									"nvnme_storage_enabled": schema.BoolAttribute{
+									"nvme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+											`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -3928,14 +3932,16 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
-									"nvnme_storage_enabled": schema.BoolAttribute{
+									"nvme_storage_enabled": schema.BoolAttribute{
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+											`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -4980,4 +4986,10 @@ func (r *ComputeEnvResource) ImportState(ctx context.Context, req resource.Impor
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("compute_env_id"), data.ComputeEnvID)...)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
+}
+
+func (r *ComputeEnvResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.ComputeenvStateUpgraderV0},
+	}
 }

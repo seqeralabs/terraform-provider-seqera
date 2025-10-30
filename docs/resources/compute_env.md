@@ -3,9 +3,9 @@
 page_title: "seqera_compute_env Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
+  This resource allows the management of Seqera compute environments.
   Seqera Platform compute environments define the execution platform where a pipeline will run.
-  Compute environments enable users to launch pipelines on a growing number of cloud and
-  on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+  Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
   Compute environments define the computational resources and configuration needed
   to run Nextflow workflows, including cloud provider settings, resource limits,
   and execution parameters.
@@ -13,9 +13,10 @@ description: |-
 
 # seqera_compute_env (Resource)
 
+This resource allows the management of Seqera compute environments.
+
 Seqera Platform compute environments define the execution platform where a pipeline will run.
-Compute environments enable users to launch pipelines on a growing number of cloud and
-on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
 
 Compute environments define the computational resources and configuration needed
 to run Nextflow workflows, including cloud provider settings, resource limits,
@@ -208,7 +209,9 @@ Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
+- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
+When enabled, NVMe storage volumes are automatically mounted and configured.
+Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) AWS region where the Batch compute environment will be created.
@@ -693,7 +696,9 @@ Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nvnme_storage_enabled` (Boolean) Requires replacement if changed.
+- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
+When enabled, NVMe storage volumes are automatically mounted and configured.
+Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) AWS region where the Batch compute environment will be created.

@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 0407be6e2087bd5900494d830fced8fc
+  docChecksum: e9a2b657fe1db3fa0a5d2f651853cfe9
   docVersion: 1.56.0
-  speakeasyVersion: 1.643.2
-  generationVersion: 2.731.6
+  speakeasyVersion: 1.643.3
+  generationVersion: 2.731.9
   releaseVersion: 0.25.4
   configChecksum: 853d1b859009f3eb0de1df23d43a5fac
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.3
+    core: 3.46.4
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
@@ -2825,7 +2825,7 @@ examples:
         query:
           workspaceId: 814681
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
       responses:
         "200":
           application/json: {}
@@ -2840,7 +2840,7 @@ examples:
           workspaceId: 757884
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSComputeEnv:
@@ -3390,7 +3390,7 @@ examples:
         query:
           workspaceId: 890311
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
       responses:
         "200":
           application/json: {}
@@ -3405,7 +3405,7 @@ examples:
           workspaceId: 651683
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateAWSBatchCE:

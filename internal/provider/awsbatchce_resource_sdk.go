@@ -96,7 +96,7 @@ func (r *AWSBatchCEResourceModel) RefreshFromSharedAWSBatchCEComputeConfig(ctx c
 		r.Config.LogGroup = types.StringPointerValue(resp.Config.LogGroup)
 		r.Config.LustreID = types.StringPointerValue(resp.Config.LustreID)
 		r.Config.NextflowConfig = types.StringPointerValue(resp.Config.NextflowConfig)
-		r.Config.NvnmeStorageEnabled = types.BoolPointerValue(resp.Config.NvnmeStorageEnabled)
+		r.Config.NvmeStorageEnabled = types.BoolPointerValue(resp.Config.NvmeStorageEnabled)
 		r.Config.PostRunScript = types.StringPointerValue(resp.Config.PostRunScript)
 		r.Config.PreRunScript = types.StringPointerValue(resp.Config.PreRunScript)
 		r.Config.Region = types.StringValue(resp.Config.Region)
@@ -405,11 +405,11 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 	} else {
 		enableFusion = nil
 	}
-	nvnmeStorageEnabled := new(bool)
-	if !r.Config.NvnmeStorageEnabled.IsUnknown() && !r.Config.NvnmeStorageEnabled.IsNull() {
-		*nvnmeStorageEnabled = r.Config.NvnmeStorageEnabled.ValueBool()
+	nvmeStorageEnabled := new(bool)
+	if !r.Config.NvmeStorageEnabled.IsUnknown() && !r.Config.NvmeStorageEnabled.IsNull() {
+		*nvmeStorageEnabled = r.Config.NvmeStorageEnabled.ValueBool()
 	} else {
-		nvnmeStorageEnabled = nil
+		nvmeStorageEnabled = nil
 	}
 	logGroup := new(string)
 	if !r.Config.LogGroup.IsUnknown() && !r.Config.LogGroup.IsNull() {
@@ -619,31 +619,31 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 		}
 	}
 	config := shared.AwsBatchConfig{
-		StorageType:         storageType,
-		LustreID:            lustreID,
-		Volumes:             volumes,
-		Region:              region,
-		ComputeQueue:        computeQueue,
-		DragenQueue:         dragenQueue,
-		DragenInstanceType:  dragenInstanceType,
-		ComputeJobRole:      computeJobRole,
-		ExecutionRole:       executionRole,
-		HeadQueue:           headQueue,
-		HeadJobRole:         headJobRole,
-		CliPath:             cliPath,
-		WorkDir:             workDir,
-		PreRunScript:        preRunScript,
-		PostRunScript:       postRunScript,
-		HeadJobCpus:         headJobCpus,
-		HeadJobMemoryMb:     headJobMemoryMb,
-		Environment:         environment,
-		EnableWave:          enableWave,
-		EnableFusion:        enableFusion,
-		NvnmeStorageEnabled: nvnmeStorageEnabled,
-		LogGroup:            logGroup,
-		NextflowConfig:      nextflowConfig,
-		FusionSnapshots:     fusionSnapshots,
-		Forge:               forge,
+		StorageType:        storageType,
+		LustreID:           lustreID,
+		Volumes:            volumes,
+		Region:             region,
+		ComputeQueue:       computeQueue,
+		DragenQueue:        dragenQueue,
+		DragenInstanceType: dragenInstanceType,
+		ComputeJobRole:     computeJobRole,
+		ExecutionRole:      executionRole,
+		HeadQueue:          headQueue,
+		HeadJobRole:        headJobRole,
+		CliPath:            cliPath,
+		WorkDir:            workDir,
+		PreRunScript:       preRunScript,
+		PostRunScript:      postRunScript,
+		HeadJobCpus:        headJobCpus,
+		HeadJobMemoryMb:    headJobMemoryMb,
+		Environment:        environment,
+		EnableWave:         enableWave,
+		EnableFusion:       enableFusion,
+		NvmeStorageEnabled: nvmeStorageEnabled,
+		LogGroup:           logGroup,
+		NextflowConfig:     nextflowConfig,
+		FusionSnapshots:    fusionSnapshots,
+		Forge:              forge,
 	}
 	out := shared.AWSBatchCEComputeConfigInput{
 		CredentialsID: credentialsID,

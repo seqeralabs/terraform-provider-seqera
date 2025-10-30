@@ -209,6 +209,7 @@ actions:
       # AWS-specific compute environment schema
       AWSBatchCE_ComputeConfig:
         x-speakeasy-entity: AWSBatchCE
+        x-speakeasy-entity-version: 1
         x-speakeasy-entity-description: |
           Manage AWS compute environments in Seqera platform using this resource.
 
@@ -593,4 +594,14 @@ actions:
       description: |
         Size of FSx file system in GB.
       example: 1200
+      x-speakeasy-param-force-new: true
+
+  # Fix typo: nvnmeStorageEnabled -> nvme_storage_enabled in Terraform
+  - target: $.components.schemas.AwsBatchConfig.properties.nvnmeStorageEnabled
+    update:
+      x-speakeasy-name-override: nvme_storage_enabled
+      description: |
+        Enable NVMe instance storage for high-performance I/O.
+        When enabled, NVMe storage volumes are automatically mounted and configured.
+      example: true
       x-speakeasy-param-force-new: true

@@ -70,7 +70,6 @@ func (h *ComputeEnvStatusHook) AfterSuccess(hookCtx AfterSuccessContext, res *ht
 		workspaceID,
 		res.Request.Header.Get("Authorization"),
 	)
-
 	if err != nil {
 		return res, fmt.Errorf("failed to poll compute environment status: %w", err)
 	}
@@ -148,7 +147,6 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 
 		bodyBytes, err := io.ReadAll(resp.Body)
 		resp.Body.Close()
-
 		if err != nil {
 			return "", fmt.Errorf("failed to read describe response: %w", err)
 		}

@@ -248,7 +248,8 @@ Format: arn:aws:iam::account-id:role/role-name
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
 - `nextflow_config` (String) Nextflow configuration settings and parameters
-- `nvnme_storage_enabled` (Boolean)
+- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
+When enabled, NVMe storage volumes are automatically mounted and configured.
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String) AWS region where the Batch compute environment will be created.
@@ -716,7 +717,8 @@ Format: arn:aws:iam::account-id:role/role-name
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
 - `nextflow_config` (String) Nextflow configuration settings and parameters
-- `nvnme_storage_enabled` (Boolean)
+- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
+When enabled, NVMe storage volumes are automatically mounted and configured.
 - `post_run_script` (String) Shell script to execute after workflow completes
 - `pre_run_script` (String) Shell script to execute before workflow starts
 - `region` (String) AWS region where the Batch compute environment will be created.

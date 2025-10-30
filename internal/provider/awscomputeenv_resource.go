@@ -30,6 +30,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
@@ -41,7 +42,7 @@ import (
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &AWSComputeEnvResource{}
-var _ resource.ResourceWithImportState = &AWSComputeEnvResource{}
+var _ resource.ResourceWithUpgradeState = &AWSComputeEnvResource{}
 
 func NewAWSComputeEnvResource() resource.Resource {
 	return &AWSComputeEnvResource{}
@@ -78,6 +79,7 @@ func (r *AWSComputeEnvResource) Metadata(ctx context.Context, req resource.Metad
 func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage AWS compute environments in Seqera platform using this resource.\n\nAWS compute environments define the execution platform where a pipeline will run\non AWS infrastructure (AWS Batch, AWS Cloud, EKS).\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
 				Computed: true,
@@ -651,14 +653,16 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 						},
 						Description: `Requires replacement if changed.`,
 					},
-					"nvnme_storage_enabled": schema.BoolAttribute{
+					"nvme_storage_enabled": schema.BoolAttribute{
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Bool{
 							boolplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+							`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed: true,
@@ -1094,4 +1098,10 @@ func (r *AWSComputeEnvResource) ImportState(ctx context.Context, req resource.Im
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("compute_env_id"), data.ComputeEnvID)...)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), data.WorkspaceID)...)
+}
+
+func (r *AWSComputeEnvResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.AwscomputeenvStateUpgraderV0},
+	}
 }

@@ -10231,6 +10231,7 @@ components:
           items:
             $ref: "#/components/schemas/LabelDbDto"
       x-speakeasy-entity: Action
+      x-speakeasy-entity-version: 1
       x-speakeasy-entity-description: |
         Manage pipeline actions for event-based workflow automation.
 
@@ -10487,6 +10488,12 @@ components:
           x-speakeasy-name-override: enable_fusion
         nvnmeStorageEnabled:
           type: boolean
+          x-speakeasy-name-override: nvme_storage_enabled
+          description: |
+            Enable NVMe instance storage for high-performance I/O.
+            When enabled, NVMe storage volumes are automatically mounted and configured.
+          example: true
+          x-speakeasy-param-force-new: true
         logGroup:
           type: string
         nextflowConfig:
@@ -10983,6 +10990,7 @@ components:
           items:
             $ref: "#/components/schemas/LabelDbDto"
       x-speakeasy-entity: ComputeEnv
+      x-speakeasy-entity-version: 1
       x-speakeasy-entity-description: |
         Seqera Platform compute environments define the execution platform where a pipeline will run.
         Compute environments enable users to launch pipelines on a growing number of cloud and
@@ -17175,6 +17183,7 @@ components:
     # AWS-specific compute environment schema
     AWSBatchCE_ComputeConfig:
       x-speakeasy-entity: AWSBatchCE
+      x-speakeasy-entity-version: 1
       x-speakeasy-entity-description: |
         Manage AWS compute environments in Seqera platform using this resource.
 
@@ -17288,6 +17297,7 @@ components:
     # AWS-specific compute environment schema
     AWSComputeEnv_ComputeConfig:
       x-speakeasy-entity: AWSComputeEnv
+      x-speakeasy-entity-version: 1
       x-speakeasy-entity-description: |
         Manage AWS compute environments in Seqera platform using this resource.
 

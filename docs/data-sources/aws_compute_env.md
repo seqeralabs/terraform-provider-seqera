@@ -84,7 +84,8 @@ Format: arn:aws:iam::account-id:role/role-name
 - `log_group` (String)
 - `lustre_id` (String, Deprecated)
 - `nextflow_config` (String)
-- `nvnme_storage_enabled` (Boolean)
+- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
+When enabled, NVMe storage volumes are automatically mounted and configured.
 - `post_run_script` (String) Bash script to run after workflow execution completes.
 Use for cleanup, archiving results, sending notifications, etc.
 - `pre_run_script` (String) Bash script to run before workflow execution begins.

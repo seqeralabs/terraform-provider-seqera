@@ -60,14 +60,17 @@ type AwsBatchConfig struct {
 	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 	// Note: If Fusion2 is enabled, Wave must also be enabled.
 	//
-	EnableWave          *bool            `json:"waveEnabled,omitempty"`
-	EnableFusion        *bool            `json:"fusion2Enabled,omitempty"`
-	NvnmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup            *string          `json:"logGroup,omitempty"`
-	NextflowConfig      *string          `json:"nextflowConfig,omitempty"`
-	FusionSnapshots     *bool            `json:"fusionSnapshots,omitempty"`
-	Forge               *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources     []map[string]any `json:"forgedResources,omitempty"`
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Enable NVMe instance storage for high-performance I/O.
+	// When enabled, NVMe storage volumes are automatically mounted and configured.
+	//
+	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string          `json:"logGroup,omitempty"`
+	NextflowConfig     *string          `json:"nextflowConfig,omitempty"`
+	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
+	Forge              *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (a *AwsBatchConfig) GetStorageType() *string {
@@ -217,11 +220,11 @@ func (a *AwsBatchConfig) GetEnableFusion() *bool {
 	return a.EnableFusion
 }
 
-func (a *AwsBatchConfig) GetNvnmeStorageEnabled() *bool {
+func (a *AwsBatchConfig) GetNvmeStorageEnabled() *bool {
 	if a == nil {
 		return nil
 	}
-	return a.NvnmeStorageEnabled
+	return a.NvmeStorageEnabled
 }
 
 func (a *AwsBatchConfig) GetLogGroup() *string {

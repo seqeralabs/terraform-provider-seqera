@@ -301,8 +301,10 @@ func (r *AWSBatchCEDataSource) Schema(ctx context.Context, req datasource.Schema
 					"nextflow_config": schema.StringAttribute{
 						Computed: true,
 					},
-					"nvnme_storage_enabled": schema.BoolAttribute{
+					"nvme_storage_enabled": schema.BoolAttribute{
 						Computed: true,
+						MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
+							`When enabled, NVMe storage volumes are automatically mounted and configured.`,
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed: true,

@@ -209,6 +209,7 @@ actions:
       # AWS-specific compute environment schema
       AWSComputeEnv_ComputeConfig:
         x-speakeasy-entity: AWSComputeEnv
+        x-speakeasy-entity-version: 1
         x-speakeasy-entity-description: |
           Manage AWS compute environments in Seqera platform using this resource.
 
