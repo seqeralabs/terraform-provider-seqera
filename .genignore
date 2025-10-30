@@ -20,5 +20,3 @@ examples/resources/seqera_gitlab_credential/resource.tf
 examples/resources/seqera_ssh_credential/resource.tf
 examples/resources/seqera_tower_agent_credential/resource.tf
 examples/resources/seqera_kubernetes_credential/resource.tf
-examples/resources/seqera_awsbatch_compute_env/resource.tf
-examples/resources/seqera_aws_compute_env/resource.tf

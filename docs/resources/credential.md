@@ -21,11 +21,11 @@ within the Seqera Platform workflows.
 
 ```terraform
 resource "seqera_credential" "my_credential" {
-  base_url       = "https://www.googleapis.com"
-  category       = "cloud"
-  checked        = false
-  credentials_id = "...my_credentials_id.."
-  description    = "Google Cloud credentials for production workloads"
+  base_url    = "https://www.googleapis.com"
+  category    = "cloud"
+  checked     = false
+  description = "Google Cloud credentials for production workloads"
+  id          = "...my_id..."
   keys = {
     google = {
       data = "...my_data..."
@@ -52,11 +52,12 @@ resource "seqera_credential" "my_credential" {
 - `base_url` (String)
 - `category` (String)
 - `checked` (Boolean) If set credentials deletion will be blocked by running jobs that depend on them
-- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `description` (String) Optional description explaining the purpose of the credential
+- `id` (String) Unique identifier for the credential (max 22 characters)
 
 ### Read-Only
 
+- `credentials_id` (String) Credentials string identifier
 - `date_created` (String) Timestamp when the credential was created
 - `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
 - `last_updated` (String)

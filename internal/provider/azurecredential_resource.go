@@ -85,7 +85,10 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 				},
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{

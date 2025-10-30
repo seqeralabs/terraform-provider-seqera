@@ -46,6 +46,7 @@ type CredentialResourceModel struct {
 	DateCreated   types.String         `tfsdk:"date_created"`
 	Deleted       types.Bool           `tfsdk:"deleted"`
 	Description   types.String         `tfsdk:"description"`
+	ID            types.String         `tfsdk:"id"`
 	Keys          tfTypes.SecurityKeys `tfsdk:"keys"`
 	LastUpdated   types.String         `tfsdk:"last_updated"`
 	LastUsed      types.String         `tfsdk:"last_used"`
@@ -79,15 +80,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `If set credentials deletion will be blocked by running jobs that depend on them`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Unique identifier for the credential (max 22 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
+				Computed:    true,
+				Description: `Credentials string identifier`,
 			},
 			"date_created": schema.StringAttribute{
 				Computed: true,
@@ -109,6 +103,17 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"description": schema.StringAttribute{
 				Optional:    true,
 				Description: `Optional description explaining the purpose of the credential`,
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique identifier for the credential (max 22 characters)`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(22),
+				},
 			},
 			"keys": schema.SingleNestedAttribute{
 				Required: true,

@@ -54,7 +54,10 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource.\n\nSSH credentials store SSH private keys for secure access to remote\ncompute environments and resources within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{

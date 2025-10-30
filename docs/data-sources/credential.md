@@ -21,7 +21,7 @@ within the Seqera Platform workflows.
 
 ```terraform
 data "seqera_credential" "my_credential" {
-  credentials_id = "...my_credentials_id.."
+  credentials_id = "...my_credentials_id..."
   workspace_id   = 6
 }
 ```
@@ -44,6 +44,7 @@ data "seqera_credential" "my_credential" {
 - `date_created` (String) Timestamp when the credential was created
 - `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
 - `description` (String) Optional description explaining the purpose of the credential
+- `id` (String) Unique identifier for the credential (max 22 characters)
 - `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `last_updated` (String)
 - `last_used` (String) Timestamp when the credential was last used

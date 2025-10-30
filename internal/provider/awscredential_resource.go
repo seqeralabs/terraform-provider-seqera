@@ -54,28 +54,25 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "Manage AWS credentials in Seqera platform using this resource.\n\nAWS credentials store authentication information for accessing AWS services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary). Requires replacement if changed.`,
+				Required:    true,
+				Description: `AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(16, 128),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$`), "must match pattern "+regexp.MustCompile(`^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$`).String()),
 				},
 			},
 			"assume_role_arn": schema.StringAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Requires replacement if changed.`,
+				Optional:    true,
+				Description: `IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`), "must match pattern "+regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`).String()),
 				},
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
@@ -98,12 +95,9 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"secret_key": schema.StringAttribute{
-				Required:  true,
-				Sensitive: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `AWS secret access key (required, sensitive). Must be at least 40 characters. Requires replacement if changed.`,
+				Required:    true,
+				Sensitive:   true,
+				Description: `AWS secret access key (required, sensitive). Must be at least 40 characters.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtLeast(40),
 				},

@@ -53,7 +53,10 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"data": schema.StringAttribute{

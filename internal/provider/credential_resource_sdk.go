@@ -28,10 +28,10 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.Category = types.StringPointerValue(resp.Category)
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.ID = types.StringPointerValue(resp.ID)
 		if resp.Keys.AgentSecurityKeys != nil {
 			r.Keys.TwAgent = &tfTypes.AgentSecurityKeys{}
 			r.Keys.TwAgent.ConnectionID = types.StringPointerValue(resp.Keys.AgentSecurityKeys.ConnectionID)
@@ -273,11 +273,11 @@ func (r *CredentialResourceModel) ToSharedCreateCredentialsRequest(ctx context.C
 func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) (*shared.CredentialsInput, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentialsID := new(string)
-	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
-		*credentialsID = r.CredentialsID.ValueString()
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
 	} else {
-		credentialsID = nil
+		id = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -747,13 +747,13 @@ func (r *CredentialResourceModel) ToSharedCredentialsInput(ctx context.Context) 
 		}
 	}
 	out := shared.CredentialsInput{
-		CredentialsID: credentialsID,
-		Name:          name,
-		Description:   description,
-		ProviderType:  providerType,
-		BaseURL:       baseURL,
-		Category:      category,
-		Keys:          keys,
+		ID:           id,
+		Name:         name,
+		Description:  description,
+		ProviderType: providerType,
+		BaseURL:      baseURL,
+		Category:     category,
+		Keys:         keys,
 	}
 
 	return &out, diags

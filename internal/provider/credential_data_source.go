@@ -5,10 +5,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
@@ -37,6 +35,7 @@ type CredentialDataSourceModel struct {
 	DateCreated   types.String               `tfsdk:"date_created"`
 	Deleted       types.Bool                 `tfsdk:"deleted"`
 	Description   types.String               `tfsdk:"description"`
+	ID            types.String               `tfsdk:"id"`
 	Keys          tfTypes.SecurityKeysOutput `tfsdk:"keys"`
 	LastUpdated   types.String               `tfsdk:"last_updated"`
 	LastUsed      types.String               `tfsdk:"last_used"`
@@ -65,9 +64,6 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 			"credentials_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Credentials string identifier`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
 			},
 			"date_created": schema.StringAttribute{
 				Computed:    true,
@@ -80,6 +76,10 @@ func (r *CredentialDataSource) Schema(ctx context.Context, req datasource.Schema
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Optional description explaining the purpose of the credential`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,

@@ -61,7 +61,10 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{

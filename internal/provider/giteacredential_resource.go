@@ -57,7 +57,10 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 				Description: `Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
