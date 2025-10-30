@@ -55,12 +55,25 @@ info:
 actions:
   - target: $.paths
     update:
-      "/compute-envs#aws":
+      "/compute-envs#aws-compute-env":
         post:
           x-speakeasy-entity-operation: AWSComputeEnv#create
           x-speakeasy-name-override: CreateAWSComputeEnv
           summary: Create AWS compute environment
           description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
+          x-speakeasy-retries:
+            strategy: backoff
+            backoff:
+              initialInterval: 5000
+              maxInterval: 5000
+              maxElapsedTime: 30000
+              exponent: 1.0
+            statusCodes:
+              - 429
+              - 500
+              - 502
+              - 503
+              - 504
           tags:
             - compute-envs
           operationId: CreateAWSComputeEnv
@@ -94,10 +107,16 @@ actions:
                     $ref: "#/components/schemas/ErrorResponse"
             "403":
               description: Operation not allowed
+            "409":
+              description: Conflict - resource already exists
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
           security:
             - BearerAuth: []
 
-      "/compute-envs/{computeEnvId}#aws":
+      "/compute-envs/{computeEnvId}#aws-compute-env":
         get:
           x-speakeasy-entity-operation: AWSComputeEnv#read
           x-speakeasy-name-override: DescribeAWSComputeEnv
@@ -142,6 +161,12 @@ actions:
                     $ref: "#/components/schemas/ErrorResponse"
             "403":
               description: Operation not allowed
+            "404":
+              description: Compute environment not found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
           security:
             - BearerAuth: []
         delete:
@@ -299,10 +324,8 @@ actions:
   # FIELD DESCRIPTIONS AND VALIDATORS
   # ============================================================================
 
-  # Make all top-level AWS Compute Environment fields force replacement
-  - target: $.components.schemas.AWSComputeEnv_ComputeConfig.properties.name
-    update:
-      x-speakeasy-param-force-new: true
+  # Make top-level AWS Compute Environment fields force replacement
+  # NOTE: name field does NOT have force-new - it can be updated in-place
   - target: $.components.schemas.AWSComputeEnv_ComputeConfig.properties.description
     update:
       x-speakeasy-param-force-new: true

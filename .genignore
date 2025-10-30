@@ -1,6 +1,17 @@
 # Speakeasy generation ignore patterns
 # Files listed here will not be overwritten by Speakeasy code generation
 
+# Custom SDK hooks for polling and error handling
+internal/sdk/internal/hooks/registration.go
+internal/sdk/internal/hooks/compute_env_status_hook.go
+internal/sdk/internal/hooks/credential_error_hook.go
+internal/sdk/internal/hooks/generic_resource_error_hook.go
+internal/sdk/internal/hooks/conflict_error_hook.go
+
+# Custom resource implementations with polling logic
+internal/provider/awsbatchce_resource.go
+internal/provider/awscomputeenv_resource.go
+
 # Custom examples that should be manually maintained
 examples/resources/seqera_labels/resource.tf
 examples/resources/seqera_orgs/resource.tf

@@ -2334,9 +2334,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							},
 							"name": schema.StringAttribute{
 								Computed: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
 							},
 							"org_id": schema.Int64Attribute{
 								Computed: true,

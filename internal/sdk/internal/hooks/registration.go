@@ -9,9 +9,19 @@ package hooks
  */
 
 func initHooks(h *Hooks) {
-	// Register credential error hook to treat 403 as 404 for deleted credentials
-	credentialErrorHook := &CredentialErrorHook{}
-	h.registerAfterSuccessHook(credentialErrorHook)
+	// Register generic resource error hook to treat 403 as 404 for all deleted resources
+	// This handles all describe operations uniformly across all resource types
+	genericResourceErrorHook := &GenericResourceErrorHook{}
+	h.registerAfterSuccessHook(genericResourceErrorHook)
+
+	// Register conflict error hook to provide clear messages for 409 errors
+	// This helps users understand when a resource already exists
+	conflictErrorHook := &ConflictErrorHook{}
+	h.registerAfterErrorHook(conflictErrorHook)
+
+	// Register compute environment status polling hook to wait for AVAILABLE status
+	computeEnvStatusHook := &ComputeEnvStatusHook{}
+	h.registerAfterSuccessHook(computeEnvStatusHook)
 
 	// exampleHook := &ExampleHook{}
 

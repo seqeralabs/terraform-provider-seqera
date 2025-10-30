@@ -26,8 +26,8 @@ actions:
       x-speakeasy-param-optional: false
 
   # ComputeEnv entity operations
-  # Note: Update operation intentionally removed - compute environments are immutable
-  # Any changes require replacement (delete + create)
+  # Note: Update operation intentionally removed - most compute environment changes require replacement
+  # However, the name field can be updated in-place without recreating the resource
   - target: $.paths["/compute-envs"].post
     update:
       x-speakeasy-entity-operation: ComputeEnv#create
@@ -39,6 +39,8 @@ actions:
       x-speakeasy-entity-operation: ComputeEnv#delete
 
   # Add retry mechanism for compute environment creation
+  # Note: 409 (Conflict) is excluded from retries because it means the resource
+  # already exists and retrying won't help. The hook will provide a clear error message.
   - target: $.paths["/compute-envs"].post
     update:
       x-speakeasy-retries:
@@ -49,8 +51,11 @@ actions:
           maxElapsedTime: 30000 # 30 seconds
           exponent: 1.0 # No exponential backoff, fixed interval
         statusCodes:
-          - 4XX
-          - 5XX
+          - 429  # Rate limiting - should retry
+          - 500  # Internal server error
+          - 502  # Bad gateway
+          - 503  # Service unavailable
+          - 504  # Gateway timeout
 
   # Mark workspaceId as required for compute-envs GET endpoint to fix import
   - target: $.paths["/compute-envs/{computeEnvId}"].get.parameters[?(@.name == "workspaceId")]
@@ -118,13 +123,12 @@ actions:
         and execution parameters.
 
   # ============================================================================
-  # FORCE REPLACEMENT ON ALL CHANGES
+  # FORCE REPLACEMENT ON CHANGES
   # ============================================================================
-  # All compute environment fields should trigger replacement when changed
+  # Most compute environment fields should trigger replacement when changed
+  # Exception: name can be updated in-place
 
-  - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.name
-    update:
-      x-speakeasy-param-force-new: true
+  # NOTE: name field does NOT have force-new - it can be updated in-place
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.description
     update:
       x-speakeasy-param-force-new: true

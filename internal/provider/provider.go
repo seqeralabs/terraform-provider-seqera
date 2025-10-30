@@ -105,6 +105,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 	return []func() resource.Resource{
 		NewActionResource,
 		NewAWSBatchCEResource,
+		NewAWSComputeEnvResource,
 		NewAWSCredentialResource,
 		NewAzureCredentialResource,
 		NewBitbucketCredentialResource,
@@ -138,6 +139,7 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 	return []func() datasource.DataSource{
 		NewActionDataSource,
 		NewAWSBatchCEDataSource,
+		NewAWSComputeEnvDataSource,
 		NewAWSCredentialDataSource,
 		NewAzureCredentialDataSource,
 		NewBitbucketCredentialDataSource,
