@@ -1,19 +1,13 @@
-# v0.25.1 (Unreleased)
+# v0.26.1 (Unreleased)
 
 FEATURES:
 
 ENHANCEMENTS:
 
-These changes improve Terraform state management by removing fields that:
-
-- Change at runtime and cause perpetual drift
-- Are computed/discovered from external sources (git repositories, parent contexts)
-- Are internal system fields not exposed in the Seqera Platform UI
-- Are managed separately through other resources (like labels)
 
 DEPRECATIONS:
 
-# v0.25.0
+# v0.26.0
 
 FEATURES:
 
