@@ -7965,6 +7965,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -8125,6 +8131,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -8285,6 +8297,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -8439,6 +8457,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -8593,6 +8617,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -8747,6 +8777,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -8901,6 +8937,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -9055,6 +9097,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -9209,6 +9257,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -9363,6 +9417,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -9517,6 +9577,12 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+        "404":
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
