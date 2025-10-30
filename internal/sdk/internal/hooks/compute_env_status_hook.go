@@ -146,9 +146,12 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 		}
 
 		bodyBytes, err := io.ReadAll(resp.Body)
-		resp.Body.Close()
+		closeErr := resp.Body.Close()
 		if err != nil {
 			return "", fmt.Errorf("failed to read describe response: %w", err)
+		}
+		if closeErr != nil {
+			return "", fmt.Errorf("failed to close response body: %w", closeErr)
 		}
 
 		if resp.StatusCode != 200 {
