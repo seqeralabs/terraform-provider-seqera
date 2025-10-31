@@ -1,6 +1,10 @@
-# v0.26.1 (Unreleased)
+# v0.26.1
 
 FEATURES:
+
+- **Credentials**: Credentials now use `.id` as an identifier vs `.credentials_id` you will have to update references to these in the code base and use terraform refresh.
+
+- **Compute Environments**: Credentials now use `.id` as an identifier vs `.compute_env_id` you will have to update references to these in the code base and use terraform refresh.
 
 ENHANCEMENTS:
 
@@ -16,8 +20,6 @@ ENHANCEMENTS:
   - Custom environment variables
 
 - **Studios**: GPU field now has clear description: "Set to 0 to disable GPU or 1 to enable GPU"
-
-DEPRECATIONS:
 
 # v0.26.0
 
