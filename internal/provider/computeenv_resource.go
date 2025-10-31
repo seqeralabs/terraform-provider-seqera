@@ -70,7 +70,7 @@ func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.Metadata
 
 func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Seqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and\non-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
+		MarkdownDescription: "This resource allows the management of Seqera compute environments.\n\nSeqera Platform compute environments define the execution platform where a pipeline will run.\nCompute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.\n\nCompute environments define the computational resources and configuration needed\nto run Nextflow workflows, including cloud provider settings, resource limits,\nand execution parameters.\n",
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"compute_env": schema.SingleNestedAttribute{
@@ -524,7 +524,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.`,
+												MarkdownDescription: `When set to true for AWS Batch forge environments, automatically deletes AWS resources` + "\n" +
+													`created during compute environment setup when the Terraform resource is destroyed.` + "\n" +
+													`` + "\n" +
+													`The following AWS resources will be deleted:` + "\n" +
+													`1. AWS Batch Compute Environments - The Batch compute environment itself` + "\n" +
+													`2. AWS Batch Job Queues - Associated job queues (head queue, compute queue, dragen queue)` + "\n" +
+													`3. EC2 Launch Templates - Launch templates for the compute instances` + "\n" +
+													`4. IAM Roles - Execution roles, head job roles, and other service roles` + "\n" +
+													`5. IAM Instance Profiles - Instance profiles attached to compute instances` + "\n" +
+													`6. FSx File Systems - FSx for Lustre file systems (if created during forge)` + "\n" +
+													`7. EFS File Systems - Elastic File Systems (if created during forge)` + "\n" +
+													`` + "\n" +
+													`Note: The AWS credentials associated with this compute environment must have appropriate` + "\n" +
+													`permissions to delete these resources.` + "\n" +
+													`` + "\n" +
+													`Important: Deleting a workspace with active compute environments will bypass this cleanup` + "\n" +
+													`and require manual removal of AWS resources. We recommend deleting compute environments` + "\n" +
+													`before deleting workspaces.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"dragen_ami_id": schema.StringAttribute{
 												Computed: true,
@@ -3593,7 +3611,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.`,
+												MarkdownDescription: `When set to true for AWS Batch forge environments, automatically deletes AWS resources` + "\n" +
+													`created during compute environment setup when the Terraform resource is destroyed.` + "\n" +
+													`` + "\n" +
+													`The following AWS resources will be deleted:` + "\n" +
+													`1. AWS Batch Compute Environments - The Batch compute environment itself` + "\n" +
+													`2. AWS Batch Job Queues - Associated job queues (head queue, compute queue, dragen queue)` + "\n" +
+													`3. EC2 Launch Templates - Launch templates for the compute instances` + "\n" +
+													`4. IAM Roles - Execution roles, head job roles, and other service roles` + "\n" +
+													`5. IAM Instance Profiles - Instance profiles attached to compute instances` + "\n" +
+													`6. FSx File Systems - FSx for Lustre file systems (if created during forge)` + "\n" +
+													`7. EFS File Systems - Elastic File Systems (if created during forge)` + "\n" +
+													`` + "\n" +
+													`Note: The AWS credentials associated with this compute environment must have appropriate` + "\n" +
+													`permissions to delete these resources.` + "\n" +
+													`` + "\n" +
+													`Important: Deleting a workspace with active compute environments will bypass this cleanup` + "\n" +
+													`and require manual removal of AWS resources. We recommend deleting compute environments` + "\n" +
+													`before deleting workspaces.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"dragen_ami_id": schema.StringAttribute{
 												Computed: true,

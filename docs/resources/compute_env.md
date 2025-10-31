@@ -3,9 +3,9 @@
 page_title: "seqera_compute_env Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
+  This resource allows the management of Seqera compute environments.
   Seqera Platform compute environments define the execution platform where a pipeline will run.
-  Compute environments enable users to launch pipelines on a growing number of cloud and
-  on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+  Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
   Compute environments define the computational resources and configuration needed
   to run Nextflow workflows, including cloud provider settings, resource limits,
   and execution parameters.
@@ -13,9 +13,10 @@ description: |-
 
 # seqera_compute_env (Resource)
 
+This resource allows the management of Seqera compute environments.
+
 Seqera Platform compute environments define the execution platform where a pipeline will run.
-Compute environments enable users to launch pipelines on a growing number of cloud and
-on-premises platforms. Each compute environment must be configured to enable Seqera to submit tasks.
+Compute environments enable users to launch pipelines on a growing number of cloud and on-premises platforms.
 
 Compute environments define the computational resources and configuration needed
 to run Nextflow workflows, including cloud provider settings, resource limits,
@@ -254,7 +255,25 @@ this field empty.
 
 Must be a whole number between 0 and 100 (inclusive).
 Requires replacement if changed.
-- `dispose_on_deletion` (Boolean) Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.
+- `dispose_on_deletion` (Boolean) When set to true for AWS Batch forge environments, automatically deletes AWS resources
+created during compute environment setup when the Terraform resource is destroyed.
+
+The following AWS resources will be deleted:
+1. AWS Batch Compute Environments - The Batch compute environment itself
+2. AWS Batch Job Queues - Associated job queues (head queue, compute queue, dragen queue)
+3. EC2 Launch Templates - Launch templates for the compute instances
+4. IAM Roles - Execution roles, head job roles, and other service roles
+5. IAM Instance Profiles - Instance profiles attached to compute instances
+6. FSx File Systems - FSx for Lustre file systems (if created during forge)
+7. EFS File Systems - Elastic File Systems (if created during forge)
+
+Note: The AWS credentials associated with this compute environment must have appropriate
+permissions to delete these resources.
+
+Important: Deleting a workspace with active compute environments will bypass this cleanup
+and require manual removal of AWS resources. We recommend deleting compute environments
+before deleting workspaces.
+Requires replacement if changed.
 - `dragen_ami_id` (String) Requires replacement if changed.
 - `dragen_enabled` (Boolean) Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
@@ -741,7 +760,25 @@ this field empty.
 
 Must be a whole number between 0 and 100 (inclusive).
 Requires replacement if changed.
-- `dispose_on_deletion` (Boolean) Dispose of AWS Batch resources when compute environment is deleted. Requires replacement if changed.
+- `dispose_on_deletion` (Boolean) When set to true for AWS Batch forge environments, automatically deletes AWS resources
+created during compute environment setup when the Terraform resource is destroyed.
+
+The following AWS resources will be deleted:
+1. AWS Batch Compute Environments - The Batch compute environment itself
+2. AWS Batch Job Queues - Associated job queues (head queue, compute queue, dragen queue)
+3. EC2 Launch Templates - Launch templates for the compute instances
+4. IAM Roles - Execution roles, head job roles, and other service roles
+5. IAM Instance Profiles - Instance profiles attached to compute instances
+6. FSx File Systems - FSx for Lustre file systems (if created during forge)
+7. EFS File Systems - Elastic File Systems (if created during forge)
+
+Note: The AWS credentials associated with this compute environment must have appropriate
+permissions to delete these resources.
+
+Important: Deleting a workspace with active compute environments will bypass this cleanup
+and require manual removal of AWS resources. We recommend deleting compute environments
+before deleting workspaces.
+Requires replacement if changed.
 - `dragen_ami_id` (String) Requires replacement if changed.
 - `dragen_enabled` (Boolean) Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.

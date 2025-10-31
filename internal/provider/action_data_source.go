@@ -271,8 +271,25 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 															`Must be a whole number between 0 and 100 (inclusive).`,
 													},
 													"dispose_on_deletion": schema.BoolAttribute{
-														Computed:    true,
-														Description: `Dispose of AWS Batch resources when compute environment is deleted.`,
+														Computed: true,
+														MarkdownDescription: `When set to true for AWS Batch forge environments, automatically deletes AWS resources` + "\n" +
+															`created during compute environment setup when the Terraform resource is destroyed.` + "\n" +
+															`` + "\n" +
+															`The following AWS resources will be deleted:` + "\n" +
+															`1. AWS Batch Compute Environments - The Batch compute environment itself` + "\n" +
+															`2. AWS Batch Job Queues - Associated job queues (head queue, compute queue, dragen queue)` + "\n" +
+															`3. EC2 Launch Templates - Launch templates for the compute instances` + "\n" +
+															`4. IAM Roles - Execution roles, head job roles, and other service roles` + "\n" +
+															`5. IAM Instance Profiles - Instance profiles attached to compute instances` + "\n" +
+															`6. FSx File Systems - FSx for Lustre file systems (if created during forge)` + "\n" +
+															`7. EFS File Systems - Elastic File Systems (if created during forge)` + "\n" +
+															`` + "\n" +
+															`Note: The AWS credentials associated with this compute environment must have appropriate` + "\n" +
+															`permissions to delete these resources.` + "\n" +
+															`` + "\n" +
+															`Important: Deleting a workspace with active compute environments will bypass this cleanup` + "\n" +
+															`and require manual removal of AWS resources. We recommend deleting compute environments` + "\n" +
+															`before deleting workspaces.`,
 													},
 													"dragen_ami_id": schema.StringAttribute{
 														Computed: true,
@@ -1322,8 +1339,25 @@ func (r *ActionDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 															`Must be a whole number between 0 and 100 (inclusive).`,
 													},
 													"dispose_on_deletion": schema.BoolAttribute{
-														Computed:    true,
-														Description: `Dispose of AWS Batch resources when compute environment is deleted.`,
+														Computed: true,
+														MarkdownDescription: `When set to true for AWS Batch forge environments, automatically deletes AWS resources` + "\n" +
+															`created during compute environment setup when the Terraform resource is destroyed.` + "\n" +
+															`` + "\n" +
+															`The following AWS resources will be deleted:` + "\n" +
+															`1. AWS Batch Compute Environments - The Batch compute environment itself` + "\n" +
+															`2. AWS Batch Job Queues - Associated job queues (head queue, compute queue, dragen queue)` + "\n" +
+															`3. EC2 Launch Templates - Launch templates for the compute instances` + "\n" +
+															`4. IAM Roles - Execution roles, head job roles, and other service roles` + "\n" +
+															`5. IAM Instance Profiles - Instance profiles attached to compute instances` + "\n" +
+															`6. FSx File Systems - FSx for Lustre file systems (if created during forge)` + "\n" +
+															`7. EFS File Systems - Elastic File Systems (if created during forge)` + "\n" +
+															`` + "\n" +
+															`Note: The AWS credentials associated with this compute environment must have appropriate` + "\n" +
+															`permissions to delete these resources.` + "\n" +
+															`` + "\n" +
+															`Important: Deleting a workspace with active compute environments will bypass this cleanup` + "\n" +
+															`and require manual removal of AWS resources. We recommend deleting compute environments` + "\n" +
+															`before deleting workspaces.`,
 													},
 													"dragen_ami_id": schema.StringAttribute{
 														Computed: true,
