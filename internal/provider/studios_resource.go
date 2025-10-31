@@ -10,9 +10,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/mapplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -23,10 +25,12 @@ import (
 	speakeasy_int32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
+	speakeasy_mapplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -45,18 +49,18 @@ type StudiosResource struct {
 
 // StudiosResourceModel describes the resource data model.
 type StudiosResourceModel struct {
-	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
-	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
-	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
-	DataStudioToolURL   types.String                     `tfsdk:"data_studio_tool_url"`
-	Description         types.String                     `tfsdk:"description"`
-	InitialCheckpointID types.Int64                      `tfsdk:"initial_checkpoint_id"`
-	IsPrivate           types.Bool                       `tfsdk:"is_private"`
-	LabelIds            []types.Int64                    `tfsdk:"label_ids"`
-	Name                types.String                     `tfsdk:"name"`
-	SessionID           types.String                     `tfsdk:"session_id"`
-	Spot                types.Bool                       `tfsdk:"spot"`
-	WorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AutoStart           types.Bool                      `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
+	ComputeEnvID        types.String                    `tfsdk:"compute_env_id"`
+	Configuration       tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
+	DataStudioToolURL   types.String                    `tfsdk:"data_studio_tool_url"`
+	Description         types.String                    `tfsdk:"description"`
+	InitialCheckpointID types.Int64                     `tfsdk:"initial_checkpoint_id"`
+	IsPrivate           types.Bool                      `tfsdk:"is_private"`
+	LabelIds            []types.Int64                   `tfsdk:"label_ids"`
+	Name                types.String                    `tfsdk:"name"`
+	SessionID           types.String                    `tfsdk:"session_id"`
+	Spot                types.Bool                      `tfsdk:"spot"`
+	WorkspaceID         types.Int64                     `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *StudiosResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,8 +89,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"configuration": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
+				Required: true,
 				PlanModifiers: []planmodifier.Object{
 					objectplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
@@ -113,14 +116,28 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 						Description: `Number of CPU cores to allocate. Requires replacement if changed.`,
 					},
+					"environment": schema.MapAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Map{
+							mapplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						Description: `Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number. Requires replacement if changed.`,
+						Validators: []validator.Map{
+							custom_mapvalidators.StudioEnvironmentVariableValidator(),
+						},
+					},
 					"gpu": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,
+						Default:  int32default.StaticInt32(0),
 						PlanModifiers: []planmodifier.Int32{
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Number of GPUs to allocate. Requires replacement if changed.`,
+						Description: `Set to 0 to disable GPU or 1 to enable GPU. Default: 0; Requires replacement if changed.`,
 					},
 					"lifespan_hours": schema.Int32Attribute{
 						Computed: true,
@@ -197,7 +214,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					listplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				ElementType: types.Int64Type,
-				Description: `Requires replacement if changed.`,
+				Description: `List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Requires replacement if changed.`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,

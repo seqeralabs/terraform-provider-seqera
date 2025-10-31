@@ -8,6 +8,9 @@ internal/sdk/internal/hooks/credential_error_hook.go
 internal/sdk/internal/hooks/generic_resource_error_hook.go
 internal/sdk/internal/hooks/conflict_error_hook.go
 
+# Custom validators
+internal/validators/mapvalidators/studio_environment_variable_validator.go
+
 # Custom state upgraders for field renames and migrations
 internal/stateupgraders/awsbatchce_v0.go
 internal/stateupgraders/awscomputeenv_v0.go
@@ -19,6 +22,7 @@ examples/resources/seqera_labels/resource.tf
 examples/resources/seqera_orgs/resource.tf
 examples/resources/seqera_primary_compute_env/resource.tf
 examples/resources/seqera_pipeline_secret/resource.tf
+examples/resources/seqera_studios/resource.tf
 examples/resources/seqera_google_credential/resource.tf
 examples/resources/seqera_google_credential/import.sh
 examples/resources/seqera_google_credential/import-by-string-id.tf

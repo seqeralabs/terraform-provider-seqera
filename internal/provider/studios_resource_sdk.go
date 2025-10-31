@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -31,12 +30,15 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if resp.Configuration == nil {
-			r.Configuration = nil
-		} else {
-			r.Configuration = &tfTypes.DataStudioConfiguration{}
+		if resp.Configuration != nil {
 			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
 			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))
+			if resp.Configuration.Environment != nil {
+				r.Configuration.Environment = make(map[string]types.String, len(resp.Configuration.Environment))
+				for key, value := range resp.Configuration.Environment {
+					r.Configuration.Environment[key] = types.StringValue(value)
+				}
+			}
 			r.Configuration.Gpu = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Gpu))
 			r.Configuration.LifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.LifespanHours))
 			r.Configuration.Memory = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Memory))
@@ -150,50 +152,55 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	} else {
 		initialCheckpointID = nil
 	}
-	var configuration *shared.DataStudioConfiguration
-	if r.Configuration != nil {
-		gpu := new(int)
-		if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
-			*gpu = int(r.Configuration.Gpu.ValueInt32())
-		} else {
-			gpu = nil
-		}
-		cpu := new(int)
-		if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
-			*cpu = int(r.Configuration.CPU.ValueInt32())
-		} else {
-			cpu = nil
-		}
-		memory := new(int)
-		if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
-			*memory = int(r.Configuration.Memory.ValueInt32())
-		} else {
-			memory = nil
-		}
-		mountData := make([]string, 0, len(r.Configuration.MountData))
-		for _, mountDataItem := range r.Configuration.MountData {
-			mountData = append(mountData, mountDataItem.ValueString())
-		}
-		condaEnvironment := new(string)
-		if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
-			*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
-		} else {
-			condaEnvironment = nil
-		}
-		lifespanHours := new(int)
-		if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
-			*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
-		} else {
-			lifespanHours = nil
-		}
-		configuration = &shared.DataStudioConfiguration{
-			Gpu:              gpu,
-			CPU:              cpu,
-			Memory:           memory,
-			MountData:        mountData,
-			CondaEnvironment: condaEnvironment,
-			LifespanHours:    lifespanHours,
-		}
+	gpu := new(int)
+	if !r.Configuration.Gpu.IsUnknown() && !r.Configuration.Gpu.IsNull() {
+		*gpu = int(r.Configuration.Gpu.ValueInt32())
+	} else {
+		gpu = nil
+	}
+	cpu := new(int)
+	if !r.Configuration.CPU.IsUnknown() && !r.Configuration.CPU.IsNull() {
+		*cpu = int(r.Configuration.CPU.ValueInt32())
+	} else {
+		cpu = nil
+	}
+	memory := new(int)
+	if !r.Configuration.Memory.IsUnknown() && !r.Configuration.Memory.IsNull() {
+		*memory = int(r.Configuration.Memory.ValueInt32())
+	} else {
+		memory = nil
+	}
+	mountData := make([]string, 0, len(r.Configuration.MountData))
+	for _, mountDataItem := range r.Configuration.MountData {
+		mountData = append(mountData, mountDataItem.ValueString())
+	}
+	environment := make(map[string]string)
+	for environmentKey, environmentValue := range r.Configuration.Environment {
+		var environmentInst string
+		environmentInst = environmentValue.ValueString()
+
+		environment[environmentKey] = environmentInst
+	}
+	condaEnvironment := new(string)
+	if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
+		*condaEnvironment = r.Configuration.CondaEnvironment.ValueString()
+	} else {
+		condaEnvironment = nil
+	}
+	lifespanHours := new(int)
+	if !r.Configuration.LifespanHours.IsUnknown() && !r.Configuration.LifespanHours.IsNull() {
+		*lifespanHours = int(r.Configuration.LifespanHours.ValueInt32())
+	} else {
+		lifespanHours = nil
+	}
+	configuration := shared.DataStudioConfiguration{
+		Gpu:              gpu,
+		CPU:              cpu,
+		Memory:           memory,
+		MountData:        mountData,
+		Environment:      environment,
+		CondaEnvironment: condaEnvironment,
+		LifespanHours:    lifespanHours,
 	}
 	isPrivate := new(bool)
 	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {

@@ -11779,8 +11779,9 @@ components:
           minimum: 0
           type: integer
           format: int32
-          description: Number of GPUs to allocate
+          description: Set to 0 to disable GPU or 1 to enable GPU.
           example: 0
+          default: 0
         cpu:
           minimum: 0
           type: integer
@@ -11797,6 +11798,15 @@ components:
           type: array
           items:
             type: string
+        environment:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+          description: Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: StudioEnvironmentVariableValidator
         condaEnvironment:
           maxLength: 2048
           type: string
@@ -11822,6 +11832,10 @@ components:
         - computeEnvId
         - dataStudioToolUrl
         - name
+        - computeEnvId
+        - dataStudioToolUrl
+        - name
+        - configuration
       type: object
       properties:
         name:
@@ -11854,6 +11868,7 @@ components:
           items:
             type: integer
             format: int64
+          description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
         spot:
           type: boolean
           nullable: true

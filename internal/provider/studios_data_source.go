@@ -58,9 +58,14 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						Computed:    true,
 						Description: `Number of CPU cores to allocate`,
 					},
+					"environment": schema.MapAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.`,
+					},
 					"gpu": schema.Int32Attribute{
 						Computed:    true,
-						Description: `Number of GPUs to allocate`,
+						Description: `Set to 0 to disable GPU or 1 to enable GPU.`,
 					},
 					"lifespan_hours": schema.Int32Attribute{
 						Computed:    true,

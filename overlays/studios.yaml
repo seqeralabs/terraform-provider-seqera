@@ -126,6 +126,15 @@ actions:
   # FIELD CONFIGURATION
   # ============================================================================
 
+  # Make configuration required (backend expects it)
+  - target: $.components.schemas.DataStudioCreateRequest
+    update:
+      required:
+        - computeEnvId
+        - dataStudioToolUrl
+        - name
+        - configuration
+
   # Make sessionId optional and configure as read-only
   - target: $["components"]["schemas"]["DataStudioDto"]["properties"]["sessionId"]
     update:
@@ -171,6 +180,14 @@ actions:
   - target: $.components.schemas.DataStudioDto.properties.description
     update:
       description: Description of the Studio session's purpose
+  - target: $.components.schemas.DataStudioDto.properties.labelIds
+    update:
+      description: List of resource label IDs to associate with this Studio. Labels can be created with resource=true using the seqera_labels resource.
+
+  # DataStudioCreateRequest field descriptions
+  - target: $.components.schemas.DataStudioCreateRequest.properties.labelIds
+    update:
+      description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
 
   # DataStudioConfiguration field descriptions
   - target: $.components.schemas.DataStudioConfiguration.properties.memory
@@ -183,12 +200,19 @@ actions:
       example: 2
   - target: $.components.schemas.DataStudioConfiguration.properties.gpu
     update:
-      description: Number of GPUs to allocate
+      description: Set to 0 to disable GPU or 1 to enable GPU.
       example: 0
+      default: 0
   - target: $.components.schemas.DataStudioConfiguration.properties.lifespanHours
     update:
       description: Maximum lifespan of the Studio session in hours
       example: 2
+  - target: $.components.schemas.DataStudioConfiguration.properties.environment
+    update:
+      description: Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-param-optional: true
+      x-speakeasy-plan-validators: StudioEnvironmentVariableValidator
 
   # ============================================================================
   # REQUEST EXAMPLES
@@ -211,10 +235,6 @@ actions:
   # ============================================================================
   # CLEANUP - Remove transient, runtime, and unmanageable fields
   # ============================================================================
-
-  # Remove environment property from configuration that cannot be managed
-  - target: $["components"]["schemas"]["DataStudioConfiguration"]["properties"]["environment"]
-    remove: true
 
   # Remove runtime checkpoint reference
   - target: $.components.schemas.DataStudioDto.properties.parentCheckpoint
