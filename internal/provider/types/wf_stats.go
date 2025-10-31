@@ -7,20 +7,20 @@ import (
 )
 
 type WfStats struct {
-	CachedCount     types.Int32   `tfsdk:"cached_count"`
-	CachedCountFmt  types.String  `tfsdk:"cached_count_fmt"`
-	CachedDuration  types.Int64   `tfsdk:"cached_duration"`
-	CachedPct       types.Float32 `tfsdk:"cached_pct"`
 	ComputeTimeFmt  types.String  `tfsdk:"compute_time_fmt"`
+	CachedCount     types.Int32   `tfsdk:"cached_count"`
 	FailedCount     types.Int32   `tfsdk:"failed_count"`
-	FailedCountFmt  types.String  `tfsdk:"failed_count_fmt"`
-	FailedDuration  types.Int64   `tfsdk:"failed_duration"`
-	FailedPct       types.Float32 `tfsdk:"failed_pct"`
 	IgnoredCount    types.Int32   `tfsdk:"ignored_count"`
-	IgnoredCountFmt types.String  `tfsdk:"ignored_count_fmt"`
-	IgnoredPct      types.Float32 `tfsdk:"ignored_pct"`
 	SucceedCount    types.Int32   `tfsdk:"succeed_count"`
+	CachedCountFmt  types.String  `tfsdk:"cached_count_fmt"`
 	SucceedCountFmt types.String  `tfsdk:"succeed_count_fmt"`
-	SucceedDuration types.Int64   `tfsdk:"succeed_duration"`
+	FailedCountFmt  types.String  `tfsdk:"failed_count_fmt"`
+	IgnoredCountFmt types.String  `tfsdk:"ignored_count_fmt"`
+	CachedPct       types.Float32 `tfsdk:"cached_pct"`
+	FailedPct       types.Float32 `tfsdk:"failed_pct"`
 	SucceedPct      types.Float32 `tfsdk:"succeed_pct"`
+	IgnoredPct      types.Float32 `tfsdk:"ignored_pct"`
+	CachedDuration  types.Int64   `tfsdk:"cached_duration"`
+	FailedDuration  types.Int64   `tfsdk:"failed_duration"`
+	SucceedDuration types.Int64   `tfsdk:"succeed_duration"`
 }

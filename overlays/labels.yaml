@@ -99,22 +99,38 @@ actions:
   # CREATE - POST /labels
   - target: $["paths"]["/labels"]["post"]
     update:
-      x-speakeasy-entity-operation: Labels#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Labels#create
 
   # READ - GET /labels
   - target: $["paths"]["/labels"]["get"]
     update:
-      x-speakeasy-entity-operation: Labels#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Labels#read
 
   # UPDATE - PUT /labels/{labelId}
   - target: $["paths"]["/labels/{labelId}"]["put"]
     update:
-      x-speakeasy-entity-operation: Labels#update
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Labels#update
 
   # DELETE - DELETE /labels/{labelId}
   - target: $["paths"]["/labels/{labelId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: Labels#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Labels#delete
 
   # ============================================================================
   # FIELD VALIDATORS

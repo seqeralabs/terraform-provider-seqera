@@ -7,16 +7,24 @@ actions:
   # DataLink entity operations
   - target: $["paths"]["/data-links"]["post"]
     update:
-      x-speakeasy-entity-operation: DataLink#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#create
   - target: $["paths"]["/data-links/{dataLinkId}"]["get"]
     update:
-      x-speakeasy-entity-operation: DataLink#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#read
   - target: $["paths"]["/data-links/{dataLinkId}"]["put"]
     update:
-      x-speakeasy-entity-operation: DataLink#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#update
   - target: $["paths"]["/data-links/{dataLinkId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: DataLink#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#delete
 
   # DataLink parameter configurations
   - target: $["paths"]["/data-links"]["post"]["parameters"][0]

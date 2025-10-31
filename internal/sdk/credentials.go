@@ -32,8 +32,9 @@ func newCredentials(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *h
 }
 
 // ListCredentials - List credentials
-// Lists all available credentials in a user context. Append `?workspaceId` to list credentials in a workspace context, and `?platformId` to filter credentials by computing platform.
-func (s *Credentials) ListCredentials(ctx context.Context, request operations.ListCredentialsRequest, opts ...operations.Option) (*operations.ListCredentialsResponse, error) {
+// Lists all credentials accessible to the authenticated user.
+// Use `workspace_id` to filter credentials in a specific workspace context.
+func (s *Credentials) ListCredentials(ctx context.Context, request operations.ListCredentialsDataSourceRequest, opts ...operations.Option) (*operations.ListCredentialsDataSourceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -61,7 +62,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request operations.Li
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "ListCredentials",
+		OperationID:      "ListCredentialsDataSource",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -125,7 +126,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request operations.Li
 		}
 	}
 
-	res := &operations.ListCredentialsResponse{
+	res := &operations.ListCredentialsDataSourceResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -140,12 +141,12 @@ func (s *Credentials) ListCredentials(ctx context.Context, request operations.Li
 				return nil, err
 			}
 
-			var out shared.ListCredentialsResponse
+			var out shared.ListCredentialsDataSourceResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ListCredentialsResponse = &out
+			res.ListCredentialsDataSourceResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

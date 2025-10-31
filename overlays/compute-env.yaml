@@ -30,16 +30,32 @@ actions:
   # Other fields still require replacement
   - target: $.paths["/compute-envs"].post
     update:
-      x-speakeasy-entity-operation: ComputeEnv#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: ComputeEnv#create
   - target: $.paths["/compute-envs/{computeEnvId}"].get
     update:
-      x-speakeasy-entity-operation: ComputeEnv#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: ComputeEnv#read
   - target: $.paths["/compute-envs/{computeEnvId}"].put
     update:
-      x-speakeasy-entity-operation: ComputeEnv#update
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: ComputeEnv#update
   - target: $.paths["/compute-envs/{computeEnvId}"].delete
     update:
-      x-speakeasy-entity-operation: ComputeEnv#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: ComputeEnv#delete
 
   # Add retry mechanism for compute environment creation
   # Note: 409 (Conflict) is excluded from retries because it means the resource

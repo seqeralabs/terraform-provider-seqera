@@ -40,6 +40,7 @@ terraform:
   enableTypeDeduplication: false
   environmentVariables: []
   generateValidationHelpers: true
+  includeEmptyObjects: false
   packageName: seqera
   unionDeserializationStrategy: populated-fields
   validation:

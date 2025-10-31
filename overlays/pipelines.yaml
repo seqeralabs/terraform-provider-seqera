@@ -62,22 +62,38 @@ actions:
   # CREATE - POST /pipelines
   - target: $.paths["/pipelines"].post
     update:
-      x-speakeasy-entity-operation: Pipeline#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Pipeline#create
 
   # READ - GET /pipelines/{pipelineId}
   - target: $.paths["/pipelines/{pipelineId}"].get
     update:
-      x-speakeasy-entity-operation: Pipeline#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Pipeline#read
 
   # UPDATE - PUT /pipelines/{pipelineId}
   - target: $.paths["/pipelines/{pipelineId}"].put
     update:
-      x-speakeasy-entity-operation: Pipeline#update
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Pipeline#update
 
   # DELETE - DELETE /pipelines/{pipelineId}
   - target: $.paths["/pipelines/{pipelineId}"].delete
     update:
-      x-speakeasy-entity-operation: Pipeline#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Pipeline#delete
 
   # ============================================================================
   # FIELD VALIDATORS

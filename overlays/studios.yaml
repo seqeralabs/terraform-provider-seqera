@@ -75,17 +75,29 @@ actions:
   # CREATE - POST /studios
   - target: $["paths"]["/studios"]["post"]
     update:
-      x-speakeasy-entity-operation: Studios#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Studios#create
 
   # READ - GET /studios/{sessionId}
   - target: $["paths"]["/studios/{sessionId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Studios#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Studios#read
 
   # DELETE - DELETE /studios/{sessionId}
   - target: $["paths"]["/studios/{sessionId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: Studios#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Studios#delete
 
   # ============================================================================
   # RETRY CONFIGURATION

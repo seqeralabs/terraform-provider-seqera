@@ -8,48 +8,48 @@ import (
 )
 
 type Workflow struct {
-	CommandLine       types.String                    `tfsdk:"command_line"`
-	CommitID          types.String                    `tfsdk:"commit_id"`
-	Complete          types.String                    `tfsdk:"complete"`
-	ConfigFiles       []types.String                  `tfsdk:"config_files"`
-	ConfigText        types.String                    `tfsdk:"config_text"`
-	Container         types.String                    `tfsdk:"container"`
-	ContainerEngine   types.String                    `tfsdk:"container_engine"`
-	DateCreated       types.String                    `tfsdk:"date_created"`
-	Deleted           types.Bool                      `tfsdk:"deleted"`
-	Duration          types.Int64                     `tfsdk:"duration"`
-	ErrorMessage      types.String                    `tfsdk:"error_message"`
-	ErrorReport       types.String                    `tfsdk:"error_report"`
-	ExitStatus        types.Int32                     `tfsdk:"exit_status"`
-	HomeDir           types.String                    `tfsdk:"home_dir"`
+	RequiresAttention types.Bool                      `tfsdk:"requires_attention"`
+	Status            types.String                    `tfsdk:"status"`
+	OwnerID           types.Int64                     `tfsdk:"owner_id"`
+	Repository        types.String                    `tfsdk:"repository"`
 	ID                types.String                    `tfsdk:"id"`
+	Submit            types.String                    `tfsdk:"submit"`
+	Start             types.String                    `tfsdk:"start"`
+	Complete          types.String                    `tfsdk:"complete"`
+	DateCreated       types.String                    `tfsdk:"date_created"`
 	LastUpdated       types.String                    `tfsdk:"last_updated"`
-	LaunchDir         types.String                    `tfsdk:"launch_dir"`
+	RunName           types.String                    `tfsdk:"run_name"`
+	SessionID         types.String                    `tfsdk:"session_id"`
+	Profile           types.String                    `tfsdk:"profile"`
+	WorkDir           types.String                    `tfsdk:"work_dir"`
+	CommitID          types.String                    `tfsdk:"commit_id"`
+	UserName          types.String                    `tfsdk:"user_name"`
+	ScriptID          types.String                    `tfsdk:"script_id"`
+	Revision          types.String                    `tfsdk:"revision"`
+	CommandLine       types.String                    `tfsdk:"command_line"`
+	ProjectName       types.String                    `tfsdk:"project_name"`
+	ScriptName        types.String                    `tfsdk:"script_name"`
 	LaunchID          types.String                    `tfsdk:"launch_id"`
-	LogFile           types.String                    `tfsdk:"log_file"`
+	ConfigFiles       []types.String                  `tfsdk:"config_files"`
+	Params            map[string]jsontypes.Normalized `tfsdk:"params"`
+	ConfigText        types.String                    `tfsdk:"config_text"`
 	Manifest          *WfManifest                     `tfsdk:"manifest"`
 	Nextflow          *WfNextflow                     `tfsdk:"nextflow"`
-	OperationID       types.String                    `tfsdk:"operation_id"`
-	OutFile           types.String                    `tfsdk:"out_file"`
-	OwnerID           types.Int64                     `tfsdk:"owner_id"`
-	Params            map[string]jsontypes.Normalized `tfsdk:"params"`
-	Profile           types.String                    `tfsdk:"profile"`
-	ProjectDir        types.String                    `tfsdk:"project_dir"`
-	ProjectName       types.String                    `tfsdk:"project_name"`
-	Repository        types.String                    `tfsdk:"repository"`
-	RequiresAttention types.Bool                      `tfsdk:"requires_attention"`
-	Resume            types.Bool                      `tfsdk:"resume"`
-	Revision          types.String                    `tfsdk:"revision"`
-	RunName           types.String                    `tfsdk:"run_name"`
-	ScriptFile        types.String                    `tfsdk:"script_file"`
-	ScriptID          types.String                    `tfsdk:"script_id"`
-	ScriptName        types.String                    `tfsdk:"script_name"`
-	SessionID         types.String                    `tfsdk:"session_id"`
-	Start             types.String                    `tfsdk:"start"`
 	Stats             *WfStats                        `tfsdk:"stats"`
-	Status            types.String                    `tfsdk:"status"`
-	Submit            types.String                    `tfsdk:"submit"`
+	ErrorMessage      types.String                    `tfsdk:"error_message"`
+	ErrorReport       types.String                    `tfsdk:"error_report"`
+	Deleted           types.Bool                      `tfsdk:"deleted"`
+	ProjectDir        types.String                    `tfsdk:"project_dir"`
+	HomeDir           types.String                    `tfsdk:"home_dir"`
+	Container         types.String                    `tfsdk:"container"`
+	ContainerEngine   types.String                    `tfsdk:"container_engine"`
+	ScriptFile        types.String                    `tfsdk:"script_file"`
+	LaunchDir         types.String                    `tfsdk:"launch_dir"`
+	Duration          types.Int64                     `tfsdk:"duration"`
+	ExitStatus        types.Int32                     `tfsdk:"exit_status"`
+	Resume            types.Bool                      `tfsdk:"resume"`
 	Success           types.Bool                      `tfsdk:"success"`
-	UserName          types.String                    `tfsdk:"user_name"`
-	WorkDir           types.String                    `tfsdk:"work_dir"`
+	LogFile           types.String                    `tfsdk:"log_file"`
+	OutFile           types.String                    `tfsdk:"out_file"`
+	OperationID       types.String                    `tfsdk:"operation_id"`
 }

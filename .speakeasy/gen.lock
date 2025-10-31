@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 953164218e286176c517cdc265848239
+  docChecksum: 074693348b4648bea6fd2ca496c3484f
   docVersion: 1.56.0
-  speakeasyVersion: 1.643.3
-  generationVersion: 2.731.9
+  speakeasyVersion: 1.644.0
+  generationVersion: 2.733.1
   releaseVersion: 0.25.4
-  configChecksum: 853d1b859009f3eb0de1df23d43a5fac
+  configChecksum: 9d61d6afb011e16bfff165d623e8f1d7
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.4
+    core: 3.46.5
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
@@ -26,37 +26,6 @@ features:
 generatedFiles:
   - .gitattributes
   - USAGE.md
-  - examples/data-sources/seqera_action/data-source.tf
-  - examples/data-sources/seqera_aws_batch_ce/data-source.tf
-  - examples/data-sources/seqera_aws_compute_env/data-source.tf
-  - examples/data-sources/seqera_aws_credential/data-source.tf
-  - examples/data-sources/seqera_azure_credential/data-source.tf
-  - examples/data-sources/seqera_bitbucket_credential/data-source.tf
-  - examples/data-sources/seqera_codecommit_credential/data-source.tf
-  - examples/data-sources/seqera_compute_env/data-source.tf
-  - examples/data-sources/seqera_container_registry_credential/data-source.tf
-  - examples/data-sources/seqera_credential/data-source.tf
-  - examples/data-sources/seqera_data_link/data-source.tf
-  - examples/data-sources/seqera_dataset/data-source.tf
-  - examples/data-sources/seqera_gitea_credential/data-source.tf
-  - examples/data-sources/seqera_github_credential/data-source.tf
-  - examples/data-sources/seqera_gitlab_credential/data-source.tf
-  - examples/data-sources/seqera_google_credential/data-source.tf
-  - examples/data-sources/seqera_kubernetes_credential/data-source.tf
-  - examples/data-sources/seqera_labels/data-source.tf
-  - examples/data-sources/seqera_orgs/data-source.tf
-  - examples/data-sources/seqera_pipeline/data-source.tf
-  - examples/data-sources/seqera_pipeline_secret/data-source.tf
-  - examples/data-sources/seqera_ssh_credential/data-source.tf
-  - examples/data-sources/seqera_studios/data-source.tf
-  - examples/data-sources/seqera_teams/data-source.tf
-  - examples/data-sources/seqera_tokens/data-source.tf
-  - examples/data-sources/seqera_tower_agent_credential/data-source.tf
-  - examples/data-sources/seqera_user/data-source.tf
-  - examples/data-sources/seqera_user_workspaces/data-source.tf
-  - examples/data-sources/seqera_workflows/data-source.tf
-  - examples/data-sources/seqera_workspace/data-source.tf
-  - examples/data-sources/seqera_workspaces/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/seqera_action/import-by-string-id.tf
   - examples/resources/seqera_action/import.sh
@@ -132,88 +101,50 @@ generatedFiles:
   - internal/planmodifiers/setplanmodifier/suppress_diff.go
   - internal/planmodifiers/stringplanmodifier/suppress_diff.go
   - internal/planmodifiers/utils/state_check.go
-  - internal/provider/action_data_source.go
-  - internal/provider/action_data_source_sdk.go
   - internal/provider/action_resource.go
   - internal/provider/action_resource_sdk.go
-  - internal/provider/awsbatchce_data_source.go
-  - internal/provider/awsbatchce_data_source_sdk.go
   - internal/provider/awsbatchce_resource.go
   - internal/provider/awsbatchce_resource_sdk.go
-  - internal/provider/awscomputeenv_data_source.go
-  - internal/provider/awscomputeenv_data_source_sdk.go
   - internal/provider/awscomputeenv_resource.go
   - internal/provider/awscomputeenv_resource_sdk.go
-  - internal/provider/awscredential_data_source.go
-  - internal/provider/awscredential_data_source_sdk.go
   - internal/provider/awscredential_resource.go
   - internal/provider/awscredential_resource_sdk.go
-  - internal/provider/azurecredential_data_source.go
-  - internal/provider/azurecredential_data_source_sdk.go
   - internal/provider/azurecredential_resource.go
   - internal/provider/azurecredential_resource_sdk.go
-  - internal/provider/bitbucketcredential_data_source.go
-  - internal/provider/bitbucketcredential_data_source_sdk.go
   - internal/provider/bitbucketcredential_resource.go
   - internal/provider/bitbucketcredential_resource_sdk.go
-  - internal/provider/codecommitcredential_data_source.go
-  - internal/provider/codecommitcredential_data_source_sdk.go
   - internal/provider/codecommitcredential_resource.go
   - internal/provider/codecommitcredential_resource_sdk.go
-  - internal/provider/computeenv_data_source.go
-  - internal/provider/computeenv_data_source_sdk.go
   - internal/provider/computeenv_resource.go
   - internal/provider/computeenv_resource_sdk.go
-  - internal/provider/containerregistrycredential_data_source.go
-  - internal/provider/containerregistrycredential_data_source_sdk.go
   - internal/provider/containerregistrycredential_resource.go
   - internal/provider/containerregistrycredential_resource_sdk.go
-  - internal/provider/credential_data_source.go
-  - internal/provider/credential_data_source_sdk.go
   - internal/provider/credential_resource.go
   - internal/provider/credential_resource_sdk.go
-  - internal/provider/datalink_data_source.go
-  - internal/provider/datalink_data_source_sdk.go
+  - internal/provider/credentials_data_source.go
+  - internal/provider/credentials_data_source_sdk.go
   - internal/provider/datalink_resource.go
   - internal/provider/datalink_resource_sdk.go
-  - internal/provider/dataset_data_source.go
-  - internal/provider/dataset_data_source_sdk.go
+  - internal/provider/datalinks_data_source.go
+  - internal/provider/datalinks_data_source_sdk.go
   - internal/provider/datasets_resource.go
   - internal/provider/datasets_resource_sdk.go
-  - internal/provider/giteacredential_data_source.go
-  - internal/provider/giteacredential_data_source_sdk.go
   - internal/provider/giteacredential_resource.go
   - internal/provider/giteacredential_resource_sdk.go
-  - internal/provider/githubcredential_data_source.go
-  - internal/provider/githubcredential_data_source_sdk.go
   - internal/provider/githubcredential_resource.go
   - internal/provider/githubcredential_resource_sdk.go
-  - internal/provider/gitlabcredential_data_source.go
-  - internal/provider/gitlabcredential_data_source_sdk.go
   - internal/provider/gitlabcredential_resource.go
   - internal/provider/gitlabcredential_resource_sdk.go
-  - internal/provider/googlecredential_data_source.go
-  - internal/provider/googlecredential_data_source_sdk.go
   - internal/provider/googlecredential_resource.go
   - internal/provider/googlecredential_resource_sdk.go
-  - internal/provider/kubernetescredential_data_source.go
-  - internal/provider/kubernetescredential_data_source_sdk.go
   - internal/provider/kubernetescredential_resource.go
   - internal/provider/kubernetescredential_resource_sdk.go
-  - internal/provider/labels_data_source.go
-  - internal/provider/labels_data_source_sdk.go
   - internal/provider/labels_resource.go
   - internal/provider/labels_resource_sdk.go
-  - internal/provider/orgs_data_source.go
-  - internal/provider/orgs_data_source_sdk.go
   - internal/provider/orgs_resource.go
   - internal/provider/orgs_resource_sdk.go
-  - internal/provider/pipeline_data_source.go
-  - internal/provider/pipeline_data_source_sdk.go
   - internal/provider/pipeline_resource.go
   - internal/provider/pipeline_resource_sdk.go
-  - internal/provider/pipelinesecret_data_source.go
-  - internal/provider/pipelinesecret_data_source_sdk.go
   - internal/provider/pipelinesecret_resource.go
   - internal/provider/pipelinesecret_resource_sdk.go
   - internal/provider/primarycomputeenv_resource.go
@@ -233,24 +164,14 @@ generatedFiles:
   - internal/provider/reflect/primitive.go
   - internal/provider/reflect/slice.go
   - internal/provider/reflect/struct.go
-  - internal/provider/sshcredential_data_source.go
-  - internal/provider/sshcredential_data_source_sdk.go
   - internal/provider/sshcredential_resource.go
   - internal/provider/sshcredential_resource_sdk.go
-  - internal/provider/studios_data_source.go
-  - internal/provider/studios_data_source_sdk.go
   - internal/provider/studios_resource.go
   - internal/provider/studios_resource_sdk.go
-  - internal/provider/teams_data_source.go
-  - internal/provider/teams_data_source_sdk.go
   - internal/provider/teams_resource.go
   - internal/provider/teams_resource_sdk.go
-  - internal/provider/tokens_data_source.go
-  - internal/provider/tokens_data_source_sdk.go
   - internal/provider/tokens_resource.go
   - internal/provider/tokens_resource_sdk.go
-  - internal/provider/toweragentcredential_data_source.go
-  - internal/provider/toweragentcredential_data_source_sdk.go
   - internal/provider/toweragentcredential_resource.go
   - internal/provider/toweragentcredential_resource_sdk.go
   - internal/provider/typeconvert/date.go
@@ -266,36 +187,26 @@ generatedFiles:
   - internal/provider/types/aws_batch_configuration.go
   - internal/provider/types/aws_cloud_configuration.go
   - internal/provider/types/aws_security_keys.go
-  - internal/provider/types/aws_security_keys1.go
   - internal/provider/types/az_batch_forge_config.go
   - internal/provider/types/azure_batch_configuration.go
   - internal/provider/types/azure_entra_keys.go
-  - internal/provider/types/azure_entra_keys1.go
   - internal/provider/types/azure_repos_security_keys.go
-  - internal/provider/types/azure_repos_security_keys1.go
   - internal/provider/types/azure_security_keys.go
-  - internal/provider/types/azure_security_keys1.go
   - internal/provider/types/bit_bucket_security_keys.go
-  - internal/provider/types/bit_bucket_security_keys1.go
   - internal/provider/types/code_commit_security_keys.go
-  - internal/provider/types/code_commit_security_keys1.go
   - internal/provider/types/compute_config.go
   - internal/provider/types/compute_env.go
   - internal/provider/types/compute_env_compute_config.go
-  - internal/provider/types/compute_env_response_dto.go
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
-  - internal/provider/types/container_registry_keys1.go
+  - internal/provider/types/credential.go
+  - internal/provider/types/data_link.go
   - internal/provider/types/data_link_credentials.go
   - internal/provider/types/data_studio_configuration.go
-  - internal/provider/types/dataset.go
   - internal/provider/types/forge_config.go
   - internal/provider/types/git_hub_security_keys.go
-  - internal/provider/types/git_hub_security_keys1.go
   - internal/provider/types/git_lab_security_keys.go
-  - internal/provider/types/git_lab_security_keys1.go
   - internal/provider/types/gitea_security_keys.go
-  - internal/provider/types/gitea_security_keys1.go
   - internal/provider/types/github_action_config.go
   - internal/provider/types/github_credential_keys.go
   - internal/provider/types/gitlab_credential_keys.go
@@ -304,25 +215,18 @@ generatedFiles:
   - internal/provider/types/google_gke_cluster_configuration.go
   - internal/provider/types/google_life_sciences_configuration.go
   - internal/provider/types/google_security_keys.go
-  - internal/provider/types/google_security_keys1.go
   - internal/provider/types/ibmlsf_configuration.go
   - internal/provider/types/k8s_security_keys.go
-  - internal/provider/types/k8s_security_keys1.go
   - internal/provider/types/kubernetes_compute_configuration.go
   - internal/provider/types/kubernetes_credential_keys.go
   - internal/provider/types/label_db_dto.go
-  - internal/provider/types/launch.go
   - internal/provider/types/moab_configuration.go
-  - internal/provider/types/org_and_workspace_dto.go
   - internal/provider/types/security_keys.go
-  - internal/provider/types/security_keys_output.go
   - internal/provider/types/seqera_compute_configuration.go
   - internal/provider/types/seqera_compute_security_keys.go
-  - internal/provider/types/seqera_compute_security_keys1.go
   - internal/provider/types/slurm_configuration.go
   - internal/provider/types/ssh_credential_keys.go
   - internal/provider/types/ssh_security_keys.go
-  - internal/provider/types/ssh_security_keys1.go
   - internal/provider/types/tower_agent_credential_keys.go
   - internal/provider/types/univa_grid_engine_configuration.go
   - internal/provider/types/wf_manifest.go
@@ -331,22 +235,11 @@ generatedFiles:
   - internal/provider/types/workflow.go
   - internal/provider/types/workflow_launch_request.go
   - internal/provider/types/workflow_launch_request1.go
-  - internal/provider/types/workspace_db_dto.go
-  - internal/provider/user_data_source.go
-  - internal/provider/user_data_source_sdk.go
-  - internal/provider/userworkspaces_data_source.go
-  - internal/provider/userworkspaces_data_source_sdk.go
   - internal/provider/utils.go
-  - internal/provider/workflows_data_source.go
-  - internal/provider/workflows_data_source_sdk.go
   - internal/provider/workflows_resource.go
   - internal/provider/workflows_resource_sdk.go
-  - internal/provider/workspace_data_source.go
-  - internal/provider/workspace_data_source_sdk.go
   - internal/provider/workspace_resource.go
   - internal/provider/workspace_resource_sdk.go
-  - internal/provider/workspaces_data_source.go
-  - internal/provider/workspaces_data_source_sdk.go
   - internal/sdk/.gitattributes
   - internal/sdk/actions.go
   - internal/sdk/avatars.go
@@ -522,8 +415,8 @@ generatedFiles:
   - internal/sdk/models/operations/listactions.go
   - internal/sdk/models/operations/listactiontypes.go
   - internal/sdk/models/operations/listcomputeenvs.go
-  - internal/sdk/models/operations/listcredentials.go
-  - internal/sdk/models/operations/listdatalinks.go
+  - internal/sdk/models/operations/listcredentialsdatasource.go
+  - internal/sdk/models/operations/listdatalinksdatasource.go
   - internal/sdk/models/operations/listdatasets.go
   - internal/sdk/models/operations/listdatasetsv2.go
   - internal/sdk/models/operations/listdatasetversions.go
@@ -701,7 +594,7 @@ generatedFiles:
   - internal/sdk/models/shared/createworkflowstarresponse.go
   - internal/sdk/models/shared/createworkspacerequest.go
   - internal/sdk/models/shared/createworkspaceresponse.go
-  - internal/sdk/models/shared/credentialsoutput.go
+  - internal/sdk/models/shared/credentialsinput.go
   - internal/sdk/models/shared/datalinkcontentresponse.go
   - internal/sdk/models/shared/datalinkcontenttreelistresponse.go
   - internal/sdk/models/shared/datalinkcreaterequest.go
@@ -719,7 +612,6 @@ generatedFiles:
   - internal/sdk/models/shared/datalinkmultipartuploadresponse.go
   - internal/sdk/models/shared/datalinkresponse.go
   - internal/sdk/models/shared/datalinksimpleitem.go
-  - internal/sdk/models/shared/datalinkslistresponse.go
   - internal/sdk/models/shared/datalinktype.go
   - internal/sdk/models/shared/datalinkupdaterequest.go
   - internal/sdk/models/shared/dataset.go
@@ -813,7 +705,8 @@ generatedFiles:
   - internal/sdk/models/shared/listactionsresponseactioninfo.go
   - internal/sdk/models/shared/listcomputeenvsresponse.go
   - internal/sdk/models/shared/listcomputeenvsresponseentry.go
-  - internal/sdk/models/shared/listcredentialsresponse.go
+  - internal/sdk/models/shared/listcredentialsdatasourceresponse.go
+  - internal/sdk/models/shared/listdatalinksdatasourceresponse.go
   - internal/sdk/models/shared/listdatasetsresponse.go
   - internal/sdk/models/shared/listdatasetversionsresponse.go
   - internal/sdk/models/shared/listeventtypesresponse.go
@@ -868,7 +761,7 @@ generatedFiles:
   - internal/sdk/models/shared/runstatus.go
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/securitygroup.go
-  - internal/sdk/models/shared/securitykeysoutput.go
+  - internal/sdk/models/shared/securitykeys.go
   - internal/sdk/models/shared/serviceinfo.go
   - internal/sdk/models/shared/serviceinforesponse.go
   - internal/sdk/models/shared/sshcredential.go
@@ -1212,7 +1105,7 @@ examples:
     speakeasy-default-list-credentials:
       responses:
         "200":
-          application/json: {"credentials": [{"name": "my-cloud-credentials", "description": "Cloud credentials for production workloads", "provider": "aws", "baseUrl": "https://example.com", "category": "cloud", "keys": {"discriminator": "gitlab"}}]}
+          application/json: {"credentials": [{}]}
         "400":
           application/json: {"message": "<value>"}
   CreateCredentials:
@@ -1266,9 +1159,11 @@ examples:
     speakeasy-default-list-data-links:
       responses:
         "200":
-          application/json: {}
+          application/json: {"dataLinks": []}
         "400":
           application/json: {"message": "<value>"}
+        "202":
+          application/json: {}
   CreateCustomDataLink:
     speakeasy-default-create-custom-data-link:
       parameters:
@@ -3429,6 +3324,152 @@ examples:
         path:
           computeEnvId: "<id>"
       responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListAWSCredentials:
+    speakeasy-default-list-AWS-credentials:
+      parameters:
+        query:
+          platformId: "aws"
+          name: "my-aws-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "bitbucket"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListAzureCredentials:
+    speakeasy-default-list-azure-credentials:
+      parameters:
+        query:
+          platformId: "azure"
+          name: "my-azure-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azurerepos"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListGoogleCredentials:
+    speakeasy-default-list-google-credentials:
+      parameters:
+        query:
+          platformId: "google"
+          name: "my-gcp-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "ssh"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListGithubCredentials:
+    speakeasy-default-list-github-credentials:
+      parameters:
+        query:
+          platformId: "github"
+          name: "my-github-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azurerepos"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListGitlabCredentials:
+    speakeasy-default-list-gitlab-credentials:
+      parameters:
+        query:
+          platformId: "gitlab"
+          name: "my-gitlab-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "gitea"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListBitbucketCredentials:
+    speakeasy-default-list-bitbucket-credentials:
+      parameters:
+        query:
+          platformId: "bitbucket"
+          name: "my-bitbucket-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "bitbucket"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListSSHCredentials:
+    speakeasy-default-list-SSH-credentials:
+      parameters:
+        query:
+          platformId: "ssh"
+          name: "my-ssh-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure_entra"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListKubernetesCredentials:
+    speakeasy-default-list-kubernetes-credentials:
+      parameters:
+        query:
+          platformId: "k8s"
+          name: "my-k8s-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "github"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListContainerRegistryCredentials:
+    speakeasy-default-list-container-registry-credentials:
+      parameters:
+        query:
+          platformId: "container-reg"
+          name: "my-registry-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "ssh"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListTowerAgentCredentials:
+    speakeasy-default-list-tower-agent-credentials:
+      parameters:
+        query:
+          platformId: "tw-agent"
+          name: "my-agent-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListCodecommitCredentials:
+    speakeasy-default-list-codecommit-credentials:
+      parameters:
+        query:
+          platformId: "codecommit"
+          name: "my-codecommit-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "github"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListGiteaCredentials:
+    speakeasy-default-list-gitea-credentials:
+      parameters:
+        query:
+          platformId: "gitea"
+          name: "my-gitea-credentials"
+      responses:
+        "200":
+          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "google"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListDataLinksDataSource:
+    speakeasy-default-list-data-links-data-source:
+      responses:
+        "200":
+          application/json: {"dataLinks": [{}]}
+        "400":
+          application/json: {"message": "<value>"}
+  ListCredentialsDataSource:
+    speakeasy-default-list-credentials-data-source:
+      responses:
+        "200":
+          application/json: {"credentials": [{}]}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2
