@@ -4,6 +4,18 @@ FEATURES:
 
 ENHANCEMENTS:
 
+- **Studios**: The `configuration` block is now required to prevent backend errors. GPU field defaults to 0 (disabled) when not specified.
+
+- **Studios**: Added `environment` field in configuration for setting studio-specific environment variables. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
+
+- **Studios**: Added varios examples showing:
+  - Minimal studio with empty configuration
+  - Conda environment setup using both heredoc and yamlencode() approaches
+  - Resource label integration
+  - Mounted data configuration
+  - Custom environment variables
+
+- **Studios**: GPU field now has clear description: "Set to 0 to disable GPU or 1 to enable GPU"
 
 DEPRECATIONS:
 
