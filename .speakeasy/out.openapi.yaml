@@ -84,7 +84,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#create
   /actions/labels/add:
     post:
       summary: Add labels to actions
@@ -282,7 +284,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#read
     put:
       summary: Update action
       description: Updates the details of the action identified by the given `actionId`. The `source` of an existing action cannot be changed.
@@ -354,7 +358,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Action#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#delete
   /actions/{actionId}/launch:
     post:
       summary: Trigger Tower Launch action
@@ -580,7 +586,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ComputeEnv#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -677,7 +685,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ComputeEnv#read
     put:
       summary: Update compute environment
       description: Updates the details of the compute environment identified by the given `computeEnvId`.
@@ -723,7 +733,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ComputeEnv#update
     delete:
       summary: Delete compute environment
       description: Deletes the compute environment identified by the given `computeEnvId`.
@@ -762,7 +774,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: ComputeEnv#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ComputeEnv#delete
   /compute-envs/{computeEnvId}/primary:
     post:
       summary: Define primary compute environment
@@ -805,14 +819,17 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PrimaryComputeEnv#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PrimaryComputeEnv#create
   /credentials:
     get:
       summary: List credentials
-      description: "Lists all available credentials in a user context. Append `?workspaceId` to list credentials in a workspace context, and `?platformId` to filter credentials by computing platform."
+      description: "Lists all credentials accessible to the authenticated user.\nUse `workspace_id` to filter credentials in a specific workspace context.\n"
       tags:
         - credentials
-      operationId: ListCredentials
+        - credentials
+      operationId: ListCredentialsDataSource
       parameters:
         - name: workspaceId
           in: query
@@ -820,18 +837,20 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: platformId
+        - name: workspaceId
           in: query
-          description: Platform string identifier
+          description: Workspace numeric identifier to filter credentials
+          required: false
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListCredentialsResponse"
+                $ref: "#/components/schemas/ListCredentialsDataSourceResponse"
         "400":
           description: Bad request
           content:
@@ -842,6 +861,10 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+        - BearerAuth: []
+      x-speakeasy-entity-operation:
+        terraform-datasource: Credentials#read
+      x-speakeasy-name-override: ListCredentials
     post:
       summary: Create credentials
       description: Creates new credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -880,7 +903,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#create
   /credentials/validate:
     get:
       summary: Validate credential name
@@ -956,7 +981,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#read
     put:
       summary: Update credentials
       description: Updates the details of the credentials identified by the given `credentialsId`.
@@ -996,7 +1023,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#update
     delete:
       summary: Delete credentials
       description: Deletes the credentials identified by the given `credentialsId`.
@@ -1040,14 +1069,19 @@ paths:
                 $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#delete
   /data-links:
     get:
-      summary: List data-links
-      description: Retrieves all available data-links in a user context. Append `?workspaceId={your-workspace-id}` to retrieve data-links in a workspace context.
+      summary: List data links
+      description: |
+        Lists all data links accessible to the authenticated user.
+        Use `workspace_id` to filter data links in a specific workspace context.
       tags:
         - data-links
-      operationId: ListDataLinks
+        - data-links
+      operationId: ListDataLinksDataSource
       parameters:
         - name: workspaceId
           in: query
@@ -1055,48 +1089,28 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: credentialsId
+        - name: workspaceId
           in: query
-          description: Credentials identifier
-          schema:
-            type: string
-        - name: search
-          in: query
-          description: "Free text search criteria â€” data-link name and keywords: `region`, `provider`."
-          schema:
-            type: string
-        - name: max
-          in: query
-          description: Pagination max results
+          description: Workspace numeric identifier to filter data links
+          required: false
           schema:
             type: integer
-            format: int32
-        - name: offset
-          in: query
-          description: Pagination offset
-          schema:
-            type: integer
-            format: int32
-        - name: visibility
-          in: query
-          description: Filter results by visibility
-          schema:
-            type: string
+            format: int64
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DataLinksListResponse"
+                $ref: "#/components/schemas/ListDataLinksDataSourceResponse"
         "202":
           description: Accepted
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DataLinksListResponse"
+                $ref: "#/components/schemas/ListDataLinksDataSourceResponse"
         "400":
-          description: BadRequest
+          description: Bad request
           content:
             application/json:
               schema:
@@ -1111,6 +1125,10 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+        - BearerAuth: []
+      x-speakeasy-entity-operation:
+        terraform-datasource: DataLinks#read
+      x-speakeasy-name-override: ListDataLinks
     post:
       summary: Create data-link
       description: Creates a new data-link in a user context. Append `?workspaceId=` to create the data-link in a workspace context.
@@ -1155,7 +1173,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#create
   /data-links/cache/refresh:
     get:
       summary: Refresh data-link cache
@@ -1230,7 +1250,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#read
     put:
       summary: Update data-link
       description: Update the data-link associated with the given `dataLinkId`.
@@ -1280,7 +1302,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#update
     delete:
       summary: Delete data-link
       description: Deletes the data-link associated with the given `dataLinkId`.
@@ -1321,7 +1345,9 @@ paths:
           description: DeleteCustomDataLink 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#delete
   /data-links/{dataLinkId}/browse:
     get:
       summary: Explore data-link
@@ -2061,7 +2087,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Datasets#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Datasets#create
   /datasets/versions:
     get:
       summary: List latest dataset versions
@@ -2145,7 +2173,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Dataset#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Dataset#update
     delete:
       summary: Delete dataset
       description: Deletes the dataset identified by the given `datasetId`.
@@ -2178,7 +2208,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Dataset#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Dataset#delete
   /datasets/{datasetId}/metadata:
     get:
       summary: Describe dataset
@@ -2216,7 +2248,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Dataset#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Dataset#read
   /datasets/{datasetId}/upload:
     post:
       summary: Upload new dataset version
@@ -2600,7 +2634,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Labels#read
     post:
       summary: Create label
       description: "Creates a new label or returns an existing label based on name/value. By default the operation works in a user context, append `?workspaceId` to create/retrieve a label in a workspace context. Resource labels include `resource: true` and a `value`."
@@ -2638,7 +2674,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Labels#create
   /labels/{labelId}:
     put:
       summary: Update label
@@ -2685,7 +2723,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Labels#update
     delete:
       summary: Delete label
       description: Deletes the label identified by the given `labelId`.
@@ -2720,7 +2760,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Labels#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Labels#delete
   /launch/{launchId}:
     get:
       summary: Describe Launch record
@@ -2855,7 +2897,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Orgs#create
   /orgs/validate:
     get:
       summary: Validate organization name
@@ -2921,7 +2965,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Orgs#read
     put:
       summary: Update organization
       description: Updates the details of the organization identified by the given `orgId`.
@@ -2967,7 +3013,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Orgs#update
     delete:
       summary: Delete organization
       description: Deletes the organization identified by the given `orgId`.
@@ -2996,7 +3044,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Orgs#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Orgs#delete
   /orgs/{orgId}/collaborators:
     get:
       summary: List organization collaborators
@@ -3379,7 +3429,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Teams#create
   /orgs/{orgId}/teams/validate:
     get:
       summary: Validate team name
@@ -3454,7 +3506,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Teams#read
     put:
       summary: Update team
       description: Updates the details of the team identified by the given `teamId`.
@@ -3506,7 +3560,9 @@ paths:
           description: UpdateOrganizationTeam 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Teams#update
     delete:
       summary: Delete team
       description: Deletes the team identified by the given `teamId`.
@@ -3543,7 +3599,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Teams#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Teams#delete
   /orgs/{orgId}/teams/{teamId}/members:
     get:
       summary: List team members
@@ -3789,7 +3847,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspaces#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workspaces#read
     post:
       summary: Create workspace
       description: Creates a new organization workspace.
@@ -3835,7 +3895,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workspace#create
   /orgs/{orgId}/workspaces/validate:
     get:
       summary: Validate workspace name
@@ -3917,7 +3979,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workspace#read
     put:
       summary: Update workspace
       description: Updates the details of the workspace identified by the given `workspaceId`.
@@ -3971,7 +4035,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workspace#update
     delete:
       summary: Delete workspace
       description: Deletes the workspace identified by the given `workspaceId`.
@@ -4008,7 +4074,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workspace#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workspace#delete
   /orgs/{orgId}/workspaces/{workspaceId}/participants:
     get:
       summary: List workspace participants
@@ -4422,7 +4490,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineSecret#create
   /pipeline-secrets/validate:
     get:
       summary: Validate secret name
@@ -4499,7 +4569,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineSecret#read
     put:
       summary: Update secret
       description: Updates the pipeline secret identified by the given `secretId`.
@@ -4540,7 +4612,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineSecret#update
     delete:
       summary: Delete secret
       description: Deletes the pipeline secret identified by the given `secretId`.
@@ -4574,7 +4648,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: PipelineSecret#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: PipelineSecret#delete
   /pipelines:
     get:
       summary: List pipelines
@@ -4679,7 +4755,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Pipeline#create
   /pipelines/info:
     get:
       summary: Describe remote pipeline repository
@@ -4939,7 +5017,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Pipeline#read
     put:
       summary: Update pipeline
       description: "Updates the details of the pipeline identified by the given `pipelineId`. \n            **Note**: If `labelIds` is `null`, empty, or ommitted, existing pipeline labels are removed.\n            Include `labelIds: [<label-id-1>,<label-id-2>]` to override existing labels. Labels to be preserved must be included.\n            To append a list of labels to multiple pipelines, use `/pipelines/labels/add`."
@@ -4990,7 +5070,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Pipeline#update
     delete:
       summary: Delete pipeline
       description: Deletes the pipeline identified by the given `pipelineId`.
@@ -5024,7 +5106,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Pipeline#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Pipeline#delete
   /pipelines/{pipelineId}/launch:
     get:
       summary: Describe pipeline launch
@@ -5386,7 +5470,9 @@ paths:
                 $ref: "#/components/schemas/DataStudioCreateResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Studios#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -5560,7 +5646,9 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Studios#read
     delete:
       summary: Delete Studio
       description: "Deletes the Studio associated with the given Studio session ID."
@@ -5594,7 +5682,9 @@ paths:
           description: "Operation not allowed."
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Studios#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Studios#delete
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -5922,7 +6012,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Tokens#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Tokens#read
     post:
       summary: Create token
       description: "Creates an API access token with the details in the given request body."
@@ -5959,7 +6051,9 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Tokens#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Tokens#create
   /tokens/delete-all:
     delete:
       summary: Delete all user tokens
@@ -6009,7 +6103,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Tokens#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Tokens#delete
   /trace/create:
     post:
       summary: Create workflow execution trace
@@ -6279,7 +6375,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: UserWorkspaces#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: UserWorkspaces#read
   /users/validate:
     get:
       summary: Check that the user name is valid
@@ -6343,7 +6441,9 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: User#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: User#read
     post:
       summary: Update an user entity
       tags:
@@ -6632,7 +6732,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workflows#create
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -6741,7 +6843,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workflows#read
     delete:
       summary: Delete the Workflow entity with the given ID
       tags:
@@ -6778,7 +6882,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Workflows#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Workflows#delete
   /workflow/{workflowId}/cancel:
     post:
       summary: Cancel workflow
@@ -7725,7 +7831,9 @@ paths:
         - BearerAuth: []
   /credentials#aws:
     post:
-      x-speakeasy-entity-operation: AWSCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSCredential#create
       x-speakeasy-name-override: CreateAWSCredentials
       summary: Create AWS credentials
       description: Creates new AWS credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -7771,7 +7879,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#aws:
     get:
-      x-speakeasy-entity-operation: AWSCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSCredential#read
       x-speakeasy-name-override: DescribeAWSCredentials
       summary: Describe AWS credentials
       description: Retrieves the details of the AWS credentials identified by the given `credentialsId`.
@@ -7815,7 +7925,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: AWSCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSCredential#update
       x-speakeasy-name-override: UpdateAWSCredentials
       summary: Update AWS credentials
       description: Updates the details of the AWS credentials identified by the given `credentialsId`.
@@ -7856,7 +7968,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: AWSCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSCredential#delete
       x-speakeasy-name-override: DeleteAWSCredentials
       summary: Delete AWS credentials
       description: Deletes the AWS credentials identified by the given `credentialsId`.
@@ -7897,7 +8011,9 @@ paths:
         - BearerAuth: []
   /credentials#azure:
     post:
-      x-speakeasy-entity-operation: AzureCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCredential#create
       x-speakeasy-name-override: CreateAzureCredentials
       summary: Create Azure credentials
       description: Creates new Azure credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -7943,7 +8059,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#azure:
     get:
-      x-speakeasy-entity-operation: AzureCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCredential#read
       x-speakeasy-name-override: DescribeAzureCredentials
       summary: Describe Azure credentials
       description: Retrieves the details of the Azure credentials identified by the given `credentialsId`.
@@ -7987,7 +8105,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: AzureCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCredential#update
       x-speakeasy-name-override: UpdateAzureCredentials
       summary: Update Azure credentials
       description: Updates the details of the Azure credentials identified by the given `credentialsId`.
@@ -8028,7 +8148,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: AzureCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AzureCredential#delete
       x-speakeasy-name-override: DeleteAzureCredentials
       summary: Delete Azure credentials
       description: Deletes the Azure credentials identified by the given `credentialsId`.
@@ -8069,7 +8191,9 @@ paths:
         - BearerAuth: []
   /credentials#google:
     post:
-      x-speakeasy-entity-operation: GoogleCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#create
       x-speakeasy-name-override: CreateGoogleCredentials
       summary: Create Google credentials
       description: Creates new Google credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -8115,7 +8239,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#google:
     get:
-      x-speakeasy-entity-operation: GoogleCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#read
       x-speakeasy-name-override: DescribeGoogleCredentials
       summary: Describe Google credentials
       description: Retrieves the details of the Google credentials identified by the given `credentialsId`.
@@ -8159,7 +8285,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: GoogleCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#update
       x-speakeasy-name-override: UpdateGoogleCredentials
       summary: Update Google credentials
       description: Updates the details of the Google credentials identified by the given `credentialsId`.
@@ -8200,7 +8328,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: GoogleCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#delete
       x-speakeasy-name-override: DeleteGoogleCredentials
       summary: Delete Google credentials
       description: Deletes the Google credentials identified by the given `credentialsId`.
@@ -8241,7 +8371,9 @@ paths:
         - BearerAuth: []
   /credentials#bitbucket:
     post:
-      x-speakeasy-entity-operation: BitbucketCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: BitbucketCredential#create
       x-speakeasy-name-override: CreateBitbucketCredentials
       summary: Create Bitbucket credentials
       description: Creates new Bitbucket credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -8287,7 +8419,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#bitbucket:
     get:
-      x-speakeasy-entity-operation: BitbucketCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: BitbucketCredential#read
       x-speakeasy-name-override: DescribeBitbucketCredentials
       summary: Describe Bitbucket credentials
       description: Retrieves the details of the Bitbucket credentials identified by the given `credentialsId`.
@@ -8331,7 +8465,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: BitbucketCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: BitbucketCredential#update
       x-speakeasy-name-override: UpdateBitbucketCredentials
       summary: Update Bitbucket credentials
       description: Updates the details of the Bitbucket credentials identified by the given `credentialsId`.
@@ -8372,7 +8508,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: BitbucketCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: BitbucketCredential#delete
       x-speakeasy-name-override: DeleteBitbucketCredentials
       summary: Delete Bitbucket credentials
       description: Deletes the Bitbucket credentials identified by the given `credentialsId`.
@@ -8407,7 +8545,9 @@ paths:
         - BearerAuth: []
   /credentials#codecommit:
     post:
-      x-speakeasy-entity-operation: CodecommitCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CodecommitCredential#create
       x-speakeasy-name-override: CreateCodecommitCredentials
       summary: Create Codecommit credentials
       description: Creates new Codecommit credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -8453,7 +8593,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#codecommit:
     get:
-      x-speakeasy-entity-operation: CodecommitCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CodecommitCredential#read
       x-speakeasy-name-override: DescribeCodecommitCredentials
       summary: Describe Codecommit credentials
       description: Retrieves the details of the Codecommit credentials identified by the given `credentialsId`.
@@ -8497,7 +8639,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: CodecommitCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CodecommitCredential#update
       x-speakeasy-name-override: UpdateCodecommitCredentials
       summary: Update Codecommit credentials
       description: Updates the details of the Codecommit credentials identified by the given `credentialsId`.
@@ -8538,7 +8682,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: CodecommitCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: CodecommitCredential#delete
       x-speakeasy-name-override: DeleteCodecommitCredentials
       summary: Delete Codecommit credentials
       description: Deletes the Codecommit credentials identified by the given `credentialsId`.
@@ -8573,7 +8719,9 @@ paths:
         - BearerAuth: []
   /credentials#container-registry:
     post:
-      x-speakeasy-entity-operation: ContainerRegistryCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ContainerRegistryCredential#create
       x-speakeasy-name-override: CreateContainerRegistryCredentials
       summary: Create container registry credentials
       description: Creates new container registry credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -8619,7 +8767,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#container-registry:
     get:
-      x-speakeasy-entity-operation: ContainerRegistryCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ContainerRegistryCredential#read
       x-speakeasy-name-override: DescribeContainerRegistryCredentials
       summary: Describe container registry credentials
       description: Retrieves the details of the container registry credentials identified by the given `credentialsId`.
@@ -8663,7 +8813,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: ContainerRegistryCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ContainerRegistryCredential#update
       x-speakeasy-name-override: UpdateContainerRegistryCredentials
       summary: Update container registry credentials
       description: Updates the details of the container registry credentials identified by the given `credentialsId`.
@@ -8704,7 +8856,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: ContainerRegistryCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ContainerRegistryCredential#delete
       x-speakeasy-name-override: DeleteContainerRegistryCredentials
       summary: Delete container registry credentials
       description: Deletes the container registry credentials identified by the given `credentialsId`.
@@ -8739,7 +8893,9 @@ paths:
         - BearerAuth: []
   /credentials#gitea:
     post:
-      x-speakeasy-entity-operation: GiteaCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GiteaCredential#create
       x-speakeasy-name-override: CreateGiteaCredentials
       summary: Create Gitea credentials
       description: Creates new Gitea credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -8785,7 +8941,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#gitea:
     get:
-      x-speakeasy-entity-operation: GiteaCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GiteaCredential#read
       x-speakeasy-name-override: DescribeGiteaCredentials
       summary: Describe Gitea credentials
       description: Retrieves the details of the Gitea credentials identified by the given `credentialsId`.
@@ -8829,7 +8987,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: GiteaCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GiteaCredential#update
       x-speakeasy-name-override: UpdateGiteaCredentials
       summary: Update Gitea credentials
       description: Updates the details of the Gitea credentials identified by the given `credentialsId`.
@@ -8870,7 +9030,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: GiteaCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GiteaCredential#delete
       x-speakeasy-name-override: DeleteGiteaCredentials
       summary: Delete Gitea credentials
       description: Deletes the Gitea credentials identified by the given `credentialsId`.
@@ -8905,7 +9067,9 @@ paths:
         - BearerAuth: []
   /credentials#github:
     post:
-      x-speakeasy-entity-operation: GithubCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubCredential#create
       x-speakeasy-name-override: CreateGithubCredentials
       summary: Create GitHub credentials
       description: Creates new GitHub credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -8951,7 +9115,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#github:
     get:
-      x-speakeasy-entity-operation: GithubCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubCredential#read
       x-speakeasy-name-override: DescribeGithubCredentials
       summary: Describe GitHub credentials
       description: Retrieves the details of the GitHub credentials identified by the given `credentialsId`.
@@ -8995,7 +9161,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: GithubCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubCredential#update
       x-speakeasy-name-override: UpdateGithubCredentials
       summary: Update GitHub credentials
       description: Updates the details of the GitHub credentials identified by the given `credentialsId`.
@@ -9036,7 +9204,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: GithubCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GithubCredential#delete
       x-speakeasy-name-override: DeleteGithubCredentials
       summary: Delete GitHub credentials
       description: Deletes the GitHub credentials identified by the given `credentialsId`.
@@ -9071,7 +9241,9 @@ paths:
         - BearerAuth: []
   /credentials#gitlab:
     post:
-      x-speakeasy-entity-operation: GitlabCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GitlabCredential#create
       x-speakeasy-name-override: CreateGitlabCredentials
       summary: Create GitLab credentials
       description: Creates new GitLab credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -9117,7 +9289,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#gitlab:
     get:
-      x-speakeasy-entity-operation: GitlabCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GitlabCredential#read
       x-speakeasy-name-override: DescribeGitlabCredentials
       summary: Describe GitLab credentials
       description: Retrieves the details of the GitLab credentials identified by the given `credentialsId`.
@@ -9161,7 +9335,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: GitlabCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GitlabCredential#update
       x-speakeasy-name-override: UpdateGitlabCredentials
       summary: Update GitLab credentials
       description: Updates the details of the GitLab credentials identified by the given `credentialsId`.
@@ -9202,7 +9378,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: GitlabCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GitlabCredential#delete
       x-speakeasy-name-override: DeleteGitlabCredentials
       summary: Delete GitLab credentials
       description: Deletes the GitLab credentials identified by the given `credentialsId`.
@@ -9237,7 +9415,9 @@ paths:
         - BearerAuth: []
   /credentials#ssh:
     post:
-      x-speakeasy-entity-operation: SSHCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SSHCredential#create
       x-speakeasy-name-override: CreateSSHCredentials
       summary: Create SSH credentials
       description: Creates new SSH credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -9283,7 +9463,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#ssh:
     get:
-      x-speakeasy-entity-operation: SSHCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SSHCredential#read
       x-speakeasy-name-override: DescribeSSHCredentials
       summary: Describe SSH credentials
       description: Retrieves the details of the SSH credentials identified by the given `credentialsId`.
@@ -9327,7 +9509,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: SSHCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SSHCredential#update
       x-speakeasy-name-override: UpdateSSHCredentials
       summary: Update SSH credentials
       description: Updates the details of the SSH credentials identified by the given `credentialsId`.
@@ -9368,7 +9552,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: SSHCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: SSHCredential#delete
       x-speakeasy-name-override: DeleteSSHCredentials
       summary: Delete SSH credentials
       description: Deletes the SSH credentials identified by the given `credentialsId`.
@@ -9403,7 +9589,9 @@ paths:
         - BearerAuth: []
   /credentials#agent:
     post:
-      x-speakeasy-entity-operation: TowerAgentCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: TowerAgentCredential#create
       x-speakeasy-name-override: CreateTowerAgentCredentials
       summary: Create Tower Agent credentials
       description: Creates new Tower Agent credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -9449,7 +9637,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#agent:
     get:
-      x-speakeasy-entity-operation: TowerAgentCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: TowerAgentCredential#read
       x-speakeasy-name-override: DescribeTowerAgentCredentials
       summary: Describe Tower Agent credentials
       description: Retrieves the details of the Tower Agent credentials identified by the given `credentialsId`.
@@ -9493,7 +9683,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: TowerAgentCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: TowerAgentCredential#update
       x-speakeasy-name-override: UpdateTowerAgentCredentials
       summary: Update Tower Agent credentials
       description: Updates the details of the Tower Agent credentials identified by the given `credentialsId`.
@@ -9534,7 +9726,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: TowerAgentCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: TowerAgentCredential#delete
       x-speakeasy-name-override: DeleteTowerAgentCredentials
       summary: Delete Tower Agent credentials
       description: Deletes the Tower Agent credentials identified by the given `credentialsId`.
@@ -9569,7 +9763,9 @@ paths:
         - BearerAuth: []
   /credentials#k8s:
     post:
-      x-speakeasy-entity-operation: KubernetesCredential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#create
       x-speakeasy-name-override: CreateKubernetesCredentials
       summary: Create Kubernetes credentials
       description: Creates new Kubernetes credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -9615,7 +9811,9 @@ paths:
         - BearerAuth: []
   /credentials/{credentialsId}#k8s:
     get:
-      x-speakeasy-entity-operation: KubernetesCredential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#read
       x-speakeasy-name-override: DescribeKubernetesCredentials
       summary: Describe Kubernetes credentials
       description: Retrieves the details of the Kubernetes credentials identified by the given `credentialsId`.
@@ -9659,7 +9857,9 @@ paths:
       security:
         - BearerAuth: []
     put:
-      x-speakeasy-entity-operation: KubernetesCredential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#update
       x-speakeasy-name-override: UpdateKubernetesCredentials
       summary: Update Kubernetes credentials
       description: Updates the details of the Kubernetes credentials identified by the given `credentialsId`.
@@ -9700,7 +9900,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: KubernetesCredential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#delete
       x-speakeasy-name-override: DeleteKubernetesCredentials
       summary: Delete Kubernetes credentials
       description: Deletes the Kubernetes credentials identified by the given `credentialsId`.
@@ -9735,7 +9937,9 @@ paths:
         - BearerAuth: []
   "/compute-envs#aws":
     post:
-      x-speakeasy-entity-operation: AWSBatchCE#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSBatchCE#create
       x-speakeasy-name-override: CreateAWSBatchCE
       summary: Create AWS compute environment
       description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
@@ -9795,7 +9999,9 @@ paths:
         - BearerAuth: []
   "/compute-envs/{computeEnvId}#aws":
     get:
-      x-speakeasy-entity-operation: AWSBatchCE#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSBatchCE#read
       x-speakeasy-name-override: DescribeAWSBatchCE
       summary: Describe AWS compute environment
       description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
@@ -9847,7 +10053,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: AWSBatchCE#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSBatchCE#delete
       x-speakeasy-name-override: DeleteAWSBatchCE
       summary: Delete AWS compute environment
       description: Deletes the AWS compute environment identified by the given `computeEnvId`.
@@ -9882,7 +10090,9 @@ paths:
         - BearerAuth: []
   "/compute-envs#aws-compute-env":
     post:
-      x-speakeasy-entity-operation: AWSComputeEnv#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSComputeEnv#create
       x-speakeasy-name-override: CreateAWSComputeEnv
       summary: Create AWS compute environment
       description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
@@ -9942,7 +10152,9 @@ paths:
         - BearerAuth: []
   "/compute-envs/{computeEnvId}#aws-compute-env":
     get:
-      x-speakeasy-entity-operation: AWSComputeEnv#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSComputeEnv#read
       x-speakeasy-name-override: DescribeAWSComputeEnv
       summary: Describe AWS compute environment
       description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
@@ -9994,7 +10206,9 @@ paths:
       security:
         - BearerAuth: []
     delete:
-      x-speakeasy-entity-operation: AWSComputeEnv#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSComputeEnv#delete
       x-speakeasy-name-override: DeleteAWSComputeEnv
       summary: Delete AWS compute environment
       description: Deletes the AWS compute environment identified by the given `computeEnvId`.
@@ -17006,6 +17220,74 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/KubernetesCredential'
+    ListCredentialsDataSourceResponse:
+      type: object
+      required:
+        - credentials
+      properties:
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace ID used for filtering
+        credentials:
+          type: array
+          description: List of credentials
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Credential ID
+              name:
+                type: string
+                description: Credential name
+              provider:
+                type: string
+                description: Provider type (aws, azure, google, github, gitlab, bitbucket, ssh, k8s, container-reg, tw-agent, codecommit, gitea)
+      x-speakeasy-entity: Credentials
+      x-speakeasy-entity-description: |
+        Data source for listing credentials in Seqera platform.
+
+        This data source returns all credentials accessible to the authenticated user,
+        with optional filtering by workspace. Use Terraform locals with for expressions
+        to filter by provider type or name.
+    ListDataLinksDataSourceResponse:
+      type: object
+      required:
+        - dataLinks
+      properties:
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace ID used for filtering
+        dataLinks:
+          type: array
+          description: List of data links
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Data link ID
+              name:
+                type: string
+                description: Data link name
+              provider:
+                type: string
+                description: Provider type (aws, azure, google, azure_entra, seqeracompute)
+              resourceRef:
+                type: string
+                description: Resource reference (e.g., s3://bucket-name)
+              region:
+                type: string
+                description: Geographic region where the data link is hosted
+      x-speakeasy-entity: DataLinks
+      x-speakeasy-entity-description: |
+        Data source for listing data links in Seqera platform.
+
+        This data source returns all data links accessible to the authenticated user,
+        with optional filtering by workspace. Use Terraform locals with for expressions
+        to filter by provider type or name.
     # AWS-specific compute environment schema
     AWSBatchCE_ComputeConfig:
       x-speakeasy-entity: AWSBatchCE

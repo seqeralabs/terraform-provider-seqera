@@ -1,3 +1,42 @@
+# Unreleased
+
+FEATURES:
+
+- **New Data Source:** `seqera_credentials` - Lists all credentials with optional workspace filtering. Returns credential `id`, `name`, and `provider_type` for each credential. Use Terraform locals with `for` expressions to filter by provider type or name (e.g., `local.creds["credential-name"].id`)
+- **New Data Source:** `seqera_data_links` - Lists all data links with optional workspace filtering. Returns data link `id`, `name`, `provider`, `resource_ref`, and `region` for each data link. Use Terraform locals with `for` expressions to filter by provider type, region, or name:
+  ```hcl
+  data "seqera_data_links" "all" {
+    workspace_id = seqera_workspace.my_workspace.id
+  }
+
+  locals {
+    # Index by name for easy lookup
+    datalinks = {
+      for dl in data.seqera_data_links.all.data_links : dl.name => dl
+    }
+
+    # Filter AWS data links in us-east-1
+    aws_us_east_1 = {
+      for dl in data.seqera_data_links.all.data_links : dl.name => dl
+      if dl.provider == "aws" && dl.region == "us-east-1"
+    }
+
+    # Filter by provider
+    aws_datalinks = {
+      for dl in data.seqera_data_links.all.data_links : dl.name => dl
+      if dl.provider == "aws"
+    }
+  }
+
+  # Access: local.datalinks["my-s3-bucket"].id
+  ```
+
+ENHANCEMENTS:
+
+- **Data Sources**: Removed automatic data source generation for all resources. Resources now only support the read operation for state management. This simplifies the provider API surface and reduces confusion between resources and data sources.
+
+- **AWS Batch Compute Environments**: Updated `dispose_on_deletion` documentation to clarify that AWS credentials must have appropriate permissions to delete resources (Batch compute environments, job queues, launch templates, IAM roles, instance profiles, FSx/EFS file systems) when this flag is enabled.
+
 # v0.26.1
 
 FEATURES:

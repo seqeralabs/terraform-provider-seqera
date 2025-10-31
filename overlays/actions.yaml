@@ -63,17 +63,23 @@ actions:
   # CREATE - POST /actions
   - target: $.paths["/actions"].post
     update:
-      x-speakeasy-entity-operation: Action#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#create
 
   # READ - GET /actions/{actionId}
   - target: $.paths["/actions/{actionId}"].get
     update:
-      x-speakeasy-entity-operation: Action#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#read
 
   # DELETE - DELETE /actions/{actionId}
   - target: $.paths["/actions/{actionId}"].delete
     update:
-      x-speakeasy-entity-operation: Action#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#delete
 
   # ============================================================================
   # SCHEMA DESCRIPTIONS

@@ -1,0 +1,99 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Data Links List Data Source Overlay
+  version: 0.0.1
+actions:
+  # Remove unwanted parameters from /data-links GET endpoint
+  - target: $.paths['/data-links'].get.parameters[?(@.name == 'credentialsId')]
+    remove: true
+  - target: $.paths['/data-links'].get.parameters[?(@.name == 'search')]
+    remove: true
+  - target: $.paths['/data-links'].get.parameters[?(@.name == 'max')]
+    remove: true
+  - target: $.paths['/data-links'].get.parameters[?(@.name == 'offset')]
+    remove: true
+  - target: $.paths['/data-links'].get.parameters[?(@.name == 'visibility')]
+    remove: true
+
+  # Data links list data source - modify existing /data-links endpoint
+  - target: $.paths['/data-links'].get
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: DataLinks#read
+      x-speakeasy-name-override: ListDataLinks
+      summary: List data links
+      description: |
+        Lists all data links accessible to the authenticated user.
+        Use `workspace_id` to filter data links in a specific workspace context.
+      tags:
+        - data-links
+      operationId: ListDataLinksDataSource
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier to filter data links
+          required: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListDataLinksDataSourceResponse"
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListDataLinksDataSourceResponse"
+        "400":
+          description: Bad request
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+
+  # ListDataLinksDataSourceResponse schema
+  - target: $.components.schemas
+    update:
+      ListDataLinksDataSourceResponse:
+        type: object
+        required:
+          - dataLinks
+        properties:
+          workspaceId:
+            type: integer
+            format: int64
+            description: Workspace ID used for filtering
+          dataLinks:
+            type: array
+            description: List of data links
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Data link ID
+                name:
+                  type: string
+                  description: Data link name
+                provider:
+                  type: string
+                  description: Provider type (aws, azure, google, azure_entra, seqeracompute)
+                resourceRef:
+                  type: string
+                  description: Resource reference (e.g., s3://bucket-name)
+                region:
+                  type: string
+                  description: Geographic region where the data link is hosted
+        x-speakeasy-entity: DataLinks
+        x-speakeasy-entity-description: |
+          Data source for listing data links in Seqera platform.
+
+          This data source returns all data links accessible to the authenticated user,
+          with optional filtering by workspace. Use Terraform locals with for expressions
+          to filter by provider type or name.

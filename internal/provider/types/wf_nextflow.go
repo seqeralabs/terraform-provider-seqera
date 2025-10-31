@@ -7,7 +7,7 @@ import (
 )
 
 type WfNextflow struct {
+	Version   types.String `tfsdk:"version"`
 	Build     types.String `tfsdk:"build"`
 	Timestamp types.String `tfsdk:"timestamp"`
-	Version   types.String `tfsdk:"version"`
 }

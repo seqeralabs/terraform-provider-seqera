@@ -60,22 +60,38 @@ actions:
   # CREATE - POST /orgs
   - target: $["paths"]["/orgs"]["post"]
     update:
-      x-speakeasy-entity-operation: Orgs#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Orgs#create
 
   # READ - GET /orgs/{orgId}
   - target: $["paths"]["/orgs/{orgId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Orgs#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Orgs#read
 
   # UPDATE - PUT /orgs/{orgId}
   - target: $["paths"]["/orgs/{orgId}"]["put"]
     update:
-      x-speakeasy-entity-operation: Orgs#update
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Orgs#update
 
   # DELETE - DELETE /orgs/{orgId}
   - target: $["paths"]["/orgs/{orgId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: Orgs#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Orgs#delete
 
   # ============================================================================
   # FIELD CONFIGURATION
@@ -189,19 +205,35 @@ actions:
   # Team entity operations
   - target: $["paths"]["/orgs/{orgId}/teams"]["post"]
     update:
-      x-speakeasy-entity-operation: Teams#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Teams#create
 
   - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Teams#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Teams#read
 
   - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["put"]
     update:
-      x-speakeasy-entity-operation: Teams#update
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Teams#update
 
   - target: $["paths"]["/orgs/{orgId}/teams/{teamId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: Teams#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Teams#delete
 
   # Team path parameters
   - target: $["paths"]["/orgs/{orgId}/teams"]["get"]["parameters"][0]
@@ -272,23 +304,43 @@ actions:
   # Workspace entity operations
   - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]
     update:
-      x-speakeasy-entity-operation: Workspaces#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workspaces#read
 
   - target: $["paths"]["/orgs/{orgId}/workspaces"]["post"]
     update:
-      x-speakeasy-entity-operation: Workspace#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workspace#create
 
   - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Workspace#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workspace#read
 
   - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["put"]
     update:
-      x-speakeasy-entity-operation: Workspace#update
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workspace#update
 
   - target: $["paths"]["/orgs/{orgId}/workspaces/{workspaceId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: Workspace#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workspace#delete
 
   # Workspace path parameters
   - target: $["paths"]["/orgs/{orgId}/workspaces"]["get"]["parameters"][0]

@@ -174,12 +174,15 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	for _, mountDataItem := range r.Configuration.MountData {
 		mountData = append(mountData, mountDataItem.ValueString())
 	}
-	environment := make(map[string]string)
-	for environmentKey, environmentValue := range r.Configuration.Environment {
-		var environmentInst string
-		environmentInst = environmentValue.ValueString()
+	var environment map[string]string
+	if r.Configuration.Environment != nil {
+		environment := make(map[string]string)
+		for environmentKey, environmentValue := range r.Configuration.Environment {
+			var environmentInst string
+			environmentInst = environmentValue.ValueString()
 
-		environment[environmentKey] = environmentInst
+			environment[environmentKey] = environmentInst
+		}
 	}
 	condaEnvironment := new(string)
 	if !r.Configuration.CondaEnvironment.IsUnknown() && !r.Configuration.CondaEnvironment.IsNull() {
