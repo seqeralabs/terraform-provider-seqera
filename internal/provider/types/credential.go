@@ -6,6 +6,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type K8sSecurityKeys1 struct {
-	Certificate types.String `tfsdk:"certificate"`
+type Credential struct {
+	ID       types.String `tfsdk:"id"`
+	Name     types.String `tfsdk:"name"`
+	Provider types.String `tfsdk:"provider"`
 }

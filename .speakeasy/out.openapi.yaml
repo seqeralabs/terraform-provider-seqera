@@ -809,10 +809,11 @@ paths:
   /credentials:
     get:
       summary: List credentials
-      description: "Lists all available credentials in a user context. Append `?workspaceId` to list credentials in a workspace context, and `?platformId` to filter credentials by computing platform."
+      description: "Lists all credentials accessible to the authenticated user.\nUse `workspace_id` to filter credentials in a specific workspace context.\n"
       tags:
         - credentials
-      operationId: ListCredentials
+        - credentials
+      operationId: ListCredentialsDataSource
       parameters:
         - name: workspaceId
           in: query
@@ -820,18 +821,20 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: platformId
+        - name: workspaceId
           in: query
-          description: Platform string identifier
+          description: Workspace numeric identifier to filter credentials
+          required: false
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ListCredentialsResponse"
+                $ref: "#/components/schemas/ListCredentialsDataSourceResponse"
         "400":
           description: Bad request
           content:
@@ -842,6 +845,10 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+        - BearerAuth: []
+      x-speakeasy-entity-operation:
+        terraform-datasource: Credentials#read
+      x-speakeasy-name-override: ListCredentials
     post:
       summary: Create credentials
       description: Creates new credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
@@ -880,7 +887,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#create
   /credentials/validate:
     get:
       summary: Validate credential name
@@ -956,7 +965,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#read
     put:
       summary: Update credentials
       description: Updates the details of the credentials identified by the given `credentialsId`.
@@ -996,7 +1007,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#update
     delete:
       summary: Delete credentials
       description: Deletes the credentials identified by the given `credentialsId`.
@@ -1040,14 +1053,19 @@ paths:
                 $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: Credential#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Credential#delete
   /data-links:
     get:
-      summary: List data-links
-      description: Retrieves all available data-links in a user context. Append `?workspaceId={your-workspace-id}` to retrieve data-links in a workspace context.
+      summary: List data links
+      description: |
+        Lists all data links accessible to the authenticated user.
+        Use `workspace_id` to filter data links in a specific workspace context.
       tags:
         - data-links
-      operationId: ListDataLinks
+        - data-links
+      operationId: ListDataLinksDataSource
       parameters:
         - name: workspaceId
           in: query
@@ -1055,48 +1073,28 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: credentialsId
+        - name: workspaceId
           in: query
-          description: Credentials identifier
-          schema:
-            type: string
-        - name: search
-          in: query
-          description: "Free text search criteria â€” data-link name and keywords: `region`, `provider`."
-          schema:
-            type: string
-        - name: max
-          in: query
-          description: Pagination max results
+          description: Workspace numeric identifier to filter data links
+          required: false
           schema:
             type: integer
-            format: int32
-        - name: offset
-          in: query
-          description: Pagination offset
-          schema:
-            type: integer
-            format: int32
-        - name: visibility
-          in: query
-          description: Filter results by visibility
-          schema:
-            type: string
+            format: int64
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DataLinksListResponse"
+                $ref: "#/components/schemas/ListDataLinksDataSourceResponse"
         "202":
           description: Accepted
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DataLinksListResponse"
+                $ref: "#/components/schemas/ListDataLinksDataSourceResponse"
         "400":
-          description: BadRequest
+          description: Bad request
           content:
             application/json:
               schema:
@@ -1111,6 +1109,10 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+        - BearerAuth: []
+      x-speakeasy-entity-operation:
+        terraform-datasource: DataLinks#read
+      x-speakeasy-name-override: ListDataLinks
     post:
       summary: Create data-link
       description: Creates a new data-link in a user context. Append `?workspaceId=` to create the data-link in a workspace context.
@@ -1155,7 +1157,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#create
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#create
   /data-links/cache/refresh:
     get:
       summary: Refresh data-link cache
@@ -1230,7 +1234,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#read
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#read
     put:
       summary: Update data-link
       description: Update the data-link associated with the given `dataLinkId`.
@@ -1280,7 +1286,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#update
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#update
     delete:
       summary: Delete data-link
       description: Deletes the data-link associated with the given `dataLinkId`.
@@ -1321,7 +1329,9 @@ paths:
           description: DeleteCustomDataLink 204 response
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation: DataLink#delete
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: DataLink#delete
   /data-links/{dataLinkId}/browse:
     get:
       summary: Explore data-link
@@ -16989,6 +16999,74 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/KubernetesCredential'
+    ListCredentialsDataSourceResponse:
+      type: object
+      required:
+        - credentials
+      properties:
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace ID used for filtering
+        credentials:
+          type: array
+          description: List of credentials
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Credential ID
+              name:
+                type: string
+                description: Credential name
+              provider:
+                type: string
+                description: Provider type (aws, azure, google, github, gitlab, bitbucket, ssh, k8s, container-reg, tw-agent, codecommit, gitea)
+      x-speakeasy-entity: Credentials
+      x-speakeasy-entity-description: |
+        Data source for listing credentials in Seqera platform.
+
+        This data source returns all credentials accessible to the authenticated user,
+        with optional filtering by workspace. Use Terraform locals with for expressions
+        to filter by provider type or name.
+    ListDataLinksDataSourceResponse:
+      type: object
+      required:
+        - dataLinks
+      properties:
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace ID used for filtering
+        dataLinks:
+          type: array
+          description: List of data links
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Data link ID
+              name:
+                type: string
+                description: Data link name
+              provider:
+                type: string
+                description: Provider type (aws, azure, google, azure_entra, seqeracompute)
+              resourceRef:
+                type: string
+                description: Resource reference (e.g., s3://bucket-name)
+              region:
+                type: string
+                description: Geographic region where the data link is hosted
+      x-speakeasy-entity: DataLinks
+      x-speakeasy-entity-description: |
+        Data source for listing data links in Seqera platform.
+
+        This data source returns all data links accessible to the authenticated user,
+        with optional filtering by workspace. Use Terraform locals with for expressions
+        to filter by provider type or name.
     # AWS-specific compute environment schema
     AWSBatchCE_ComputeConfig:
       x-speakeasy-entity: AWSBatchCE

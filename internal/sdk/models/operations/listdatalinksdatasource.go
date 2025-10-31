@@ -7,28 +7,19 @@ import (
 	"net/http"
 )
 
-type ListCredentialsRequest struct {
+type ListDataLinksDataSourceRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Platform string identifier
-	PlatformID *string `queryParam:"style=form,explode=true,name=platformId"`
 }
 
-func (l *ListCredentialsRequest) GetWorkspaceID() *int64 {
+func (l *ListDataLinksDataSourceRequest) GetWorkspaceID() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.WorkspaceID
 }
 
-func (l *ListCredentialsRequest) GetPlatformID() *string {
-	if l == nil {
-		return nil
-	}
-	return l.PlatformID
-}
-
-type ListCredentialsResponse struct {
+type ListDataLinksDataSourceResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
@@ -36,40 +27,40 @@ type ListCredentialsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	ListCredentialsResponse *shared.ListCredentialsResponse
+	ListDataLinksDataSourceResponse *shared.ListDataLinksDataSourceResponse
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
 
-func (l *ListCredentialsResponse) GetContentType() string {
+func (l *ListDataLinksDataSourceResponse) GetContentType() string {
 	if l == nil {
 		return ""
 	}
 	return l.ContentType
 }
 
-func (l *ListCredentialsResponse) GetStatusCode() int {
+func (l *ListDataLinksDataSourceResponse) GetStatusCode() int {
 	if l == nil {
 		return 0
 	}
 	return l.StatusCode
 }
 
-func (l *ListCredentialsResponse) GetRawResponse() *http.Response {
+func (l *ListDataLinksDataSourceResponse) GetRawResponse() *http.Response {
 	if l == nil {
 		return nil
 	}
 	return l.RawResponse
 }
 
-func (l *ListCredentialsResponse) GetListCredentialsResponse() *shared.ListCredentialsResponse {
+func (l *ListDataLinksDataSourceResponse) GetListDataLinksDataSourceResponse() *shared.ListDataLinksDataSourceResponse {
 	if l == nil {
 		return nil
 	}
-	return l.ListCredentialsResponse
+	return l.ListDataLinksDataSourceResponse
 }
 
-func (l *ListCredentialsResponse) GetErrorResponse() *shared.ErrorResponse {
+func (l *ListDataLinksDataSourceResponse) GetErrorResponse() *shared.ErrorResponse {
 	if l == nil {
 		return nil
 	}

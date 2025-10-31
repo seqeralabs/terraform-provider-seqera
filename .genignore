@@ -37,3 +37,7 @@ examples/resources/seqera_gitlab_credential/resource.tf
 examples/resources/seqera_ssh_credential/resource.tf
 examples/resources/seqera_tower_agent_credential/resource.tf
 examples/resources/seqera_kubernetes_credential/resource.tf
+
+# Custom data source examples that should be manually maintained
+examples/data-sources/seqera_credentials/data-source.tf
+examples/data-sources/seqera_data_links/data-source.tf
