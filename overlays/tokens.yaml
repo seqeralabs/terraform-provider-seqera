@@ -9,13 +9,25 @@ actions:
   ####################################################################
   - target: $.paths["/tokens"].post
     update:
-      x-speakeasy-entity-operation: Tokens#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Tokens#create
   - target: $.paths["/tokens"].get
     update:
-      x-speakeasy-entity-operation: Tokens#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Tokens#read
   - target: $.paths["/tokens/{tokenId}"].delete
     update:
-      x-speakeasy-entity-operation: Tokens#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Tokens#delete
 
   ####################################################################
   ####                  Token Entity Schema                       ####

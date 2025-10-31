@@ -11,16 +11,32 @@ actions:
   # Dataset entity operations
   - target: $["paths"]["/datasets"]["post"]
     update:
-      x-speakeasy-entity-operation: Datasets#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Datasets#create
   - target: $["paths"]["/datasets/{datasetId}"]["put"]
     update:
-      x-speakeasy-entity-operation: Dataset#update
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Dataset#update
   - target: $["paths"]["/datasets/{datasetId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: Dataset#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Dataset#delete
   - target: $["paths"]["/datasets/{datasetId}/metadata"]["get"]
     update:
-      x-speakeasy-entity-operation: Dataset#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Dataset#read
 
   # Dataset entity annotation
   - target: $["components"]["schemas"]["Dataset"]

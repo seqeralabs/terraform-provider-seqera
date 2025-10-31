@@ -50,7 +50,11 @@ actions:
   # that designates which compute environment is primary in a workspace
   - target: $.paths["/compute-envs/{computeEnvId}/primary"].post
     update:
-      x-speakeasy-entity-operation: PrimaryComputeEnv#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: PrimaryComputeEnv#create
       description: |
         Designates a compute environment as the primary (default) compute
         environment for a workspace. The primary compute environment is used

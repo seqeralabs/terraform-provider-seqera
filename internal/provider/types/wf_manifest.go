@@ -7,14 +7,14 @@ import (
 )
 
 type WfManifest struct {
-	Author          types.String `tfsdk:"author"`
-	DefaultBranch   types.String `tfsdk:"default_branch"`
-	Description     types.String `tfsdk:"description"`
-	Gitmodules      types.String `tfsdk:"gitmodules"`
-	HomePage        types.String `tfsdk:"home_page"`
-	Icon            types.String `tfsdk:"icon"`
-	MainScript      types.String `tfsdk:"main_script"`
-	Name            types.String `tfsdk:"name"`
 	NextflowVersion types.String `tfsdk:"nextflow_version"`
+	DefaultBranch   types.String `tfsdk:"default_branch"`
 	Version         types.String `tfsdk:"version"`
+	HomePage        types.String `tfsdk:"home_page"`
+	Gitmodules      types.String `tfsdk:"gitmodules"`
+	Description     types.String `tfsdk:"description"`
+	Name            types.String `tfsdk:"name"`
+	MainScript      types.String `tfsdk:"main_script"`
+	Author          types.String `tfsdk:"author"`
+	Icon            types.String `tfsdk:"icon"`
 }

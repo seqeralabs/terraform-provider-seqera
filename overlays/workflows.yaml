@@ -54,17 +54,29 @@ actions:
   # CREATE - POST /workflow/launch
   - target: $["paths"]["/workflow/launch"]["post"]
     update:
-      x-speakeasy-entity-operation: Workflows#create
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workflows#create
 
   # READ - GET /workflow/{workflowId}
   - target: $["paths"]["/workflow/{workflowId}"]["get"]
     update:
-      x-speakeasy-entity-operation: Workflows#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workflows#read
 
   # DELETE - DELETE /workflow/{workflowId}
   - target: $["paths"]["/workflow/{workflowId}"]["delete"]
     update:
-      x-speakeasy-entity-operation: Workflows#delete
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: Workflows#delete
 
   # Workflow star operations grouping (non-entity operations)
   - target: $["paths"]["/workflow/{workflowId}/star"]["get"]

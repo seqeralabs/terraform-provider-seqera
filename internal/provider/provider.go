@@ -137,37 +137,8 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 
 func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		NewActionDataSource,
-		NewAWSBatchCEDataSource,
-		NewAWSComputeEnvDataSource,
-		NewAWSCredentialDataSource,
-		NewAzureCredentialDataSource,
-		NewBitbucketCredentialDataSource,
-		NewCodecommitCredentialDataSource,
-		NewComputeEnvDataSource,
-		NewContainerRegistryCredentialDataSource,
 		NewCredentialsDataSource,
 		NewDataLinksDataSource,
-		NewDatasetDataSource,
-		NewGiteaCredentialDataSource,
-		NewGithubCredentialDataSource,
-		NewGitlabCredentialDataSource,
-		NewGoogleCredentialDataSource,
-		NewKubernetesCredentialDataSource,
-		NewLabelsDataSource,
-		NewOrgsDataSource,
-		NewPipelineDataSource,
-		NewPipelineSecretDataSource,
-		NewSSHCredentialDataSource,
-		NewStudiosDataSource,
-		NewTeamsDataSource,
-		NewTokensDataSource,
-		NewTowerAgentCredentialDataSource,
-		NewUserDataSource,
-		NewUserWorkspacesDataSource,
-		NewWorkflowsDataSource,
-		NewWorkspaceDataSource,
-		NewWorkspacesDataSource,
 	}
 }
 

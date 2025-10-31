@@ -57,7 +57,11 @@ actions:
     update:
       "/compute-envs#aws-compute-env":
         post:
-          x-speakeasy-entity-operation: AWSComputeEnv#create
+          x-speakeasy-entity-operation:
+
+            terraform-datasource: null
+
+            terraform-resource: AWSComputeEnv#create
           x-speakeasy-name-override: CreateAWSComputeEnv
           summary: Create AWS compute environment
           description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
@@ -118,7 +122,11 @@ actions:
 
       "/compute-envs/{computeEnvId}#aws-compute-env":
         get:
-          x-speakeasy-entity-operation: AWSComputeEnv#read
+          x-speakeasy-entity-operation:
+
+            terraform-datasource: null
+
+            terraform-resource: AWSComputeEnv#read
           x-speakeasy-name-override: DescribeAWSComputeEnv
           summary: Describe AWS compute environment
           description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
@@ -170,7 +178,11 @@ actions:
           security:
             - BearerAuth: []
         delete:
-          x-speakeasy-entity-operation: AWSComputeEnv#delete
+          x-speakeasy-entity-operation:
+
+            terraform-datasource: null
+
+            terraform-resource: AWSComputeEnv#delete
           x-speakeasy-name-override: DeleteAWSComputeEnv
           summary: Delete AWS compute environment
           description: Deletes the AWS compute environment identified by the given `computeEnvId`.

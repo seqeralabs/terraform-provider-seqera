@@ -7,13 +7,25 @@ actions:
   # User operations
   - target: $.paths["/user"].get
     update:
-      x-speakeasy-entity-operation: CurrentUser#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: CurrentUser#read
   - target: $.paths["/user/{userId}/workspaces"].get
     update:
-      x-speakeasy-entity-operation: UserWorkspaces#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: UserWorkspaces#read
   - target: $.paths["/users/{userId}"].get
     update:
-      x-speakeasy-entity-operation: User#read
+      x-speakeasy-entity-operation:
+
+        terraform-datasource: null
+
+        terraform-resource: User#read
 
   # UserDbDto entity configuration
   - target: $["components"]["schemas"]["UserDbDto"]
