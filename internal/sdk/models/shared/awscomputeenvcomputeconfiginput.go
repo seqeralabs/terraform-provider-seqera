@@ -39,7 +39,7 @@ type AWSComputeEnvComputeConfigInput struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
-	ComputeEnvID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the compute environment
 	Name string `json:"name"`
 	// Optional description of the compute environment
@@ -84,11 +84,11 @@ func (a *AWSComputeEnvComputeConfigInput) GetWorkspaceID() *int64 {
 	return a.WorkspaceID
 }
 
-func (a *AWSComputeEnvComputeConfigInput) GetComputeEnvID() *string {
+func (a *AWSComputeEnvComputeConfigInput) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ComputeEnvID
+	return a.ID
 }
 
 func (a *AWSComputeEnvComputeConfigInput) GetName() string {
@@ -161,7 +161,7 @@ type AWSComputeEnvComputeConfig struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
-	ComputeEnvID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the compute environment
 	Name string `json:"name"`
 	// Optional description of the compute environment
@@ -213,11 +213,11 @@ func (a *AWSComputeEnvComputeConfig) GetWorkspaceID() *int64 {
 	return a.WorkspaceID
 }
 
-func (a *AWSComputeEnvComputeConfig) GetComputeEnvID() *string {
+func (a *AWSComputeEnvComputeConfig) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ComputeEnvID
+	return a.ID
 }
 
 func (a *AWSComputeEnvComputeConfig) GetName() string {

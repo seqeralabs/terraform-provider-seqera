@@ -127,6 +127,10 @@ actions:
   # ============================================================================
 
   # Make configuration required (backend expects it)
+  # First remove the existing required array to avoid duplicates
+  - target: $.components.schemas.DataStudioCreateRequest.required
+    remove: true
+  # Then add the complete required array
   - target: $.components.schemas.DataStudioCreateRequest
     update:
       required:

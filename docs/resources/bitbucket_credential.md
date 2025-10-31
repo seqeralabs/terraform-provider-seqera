@@ -43,7 +43,8 @@ resource "seqera_bitbucket_credential" "my_bitbucketcredential" {
 
 ### Read-Only
 
-- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
+- `credentials_id` (String) Credentials string identifier
+- `id` (String) Unique identifier for the credential (max 22 characters)
 - `provider_type` (String) Cloud provider type (automatically set to "bitbucket"). Default: "bitbucket"; must be "bitbucket"
 
 ## Import

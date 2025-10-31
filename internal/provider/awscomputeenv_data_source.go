@@ -36,6 +36,7 @@ type AWSComputeEnvDataSourceModel struct {
 	DateCreated   types.String           `tfsdk:"date_created"`
 	Deleted       types.Bool             `tfsdk:"deleted"`
 	Description   types.String           `tfsdk:"description"`
+	ID            types.String           `tfsdk:"id"`
 	LastUpdated   types.String           `tfsdk:"last_updated"`
 	LastUsed      types.String           `tfsdk:"last_used"`
 	Name          types.String           `tfsdk:"name"`
@@ -62,7 +63,7 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 				Description: `Additional attribute values to include in the response (` + "`" + `labels` + "`" + `). Returns an empty value (` + "`" + `labels: null` + "`" + `) if omitted.`,
 			},
 			"compute_env_id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Compute environment string identifier`,
 			},
 			"config": schema.SingleNestedAttribute{
@@ -351,6 +352,10 @@ func (r *AWSComputeEnvDataSource) Schema(ctx context.Context, req datasource.Sch
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Optional description of the compute environment`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the compute environment`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed:    true,

@@ -1,3 +1,4 @@
 data "seqera_aws_credential" "my_awscredential" {
-  workspace_id = 4
+  credentials_id = "...my_credentials_id..."
+  workspace_id   = 4
 }

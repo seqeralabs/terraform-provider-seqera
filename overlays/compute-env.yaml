@@ -72,9 +72,7 @@ actions:
         format: int64
 
   # ComputeEnvResponseDto annotations
-  - target: $.components.schemas.ComputeEnvResponseDto.properties.id
-    update:
-      x-speakeasy-name-override: computeEnvId
+  # Note: Removed x-speakeasy-name-override to use 'id' directly instead of 'computeEnvId'
   - target: $.components.schemas.ComputeEnvResponseDto.properties.dateCreated
     update:
       x-speakeasy-param-readonly: true
@@ -86,9 +84,9 @@ actions:
       x-speakeasy-param-readonly: true
 
   # ComputeEnv_ComputeConfig_ annotations
+  # Note: Removed x-speakeasy-name-override to use 'id' directly instead of 'computeEnvId'
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.id
     update:
-      x-speakeasy-name-override: computeEnvId
       x-speakeasy-param-readonly: true
   - target: $.components.schemas.ComputeEnv_ComputeConfig_.properties.dateCreated
     update:

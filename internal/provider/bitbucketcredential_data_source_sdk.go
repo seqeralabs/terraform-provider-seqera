@@ -22,7 +22,7 @@ func (r *BitbucketCredentialDataSourceModel) RefreshFromSharedBitbucketCredentia
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedBitbucketCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {

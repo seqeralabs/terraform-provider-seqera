@@ -30,6 +30,7 @@ type KubernetesCredentialDataSource struct {
 // KubernetesCredentialDataSourceModel describes the data model.
 type KubernetesCredentialDataSourceModel struct {
 	CredentialsID types.String                     `tfsdk:"credentials_id"`
+	ID            types.String                     `tfsdk:"id"`
 	Keys          tfTypes.KubernetesCredentialKeys `tfsdk:"keys"`
 	Name          types.String                     `tfsdk:"name"`
 	ProviderType  types.String                     `tfsdk:"provider_type"`
@@ -48,8 +49,12 @@ func (r *KubernetesCredentialDataSource) Schema(ctx context.Context, req datasou
 
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,

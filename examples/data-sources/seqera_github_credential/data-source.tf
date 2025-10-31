@@ -1,3 +1,4 @@
 data "seqera_github_credential" "my_githubcredential" {
-  workspace_id = 10
+  credentials_id = "...my_credentials_id..."
+  workspace_id   = 10
 }

@@ -30,6 +30,7 @@ type AWSCredentialDataSource struct {
 type AWSCredentialDataSourceModel struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
@@ -51,8 +52,12 @@ func (r *AWSCredentialDataSource) Schema(ctx context.Context, req datasource.Sch
 				Description: `AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,

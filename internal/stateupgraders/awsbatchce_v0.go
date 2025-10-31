@@ -47,3 +47,41 @@ func AwsbatchceStateUpgraderV0(ctx context.Context, req resource.UpgradeStateReq
 		JSON: upgradedStateJSON,
 	}
 }
+
+// AwsbatchceStateUpgraderV1 migrates the state from version 1 to version 2
+// This handles the field rename from compute_env_id to id
+func AwsbatchceStateUpgraderV1(ctx context.Context, req resource.UpgradeStateRequest, resp *resource.UpgradeStateResponse) {
+	// Unmarshal the raw state (JSON format from Terraform state file)
+	var rawState map[string]interface{}
+	err := json.Unmarshal(req.RawState.JSON, &rawState)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to Unmarshal Prior State",
+			err.Error(),
+		)
+		return
+	}
+
+	// Rename compute_env_id to id at the root level
+	if oldValue, exists := rawState["compute_env_id"]; exists {
+		// Copy the value to the new field name
+		rawState["id"] = oldValue
+		// Remove the old field name
+		delete(rawState, "compute_env_id")
+	}
+
+	// Marshal the updated state back to JSON
+	upgradedStateJSON, err := json.Marshal(rawState)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Unable to Marshal Upgraded State",
+			err.Error(),
+		)
+		return
+	}
+
+	// Set the upgraded state as raw JSON
+	resp.DynamicValue = &tfprotov6.DynamicValue{
+		JSON: upgradedStateJSON,
+	}
+}

@@ -39,7 +39,7 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -163,11 +163,11 @@ func (r *GoogleCredentialResourceModel) ToSharedCreateGoogleCredentialsRequest(c
 func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Context) (*shared.GoogleCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentialsID := new(string)
-	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
-		*credentialsID = r.CredentialsID.ValueString()
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
 	} else {
-		credentialsID = nil
+		id = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -180,10 +180,10 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	}
 	keys := shared.GoogleCredentialKeys{}
 	out := shared.GoogleCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          keys,
+		ID:           id,
+		Name:         name,
+		ProviderType: providerType,
+		Keys:         keys,
 	}
 
 	return &out, diags

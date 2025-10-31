@@ -37,6 +37,7 @@ type GiteaCredentialResource struct {
 type GiteaCredentialResourceModel struct {
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Password      types.String `tfsdk:"password"`
 	ProviderType  types.String `tfsdk:"provider_type"`
@@ -57,6 +58,10 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 				Description: `Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

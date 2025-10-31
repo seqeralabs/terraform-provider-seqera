@@ -38,6 +38,7 @@ type TowerAgentCredentialResource struct {
 type TowerAgentCredentialResourceModel struct {
 	ConnectionID  types.String                     `tfsdk:"connection_id"`
 	CredentialsID types.String                     `tfsdk:"credentials_id"`
+	ID            types.String                     `tfsdk:"id"`
 	Keys          tfTypes.TowerAgentCredentialKeys `tfsdk:"keys"`
 	Name          types.String                     `tfsdk:"name"`
 	ProviderType  types.String                     `tfsdk:"provider_type"`
@@ -58,6 +59,10 @@ func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

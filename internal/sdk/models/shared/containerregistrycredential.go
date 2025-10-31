@@ -65,7 +65,7 @@ func (c *ContainerRegistryCredentialKeys) GetRegistry() *string {
 
 type ContainerRegistryCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "container-reg")
@@ -92,11 +92,11 @@ func (c *ContainerRegistryCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ContainerRegistryCredential) GetCredentialsID() *string {
+func (c *ContainerRegistryCredential) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }
 
 func (c *ContainerRegistryCredential) GetName() string {
@@ -162,7 +162,7 @@ func (c *ContainerRegistryCredentialKeysOutput) GetUserName() string {
 
 type ContainerRegistryCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "container-reg")
@@ -189,11 +189,11 @@ func (c *ContainerRegistryCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *ContainerRegistryCredentialOutput) GetCredentialsID() *string {
+func (c *ContainerRegistryCredentialOutput) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }
 
 func (c *ContainerRegistryCredentialOutput) GetName() string {

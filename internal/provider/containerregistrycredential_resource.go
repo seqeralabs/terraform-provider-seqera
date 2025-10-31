@@ -36,6 +36,7 @@ type ContainerRegistryCredentialResource struct {
 // ContainerRegistryCredentialResourceModel describes the resource data model.
 type ContainerRegistryCredentialResourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Password      types.String `tfsdk:"password"`
 	ProviderType  types.String `tfsdk:"provider_type"`
@@ -53,6 +54,10 @@ func (r *ContainerRegistryCredentialResource) Schema(ctx context.Context, req re
 		MarkdownDescription: "Manage container registry credentials in Seqera platform using this resource.\n\nContainer registry credentials store authentication information for accessing\ncontainer registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

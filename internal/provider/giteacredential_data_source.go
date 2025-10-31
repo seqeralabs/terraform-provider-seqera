@@ -29,6 +29,7 @@ type GiteaCredentialDataSource struct {
 // GiteaCredentialDataSourceModel describes the data model.
 type GiteaCredentialDataSourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	Username      types.String `tfsdk:"username"`
@@ -47,8 +48,12 @@ func (r *GiteaCredentialDataSource) Schema(ctx context.Context, req datasource.S
 
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,

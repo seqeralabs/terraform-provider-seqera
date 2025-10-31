@@ -237,7 +237,6 @@ actions:
           id:
             type: string
             description: Unique identifier for the compute environment
-            x-speakeasy-name-override: computeEnvId
             x-speakeasy-param-readonly: true
           name:
             maxLength: 100

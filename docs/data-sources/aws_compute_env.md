@@ -22,7 +22,8 @@ data "seqera_aws_compute_env" "my_awscomputeenv" {
   attributes = [
     "labels"
   ]
-  workspace_id = 7
+  compute_env_id = "...my_compute_env_id..."
+  workspace_id   = 7
 }
 ```
 
@@ -31,6 +32,7 @@ data "seqera_aws_compute_env" "my_awscomputeenv" {
 
 ### Required
 
+- `compute_env_id` (String) Compute environment string identifier
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
@@ -39,12 +41,12 @@ data "seqera_aws_compute_env" "my_awscomputeenv" {
 
 ### Read-Only
 
-- `compute_env_id` (String) Compute environment string identifier
 - `config` (Attributes) (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) AWS credentials identifier
 - `date_created` (String) Timestamp when the compute environment was created
 - `deleted` (Boolean) Flag indicating if the compute environment has been deleted
 - `description` (String) Optional description of the compute environment
+- `id` (String) Unique identifier for the compute environment
 - `last_updated` (String) Timestamp when the compute environment was last updated
 - `last_used` (String) Timestamp when the compute environment was last used
 - `name` (String) Display name for the compute environment

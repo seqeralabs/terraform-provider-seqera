@@ -65,7 +65,7 @@ func (g *GiteaCredentialKeys) GetBaseURL() *string {
 
 type GiteaCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitea")
@@ -92,11 +92,11 @@ func (g *GiteaCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GiteaCredential) GetCredentialsID() *string {
+func (g *GiteaCredential) GetID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.CredentialsID
+	return g.ID
 }
 
 func (g *GiteaCredential) GetName() string {
@@ -162,7 +162,7 @@ func (g *GiteaCredentialKeysOutput) GetUsername() string {
 
 type GiteaCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitea")
@@ -189,11 +189,11 @@ func (g *GiteaCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GiteaCredentialOutput) GetCredentialsID() *string {
+func (g *GiteaCredentialOutput) GetID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.CredentialsID
+	return g.ID
 }
 
 func (g *GiteaCredentialOutput) GetName() string {

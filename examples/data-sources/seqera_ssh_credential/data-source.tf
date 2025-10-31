@@ -1,3 +1,4 @@
 data "seqera_ssh_credential" "my_sshcredential" {
-  workspace_id = 2
+  credentials_id = "...my_credentials_id..."
+  workspace_id   = 2
 }

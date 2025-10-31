@@ -38,6 +38,7 @@ type GoogleCredentialResource struct {
 type GoogleCredentialResourceModel struct {
 	CredentialsID types.String                 `tfsdk:"credentials_id"`
 	Data          types.String                 `tfsdk:"data"`
+	ID            types.String                 `tfsdk:"id"`
 	Keys          tfTypes.GoogleCredentialKeys `tfsdk:"keys"`
 	Name          types.String                 `tfsdk:"name"`
 	ProviderType  types.String                 `tfsdk:"provider_type"`
@@ -53,16 +54,20 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Unique identifier for the credential (max 22 characters)`,
+				Computed:    true,
+				Description: `Credentials string identifier`,
 			},
 			"data": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
 				Description: `Google Cloud service account key JSON (required, sensitive).`,
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,
