@@ -10,8 +10,7 @@ import (
 )
 
 type GithubActionConfig struct {
-	Discriminator *string  `json:"discriminator,omitempty"`
-	Events        []string `json:"events,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
 }
 
 func (g GithubActionConfig) MarshalJSON() ([]byte, error) {
@@ -30,13 +29,6 @@ func (g *GithubActionConfig) GetDiscriminator() *string {
 		return nil
 	}
 	return g.Discriminator
-}
-
-func (g *GithubActionConfig) GetEvents() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Events
 }
 
 type ActionTowerActionConfig struct {

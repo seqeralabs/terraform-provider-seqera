@@ -12,21 +12,93 @@ info:
 # Actions enable event-based pipeline execution, such as triggering a pipeline
 # launch with a GitHub webhook whenever the pipeline repository is updated.
 #
+# IMPORTANT: GitHub webhook actions require a linked GitHub account in your
+# Seqera workspace. Configure GitHub integration in the Seqera Platform UI
+# before creating GitHub webhook actions.
+#
 # TERRAFORM EXAMPLES:
 # -------------------
 #
-# Example: GitHub webhook action
-# resource "seqera_action" "github_webhook" {
+# Example 1: Basic GitHub webhook action (requires linked GitHub account)
+# resource "seqera_action" "github_basic" {
 #   workspace_id = seqera_workspace.main.id
-#   name = "my-github-action"
-#   source = "github"
+#   name         = "github-pipeline-trigger"
+#   source       = "github"
+#
 #   config = {
-#     # GitHub config
+#     github = {
+#       discriminator = "github"
+#     }
 #   }
+#
 #   launch = {
-#     pipeline = "https://github.com/myorg/pipeline"
+#     pipeline       = "https://github.com/myorg/my-pipeline"
 #     compute_env_id = seqera_compute_env.aws.id
-#     work_dir = "s3://my-bucket/work"
+#     work_dir       = "s3://my-bucket/work"
+#     revision       = "main"
+#   }
+# }
+#
+# Example 2: GitHub action with parameters using heredoc (requires linked GitHub account)
+# resource "seqera_action" "github_advanced" {
+#   workspace_id = seqera_workspace.main.id
+#   name         = "github-production-pipeline"
+#   source       = "github"
+#
+#   config = {
+#     github = {
+#       discriminator = "github"
+#     }
+#   }
+#
+#   launch = {
+#     pipeline       = "https://github.com/myorg/production-pipeline"
+#     compute_env_id = seqera_compute_env.aws.id
+#     work_dir       = "s3://my-bucket/production/work"
+#     revision       = "main"
+#
+#     params_text = jsonencode({
+#       input_data  = "s3://my-bucket/input/data.csv"
+#       output_dir  = "s3://my-bucket/results"
+#       sample_size = 1000
+#     })
+#
+#     config_text = <<-EOT
+#       process {
+#         executor = 'awsbatch'
+#         queue    = 'my-production-queue'
+#         memory   = '8 GB'
+#         cpus     = 4
+#       }
+#     EOT
+#
+#     pre_run_script = <<-EOT
+#       #!/bin/bash
+#       echo "Starting production pipeline run"
+#       aws s3 sync s3://my-bucket/reference ./reference
+#     EOT
+#   }
+# }
+#
+# Example 3: Tower webhook action (programmatic trigger, no GitHub account required)
+# resource "seqera_action" "tower_api" {
+#   workspace_id = seqera_workspace.main.id
+#   name         = "api-triggered-pipeline"
+#   source       = "tower"
+#
+#   config = {
+#     tower = {
+#       discriminator = "tower"
+#     }
+#   }
+#
+#   launch = {
+#     pipeline       = "https://github.com/myorg/api-pipeline"
+#     compute_env_id = seqera_compute_env.aws.id
+#     work_dir       = "s3://my-bucket/api-work"
+#     revision       = "main"
+#     resume         = true
+#     pull_latest    = true
 #   }
 # }
 #
@@ -74,12 +146,35 @@ actions:
         terraform-datasource: null
         terraform-resource: Action#read
 
+  # UPDATE - PUT /actions/{actionId}
+  - target: $.paths["/actions/{actionId}"].put
+    update:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#update
+
   # DELETE - DELETE /actions/{actionId}
   - target: $.paths["/actions/{actionId}"].delete
     update:
       x-speakeasy-entity-operation:
         terraform-datasource: null
         terraform-resource: Action#delete
+
+  # ============================================================================
+  # FIELD CONFIGURATION
+  # ============================================================================
+
+  # Set default value for source field and make it optional
+  - target: $.components.schemas.CreateActionRequest.properties.source
+    update:
+      default: "tower"
+      x-speakeasy-param-optional: true
+
+  # Remove source from required array to allow default value
+  - target: $.components.schemas.CreateActionRequest.required
+    update:
+      - name
+      - launch
 
   # ============================================================================
   # SCHEMA DESCRIPTIONS
@@ -98,7 +193,7 @@ actions:
 
   - target: $.components.schemas.ActionResponseDto.properties.source
     update:
-      description: Event source that triggers this action (e.g., github, tower)
+      description: "Event source that triggers this action. Defaults to 'tower' (programmatic webhook). Use 'github' for GitHub webhook events (requires linked GitHub account)."
       x-speakeasy-param-ordering: 3
 
   - target: $.components.schemas.ActionResponseDto.properties.config
@@ -157,29 +252,15 @@ actions:
       x-speakeasy-param-readonly: true
 
   # ============================================================================
-  # DISCRIMINATOR FIELD FIXES
-  # ============================================================================
-
-  # Remove readOnly from discriminator fields to allow setting them
-  - target: $["components"]["schemas"]["Action.ConfigType"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["Action.EventType"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["Action.TowerActionConfig"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["Action.TowerActionEvent"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["GithubActionConfig"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-  - target: $["components"]["schemas"]["GithubActionEvent"]["properties"]["discriminator"]["readOnly"]
-    remove: true
-
-  # ============================================================================
   # CLEANUP - Remove runtime and transient fields
   # ============================================================================
 
   # Remove last event data (runtime execution information)
   - target: $.components.schemas.ActionResponseDto.properties.event
+    remove: true
+
+  # Remove events field from GithubActionConfig (runtime/response field)
+  - target: $.components.schemas.GithubActionConfig.properties.events
     remove: true
 
   # Remove timestamp fields
@@ -193,3 +274,39 @@ actions:
   # Remove runtime label associations (managed separately)
   - target: $.components.schemas.ActionResponseDto.properties.labels
     remove: true
+
+  # ============================================================================
+  # LAUNCH SCHEMA - Remove ephemeral and computed fields
+  # ============================================================================
+
+  # Remove timestamp fields from Launch schema
+  - target: $.components.schemas.Launch.properties.dateCreated
+    remove: true
+
+  - target: $.components.schemas.Launch.properties.lastUpdated
+    remove: true
+
+  # Remove computeEnv (full compute environment object - response only)
+  - target: $.components.schemas.Launch.properties.computeEnv
+    remove: true
+
+  # Mark computed/response-only fields as read-only in Launch schema
+  - target: $.components.schemas.Launch.properties.resumeLaunchId
+    update:
+      x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.Launch.properties.sessionId
+    update:
+      x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.Launch.properties.optimizationId
+    update:
+      x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.Launch.properties.optimizationTargets
+    update:
+      x-speakeasy-param-readonly: true
+
+  - target: $.components.schemas.Launch.properties.launchContainer
+    update:
+      x-speakeasy-param-readonly: true

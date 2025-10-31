@@ -7,6 +7,5 @@ import (
 )
 
 type GithubActionConfig struct {
-	Discriminator types.String   `tfsdk:"discriminator"`
-	Events        []types.String `tfsdk:"events"`
+	Discriminator types.String `tfsdk:"discriminator"`
 }

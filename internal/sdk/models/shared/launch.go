@@ -2,346 +2,35 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
-	"time"
-)
-
-type LaunchPlatform string
-
-const (
-	LaunchPlatformAwsBatch              LaunchPlatform = "aws-batch"
-	LaunchPlatformAwsCloud              LaunchPlatform = "aws-cloud"
-	LaunchPlatformGoogleLifesciences    LaunchPlatform = "google-lifesciences"
-	LaunchPlatformGoogleBatch           LaunchPlatform = "google-batch"
-	LaunchPlatformAzureBatch            LaunchPlatform = "azure-batch"
-	LaunchPlatformK8sPlatform           LaunchPlatform = "k8s-platform"
-	LaunchPlatformEksPlatform           LaunchPlatform = "eks-platform"
-	LaunchPlatformGkePlatform           LaunchPlatform = "gke-platform"
-	LaunchPlatformUgePlatform           LaunchPlatform = "uge-platform"
-	LaunchPlatformSlurmPlatform         LaunchPlatform = "slurm-platform"
-	LaunchPlatformLsfPlatform           LaunchPlatform = "lsf-platform"
-	LaunchPlatformAltairPlatform        LaunchPlatform = "altair-platform"
-	LaunchPlatformMoabPlatform          LaunchPlatform = "moab-platform"
-	LaunchPlatformLocalPlatform         LaunchPlatform = "local-platform"
-	LaunchPlatformSeqeracomputePlatform LaunchPlatform = "seqeracompute-platform"
-)
-
-func (e LaunchPlatform) ToPointer() *LaunchPlatform {
-	return &e
-}
-func (e *LaunchPlatform) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "aws-batch":
-		fallthrough
-	case "aws-cloud":
-		fallthrough
-	case "google-lifesciences":
-		fallthrough
-	case "google-batch":
-		fallthrough
-	case "azure-batch":
-		fallthrough
-	case "k8s-platform":
-		fallthrough
-	case "eks-platform":
-		fallthrough
-	case "gke-platform":
-		fallthrough
-	case "uge-platform":
-		fallthrough
-	case "slurm-platform":
-		fallthrough
-	case "lsf-platform":
-		fallthrough
-	case "altair-platform":
-		fallthrough
-	case "moab-platform":
-		fallthrough
-	case "local-platform":
-		fallthrough
-	case "seqeracompute-platform":
-		*e = LaunchPlatform(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for LaunchPlatform: %v", v)
-	}
-}
-
-type LaunchStatus string
-
-const (
-	LaunchStatusCreating  LaunchStatus = "CREATING"
-	LaunchStatusAvailable LaunchStatus = "AVAILABLE"
-	LaunchStatusErrored   LaunchStatus = "ERRORED"
-	LaunchStatusInvalid   LaunchStatus = "INVALID"
-)
-
-func (e LaunchStatus) ToPointer() *LaunchStatus {
-	return &e
-}
-func (e *LaunchStatus) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "CREATING":
-		fallthrough
-	case "AVAILABLE":
-		fallthrough
-	case "ERRORED":
-		fallthrough
-	case "INVALID":
-		*e = LaunchStatus(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for LaunchStatus: %v", v)
-	}
-}
-
-type ComputeEnv struct {
-	CredentialsID string         `json:"credentialsId"`
-	OrgID         *int64         `json:"orgId,omitempty"`
-	WorkspaceID   *int64         `json:"workspaceId,omitempty"`
-	ComputeEnvID  *string        `json:"id,omitempty"`
-	Name          string         `json:"name"`
-	Description   *string        `json:"description,omitempty"`
-	Platform      LaunchPlatform `json:"platform"`
-	// Configuration settings for compute environments including work directories,
-	// pre/post run scripts, and environment-specific parameters.
-	//
-	Config      ComputeConfig `json:"config"`
-	DateCreated *time.Time    `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time    `json:"lastUpdated,omitempty"`
-	LastUsed    *time.Time    `json:"lastUsed,omitempty"`
-	Deleted     *bool         `json:"deleted,omitempty"`
-	Status      *LaunchStatus `json:"status,omitempty"`
-	Message     *string       `json:"message,omitempty"`
-	Primary     *bool         `json:"primary,omitempty"`
-}
-
-func (c ComputeEnv) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(c, "", false)
-}
-
-func (c *ComputeEnv) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"credentialsId", "name", "platform", "config"}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *ComputeEnv) GetCredentialsID() string {
-	if c == nil {
-		return ""
-	}
-	return c.CredentialsID
-}
-
-func (c *ComputeEnv) GetOrgID() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.OrgID
-}
-
-func (c *ComputeEnv) GetWorkspaceID() *int64 {
-	if c == nil {
-		return nil
-	}
-	return c.WorkspaceID
-}
-
-func (c *ComputeEnv) GetComputeEnvID() *string {
-	if c == nil {
-		return nil
-	}
-	return c.ComputeEnvID
-}
-
-func (c *ComputeEnv) GetName() string {
-	if c == nil {
-		return ""
-	}
-	return c.Name
-}
-
-func (c *ComputeEnv) GetDescription() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Description
-}
-
-func (c *ComputeEnv) GetPlatform() LaunchPlatform {
-	if c == nil {
-		return LaunchPlatform("")
-	}
-	return c.Platform
-}
-
-func (c *ComputeEnv) GetConfig() ComputeConfig {
-	if c == nil {
-		return ComputeConfig{}
-	}
-	return c.Config
-}
-
-func (c *ComputeEnv) GetConfigMoabPlatform() *MoabConfiguration {
-	return c.GetConfig().MoabConfiguration
-}
-
-func (c *ComputeEnv) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return c.GetConfig().AWSBatchConfiguration
-}
-
-func (c *ComputeEnv) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return c.GetConfig().GoogleGKEClusterConfiguration
-}
-
-func (c *ComputeEnv) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return c.GetConfig().GoogleBatchServiceConfiguration
-}
-
-func (c *ComputeEnv) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return c.GetConfig().AWSCloudConfiguration
-}
-
-func (c *ComputeEnv) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return c.GetConfig().SlurmConfiguration
-}
-
-func (c *ComputeEnv) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return c.GetConfig().KubernetesComputeConfiguration
-}
-
-func (c *ComputeEnv) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return c.GetConfig().AltairPBSConfiguration
-}
-
-func (c *ComputeEnv) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return c.GetConfig().IBMLSFConfiguration
-}
-
-func (c *ComputeEnv) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return c.GetConfig().AzureBatchConfiguration
-}
-
-func (c *ComputeEnv) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return c.GetConfig().SeqeraComputeConfiguration
-}
-
-func (c *ComputeEnv) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return c.GetConfig().AmazonEKSClusterConfiguration
-}
-
-func (c *ComputeEnv) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	return c.GetConfig().GoogleLifeSciencesConfiguration
-}
-
-func (c *ComputeEnv) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return c.GetConfig().UnivaGridEngineConfiguration
-}
-
-func (c *ComputeEnv) GetDateCreated() *time.Time {
-	if c == nil {
-		return nil
-	}
-	return c.DateCreated
-}
-
-func (c *ComputeEnv) GetLastUpdated() *time.Time {
-	if c == nil {
-		return nil
-	}
-	return c.LastUpdated
-}
-
-func (c *ComputeEnv) GetLastUsed() *time.Time {
-	if c == nil {
-		return nil
-	}
-	return c.LastUsed
-}
-
-func (c *ComputeEnv) GetDeleted() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.Deleted
-}
-
-func (c *ComputeEnv) GetStatus() *LaunchStatus {
-	if c == nil {
-		return nil
-	}
-	return c.Status
-}
-
-func (c *ComputeEnv) GetMessage() *string {
-	if c == nil {
-		return nil
-	}
-	return c.Message
-}
-
-func (c *ComputeEnv) GetPrimary() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.Primary
-}
-
 type Launch struct {
-	ID          *string     `json:"id,omitempty"`
-	ComputeEnv  *ComputeEnv `json:"computeEnv,omitempty"`
-	Pipeline    string      `json:"pipeline"`
-	WorkDir     *string     `json:"workDir,omitempty"`
-	Revision    *string     `json:"revision,omitempty"`
-	ConfigText  *string     `json:"configText,omitempty"`
-	TowerConfig *string     `json:"towerConfig,omitempty"`
-	ParamsText  *string     `json:"paramsText,omitempty"`
+	ID          *string `json:"id,omitempty"`
+	Pipeline    string  `json:"pipeline"`
+	WorkDir     *string `json:"workDir,omitempty"`
+	Revision    *string `json:"revision,omitempty"`
+	ConfigText  *string `json:"configText,omitempty"`
+	TowerConfig *string `json:"towerConfig,omitempty"`
+	ParamsText  *string `json:"paramsText,omitempty"`
 	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript       *string    `json:"postRunScript,omitempty"`
-	MainScript          *string    `json:"mainScript,omitempty"`
-	EntryName           *string    `json:"entryName,omitempty"`
-	SchemaName          *string    `json:"schemaName,omitempty"`
-	Resume              *bool      `json:"resume,omitempty"`
-	ResumeLaunchID      *string    `json:"resumeLaunchId,omitempty"`
-	PullLatest          *bool      `json:"pullLatest,omitempty"`
-	StubRun             *bool      `json:"stubRun,omitempty"`
-	SessionID           *string    `json:"sessionId,omitempty"`
-	RunName             *string    `json:"runName,omitempty"`
-	ConfigProfiles      []string   `json:"configProfiles,omitempty"`
-	UserSecrets         []string   `json:"userSecrets,omitempty"`
-	WorkspaceSecrets    []string   `json:"workspaceSecrets,omitempty"`
-	OptimizationID      *string    `json:"optimizationId,omitempty"`
-	OptimizationTargets *string    `json:"optimizationTargets,omitempty"`
-	HeadJobCpus         *int       `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb     *int       `json:"headJobMemoryMb,omitempty"`
-	LaunchContainer     *string    `json:"launchContainer,omitempty"`
-	DateCreated         time.Time  `json:"dateCreated"`
-	LastUpdated         *time.Time `json:"lastUpdated,omitempty"`
-}
-
-func (l Launch) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
-}
-
-func (l *Launch) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, []string{"pipeline", "dateCreated"}); err != nil {
-		return err
-	}
-	return nil
+	PostRunScript       *string  `json:"postRunScript,omitempty"`
+	MainScript          *string  `json:"mainScript,omitempty"`
+	EntryName           *string  `json:"entryName,omitempty"`
+	SchemaName          *string  `json:"schemaName,omitempty"`
+	Resume              *bool    `json:"resume,omitempty"`
+	ResumeLaunchID      *string  `json:"resumeLaunchId,omitempty"`
+	PullLatest          *bool    `json:"pullLatest,omitempty"`
+	StubRun             *bool    `json:"stubRun,omitempty"`
+	SessionID           *string  `json:"sessionId,omitempty"`
+	RunName             *string  `json:"runName,omitempty"`
+	ConfigProfiles      []string `json:"configProfiles,omitempty"`
+	UserSecrets         []string `json:"userSecrets,omitempty"`
+	WorkspaceSecrets    []string `json:"workspaceSecrets,omitempty"`
+	OptimizationID      *string  `json:"optimizationId,omitempty"`
+	OptimizationTargets *string  `json:"optimizationTargets,omitempty"`
+	HeadJobCpus         *int     `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb     *int     `json:"headJobMemoryMb,omitempty"`
+	LaunchContainer     *string  `json:"launchContainer,omitempty"`
 }
 
 func (l *Launch) GetID() *string {
@@ -349,13 +38,6 @@ func (l *Launch) GetID() *string {
 		return nil
 	}
 	return l.ID
-}
-
-func (l *Launch) GetComputeEnv() *ComputeEnv {
-	if l == nil {
-		return nil
-	}
-	return l.ComputeEnv
 }
 
 func (l *Launch) GetPipeline() string {
@@ -531,18 +213,4 @@ func (l *Launch) GetLaunchContainer() *string {
 		return nil
 	}
 	return l.LaunchContainer
-}
-
-func (l *Launch) GetDateCreated() time.Time {
-	if l == nil {
-		return time.Time{}
-	}
-	return l.DateCreated
-}
-
-func (l *Launch) GetLastUpdated() *time.Time {
-	if l == nil {
-		return nil
-	}
-	return l.LastUpdated
 }
