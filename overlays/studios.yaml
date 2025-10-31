@@ -192,12 +192,14 @@ actions:
   # DataStudioConfiguration field descriptions
   - target: $.components.schemas.DataStudioConfiguration.properties.memory
     update:
-      description: Memory allocation for the Studio session in megabytes (MB).
+      description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
       example: 4096
+      default: 8192
   - target: $.components.schemas.DataStudioConfiguration.properties.cpu
     update:
-      description: Number of CPU cores to allocate
+      description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
       example: 2
+      default: 2
   - target: $.components.schemas.DataStudioConfiguration.properties.gpu
     update:
       description: Set to 0 to disable GPU or 1 to enable GPU.

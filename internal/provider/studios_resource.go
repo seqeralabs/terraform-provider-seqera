@@ -110,11 +110,12 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					"cpu": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,
+						Default:  int32default.StaticInt32(2),
 						PlanModifiers: []planmodifier.Int32{
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Number of CPU cores to allocate. Requires replacement if changed.`,
+						Description: `Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. Default: 2; Requires replacement if changed.`,
 					},
 					"environment": schema.MapAttribute{
 						Computed: true,
@@ -151,11 +152,12 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					"memory": schema.Int32Attribute{
 						Computed: true,
 						Optional: true,
+						Default:  int32default.StaticInt32(8192),
 						PlanModifiers: []planmodifier.Int32{
 							int32planmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
-						Description: `Memory allocation for the Studio session in megabytes (MB). Requires replacement if changed.`,
+						Description: `Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. Default: 8192; Requires replacement if changed.`,
 					},
 					"mount_data": schema.ListAttribute{
 						Computed: true,

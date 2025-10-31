@@ -201,11 +201,11 @@ resource "seqera_studios" "studio_with_env_vars" {
 Optional:
 
 - `conda_environment` (String) Requires replacement if changed.
-- `cpu` (Number) Number of CPU cores to allocate. Requires replacement if changed.
+- `cpu` (Number) Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. Default: 2; Requires replacement if changed.
 - `environment` (Map of String) Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number. Requires replacement if changed.
 - `gpu` (Number) Set to 0 to disable GPU or 1 to enable GPU. Default: 0; Requires replacement if changed.
 - `lifespan_hours` (Number) Maximum lifespan of the Studio session in hours. Requires replacement if changed.
-- `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Requires replacement if changed.
+- `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. Default: 8192; Requires replacement if changed.
 - `mount_data` (List of String) Requires replacement if changed.
 
 ## Import

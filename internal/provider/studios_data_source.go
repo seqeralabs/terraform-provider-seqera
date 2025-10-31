@@ -56,7 +56,7 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 					"cpu": schema.Int32Attribute{
 						Computed:    true,
-						Description: `Number of CPU cores to allocate`,
+						Description: `Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.`,
 					},
 					"environment": schema.MapAttribute{
 						Computed:    true,
@@ -73,7 +73,7 @@ func (r *StudiosDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 					"memory": schema.Int32Attribute{
 						Computed:    true,
-						Description: `Memory allocation for the Studio session in megabytes (MB).`,
+						Description: `Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.`,
 					},
 					"mount_data": schema.ListAttribute{
 						Computed:    true,

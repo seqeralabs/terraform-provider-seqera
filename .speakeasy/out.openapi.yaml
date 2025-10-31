@@ -11786,14 +11786,16 @@ components:
           minimum: 0
           type: integer
           format: int32
-          description: Number of CPU cores to allocate
+          description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
           example: 2
+          default: 2
         memory:
           minimum: 0
           type: integer
           format: int32
-          description: Memory allocation for the Studio session in megabytes (MB).
+          description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
           example: 4096
+          default: 8192
         mountData:
           type: array
           items:
