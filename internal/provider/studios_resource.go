@@ -238,7 +238,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 				PlanModifiers: []planmodifier.Bool{
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments. Requires replacement if changed.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Computed: true,

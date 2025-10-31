@@ -188,6 +188,9 @@ actions:
   - target: $.components.schemas.DataStudioCreateRequest.properties.labelIds
     update:
       description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
+  - target: $.components.schemas.DataStudioCreateRequest.properties.spot
+    update:
+      description: Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
 
   # DataStudioConfiguration field descriptions
   - target: $.components.schemas.DataStudioConfiguration.properties.memory

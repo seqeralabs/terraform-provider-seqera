@@ -12,7 +12,8 @@ type DataStudioCreateRequest struct {
 	IsPrivate           *bool                   `json:"isPrivate,omitempty"`
 	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
 	LabelIds []int64 `json:"labelIds,omitempty"`
-	Spot     *bool   `json:"spot,omitempty"`
+	// Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
+	Spot *bool `json:"spot,omitempty"`
 }
 
 func (d *DataStudioCreateRequest) GetName() string {

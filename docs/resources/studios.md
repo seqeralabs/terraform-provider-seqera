@@ -188,7 +188,7 @@ resource "seqera_studios" "studio_with_env_vars" {
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
 - `is_private` (Boolean) Requires replacement if changed.
 - `label_ids` (List of Number) List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Requires replacement if changed.
-- `spot` (Boolean) Requires replacement if changed.
+- `spot` (Boolean) Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments. Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only

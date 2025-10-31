@@ -11874,6 +11874,7 @@ components:
         spot:
           type: boolean
           nullable: true
+          description: Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
       x-speakeasy-entity: Studios
       x-speakeasy-entity-description: |
         Studios is a unified platform where you can host a combination of
