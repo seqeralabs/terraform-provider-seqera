@@ -326,6 +326,9 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: Action#update
     delete:
       summary: Delete action
       description: Deletes the pipeline action identified by the given `actionId`.
@@ -10330,6 +10333,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
       discriminator:
         propertyName: discriminator
         mapping:
@@ -10343,6 +10347,7 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
         timestamp:
           type: string
           format: date-time
@@ -10371,11 +10376,13 @@ components:
       properties:
         discriminator:
           type: string
+          readOnly: true
     Action.TowerActionEvent:
       type: object
       properties:
         discriminator:
           type: string
+          readOnly: true
         timestamp:
           type: string
           format: date-time
@@ -10418,7 +10425,7 @@ components:
           x-speakeasy-param-readonly: true
         source:
           $ref: "#/components/schemas/Action.Source"
-          description: Event source that triggers this action (e.g., github, tower)
+          description: "Event source that triggers this action. Defaults to 'tower' (programmatic webhook). Use 'github' for GitHub webhook events (requires linked GitHub account)."
           x-speakeasy-param-ordering: 3
         status:
           $ref: "#/components/schemas/Action.Status"
@@ -11384,11 +11391,15 @@ components:
           type: string
         source:
           $ref: "#/components/schemas/Action.Source"
+          default: "tower"
+          x-speakeasy-param-optional: true
         launch:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
       required:
         - name
         - source
+        - launch
+        - name
         - launch
     CreateActionResponse:
       type: object
@@ -12875,15 +12886,13 @@ components:
       properties:
         discriminator:
           type: string
-        events:
-          type: array
-          items:
-            type: string
+          readOnly: true
     GithubActionEvent:
       type: object
       properties:
         discriminator:
           type: string
+          readOnly: true
         ref:
           type: string
         commitId:
@@ -13316,10 +13325,6 @@ components:
           maxLength: 22
           type: string
           x-speakeasy-param-readonly: true
-        computeEnv:
-          nullable: true
-          allOf:
-            - $ref: "#/components/schemas/ComputeEnv_ComputeConfig_"
         pipeline:
           maxLength: 200
           type: string
@@ -13355,6 +13360,7 @@ components:
         resumeLaunchId:
           maxLength: 22
           type: string
+          x-speakeasy-param-readonly: true
         pullLatest:
           type: boolean
         stubRun:
@@ -13362,6 +13368,7 @@ components:
         sessionId:
           maxLength: 36
           type: string
+          x-speakeasy-param-readonly: true
         runName:
           maxLength: 80
           type: string
@@ -13380,8 +13387,10 @@ components:
         optimizationId:
           maxLength: 32
           type: string
+          x-speakeasy-param-readonly: true
         optimizationTargets:
           type: string
+          x-speakeasy-param-readonly: true
         headJobCpus:
           type: integer
           format: int32
@@ -13390,12 +13399,7 @@ components:
           format: int32
         launchContainer:
           type: string
-        dateCreated:
-          type: string
-          format: date-time
-        lastUpdated:
-          type: string
-          format: date-time
+          x-speakeasy-param-readonly: true
     LaunchActionRequest:
       type: object
       properties:

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 6f36cbc58f922b3a06689e9a0d7e9a88
+  docChecksum: 9494fac1ffcf86d1510da904db4204c4
   docVersion: 1.56.0
   speakeasyVersion: 1.644.0
   generationVersion: 2.733.1
@@ -195,7 +195,6 @@ generatedFiles:
   - internal/provider/types/bit_bucket_security_keys.go
   - internal/provider/types/code_commit_security_keys.go
   - internal/provider/types/compute_config.go
-  - internal/provider/types/compute_env.go
   - internal/provider/types/compute_env_compute_config.go
   - internal/provider/types/config_env_variable.go
   - internal/provider/types/container_registry_keys.go
@@ -914,7 +913,7 @@ examples:
           actionId: "<id>"
       responses:
         "200":
-          application/json: {"action": {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "uge-platform", "config": {"workDir": "<value>", "discriminator": "slurm-platform"}}, "pipeline": "<value>", "dateCreated": "2024-05-31T13:24:57.129Z"}}}
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
   UpdateAction:
@@ -1426,7 +1425,7 @@ examples:
           launchId: "<id>"
       responses:
         "200":
-          application/json: {"launch": {"computeEnv": null, "pipeline": "<value>", "dateCreated": "2023-07-03T07:06:42.847Z"}}
+          application/json: {}
   ListDatasets:
     speakeasy-default-list-datasets:
       parameters:
@@ -1588,7 +1587,7 @@ examples:
           launchId: "<id>"
       responses:
         "200":
-          application/json: {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "gke-platform", "config": {"discriminator": "aws-cloud", "region": "<value>"}}, "pipeline": "<value>", "dateCreated": "2024-09-13T11:17:27.230Z"}}
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
   ListOrganizations:
@@ -2094,7 +2093,7 @@ examples:
           pipelineId: 833165
       responses:
         "200":
-          application/json: {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-cloud", "config": {"discriminator": "gke-platform", "server": "<value>", "sslCert": "<value>", "namespace": "<value>", "headServiceAccount": "<value>", "storageClaimName": "<value>", "region": "<value>", "clusterName": "<value>"}}, "pipeline": "<value>", "dateCreated": "2023-02-10T15:30:45.146Z"}}
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
   DescribePipelineSchema:

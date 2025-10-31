@@ -18,6 +18,7 @@ internal/stateupgraders/computeenv_v0.go
 internal/stateupgraders/action_v0.go
 
 # Custom examples that should be manually maintained
+examples/resources/seqera_action/resource.tf
 examples/resources/seqera_labels/resource.tf
 examples/resources/seqera_orgs/resource.tf
 examples/resources/seqera_primary_compute_env/resource.tf
