@@ -65,7 +65,7 @@ func (a *AWSCredentialKeys) GetAssumeRoleArn() *string {
 
 type AWSCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "aws")
@@ -92,11 +92,11 @@ func (a *AWSCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AWSCredential) GetCredentialsID() *string {
+func (a *AWSCredential) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.CredentialsID
+	return a.ID
 }
 
 func (a *AWSCredential) GetName() string {
@@ -162,7 +162,7 @@ func (a *AWSCredentialKeysOutput) GetAccessKey() string {
 
 type AWSCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "aws")
@@ -189,11 +189,11 @@ func (a *AWSCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AWSCredentialOutput) GetCredentialsID() *string {
+func (a *AWSCredentialOutput) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.CredentialsID
+	return a.ID
 }
 
 func (a *AWSCredentialOutput) GetName() string {

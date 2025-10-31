@@ -37,6 +37,7 @@ type SSHCredentialResource struct {
 // SSHCredentialResourceModel describes the resource data model.
 type SSHCredentialResourceModel struct {
 	CredentialsID types.String              `tfsdk:"credentials_id"`
+	ID            types.String              `tfsdk:"id"`
 	Keys          tfTypes.SSHCredentialKeys `tfsdk:"keys"`
 	Name          types.String              `tfsdk:"name"`
 	Passphrase    types.String              `tfsdk:"passphrase"`
@@ -54,6 +55,10 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource.\n\nSSH credentials store SSH private keys for secure access to remote\ncompute environments and resources within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

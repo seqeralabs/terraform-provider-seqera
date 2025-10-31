@@ -30,6 +30,7 @@ type AzureCredentialDataSource struct {
 type AzureCredentialDataSourceModel struct {
 	BatchName     types.String `tfsdk:"batch_name"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	StorageName   types.String `tfsdk:"storage_name"`
@@ -52,8 +53,12 @@ func (r *AzureCredentialDataSource) Schema(ctx context.Context, req datasource.S
 				Description: `Azure Batch account name (required)`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,

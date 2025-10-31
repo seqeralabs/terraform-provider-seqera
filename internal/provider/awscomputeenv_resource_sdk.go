@@ -17,7 +17,6 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ComputeEnvID = types.StringPointerValue(resp.ComputeEnvID)
 		r.Config.CliPath = types.StringPointerValue(resp.Config.CliPath)
 		r.Config.ComputeJobRole = types.StringPointerValue(resp.Config.ComputeJobRole)
 		r.Config.ComputeQueue = types.StringPointerValue(resp.Config.ComputeQueue)
@@ -110,6 +109,7 @@ func (r *AWSComputeEnvResourceModel) RefreshFromSharedAWSComputeEnvComputeConfig
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
@@ -217,11 +217,11 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		workspaceID = nil
 	}
-	computeEnvID := new(string)
-	if !r.ComputeEnvID.IsUnknown() && !r.ComputeEnvID.IsNull() {
-		*computeEnvID = r.ComputeEnvID.ValueString()
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
 	} else {
-		computeEnvID = nil
+		id = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -648,7 +648,7 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	out := shared.AWSComputeEnvComputeConfigInput{
 		CredentialsID: credentialsID,
 		WorkspaceID:   workspaceID,
-		ComputeEnvID:  computeEnvID,
+		ID:            id,
 		Name:          name,
 		Description:   description,
 		Platform:      platform,

@@ -56,7 +56,7 @@ func (g *GithubCredentialKeys) GetBaseURL() *string {
 
 type GithubCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "github")
@@ -83,11 +83,11 @@ func (g *GithubCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GithubCredential) GetCredentialsID() *string {
+func (g *GithubCredential) GetID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.CredentialsID
+	return g.ID
 }
 
 func (g *GithubCredential) GetName() string {
@@ -144,7 +144,7 @@ type GithubCredentialKeysOutput struct {
 
 type GithubCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "github")
@@ -171,11 +171,11 @@ func (g *GithubCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GithubCredentialOutput) GetCredentialsID() *string {
+func (g *GithubCredentialOutput) GetID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.CredentialsID
+	return g.ID
 }
 
 func (g *GithubCredentialOutput) GetName() string {

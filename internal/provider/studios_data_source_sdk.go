@@ -22,6 +22,12 @@ func (r *StudiosDataSourceModel) RefreshFromSharedDataStudioDto(ctx context.Cont
 			r.Configuration = &tfTypes.DataStudioConfiguration{}
 			r.Configuration.CondaEnvironment = types.StringPointerValue(resp.Configuration.CondaEnvironment)
 			r.Configuration.CPU = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.CPU))
+			if resp.Configuration.Environment != nil {
+				r.Configuration.Environment = make(map[string]types.String, len(resp.Configuration.Environment))
+				for key, value := range resp.Configuration.Environment {
+					r.Configuration.Environment[key] = types.StringValue(value)
+				}
+			}
 			r.Configuration.Gpu = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Gpu))
 			r.Configuration.LifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.LifespanHours))
 			r.Configuration.Memory = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Memory))

@@ -1,3 +1,4 @@
 data "seqera_azure_credential" "my_azurecredential" {
-  workspace_id = 0
+  credentials_id = "...my_credentials_id..."
+  workspace_id   = 0
 }

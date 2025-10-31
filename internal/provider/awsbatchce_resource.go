@@ -62,6 +62,7 @@ type AWSBatchCEResourceModel struct {
 	DateCreated   types.String           `tfsdk:"date_created"`
 	Deleted       types.Bool             `tfsdk:"deleted"`
 	Description   types.String           `tfsdk:"description"`
+	ID            types.String           `tfsdk:"id"`
 	LabelIds      []types.Int64          `tfsdk:"label_ids"`
 	LastUpdated   types.String           `tfsdk:"last_updated"`
 	LastUsed      types.String           `tfsdk:"last_used"`
@@ -82,11 +83,8 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"compute_env_id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Unique identifier for the compute environment`,
+				Computed:    true,
+				Description: `Compute environment string identifier`,
 			},
 			"config": schema.SingleNestedAttribute{
 				Required: true,
@@ -766,6 +764,13 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Optional description of the compute environment. Requires replacement if changed.`,
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Unique identifier for the compute environment`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,

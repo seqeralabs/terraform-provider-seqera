@@ -22,7 +22,7 @@ func (r *ContainerRegistryCredentialDataSourceModel) RefreshFromSharedContainerR
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedContainerRegistryCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {

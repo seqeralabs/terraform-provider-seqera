@@ -22,7 +22,7 @@ func (r *AWSCredentialDataSourceModel) RefreshFromSharedAWSCredentialOutput(ctx 
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedAWSCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {

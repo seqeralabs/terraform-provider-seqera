@@ -3,15 +3,17 @@
 package shared
 
 type DataStudioCreateRequest struct {
-	Name                string                   `json:"name"`
-	Description         *string                  `json:"description,omitempty"`
-	DataStudioToolURL   string                   `json:"dataStudioToolUrl"`
-	ComputeEnvID        string                   `json:"computeEnvId"`
-	InitialCheckpointID *int64                   `json:"initialCheckpointId,omitempty"`
-	Configuration       *DataStudioConfiguration `json:"configuration,omitempty"`
-	IsPrivate           *bool                    `json:"isPrivate,omitempty"`
-	LabelIds            []int64                  `json:"labelIds,omitempty"`
-	Spot                *bool                    `json:"spot,omitempty"`
+	Name                string                  `json:"name"`
+	Description         *string                 `json:"description,omitempty"`
+	DataStudioToolURL   string                  `json:"dataStudioToolUrl"`
+	ComputeEnvID        string                  `json:"computeEnvId"`
+	InitialCheckpointID *int64                  `json:"initialCheckpointId,omitempty"`
+	Configuration       DataStudioConfiguration `json:"configuration"`
+	IsPrivate           *bool                   `json:"isPrivate,omitempty"`
+	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
+	LabelIds []int64 `json:"labelIds,omitempty"`
+	// Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
+	Spot *bool `json:"spot,omitempty"`
 }
 
 func (d *DataStudioCreateRequest) GetName() string {
@@ -49,9 +51,9 @@ func (d *DataStudioCreateRequest) GetInitialCheckpointID() *int64 {
 	return d.InitialCheckpointID
 }
 
-func (d *DataStudioCreateRequest) GetConfiguration() *DataStudioConfiguration {
+func (d *DataStudioCreateRequest) GetConfiguration() DataStudioConfiguration {
 	if d == nil {
-		return nil
+		return DataStudioConfiguration{}
 	}
 	return d.Configuration
 }

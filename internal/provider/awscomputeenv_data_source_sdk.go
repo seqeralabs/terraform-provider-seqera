@@ -16,7 +16,6 @@ func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedAWSComputeEnvComputeConf
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ComputeEnvID = types.StringPointerValue(resp.ComputeEnvID)
 		r.Config.CliPath = types.StringPointerValue(resp.Config.CliPath)
 		r.Config.ComputeJobRole = types.StringPointerValue(resp.Config.ComputeJobRole)
 		r.Config.ComputeQueue = types.StringPointerValue(resp.Config.ComputeQueue)
@@ -109,6 +108,7 @@ func (r *AWSComputeEnvDataSourceModel) RefreshFromSharedAWSComputeEnvComputeConf
 		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)

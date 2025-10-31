@@ -23,7 +23,7 @@ func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialOutput(ct
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedAzureCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
@@ -161,11 +161,11 @@ func (r *AzureCredentialResourceModel) ToOperationsUpdateAzureCredentialsRequest
 func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Context) (*shared.AzureCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentialsID := new(string)
-	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
-		*credentialsID = r.CredentialsID.ValueString()
+	id := new(string)
+	if !r.ID.IsUnknown() && !r.ID.IsNull() {
+		*id = r.ID.ValueString()
 	} else {
-		credentialsID = nil
+		id = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -184,10 +184,10 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Conte
 	}
 
 	out := shared.AzureCredential{
-		CredentialsID: credentialsID,
-		Name:          name,
-		ProviderType:  providerType,
-		Keys:          *keys,
+		ID:           id,
+		Name:         name,
+		ProviderType: providerType,
+		Keys:         *keys,
 	}
 
 	return &out, diags

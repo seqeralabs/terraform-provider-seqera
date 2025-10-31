@@ -37,6 +37,7 @@ type BitbucketCredentialResource struct {
 type BitbucketCredentialResourceModel struct {
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	Token         types.String `tfsdk:"token"`
@@ -57,6 +58,10 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 				Description: `Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

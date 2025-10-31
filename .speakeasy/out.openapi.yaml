@@ -11010,8 +11010,8 @@ components:
           maxLength: 22
           type: string
           readOnly: true
-          x-speakeasy-name-override: computeEnvId
           x-speakeasy-param-readonly: true
+          x-speakeasy-name-override: computeEnvId
         name:
           maxLength: 100
           type: string
@@ -11779,24 +11779,36 @@ components:
           minimum: 0
           type: integer
           format: int32
-          description: Number of GPUs to allocate
+          description: Set to 0 to disable GPU or 1 to enable GPU.
           example: 0
+          default: 0
         cpu:
           minimum: 0
           type: integer
           format: int32
-          description: Number of CPU cores to allocate
+          description: Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
           example: 2
+          default: 2
         memory:
           minimum: 0
           type: integer
           format: int32
-          description: Memory allocation for the Studio session in megabytes (MB).
+          description: Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
           example: 4096
+          default: 8192
         mountData:
           type: array
           items:
             type: string
+        environment:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+          description: Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: true
+          x-speakeasy-plan-validators: StudioEnvironmentVariableValidator
         condaEnvironment:
           maxLength: 2048
           type: string
@@ -11818,10 +11830,6 @@ components:
         On Seqera Cloud, the free tier permits only one running Studio session at a time.
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
     DataStudioCreateRequest:
-      required:
-        - computeEnvId
-        - dataStudioToolUrl
-        - name
       type: object
       properties:
         name:
@@ -11854,9 +11862,11 @@ components:
           items:
             type: integer
             format: int64
+          description: List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
         spot:
           type: boolean
           nullable: true
+          description: Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments.
       x-speakeasy-entity: Studios
       x-speakeasy-entity-description: |
         Studios is a unified platform where you can host a combination of
@@ -11868,6 +11878,11 @@ components:
         Note:
         On Seqera Cloud, the free tier permits only one running Studio session at a time.
         To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
+      required:
+        - computeEnvId
+        - dataStudioToolUrl
+        - name
+        - configuration
     DataStudioCreateResponse:
       type: object
       properties:
@@ -15741,7 +15756,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -15850,7 +15864,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16006,7 +16019,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16099,7 +16111,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16202,7 +16213,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16307,7 +16317,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16409,7 +16418,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16511,7 +16519,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16609,7 +16616,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16706,7 +16712,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16801,7 +16806,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -16897,7 +16901,6 @@ components:
         id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-name-override: credentialsId
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -17019,7 +17022,6 @@ components:
         id:
           type: string
           description: Unique identifier for the compute environment
-          x-speakeasy-name-override: computeEnvId
           x-speakeasy-param-readonly: true
         name:
           maxLength: 100
@@ -17133,7 +17135,6 @@ components:
         id:
           type: string
           description: Unique identifier for the compute environment
-          x-speakeasy-name-override: computeEnvId
           x-speakeasy-param-readonly: true
         name:
           maxLength: 100

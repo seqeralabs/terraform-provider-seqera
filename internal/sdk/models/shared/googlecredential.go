@@ -47,7 +47,7 @@ func (g *GoogleCredentialKeys) GetData() string {
 
 type GoogleCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "google")
@@ -74,11 +74,11 @@ func (g *GoogleCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GoogleCredential) GetCredentialsID() *string {
+func (g *GoogleCredential) GetID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.CredentialsID
+	return g.ID
 }
 
 func (g *GoogleCredential) GetName() string {
@@ -135,7 +135,7 @@ type GoogleCredentialKeysOutput struct {
 
 type GoogleCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "google")
@@ -162,11 +162,11 @@ func (g *GoogleCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GoogleCredentialOutput) GetCredentialsID() *string {
+func (g *GoogleCredentialOutput) GetID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.CredentialsID
+	return g.ID
 }
 
 func (g *GoogleCredentialOutput) GetName() string {

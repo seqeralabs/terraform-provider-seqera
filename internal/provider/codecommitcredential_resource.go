@@ -38,6 +38,7 @@ type CodecommitCredentialResourceModel struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	SecretKey     types.String `tfsdk:"secret_key"`
@@ -61,6 +62,10 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com`,
 			},
 			"credentials_id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

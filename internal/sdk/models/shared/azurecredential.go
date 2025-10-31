@@ -151,7 +151,7 @@ func (a *AzureCredentialKeys) GetClientSecret() *string {
 
 type AzureCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "azure")
@@ -178,11 +178,11 @@ func (a *AzureCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCredential) GetCredentialsID() *string {
+func (a *AzureCredential) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.CredentialsID
+	return a.ID
 }
 
 func (a *AzureCredential) GetName() string {
@@ -277,7 +277,7 @@ func (a *AzureCredentialKeysOutput) GetStorageName() string {
 
 type AzureCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "azure")
@@ -304,11 +304,11 @@ func (a *AzureCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzureCredentialOutput) GetCredentialsID() *string {
+func (a *AzureCredentialOutput) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.CredentialsID
+	return a.ID
 }
 
 func (a *AzureCredentialOutput) GetName() string {

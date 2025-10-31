@@ -30,6 +30,7 @@ type GoogleCredentialDataSource struct {
 // GoogleCredentialDataSourceModel describes the data model.
 type GoogleCredentialDataSourceModel struct {
 	CredentialsID types.String                 `tfsdk:"credentials_id"`
+	ID            types.String                 `tfsdk:"id"`
 	Keys          tfTypes.GoogleCredentialKeys `tfsdk:"keys"`
 	Name          types.String                 `tfsdk:"name"`
 	ProviderType  types.String                 `tfsdk:"provider_type"`
@@ -48,8 +49,12 @@ func (r *GoogleCredentialDataSource) Schema(ctx context.Context, req datasource.
 
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{
 				Computed: true,

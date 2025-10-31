@@ -28,29 +28,146 @@ To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 ## Example Usage
 
 ```terraform
-resource "seqera_studios" "my_studios" {
+# Example 1: Minimal Jupyter Studio
+resource "seqera_studios" "basic_jupyter" {
+  name                 = "my-jupyter-studio"
+  compute_env_id       = "compute-env-id"
+  data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
+  workspace_id         = seqera_workspace.my_workspace.id
+  # Configuration is required - gpu defaults to 0
+  configuration = {}
+}
+
+# Example 2: Jupyter Studio with Conda Environment using heredoc
+resource "seqera_studios" "jupyter_with_conda_heredoc" {
   auto_start     = false
   compute_env_id = "compute-env-id"
   configuration = {
-    conda_environment = "...my_conda_environment..."
-    cpu               = 2
-    gpu               = 0
-    lifespan_hours    = 2
-    memory            = 4096
-    mount_data = [
-      "..."
-    ]
+    # Use heredoc for simple YAML - just copy/paste your conda environment
+    conda_environment = <<-EOT
+      channels:
+        - conda-forge
+        - bioconda
+      dependencies:
+        - numpy>1.7,<2.3
+        - scipy
+        - tqdm=4.*
+        - pip:
+          - matplotlib==3.10.*
+          - seaborn>=0.13
+    EOT
+    cpu            = 2
+    memory         = 4096
+    lifespan_hours = 8
+    # gpu defaults to 0 (disabled)
+  }
+  data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
+  description          = "Jupyter studio with conda packages defined using heredoc"
+  is_private           = true
+  name                 = "jupyter-with-conda-heredoc"
+  spot                 = true
+  workspace_id         = seqera_workspace.my_workspace.id
+}
+
+# Example 3: Jupyter Studio with Conda Environment and Labels using yamlencode
+resource "seqera_labels" "environment_prod" {
+  workspace_id = seqera_workspace.my_workspace.id
+  name         = "environment"
+  value        = "production"
+  resource     = true
+}
+
+resource "seqera_labels" "team_datascience" {
+  workspace_id = seqera_workspace.my_workspace.id
+  name         = "team"
+  value        = "data-science"
+  resource     = true
+}
+
+resource "seqera_studios" "jupyter_with_conda_labels" {
+  auto_start     = false
+  compute_env_id = "compute-env-id"
+  configuration = {
+    # Use yamlencode() for dynamic generation or when using Terraform variables
+    conda_environment = yamlencode({
+      channels = [
+        "conda-forge",
+        "bioconda"
+      ]
+      dependencies = [
+        "numpy>1.7,<2.3",
+        "scipy",
+        "tqdm=4.*",
+        {
+          pip = [
+            "matplotlib==3.10.*",
+            "seaborn>=0.13"
+          ]
+        }
+      ]
+    })
+    cpu            = 2
+    memory         = 4096
+    lifespan_hours = 8
+    # gpu defaults to 0 (disabled)
   }
   data_studio_tool_url  = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
   description           = "Jupyter studio for data analysis and visualization"
-  initial_checkpoint_id = 9
   is_private            = true
+  # Reference label IDs from seqera_labels resources
   label_ids = [
-    7
+    seqera_labels.environment_prod.id,
+    seqera_labels.team_datascience.id
   ]
-  name         = "my-jupyter-studio"
+  name         = "jupyter-with-conda-labels"
   spot         = true
-  workspace_id = 9
+  workspace_id = seqera_workspace.my_workspace.id
+}
+
+
+# Example 4: RStudio with Mounted Data
+resource "seqera_studios" "rstudio_with_data" {
+  auto_start     = false
+  compute_env_id = "htaAEef9YYm5DqQrAyeDy"
+  configuration = {
+    cpu            = 2
+    memory         = 8192
+    lifespan_hours = 8
+    # Mount data references - these are encoded identifiers for S3/Azure/GCS buckets
+    # configured in your Seqera workspace. Get these IDs from your data links in the Platform UI.
+    mount_data = [
+      "v1-cloud-YnVja2V0OndzOjE1ODY2NDE2Mzg0MzQ4MzpzMzovL2FuZHJlYS10b3J0b3JlbGxhLWRldg=="
+    ]
+    # gpu defaults to 0 (disabled)
+  }
+  data_studio_tool_url = "cr.seqera.io/public/data-studio-ride:2025.04.1-snapshot"
+  description          = "RStudio with mounted S3 data"
+  is_private           = true
+  name                 = "rstudio-with-data"
+  workspace_id         = seqera_workspace.my_workspace.id
+}
+
+# Example 5: Studio with Custom Environment Variables
+resource "seqera_studios" "studio_with_env_vars" {
+  auto_start     = false
+  compute_env_id = "htaAEef9YYm5DqQrAyeDy"
+  configuration = {
+    cpu            = 2
+    memory         = 8192
+    lifespan_hours = 8
+    # Studio-specific environment variables (keys must be alphanumeric + underscore, cannot start with number)
+    environment = {
+      MY_STUDIO_VAR = "testing"
+      API_ENDPOINT  = "https://api.example.com"
+      DEBUG_MODE    = "true"
+    }
+    # gpu defaults to 0 (disabled)
+  }
+  data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-ride:2025.04.1-0.8"
+  description          = "Studio with custom environment variables"
+  is_private           = true
+  name                 = "studio-with-env"
+  workspace_id         = seqera_workspace.my_workspace.id
 }
 ```
 
@@ -60,18 +177,18 @@ resource "seqera_studios" "my_studios" {
 ### Required
 
 - `compute_env_id` (String) Requires replacement if changed.
+- `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
 - `data_studio_tool_url` (String) Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 
 ### Optional
 
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
-- `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
 - `description` (String) Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
 - `is_private` (Boolean) Requires replacement if changed.
-- `label_ids` (List of Number) Requires replacement if changed.
-- `spot` (Boolean) Requires replacement if changed.
+- `label_ids` (List of Number) List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Requires replacement if changed.
+- `spot` (Boolean) Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments. Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
@@ -84,10 +201,11 @@ resource "seqera_studios" "my_studios" {
 Optional:
 
 - `conda_environment` (String) Requires replacement if changed.
-- `cpu` (Number) Number of CPU cores to allocate. Requires replacement if changed.
-- `gpu` (Number) Number of GPUs to allocate. Requires replacement if changed.
+- `cpu` (Number) Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. Default: 2; Requires replacement if changed.
+- `environment` (Map of String) Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number. Requires replacement if changed.
+- `gpu` (Number) Set to 0 to disable GPU or 1 to enable GPU. Default: 0; Requires replacement if changed.
 - `lifespan_hours` (Number) Maximum lifespan of the Studio session in hours. Requires replacement if changed.
-- `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Requires replacement if changed.
+- `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. Default: 8192; Requires replacement if changed.
 - `mount_data` (List of String) Requires replacement if changed.
 
 ## Import

@@ -2,17 +2,34 @@
 
 package shared
 
+import (
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
+)
+
 type DataStudioConfiguration struct {
-	// Number of GPUs to allocate
-	Gpu *int `json:"gpu,omitempty"`
-	// Number of CPU cores to allocate
-	CPU *int `json:"cpu,omitempty"`
-	// Memory allocation for the Studio session in megabytes (MB).
-	Memory           *int     `json:"memory,omitempty"`
-	MountData        []string `json:"mountData,omitempty"`
-	CondaEnvironment *string  `json:"condaEnvironment,omitempty"`
+	// Set to 0 to disable GPU or 1 to enable GPU.
+	Gpu *int `default:"0" json:"gpu"`
+	// Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
+	CPU *int `default:"2" json:"cpu"`
+	// Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
+	Memory    *int     `default:"8192" json:"memory"`
+	MountData []string `json:"mountData,omitempty"`
+	// Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
+	Environment      map[string]string `json:"environment,omitempty"`
+	CondaEnvironment *string           `json:"condaEnvironment,omitempty"`
 	// Maximum lifespan of the Studio session in hours
 	LifespanHours *int `json:"lifespanHours,omitempty"`
+}
+
+func (d DataStudioConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DataStudioConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DataStudioConfiguration) GetGpu() *int {
@@ -41,6 +58,13 @@ func (d *DataStudioConfiguration) GetMountData() []string {
 		return nil
 	}
 	return d.MountData
+}
+
+func (d *DataStudioConfiguration) GetEnvironment() map[string]string {
+	if d == nil {
+		return nil
+	}
+	return d.Environment
 }
 
 func (d *DataStudioConfiguration) GetCondaEnvironment() *string {

@@ -56,7 +56,7 @@ func (t *TowerAgentCredentialKeys) GetWorkDir() *string {
 
 type TowerAgentCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "agent")
@@ -83,11 +83,11 @@ func (t *TowerAgentCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (t *TowerAgentCredential) GetCredentialsID() *string {
+func (t *TowerAgentCredential) GetID() *string {
 	if t == nil {
 		return nil
 	}
-	return t.CredentialsID
+	return t.ID
 }
 
 func (t *TowerAgentCredential) GetName() string {
@@ -144,7 +144,7 @@ type TowerAgentCredentialKeysOutput struct {
 
 type TowerAgentCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "agent")
@@ -171,11 +171,11 @@ func (t *TowerAgentCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (t *TowerAgentCredentialOutput) GetCredentialsID() *string {
+func (t *TowerAgentCredentialOutput) GetID() *string {
 	if t == nil {
 		return nil
 	}
-	return t.CredentialsID
+	return t.ID
 }
 
 func (t *TowerAgentCredentialOutput) GetName() string {

@@ -39,7 +39,7 @@ type AWSBatchCEComputeConfigInput struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
-	ComputeEnvID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the compute environment
 	Name string `json:"name"`
 	// Optional description of the compute environment
@@ -84,11 +84,11 @@ func (a *AWSBatchCEComputeConfigInput) GetWorkspaceID() *int64 {
 	return a.WorkspaceID
 }
 
-func (a *AWSBatchCEComputeConfigInput) GetComputeEnvID() *string {
+func (a *AWSBatchCEComputeConfigInput) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ComputeEnvID
+	return a.ID
 }
 
 func (a *AWSBatchCEComputeConfigInput) GetName() string {
@@ -161,7 +161,7 @@ type AWSBatchCEComputeConfig struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
-	ComputeEnvID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the compute environment
 	Name string `json:"name"`
 	// Optional description of the compute environment
@@ -213,11 +213,11 @@ func (a *AWSBatchCEComputeConfig) GetWorkspaceID() *int64 {
 	return a.WorkspaceID
 }
 
-func (a *AWSBatchCEComputeConfig) GetComputeEnvID() *string {
+func (a *AWSBatchCEComputeConfig) GetID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ComputeEnvID
+	return a.ID
 }
 
 func (a *AWSBatchCEComputeConfig) GetName() string {

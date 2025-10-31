@@ -29,6 +29,7 @@ type ContainerRegistryCredentialDataSource struct {
 // ContainerRegistryCredentialDataSourceModel describes the data model.
 type ContainerRegistryCredentialDataSourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	UserName      types.String `tfsdk:"user_name"`
@@ -47,8 +48,12 @@ func (r *ContainerRegistryCredentialDataSource) Schema(ctx context.Context, req 
 
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Credentials string identifier`,
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,

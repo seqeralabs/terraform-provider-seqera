@@ -65,7 +65,7 @@ func (b *BitbucketCredentialKeys) GetBaseURL() *string {
 
 type BitbucketCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")
@@ -92,11 +92,11 @@ func (b *BitbucketCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BitbucketCredential) GetCredentialsID() *string {
+func (b *BitbucketCredential) GetID() *string {
 	if b == nil {
 		return nil
 	}
-	return b.CredentialsID
+	return b.ID
 }
 
 func (b *BitbucketCredential) GetName() string {
@@ -162,7 +162,7 @@ func (b *BitbucketCredentialKeysOutput) GetUsername() string {
 
 type BitbucketCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
 	// Display name for the credential (max 100 characters)
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")
@@ -189,11 +189,11 @@ func (b *BitbucketCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BitbucketCredentialOutput) GetCredentialsID() *string {
+func (b *BitbucketCredentialOutput) GetID() *string {
 	if b == nil {
 		return nil
 	}
-	return b.CredentialsID
+	return b.ID
 }
 
 func (b *BitbucketCredentialOutput) GetName() string {
