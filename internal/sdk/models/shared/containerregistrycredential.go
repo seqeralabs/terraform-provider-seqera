@@ -66,7 +66,7 @@ func (c *ContainerRegistryCredentialKeys) GetRegistry() *string {
 type ContainerRegistryCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "container-reg")
 	ProviderType *ContainerRegistryCredentialProviderType `default:"container-reg" json:"provider"`
@@ -163,7 +163,7 @@ func (c *ContainerRegistryCredentialKeysOutput) GetUserName() string {
 type ContainerRegistryCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "container-reg")
 	ProviderType *ContainerRegistryCredentialProviderType `default:"container-reg" json:"provider"`

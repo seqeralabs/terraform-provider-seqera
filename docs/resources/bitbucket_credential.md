@@ -18,12 +18,30 @@ repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-resource "seqera_bitbucket_credential" "my_bitbucketcredential" {
-  base_url     = "https://bitbucket.org/myorg"
-  name         = "...my_name..."
-  token        = "ATBB..."
-  username     = "myuser@example.com"
-  workspace_id = 10
+# Bitbucket Credential Resource Examples
+#
+# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
+# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
+
+# Variables for sensitive credentials
+variable "bitbucket_username" {
+  description = "Bitbucket username"
+  type        = string
+}
+
+variable "bitbucket_password" {
+  description = "Bitbucket app password"
+  type        = string
+  sensitive   = true
+}
+
+# Example: Basic Bitbucket credentials
+resource "seqera_bitbucket_credential" "example" {
+  name         = "bitbucket-main"
+  workspace_id = seqera_workspace.main.id
+
+  username = var.bitbucket_username
+  password = var.bitbucket_password
 }
 ```
 
@@ -32,7 +50,7 @@ resource "seqera_bitbucket_credential" "my_bitbucketcredential" {
 
 ### Required
 
-- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
+- `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `token` (String, Sensitive) Bitbucket API token (required, sensitive). App passwords are deprecated.
 - `username` (String) Bitbucket account username (for app passwords) or email (for API tokens). Required.
 

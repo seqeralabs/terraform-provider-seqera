@@ -35,11 +35,25 @@ func (r *GithubCredentialResourceModel) RefreshFromSharedDescribeGithubCredentia
 	return diags
 }
 
+func (r *GithubCredentialResourceModel) RefreshFromSharedGithubCredentialKeysOutput(ctx context.Context, resp *shared.GithubCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Username = types.StringValue(resp.Username)
+
+	return diags
+}
+
 func (r *GithubCredentialResourceModel) RefreshFromSharedGithubCredentialOutput(ctx context.Context, resp *shared.GithubCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.ID = types.StringPointerValue(resp.ID)
+		diags.Append(r.RefreshFromSharedGithubCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -178,12 +192,18 @@ func (r *GithubCredentialResourceModel) ToSharedGithubCredential(ctx context.Con
 	} else {
 		providerType = nil
 	}
-	keys := shared.GithubCredentialKeys{}
+	keys, keysDiags := r.ToSharedGithubCredentialKeys(ctx)
+	diags.Append(keysDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := shared.GithubCredential{
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
-		Keys:         keys,
+		Keys:         *keys,
 	}
 
 	return &out, diags
@@ -191,6 +211,9 @@ func (r *GithubCredentialResourceModel) ToSharedGithubCredential(ctx context.Con
 
 func (r *GithubCredentialResourceModel) ToSharedGithubCredentialKeys(ctx context.Context) (*shared.GithubCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var username string
+	username = r.Username.ValueString()
 
 	var accessToken string
 	accessToken = r.AccessToken.ValueString()
@@ -202,6 +225,7 @@ func (r *GithubCredentialResourceModel) ToSharedGithubCredentialKeys(ctx context
 		baseURL = nil
 	}
 	out := shared.GithubCredentialKeys{
+		Username:    username,
 		AccessToken: accessToken,
 		BaseURL:     baseURL,
 	}

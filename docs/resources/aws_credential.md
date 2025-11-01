@@ -18,97 +18,31 @@ within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# Seqera AWS Credentials Examples
+# AWS Credential Resource Examples
 #
-# AWS credentials store authentication information for accessing AWS services
-# within the Seqera Platform workflows.
-#
-# SECURITY BEST PRACTICES:
-# - Never hardcode AWS access keys or secret keys in Terraform files
-# - Use Terraform variables marked as sensitive
-# - Store actual credentials in secure secret management systems (AWS Secrets Manager, HashiCorp Vault, etc.)
-# - Use IAM roles and assume role ARN when possible for enhanced security
-# - Restrict IAM permissions to minimum required (principle of least privilege)
+# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
+# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
 
-# Variable declarations for sensitive AWS credentials
-variable "aws_access_key" {
-  description = "AWS access key ID"
+# Variables for sensitive credentials
+variable "aws_access_key_id" {
+  description = "AWS Access Key ID"
   type        = string
   sensitive   = true
 }
 
-variable "aws_secret_key" {
-  description = "AWS secret access key"
+variable "aws_secret_access_key" {
+  description = "AWS Secret Access Key"
   type        = string
   sensitive   = true
 }
 
-# Example 1: Basic AWS credentials using variables
-# Use IAM user access keys (least recommended for production)
-
-resource "seqera_aws_credential" "basic" {
-  name         = "aws-basic"
+# Example: Basic AWS credentials
+resource "seqera_aws_credential" "example" {
+  name         = "aws-main"
   workspace_id = seqera_workspace.main.id
-  access_key   = var.aws_access_key
-  secret_key   = var.aws_secret_key
-}
 
-# Example 2: AWS credentials with assume role ARN (recommended)
-# Use IAM role assumption for enhanced security
-
-resource "seqera_aws_credential" "with_assume_role" {
-  name            = "aws-assume-role"
-  workspace_id    = seqera_workspace.main.id
-  access_key      = var.aws_access_key
-  secret_key      = var.aws_secret_key
-  assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraRole"
-}
-
-# Example 3: AWS credentials for specific services
-# Configure credentials for accessing specific AWS services like S3, Batch, etc.
-
-resource "seqera_aws_credential" "s3_access" {
-  name         = "aws-s3-access"
-  workspace_id = seqera_workspace.main.id
-  access_key   = var.aws_access_key
-  secret_key   = var.aws_secret_key
-}
-
-# Example 4: Multiple AWS credentials for different environments
-# Create credentials for dev, staging, and production environments
-
-locals {
-  aws_environments = {
-    "dev" = {
-      access_key_var = var.aws_dev_access_key
-      secret_key_var = var.aws_dev_secret_key
-    }
-    "staging" = {
-      access_key_var = var.aws_staging_access_key
-      secret_key_var = var.aws_staging_secret_key
-    }
-    "production" = {
-      access_key_var = var.aws_prod_access_key
-      secret_key_var = var.aws_prod_secret_key
-    }
-  }
-}
-
-# Note: You would need to declare the corresponding variables:
-# variable "aws_dev_access_key" { type = string; sensitive = true }
-# variable "aws_dev_secret_key" { type = string; sensitive = true }
-# variable "aws_staging_access_key" { type = string; sensitive = true }
-# variable "aws_staging_secret_key" { type = string; sensitive = true }
-# variable "aws_prod_access_key" { type = string; sensitive = true }
-# variable "aws_prod_secret_key" { type = string; sensitive = true }
-
-resource "seqera_aws_credential" "environment_credentials" {
-  for_each = local.aws_environments
-
-  name         = "aws-${each.key}"
-  workspace_id = seqera_workspace.main.id
-  access_key   = each.value.access_key_var
-  secret_key   = each.value.secret_key_var
+  access_key = var.aws_access_key_id
+  secret_key = var.aws_secret_access_key
 }
 ```
 
@@ -118,7 +52,7 @@ resource "seqera_aws_credential" "environment_credentials" {
 ### Required
 
 - `access_key` (String) AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
-- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
+- `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `secret_key` (String, Sensitive) AWS secret access key (required, sensitive). Must be at least 40 characters.
 
 ### Optional
