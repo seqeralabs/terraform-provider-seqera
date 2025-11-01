@@ -66,7 +66,7 @@ func (k *KubernetesCredentialKeys) GetPrivateKey() *string {
 type KubernetesCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "k8s")
 	ProviderType *KubernetesCredentialProviderType `default:"k8s" json:"provider"`
@@ -154,7 +154,7 @@ type KubernetesCredentialKeysOutput struct {
 type KubernetesCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "k8s")
 	ProviderType *KubernetesCredentialProviderType `default:"k8s" json:"provider"`

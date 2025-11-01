@@ -15990,9 +15990,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16098,9 +16100,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16253,9 +16257,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16345,9 +16351,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16447,9 +16455,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16551,9 +16561,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16652,9 +16664,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16753,9 +16767,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16801,8 +16817,13 @@ components:
 '
           type: object
           required:
+            - username
             - accessToken
           properties:
+            username:
+              type: string
+              description: GitHub username associated with the Personal Access Token (required)
+              example: octocat
             accessToken:
               type: string
               description: GitHub Personal Access Token (PAT) for authentication (required, sensitive)
@@ -16850,9 +16871,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16898,8 +16921,13 @@ components:
 '
           type: object
           required:
+            - username
             - token
           properties:
+            username:
+              type: string
+              description: GitLab username associated with the Personal Access Token (required)
+              example: gitlab-user
             token:
               type: string
               description: GitLab Personal Access Token or Project Access Token (required, sensitive)
@@ -16946,9 +16974,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -17040,9 +17070,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -17135,9 +17167,11 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string

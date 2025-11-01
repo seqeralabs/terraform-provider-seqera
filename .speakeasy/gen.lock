@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 6f36cbc58f922b3a06689e9a0d7e9a88
+  docChecksum: 2c966627e484fe08f8c496e7e0b19b34
   docVersion: 1.56.0
-  speakeasyVersion: 1.644.0
-  generationVersion: 2.733.1
+  speakeasyVersion: 1.645.1
+  generationVersion: 2.735.1
   releaseVersion: 0.25.4
   configChecksum: 9d61d6afb011e16bfff165d623e8f1d7
 features:
@@ -208,8 +208,6 @@ generatedFiles:
   - internal/provider/types/git_lab_security_keys.go
   - internal/provider/types/gitea_security_keys.go
   - internal/provider/types/github_action_config.go
-  - internal/provider/types/github_credential_keys.go
-  - internal/provider/types/gitlab_credential_keys.go
   - internal/provider/types/google_batch_service_configuration.go
   - internal/provider/types/google_credential_keys.go
   - internal/provider/types/google_gke_cluster_configuration.go
@@ -3139,7 +3137,7 @@ examples:
   CreateGithubCredentials:
     speakeasy-default-create-github-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"username": "octocat", "accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
       responses:
         "200":
           application/json: {}
@@ -3152,7 +3150,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"username": "octocat"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGithubCredentials:
@@ -3161,7 +3159,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"username": "octocat", "accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3176,7 +3174,7 @@ examples:
   CreateGitlabCredentials:
     speakeasy-default-create-gitlab-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
       responses:
         "200":
           application/json: {}
@@ -3189,7 +3187,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"username": "gitlab-user"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGitlabCredentials:
@@ -3198,7 +3196,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}

@@ -35,11 +35,25 @@ func (r *GitlabCredentialResourceModel) RefreshFromSharedDescribeGitlabCredentia
 	return diags
 }
 
+func (r *GitlabCredentialResourceModel) RefreshFromSharedGitlabCredentialKeysOutput(ctx context.Context, resp *shared.GitlabCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Username = types.StringValue(resp.Username)
+
+	return diags
+}
+
 func (r *GitlabCredentialResourceModel) RefreshFromSharedGitlabCredentialOutput(ctx context.Context, resp *shared.GitlabCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.ID = types.StringPointerValue(resp.ID)
+		diags.Append(r.RefreshFromSharedGitlabCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -178,12 +192,18 @@ func (r *GitlabCredentialResourceModel) ToSharedGitlabCredential(ctx context.Con
 	} else {
 		providerType = nil
 	}
-	keys := shared.GitlabCredentialKeys{}
+	keys, keysDiags := r.ToSharedGitlabCredentialKeys(ctx)
+	diags.Append(keysDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := shared.GitlabCredential{
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
-		Keys:         keys,
+		Keys:         *keys,
 	}
 
 	return &out, diags
@@ -191,6 +211,9 @@ func (r *GitlabCredentialResourceModel) ToSharedGitlabCredential(ctx context.Con
 
 func (r *GitlabCredentialResourceModel) ToSharedGitlabCredentialKeys(ctx context.Context) (*shared.GitlabCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	var username string
+	username = r.Username.ValueString()
 
 	var token string
 	token = r.Token.ValueString()
@@ -202,8 +225,9 @@ func (r *GitlabCredentialResourceModel) ToSharedGitlabCredentialKeys(ctx context
 		baseURL = nil
 	}
 	out := shared.GitlabCredentialKeys{
-		Token:   token,
-		BaseURL: baseURL,
+		Username: username,
+		Token:    token,
+		BaseURL:  baseURL,
 	}
 
 	return &out, diags

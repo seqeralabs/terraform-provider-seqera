@@ -18,12 +18,28 @@ AWS Codecommit repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-resource "seqera_codecommit_credential" "my_codecommitcredential" {
-  access_key   = "AKIAIOSFODNN7EXAMPLE"
-  base_url     = "https://git-codecommit.us-east-1.amazonaws.com"
-  name         = "...my_name..."
-  secret_key   = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-  workspace_id = 9
+# AWS CodeCommit Credential Resource Examples
+
+
+# Variables for sensitive credentials
+variable "codecommit_username" {
+  description = "CodeCommit username"
+  type        = string
+}
+
+variable "codecommit_password" {
+  description = "CodeCommit password"
+  type        = string
+  sensitive   = true
+}
+
+# Example: Basic CodeCommit credentials
+resource "seqera_codecommit_credential" "example" {
+  name         = "codecommit-main"
+  workspace_id = seqera_workspace.main.id
+
+  username = var.codecommit_username
+  password = var.codecommit_password
 }
 ```
 
@@ -33,7 +49,7 @@ resource "seqera_codecommit_credential" "my_codecommitcredential" {
 ### Required
 
 - `access_key` (String) AWS access key to access the Codecommit repository (required)
-- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
+- `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `secret_key` (String, Sensitive) AWS secret key to access the Codecommit repository (required, sensitive)
 
 ### Optional
