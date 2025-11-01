@@ -19,9 +19,7 @@ enable secure communication between the Seqera Platform and compute environments
 
 ```terraform
 # Tower Agent Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
+
 
 # Variable for sensitive credentials
 variable "agent_connection_id" {

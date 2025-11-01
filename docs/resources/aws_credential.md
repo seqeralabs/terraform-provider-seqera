@@ -18,12 +18,6 @@ within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# AWS Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
-
-# Variables for sensitive credentials
 variable "aws_access_key_id" {
   description = "AWS Access Key ID"
   type        = string

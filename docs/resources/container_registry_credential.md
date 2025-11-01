@@ -19,9 +19,7 @@ container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platfor
 
 ```terraform
 # Container Registry Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
+
 
 # Variables for sensitive credentials
 variable "registry_username" {

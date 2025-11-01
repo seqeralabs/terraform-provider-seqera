@@ -19,13 +19,11 @@ compute environments and resources within the Seqera Platform workflows.
 
 ```terraform
 # SSH Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
+
 
 # Variables for sensitive credentials
 variable "ssh_private_key" {
-  description = "SSH private key (PEM format)"
+  description = "SSH private key content"
   type        = string
   sensitive   = true
 }

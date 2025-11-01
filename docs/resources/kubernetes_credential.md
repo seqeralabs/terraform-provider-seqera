@@ -19,9 +19,7 @@ execution. Supports two authentication methods: Service Account Token and X.509 
 
 ```terraform
 # Kubernetes Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
+
 
 # Variables for sensitive credentials
 variable "k8s_certificate" {

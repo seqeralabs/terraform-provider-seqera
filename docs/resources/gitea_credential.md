@@ -19,9 +19,7 @@ repositories within the Seqera Platform workflows.
 
 ```terraform
 # Gitea Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
+
 
 # Variables for sensitive credentials
 variable "gitea_username" {

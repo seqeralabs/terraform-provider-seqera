@@ -19,9 +19,7 @@ within the Seqera Platform workflows.
 
 ```terraform
 # Google Cloud (GCP) Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
+
 
 # Variable for sensitive credentials
 variable "gcp_service_account_key" {

@@ -20,11 +20,6 @@ Azure credentials support three authentication modes:
 ## Example Usage
 
 ```terraform
-# Azure Credential Resource Examples
-#
-# IMPORTANT: Credential names must use only letters, numbers, underscores, and hyphens.
-# No spaces allowed. Use snake_case (my_credential) or kebab-case (my-credential).
-
 # Variables for sensitive credentials
 variable "azure_batch_name" {
   description = "Azure Batch account name"
