@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 9494fac1ffcf86d1510da904db4204c4
+  docChecksum: 2c302f89ac687c8ee87abea7bb3ca882
   docVersion: 1.56.0
   speakeasyVersion: 1.645.2
   generationVersion: 2.735.1
@@ -29,7 +29,6 @@ generatedFiles:
   - examples/provider/provider.tf
   - examples/resources/seqera_action/import-by-string-id.tf
   - examples/resources/seqera_action/import.sh
-  - examples/resources/seqera_action/resource.tf
   - examples/resources/seqera_aws_batch_ce/import-by-string-id.tf
   - examples/resources/seqera_aws_batch_ce/import.sh
   - examples/resources/seqera_aws_batch_ce/resource.tf
