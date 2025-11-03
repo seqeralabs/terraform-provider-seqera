@@ -7,7 +7,6 @@ import (
 )
 
 type AccessToken struct {
-	BasicAuth   types.String `tfsdk:"basic_auth"`
 	DateCreated types.String `tfsdk:"date_created"`
 	ID          types.Int64  `tfsdk:"id"`
 	LastUsed    types.String `tfsdk:"last_used"`

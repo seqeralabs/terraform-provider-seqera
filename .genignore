@@ -7,6 +7,11 @@ internal/sdk/internal/hooks/compute_env_status_hook.go
 internal/sdk/internal/hooks/credential_error_hook.go
 internal/sdk/internal/hooks/generic_resource_error_hook.go
 internal/sdk/internal/hooks/conflict_error_hook.go
+internal/sdk/internal/hooks/token_list_error_hook.go
+
+# Custom resource SDK files with manual token filtering
+internal/provider/tokens_resource_sdk.go
+internal/provider/tokens_resource.go
 
 # Custom validators
 internal/validators/mapvalidators/studio_environment_variable_validator.go
@@ -24,6 +29,7 @@ examples/resources/seqera_orgs/resource.tf
 examples/resources/seqera_primary_compute_env/resource.tf
 examples/resources/seqera_pipeline_secret/resource.tf
 examples/resources/seqera_studios/resource.tf
+examples/resources/seqera_tokens/resource.tf
 examples/resources/seqera_google_credential/resource.tf
 examples/resources/seqera_google_credential/import.sh
 examples/resources/seqera_google_credential/import-by-string-id.tf

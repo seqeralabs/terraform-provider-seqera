@@ -4,25 +4,54 @@ page_title: "seqera_tokens Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
   Manage API access tokens for authentication.
-  Tokens provide secure API access, enabling programmatic
-  access to platform resources and services. They can be used
-  for CI/CD integration, automation scripts, and external tools.
+  Tokens provide secure API access for programmatic access to platform
+  resources and services. Use tokens for CI/CD integration, automation
+  scripts, and external tools.
+  IMPORTANT: The token value (access_key) is only available immediately
+  after creation. Store it securely as it cannot be retrieved later.
 ---
 
 # seqera_tokens (Resource)
 
 Manage API access tokens for authentication.
 
-Tokens provide secure API access, enabling programmatic
-access to platform resources and services. They can be used
-for CI/CD integration, automation scripts, and external tools.
+Tokens provide secure API access for programmatic access to platform
+resources and services. Use tokens for CI/CD integration, automation
+scripts, and external tools.
+
+IMPORTANT: The token value (access_key) is only available immediately
+after creation. Store it securely as it cannot be retrieved later.
 
 ## Example Usage
 
 ```terraform
-resource "seqera_tokens" "my_tokens" {
-  name     = "ci-cd-pipeline-token"
-  token_id = 3
+# Token Resource Examples
+#
+# Tokens provide API access for programmatic authentication to Seqera Platform.
+# The token value (access_key) is only available immediately after creation.
+
+# Example 1: Basic token creation
+# Create a token for CI/CD pipeline authentication
+
+resource "seqera_tokens" "ci_pipeline" {
+  name = "ci-cd-pipeline-token"
+}
+
+output "ci_token_value" {
+  value     = seqera_tokens.ci_pipeline.access_key
+  sensitive = true
+}
+
+# Example 2: Token for automation scripts
+
+resource "seqera_tokens" "automation" {
+  name = "automation-script-token"
+}
+
+# Example 3: Token with descriptive name for team workflows
+
+resource "seqera_tokens" "data_science_team" {
+  name = "data-science-team-token"
 }
 ```
 
@@ -31,27 +60,25 @@ resource "seqera_tokens" "my_tokens" {
 
 ### Optional
 
-- `name` (String) Requires replacement if changed.
-- `token_id` (Number) Token numeric identifier
+- `name` (String) Display name for the token (1-50 characters). Requires replacement if changed.
 
 ### Read-Only
 
-- `access_key` (String)
-- `basic_auth` (String, Deprecated) Deprecated basic authentication string
+- `access_key` (String, Sensitive) The actual token value for authentication. This sensitive value is ONLY
+returned when the token is created and cannot be retrieved later.
+Store this securely.
 - `date_created` (String) Timestamp when the token was created
-- `id` (Number) Unique numeric identifier for the access token (nullable)
-- `last_used` (String) Timestamp when the token was last used for authentication
-- `token` (Attributes) Represents an API access token for authentication.
-Contains token metadata, permissions, and expiration information
-for secure API access to platform resources. (see [below for nested schema](#nestedatt--token))
+- `id` (Number) Unique identifier for the token
+- `last_used` (String) Timestamp when the token was last used for authentication (null if never used)
+- `token` (Attributes) API access token for platform authentication.
+Contains the token ID, name, and usage metadata. (see [below for nested schema](#nestedatt--token))
 
 <a id="nestedatt--token"></a>
 ### Nested Schema for `token`
 
 Read-Only:
 
-- `basic_auth` (String, Deprecated) Deprecated basic authentication string
 - `date_created` (String) Timestamp when the token was created
-- `id` (Number) Unique numeric identifier for the access token (nullable)
-- `last_used` (String) Timestamp when the token was last used for authentication
-- `name` (String) Display name for the token (1-50 characters)
+- `id` (Number) Unique identifier for the token
+- `last_used` (String) Timestamp when the token was last used for authentication (null if never used)
+- `name` (String) Display name for the token (1-50 characters). Used to identify the token's purpose.

@@ -3,6 +3,7 @@
 package shared
 
 type CreateAccessTokenRequest struct {
+	// Display name for the token (1-50 characters)
 	Name *string `json:"name,omitempty"`
 }
 

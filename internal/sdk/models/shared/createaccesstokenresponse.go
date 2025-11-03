@@ -3,10 +3,13 @@
 package shared
 
 type CreateAccessTokenResponse struct {
+	// The actual token value for authentication. This sensitive value is ONLY
+	// returned when the token is created and cannot be retrieved later.
+	// Store this securely.
+	//
 	AccessKey *string `json:"accessKey,omitempty"`
-	// Represents an API access token for authentication.
-	// Contains token metadata, permissions, and expiration information
-	// for secure API access to platform resources.
+	// API access token for platform authentication.
+	// Contains the token ID, name, and usage metadata.
 	//
 	Token *AccessToken `json:"token,omitempty"`
 }

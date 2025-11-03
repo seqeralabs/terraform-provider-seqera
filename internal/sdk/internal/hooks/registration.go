@@ -18,6 +18,11 @@ func initHooks(h *Hooks) {
 	computeEnvStatusHook := &ComputeEnvStatusHook{}
 	h.registerAfterSuccessHook(computeEnvStatusHook)
 
+	// Register token list error hook to handle permission errors (401/403)
+	// This allows token creation to succeed even when user can't list all tokens
+	tokenListErrorHook := &TokenListErrorHook{}
+	h.registerAfterSuccessHook(tokenListErrorHook)
+
 	// exampleHook := &ExampleHook{}
 
 	// h.registerSDKInitHook(exampleHook)
