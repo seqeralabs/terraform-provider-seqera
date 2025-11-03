@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -16,8 +17,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -36,14 +37,14 @@ type GitlabCredentialResource struct {
 
 // GitlabCredentialResourceModel describes the resource data model.
 type GitlabCredentialResourceModel struct {
-	BaseURL       types.String                 `tfsdk:"base_url"`
-	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	ID            types.String                 `tfsdk:"id"`
-	Keys          tfTypes.GitlabCredentialKeys `tfsdk:"keys"`
-	Name          types.String                 `tfsdk:"name"`
-	ProviderType  types.String                 `tfsdk:"provider_type"`
-	Token         types.String                 `tfsdk:"token"`
-	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL       types.String `tfsdk:"base_url"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
+	Name          types.String `tfsdk:"name"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	Token         types.String `tfsdk:"token"`
+	Username      types.String `tfsdk:"username"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GitlabCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -69,18 +70,16 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
-			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Display name for the credential (max 100 characters). Requires replacement if changed.`,
+				Description: `Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
+					stringvalidator.UTF8LengthBetween(2, 99),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
 			"provider_type": schema.StringAttribute{
@@ -96,9 +95,16 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Sensitive:   true,
 				Description: `GitLab Personal Access Token or Project Access Token (required, sensitive)`,
 			},
+			"username": schema.StringAttribute{
+				Required:    true,
+				Description: `GitLab username associated with the Personal Access Token (required)`,
+			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
-				Description: `Workspace numeric identifier`,
+				Optional: true,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Workspace numeric identifier. Requires replacement if changed.`,
 			},
 		},
 	}

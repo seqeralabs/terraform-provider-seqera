@@ -3,7 +3,7 @@
 
 # Gitea credential
 resource "seqera_gitea_credential" "example" {
-  name     = "Example Gitea Credentials"
+  name     = "example-gitea-credentials"
   username = "example-user"
   password = "example-password-or-token-123456"
   base_url = "https://gitea.example.com"

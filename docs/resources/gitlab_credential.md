@@ -18,284 +18,31 @@ repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# Seqera GitLab Credentials Examples
-#
-# GitLab credentials store authentication information for accessing GitLab
-# repositories within the Seqera Platform workflows.
-#
-# SECURITY BEST PRACTICES:
-# - Never hardcode credentials in Terraform files
-# - Use Terraform variables marked as sensitive
-# - Store actual credentials in secure secret management systems
-# - Use Personal Access Tokens (PATs) or Project Access Tokens with minimal required scopes
-# - Regularly rotate tokens
-# - Set token expiration dates
-
-# Variable declarations for sensitive GitLab credentials
-variable "gitlab_token" {
-  description = "GitLab Personal Access Token or Project Access Token"
-  type        = string
-  sensitive   = true
+variable "gitlab_username" {
+  type = string
 }
 
-# =============================================================================
-# Example 1: Basic GitLab Credentials (Recommended)
-# =============================================================================
-# Basic configuration with GitLab Personal Access Token (PAT).
-# This works for both GitLab.com and self-hosted GitLab instances.
+variable "gitlab_token" {
+  type      = string
+  sensitive = true
+}
 
-resource "seqera_gitlab_credential" "basic" {
+resource "seqera_gitlab_credential" "example" {
   name         = "gitlab-main"
   workspace_id = seqera_workspace.main.id
 
-  token = var.gitlab_token
+  username = var.gitlab_username
+  token    = var.gitlab_token
 }
-
-# =============================================================================
-# Example 2: Self-Hosted GitLab Server Credentials
-# =============================================================================
-# Use base_url when connecting to self-hosted GitLab server.
-# Leave base_url empty or unset for GitLab.com.
 
 resource "seqera_gitlab_credential" "self_hosted" {
   name         = "gitlab-enterprise"
   workspace_id = seqera_workspace.main.id
 
+  username = var.gitlab_username
   token    = var.gitlab_token
   base_url = "https://gitlab.mycompany.com"
 }
-
-# =============================================================================
-# Example 3: Multiple GitLab Credentials for Different Instances
-# =============================================================================
-# Use separate tokens for different GitLab instances or groups
-# for better access control and auditability.
-
-locals {
-  gitlab_instances = {
-    "public" = {
-      token    = var.gitlab_public_token
-      base_url = "" # GitLab.com (default)
-    }
-    "internal" = {
-      token    = var.gitlab_internal_token
-      base_url = "https://gitlab.internal.company.com"
-    }
-    "partner" = {
-      token    = var.gitlab_partner_token
-      base_url = "https://gitlab.partner.com"
-    }
-  }
-}
-
-# Note: You would need to declare the corresponding variables:
-# variable "gitlab_public_token" { type = string; sensitive = true }
-# variable "gitlab_internal_token" { type = string; sensitive = true }
-# variable "gitlab_partner_token" { type = string; sensitive = true }
-
-resource "seqera_gitlab_credential" "multi_instance" {
-  for_each = local.gitlab_instances
-
-  name         = "gitlab-${each.key}"
-  workspace_id = seqera_workspace.main.id
-  token        = each.value.token
-  base_url     = each.value.base_url != "" ? each.value.base_url : null
-}
-
-# =============================================================================
-# Example 4: Creating GitLab Personal Access Tokens
-# =============================================================================
-# To create a GitLab Personal Access Token:
-#
-# 1. Go to GitLab Settings (User Preferences):
-#    https://gitlab.com/-/profile/personal_access_tokens
-#    Or: https://your-gitlab-instance.com/-/profile/personal_access_tokens
-#
-# 2. Click "Add new token"
-#
-# 3. Configure token:
-#    - Token name: "Seqera Platform"
-#    - Expiration date: Set appropriate date (e.g., 90 days)
-#
-# 4. Select the required scopes:
-#    - read_repository (Read access to repositories)
-#      - Required for cloning repositories
-#    - write_repository (Write access to repositories)
-#      - Optional, if you need to push changes
-#    - read_api (Read-only API access)
-#      - Optional, for additional API operations
-#    - api (Full API access)
-#      - Use cautiously, grants extensive permissions
-#
-# 5. Click "Create personal access token"
-#
-# 6. Copy the token immediately (it won't be shown again)
-#
-# 7. Store the token securely and use it in your Terraform configuration
-
-# =============================================================================
-# Example 5: Creating GitLab Project Access Tokens
-# =============================================================================
-# Project Access Tokens provide scoped access to specific projects:
-#
-# 1. Navigate to your project in GitLab
-#
-# 2. Go to Settings > Access Tokens
-#
-# 3. Create new token:
-#    - Token name: "Seqera Platform"
-#    - Expiration date: Set appropriate date
-#    - Select a role: Developer, Maintainer, or Owner
-#    - Select scopes: read_repository, write_repository
-#
-# 4. Click "Create project access token"
-#
-# 5. Copy and store the token securely
-#
-# Benefits of Project Access Tokens:
-# - Scoped to specific projects
-# - Can be managed by project maintainers
-# - Easier to audit and revoke
-# - Recommended for CI/CD and automation
-
-# =============================================================================
-# Example 6: Using GitLab Credentials with Pipelines
-# =============================================================================
-
-resource "seqera_gitlab_credential" "pipeline_creds" {
-  name         = "gitlab-pipelines"
-  workspace_id = seqera_workspace.main.id
-  token        = var.gitlab_token
-  base_url     = "https://gitlab.mycompany.com"
-}
-
-resource "seqera_pipeline" "from_gitlab" {
-  name         = "my-pipeline"
-  workspace_id = seqera_workspace.main.id
-
-  # Reference the GitLab repository
-  repository = "https://gitlab.mycompany.com/myorg/my-repo"
-
-  # Use the GitLab credentials
-  credentials_id = seqera_gitlab_credential.pipeline_creds.credentials_id
-}
-
-# =============================================================================
-# Example 7: GitLab Credentials for Different Groups
-# =============================================================================
-# Use separate credentials for different GitLab groups or access levels.
-
-locals {
-  gitlab_groups = {
-    "data-science" = {
-      token = var.gitlab_ds_token
-      url   = "https://gitlab.com/data-science-group"
-    }
-    "ml-research" = {
-      token = var.gitlab_ml_token
-      url   = "https://gitlab.com/ml-research-group"
-    }
-    "production" = {
-      token = var.gitlab_prod_token
-      url   = "https://gitlab.company.com/production"
-    }
-  }
-}
-
-resource "seqera_gitlab_credential" "by_group" {
-  for_each = local.gitlab_groups
-
-  name         = "gitlab-${each.key}"
-  workspace_id = seqera_workspace.main.id
-  token        = each.value.token
-  base_url     = each.value.url
-}
-
-# =============================================================================
-# Example 8: GitLab Credentials by Environment
-# =============================================================================
-
-locals {
-  gitlab_environments = {
-    "dev" = {
-      token = var.gitlab_dev_token
-      url   = "https://gitlab-dev.company.com"
-    }
-    "staging" = {
-      token = var.gitlab_staging_token
-      url   = "https://gitlab-staging.company.com"
-    }
-    "prod" = {
-      token = var.gitlab_prod_token
-      url   = "https://gitlab.company.com"
-    }
-  }
-}
-
-resource "seqera_gitlab_credential" "by_environment" {
-  for_each = local.gitlab_environments
-
-  name         = "gitlab-${each.key}"
-  workspace_id = seqera_workspace.main.id
-  token        = each.value.token
-  base_url     = each.value.url
-}
-
-# =============================================================================
-# Example 9: Token Rotation Strategy
-# =============================================================================
-# Implement token rotation by:
-# 1. Creating a new token with same scopes
-# 2. Updating the Terraform variable with new token
-# 3. Running terraform apply to update credentials
-# 4. Verifying new token works
-# 5. Revoking old token
-#
-# Consider setting token expiration dates and automating rotation:
-
-resource "seqera_gitlab_credential" "with_rotation" {
-  name         = "gitlab-rotated"
-  workspace_id = seqera_workspace.main.id
-  token        = var.gitlab_token
-  # Update var.gitlab_token when rotating tokens
-}
-
-# =============================================================================
-# Example 10: GitLab.com vs Self-Hosted GitLab
-# =============================================================================
-
-# GitLab.com (SaaS)
-resource "seqera_gitlab_credential" "gitlab_com" {
-  name         = "gitlab-saas"
-  workspace_id = seqera_workspace.main.id
-  token        = var.gitlab_saas_token
-  # No base_url needed for GitLab.com
-}
-
-# Self-Hosted GitLab
-resource "seqera_gitlab_credential" "gitlab_self_hosted" {
-  name         = "gitlab-selfhosted"
-  workspace_id = seqera_workspace.main.id
-  token        = var.gitlab_selfhosted_token
-  base_url     = "https://gitlab.mycompany.com"
-}
-
-# =============================================================================
-# SECURITY RECOMMENDATIONS
-# =============================================================================
-#
-# 1. Use Project Access Tokens when possible for better security and scoping
-# 2. Set token expiration dates (e.g., 90 days) to enforce rotation
-# 3. Grant minimum required scopes (prefer read_repository over api scope)
-# 4. Use separate tokens for different projects or environments
-# 5. Store tokens in secure secret management systems (Vault, AWS Secrets Manager)
-# 6. Monitor token usage through GitLab's audit logs
-# 7. Revoke tokens immediately if compromised
-# 8. Never commit tokens to version control
-# 9. Use GitLab's token rotation features
-# 10. Enable 2FA on accounts that create tokens
-# 11. Use Group Access Tokens for organization-wide access
-# 12. Consider using Deploy Tokens for read-only repository access
 ```
 
 <!-- schema generated by tfplugindocs -->
@@ -303,23 +50,20 @@ resource "seqera_gitlab_credential" "gitlab_self_hosted" {
 
 ### Required
 
-- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
+- `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `token` (String, Sensitive) GitLab Personal Access Token or Project Access Token (required, sensitive)
+- `username` (String) GitLab username associated with the Personal Access Token (required)
 
 ### Optional
 
 - `base_url` (String) Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
 - `provider_type` (String) Cloud provider type (automatically set to "gitlab"). Default: "gitlab"; must be "gitlab"
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
 
 ## Import
 

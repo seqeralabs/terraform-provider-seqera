@@ -18,12 +18,21 @@ AWS Codecommit repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-resource "seqera_codecommit_credential" "my_codecommitcredential" {
-  access_key   = "AKIAIOSFODNN7EXAMPLE"
-  base_url     = "https://git-codecommit.us-east-1.amazonaws.com"
-  name         = "...my_name..."
-  secret_key   = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-  workspace_id = 9
+variable "codecommit_username" {
+  type = string
+}
+
+variable "codecommit_password" {
+  type      = string
+  sensitive = true
+}
+
+resource "seqera_codecommit_credential" "example" {
+  name         = "codecommit-main"
+  workspace_id = seqera_workspace.main.id
+
+  username = var.codecommit_username
+  password = var.codecommit_password
 }
 ```
 
@@ -33,13 +42,13 @@ resource "seqera_codecommit_credential" "my_codecommitcredential" {
 ### Required
 
 - `access_key` (String) AWS access key to access the Codecommit repository (required)
-- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
+- `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `secret_key` (String, Sensitive) AWS secret key to access the Codecommit repository (required, sensitive)
 
 ### Optional
 
 - `base_url` (String) Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

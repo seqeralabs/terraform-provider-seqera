@@ -34,10 +34,30 @@ func (e *SSHCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type SSHCredentialKeys struct {
+	// Type of SSH key (always "ssh")
+	KeyType *string `default:"ssh" json:"keyType"`
 	// SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen
 	PrivateKey string `json:"privateKey"`
 	// Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
 	Passphrase *string `json:"passphrase,omitempty"`
+}
+
+func (s SSHCredentialKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SSHCredentialKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"privateKey"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SSHCredentialKeys) GetKeyType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.KeyType
 }
 
 func (s *SSHCredentialKeys) GetPrivateKey() string {
@@ -57,7 +77,7 @@ func (s *SSHCredentialKeys) GetPassphrase() *string {
 type SSHCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "ssh")
 	ProviderType *SSHCredentialProviderType `default:"ssh" json:"provider"`
@@ -140,12 +160,32 @@ func (s *SSHCredential) GetKeys() SSHCredentialKeys {
 }
 
 type SSHCredentialKeysOutput struct {
+	// Type of SSH key (always "ssh")
+	KeyType *string `default:"ssh" json:"keyType"`
+}
+
+func (s SSHCredentialKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SSHCredentialKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SSHCredentialKeysOutput) GetKeyType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.KeyType
 }
 
 type SSHCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "ssh")
 	ProviderType *SSHCredentialProviderType `default:"ssh" json:"provider"`

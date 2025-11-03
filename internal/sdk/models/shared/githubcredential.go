@@ -34,10 +34,19 @@ func (e *GithubCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type GithubCredentialKeys struct {
+	// GitHub username associated with the Personal Access Token (required)
+	Username string `json:"username"`
 	// GitHub Personal Access Token (PAT) for authentication (required, sensitive)
 	AccessToken string `json:"accessToken"`
 	// Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com
 	BaseURL *string `json:"baseUrl,omitempty"`
+}
+
+func (g *GithubCredentialKeys) GetUsername() string {
+	if g == nil {
+		return ""
+	}
+	return g.Username
 }
 
 func (g *GithubCredentialKeys) GetAccessToken() string {
@@ -57,7 +66,7 @@ func (g *GithubCredentialKeys) GetBaseURL() *string {
 type GithubCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "github")
 	ProviderType *GithubCredentialProviderType `default:"github" json:"provider"`
@@ -140,12 +149,21 @@ func (g *GithubCredential) GetKeys() GithubCredentialKeys {
 }
 
 type GithubCredentialKeysOutput struct {
+	// GitHub username associated with the Personal Access Token (required)
+	Username string `json:"username"`
+}
+
+func (g *GithubCredentialKeysOutput) GetUsername() string {
+	if g == nil {
+		return ""
+	}
+	return g.Username
 }
 
 type GithubCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "github")
 	ProviderType *GithubCredentialProviderType `default:"github" json:"provider"`

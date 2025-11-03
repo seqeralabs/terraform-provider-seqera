@@ -9,11 +9,11 @@ import (
 	"time"
 )
 
-// TowerAgentCredentialProviderType - Cloud provider type (automatically set to "agent")
+// TowerAgentCredentialProviderType - Cloud provider type (automatically set to "tw-agent")
 type TowerAgentCredentialProviderType string
 
 const (
-	TowerAgentCredentialProviderTypeAgent TowerAgentCredentialProviderType = "agent"
+	TowerAgentCredentialProviderTypeTwAgent TowerAgentCredentialProviderType = "tw-agent"
 )
 
 func (e TowerAgentCredentialProviderType) ToPointer() *TowerAgentCredentialProviderType {
@@ -25,7 +25,7 @@ func (e *TowerAgentCredentialProviderType) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
-	case "agent":
+	case "tw-agent":
 		*e = TowerAgentCredentialProviderType(v)
 		return nil
 	default:
@@ -36,8 +36,19 @@ func (e *TowerAgentCredentialProviderType) UnmarshalJSON(data []byte) error {
 type TowerAgentCredentialKeys struct {
 	// Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.
 	ConnectionID string `json:"connectionId"`
-	// Working directory for the Tower Agent (optional)
-	WorkDir *string `json:"workDir,omitempty"`
+	// When enabled, all workspace users can access the same Tower Agent instance
+	Shared *bool `default:"false" json:"shared"`
+}
+
+func (t TowerAgentCredentialKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TowerAgentCredentialKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"connectionId"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t *TowerAgentCredentialKeys) GetConnectionID() string {
@@ -47,20 +58,20 @@ func (t *TowerAgentCredentialKeys) GetConnectionID() string {
 	return t.ConnectionID
 }
 
-func (t *TowerAgentCredentialKeys) GetWorkDir() *string {
+func (t *TowerAgentCredentialKeys) GetShared() *bool {
 	if t == nil {
 		return nil
 	}
-	return t.WorkDir
+	return t.Shared
 }
 
 type TowerAgentCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "agent")
-	ProviderType *TowerAgentCredentialProviderType `default:"agent" json:"provider"`
+	// Cloud provider type (automatically set to "tw-agent")
+	ProviderType *TowerAgentCredentialProviderType `default:"tw-agent" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used
@@ -140,15 +151,35 @@ func (t *TowerAgentCredential) GetKeys() TowerAgentCredentialKeys {
 }
 
 type TowerAgentCredentialKeysOutput struct {
+	// When enabled, all workspace users can access the same Tower Agent instance
+	Shared *bool `default:"false" json:"shared"`
+}
+
+func (t TowerAgentCredentialKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TowerAgentCredentialKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *TowerAgentCredentialKeysOutput) GetShared() *bool {
+	if t == nil {
+		return nil
+	}
+	return t.Shared
 }
 
 type TowerAgentCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
-	// Cloud provider type (automatically set to "agent")
-	ProviderType *TowerAgentCredentialProviderType `default:"agent" json:"provider"`
+	// Cloud provider type (automatically set to "tw-agent")
+	ProviderType *TowerAgentCredentialProviderType `default:"tw-agent" json:"provider"`
 	// Flag indicating if the credential has been soft-deleted
 	Deleted *bool `json:"deleted,omitempty"`
 	// Timestamp when the credential was last used

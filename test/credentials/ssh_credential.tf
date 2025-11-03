@@ -3,22 +3,7 @@
 
 # SSH credential without passphrase
 resource "seqera_ssh_credential" "example_no_passphrase" {
-  name        = "Example SSH Credentials (No Passphrase)"
-  private_key = <<-EOT
-    -----BEGIN OPENSSH PRIVATE KEY-----
-    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
-    NhAAAAAwEAAQAAAYEAyExampleKeyContentHereNotARealKey123456789ABCDEFGHIJKLM
-    NOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=ExampleKeyContent
-    -----END OPENSSH PRIVATE KEY-----
-  EOT
-
-  # Optional: Associate with a workspace
-  # workspace_id = data.seqera_workspace.example.id
-}
-
-# SSH credential with passphrase
-resource "seqera_ssh_credential" "example_with_passphrase" {
-  name        = "Example SSH Credentials (With Passphrase)"
+  name        = "example-ssh-credentials-no-passphrase"
   private_key = <<-EOT
     -----BEGIN OPENSSH PRIVATE KEY-----
     b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABB1234567
@@ -26,7 +11,6 @@ resource "seqera_ssh_credential" "example_with_passphrase" {
     WXYZabcdefghijklmnopqrstuvwxyz0123456789+/=ExampleKeyContent
     -----END OPENSSH PRIVATE KEY-----
   EOT
-  passphrase  = "example-passphrase-not-real"
 
   # Optional: Associate with a workspace
   # workspace_id = data.seqera_workspace.example.id

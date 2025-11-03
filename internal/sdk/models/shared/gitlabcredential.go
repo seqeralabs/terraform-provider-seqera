@@ -34,10 +34,19 @@ func (e *GitlabCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type GitlabCredentialKeys struct {
+	// GitLab username associated with the Personal Access Token (required)
+	Username string `json:"username"`
 	// GitLab Personal Access Token or Project Access Token (required, sensitive)
 	Token string `json:"token"`
 	// Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
 	BaseURL *string `json:"baseUrl,omitempty"`
+}
+
+func (g *GitlabCredentialKeys) GetUsername() string {
+	if g == nil {
+		return ""
+	}
+	return g.Username
 }
 
 func (g *GitlabCredentialKeys) GetToken() string {
@@ -57,7 +66,7 @@ func (g *GitlabCredentialKeys) GetBaseURL() *string {
 type GitlabCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitlab")
 	ProviderType *GitlabCredentialProviderType `default:"gitlab" json:"provider"`
@@ -140,12 +149,21 @@ func (g *GitlabCredential) GetKeys() GitlabCredentialKeys {
 }
 
 type GitlabCredentialKeysOutput struct {
+	// GitLab username associated with the Personal Access Token (required)
+	Username string `json:"username"`
+}
+
+func (g *GitlabCredentialKeysOutput) GetUsername() string {
+	if g == nil {
+		return ""
+	}
+	return g.Username
 }
 
 type GitlabCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
-	// Display name for the credential (max 100 characters)
+	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitlab")
 	ProviderType *GitlabCredentialProviderType `default:"gitlab" json:"provider"`

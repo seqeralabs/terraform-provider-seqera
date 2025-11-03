@@ -3,7 +3,7 @@
 
 # Bitbucket credential for Bitbucket Cloud
 resource "seqera_bitbucket_credential" "example_cloud" {
-  name     = "Example Bitbucket Cloud Credentials"
+  name     = "example-bitbucket-cloud-credentials"
   username = "example-user@example.com"
   token    = "ATBBExampleAppPassword123456789ABCDEFGH"
 
@@ -13,7 +13,7 @@ resource "seqera_bitbucket_credential" "example_cloud" {
 
 # Bitbucket credential for self-hosted Bitbucket Server
 resource "seqera_bitbucket_credential" "example_server" {
-  name     = "Example Bitbucket Server Credentials"
+  name     = "example-bitbucket-server-credentials"
   username = "example-user"
   token    = "ATBBExampleAppPassword123456789ABCDEFGH"
   base_url = "https://bitbucket.example.com"

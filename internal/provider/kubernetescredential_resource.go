@@ -18,6 +18,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -80,9 +81,10 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Display name for the credential (max 100 characters). Requires replacement if changed.`,
+				Description: `Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
+					stringvalidator.UTF8LengthBetween(2, 99),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
 			"private_key": schema.StringAttribute{

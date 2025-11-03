@@ -3,7 +3,7 @@
 
 # Kubernetes credential with service account token
 resource "seqera_kubernetes_credential" "example_token" {
-  name  = "Example Kubernetes Credentials (Token)"
+  name  = "example-kubernetes-credentials-token"
   token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkV4YW1wbGVLZXlJZDEyMzQ1Njc4OTAifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImV4YW1wbGUtc2VjcmV0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImV4YW1wbGUtc2EiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIxMjM0NTY3OC0xMjM0LTEyMzQtMTIzNC0xMjM0NTY3ODkwMTIiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpleGFtcGxlLXNhIn0.ExampleSignatureNotRealJustForTestingPurposes"
 
   # Optional: Associate with a workspace
@@ -12,7 +12,7 @@ resource "seqera_kubernetes_credential" "example_token" {
 
 # Kubernetes credential with client certificate
 resource "seqera_kubernetes_credential" "example_certificate" {
-  name               = "Example Kubernetes Credentials (Certificate)"
+  name               = "example-kubernetes-credentials-certificate"
   client_certificate = <<-EOT
     -----BEGIN CERTIFICATE-----
     MIIDITCCAgmgAwIBAgIIExampleCertificateNotRealJustForTesting123456789AB
