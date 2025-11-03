@@ -7,6 +7,7 @@ package provider
 import (
 	"context"
 	"fmt"
+
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -22,8 +23,10 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.Resource = &TokensResource{}
-var _ resource.ResourceWithImportState = &TokensResource{}
+var (
+	_ resource.Resource                = &TokensResource{}
+	_ resource.ResourceWithImportState = &TokensResource{}
+)
 
 func NewTokensResource() resource.Resource {
 	return &TokensResource{}
@@ -183,7 +186,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.CreateAccessTokenResponse != nil) {
+	if res.CreateAccessTokenResponse == nil {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
@@ -214,7 +217,7 @@ func (r *TokensResource) Create(ctx context.Context, req resource.CreateRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.ListAccessTokensResponse != nil) {
+	if res1.ListAccessTokensResponse == nil {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
@@ -276,7 +279,7 @@ func (r *TokensResource) Read(ctx context.Context, req resource.ReadRequest, res
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.ListAccessTokensResponse != nil) {
+	if res.ListAccessTokensResponse == nil {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
@@ -357,7 +360,6 @@ func (r *TokensResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-
 }
 
 func (r *TokensResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
