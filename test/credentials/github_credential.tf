@@ -3,7 +3,8 @@
 
 # GitHub credential for GitHub.com
 resource "seqera_github_credential" "example_github_com" {
-  name         = "Example GitHub Credentials"
+  name         = "example-github-credentials"
+  username     = "example-github-user"
   access_token = "ghp_ExamplePersonalAccessToken123456789ABCDEFGHIJ"
 
   # Optional: Associate with a workspace
@@ -12,7 +13,8 @@ resource "seqera_github_credential" "example_github_com" {
 
 # GitHub credential for GitHub Enterprise Server
 resource "seqera_github_credential" "example_github_enterprise" {
-  name         = "Example GitHub Enterprise Credentials"
+  name         = "example-github-enterprise-credentials"
+  username     = "example-github-user"
   access_token = "ghp_ExamplePersonalAccessToken123456789ABCDEFGHIJ"
   base_url     = "https://github.example.com"
 

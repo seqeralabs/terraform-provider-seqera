@@ -35,11 +35,25 @@ func (r *TowerAgentCredentialResourceModel) RefreshFromSharedDescribeTowerAgentC
 	return diags
 }
 
+func (r *TowerAgentCredentialResourceModel) RefreshFromSharedTowerAgentCredentialKeysOutput(ctx context.Context, resp *shared.TowerAgentCredentialKeysOutput) diag.Diagnostics {
+	var diags diag.Diagnostics
+
+	r.Shared = types.BoolPointerValue(resp.Shared)
+
+	return diags
+}
+
 func (r *TowerAgentCredentialResourceModel) RefreshFromSharedTowerAgentCredentialOutput(ctx context.Context, resp *shared.TowerAgentCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.ID = types.StringPointerValue(resp.ID)
+		diags.Append(r.RefreshFromSharedTowerAgentCredentialKeysOutput(ctx, &resp.Keys)...)
+
+		if diags.HasError() {
+			return diags
+		}
+
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -178,12 +192,18 @@ func (r *TowerAgentCredentialResourceModel) ToSharedTowerAgentCredential(ctx con
 	} else {
 		providerType = nil
 	}
-	keys := shared.TowerAgentCredentialKeys{}
+	keys, keysDiags := r.ToSharedTowerAgentCredentialKeys(ctx)
+	diags.Append(keysDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := shared.TowerAgentCredential{
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
-		Keys:         keys,
+		Keys:         *keys,
 	}
 
 	return &out, diags
@@ -195,15 +215,15 @@ func (r *TowerAgentCredentialResourceModel) ToSharedTowerAgentCredentialKeys(ctx
 	var connectionID string
 	connectionID = r.ConnectionID.ValueString()
 
-	workDir := new(string)
-	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
-		*workDir = r.WorkDir.ValueString()
+	sharedVar := new(bool)
+	if !r.Shared.IsUnknown() && !r.Shared.IsNull() {
+		*sharedVar = r.Shared.ValueBool()
 	} else {
-		workDir = nil
+		sharedVar = nil
 	}
 	out := shared.TowerAgentCredentialKeys{
 		ConnectionID: connectionID,
-		WorkDir:      workDir,
+		Shared:       sharedVar,
 	}
 
 	return &out, diags

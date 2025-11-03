@@ -3,7 +3,7 @@
 
 # Docker Hub credential
 resource "seqera_container_registry_credential" "example_docker_hub" {
-  name      = "Example Docker Hub Credentials"
+  name      = "example-docker-hub-credentials"
   user_name = "example-docker-user"
   password  = "example-docker-password-123456"
   registry  = "docker.io"
@@ -14,7 +14,7 @@ resource "seqera_container_registry_credential" "example_docker_hub" {
 
 # AWS ECR credential
 resource "seqera_container_registry_credential" "example_ecr" {
-  name      = "Example AWS ECR Credentials"
+  name      = "example-aws-ecr-credentials"
   user_name = "AWS"
   password  = "example-ecr-token-base64-encoded-string-123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   registry  = "123456789012.dkr.ecr.us-east-1.amazonaws.com"
@@ -25,7 +25,7 @@ resource "seqera_container_registry_credential" "example_ecr" {
 
 # Google Container Registry (GCR) credential
 resource "seqera_container_registry_credential" "example_gcr" {
-  name      = "Example GCR Credentials"
+  name      = "example-gcr-credentials"
   user_name = "_json_key"
   password = jsonencode({
     "type" : "service_account",
@@ -42,7 +42,7 @@ resource "seqera_container_registry_credential" "example_gcr" {
 
 # Google Artifact Registry (GAR) credential
 resource "seqera_container_registry_credential" "example_gar" {
-  name      = "Example GAR Credentials"
+  name      = "example-gar-credentials"
   user_name = "_json_key"
   password = jsonencode({
     "type" : "service_account",
@@ -59,7 +59,7 @@ resource "seqera_container_registry_credential" "example_gar" {
 
 # Azure Container Registry (ACR) credential
 resource "seqera_container_registry_credential" "example_acr" {
-  name      = "Example ACR Credentials"
+  name      = "example-acr-credentials"
   user_name = "example-acr-username"
   password  = "example-acr-password-123456"
   registry  = "exampleregistry.azurecr.io"
@@ -70,7 +70,7 @@ resource "seqera_container_registry_credential" "example_acr" {
 
 # GitHub Container Registry (GHCR) credential
 resource "seqera_container_registry_credential" "example_ghcr" {
-  name      = "Example GHCR Credentials"
+  name      = "example-ghcr-credentials"
   user_name = "example-github-user"
   password  = "ghp_ExamplePersonalAccessToken123456789ABCDEFGHIJ"
   registry  = "ghcr.io"
@@ -81,7 +81,7 @@ resource "seqera_container_registry_credential" "example_ghcr" {
 
 # GitLab Container Registry credential
 resource "seqera_container_registry_credential" "example_gitlab_registry" {
-  name      = "Example GitLab Registry Credentials"
+  name      = "example-gitlab-registry-credentials"
   user_name = "example-gitlab-user"
   password  = "glpat-ExamplePersonalAccessToken1234567890AB"
   registry  = "registry.gitlab.com"
@@ -92,7 +92,7 @@ resource "seqera_container_registry_credential" "example_gitlab_registry" {
 
 # Quay.io credential
 resource "seqera_container_registry_credential" "example_quay" {
-  name      = "Example Quay.io Credentials"
+  name      = "example-quay-io-credentials"
   user_name = "example-quay-user"
   password  = "example-quay-password-123456"
   registry  = "quay.io"
@@ -103,7 +103,7 @@ resource "seqera_container_registry_credential" "example_quay" {
 
 # Private/Custom Container Registry credential
 resource "seqera_container_registry_credential" "example_private" {
-  name      = "Example Private Registry Credentials"
+  name      = "example-private-registry-credentials"
   user_name = "example-private-user"
   password  = "example-private-password-123456"
   registry  = "registry.example.com"
