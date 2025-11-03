@@ -12,17 +12,11 @@ resource "seqera_action" "tower_basic" {
   name         = "api-triggered-pipeline"
   source       = "tower"
 
-  config = {
-    tower = {
-      discriminator = "tower"
-    }
-  }
-
   launch = {
     pipeline       = "https://github.com/nextflow-io/hello"
     compute_env_id = seqera_compute_env.aws.id
     work_dir       = "s3://my-bucket/work"
-    revision       = "main"
+    revision       = "master"
   }
 }
 
@@ -32,17 +26,11 @@ resource "seqera_action" "tower_advanced" {
   name         = "production-pipeline"
   source       = "tower"
 
-  config = {
-    tower = {
-      discriminator = "tower"
-    }
-  }
-
   launch = {
     pipeline       = "https://github.com/myorg/production-pipeline"
     compute_env_id = seqera_compute_env.aws.id
     work_dir       = "s3://my-bucket/production/work"
-    revision       = "main"
+    revision       = "master"
 
     params_text = jsonencode({
       input_data  = "s3://my-bucket/input/data.csv"
@@ -92,7 +80,7 @@ resource "seqera_action" "github_webhook" {
     pipeline       = "https://github.com/myorg/my-pipeline"
     compute_env_id = seqera_compute_env.aws.id
     work_dir       = "s3://my-bucket/work"
-    revision       = "main"
+    revision       = "master"
 
     config_profiles = ["docker", "aws"]
 
