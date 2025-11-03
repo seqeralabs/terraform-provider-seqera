@@ -18,22 +18,15 @@ repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# GitLab Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "gitlab_username" {
-  description = "GitLab username"
-  type        = string
+  type = string
 }
 
 variable "gitlab_token" {
-  description = "GitLab Personal Access Token or Project Access Token"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example 1: Basic GitLab credentials (GitLab.com)
 resource "seqera_gitlab_credential" "example" {
   name         = "gitlab-main"
   workspace_id = seqera_workspace.main.id
@@ -42,7 +35,6 @@ resource "seqera_gitlab_credential" "example" {
   token    = var.gitlab_token
 }
 
-# Example 2: Self-hosted GitLab Server
 resource "seqera_gitlab_credential" "self_hosted" {
   name         = "gitlab-enterprise"
   workspace_id = seqera_workspace.main.id
@@ -65,7 +57,7 @@ resource "seqera_gitlab_credential" "self_hosted" {
 ### Optional
 
 - `base_url` (String) Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

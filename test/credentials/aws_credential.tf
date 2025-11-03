@@ -3,7 +3,7 @@
 
 # Basic AWS credential with access key
 resource "seqera_aws_credential" "example_basic" {
-  name       = "Example AWS Credentials"
+  name       = "example-aws-credentials"
   access_key = "AKIAIOSFODNN7EXAMPLE"
   secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 
@@ -13,7 +13,7 @@ resource "seqera_aws_credential" "example_basic" {
 
 # AWS credential with assume role
 resource "seqera_aws_credential" "example_with_role" {
-  name            = "Example AWS Credentials with AssumeRole"
+  name            = "example-aws-credentials-with-assumerole"
   access_key      = "AKIAIOSFODNN7EXAMPLE"
   secret_key      = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraExecutionRole"

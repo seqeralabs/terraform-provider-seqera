@@ -3,7 +3,7 @@
 
 # Google Cloud credential with service account JSON
 resource "seqera_google_credential" "example" {
-  name = "Example Google Cloud Credentials"
+  name = "example-google-cloud-credentials"
 
   # This is an example service account key JSON (non-functional)
   data = jsonencode({

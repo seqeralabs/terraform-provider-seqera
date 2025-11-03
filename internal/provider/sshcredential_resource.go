@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -16,7 +17,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -37,14 +37,14 @@ type SSHCredentialResource struct {
 
 // SSHCredentialResourceModel describes the resource data model.
 type SSHCredentialResourceModel struct {
-	CredentialsID types.String              `tfsdk:"credentials_id"`
-	ID            types.String              `tfsdk:"id"`
-	Keys          tfTypes.SSHCredentialKeys `tfsdk:"keys"`
-	Name          types.String              `tfsdk:"name"`
-	Passphrase    types.String              `tfsdk:"passphrase"`
-	PrivateKey    types.String              `tfsdk:"private_key"`
-	ProviderType  types.String              `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64               `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
+	KeyType       types.String `tfsdk:"key_type"`
+	Name          types.String `tfsdk:"name"`
+	Passphrase    types.String `tfsdk:"passphrase"`
+	PrivateKey    types.String `tfsdk:"private_key"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *SSHCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -53,21 +53,20 @@ func (r *SSHCredentialResource) Metadata(ctx context.Context, req resource.Metad
 
 func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource.\n\nSSH credentials store SSH private keys for secure access to remote\ncompute environments and resources within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. ",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
+			"key_type": schema.StringAttribute{
+				Computed:    true,
+				Default:     stringdefault.StaticString(`ssh`),
+				Description: `Type of SSH key (always "ssh"). Default: "ssh"`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -82,9 +81,12 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"passphrase": schema.StringAttribute{
-				Optional:    true,
-				Sensitive:   true,
-				Description: `Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.`,
+				Optional:  true,
+				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed. Requires replacement if changed.`,
 			},
 			"private_key": schema.StringAttribute{
 				Required:    true,
@@ -100,8 +102,11 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
-				Description: `Workspace numeric identifier`,
+				Optional: true,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Workspace numeric identifier. Requires replacement if changed.`,
 			},
 		},
 	}

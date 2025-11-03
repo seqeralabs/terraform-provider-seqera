@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -16,7 +17,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -37,14 +37,13 @@ type TowerAgentCredentialResource struct {
 
 // TowerAgentCredentialResourceModel describes the resource data model.
 type TowerAgentCredentialResourceModel struct {
-	ConnectionID  types.String                     `tfsdk:"connection_id"`
-	CredentialsID types.String                     `tfsdk:"credentials_id"`
-	ID            types.String                     `tfsdk:"id"`
-	Keys          tfTypes.TowerAgentCredentialKeys `tfsdk:"keys"`
-	Name          types.String                     `tfsdk:"name"`
-	ProviderType  types.String                     `tfsdk:"provider_type"`
-	WorkDir       types.String                     `tfsdk:"work_dir"`
-	WorkspaceID   types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ConnectionID  types.String `tfsdk:"connection_id"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
+	Name          types.String `tfsdk:"name"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	Shared        types.Bool   `tfsdk:"shared"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *TowerAgentCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -53,7 +52,7 @@ func (r *TowerAgentCredentialResource) Metadata(ctx context.Context, req resourc
 
 func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage Tower Agent credentials in Seqera platform using this resource.\n\nTower Agent credentials store connection IDs for Tower Agent instances that\nenable secure communication between the Seqera Platform and compute environments.\n",
+		MarkdownDescription: "Manage Tower Agent credentials in Seqera platform using this resource.\n\nTower Agent credentials store connection IDs for Tower Agent instances that\nenable secure communication between the Seqera Platform and compute environments.\n\n**IMPORTANT**: The Tower Agent must be running and online before creating the credential.\nStart the agent with your connection ID first, then create the credential resource.\nIf the agent is not online, you will receive an error: \"The agent is not online - You need to run the agent before proceeding\".\n",
 		Attributes: map[string]schema.Attribute{
 			"connection_id": schema.StringAttribute{
 				Required:    true,
@@ -70,9 +69,6 @@ func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.
 				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
-			},
 			"name": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
@@ -87,15 +83,17 @@ func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.
 			},
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
-				Default:     stringdefault.StaticString(`agent`),
-				Description: `Cloud provider type (automatically set to "agent"). Default: "agent"; must be "agent"`,
+				Default:     stringdefault.StaticString(`tw-agent`),
+				Description: `Cloud provider type (automatically set to "tw-agent"). Default: "tw-agent"; must be "tw-agent"`,
 				Validators: []validator.String{
-					stringvalidator.OneOf("agent"),
+					stringvalidator.OneOf("tw-agent"),
 				},
 			},
-			"work_dir": schema.StringAttribute{
+			"shared": schema.BoolAttribute{
+				Computed:    true,
 				Optional:    true,
-				Description: `Working directory for the Tower Agent (optional)`,
+				Default:     booldefault.StaticBool(false),
+				Description: `When enabled, all workspace users can access the same Tower Agent instance. Default: false`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional:    true,

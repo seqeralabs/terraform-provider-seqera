@@ -18,22 +18,15 @@ repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# GitHub Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "github_username" {
-  description = "GitHub username"
-  type        = string
+  type = string
 }
 
 variable "github_access_token" {
-  description = "GitHub Personal Access Token"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example 1: Basic GitHub credentials (GitHub.com)
 resource "seqera_github_credential" "example" {
   name         = "github-main"
   workspace_id = seqera_workspace.main.id
@@ -42,7 +35,6 @@ resource "seqera_github_credential" "example" {
   access_token = var.github_access_token
 }
 
-# Example 2: GitHub Enterprise Server
 resource "seqera_github_credential" "enterprise" {
   name         = "github-enterprise"
   workspace_id = seqera_workspace.main.id
@@ -65,7 +57,7 @@ resource "seqera_github_credential" "enterprise" {
 ### Optional
 
 - `base_url` (String) Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

@@ -3,7 +3,7 @@
 
 # Azure credential with shared keys
 resource "seqera_azure_credential" "example_shared_key" {
-  name         = "Example Azure Credentials (Shared Key)"
+  name         = "example-azure-credentials-shared-key"
   batch_name   = "examplebatchaccount"
   storage_name = "examplestorageaccount"
   batch_key    = "exampleBatchKeyBase64EncodedString123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ=="
@@ -15,7 +15,7 @@ resource "seqera_azure_credential" "example_shared_key" {
 
 # Azure credential with service principal (Entra ID)
 resource "seqera_azure_credential" "example_service_principal" {
-  name          = "Example Azure Credentials (Service Principal)"
+  name          = "example-azure-credentials-service-principal"
   batch_name    = "examplebatchaccount"
   storage_name  = "examplestorageaccount"
   tenant_id     = "12345678-1234-1234-1234-123456789012"

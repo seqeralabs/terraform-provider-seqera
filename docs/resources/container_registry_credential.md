@@ -18,22 +18,15 @@ container registries (Docker Hub, ECR, GCR, ACR, etc.) within the Seqera Platfor
 ## Example Usage
 
 ```terraform
-# Container Registry Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "registry_username" {
-  description = "Container registry username"
-  type        = string
+  type = string
 }
 
 variable "registry_password" {
-  description = "Container registry password or token"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example 1: Docker Hub
 resource "seqera_container_registry_credential" "dockerhub" {
   name         = "dockerhub-main"
   workspace_id = seqera_workspace.main.id
@@ -43,7 +36,6 @@ resource "seqera_container_registry_credential" "dockerhub" {
   password = var.registry_password
 }
 
-# Example 2: Private registry
 resource "seqera_container_registry_credential" "private" {
   name         = "private-registry"
   workspace_id = seqera_workspace.main.id
@@ -66,7 +58,7 @@ resource "seqera_container_registry_credential" "private" {
 ### Optional
 
 - `registry` (String) Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

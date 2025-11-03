@@ -3,7 +3,7 @@
 
 # CodeCommit credential
 resource "seqera_codecommit_credential" "example" {
-  name       = "Example CodeCommit Credentials"
+  name       = "example-codecommit-credentials"
   access_key = "AKIAIOSFODNN7EXAMPLE"
   secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   base_url   = "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/example-repo"

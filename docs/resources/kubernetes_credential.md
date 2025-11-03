@@ -18,23 +18,16 @@ execution. Supports two authentication methods: Service Account Token and X.509 
 ## Example Usage
 
 ```terraform
-# Kubernetes Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "k8s_certificate" {
-  description = "Kubernetes client certificate (base64 encoded)"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "k8s_private_key" {
-  description = "Kubernetes client private key (base64 encoded)"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic Kubernetes credentials using certificates
 resource "seqera_kubernetes_credential" "example" {
   name         = "k8s-main"
   workspace_id = seqera_workspace.main.id

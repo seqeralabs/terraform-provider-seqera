@@ -6,6 +6,9 @@ description: |-
   Manage Tower Agent credentials in Seqera platform using this resource.
   Tower Agent credentials store connection IDs for Tower Agent instances that
   enable secure communication between the Seqera Platform and compute environments.
+  IMPORTANT: The Tower Agent must be running and online before creating the credential.
+  Start the agent with your connection ID first, then create the credential resource.
+  If the agent is not online, you will receive an error: "The agent is not online - You need to run the agent before proceeding".
 ---
 
 # seqera_tower_agent_credential (Resource)
@@ -15,25 +18,36 @@ Manage Tower Agent credentials in Seqera platform using this resource.
 Tower Agent credentials store connection IDs for Tower Agent instances that
 enable secure communication between the Seqera Platform and compute environments.
 
+**IMPORTANT**: The Tower Agent must be running and online before creating the credential.
+Start the agent with your connection ID first, then create the credential resource.
+If the agent is not online, you will receive an error: "The agent is not online - You need to run the agent before proceeding".
+
 ## Example Usage
 
 ```terraform
-# Tower Agent Credential Resource Examples
-
-
-# Variable for sensitive credentials
 variable "agent_connection_id" {
-  description = "Tower Agent connection ID"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic Tower Agent credentials
+# IMPORTANT: The Tower Agent must be running and online with this connection_id
+# before creating the credential. Start the agent first:
+# ./tw-agent <connection_id> -u https://cloud.seqera.io/api --work-dir=/work
+
 resource "seqera_tower_agent_credential" "example" {
   name         = "agent-main"
   workspace_id = seqera_workspace.main.id
 
   connection_id = var.agent_connection_id
+  shared        = false
+}
+
+resource "seqera_tower_agent_credential" "shared" {
+  name         = "agent-shared"
+  workspace_id = seqera_workspace.main.id
+
+  connection_id = var.agent_connection_id
+  shared        = true
 }
 ```
 
@@ -47,18 +61,14 @@ resource "seqera_tower_agent_credential" "example" {
 
 ### Optional
 
-- `work_dir` (String) Working directory for the Tower Agent (optional)
+- `shared` (Boolean) When enabled, all workspace users can access the same Tower Agent instance. Default: false
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `provider_type` (String) Cloud provider type (automatically set to "agent"). Default: "agent"; must be "agent"
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
+- `provider_type` (String) Cloud provider type (automatically set to "tw-agent"). Default: "tw-agent"; must be "tw-agent"
 
 ## Import
 

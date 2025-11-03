@@ -18,22 +18,15 @@ AWS Codecommit repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# AWS CodeCommit Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "codecommit_username" {
-  description = "CodeCommit username"
-  type        = string
+  type = string
 }
 
 variable "codecommit_password" {
-  description = "CodeCommit password"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic CodeCommit credentials
 resource "seqera_codecommit_credential" "example" {
   name         = "codecommit-main"
   workspace_id = seqera_workspace.main.id
@@ -55,7 +48,7 @@ resource "seqera_codecommit_credential" "example" {
 ### Optional
 
 - `base_url` (String) Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

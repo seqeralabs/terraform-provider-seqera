@@ -3,45 +3,33 @@
 page_title: "seqera_ssh_credential Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage SSH credentials in Seqera platform using this resource.
-  SSH credentials store SSH private keys for secure access to remote
-  compute environments and resources within the Seqera Platform workflows.
+  Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 ---
 
 # seqera_ssh_credential (Resource)
 
-Manage SSH credentials in Seqera platform using this resource.
-
-SSH credentials store SSH private keys for secure access to remote
-compute environments and resources within the Seqera Platform workflows.
+Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 
 ## Example Usage
 
 ```terraform
-# SSH Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "ssh_private_key" {
-  description = "SSH private key content"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "ssh_passphrase" {
-  description = "SSH key passphrase (if encrypted)"
-  type        = string
-  sensitive   = true
-  default     = ""
+  type      = string
+  sensitive = true
+  default   = ""
 }
 
-# Example: Basic SSH credentials with private key
 resource "seqera_ssh_credential" "example" {
   name         = "ssh-main"
   workspace_id = seqera_workspace.main.id
 
   private_key = var.ssh_private_key
-  passphrase  = var.ssh_passphrase  # Optional, only if key is encrypted
+  passphrase  = var.ssh_passphrase
 }
 ```
 
@@ -55,18 +43,15 @@ resource "seqera_ssh_credential" "example" {
 
 ### Optional
 
-- `passphrase` (String, Sensitive) Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
-- `workspace_id` (Number) Workspace numeric identifier
+- `passphrase` (String, Sensitive) Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
+- `key_type` (String) Type of SSH key (always "ssh"). Default: "ssh"
 - `provider_type` (String) Cloud provider type (automatically set to "ssh"). Default: "ssh"; must be "ssh"
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
 
 ## Import
 

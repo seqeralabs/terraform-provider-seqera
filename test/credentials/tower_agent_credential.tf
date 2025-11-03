@@ -1,20 +1,21 @@
 # Tower Agent Credentials Example
 # These are example non-sensitive values for testing
 
-# Tower Agent credential with default work directory
+# Tower Agent credential (private)
 resource "seqera_tower_agent_credential" "example_basic" {
-  name          = "Example Tower Agent Credentials"
+  name          = "example-tower-agent-credentials"
   connection_id = "12345678-1234-1234-1234-123456789012"
+  shared        = false
 
   # Optional: Associate with a workspace
   # workspace_id = data.seqera_workspace.example.id
 }
 
-# Tower Agent credential with custom work directory
-resource "seqera_tower_agent_credential" "example_with_workdir" {
-  name          = "Example Tower Agent Credentials with Work Dir"
+# Tower Agent credential (shared with workspace)
+resource "seqera_tower_agent_credential" "example_shared" {
+  name          = "example-tower-agent-credentials-shared"
   connection_id = "87654321-4321-4321-4321-210987654321"
-  work_dir      = "/data/scratch/nextflow-work"
+  shared        = true
 
   # Optional: Associate with a workspace
   # workspace_id = data.seqera_workspace.example.id

@@ -18,22 +18,15 @@ repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# Bitbucket Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "bitbucket_username" {
-  description = "Bitbucket username"
-  type        = string
+  type = string
 }
 
 variable "bitbucket_password" {
-  description = "Bitbucket app password"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic Bitbucket credentials
 resource "seqera_bitbucket_credential" "example" {
   name         = "bitbucket-main"
   workspace_id = seqera_workspace.main.id
@@ -55,7 +48,7 @@ resource "seqera_bitbucket_credential" "example" {
 ### Optional
 
 - `base_url` (String) Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

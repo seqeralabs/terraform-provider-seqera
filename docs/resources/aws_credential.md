@@ -19,18 +19,15 @@ within the Seqera Platform workflows.
 
 ```terraform
 variable "aws_access_key_id" {
-  description = "AWS Access Key ID"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "aws_secret_access_key" {
-  description = "AWS Secret Access Key"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic AWS credentials
 resource "seqera_aws_credential" "example" {
   name         = "aws-main"
   workspace_id = seqera_workspace.main.id
@@ -52,7 +49,7 @@ resource "seqera_aws_credential" "example" {
 ### Optional
 
 - `assume_role_arn` (String) IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

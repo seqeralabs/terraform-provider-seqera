@@ -18,17 +18,11 @@ within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# Google Cloud (GCP) Credential Resource Examples
-
-
-# Variable for sensitive credentials
 variable "gcp_service_account_key" {
-  description = "GCP service account key JSON (as string)"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic GCP credentials using service account key
 resource "seqera_google_credential" "example" {
   name         = "gcp-main"
   workspace_id = seqera_workspace.main.id
@@ -47,7 +41,7 @@ resource "seqera_google_credential" "example" {
 
 ### Optional
 
-- `workspace_id` (Number) Workspace numeric identifier where the credentials will be stored
+- `workspace_id` (Number) Workspace numeric identifier where the credentials will be stored. Requires replacement if changed.
 
 ### Read-Only
 

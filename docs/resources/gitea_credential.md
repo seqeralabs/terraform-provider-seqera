@@ -18,22 +18,15 @@ repositories within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
-# Gitea Credential Resource Examples
-
-
-# Variables for sensitive credentials
 variable "gitea_username" {
-  description = "Gitea username"
-  type        = string
+  type = string
 }
 
 variable "gitea_password" {
-  description = "Gitea password or access token"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic Gitea credentials
 resource "seqera_gitea_credential" "example" {
   name         = "gitea-main"
   workspace_id = seqera_workspace.main.id
@@ -56,7 +49,7 @@ resource "seqera_gitea_credential" "example" {
 ### Optional
 
 - `base_url` (String) Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

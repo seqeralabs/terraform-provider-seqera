@@ -20,38 +20,32 @@ Azure credentials support three authentication modes:
 ## Example Usage
 
 ```terraform
-# Variables for sensitive credentials
 variable "azure_batch_name" {
-  description = "Azure Batch account name"
-  type        = string
+  type = string
 }
 
 variable "azure_batch_key" {
-  description = "Azure Batch account key"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
 variable "azure_storage_name" {
-  description = "Azure Storage account name"
-  type        = string
+  type = string
 }
 
 variable "azure_storage_key" {
-  description = "Azure Storage account key"
-  type        = string
-  sensitive   = true
+  type      = string
+  sensitive = true
 }
 
-# Example: Basic Azure credentials
 resource "seqera_azure_credential" "example" {
   name         = "azure-main"
   workspace_id = seqera_workspace.main.id
 
-  batch_name    = var.azure_batch_name
-  batch_key     = var.azure_batch_key
-  storage_name  = var.azure_storage_name
-  storage_key   = var.azure_storage_key
+  batch_name   = var.azure_batch_name
+  batch_key    = var.azure_batch_key
+  storage_name = var.azure_storage_name
+  storage_key  = var.azure_storage_key
 }
 ```
 
@@ -71,7 +65,7 @@ resource "seqera_azure_credential" "example" {
 - `client_secret` (String, Sensitive) Azure service principal client secret (for Entra/Cloud authentication)
 - `storage_key` (String, Sensitive) Azure Storage account key (for shared key authentication)
 - `tenant_id` (String) Azure tenant ID (for Entra/Cloud authentication)
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

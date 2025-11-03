@@ -7847,6 +7847,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: AWS credentials create request
         content:
@@ -8027,6 +8028,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Azure credentials create request
         content:
@@ -8207,6 +8209,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Google credentials create request
         content:
@@ -8387,6 +8390,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Bitbucket credentials create request
         content:
@@ -8561,6 +8565,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Codecommit credentials create request
         content:
@@ -8735,6 +8740,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Container registry credentials create request
         content:
@@ -8909,6 +8915,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: Gitea credentials create request
         content:
@@ -9083,6 +9090,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: GitHub credentials create request
         content:
@@ -9257,6 +9265,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: GitLab credentials create request
         content:
@@ -9431,6 +9440,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: SSH credentials create request
         content:
@@ -16972,7 +16982,6 @@ components:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
-          x-speakeasy-param-suppress-computed-diff: true
         name:
           minLength: 2
           maxLength: 99
@@ -17013,30 +17022,31 @@ components:
           x-speakeasy-terraform-ignore: true
         keys:
           x-speakeasy-entity: SSHCredential
-          x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource.
-
-
-            SSH credentials store SSH private keys for secure access to remote
-
-            compute environments and resources within the Seqera Platform workflows.
-
-'
+          x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. '
           type: object
           required:
             - privateKey
           properties:
+            # This value is not part of our API but included to fix generation. 
+            keyType:
+              type: string
+              description: Type of SSH key (always "ssh")
+              default: ssh
+              example: ssh
+              x-speakeasy-param-readonly: true
+              x-speakeasy-param-computed: true
+              x-speakeasy-name-override: key_type
             privateKey:
               type: string
               description: 'SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen'
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
               x-speakeasy-name-override: private_key
               writeOnly: true
             passphrase:
               type: string
               description: Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-param-force-new: true
               writeOnly: true
     CreateSSHCredentialsRequest:
       type: object
@@ -17079,9 +17089,9 @@ components:
         provider:
           type: string
           enum:
-            - agent
-          default: agent
-          description: Cloud provider type (automatically set to "agent")
+            - tw-agent
+          default: tw-agent
+          description: Cloud provider type (automatically set to "tw-agent")
           x-speakeasy-name-override: providerType
           x-speakeasy-param-readonly: true
         deleted:
@@ -17116,6 +17126,13 @@ components:
 
             enable secure communication between the Seqera Platform and compute environments.
 
+
+            **IMPORTANT**: The Tower Agent must be running and online before creating the credential.
+
+            Start the agent with your connection ID first, then create the credential resource.
+
+            If the agent is not online, you will receive an error: "The agent is not online - You need to run the agent before proceeding".
+
 '
           type: object
           required:
@@ -17128,13 +17145,11 @@ components:
               x-speakeasy-param-computed: false
               x-speakeasy-name-override: connection_id
               writeOnly: true
-            workDir:
-              type: string
-              description: Working directory for the Tower Agent (optional)
-              example: /work
+            shared:
+              type: boolean
+              description: When enabled, all workspace users can access the same Tower Agent instance
+              default: false
               x-speakeasy-param-computed: false
-              x-speakeasy-name-override: work_dir
-              writeOnly: true
     CreateTowerAgentCredentialsRequest:
       type: object
       properties:
