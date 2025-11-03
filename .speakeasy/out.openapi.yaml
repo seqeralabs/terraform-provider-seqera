@@ -11407,9 +11407,6 @@ components:
           $ref: "#/components/schemas/WorkflowLaunchRequest"
       required:
         - name
-        - source
-        - launch
-        - name
         - launch
     CreateActionResponse:
       type: object
@@ -12341,7 +12338,7 @@ components:
           description: Unique identifier for the dataset (max 22 characters)
         name:
           maxLength: 100
-          pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,98}$"
+          pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
           type: string
           description: Dataset name following naming conventions (1-100 characters)
         description:
@@ -13363,7 +13360,7 @@ components:
           type: string
         schemaName:
           maxLength: 100
-          pattern: "[\\p{Graph}&&[^/]]\\p{Graph}+"
+          pattern: "^[^/\\s][^/]*$"
           type: string
         resume:
           type: boolean
@@ -13855,7 +13852,7 @@ components:
           x-speakeasy-param-optional: true
         name:
           maxLength: 40
-          pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
+          pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
           type: string
           description: Short name or handle for the organization (used in URLs and resource paths). Required.
           example: "my-org"
@@ -14099,7 +14096,7 @@ components:
           description: Unique numeric identifier for the secret
         name:
           maxLength: 100
-          pattern: "^[a-zA-Z_](?:[0-9A-Za-z]+|(_)(?!\\1)){1,49}$"
+          pattern: "^[a-zA-Z_][0-9A-Za-z_]*$"
           type: string
           description: Secret name used to reference the secret in workflows (max 100 characters). Required.
         lastUsed:
@@ -14767,7 +14764,7 @@ components:
           x-speakeasy-name-override: teamId
         name:
           maxLength: 40
-          pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
+          pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
           type: string
           example: "bioinformatics-team"
         description:
@@ -15918,7 +15915,7 @@ components:
           x-speakeasy-param-optional: true
         name:
           maxLength: 40
-          pattern: "^[a-zA-Z\\d](?:[a-zA-Z\\d]|[-_](?=[a-zA-Z\\d])){1,38}$"
+          pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
           type: string
           x-speakeasy-param-readonly: false
           example: "genomics-research"

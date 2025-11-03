@@ -19,6 +19,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -219,6 +220,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Optional: true,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(100),
+							stringvalidator.RegexMatches(regexp.MustCompile(`^[^/\s][^/]*$`), "must match pattern "+regexp.MustCompile(`^[^/\s][^/]*$`).String()),
 						},
 					},
 					"session_id": schema.StringAttribute{
@@ -259,7 +261,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Required: true,
 			},
 			"source": schema.StringAttribute{
-				Required: true,
+				Computed: true,
+				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

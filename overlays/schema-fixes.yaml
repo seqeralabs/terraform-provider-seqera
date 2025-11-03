@@ -98,3 +98,45 @@ actions:
   - target: $["components"]["schemas"]["Visibility"]
     update:
       x-speakeasy-param-optional: false
+
+  # Fix regex patterns incompatible with Go RE2 engine
+  # Dataset name: Replace lookahead pattern with simpler RE2-compatible pattern
+  - target: $["components"]["schemas"]["Dataset"]["properties"]["name"]
+    update:
+      pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
+
+  # Launch schemaName: Replace Unicode character class with RE2-compatible pattern
+  - target: $["components"]["schemas"]["Launch"]["properties"]["schemaName"]
+    update:
+      pattern: "^[^/\\s][^/]*$"
+
+  # Organization name: Replace lookahead pattern with simpler RE2-compatible pattern
+  - target: $["components"]["schemas"]["Organization"]["properties"]["name"]
+    update:
+      pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
+
+  # PipelineSecret name: Replace negative lookahead pattern with simpler RE2-compatible pattern
+  - target: $["components"]["schemas"]["PipelineSecret"]["properties"]["name"]
+    update:
+      pattern: "^[a-zA-Z_][0-9A-Za-z_]*$"
+
+  # Team name: Replace lookahead pattern with simpler RE2-compatible pattern
+  - target: $["components"]["schemas"]["Team"]["properties"]["name"]
+    update:
+      pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
+
+  # Workspace name: Replace lookahead pattern with simpler RE2-compatible pattern
+  - target: $["components"]["schemas"]["Workspace"]["properties"]["name"]
+    update:
+      pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
+
+  # Fix duplicate required items in CreateActionRequest (caused by multiple overlays)
+  # First remove the entire required array
+  - target: $["components"]["schemas"]["CreateActionRequest"]["required"]
+    remove: true
+  # Then add it back with correct values
+  - target: $["components"]["schemas"]["CreateActionRequest"]
+    update:
+      required:
+        - name
+        - launch

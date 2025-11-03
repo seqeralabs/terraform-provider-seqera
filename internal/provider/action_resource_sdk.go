@@ -207,7 +207,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	var name string
 	name = r.Name.ValueString()
 
-	source := shared.ActionSource(r.Source.ValueString())
+	source := new(shared.ActionSource)
+	if !r.Source.IsUnknown() && !r.Source.IsNull() {
+		*source = shared.ActionSource(r.Source.ValueString())
+	} else {
+		source = nil
+	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
