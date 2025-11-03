@@ -7,19 +7,14 @@ import (
 	"time"
 )
 
-// AccessToken - Represents an API access token for authentication.
-// Contains token metadata, permissions, and expiration information
-// for secure API access to platform resources.
+// AccessToken - API access token for platform authentication.
+// Contains the token ID, name, and usage metadata.
 type AccessToken struct {
-	// Deprecated basic authentication string
-	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	BasicAuth *string `json:"basicAuth,omitempty"`
-	// Unique numeric identifier for the access token (nullable)
+	// Unique identifier for the token
 	ID *int64 `json:"id,omitempty"`
-	// Display name for the token (1-50 characters)
+	// Display name for the token (1-50 characters). Used to identify the token's purpose.
 	Name string `json:"name"`
-	// Timestamp when the token was last used for authentication
+	// Timestamp when the token was last used for authentication (null if never used)
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the token was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
@@ -34,13 +29,6 @@ func (a *AccessToken) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (a *AccessToken) GetBasicAuth() *string {
-	if a == nil {
-		return nil
-	}
-	return a.BasicAuth
 }
 
 func (a *AccessToken) GetID() *int64 {

@@ -3,31 +3,54 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Tokens Overlay
   version: 0.0.0
+
+# ==============================================================================
+# TOKENS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Manages API access tokens for Seqera Platform authentication.
+#
+# TOKEN LIFECYCLE:
+# 1. Create: Provide a token name, receive back:
+#    - accessKey: The sensitive token value (ONLY available on creation)
+#    - id: Token ID for management
+#    - metadata: Creation date, last used date, etc.
+# 2. Read: Token metadata only (accessKey is never returned again)
+# 3. Delete: Remove token by ID
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example: Basic token creation
+# resource "seqera_tokens" "ci_token" {
+#   name = "ci-cd-pipeline-token"
+# }
+#
+# output "token_value" {
+#   value     = seqera_tokens.ci_token.access_key
+#   sensitive = true
+# }
+#
+# ==============================================================================
+
 actions:
   ####################################################################
   ####                  Token Entity Operations                   ####
   ####################################################################
   - target: $.paths["/tokens"].post
     update:
-      x-speakeasy-entity-operation:
+      x-speakeasy-entity-operation: Tokens#create
 
-        terraform-datasource: null
-
-        terraform-resource: Tokens#create
   - target: $.paths["/tokens"].get
     update:
+      # Disable data source generation - tokens list is for internal resource use only
       x-speakeasy-entity-operation:
-
+        terraform-resource: Tokens#read
         terraform-datasource: null
 
-        terraform-resource: Tokens#read
   - target: $.paths["/tokens/{tokenId}"].delete
     update:
-      x-speakeasy-entity-operation:
-
-        terraform-datasource: null
-
-        terraform-resource: Tokens#delete
+      x-speakeasy-entity-operation: Tokens#delete
 
   ####################################################################
   ####                  Token Entity Schema                       ####
@@ -38,71 +61,99 @@ actions:
       x-speakeasy-entity-description: |
         Manage API access tokens for authentication.
 
-        Tokens provide secure API access, enabling programmatic
-        access to platform resources and services. They can be used
-        for CI/CD integration, automation scripts, and external tools.
+        Tokens provide secure API access for programmatic access to platform
+        resources and services. Use tokens for CI/CD integration, automation
+        scripts, and external tools.
+
+        IMPORTANT: The token value (access_key) is only available immediately
+        after creation. Store it securely as it cannot be retrieved later.
       description: |
-        Represents an API access token for authentication.
-        Contains token metadata, permissions, and expiration information
-        for secure API access to platform resources.
+        API access token for platform authentication.
+        Contains the token ID, name, and usage metadata.
 
   ####################################################################
   ####            Token Field Descriptions & Ordering             ####
   ####################################################################
-  # Field descriptions and ordering for AccessToken
+  # Field descriptions for AccessToken (metadata object)
   - target: $.components.schemas.AccessToken.properties.id
     update:
-      description: Unique numeric identifier for the access token (nullable)
+      description: Unique identifier for the token
       x-speakeasy-param-ordering: 1
-      x-speakeasy-param-optional: true
+      x-speakeasy-param-readonly: true
+
   - target: $.components.schemas.AccessToken.properties.name
     update:
-      description: Display name for the token (1-50 characters)
+      description: Display name for the token (1-50 characters). Used to identify the token's purpose.
       x-speakeasy-param-ordering: 2
+
   - target: $.components.schemas.AccessToken.properties.dateCreated
     update:
       description: Timestamp when the token was created
       x-speakeasy-param-ordering: 3
+      x-speakeasy-param-readonly: true
+
   - target: $.components.schemas.AccessToken.properties.lastUsed
     update:
-      description: Timestamp when the token was last used for authentication
+      description: Timestamp when the token was last used for authentication (null if never used)
       x-speakeasy-param-ordering: 4
-  - target: $.components.schemas.AccessToken.properties.basicAuth
-    update:
-      description: Deprecated basic authentication string
-      x-speakeasy-param-ordering: 5
+      x-speakeasy-param-readonly: true
 
   ####################################################################
-  ####            Server-Managed Read-Only Fields                 ####
+  ####     CreateAccessTokenResponse Field Configuration          ####
   ####################################################################
-  # Mark server-managed fields as read-only in AccessToken
-  - target: $.components.schemas.AccessToken.properties.id
+  # Configure accessKey field - the actual token value
+  - target: $.components.schemas.CreateAccessTokenResponse.properties.accessKey
     update:
+      description: |
+        The actual token value for authentication. This sensitive value is ONLY
+        returned when the token is created and cannot be retrieved later.
+        Store this securely.
+      x-speakeasy-param-ordering: 1
       x-speakeasy-param-readonly: true
-  - target: $.components.schemas.AccessToken.properties.dateCreated
+      x-speakeasy-param-sensitive: true
+
+  # Keep the nested token object - it has all the metadata we need
+  - target: $.components.schemas.CreateAccessTokenResponse.properties.token
     update:
-      x-speakeasy-param-readonly: true
-  - target: $.components.schemas.AccessToken.properties.lastUsed
-    update:
-      x-speakeasy-param-readonly: true
+      description: Token metadata returned after creation
+      x-speakeasy-param-ordering: 2
+
+  ####################################################################
+  ####                  Cleanup - Remove Fields                   ####
+  ####################################################################
+  # Remove deprecated and unused fields
   - target: $.components.schemas.AccessToken.properties.basicAuth
-    update:
-      x-speakeasy-param-readonly: true
+    remove: true
+
+  - target: $.components.schemas.AccessToken.properties.token
+    remove: true
+
+  # Remove deprecated field from CreateAccessTokenResponse if present
+  - target: $.components.schemas.CreateAccessTokenResponse.properties.basicAuth
+    remove: true
+
+  # Remove deprecated field from ListAccessTokensResponse items
+  - target: $.components.schemas.ListAccessTokensResponse.properties.tokens.items.properties.basicAuth
+    remove: true
+
+  - target: $.components.schemas.ListAccessTokensResponse.properties.tokens.items.properties.token
+    remove: true
 
   ####################################################################
   ####                  Request Examples                          ####
   ####################################################################
   - target: $.components.schemas.CreateAccessTokenRequest.properties.name
     update:
+      description: Display name for the token (1-50 characters)
       example: "ci-cd-pipeline-token"
 
   ####################################################################
   ####               Parameter Configuration                      ####
   ####################################################################
-  # Token parameter configurations
+  # Map the tokenId parameter to the entity's id field
   - target: $.paths["/tokens/{tokenId}"].delete.parameters[0]
     update:
-      x-speakeasy-param-optional: true
+      x-speakeasy-match: id
 
   ####################################################################
   ####                Schema Overrides                            ####

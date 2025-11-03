@@ -6015,9 +6015,10 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+      # Disable data source generation - tokens list is for internal resource use only
       x-speakeasy-entity-operation:
-        terraform-datasource: null
         terraform-resource: Tokens#read
+        terraform-datasource: null
     post:
       summary: Create token
       description: "Creates an API access token with the details in the given request body."
@@ -6054,9 +6055,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: Tokens#create
+      x-speakeasy-entity-operation: Tokens#create
   /tokens/delete-all:
     delete:
       summary: Delete all user tokens
@@ -6092,7 +6091,7 @@ paths:
           schema:
             type: integer
             format: int64
-          x-speakeasy-param-optional: true
+          x-speakeasy-match: id
       responses:
         "204":
           description: OK - No content
@@ -6106,9 +6105,7 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: Tokens#delete
+      x-speakeasy-entity-operation: Tokens#delete
   /trace/create:
     post:
       summary: Create workflow execution trace
@@ -10295,30 +10292,23 @@ components:
         - name
       type: object
       properties:
-        basicAuth:
-          type: string
-          deprecated: true
-          description: Deprecated basic authentication string
-          x-speakeasy-param-ordering: 5
-          x-speakeasy-param-readonly: true
         id:
           type: integer
           format: int64
           nullable: true
-          description: Unique numeric identifier for the access token (nullable)
+          description: Unique identifier for the token
           x-speakeasy-param-ordering: 1
-          x-speakeasy-param-optional: true
           x-speakeasy-param-readonly: true
         name:
           maxLength: 50
           minLength: 1
           type: string
-          description: Display name for the token (1-50 characters)
+          description: Display name for the token (1-50 characters). Used to identify the token's purpose.
           x-speakeasy-param-ordering: 2
         lastUsed:
           type: string
           format: date-time
-          description: Timestamp when the token was last used for authentication
+          description: Timestamp when the token was last used for authentication (null if never used)
           x-speakeasy-param-ordering: 4
           x-speakeasy-param-readonly: true
         dateCreated:
@@ -10331,13 +10321,15 @@ components:
       x-speakeasy-entity-description: |
         Manage API access tokens for authentication.
 
-        Tokens provide secure API access, enabling programmatic
-        access to platform resources and services. They can be used
-        for CI/CD integration, automation scripts, and external tools.
+        Tokens provide secure API access for programmatic access to platform
+        resources and services. Use tokens for CI/CD integration, automation
+        scripts, and external tools.
+
+        IMPORTANT: The token value (access_key) is only available immediately
+        after creation. Store it securely as it cannot be retrieved later.
       description: |
-        Represents an API access token for authentication.
-        Contains token metadata, permissions, and expiration information
-        for secure API access to platform resources.
+        API access token for platform authentication.
+        Contains the token ID, name, and usage metadata.
     Action.ConfigType:
       type: object
       properties:
@@ -11385,14 +11377,24 @@ components:
       properties:
         name:
           type: string
+          description: Display name for the token (1-50 characters)
           example: "ci-cd-pipeline-token"
     CreateAccessTokenResponse:
       type: object
       properties:
         accessKey:
           type: string
+          description: |
+            The actual token value for authentication. This sensitive value is ONLY
+            returned when the token is created and cannot be retrieved later.
+            Store this securely.
+          x-speakeasy-param-ordering: 1
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-sensitive: true
         token:
           $ref: "#/components/schemas/AccessToken"
+          description: Token metadata returned after creation
+          x-speakeasy-param-ordering: 2
       x-speakeasy-entity: Tokens
     CreateActionRequest:
       type: object
