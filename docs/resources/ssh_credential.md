@@ -3,17 +3,12 @@
 page_title: "seqera_ssh_credential Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage SSH credentials in Seqera platform using this resource.
-  SSH credentials store SSH private keys for secure access to remote
-  compute environments and resources within the Seqera Platform workflows.
+  Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 ---
 
 # seqera_ssh_credential (Resource)
 
-Manage SSH credentials in Seqera platform using this resource.
-
-SSH credentials store SSH private keys for secure access to remote
-compute environments and resources within the Seqera Platform workflows.
+Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows.
 
 ## Example Usage
 
@@ -322,13 +317,13 @@ resource "seqera_ssh_credential" "rotated" {
 
 ### Required
 
-- `name` (String) Display name for the credential (max 100 characters). Requires replacement if changed.
+- `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `private_key` (String, Sensitive) SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen
 
 ### Optional
 
-- `passphrase` (String, Sensitive) Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
-- `workspace_id` (Number) Workspace numeric identifier
+- `passphrase` (String, Sensitive) Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed. Requires replacement if changed.
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

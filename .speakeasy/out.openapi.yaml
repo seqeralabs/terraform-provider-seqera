@@ -9431,6 +9431,7 @@ paths:
           schema:
             type: integer
             format: int64
+          x-speakeasy-param-force-new: true
       requestBody:
         description: SSH credentials create request
         content:
@@ -16944,11 +16945,12 @@ components:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
-          x-speakeasy-param-suppress-computed-diff: true
         name:
-          maxLength: 100
+          minLength: 2
+          maxLength: 99
           type: string
-          description: Display name for the credential (max 100 characters)
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
           type: string
@@ -16983,18 +16985,20 @@ components:
           x-speakeasy-terraform-ignore: true
         keys:
           x-speakeasy-entity: SSHCredential
-          x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource.
-
-
-            SSH credentials store SSH private keys for secure access to remote
-
-            compute environments and resources within the Seqera Platform workflows.
-
-'
+          x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. '
           type: object
           required:
             - privateKey
           properties:
+            # # This value is not part of our API but included to fix generation. 
+            # keyType:
+            #   type: string
+            #   description: Type of SSH key (always "ssh")
+            #   default: ssh
+            #   example: ssh
+            #   x-speakeasy-param-readonly: true
+            #   x-speakeasy-param-computed: true
+            #   x-speakeasy-name-override: key_type
             privateKey:
               type: string
               description: 'SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen'
@@ -17007,6 +17011,7 @@ components:
               description: Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
               x-speakeasy-param-sensitive: true
               x-speakeasy-param-computed: false
+              x-speakeasy-param-force-new: true
               writeOnly: true
     CreateSSHCredentialsRequest:
       type: object

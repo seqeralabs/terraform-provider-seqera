@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -18,6 +19,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -52,17 +54,14 @@ func (r *SSHCredentialResource) Metadata(ctx context.Context, req resource.Metad
 
 func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource.\n\nSSH credentials store SSH private keys for secure access to remote\ncompute environments and resources within the Seqera Platform workflows.\n",
+		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. ",
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"keys": schema.SingleNestedAttribute{
@@ -74,15 +73,19 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Display name for the credential (max 100 characters). Requires replacement if changed.`,
+				Description: `Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
+					stringvalidator.UTF8LengthBetween(2, 99),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
 			"passphrase": schema.StringAttribute{
-				Optional:    true,
-				Sensitive:   true,
-				Description: `Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.`,
+				Optional:  true,
+				Sensitive: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed. Requires replacement if changed.`,
 			},
 			"private_key": schema.StringAttribute{
 				Required:    true,
@@ -98,8 +101,11 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"workspace_id": schema.Int64Attribute{
-				Optional:    true,
-				Description: `Workspace numeric identifier`,
+				Optional: true,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Workspace numeric identifier. Requires replacement if changed.`,
 			},
 		},
 	}
