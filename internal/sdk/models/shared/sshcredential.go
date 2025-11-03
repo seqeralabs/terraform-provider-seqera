@@ -34,10 +34,30 @@ func (e *SSHCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type SSHCredentialKeys struct {
+	// Type of SSH key (always "ssh")
+	KeyType *string `default:"ssh" json:"keyType"`
 	// SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen
 	PrivateKey string `json:"privateKey"`
 	// Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
 	Passphrase *string `json:"passphrase,omitempty"`
+}
+
+func (s SSHCredentialKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SSHCredentialKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"privateKey"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SSHCredentialKeys) GetKeyType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.KeyType
 }
 
 func (s *SSHCredentialKeys) GetPrivateKey() string {
@@ -140,6 +160,26 @@ func (s *SSHCredential) GetKeys() SSHCredentialKeys {
 }
 
 type SSHCredentialKeysOutput struct {
+	// Type of SSH key (always "ssh")
+	KeyType *string `default:"ssh" json:"keyType"`
+}
+
+func (s SSHCredentialKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SSHCredentialKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SSHCredentialKeysOutput) GetKeyType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.KeyType
 }
 
 type SSHCredentialOutput struct {

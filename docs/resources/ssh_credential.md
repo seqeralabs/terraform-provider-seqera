@@ -329,11 +329,8 @@ resource "seqera_ssh_credential" "rotated" {
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
-- `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
+- `key_type` (String) Type of SSH key (always "ssh"). Default: "ssh"
 - `provider_type` (String) Cloud provider type (automatically set to "ssh"). Default: "ssh"; must be "ssh"
-
-<a id="nestedatt--keys"></a>
-### Nested Schema for `keys`
 
 ## Import
 

@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: cdb2b7800ed173985527b7c9d83ed638
+  docChecksum: d050e1c8607c9c09680a2508063af6af
   docVersion: 1.56.0
   speakeasyVersion: 1.645.2
   generationVersion: 2.735.1
@@ -225,7 +225,6 @@ generatedFiles:
   - internal/provider/types/seqera_compute_configuration.go
   - internal/provider/types/seqera_compute_security_keys.go
   - internal/provider/types/slurm_configuration.go
-  - internal/provider/types/ssh_credential_keys.go
   - internal/provider/types/ssh_security_keys.go
   - internal/provider/types/tower_agent_credential_keys.go
   - internal/provider/types/univa_grid_engine_configuration.go
@@ -2954,7 +2953,7 @@ examples:
   CreateSSHCredentials:
     speakeasy-default-create-SSH-credentials:
       requestBody:
-        application/json: {}
+        application/json: {"credentials": {"name": "<value>", "provider": "ssh", "keys": {"keyType": "ssh", "privateKey": "<value>"}}}
       responses:
         "200":
           application/json: {}
@@ -2967,7 +2966,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {}
+          application/json: {"credentials": {"name": "<value>", "provider": "ssh", "keys": {"keyType": "ssh"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateSSHCredentials:
@@ -2976,7 +2975,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {}
+        application/json: {"credentials": {"name": "<value>", "provider": "ssh", "keys": {"keyType": "ssh", "privateKey": "<value>"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}

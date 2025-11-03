@@ -17,7 +17,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -38,14 +37,14 @@ type SSHCredentialResource struct {
 
 // SSHCredentialResourceModel describes the resource data model.
 type SSHCredentialResourceModel struct {
-	CredentialsID types.String              `tfsdk:"credentials_id"`
-	ID            types.String              `tfsdk:"id"`
-	Keys          tfTypes.SSHCredentialKeys `tfsdk:"keys"`
-	Name          types.String              `tfsdk:"name"`
-	Passphrase    types.String              `tfsdk:"passphrase"`
-	PrivateKey    types.String              `tfsdk:"private_key"`
-	ProviderType  types.String              `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64               `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	ID            types.String `tfsdk:"id"`
+	KeyType       types.String `tfsdk:"key_type"`
+	Name          types.String `tfsdk:"name"`
+	Passphrase    types.String `tfsdk:"passphrase"`
+	PrivateKey    types.String `tfsdk:"private_key"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *SSHCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -64,8 +63,10 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
+			"key_type": schema.StringAttribute{
+				Computed:    true,
+				Default:     stringdefault.StaticString(`ssh`),
+				Description: `Type of SSH key (always "ssh"). Default: "ssh"`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,
