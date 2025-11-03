@@ -4,7 +4,7 @@ package shared
 
 type CreateActionRequest struct {
 	Name   string                `json:"name"`
-	Source ActionSource          `json:"source"`
+	Source *ActionSource         `json:"source,omitempty"`
 	Launch WorkflowLaunchRequest `json:"launch"`
 }
 
@@ -15,9 +15,9 @@ func (c *CreateActionRequest) GetName() string {
 	return c.Name
 }
 
-func (c *CreateActionRequest) GetSource() ActionSource {
+func (c *CreateActionRequest) GetSource() *ActionSource {
 	if c == nil {
-		return ActionSource("")
+		return nil
 	}
 	return c.Source
 }
