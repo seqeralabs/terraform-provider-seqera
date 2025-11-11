@@ -166,8 +166,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -226,8 +232,14 @@ Not Null; Requires replacement if changed.
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -361,8 +373,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -394,8 +412,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -445,8 +469,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -484,8 +514,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -530,8 +566,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -569,8 +611,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -604,8 +652,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -639,8 +693,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -671,8 +731,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -731,8 +797,14 @@ Not Null; Requires replacement if changed.
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -861,8 +933,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 
@@ -893,8 +971,14 @@ Optional:
 
 Optional:
 
-- `compute` (Boolean) Requires replacement if changed.
-- `head` (Boolean) Requires replacement if changed.
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `value` (String) Requires replacement if changed.
 

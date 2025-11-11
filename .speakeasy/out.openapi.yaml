@@ -11333,8 +11333,22 @@ components:
           type: string
         head:
           type: boolean
+          description: |
+            Whether this environment variable should be applied to the head/master node.
+            At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+            Requires replacement if changed.
+          default: false
         compute:
           type: boolean
+          description: |
+            Whether this environment variable should be applied to compute/worker nodes.
+            At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+            Requires replacement if changed.
+          default: false
+      x-speakeasy-plan-validators: ConfigEnvVariableValidator
+      description: |
+        Environment variable configuration. Each variable must specify whether it applies to the head node, compute nodes, or both.
+        At least one of 'head' or 'compute' must be set to true. Both can be true to target both head and compute nodes.
     ContainerData:
       required:
         - targetImage

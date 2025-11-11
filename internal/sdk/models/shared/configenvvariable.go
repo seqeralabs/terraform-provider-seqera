@@ -6,11 +6,21 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
+// ConfigEnvVariable - Environment variable configuration. Each variable must specify whether it applies to the head node, compute nodes, or both.
+// At least one of 'head' or 'compute' must be set to true. Both can be true to target both head and compute nodes.
 type ConfigEnvVariable struct {
-	Name    *string `json:"name,omitempty"`
-	Value   *string `json:"value,omitempty"`
-	Head    *bool   `json:"head,omitempty"`
-	Compute *bool   `json:"compute,omitempty"`
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+	// Whether this environment variable should be applied to the head/master node.
+	// At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+	// Requires replacement if changed.
+	//
+	Head *bool `default:"false" json:"head"`
+	// Whether this environment variable should be applied to compute/worker nodes.
+	// At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+	// Requires replacement if changed.
+	//
+	Compute *bool `default:"false" json:"compute"`
 }
 
 func (c ConfigEnvVariable) MarshalJSON() ([]byte, error) {
