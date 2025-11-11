@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
 
@@ -56,18 +57,20 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "Manage AWS credentials in Seqera platform using this resource.\n\nAWS credentials store authentication information for accessing AWS services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
-				Required:    true,
-				Description: `AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).`,
+				Optional:    true,
+				Description: `AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(16, 128),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$`), "must match pattern "+regexp.MustCompile(`^(AKIA|ASIA|AIDA)[A-Z0-9]{16,}$`).String()),
+					custom_stringvalidators.AWSCredentialKeysValidator(),
 				},
 			},
 			"assume_role_arn": schema.StringAttribute{
 				Optional:    true,
-				Description: `IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME`,
+				Description: `IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`), "must match pattern "+regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`).String()),
+					custom_stringvalidators.AWSCredentialKeysValidator(),
 				},
 			},
 			"credentials_id": schema.StringAttribute{
@@ -102,11 +105,12 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"secret_key": schema.StringAttribute{
-				Required:    true,
+				Optional:    true,
 				Sensitive:   true,
-				Description: `AWS secret access key (required, sensitive). Must be at least 40 characters.`,
+				Description: `AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtLeast(40),
+					custom_stringvalidators.AWSCredentialKeysValidator(),
 				},
 			},
 			"workspace_id": schema.Int64Attribute{

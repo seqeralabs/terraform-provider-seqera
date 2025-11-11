@@ -34,24 +34,24 @@ func (e *AWSCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type AWSCredentialKeys struct {
-	// AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
-	AccessKey string `json:"accessKey"`
-	// AWS secret access key (required, sensitive). Must be at least 40 characters.
-	SecretKey string `json:"secretKey"`
-	// IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
+	// AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
+	AccessKey *string `json:"accessKey,omitempty"`
+	// AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
+	SecretKey *string `json:"secretKey,omitempty"`
+	// IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty"`
 }
 
-func (a *AWSCredentialKeys) GetAccessKey() string {
+func (a *AWSCredentialKeys) GetAccessKey() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.AccessKey
 }
 
-func (a *AWSCredentialKeys) GetSecretKey() string {
+func (a *AWSCredentialKeys) GetSecretKey() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.SecretKey
 }
@@ -149,13 +149,13 @@ func (a *AWSCredential) GetKeys() AWSCredentialKeys {
 }
 
 type AWSCredentialKeysOutput struct {
-	// AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
-	AccessKey string `json:"accessKey"`
+	// AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
+	AccessKey *string `json:"accessKey,omitempty"`
 }
 
-func (a *AWSCredentialKeysOutput) GetAccessKey() string {
+func (a *AWSCredentialKeysOutput) GetAccessKey() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.AccessKey
 }

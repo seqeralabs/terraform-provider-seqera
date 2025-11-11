@@ -18,6 +18,12 @@ within the Seqera Platform workflows.
 ## Example Usage
 
 ```terraform
+# AWS Credential Examples
+#
+# AWS credentials can be configured in two ways:
+# 1. Using access keys (access_key + secret_key)
+# 2. Using IAM role assumption (assume_role_arn)
+
 variable "aws_access_key_id" {
   type      = string
   sensitive = true
@@ -28,12 +34,33 @@ variable "aws_secret_access_key" {
   sensitive = true
 }
 
-resource "seqera_aws_credential" "example" {
-  name         = "aws-main"
+# Example 1: Using access keys
+resource "seqera_aws_credential" "with_keys" {
+  name         = "aws-with-keys"
   workspace_id = seqera_workspace.main.id
 
   access_key = var.aws_access_key_id
   secret_key = var.aws_secret_access_key
+}
+
+# Example 2: Using IAM role assumption
+# The Seqera Platform will use ambient AWS credentials to assume this role
+resource "seqera_aws_credential" "with_assume_role" {
+  name         = "aws-with-role"
+  workspace_id = seqera_workspace.main.id
+
+  assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraExecutionRole"
+}
+
+# Example 3: Using both access keys and role assumption
+# The access keys will be used to assume the specified role
+resource "seqera_aws_credential" "with_keys_and_role" {
+  name         = "aws-with-keys-and-role"
+  workspace_id = seqera_workspace.main.id
+
+  access_key      = var.aws_access_key_id
+  secret_key      = var.aws_secret_access_key
+  assume_role_arn = "arn:aws:iam::123456789012:role/SeqeraExecutionRole"
 }
 ```
 
@@ -42,13 +69,13 @@ resource "seqera_aws_credential" "example" {
 
 ### Required
 
-- `access_key` (String) AWS access key ID (required). Must start with AKIA (standard) or ASIA (temporary).
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
-- `secret_key` (String, Sensitive) AWS secret access key (required, sensitive). Must be at least 40 characters.
 
 ### Optional
 
-- `assume_role_arn` (String) IAM role ARN to assume (optional, recommended for enhanced security). Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
+- `access_key` (String) AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
+- `assume_role_arn` (String) IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.
+- `secret_key` (String, Sensitive) AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only

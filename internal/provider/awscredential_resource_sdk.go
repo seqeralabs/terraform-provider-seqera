@@ -13,7 +13,7 @@ import (
 func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialKeysOutput(ctx context.Context, resp *shared.AWSCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
-	r.AccessKey = types.StringValue(resp.AccessKey)
+	r.AccessKey = types.StringPointerValue(resp.AccessKey)
 
 	return diags
 }
@@ -195,12 +195,18 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context) 
 func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Context) (*shared.AWSCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var accessKey string
-	accessKey = r.AccessKey.ValueString()
-
-	var secretKey string
-	secretKey = r.SecretKey.ValueString()
-
+	accessKey := new(string)
+	if !r.AccessKey.IsUnknown() && !r.AccessKey.IsNull() {
+		*accessKey = r.AccessKey.ValueString()
+	} else {
+		accessKey = nil
+	}
+	secretKey := new(string)
+	if !r.SecretKey.IsUnknown() && !r.SecretKey.IsNull() {
+		*secretKey = r.SecretKey.ValueString()
+	} else {
+		secretKey = nil
+	}
 	assumeRoleArn := new(string)
 	if !r.AssumeRoleArn.IsUnknown() && !r.AssumeRoleArn.IsNull() {
 		*assumeRoleArn = r.AssumeRoleArn.ValueString()
