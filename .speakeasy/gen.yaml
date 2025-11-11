@@ -20,6 +20,7 @@ generation:
   sdkHooksConfigAccess: true
   schemas:
     allOfMergeStrategy: shallowMerge
+  requestBodyFieldName: ""
   tests:
     generateTests: true
     generateNewTests: false
@@ -37,6 +38,8 @@ terraform:
   author: seqeralabs
   baseErrorName: SeqeraError
   defaultErrorName: APIError
+  enableOperationSecurity: false
+  enableOperationServers: false
   enableTypeDeduplication: false
   environmentVariables: []
   generateValidationHelpers: true

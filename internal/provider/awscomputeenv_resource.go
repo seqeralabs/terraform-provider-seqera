@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/boolplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int32planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
@@ -177,6 +178,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
+								custom_objectvalidators.ConfigEnvVariableValidator(),
 							},
 							PlanModifiers: []planmodifier.Object{
 								objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -186,20 +188,28 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 								"compute": schema.BoolAttribute{
 									Computed: true,
 									Optional: true,
+									Default:  booldefault.StaticBool(false),
 									PlanModifiers: []planmodifier.Bool{
 										boolplanmodifier.RequiresReplaceIfConfigured(),
 										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 									},
-									Description: `Requires replacement if changed.`,
+									MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
+										`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+										`Requires replacement if changed.` + "\n" +
+										`Default: false; Requires replacement if changed.`,
 								},
 								"head": schema.BoolAttribute{
 									Computed: true,
 									Optional: true,
+									Default:  booldefault.StaticBool(false),
 									PlanModifiers: []planmodifier.Bool{
 										boolplanmodifier.RequiresReplaceIfConfigured(),
 										speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 									},
-									Description: `Requires replacement if changed.`,
+									MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
+										`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+										`Requires replacement if changed.` + "\n" +
+										`Default: false; Requires replacement if changed.`,
 								},
 								"name": schema.StringAttribute{
 									Computed: true,

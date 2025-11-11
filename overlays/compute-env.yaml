@@ -25,6 +25,31 @@ actions:
     update:
       x-speakeasy-param-optional: false
 
+  # ConfigEnvVariable validator - ensures at least one of head or compute is true
+  - target: $["components"]["schemas"]["ConfigEnvVariable"]
+    update:
+      x-speakeasy-plan-validators: ConfigEnvVariableValidator
+      description: |
+        Environment variable configuration. Each variable must specify whether it applies to the head node, compute nodes, or both.
+        At least one of 'head' or 'compute' must be set to true. Both can be true to target both head and compute nodes.
+
+  # ConfigEnvVariable field descriptions and defaults
+  - target: $["components"]["schemas"]["ConfigEnvVariable"]["properties"]["head"]
+    update:
+      description: |
+        Whether this environment variable should be applied to the head/master node.
+        At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+        Requires replacement if changed.
+      default: false
+
+  - target: $["components"]["schemas"]["ConfigEnvVariable"]["properties"]["compute"]
+    update:
+      description: |
+        Whether this environment variable should be applied to compute/worker nodes.
+        At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+        Requires replacement if changed.
+      default: false
+
   # ComputeEnv entity operations
   # Note: Update operation now supports in-place name changes
   # Other fields still require replacement

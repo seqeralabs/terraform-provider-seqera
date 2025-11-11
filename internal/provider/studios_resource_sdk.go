@@ -176,7 +176,7 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	}
 	var environment map[string]string
 	if r.Configuration.Environment != nil {
-		environment := make(map[string]string)
+		environment = make(map[string]string)
 		for environmentKey, environmentValue := range r.Configuration.Environment {
 			var environmentInst string
 			environmentInst = environmentValue.ValueString()

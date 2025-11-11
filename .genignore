@@ -15,6 +15,7 @@ internal/provider/tokens_resource.go
 
 # Custom validators
 internal/validators/mapvalidators/studio_environment_variable_validator.go
+internal/validators/objectvalidators/config_env_variable_validator.go
 
 # Custom state upgraders for field renames and migrations
 internal/stateupgraders/awsbatchce_v0.go
