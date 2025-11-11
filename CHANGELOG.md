@@ -1,9 +1,27 @@
+# v0.26.4
+
+FIX:
+
+- **Compute Environments** Added validation for compute and head job targetting of environment variables.
+- **AWS Credentials** Allowed the ommission of Secret Key & Access Key values when using a role.
+
+# v0.26.3
+
+FEATURES:
+
+- **Seqera Action Resource** Cleaned up the resource removing unused fields.
+
+FIX:
+
+- **Seqera Credentials Resource** Added missing username fields.
+
 # v0.26.2
 
 FEATURES:
 
 - **New Data Source:** `seqera_credentials` - Lists all credentials with optional workspace filtering. Returns credential `id`, `name`, and `provider_type` for each credential. Use Terraform locals with `for` expressions to filter by provider type or name (e.g., `local.creds["credential-name"].id`)
 - **New Data Source:** `seqera_data_links` - Lists all data links with optional workspace filtering. Returns data link `id`, `name`, `provider`, `resource_ref`, and `region` for each data link. Use Terraform locals with `for` expressions to filter by provider type, region, or name:
+
   ```hcl
   data "seqera_data_links" "all" {
     workspace_id = seqera_workspace.my_workspace.id
@@ -52,6 +70,7 @@ ENHANCEMENTS:
 - **Studios**: Added `environment` field in configuration for setting studio-specific environment variables. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
 
 - **Studios**: Added varios examples showing:
+
   - Minimal studio with empty configuration
   - Conda environment setup using both heredoc and yamlencode() approaches
   - Resource label integration
