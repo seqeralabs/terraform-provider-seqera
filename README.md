@@ -1,7 +1,13 @@
 # Seqera Platform Terraform Provider
 
+> [!NOTE]
+> **Early Preview** - This provider is currently in early preview as we work toward a stable release by the end of 2025. Track our progress on the [v1.0 stable release milestone](https://github.com/seqeralabs/terraform-provider-seqera/milestone/3).
+>
+> We'd love your feedback! Please test the provider with your use cases and [report any issues](https://github.com/seqeralabs/terraform-provider-seqera/issues) you encounter. Your input will help us build a better stable release.
+
 > [!CAUTION]
-> **Early Preview** - This provider is in early preview and subject to breaking changes. APIs and resource schemas may change without notice. Please use with caution in production environments and report any issues you encounter.
+> **Deprecated Resources** - Resources marked as deprecated should be avoided in new configurations, as they will be removed for the stable release. Please migrate to their recommended replacements if available.
+
 
 Terraform Provider for the Seqera Platform API.
 
@@ -43,7 +49,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.25.4"
+      version = "0.26.4"
     }
   }
 }
