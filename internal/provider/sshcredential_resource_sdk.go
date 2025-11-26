@@ -35,25 +35,11 @@ func (r *SSHCredentialResourceModel) RefreshFromSharedDescribeSSHCredentialsResp
 	return diags
 }
 
-func (r *SSHCredentialResourceModel) RefreshFromSharedSSHCredentialKeysOutput(ctx context.Context, resp *shared.SSHCredentialKeysOutput) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	r.KeyType = types.StringPointerValue(resp.KeyType)
-
-	return diags
-}
-
 func (r *SSHCredentialResourceModel) RefreshFromSharedSSHCredentialOutput(ctx context.Context, resp *shared.SSHCredentialOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.ID = types.StringPointerValue(resp.ID)
-		diags.Append(r.RefreshFromSharedSSHCredentialKeysOutput(ctx, &resp.Keys)...)
-
-		if diags.HasError() {
-			return diags
-		}
-
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -212,12 +198,6 @@ func (r *SSHCredentialResourceModel) ToSharedSSHCredential(ctx context.Context) 
 func (r *SSHCredentialResourceModel) ToSharedSSHCredentialKeys(ctx context.Context) (*shared.SSHCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	keyType := new(string)
-	if !r.KeyType.IsUnknown() && !r.KeyType.IsNull() {
-		*keyType = r.KeyType.ValueString()
-	} else {
-		keyType = nil
-	}
 	var privateKey string
 	privateKey = r.PrivateKey.ValueString()
 
@@ -228,7 +208,6 @@ func (r *SSHCredentialResourceModel) ToSharedSSHCredentialKeys(ctx context.Conte
 		passphrase = nil
 	}
 	out := shared.SSHCredentialKeys{
-		KeyType:    keyType,
 		PrivateKey: privateKey,
 		Passphrase: passphrase,
 	}

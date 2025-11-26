@@ -16,7 +16,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -37,15 +36,14 @@ type KubernetesCredentialResource struct {
 
 // KubernetesCredentialResourceModel describes the resource data model.
 type KubernetesCredentialResourceModel struct {
-	ClientCertificate types.String                     `tfsdk:"client_certificate"`
-	CredentialsID     types.String                     `tfsdk:"credentials_id"`
-	ID                types.String                     `tfsdk:"id"`
-	Keys              tfTypes.KubernetesCredentialKeys `tfsdk:"keys"`
-	Name              types.String                     `tfsdk:"name"`
-	PrivateKey        types.String                     `tfsdk:"private_key"`
-	ProviderType      types.String                     `tfsdk:"provider_type"`
-	Token             types.String                     `tfsdk:"token"`
-	WorkspaceID       types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ClientCertificate types.String `tfsdk:"client_certificate"`
+	CredentialsID     types.String `tfsdk:"credentials_id"`
+	ID                types.String `tfsdk:"id"`
+	Name              types.String `tfsdk:"name"`
+	PrivateKey        types.String `tfsdk:"private_key"`
+	ProviderType      types.String `tfsdk:"provider_type"`
+	Token             types.String `tfsdk:"token"`
+	WorkspaceID       types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *KubernetesCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -71,9 +69,6 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
-			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
 			},
 			"name": schema.StringAttribute{
 				Required: true,

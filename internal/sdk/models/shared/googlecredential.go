@@ -36,6 +36,19 @@ func (e *GoogleCredentialProviderType) UnmarshalJSON(data []byte) error {
 type GoogleCredentialKeys struct {
 	// Google Cloud service account key JSON (required, sensitive).
 	Data string `json:"data"`
+	// Type of key (always "google") - not exposed in Terraform
+	KeyType *string `default:"google" json:"keyType"`
+}
+
+func (g GoogleCredentialKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleCredentialKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"data"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (g *GoogleCredentialKeys) GetData() string {
@@ -43,6 +56,13 @@ func (g *GoogleCredentialKeys) GetData() string {
 		return ""
 	}
 	return g.Data
+}
+
+func (g *GoogleCredentialKeys) GetKeyType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.KeyType
 }
 
 type GoogleCredential struct {
@@ -131,6 +151,26 @@ func (g *GoogleCredential) GetKeys() GoogleCredentialKeys {
 }
 
 type GoogleCredentialKeysOutput struct {
+	// Type of key (always "google") - not exposed in Terraform
+	KeyType *string `default:"google" json:"keyType"`
+}
+
+func (g GoogleCredentialKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleCredentialKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (g *GoogleCredentialKeysOutput) GetKeyType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.KeyType
 }
 
 type GoogleCredentialOutput struct {

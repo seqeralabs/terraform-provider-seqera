@@ -39,7 +39,6 @@ type SSHCredentialResource struct {
 type SSHCredentialResourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
 	ID            types.String `tfsdk:"id"`
-	KeyType       types.String `tfsdk:"key_type"`
 	Name          types.String `tfsdk:"name"`
 	Passphrase    types.String `tfsdk:"passphrase"`
 	PrivateKey    types.String `tfsdk:"private_key"`
@@ -62,11 +61,6 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
-			},
-			"key_type": schema.StringAttribute{
-				Computed:    true,
-				Default:     stringdefault.StaticString(`ssh`),
-				Description: `Type of SSH key (always "ssh"). Default: "ssh"`,
 			},
 			"name": schema.StringAttribute{
 				Required: true,

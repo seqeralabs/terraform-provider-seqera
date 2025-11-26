@@ -34,12 +34,12 @@ func (e *SSHCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type SSHCredentialKeys struct {
-	// Type of SSH key (always "ssh")
-	KeyType *string `default:"ssh" json:"keyType"`
 	// SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen
 	PrivateKey string `json:"privateKey"`
 	// Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
 	Passphrase *string `json:"passphrase,omitempty"`
+	// Type of key (always "ssh") - not exposed in Terraform
+	KeyType *string `default:"ssh" json:"keyType"`
 }
 
 func (s SSHCredentialKeys) MarshalJSON() ([]byte, error) {
@@ -51,13 +51,6 @@ func (s *SSHCredentialKeys) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (s *SSHCredentialKeys) GetKeyType() *string {
-	if s == nil {
-		return nil
-	}
-	return s.KeyType
 }
 
 func (s *SSHCredentialKeys) GetPrivateKey() string {
@@ -72,6 +65,13 @@ func (s *SSHCredentialKeys) GetPassphrase() *string {
 		return nil
 	}
 	return s.Passphrase
+}
+
+func (s *SSHCredentialKeys) GetKeyType() *string {
+	if s == nil {
+		return nil
+	}
+	return s.KeyType
 }
 
 type SSHCredential struct {
@@ -160,7 +160,7 @@ func (s *SSHCredential) GetKeys() SSHCredentialKeys {
 }
 
 type SSHCredentialKeysOutput struct {
-	// Type of SSH key (always "ssh")
+	// Type of key (always "ssh") - not exposed in Terraform
 	KeyType *string `default:"ssh" json:"keyType"`
 }
 

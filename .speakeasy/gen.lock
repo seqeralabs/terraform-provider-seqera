@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 6ef9fff89b887636f066926467f5d0b2
+  docChecksum: ef434f963aeeaa7056539c3e628fde8f
   docVersion: 1.56.0
   speakeasyVersion: 1.661.3
   generationVersion: 2.763.3
@@ -204,14 +204,12 @@ generatedFiles:
   - internal/provider/types/gitea_security_keys.go
   - internal/provider/types/github_action_config.go
   - internal/provider/types/google_batch_service_configuration.go
-  - internal/provider/types/google_credential_keys.go
   - internal/provider/types/google_gke_cluster_configuration.go
   - internal/provider/types/google_life_sciences_configuration.go
   - internal/provider/types/google_security_keys.go
   - internal/provider/types/ibmlsf_configuration.go
   - internal/provider/types/k8s_security_keys.go
   - internal/provider/types/kubernetes_compute_configuration.go
-  - internal/provider/types/kubernetes_credential_keys.go
   - internal/provider/types/label_db_dto.go
   - internal/provider/types/moab_configuration.go
   - internal/provider/types/security_keys.go
@@ -2649,7 +2647,7 @@ examples:
   CreateGoogleCredentials:
     speakeasy-default-create-google-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
       responses:
         "200":
           application/json: {}
@@ -2671,7 +2669,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2952,7 +2950,7 @@ examples:
   CreateSSHCredentials:
     speakeasy-default-create-SSH-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "ssh", "keys": {"keyType": "ssh", "privateKey": "<value>"}}}
+        application/json: {}
       responses:
         "200":
           application/json: {}
@@ -2965,7 +2963,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "ssh", "keys": {"keyType": "ssh"}}}
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
   UpdateSSHCredentials:
@@ -2974,7 +2972,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "ssh", "keys": {"keyType": "ssh", "privateKey": "<value>"}}}
+        application/json: {}
       responses:
         "400":
           application/json: {"message": "<value>"}
