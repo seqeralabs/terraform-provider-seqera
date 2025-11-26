@@ -22,6 +22,7 @@ func (r *BitbucketCredentialResourceModel) RefreshFromSharedBitbucketCredentialO
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedBitbucketCredentialKeysOutput(ctx, &resp.Keys)...)
 
@@ -175,6 +176,12 @@ func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredential(ctx conte
 	} else {
 		providerType = nil
 	}
+	baseURL := new(string)
+	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
+		*baseURL = r.BaseURL.ValueString()
+	} else {
+		baseURL = nil
+	}
 	keys, keysDiags := r.ToSharedBitbucketCredentialKeys(ctx)
 	diags.Append(keysDiags...)
 
@@ -186,6 +193,7 @@ func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredential(ctx conte
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
+		BaseURL:      baseURL,
 		Keys:         *keys,
 	}
 
@@ -201,16 +209,9 @@ func (r *BitbucketCredentialResourceModel) ToSharedBitbucketCredentialKeys(ctx c
 	var token string
 	token = r.Token.ValueString()
 
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
 	out := shared.BitbucketCredentialKeys{
 		Username: username,
 		Token:    token,
-		BaseURL:  baseURL,
 	}
 
 	return &out, diags

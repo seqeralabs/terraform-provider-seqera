@@ -38,8 +38,6 @@ type GiteaCredentialKeys struct {
 	Username string `json:"username"`
 	// Gitea account password (required, sensitive)
 	Password string `json:"password"`
-	// Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower
-	BaseURL *string `json:"baseUrl,omitempty"`
 }
 
 func (g *GiteaCredentialKeys) GetUsername() string {
@@ -56,13 +54,6 @@ func (g *GiteaCredentialKeys) GetPassword() string {
 	return g.Password
 }
 
-func (g *GiteaCredentialKeys) GetBaseURL() *string {
-	if g == nil {
-		return nil
-	}
-	return g.BaseURL
-}
-
 type GiteaCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
@@ -77,8 +68,10 @@ type GiteaCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time          `json:"lastUpdated,omitempty"`
-	Keys        GiteaCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com
+	BaseURL *string             `json:"baseUrl,omitempty"`
+	Keys    GiteaCredentialKeys `json:"keys"`
 }
 
 func (g GiteaCredential) MarshalJSON() ([]byte, error) {
@@ -141,6 +134,13 @@ func (g *GiteaCredential) GetLastUpdated() *time.Time {
 	return g.LastUpdated
 }
 
+func (g *GiteaCredential) GetBaseURL() *string {
+	if g == nil {
+		return nil
+	}
+	return g.BaseURL
+}
+
 func (g *GiteaCredential) GetKeys() GiteaCredentialKeys {
 	if g == nil {
 		return GiteaCredentialKeys{}
@@ -174,8 +174,10 @@ type GiteaCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                `json:"lastUpdated,omitempty"`
-	Keys        GiteaCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com
+	BaseURL *string                   `json:"baseUrl,omitempty"`
+	Keys    GiteaCredentialKeysOutput `json:"keys"`
 }
 
 func (g GiteaCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -236,6 +238,13 @@ func (g *GiteaCredentialOutput) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return g.LastUpdated
+}
+
+func (g *GiteaCredentialOutput) GetBaseURL() *string {
+	if g == nil {
+		return nil
+	}
+	return g.BaseURL
 }
 
 func (g *GiteaCredentialOutput) GetKeys() GiteaCredentialKeysOutput {

@@ -78,15 +78,7 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed: true,
 			},
 			"member_role": schema.StringAttribute{
-				Computed:    true,
-				Description: `must be one of ["owner", "member", "collaborator"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"owner",
-						"member",
-						"collaborator",
-					),
-				},
+				Computed: true,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
@@ -163,6 +155,13 @@ func (r *OrgsResource) Create(ctx context.Context, req resource.CreateRequest, r
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -367,7 +366,10 @@ func (r *OrgsResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

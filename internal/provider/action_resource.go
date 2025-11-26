@@ -5,7 +5,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -74,11 +73,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 								Computed: true,
 							},
 						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("tower"),
-							}...),
-						},
 					},
 					"tower": schema.SingleNestedAttribute{
 						Computed: true,
@@ -86,11 +80,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							"discriminator": schema.StringAttribute{
 								Computed: true,
 							},
-						},
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
-								path.MatchRelative().AtParent().AtName("github"),
-							}...),
 						},
 					},
 				},
@@ -139,9 +128,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
 					},
 					"label_ids": schema.ListAttribute{
 						Optional:    true,
@@ -159,9 +145,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"optimization_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(32),
-						},
 					},
 					"optimization_targets": schema.StringAttribute{
 						Computed: true,
@@ -197,9 +180,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"resume_launch_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(22),
-						},
 					},
 					"revision": schema.StringAttribute{
 						Computed: true,
@@ -225,9 +205,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					},
 					"session_id": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(36),
-						},
 					},
 					"stub_run": schema.BoolAttribute{
 						Computed: true,
@@ -276,16 +253,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				},
 			},
 			"status": schema.StringAttribute{
-				Computed:    true,
-				Description: `must be one of ["CREATING", "ACTIVE", "ERROR", "PAUSED"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"CREATING",
-						"ACTIVE",
-						"ERROR",
-						"PAUSED",
-					),
-				},
+				Computed: true,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required:    true,
@@ -590,7 +558,10 @@ func (r *ActionResource) Delete(ctx context.Context, req resource.DeleteRequest,
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

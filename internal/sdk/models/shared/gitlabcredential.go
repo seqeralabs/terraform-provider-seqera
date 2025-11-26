@@ -38,8 +38,6 @@ type GitlabCredentialKeys struct {
 	Username string `json:"username"`
 	// GitLab Personal Access Token or Project Access Token (required, sensitive)
 	Token string `json:"token"`
-	// Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
-	BaseURL *string `json:"baseUrl,omitempty"`
 }
 
 func (g *GitlabCredentialKeys) GetUsername() string {
@@ -56,13 +54,6 @@ func (g *GitlabCredentialKeys) GetToken() string {
 	return g.Token
 }
 
-func (g *GitlabCredentialKeys) GetBaseURL() *string {
-	if g == nil {
-		return nil
-	}
-	return g.BaseURL
-}
-
 type GitlabCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
@@ -77,8 +68,10 @@ type GitlabCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time           `json:"lastUpdated,omitempty"`
-	Keys        GitlabCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
+	BaseURL *string              `json:"baseUrl,omitempty"`
+	Keys    GitlabCredentialKeys `json:"keys"`
 }
 
 func (g GitlabCredential) MarshalJSON() ([]byte, error) {
@@ -141,6 +134,13 @@ func (g *GitlabCredential) GetLastUpdated() *time.Time {
 	return g.LastUpdated
 }
 
+func (g *GitlabCredential) GetBaseURL() *string {
+	if g == nil {
+		return nil
+	}
+	return g.BaseURL
+}
+
 func (g *GitlabCredential) GetKeys() GitlabCredentialKeys {
 	if g == nil {
 		return GitlabCredentialKeys{}
@@ -174,8 +174,10 @@ type GitlabCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                 `json:"lastUpdated,omitempty"`
-	Keys        GitlabCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com
+	BaseURL *string                    `json:"baseUrl,omitempty"`
+	Keys    GitlabCredentialKeysOutput `json:"keys"`
 }
 
 func (g GitlabCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -236,6 +238,13 @@ func (g *GitlabCredentialOutput) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return g.LastUpdated
+}
+
+func (g *GitlabCredentialOutput) GetBaseURL() *string {
+	if g == nil {
+		return nil
+	}
+	return g.BaseURL
 }
 
 func (g *GitlabCredentialOutput) GetKeys() GitlabCredentialKeysOutput {

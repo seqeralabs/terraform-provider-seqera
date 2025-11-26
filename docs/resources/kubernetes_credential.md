@@ -56,7 +56,7 @@ resource "seqera_kubernetes_credential" "example" {
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
 - `keys` (Attributes) (see [below for nested schema](#nestedatt--keys))
-- `provider_type` (String) Cloud provider type (automatically set to "k8s"). Default: "k8s"; must be "k8s"
+- `provider_type` (String) Cloud provider type (automatically set to "k8s"). Default: "k8s"
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

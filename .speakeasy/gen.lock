@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 6879e59e99fbc0b6ff4ca1dcecc95099
+  docChecksum: 6ef9fff89b887636f066926467f5d0b2
   docVersion: 1.56.0
-  speakeasyVersion: 1.653.1
-  generationVersion: 2.748.0
+  speakeasyVersion: 1.661.3
+  generationVersion: 2.763.3
   releaseVersion: 0.25.4
-  configChecksum: 2e104ae5c00a2ab79189eedf59fa34b7
+  configChecksum: ff8557c29330e676ec2fbb0d706c7222
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.8
+    core: 3.46.18
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
@@ -22,7 +22,7 @@ features:
     nameOverrides: 2.81.3
     nullables: 0.0.0
     retries: 2.81.4
-    unions: 2.82.2
+    unions: 2.82.5
 generatedFiles:
   - .gitattributes
   - USAGE.md
@@ -264,6 +264,7 @@ generatedFiles:
   - internal/sdk/models/operations/applylabelstoworkflows.go
   - internal/sdk/models/operations/cancelworkflow.go
   - internal/sdk/models/operations/createaction.go
+  - internal/sdk/models/operations/createavatar.go
   - internal/sdk/models/operations/createawsbatchce.go
   - internal/sdk/models/operations/createawscomputeenv.go
   - internal/sdk/models/operations/createawscredentials.go
@@ -510,6 +511,7 @@ generatedFiles:
   - internal/sdk/models/shared/associateactionlabelsrequest.go
   - internal/sdk/models/shared/associatepipelinelabelsrequest.go
   - internal/sdk/models/shared/associateworkflowlabelsrequest.go
+  - internal/sdk/models/shared/avatar.go
   - internal/sdk/models/shared/awsbatchcecomputeconfiginput.go
   - internal/sdk/models/shared/awsbatchconfig.go
   - internal/sdk/models/shared/awsbatchplatformmetainfo.go
@@ -537,6 +539,7 @@ generatedFiles:
   - internal/sdk/models/shared/createaccesstokenresponse.go
   - internal/sdk/models/shared/createactionrequest.go
   - internal/sdk/models/shared/createactionresponse.go
+  - internal/sdk/models/shared/createavatarresponse.go
   - internal/sdk/models/shared/createawsbatchcerequest.go
   - internal/sdk/models/shared/createawsbatchceresponse.go
   - internal/sdk/models/shared/createawscomputeenvrequest.go
@@ -1061,7 +1064,7 @@ examples:
           workspaceId: 90014
       responses:
         "200":
-          application/json: {"computeEnv": {"config": {"discriminator": "aws-batch", "region": "<value>"}}}
+          application/json: {"computeEnv": {"config": {"discriminator": "aws-batch", "region": "us-east-1"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateComputeEnv:
@@ -1246,6 +1249,8 @@ examples:
       parameters:
         path:
           dataLinkId: "<id>"
+          filePath: "/etc/yowza_into.mid"
+        query:
           filePath: "/etc/yowza_into.mid"
       responses:
         "200":
@@ -1933,7 +1938,7 @@ examples:
           workspaceId: 952424
       responses:
         "200":
-          application/json: {"orgId": 959967, "wspId": 518999, "lifespanHours": 75905}
+          application/json: {"orgId": 986994, "wspId": 952424, "lifespanHours": 959967}
         "400":
           application/json: {"message": "<value>"}
   UpdateDataStudiosWorkspaceSettings:
@@ -2151,6 +2156,8 @@ examples:
           application/json: {"studio": {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}}
         "400":
           application/json: {"message": "<value>"}
+        "201":
+          application/json: {"studio": {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}}
   ListMountedDataLinkIds:
     speakeasy-default-list-mounted-data-link-ids:
       responses:
@@ -2200,7 +2207,7 @@ examples:
           checkpointId: 674924
       responses:
         "200":
-          application/json: {"id": 650158, "name": "<value>", "dateCreated": "2023-09-09T23:15:18.409Z", "dateSaved": "2025-08-27T11:46:26.393Z", "author": {"id": 209321, "userName": "Marcel.Fadel", "email": "Dawn65@gmail.com", "avatar": "https://picsum.photos/seed/7YoAI/592/3800"}, "path": "/usr/src"}
+          application/json: {"id": 650158, "name": "<value>", "dateCreated": "2023-09-09T23:15:18.409Z", "dateSaved": "2025-08-27T11:46:26.393Z", "author": {"id": 674924, "userName": "Mabelle.Torp66", "email": "Delpha.Kihn23@gmail.com", "avatar": "https://picsum.photos/seed/9WT87YoAI/2797/1156"}, "path": "/usr/src"}
         "400":
           application/json: {"message": "<value>"}
   UpdateDataStudioCheckpoint:
@@ -2213,7 +2220,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"id": 30064, "name": "<value>", "dateCreated": "2024-08-15T11:49:05.950Z", "dateSaved": "2024-07-04T01:04:00.041Z", "author": {"id": 361514, "userName": "Reese.Murphy", "email": "Roosevelt_Kuhic@hotmail.com", "avatar": "https://loremflickr.com/3378/1110?lock=4186109938868485"}, "path": "/opt/lib"}
+          application/json: {"id": 30064, "name": "<value>", "dateCreated": "2024-08-15T11:49:05.950Z", "dateSaved": "2024-07-04T01:04:00.041Z", "author": {"id": 554221, "userName": "Alexa.Kuvalis81", "email": "Garnet84@yahoo.com", "avatar": "https://picsum.photos/seed/Qh1spoq1/1937/2307"}, "path": "/opt/lib"}
         "400":
           application/json: {"message": "<value>"}
   ExtendDataStudioLifespan:
@@ -2797,7 +2804,7 @@ examples:
   CreateGiteaCredentials:
     speakeasy-default-create-gitea-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "keys": {"username": "myuser", "password": "mypassword", "baseUrl": "https://gitea.example.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
       responses:
         "200":
           application/json: {}
@@ -2810,7 +2817,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "gitea", "keys": {"username": "myuser"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGiteaCredentials:
@@ -2819,7 +2826,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "keys": {"username": "myuser", "password": "mypassword", "baseUrl": "https://gitea.example.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -2921,7 +2928,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "registry": "docker.io"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateContainerRegistryCredentials:
@@ -3056,7 +3063,7 @@ examples:
   CreateBitbucketCredentials:
     speakeasy-default-create-bitbucket-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
       responses:
         "200":
           application/json: {}
@@ -3069,7 +3076,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateBitbucketCredentials:
@@ -3078,7 +3085,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3093,7 +3100,7 @@ examples:
   CreateCodecommitCredentials:
     speakeasy-default-create-codecommit-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
       responses:
         "200":
           application/json: {}
@@ -3106,7 +3113,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateCodecommitCredentials:
@@ -3115,7 +3122,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3130,7 +3137,7 @@ examples:
   CreateGithubCredentials:
     speakeasy-default-create-github-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"username": "octocat", "accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
       responses:
         "200":
           application/json: {}
@@ -3143,7 +3150,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"username": "octocat"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGithubCredentials:
@@ -3152,7 +3159,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"username": "octocat", "accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3167,7 +3174,7 @@ examples:
   CreateGitlabCredentials:
     speakeasy-default-create-gitlab-credentials:
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
       responses:
         "200":
           application/json: {}
@@ -3180,7 +3187,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"username": "gitlab-user"}}}
+          application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateGitlabCredentials:
@@ -3189,7 +3196,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -3461,6 +3468,200 @@ examples:
       responses:
         "200":
           application/json: {"credentials": [{}]}
+        "400":
+          application/json: {"message": "<value>"}
+  AddLabelsToDatasets:
+    speakeasy-default-add-labels-to-datasets:
+      requestBody:
+        application/json: {}
+  ApplyLabelsToDatasets:
+    speakeasy-default-apply-labels-to-datasets:
+      requestBody:
+        application/json: {}
+  RemoveLabelsFromDatasets:
+    speakeasy-default-remove-labels-from-datasets:
+      requestBody:
+        application/json: {}
+  CreateAvatar:
+    speakeasy-default-create-avatar:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteDatasets:
+    speakeasy-default-delete-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  HideDatasets:
+    speakeasy-default-hide-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ShowDatasets:
+    speakeasy-default-show-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DisableDatasetVersion:
+    speakeasy-default-disable-dataset-version:
+      parameters:
+        path:
+          datasetId: "<id>"
+          version: 656549
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListManagedIdentities:
+    speakeasy-default-list-managed-identities:
+      responses:
+        "200":
+          application/json: {"managedIdentities": [{"config": {"discriminator": "google-batch"}}]}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedIdentity:
+    speakeasy-default-create-managed-identity:
+      requestBody:
+        application/json: {"config": {"discriminator": "slurm-platform", "workDir": "<value>"}}
+      responses:
+        "200":
+          application/json: {"config": {"discriminator": "altair-platform", "workDir": "<value>"}}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeManagedIdentity:
+    speakeasy-default-describe-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 934481
+      responses:
+        "200":
+          application/json: {"config": {"discriminator": "uge-platform", "workDir": "<value>"}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateManagedIdentity:
+    speakeasy-default-update-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 255440
+      requestBody:
+        application/json: {"managedIdentity": {"config": {"discriminator": "gke-platform", "server": "<value>", "sslCert": "<value>", "namespace": "<value>", "headServiceAccount": "<value>", "storageClaimName": "<value>", "region": "<value>", "clusterName": "<value>"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedIdentity:
+    speakeasy-default-delete-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 510937
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  ListManagedCredentials:
+    speakeasy-default-list-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 552174
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedCredentials:
+    speakeasy-default-create-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 540701
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "container-reg"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateManagedCredentials:
+    speakeasy-default-update-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 221555
+          managedCredentialsId: 485576
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure-cloud"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedCredentials:
+    speakeasy-default-delete-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 64238
+          managedCredentialsId: 728918
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  ValidateWorkspaceName:
+    speakeasy-default-validate-workspace-name:
+      parameters:
+        path:
+          orgId: 741883
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  GetWorkflowLog:
+    speakeasy-default-get-workflow-log:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ExploreDataLinkWithPath:
+    speakeasy-default-explore-data-link-with-path:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+          path: "/home"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  FinishDataLinkUploadWithDirPath:
+    speakeasy-default-finish-data-link-upload-with-dir-path:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+          dirPath: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  GenerateDataLinkUploadUrlWithDirPath:
+    speakeasy-default-generate-data-link-upload-url-with-dir-path:
+      parameters:
+        path:
+          dataLinkId: "<id>"
+          dirPath: "<value>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

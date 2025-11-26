@@ -18,7 +18,6 @@ import (
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
@@ -89,9 +88,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Timestamp when the credential was created`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"deleted": schema.BoolAttribute{
 				Computed: true,
@@ -621,9 +617,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"last_used": schema.StringAttribute{
 				Computed: true,
@@ -631,9 +624,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Timestamp when the credential was last used`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
@@ -969,7 +959,10 @@ func (r *CredentialResource) Delete(ctx context.Context, req resource.DeleteRequ
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

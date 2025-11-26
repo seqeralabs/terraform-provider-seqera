@@ -25,16 +25,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
-	speakeasy_int32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
-	speakeasy_mapplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -95,11 +92,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						Attributes: map[string]schema.Attribute{
 							"altair_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -107,7 +102,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -116,7 +110,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -125,7 +118,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -134,7 +126,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -147,7 +138,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -159,7 +149,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -168,7 +157,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -181,7 +169,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -190,7 +177,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -199,7 +185,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -208,7 +193,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -217,7 +201,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -226,7 +209,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -235,7 +217,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -244,7 +225,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -253,7 +233,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -262,7 +241,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -271,7 +249,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -280,7 +257,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -308,11 +284,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"aws_batch": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cli_path": schema.StringAttribute{
@@ -320,7 +294,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Path to AWS CLI on compute instances. AWS CLI must be available at this path. Requires replacement if changed.`,
 									},
@@ -329,7 +302,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `IAM role ARN for compute jobs. Jobs assume this role during execution.` + "\n" +
 											`Must have permissions for S3, CloudWatch, etc.` + "\n" +
@@ -341,7 +313,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Name of the AWS Batch compute queue. Requires replacement if changed.`,
 									},
@@ -350,7 +321,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -359,7 +329,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -368,7 +337,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -377,7 +345,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
 											`and augmentation capabilities for Nextflow workflows.` + "\n" +
@@ -394,7 +361,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -403,7 +369,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -412,7 +377,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -425,7 +389,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -437,7 +400,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -446,7 +408,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -459,7 +420,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `IAM role ARN for Batch execution (pulling container images, writing logs).` + "\n" +
 											`Must have permissions for ECR and CloudWatch Logs.` + "\n" +
@@ -471,7 +431,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Object{
 											objectplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 										},
 										Attributes: map[string]schema.Attribute{
 											"alloc_strategy": schema.StringAttribute{
@@ -479,7 +438,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Strategy for allocating compute resources:` + "\n" +
 													`- BEST_FIT: Selects instance type that best fits job requirements` + "\n" +
@@ -502,7 +460,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												Description: `Requires replacement if changed.`,
@@ -512,7 +469,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -521,7 +477,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `The maximum percentage that a Spot Instance price can be when compared with the On-Demand price` + "\n" +
 													`for that instance type before instances are launched. For example, if your maximum percentage is 20%,` + "\n" +
@@ -541,7 +496,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `When set to true for AWS Batch forge environments, automatically deletes AWS resources` + "\n" +
 													`created during compute environment setup when the Terraform resource is destroyed.` + "\n" +
@@ -568,7 +522,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -577,7 +530,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -586,7 +538,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -595,7 +546,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
 													`When enabled, EBS volumes automatically expand as needed.` + "\n" +
@@ -606,7 +556,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.`,
 											},
@@ -615,7 +564,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -624,7 +572,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
 													`Key pair must exist in the specified region.` + "\n" +
@@ -635,7 +582,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -644,7 +590,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Automatically create an EFS file system. Requires replacement if changed.`,
 											},
@@ -653,7 +598,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `EFS file system ID to mount.` + "\n" +
 													`Format: fs- followed by hexadecimal characters.` + "\n" +
@@ -665,7 +609,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Path where EFS will be mounted in the container. Requires replacement if changed.`,
 											},
@@ -674,7 +617,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
 													`Reduces costs by running head job on serverless compute.` + "\n" +
@@ -686,7 +628,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Path where FSx will be mounted in the container. Requires replacement if changed.`,
 											},
@@ -695,7 +636,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `FSx for Lustre file system name. Requires replacement if changed.`,
 											},
@@ -704,7 +644,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												Description: `Size of FSx file system in GB. Requires replacement if changed.`,
 											},
@@ -713,7 +652,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
 													`When enabled, GPU-capable instance types will be selected.` + "\n" +
@@ -724,7 +662,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -733,7 +670,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												MarkdownDescription: `List of EC2 instance types to use.` + "\n" +
@@ -746,7 +682,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Maximum number of CPUs available in the compute environment.` + "\n" +
 													`Subject to AWS service quotas.` + "\n" +
@@ -760,7 +695,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Minimum number of CPUs to maintain in the compute environment.` + "\n" +
 													`Setting to 0 allows environment to scale to zero when idle.` + "\n" +
@@ -771,7 +705,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
@@ -783,7 +716,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												MarkdownDescription: `List of subnet IDs for compute instances.` + "\n" +
@@ -796,7 +728,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Type of compute instances to provision:` + "\n" +
 													`- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)` + "\n" +
@@ -816,7 +747,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `VPC ID where compute environment will be deployed.` + "\n" +
 													`Format: vpc- followed by hexadecimal characters` + "\n" +
@@ -830,7 +760,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -839,7 +768,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.`,
 									},
@@ -848,7 +776,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.`,
 									},
@@ -857,7 +784,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `IAM role ARN for the head job.` + "\n" +
 											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
@@ -868,7 +794,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Name of the head job queue. Requires replacement if changed.`,
 									},
@@ -877,7 +802,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -886,7 +810,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										Description:        `Requires replacement if changed.`,
@@ -896,7 +819,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -905,7 +827,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
 											`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
@@ -916,7 +837,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -925,7 +845,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -934,7 +853,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `AWS region where the Batch compute environment will be created.` + "\n" +
 											`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
@@ -948,7 +866,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										Description:        `Requires replacement if changed.`,
@@ -958,7 +875,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
@@ -968,7 +884,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -997,11 +912,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"aws_cloud": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"allow_buckets": schema.ListAttribute{
@@ -1009,7 +922,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
@@ -1019,7 +931,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1028,7 +939,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1037,7 +947,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1046,7 +955,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1055,7 +963,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1064,7 +971,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -1073,7 +979,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -1082,7 +987,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1095,7 +999,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1107,7 +1010,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1116,7 +1018,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1129,7 +1030,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1138,7 +1038,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1147,7 +1046,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1156,7 +1054,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1165,7 +1062,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1174,7 +1070,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -1183,7 +1078,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -1192,7 +1086,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -1201,7 +1094,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1213,7 +1105,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
@@ -1223,7 +1114,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1232,7 +1122,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1260,11 +1149,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"azure_batch": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"auto_pool_mode": schema.BoolAttribute{
@@ -1272,7 +1159,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										Description:        `Requires replacement if changed.`,
@@ -1282,7 +1168,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1298,7 +1183,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1307,7 +1191,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1316,7 +1199,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1325,7 +1207,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -1334,7 +1215,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -1343,7 +1223,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1356,7 +1235,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1368,7 +1246,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1377,7 +1254,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1390,7 +1266,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Object{
 											objectplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 										},
 										Attributes: map[string]schema.Attribute{
 											"auto_scale": schema.BoolAttribute{
@@ -1398,7 +1273,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -1407,7 +1281,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												Description: `Requires replacement if changed.`,
@@ -1417,7 +1290,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -1426,7 +1298,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												Description: `Not Null; Requires replacement if changed.`,
 												Validators: []validator.Int32{
@@ -1438,7 +1309,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -1450,7 +1320,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1459,7 +1328,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1468,7 +1336,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -1477,7 +1344,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -1486,7 +1352,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -1495,7 +1360,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1507,7 +1371,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1516,7 +1379,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1544,11 +1406,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"eks_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cluster_name": schema.StringAttribute{
@@ -1556,7 +1416,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The AWS EKS cluster name. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1568,7 +1427,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1577,7 +1435,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1586,7 +1443,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1595,7 +1451,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -1604,7 +1459,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -1613,7 +1467,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1626,7 +1479,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1638,7 +1490,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1647,7 +1498,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1660,7 +1510,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1669,7 +1518,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1678,7 +1526,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1687,7 +1534,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1699,7 +1545,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1711,7 +1556,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -1720,7 +1564,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1736,7 +1579,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -1745,7 +1587,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -1754,7 +1595,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `AWS region. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1766,7 +1606,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1778,7 +1617,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1787,7 +1625,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1799,7 +1636,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1811,7 +1647,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1820,7 +1655,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1848,11 +1682,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"gke_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cluster_name": schema.StringAttribute{
@@ -1860,7 +1692,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The GKE cluster name. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -1872,7 +1703,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1881,7 +1711,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1890,7 +1719,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1899,7 +1727,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -1908,7 +1735,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -1917,7 +1743,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1930,7 +1755,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -1942,7 +1766,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1951,7 +1774,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -1964,7 +1786,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1973,7 +1794,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1982,7 +1802,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -1991,7 +1810,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2003,7 +1821,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2015,7 +1832,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -2024,7 +1840,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2040,7 +1855,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -2049,7 +1863,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -2058,7 +1871,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The GKE cluster region - or - zone. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2070,7 +1882,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2082,7 +1893,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2091,7 +1901,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2103,7 +1912,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2115,7 +1923,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2124,7 +1931,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2152,11 +1958,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"google_batch": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"boot_disk_size_gb": schema.Int32Attribute{
@@ -2164,7 +1968,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2173,7 +1976,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2182,7 +1984,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2191,7 +1992,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2200,7 +2000,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2209,7 +2008,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2218,7 +2016,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2227,7 +2024,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2236,7 +2032,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -2245,7 +2040,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -2258,7 +2052,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -2270,7 +2063,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -2279,7 +2071,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -2292,7 +2083,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2301,7 +2091,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2310,7 +2099,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2319,7 +2107,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Map{
 											mapplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
@@ -2329,7 +2116,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2338,7 +2124,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2347,7 +2132,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2356,7 +2140,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -2365,7 +2148,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2374,7 +2156,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2383,7 +2164,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -2392,7 +2172,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -2401,7 +2180,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2410,7 +2188,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2419,7 +2196,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2428,7 +2204,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2437,7 +2212,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2446,7 +2220,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2455,7 +2228,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2464,7 +2236,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2492,11 +2263,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"google_lifesciences": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"boot_disk_size_gb": schema.Int32Attribute{
@@ -2504,7 +2273,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2513,7 +2281,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2522,7 +2289,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2531,7 +2297,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2540,7 +2305,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -2549,7 +2313,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -2562,7 +2325,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -2574,7 +2336,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -2583,7 +2344,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -2596,7 +2356,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2605,7 +2364,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2614,7 +2372,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Map{
 											mapplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
@@ -2624,7 +2381,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2633,7 +2389,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -2642,7 +2397,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2651,7 +2405,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2660,7 +2413,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -2669,7 +2421,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -2678,7 +2429,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2687,7 +2437,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2696,7 +2445,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2705,7 +2453,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2714,7 +2461,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2723,7 +2469,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2732,7 +2477,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2744,7 +2488,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
@@ -2770,11 +2513,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"k8s_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_service_account": schema.StringAttribute{
@@ -2782,7 +2523,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2791,7 +2531,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2800,7 +2539,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -2809,7 +2547,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -2822,7 +2559,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -2834,7 +2570,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -2843,7 +2578,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -2856,7 +2590,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2865,7 +2598,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2874,7 +2606,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2883,7 +2614,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2895,7 +2625,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2907,7 +2636,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -2916,7 +2644,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2932,7 +2659,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -2941,7 +2667,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -2950,7 +2675,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2962,7 +2686,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -2971,7 +2694,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2983,7 +2705,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -2995,7 +2716,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3004,7 +2724,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -3032,11 +2751,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"lsf_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -3044,7 +2761,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3053,7 +2769,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -3062,7 +2777,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -3071,7 +2785,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -3084,7 +2797,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -3096,7 +2808,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -3105,7 +2816,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -3118,7 +2828,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3127,7 +2836,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3136,7 +2844,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3145,7 +2852,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3154,7 +2860,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3163,7 +2868,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -3172,7 +2876,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3181,7 +2884,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3190,7 +2892,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3199,7 +2900,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -3208,7 +2908,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -3217,7 +2916,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3226,7 +2924,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3235,7 +2932,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3244,7 +2940,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -3272,11 +2967,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"moab_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -3284,7 +2977,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3293,7 +2985,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -3302,7 +2993,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -3311,7 +3001,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -3324,7 +3013,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -3336,7 +3024,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -3345,7 +3032,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -3358,7 +3044,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3367,7 +3052,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3376,7 +3060,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3385,7 +3068,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3394,7 +3076,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3403,7 +3084,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -3412,7 +3092,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3421,7 +3100,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -3430,7 +3108,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -3439,7 +3116,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3448,7 +3124,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3457,7 +3132,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -3485,11 +3159,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"seqeracompute_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cli_path": schema.StringAttribute{
@@ -3497,7 +3169,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Path to AWS CLI on compute instances. AWS CLI must be available at this path. Requires replacement if changed.`,
 									},
@@ -3506,7 +3177,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `IAM role ARN for compute jobs. Jobs assume this role during execution.` + "\n" +
 											`Must have permissions for S3, CloudWatch, etc.` + "\n" +
@@ -3518,7 +3188,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Name of the AWS Batch compute queue. Requires replacement if changed.`,
 									},
@@ -3527,7 +3196,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3536,7 +3204,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3545,7 +3212,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -3554,7 +3220,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
 											`and augmentation capabilities for Nextflow workflows.` + "\n" +
@@ -3571,7 +3236,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -3580,7 +3244,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -3589,7 +3252,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -3602,7 +3264,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -3614,7 +3275,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -3623,7 +3283,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -3636,7 +3295,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `IAM role ARN for Batch execution (pulling container images, writing logs).` + "\n" +
 											`Must have permissions for ECR and CloudWatch Logs.` + "\n" +
@@ -3648,7 +3306,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Object{
 											objectplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 										},
 										Attributes: map[string]schema.Attribute{
 											"alloc_strategy": schema.StringAttribute{
@@ -3656,7 +3313,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Strategy for allocating compute resources:` + "\n" +
 													`- BEST_FIT: Selects instance type that best fits job requirements` + "\n" +
@@ -3679,7 +3335,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												Description: `Requires replacement if changed.`,
@@ -3689,7 +3344,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -3698,7 +3352,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `The maximum percentage that a Spot Instance price can be when compared with the On-Demand price` + "\n" +
 													`for that instance type before instances are launched. For example, if your maximum percentage is 20%,` + "\n" +
@@ -3718,7 +3371,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `When set to true for AWS Batch forge environments, automatically deletes AWS resources` + "\n" +
 													`created during compute environment setup when the Terraform resource is destroyed.` + "\n" +
@@ -3745,7 +3397,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -3754,7 +3405,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -3763,7 +3413,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -3772,7 +3421,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
 													`When enabled, EBS volumes automatically expand as needed.` + "\n" +
@@ -3783,7 +3431,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.`,
 											},
@@ -3792,7 +3439,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -3801,7 +3447,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
 													`Key pair must exist in the specified region.` + "\n" +
@@ -3812,7 +3457,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -3821,7 +3465,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												Description: `Automatically create an EFS file system. Requires replacement if changed.`,
 											},
@@ -3830,7 +3473,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `EFS file system ID to mount.` + "\n" +
 													`Format: fs- followed by hexadecimal characters.` + "\n" +
@@ -3842,7 +3484,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Path where EFS will be mounted in the container. Requires replacement if changed.`,
 											},
@@ -3851,7 +3492,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
 													`Reduces costs by running head job on serverless compute.` + "\n" +
@@ -3863,7 +3503,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Path where FSx will be mounted in the container. Requires replacement if changed.`,
 											},
@@ -3872,7 +3511,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `FSx for Lustre file system name. Requires replacement if changed.`,
 											},
@@ -3881,7 +3519,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												Description: `Size of FSx file system in GB. Requires replacement if changed.`,
 											},
@@ -3890,7 +3527,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
 													`When enabled, GPU-capable instance types will be selected.` + "\n" +
@@ -3901,7 +3537,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Requires replacement if changed.`,
 											},
@@ -3910,7 +3545,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												MarkdownDescription: `List of EC2 instance types to use.` + "\n" +
@@ -3923,7 +3557,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Maximum number of CPUs available in the compute environment.` + "\n" +
 													`Subject to AWS service quotas.` + "\n" +
@@ -3937,7 +3570,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Minimum number of CPUs to maintain in the compute environment.` + "\n" +
 													`Setting to 0 allows environment to scale to zero when idle.` + "\n" +
@@ -3948,7 +3580,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
@@ -3960,7 +3591,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.List{
 													listplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 												},
 												ElementType: types.StringType,
 												MarkdownDescription: `List of subnet IDs for compute instances.` + "\n" +
@@ -3973,7 +3603,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `Type of compute instances to provision:` + "\n" +
 													`- SPOT: Use EC2 Spot instances (cost-effective, can be interrupted)` + "\n" +
@@ -3993,7 +3622,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												Optional: true,
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
-													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												MarkdownDescription: `VPC ID where compute environment will be deployed.` + "\n" +
 													`Format: vpc- followed by hexadecimal characters` + "\n" +
@@ -4007,7 +3635,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4016,7 +3643,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.`,
 									},
@@ -4025,7 +3651,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.`,
 									},
@@ -4034,7 +3659,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `IAM role ARN for the head job.` + "\n" +
 											`Format: arn:aws:iam::account-id:role/role-name` + "\n" +
@@ -4045,7 +3669,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Name of the head job queue. Requires replacement if changed.`,
 									},
@@ -4054,7 +3677,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4063,7 +3685,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										Description:        `Requires replacement if changed.`,
@@ -4073,7 +3694,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -4082,7 +3702,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
 											`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
@@ -4093,7 +3712,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -4102,7 +3720,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -4111,7 +3728,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										MarkdownDescription: `AWS region where the Batch compute environment will be created.` + "\n" +
 											`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
@@ -4125,7 +3741,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										Description:        `Requires replacement if changed.`,
@@ -4135,7 +3750,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
 										Description: `Requires replacement if changed.`,
@@ -4145,7 +3759,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -4174,11 +3787,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"slurm_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -4186,7 +3797,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4195,7 +3805,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -4204,7 +3813,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -4213,7 +3821,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -4226,7 +3833,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -4238,7 +3844,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -4247,7 +3852,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -4260,7 +3864,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4269,7 +3872,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4278,7 +3880,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4287,7 +3888,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4296,7 +3896,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4305,7 +3904,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -4314,7 +3912,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4323,7 +3920,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -4332,7 +3928,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -4341,7 +3936,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4350,7 +3944,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4359,7 +3952,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -4387,11 +3979,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 							"uge_platform": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -4399,7 +3989,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4408,7 +3997,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											listplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -4417,7 +4005,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 											PlanModifiers: []planmodifier.Object{
 												objectplanmodifier.RequiresReplaceIfConfigured(),
-												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"compute": schema.BoolAttribute{
@@ -4426,7 +4013,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -4439,7 +4025,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Default:  booldefault.StaticBool(false),
 													PlanModifiers: []planmodifier.Bool{
 														boolplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 													},
 													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
 														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
@@ -4451,7 +4036,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -4460,7 +4044,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													Optional: true,
 													PlanModifiers: []planmodifier.String{
 														stringplanmodifier.RequiresReplaceIfConfigured(),
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `Requires replacement if changed.`,
 												},
@@ -4473,7 +4056,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4482,7 +4064,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4491,7 +4072,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4500,7 +4080,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4509,7 +4088,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4518,7 +4096,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 									},
@@ -4527,7 +4104,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4536,7 +4112,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 									},
@@ -4545,7 +4120,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 									},
@@ -4554,7 +4128,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4563,7 +4136,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Requires replacement if changed.`,
 									},
@@ -4572,7 +4144,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
@@ -4617,9 +4188,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
 					},
 					"deleted": schema.BoolAttribute{
 						Computed: true,
@@ -4655,9 +4223,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
 									Description: `Timestamp when the label was created`,
-									Validators: []validator.String{
-										validators.IsRFC3339(),
-									},
 								},
 								"id": schema.Int64Attribute{
 									Computed: true,
@@ -4702,17 +4267,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
 					},
 					"last_used": schema.StringAttribute{
 						Computed: true,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Validators: []validator.String{
-							validators.IsRFC3339(),
 						},
 					},
 					"managed_identity_id": schema.StringAttribute{
@@ -4788,15 +4347,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Computed: true,
 						PlanModifiers: []planmodifier.String{
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `must be one of ["CREATING", "AVAILABLE", "ERRORED", "INVALID"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"CREATING",
-								"AVAILABLE",
-								"ERRORED",
-								"INVALID",
-							),
 						},
 					},
 					"workspace_id": schema.Int64Attribute{
@@ -5123,7 +4673,10 @@ func (r *ComputeEnvResource) Delete(ctx context.Context, req resource.DeleteRequ
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

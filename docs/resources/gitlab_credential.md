@@ -63,7 +63,7 @@ resource "seqera_gitlab_credential" "self_hosted" {
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
-- `provider_type` (String) Cloud provider type (automatically set to "gitlab"). Default: "gitlab"; must be "gitlab"
+- `provider_type` (String) Cloud provider type (automatically set to "gitlab"). Default: "gitlab"
 
 ## Import
 

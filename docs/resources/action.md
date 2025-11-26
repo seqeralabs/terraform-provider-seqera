@@ -140,7 +140,7 @@ resource "seqera_action" "github_webhook" {
 - `hook_url` (String) URL endpoint for the webhook that triggers this action
 - `id` (String) Unique identifier for the action
 - `message` (String) Status or informational message about the action
-- `status` (String) must be one of ["CREATING", "ACTIVE", "ERROR", "PAUSED"]
+- `status` (String)
 
 <a id="nestedatt--launch"></a>
 ### Nested Schema for `launch`

@@ -41,20 +41,20 @@ resource "seqera_codecommit_credential" "example" {
 
 ### Required
 
-- `access_key` (String) AWS access key to access the Codecommit repository (required)
+- `access_key` (String) AWS Access Key ID for CodeCommit (required)
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
-- `secret_key` (String, Sensitive) AWS secret key to access the Codecommit repository (required, sensitive)
+- `secret_key` (String, Sensitive) AWS Secret Access Key for CodeCommit (required, sensitive)
 
 ### Optional
 
-- `base_url` (String) Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com
+- `base_url` (String) Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
-- `provider_type` (String) Cloud provider type (automatically set to "codecommit"). Default: "codecommit"; must be "codecommit"
+- `provider_type` (String) Cloud provider type (automatically set to "codecommit"). Default: "codecommit"
 
 ## Import
 

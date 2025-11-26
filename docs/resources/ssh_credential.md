@@ -51,7 +51,7 @@ resource "seqera_ssh_credential" "example" {
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
 - `key_type` (String) Type of SSH key (always "ssh"). Default: "ssh"
-- `provider_type` (String) Cloud provider type (automatically set to "ssh"). Default: "ssh"; must be "ssh"
+- `provider_type` (String) Cloud provider type (automatically set to "ssh"). Default: "ssh"
 
 ## Import
 

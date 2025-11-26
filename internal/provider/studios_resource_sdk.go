@@ -171,15 +171,15 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		memory = nil
 	}
 	mountData := make([]string, 0, len(r.Configuration.MountData))
-	for _, mountDataItem := range r.Configuration.MountData {
-		mountData = append(mountData, mountDataItem.ValueString())
+	for mountDataIndex := range r.Configuration.MountData {
+		mountData = append(mountData, r.Configuration.MountData[mountDataIndex].ValueString())
 	}
 	var environment map[string]string
 	if r.Configuration.Environment != nil {
 		environment = make(map[string]string)
-		for environmentKey, environmentValue := range r.Configuration.Environment {
+		for environmentKey := range r.Configuration.Environment {
 			var environmentInst string
-			environmentInst = environmentValue.ValueString()
+			environmentInst = r.Configuration.Environment[environmentKey].ValueString()
 
 			environment[environmentKey] = environmentInst
 		}
@@ -214,8 +214,8 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	var labelIds []int64
 	if r.LabelIds != nil {
 		labelIds = make([]int64, 0, len(r.LabelIds))
-		for _, labelIdsItem := range r.LabelIds {
-			labelIds = append(labelIds, labelIdsItem.ValueInt64())
+		for labelIdsIndex := range r.LabelIds {
+			labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
 		}
 	}
 	spot := new(bool)

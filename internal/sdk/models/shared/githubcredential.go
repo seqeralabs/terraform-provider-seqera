@@ -37,9 +37,7 @@ type GithubCredentialKeys struct {
 	// GitHub username associated with the Personal Access Token (required)
 	Username string `json:"username"`
 	// GitHub Personal Access Token (PAT) for authentication (required, sensitive)
-	AccessToken string `json:"accessToken"`
-	// Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com
-	BaseURL *string `json:"baseUrl,omitempty"`
+	AccessToken string `json:"password"`
 }
 
 func (g *GithubCredentialKeys) GetUsername() string {
@@ -56,13 +54,6 @@ func (g *GithubCredentialKeys) GetAccessToken() string {
 	return g.AccessToken
 }
 
-func (g *GithubCredentialKeys) GetBaseURL() *string {
-	if g == nil {
-		return nil
-	}
-	return g.BaseURL
-}
-
 type GithubCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
@@ -77,8 +68,10 @@ type GithubCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time           `json:"lastUpdated,omitempty"`
-	Keys        GithubCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com
+	BaseURL *string              `json:"baseUrl,omitempty"`
+	Keys    GithubCredentialKeys `json:"keys"`
 }
 
 func (g GithubCredential) MarshalJSON() ([]byte, error) {
@@ -141,6 +134,13 @@ func (g *GithubCredential) GetLastUpdated() *time.Time {
 	return g.LastUpdated
 }
 
+func (g *GithubCredential) GetBaseURL() *string {
+	if g == nil {
+		return nil
+	}
+	return g.BaseURL
+}
+
 func (g *GithubCredential) GetKeys() GithubCredentialKeys {
 	if g == nil {
 		return GithubCredentialKeys{}
@@ -174,8 +174,10 @@ type GithubCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                 `json:"lastUpdated,omitempty"`
-	Keys        GithubCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com
+	BaseURL *string                    `json:"baseUrl,omitempty"`
+	Keys    GithubCredentialKeysOutput `json:"keys"`
 }
 
 func (g GithubCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -236,6 +238,13 @@ func (g *GithubCredentialOutput) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return g.LastUpdated
+}
+
+func (g *GithubCredentialOutput) GetBaseURL() *string {
+	if g == nil {
+		return nil
+	}
+	return g.BaseURL
 }
 
 func (g *GithubCredentialOutput) GetKeys() GithubCredentialKeysOutput {

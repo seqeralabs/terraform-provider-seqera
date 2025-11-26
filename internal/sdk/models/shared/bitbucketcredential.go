@@ -38,8 +38,6 @@ type BitbucketCredentialKeys struct {
 	Username string `json:"username"`
 	// Bitbucket API token (required, sensitive). App passwords are deprecated.
 	Token string `json:"token"`
-	// Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs
-	BaseURL *string `json:"baseUrl,omitempty"`
 }
 
 func (b *BitbucketCredentialKeys) GetUsername() string {
@@ -56,13 +54,6 @@ func (b *BitbucketCredentialKeys) GetToken() string {
 	return b.Token
 }
 
-func (b *BitbucketCredentialKeys) GetBaseURL() *string {
-	if b == nil {
-		return nil
-	}
-	return b.BaseURL
-}
-
 type BitbucketCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
@@ -77,8 +68,10 @@ type BitbucketCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time              `json:"lastUpdated,omitempty"`
-	Keys        BitbucketCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs
+	BaseURL *string                 `json:"baseUrl,omitempty"`
+	Keys    BitbucketCredentialKeys `json:"keys"`
 }
 
 func (b BitbucketCredential) MarshalJSON() ([]byte, error) {
@@ -141,6 +134,13 @@ func (b *BitbucketCredential) GetLastUpdated() *time.Time {
 	return b.LastUpdated
 }
 
+func (b *BitbucketCredential) GetBaseURL() *string {
+	if b == nil {
+		return nil
+	}
+	return b.BaseURL
+}
+
 func (b *BitbucketCredential) GetKeys() BitbucketCredentialKeys {
 	if b == nil {
 		return BitbucketCredentialKeys{}
@@ -174,8 +174,10 @@ type BitbucketCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                    `json:"lastUpdated,omitempty"`
-	Keys        BitbucketCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs
+	BaseURL *string                       `json:"baseUrl,omitempty"`
+	Keys    BitbucketCredentialKeysOutput `json:"keys"`
 }
 
 func (b BitbucketCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -236,6 +238,13 @@ func (b *BitbucketCredentialOutput) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return b.LastUpdated
+}
+
+func (b *BitbucketCredentialOutput) GetBaseURL() *string {
+	if b == nil {
+		return nil
+	}
+	return b.BaseURL
 }
 
 func (b *BitbucketCredentialOutput) GetKeys() BitbucketCredentialKeysOutput {

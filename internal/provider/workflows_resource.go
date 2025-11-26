@@ -6,8 +6,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
-	"github.com/hashicorp/terraform-plugin-framework-validators/mapvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -17,13 +15,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -251,9 +247,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"complete": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
 					},
 					"config_files": schema.ListAttribute{
 						Computed:    true,
@@ -270,9 +263,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"date_created": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
 					},
 					"deleted": schema.BoolAttribute{
 						Computed: true,
@@ -297,9 +287,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"last_updated": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
 					},
 					"launch_dir": schema.StringAttribute{
 						Computed: true,
@@ -353,9 +340,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 							},
 							"timestamp": schema.StringAttribute{
 								Computed: true,
-								Validators: []validator.String{
-									validators.IsRFC3339(),
-								},
 							},
 							"version": schema.StringAttribute{
 								Computed: true,
@@ -374,9 +358,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					"params": schema.MapAttribute{
 						Computed:    true,
 						ElementType: jsontypes.NormalizedType{},
-						Validators: []validator.Map{
-							mapvalidator.ValueStringsAre(validators.IsValidJSON()),
-						},
 					},
 					"profile": schema.StringAttribute{
 						Computed: true,
@@ -416,9 +397,6 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 					"start": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
 					},
 					"stats": schema.SingleNestedAttribute{
 						Computed: true,
@@ -474,24 +452,10 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 						},
 					},
 					"status": schema.StringAttribute{
-						Computed:    true,
-						Description: `must be one of ["SUBMITTED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELLED", "UNKNOWN"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"SUBMITTED",
-								"RUNNING",
-								"SUCCEEDED",
-								"FAILED",
-								"CANCELLED",
-								"UNKNOWN",
-							),
-						},
+						Computed: true,
 					},
 					"submit": schema.StringAttribute{
 						Computed: true,
-						Validators: []validator.String{
-							validators.IsRFC3339(),
-						},
 					},
 					"success": schema.BoolAttribute{
 						Computed: true,
@@ -759,7 +723,10 @@ func (r *WorkflowsResource) Delete(ctx context.Context, req resource.DeleteReque
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

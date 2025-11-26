@@ -145,7 +145,7 @@ Read-Only:
 - `session_id` (String)
 - `start` (String)
 - `stats` (Attributes) (see [below for nested schema](#nestedatt--workflow--stats))
-- `status` (String) must be one of ["SUBMITTED", "RUNNING", "SUCCEEDED", "FAILED", "CANCELLED", "UNKNOWN"]
+- `status` (String)
 - `submit` (String)
 - `success` (Boolean)
 - `user_name` (String)

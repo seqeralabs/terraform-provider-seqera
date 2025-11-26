@@ -72,17 +72,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 							Computed: true,
 						},
 						"provider_type": schema.StringAttribute{
-							Computed:    true,
-							Description: `must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]`,
-							Validators: []validator.String{
-								stringvalidator.OneOf(
-									"aws",
-									"google",
-									"azure",
-									"azure_entra",
-									"seqeracompute",
-								),
-							},
+							Computed: true,
 						},
 					},
 				},
@@ -145,14 +135,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Requires replacement if changed.`,
 			},
 			"status": schema.StringAttribute{
-				Computed:    true,
-				Description: `must be one of ["VALID", "INVALID"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"VALID",
-						"INVALID",
-					),
-				},
+				Computed: true,
 			},
 			"type": schema.StringAttribute{
 				Required: true,
@@ -404,7 +387,7 @@ func (r *DataLinkResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 	switch res.StatusCode {
-	case 200, 204:
+	case 200, 204, 404:
 		break
 	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))

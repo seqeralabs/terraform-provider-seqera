@@ -89,10 +89,7 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`google`),
-				Description: `Cloud provider type (automatically set to "google"). Default: "google"; must be "google"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("google"),
-				},
+				Description: `Cloud provider type (automatically set to "google"). Default: "google"`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional: true,
@@ -159,6 +156,13 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -400,7 +404,10 @@ func (r *GoogleCredentialResource) Delete(ctx context.Context, req resource.Dele
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

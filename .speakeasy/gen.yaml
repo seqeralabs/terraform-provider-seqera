@@ -38,13 +38,16 @@ terraform:
   author: seqeralabs
   baseErrorName: SeqeraError
   defaultErrorName: APIError
+  enableCustomCodeRegions: false
   enableOperationSecurity: false
   enableOperationServers: false
   enableTypeDeduplication: false
   environmentVariables: []
+  excludeEmptyObjectSchemas: false
   generateValidationHelpers: true
   includeEmptyObjects: false
+  inferUnionDiscriminators: false
   packageName: seqera
-  unionDeserializationStrategy: populated-fields
+  unionStrategy: populated-fields
   validation:
     enabled: true
