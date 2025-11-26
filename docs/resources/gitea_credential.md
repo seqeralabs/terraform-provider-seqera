@@ -48,14 +48,14 @@ resource "seqera_gitea_credential" "example" {
 
 ### Optional
 
-- `base_url` (String) Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower
+- `base_url` (String) Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
 - `id` (String) Unique identifier for the credential (max 22 characters)
-- `provider_type` (String) Cloud provider type (automatically set to "gitea"). Default: "gitea"; must be "gitea"
+- `provider_type` (String) Cloud provider type (automatically set to "gitea"). Default: "gitea"
 
 ## Import
 

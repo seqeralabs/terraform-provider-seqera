@@ -47,6 +47,7 @@ func (r *GiteaCredentialResourceModel) RefreshFromSharedGiteaCredentialOutput(ct
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedGiteaCredentialKeysOutput(ctx, &resp.Keys)...)
 
@@ -192,6 +193,12 @@ func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Conte
 	} else {
 		providerType = nil
 	}
+	baseURL := new(string)
+	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
+		*baseURL = r.BaseURL.ValueString()
+	} else {
+		baseURL = nil
+	}
 	keys, keysDiags := r.ToSharedGiteaCredentialKeys(ctx)
 	diags.Append(keysDiags...)
 
@@ -203,6 +210,7 @@ func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Conte
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
+		BaseURL:      baseURL,
 		Keys:         *keys,
 	}
 
@@ -218,16 +226,9 @@ func (r *GiteaCredentialResourceModel) ToSharedGiteaCredentialKeys(ctx context.C
 	var password string
 	password = r.Password.ValueString()
 
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
 	out := shared.GiteaCredentialKeys{
 		Username: username,
 		Password: password,
-		BaseURL:  baseURL,
 	}
 
 	return &out, diags

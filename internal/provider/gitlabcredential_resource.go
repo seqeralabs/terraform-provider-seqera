@@ -56,6 +56,7 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 		MarkdownDescription: "Manage GitLab credentials in Seqera platform using this resource.\n\nGitLab credentials store authentication information for accessing GitLab\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com`,
 			},
@@ -85,10 +86,7 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`gitlab`),
-				Description: `Cloud provider type (automatically set to "gitlab"). Default: "gitlab"; must be "gitlab"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("gitlab"),
-				},
+				Description: `Cloud provider type (automatically set to "gitlab"). Default: "gitlab"`,
 			},
 			"token": schema.StringAttribute{
 				Required:    true,
@@ -164,6 +162,13 @@ func (r *GitlabCredentialResource) Create(ctx context.Context, req resource.Crea
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -405,7 +410,10 @@ func (r *GitlabCredentialResource) Delete(ctx context.Context, req resource.Dele
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

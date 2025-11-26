@@ -56,6 +56,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 		MarkdownDescription: "Manage Bitbucket credentials in Seqera platform using this resource.\n\nBitbucket credentials store authentication information for accessing Bitbucket\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs`,
 			},
@@ -85,12 +86,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`bitbucket`),
-				Description: `Cloud provider type (automatically set to "bitbucket"). Default: "bitbucket"; must be "bitbucket"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"bitbucket",
-					),
-				},
+				Description: `Cloud provider type (automatically set to "bitbucket"). Default: "bitbucket"`,
 			},
 			"token": schema.StringAttribute{
 				Required:    true,
@@ -166,6 +162,13 @@ func (r *BitbucketCredentialResource) Create(ctx context.Context, req resource.C
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -407,7 +410,10 @@ func (r *BitbucketCredentialResource) Delete(ctx context.Context, req resource.D
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

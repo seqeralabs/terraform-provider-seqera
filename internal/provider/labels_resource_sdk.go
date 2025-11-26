@@ -24,15 +24,6 @@ func (r *LabelsResourceModel) RefreshFromSharedCreateLabelResponse(ctx context.C
 	return diags
 }
 
-func (r *LabelsResourceModel) RefreshFromSharedListLabelsResponse(ctx context.Context, resp *shared.ListLabelsResponse) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-	}
-
-	return diags
-}
-
 func (r *LabelsResourceModel) RefreshFromSharedUpdateLabelResponse(ctx context.Context, resp *shared.UpdateLabelResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 

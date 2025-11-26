@@ -56,8 +56,9 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 		MarkdownDescription: "Manage Gitea credentials in Seqera platform using this resource.\n\nGitea credentials store authentication information for accessing Gitea\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
-				Description: `Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower`,
+				Description: `Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
@@ -90,10 +91,7 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`gitea`),
-				Description: `Cloud provider type (automatically set to "gitea"). Default: "gitea"; must be "gitea"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("gitea"),
-				},
+				Description: `Cloud provider type (automatically set to "gitea"). Default: "gitea"`,
 			},
 			"username": schema.StringAttribute{
 				Required:    true,
@@ -164,6 +162,13 @@ func (r *GiteaCredentialResource) Create(ctx context.Context, req resource.Creat
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -405,7 +410,10 @@ func (r *GiteaCredentialResource) Delete(ctx context.Context, req resource.Delet
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

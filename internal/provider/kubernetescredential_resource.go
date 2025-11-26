@@ -95,10 +95,7 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`k8s`),
-				Description: `Cloud provider type (automatically set to "k8s"). Default: "k8s"; must be "k8s"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("k8s"),
-				},
+				Description: `Cloud provider type (automatically set to "k8s"). Default: "k8s"`,
 			},
 			"token": schema.StringAttribute{
 				Optional:    true,
@@ -167,6 +164,13 @@ func (r *KubernetesCredentialResource) Create(ctx context.Context, req resource.
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -408,7 +412,10 @@ func (r *KubernetesCredentialResource) Delete(ctx context.Context, req resource.
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

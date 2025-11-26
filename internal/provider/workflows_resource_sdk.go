@@ -260,16 +260,16 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		revision = nil
 	}
 	configProfiles := make([]string, 0, len(r.ConfigProfiles))
-	for _, configProfilesItem := range r.ConfigProfiles {
-		configProfiles = append(configProfiles, configProfilesItem.ValueString())
+	for configProfilesIndex := range r.ConfigProfiles {
+		configProfiles = append(configProfiles, r.ConfigProfiles[configProfilesIndex].ValueString())
 	}
 	userSecrets := make([]string, 0, len(r.UserSecrets))
-	for _, userSecretsItem := range r.UserSecrets {
-		userSecrets = append(userSecrets, userSecretsItem.ValueString())
+	for userSecretsIndex := range r.UserSecrets {
+		userSecrets = append(userSecrets, r.UserSecrets[userSecretsIndex].ValueString())
 	}
 	workspaceSecrets := make([]string, 0, len(r.WorkspaceSecrets))
-	for _, workspaceSecretsItem := range r.WorkspaceSecrets {
-		workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
+	for workspaceSecretsIndex := range r.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, r.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 	}
 	configText := new(string)
 	if !r.ConfigText.IsUnknown() && !r.ConfigText.IsNull() {
@@ -338,8 +338,8 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		stubRun = nil
 	}
 	labelIds := make([]int64, 0, len(r.LabelIds))
-	for _, labelIdsItem := range r.LabelIds {
-		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	for labelIdsIndex := range r.LabelIds {
+		labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
 	}
 	headJobCpus := new(int)
 	if !r.HeadJobCpus.IsUnknown() && !r.HeadJobCpus.IsNull() {

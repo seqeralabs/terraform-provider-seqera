@@ -1,3 +1,13 @@
+# v0.26.5
+
+FIX:
+
+- **Credentials Resources** - Fixed an issue where the `base_url` field was not being returned in API responses for GitHub, GitLab, Gitea, Bitbucket, and CodeCommit credentials, preventing the URL from displaying correctly in the Seqera Platform UI.
+- **GitHub Credentials** - Fixed an issue where the GitHub Personal Access Token field was using incorrect API field name `accessToken` instead of `password`, resulting in invalid credentials.
+- **CodeCommit Credentials** - Fixed an issue where AWS credential fields were using incorrect API field names `accessKey`/`secretKey` instead of `username`/`password`, resulting in authentication failures.
+- **Container Registry Credentials** - Fixed an issue where the `registry` field was incorrectly marked as write-only, preventing the registry URL from being readable in API responses.
+
+
 # v0.26.4
 
 FIX:

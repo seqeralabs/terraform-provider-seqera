@@ -54,7 +54,7 @@ resource "seqera_data_link" "my_datalink" {
 - `hidden` (Boolean)
 - `message` (String)
 - `region` (String) Geographic region where the data link is hosted
-- `status` (String) must be one of ["VALID", "INVALID"]
+- `status` (String)
 
 <a id="nestedatt--credentials"></a>
 ### Nested Schema for `credentials`
@@ -63,7 +63,7 @@ Read-Only:
 
 - `id` (String)
 - `name` (String)
-- `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]
+- `provider_type` (String)
 
 ## Import
 

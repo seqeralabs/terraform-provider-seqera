@@ -61,6 +61,7 @@ func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Description: `GitHub Personal Access Token (PAT) for authentication (required, sensitive)`,
 			},
 			"base_url": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com`,
 			},
@@ -90,10 +91,7 @@ func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.Sche
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`github`),
-				Description: `Cloud provider type (automatically set to "github"). Default: "github"; must be "github"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("github"),
-				},
+				Description: `Cloud provider type (automatically set to "github"). Default: "github"`,
 			},
 			"username": schema.StringAttribute{
 				Required:    true,
@@ -164,6 +162,13 @@ func (r *GithubCredentialResource) Create(ctx context.Context, req resource.Crea
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -405,7 +410,10 @@ func (r *GithubCredentialResource) Delete(ctx context.Context, req resource.Dele
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

@@ -276,8 +276,8 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 		lustreID = nil
 	}
 	volumes := make([]string, 0, len(r.Config.Volumes))
-	for _, volumesItem := range r.Config.Volumes {
-		volumes = append(volumes, volumesItem.ValueString())
+	for volumesIndex := range r.Config.Volumes {
+		volumes = append(volumes, r.Config.Volumes[volumesIndex].ValueString())
 	}
 	var region string
 	region = r.Config.Region.ValueString()
@@ -361,28 +361,28 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 		headJobMemoryMb = nil
 	}
 	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
-	for _, environmentItem := range r.Config.Environment {
+	for environmentIndex := range r.Config.Environment {
 		name1 := new(string)
-		if !environmentItem.Name.IsUnknown() && !environmentItem.Name.IsNull() {
-			*name1 = environmentItem.Name.ValueString()
+		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
+			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
 		} else {
 			name1 = nil
 		}
 		value := new(string)
-		if !environmentItem.Value.IsUnknown() && !environmentItem.Value.IsNull() {
-			*value = environmentItem.Value.ValueString()
+		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
+			*value = r.Config.Environment[environmentIndex].Value.ValueString()
 		} else {
 			value = nil
 		}
 		head := new(bool)
-		if !environmentItem.Head.IsUnknown() && !environmentItem.Head.IsNull() {
-			*head = environmentItem.Head.ValueBool()
+		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
 		} else {
 			head = nil
 		}
 		compute := new(bool)
-		if !environmentItem.Compute.IsUnknown() && !environmentItem.Compute.IsNull() {
-			*compute = environmentItem.Compute.ValueBool()
+		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
 		} else {
 			compute = nil
 		}
@@ -451,8 +451,8 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 			ebsAutoScale = nil
 		}
 		instanceTypes := make([]string, 0, len(r.Config.Forge.InstanceTypes))
-		for _, instanceTypesItem := range r.Config.Forge.InstanceTypes {
-			instanceTypes = append(instanceTypes, instanceTypesItem.ValueString())
+		for instanceTypesIndex := range r.Config.Forge.InstanceTypes {
+			instanceTypes = append(instanceTypes, r.Config.Forge.InstanceTypes[instanceTypesIndex].ValueString())
 		}
 		allocStrategy := new(shared.AllocStrategy)
 		if !r.Config.Forge.AllocStrategy.IsUnknown() && !r.Config.Forge.AllocStrategy.IsNull() {
@@ -473,12 +473,12 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 			vpcID = nil
 		}
 		subnets := make([]string, 0, len(r.Config.Forge.Subnets))
-		for _, subnetsItem := range r.Config.Forge.Subnets {
-			subnets = append(subnets, subnetsItem.ValueString())
+		for subnetsIndex := range r.Config.Forge.Subnets {
+			subnets = append(subnets, r.Config.Forge.Subnets[subnetsIndex].ValueString())
 		}
 		securityGroups := make([]string, 0, len(r.Config.Forge.SecurityGroups))
-		for _, securityGroupsItem := range r.Config.Forge.SecurityGroups {
-			securityGroups = append(securityGroups, securityGroupsItem.ValueString())
+		for securityGroupsIndex := range r.Config.Forge.SecurityGroups {
+			securityGroups = append(securityGroups, r.Config.Forge.SecurityGroups[securityGroupsIndex].ValueString())
 		}
 		fsxMount := new(string)
 		if !r.Config.Forge.FsxMount.IsUnknown() && !r.Config.Forge.FsxMount.IsNull() {
@@ -511,8 +511,8 @@ func (r *AWSBatchCEResourceModel) ToSharedAWSBatchCEComputeConfigInput(ctx conte
 			ec2KeyPair = nil
 		}
 		allowBuckets := make([]string, 0, len(r.Config.Forge.AllowBuckets))
-		for _, allowBucketsItem := range r.Config.Forge.AllowBuckets {
-			allowBuckets = append(allowBuckets, allowBucketsItem.ValueString())
+		for allowBucketsIndex := range r.Config.Forge.AllowBuckets {
+			allowBuckets = append(allowBuckets, r.Config.Forge.AllowBuckets[allowBucketsIndex].ValueString())
 		}
 		ebsBlockSize := new(int)
 		if !r.Config.Forge.EbsBlockSize.IsUnknown() && !r.Config.Forge.EbsBlockSize.IsNull() {
@@ -674,8 +674,8 @@ func (r *AWSBatchCEResourceModel) ToSharedCreateAWSBatchCERequest(ctx context.Co
 	}
 
 	labelIds := make([]int64, 0, len(r.LabelIds))
-	for _, labelIdsItem := range r.LabelIds {
-		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	for labelIdsIndex := range r.LabelIds {
+		labelIds = append(labelIds, r.LabelIds[labelIdsIndex].ValueInt64())
 	}
 	out := shared.CreateAWSBatchCERequest{
 		ComputeEnv: computeEnv,

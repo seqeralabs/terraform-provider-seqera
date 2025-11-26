@@ -57,11 +57,12 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
 				Required:    true,
-				Description: `AWS access key to access the Codecommit repository (required)`,
+				Description: `AWS Access Key ID for CodeCommit (required)`,
 			},
 			"base_url": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
-				Description: `Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com`,
+				Description: `Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com`,
 			},
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
@@ -89,17 +90,12 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`codecommit`),
-				Description: `Cloud provider type (automatically set to "codecommit"). Default: "codecommit"; must be "codecommit"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"codecommit",
-					),
-				},
+				Description: `Cloud provider type (automatically set to "codecommit"). Default: "codecommit"`,
 			},
 			"secret_key": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
-				Description: `AWS secret key to access the Codecommit repository (required, sensitive)`,
+				Description: `AWS Secret Access Key for CodeCommit (required, sensitive)`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional: true,
@@ -166,6 +162,13 @@ func (r *CodecommitCredentialResource) Create(ctx context.Context, req resource.
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -407,7 +410,10 @@ func (r *CodecommitCredentialResource) Delete(ctx context.Context, req resource.
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

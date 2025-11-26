@@ -118,7 +118,7 @@ Read-Only:
 - `managed_identity_id` (String)
 - `org_id` (Number)
 - `primary` (Boolean)
-- `status` (String) must be one of ["CREATING", "AVAILABLE", "ERRORED", "INVALID"]
+- `status` (String)
 - `workspace_id` (Number)
 
 <a id="nestedatt--compute_env--config"></a>

@@ -96,10 +96,7 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 			"provider_type": schema.StringAttribute{
 				Computed:    true,
 				Default:     stringdefault.StaticString(`ssh`),
-				Description: `Cloud provider type (automatically set to "ssh"). Default: "ssh"; must be "ssh"`,
-				Validators: []validator.String{
-					stringvalidator.OneOf("ssh"),
-				},
+				Description: `Cloud provider type (automatically set to "ssh"). Default: "ssh"`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Optional: true,
@@ -166,6 +163,13 @@ func (r *SSHCredentialResource) Create(ctx context.Context, req resource.CreateR
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -407,7 +411,10 @@ func (r *SSHCredentialResource) Delete(ctx context.Context, req resource.DeleteR
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

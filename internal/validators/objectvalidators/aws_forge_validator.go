@@ -30,7 +30,7 @@ func (v ObjectAwsForgeValidatorValidator) ValidateObject(ctx context.Context, re
 	}
 
 	// Extract the AWS Batch configuration from the request
-	var awsBatchConfig tfTypes.AWSBatchConfiguration
+	var awsBatchConfig tfTypes.AwsBatchConfig
 	diags := req.ConfigValue.As(ctx, &awsBatchConfig, basetypes.ObjectAsOptions{})
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {

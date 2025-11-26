@@ -34,12 +34,10 @@ func (e *CodecommitCredentialProviderType) UnmarshalJSON(data []byte) error {
 }
 
 type CodecommitCredentialKeys struct {
-	// AWS access key to access the Codecommit repository (required)
-	AccessKey string `json:"accessKey"`
-	// AWS secret key to access the Codecommit repository (required, sensitive)
-	SecretKey string `json:"secretKey"`
-	// Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com
-	BaseURL *string `json:"baseUrl,omitempty"`
+	// AWS Access Key ID for CodeCommit (required)
+	AccessKey string `json:"username"`
+	// AWS Secret Access Key for CodeCommit (required, sensitive)
+	SecretKey string `json:"password"`
 }
 
 func (c *CodecommitCredentialKeys) GetAccessKey() string {
@@ -56,13 +54,6 @@ func (c *CodecommitCredentialKeys) GetSecretKey() string {
 	return c.SecretKey
 }
 
-func (c *CodecommitCredentialKeys) GetBaseURL() *string {
-	if c == nil {
-		return nil
-	}
-	return c.BaseURL
-}
-
 type CodecommitCredential struct {
 	// Unique identifier for the credential (max 22 characters)
 	ID *string `json:"id,omitempty"`
@@ -77,8 +68,10 @@ type CodecommitCredential struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time               `json:"lastUpdated,omitempty"`
-	Keys        CodecommitCredentialKeys `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com
+	BaseURL *string                  `json:"baseUrl,omitempty"`
+	Keys    CodecommitCredentialKeys `json:"keys"`
 }
 
 func (c CodecommitCredential) MarshalJSON() ([]byte, error) {
@@ -141,6 +134,13 @@ func (c *CodecommitCredential) GetLastUpdated() *time.Time {
 	return c.LastUpdated
 }
 
+func (c *CodecommitCredential) GetBaseURL() *string {
+	if c == nil {
+		return nil
+	}
+	return c.BaseURL
+}
+
 func (c *CodecommitCredential) GetKeys() CodecommitCredentialKeys {
 	if c == nil {
 		return CodecommitCredentialKeys{}
@@ -149,8 +149,8 @@ func (c *CodecommitCredential) GetKeys() CodecommitCredentialKeys {
 }
 
 type CodecommitCredentialKeysOutput struct {
-	// AWS access key to access the Codecommit repository (required)
-	AccessKey string `json:"accessKey"`
+	// AWS Access Key ID for CodeCommit (required)
+	AccessKey string `json:"username"`
 }
 
 func (c *CodecommitCredentialKeysOutput) GetAccessKey() string {
@@ -174,8 +174,10 @@ type CodecommitCredentialOutput struct {
 	// Timestamp when the credential was created
 	DateCreated *time.Time `json:"dateCreated,omitempty"`
 	// Timestamp when the credential was last updated
-	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	Keys        CodecommitCredentialKeysOutput `json:"keys"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com
+	BaseURL *string                        `json:"baseUrl,omitempty"`
+	Keys    CodecommitCredentialKeysOutput `json:"keys"`
 }
 
 func (c CodecommitCredentialOutput) MarshalJSON() ([]byte, error) {
@@ -236,6 +238,13 @@ func (c *CodecommitCredentialOutput) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return c.LastUpdated
+}
+
+func (c *CodecommitCredentialOutput) GetBaseURL() *string {
+	if c == nil {
+		return nil
+	}
+	return c.BaseURL
 }
 
 func (c *CodecommitCredentialOutput) GetKeys() CodecommitCredentialKeysOutput {

@@ -47,6 +47,7 @@ func (r *GitlabCredentialResourceModel) RefreshFromSharedGitlabCredentialOutput(
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedGitlabCredentialKeysOutput(ctx, &resp.Keys)...)
 
@@ -192,6 +193,12 @@ func (r *GitlabCredentialResourceModel) ToSharedGitlabCredential(ctx context.Con
 	} else {
 		providerType = nil
 	}
+	baseURL := new(string)
+	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
+		*baseURL = r.BaseURL.ValueString()
+	} else {
+		baseURL = nil
+	}
 	keys, keysDiags := r.ToSharedGitlabCredentialKeys(ctx)
 	diags.Append(keysDiags...)
 
@@ -203,6 +210,7 @@ func (r *GitlabCredentialResourceModel) ToSharedGitlabCredential(ctx context.Con
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
+		BaseURL:      baseURL,
 		Keys:         *keys,
 	}
 
@@ -218,16 +226,9 @@ func (r *GitlabCredentialResourceModel) ToSharedGitlabCredentialKeys(ctx context
 	var token string
 	token = r.Token.ValueString()
 
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
 	out := shared.GitlabCredentialKeys{
 		Username: username,
 		Token:    token,
-		BaseURL:  baseURL,
 	}
 
 	return &out, diags

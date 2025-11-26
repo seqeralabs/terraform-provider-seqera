@@ -16418,6 +16418,12 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        baseUrl:
+          type: string
+          description: 'Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs'
+          example: https://bitbucket.org/myorg
+          x-speakeasy-param-computed: true
+          x-speakeasy-name-override: base_url
         keys:
           x-speakeasy-entity: BitbucketCredential
           x-speakeasy-terraform-resource-name: bitbucket_credential
@@ -16445,13 +16451,6 @@ components:
               x-speakeasy-param-sensitive: true
               x-speakeasy-param-computed: false
               example: ATBB...
-              writeOnly: true
-            baseUrl:
-              type: string
-              description: 'Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs'
-              example: https://bitbucket.org/myorg
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: base_url
               writeOnly: true
     CreateBitbucketCredentialsRequest:
       type: object
@@ -16522,6 +16521,12 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        baseUrl:
+          type: string
+          description: 'Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com'
+          example: https://git-codecommit.us-east-1.amazonaws.com
+          x-speakeasy-param-computed: true
+          x-speakeasy-name-override: base_url
         keys:
           x-speakeasy-entity: CodecommitCredential
           x-speakeasy-terraform-resource-name: codecommit_credential
@@ -16535,29 +16540,22 @@ components:
 '
           type: object
           required:
-            - accessKey
-            - secretKey
+            - username
+            - password
           properties:
-            accessKey:
+            username:
               type: string
-              description: AWS access key to access the Codecommit repository (required)
+              description: AWS Access Key ID for CodeCommit (required)
               example: AKIAIOSFODNN7EXAMPLE
               x-speakeasy-param-computed: false
               x-speakeasy-name-override: access_key
-            secretKey:
+            password:
               type: string
-              description: AWS secret key to access the Codecommit repository (required, sensitive)
+              description: AWS Secret Access Key for CodeCommit (required, sensitive)
               x-speakeasy-param-sensitive: true
               x-speakeasy-param-computed: false
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               x-speakeasy-name-override: secret_key
-              writeOnly: true
-            baseUrl:
-              type: string
-              description: 'Repository base URL to associate with a specific repository or AWS region (optional). Example: https://git-codecommit.eu-west-1.amazonaws.com'
-              example: https://git-codecommit.us-east-1.amazonaws.com
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: base_url
               writeOnly: true
     CreateCodecommitCredentialsRequest:
       type: object
@@ -16661,7 +16659,6 @@ components:
               description: 'Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com'
               example: docker.io
               x-speakeasy-param-computed: false
-              writeOnly: true
     CreateContainerRegistryCredentialsRequest:
       type: object
       properties:
@@ -16731,6 +16728,12 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        baseUrl:
+          type: string
+          description: 'Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com'
+          example: https://gitea.mycompany.com
+          x-speakeasy-param-computed: true
+          x-speakeasy-name-override: base_url
         keys:
           x-speakeasy-entity: GiteaCredential
           x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource.
@@ -16757,13 +16760,6 @@ components:
               x-speakeasy-param-sensitive: true
               x-speakeasy-param-computed: false
               example: mypassword
-              writeOnly: true
-            baseUrl:
-              type: string
-              description: 'Repository base URL for Gitea server or to associate with specific repository (optional). Example: https://try.gitea.io/seqera/tower'
-              example: https://gitea.example.com
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: base_url
               writeOnly: true
     CreateGiteaCredentialsRequest:
       type: object
@@ -16834,6 +16830,12 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        baseUrl:
+          type: string
+          description: 'Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com'
+          example: https://github.mycompany.com
+          x-speakeasy-param-computed: true
+          x-speakeasy-name-override: base_url
         keys:
           x-speakeasy-entity: GithubCredential
           x-speakeasy-terraform-resource-name: github_credential
@@ -16848,26 +16850,19 @@ components:
           type: object
           required:
             - username
-            - accessToken
+            - password
           properties:
             username:
               type: string
               description: GitHub username associated with the Personal Access Token (required)
               example: octocat
-            accessToken:
+            password:
               type: string
               description: GitHub Personal Access Token (PAT) for authentication (required, sensitive)
               x-speakeasy-param-sensitive: true
               x-speakeasy-param-computed: false
               example: ghp_1234567890abcdefghijklmnopqrstuvwxyz
               x-speakeasy-name-override: access_token
-              writeOnly: true
-            baseUrl:
-              type: string
-              description: 'Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com'
-              example: https://github.mycompany.com
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: base_url
               writeOnly: true
     CreateGithubCredentialsRequest:
       type: object
@@ -16938,6 +16933,12 @@ components:
           description: Timestamp when the credential was last updated
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
+        baseUrl:
+          type: string
+          description: 'Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com'
+          example: https://gitlab.mycompany.com
+          x-speakeasy-param-computed: true
+          x-speakeasy-name-override: base_url
         keys:
           x-speakeasy-entity: GitlabCredential
           x-speakeasy-terraform-resource-name: gitlab_credential
@@ -16964,13 +16965,6 @@ components:
               x-speakeasy-param-sensitive: true
               x-speakeasy-param-computed: false
               example: glpat-xxxxxxxxxxxxxxxxxxxx
-              writeOnly: true
-            baseUrl:
-              type: string
-              description: 'Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com'
-              example: https://gitlab.mycompany.com
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: base_url
               writeOnly: true
     CreateGitlabCredentialsRequest:
       type: object

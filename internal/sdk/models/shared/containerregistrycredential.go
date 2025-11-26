@@ -151,6 +151,8 @@ func (c *ContainerRegistryCredential) GetKeys() ContainerRegistryCredentialKeys 
 type ContainerRegistryCredentialKeysOutput struct {
 	// Username for container registry authentication (required)
 	UserName string `json:"userName"`
+	// Container registry server URL (optional). Examples: docker.io, gcr.io, account.dkr.ecr.region.amazonaws.com
+	Registry *string `json:"registry,omitempty"`
 }
 
 func (c *ContainerRegistryCredentialKeysOutput) GetUserName() string {
@@ -158,6 +160,13 @@ func (c *ContainerRegistryCredentialKeysOutput) GetUserName() string {
 		return ""
 	}
 	return c.UserName
+}
+
+func (c *ContainerRegistryCredentialKeysOutput) GetRegistry() *string {
+	if c == nil {
+		return nil
+	}
+	return c.Registry
 }
 
 type ContainerRegistryCredentialOutput struct {

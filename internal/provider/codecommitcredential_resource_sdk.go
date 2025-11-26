@@ -22,6 +22,7 @@ func (r *CodecommitCredentialResourceModel) RefreshFromSharedCodecommitCredentia
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedCodecommitCredentialKeysOutput(ctx, &resp.Keys)...)
 
@@ -175,6 +176,12 @@ func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx con
 	} else {
 		providerType = nil
 	}
+	baseURL := new(string)
+	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
+		*baseURL = r.BaseURL.ValueString()
+	} else {
+		baseURL = nil
+	}
 	keys, keysDiags := r.ToSharedCodecommitCredentialKeys(ctx)
 	diags.Append(keysDiags...)
 
@@ -186,6 +193,7 @@ func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx con
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
+		BaseURL:      baseURL,
 		Keys:         *keys,
 	}
 
@@ -201,16 +209,9 @@ func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredentialKeys(ctx
 	var secretKey string
 	secretKey = r.SecretKey.ValueString()
 
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
 	out := shared.CodecommitCredentialKeys{
 		AccessKey: accessKey,
 		SecretKey: secretKey,
-		BaseURL:   baseURL,
 	}
 
 	return &out, diags

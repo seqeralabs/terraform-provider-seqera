@@ -16,7 +16,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 	"regexp"
 )
 
@@ -56,9 +55,6 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 		Attributes: map[string]schema.Attribute{
 			"date_created": schema.StringAttribute{
 				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"deleted": schema.BoolAttribute{
 				Computed:    true,
@@ -79,22 +75,13 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the dataset (max 22 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(22),
-				},
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"media_type": schema.StringAttribute{
 				Computed:    true,
 				Description: `MIME type or media type of the dataset content (max 80 characters)`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(80),
-				},
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -173,6 +160,13 @@ func (r *DatasetsResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {

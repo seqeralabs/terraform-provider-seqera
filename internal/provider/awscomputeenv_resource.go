@@ -32,7 +32,6 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/validators"
 	custom_boolvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/boolvalidators"
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
@@ -775,9 +774,6 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Timestamp when the compute environment was created`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"deleted": schema.BoolAttribute{
 				Computed: true,
@@ -814,9 +810,6 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Timestamp when the compute environment was last updated`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"last_used": schema.StringAttribute{
 				Computed: true,
@@ -824,9 +817,6 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Timestamp when the compute environment was last used`,
-				Validators: []validator.String{
-					validators.IsRFC3339(),
-				},
 			},
 			"name": schema.StringAttribute{
 				Required: true,
@@ -928,6 +918,13 @@ func (r *AWSComputeEnvResource) Create(ctx context.Context, req resource.CreateR
 	}
 	if res == nil {
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+		return
+	}
+	if res.StatusCode == 409 {
+		resp.Diagnostics.AddError(
+			"Resource Already Exists",
+			"When creating this resource, the API indicated that this resource already exists. You can bring the existing resource under management using Terraform import functionality or retry with a unique configuration.",
+		)
 		return
 	}
 	if res.StatusCode != 200 {
@@ -1105,7 +1102,10 @@ func (r *AWSComputeEnvResource) Delete(ctx context.Context, req resource.DeleteR
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}

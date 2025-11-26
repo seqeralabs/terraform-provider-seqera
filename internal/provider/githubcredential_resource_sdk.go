@@ -47,6 +47,7 @@ func (r *GithubCredentialResourceModel) RefreshFromSharedGithubCredentialOutput(
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.ID = types.StringPointerValue(resp.ID)
 		diags.Append(r.RefreshFromSharedGithubCredentialKeysOutput(ctx, &resp.Keys)...)
 
@@ -192,6 +193,12 @@ func (r *GithubCredentialResourceModel) ToSharedGithubCredential(ctx context.Con
 	} else {
 		providerType = nil
 	}
+	baseURL := new(string)
+	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
+		*baseURL = r.BaseURL.ValueString()
+	} else {
+		baseURL = nil
+	}
 	keys, keysDiags := r.ToSharedGithubCredentialKeys(ctx)
 	diags.Append(keysDiags...)
 
@@ -203,6 +210,7 @@ func (r *GithubCredentialResourceModel) ToSharedGithubCredential(ctx context.Con
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
+		BaseURL:      baseURL,
 		Keys:         *keys,
 	}
 
@@ -218,16 +226,9 @@ func (r *GithubCredentialResourceModel) ToSharedGithubCredentialKeys(ctx context
 	var accessToken string
 	accessToken = r.AccessToken.ValueString()
 
-	baseURL := new(string)
-	if !r.BaseURL.IsUnknown() && !r.BaseURL.IsNull() {
-		*baseURL = r.BaseURL.ValueString()
-	} else {
-		baseURL = nil
-	}
 	out := shared.GithubCredentialKeys{
 		Username:    username,
 		AccessToken: accessToken,
-		BaseURL:     baseURL,
 	}
 
 	return &out, diags

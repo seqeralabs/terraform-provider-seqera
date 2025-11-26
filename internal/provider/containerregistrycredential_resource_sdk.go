@@ -13,6 +13,7 @@ import (
 func (r *ContainerRegistryCredentialResourceModel) RefreshFromSharedContainerRegistryCredentialKeysOutput(ctx context.Context, resp *shared.ContainerRegistryCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
+	r.Registry = types.StringPointerValue(resp.Registry)
 	r.UserName = types.StringValue(resp.UserName)
 
 	return diags

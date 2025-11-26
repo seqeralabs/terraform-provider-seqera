@@ -241,16 +241,16 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		revision = nil
 	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-	for _, configProfilesItem := range r.Launch.ConfigProfiles {
-		configProfiles = append(configProfiles, configProfilesItem.ValueString())
+	for configProfilesIndex := range r.Launch.ConfigProfiles {
+		configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
 	}
 	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-	for _, userSecretsItem := range r.Launch.UserSecrets {
-		userSecrets = append(userSecrets, userSecretsItem.ValueString())
+	for userSecretsIndex := range r.Launch.UserSecrets {
+		userSecrets = append(userSecrets, r.Launch.UserSecrets[userSecretsIndex].ValueString())
 	}
 	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-	for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
-		workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
+	for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 	}
 	configText := new(string)
 	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
@@ -319,8 +319,8 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		stubRun = nil
 	}
 	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-	for _, labelIdsItem := range r.Launch.LabelIds {
-		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	for labelIdsIndex := range r.Launch.LabelIds {
+		labelIds = append(labelIds, r.Launch.LabelIds[labelIdsIndex].ValueInt64())
 	}
 	headJobCpus := new(int)
 	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
@@ -405,16 +405,16 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		revision = nil
 	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
-	for _, configProfilesItem := range r.Launch.ConfigProfiles {
-		configProfiles = append(configProfiles, configProfilesItem.ValueString())
+	for configProfilesIndex := range r.Launch.ConfigProfiles {
+		configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
 	}
 	userSecrets := make([]string, 0, len(r.Launch.UserSecrets))
-	for _, userSecretsItem := range r.Launch.UserSecrets {
-		userSecrets = append(userSecrets, userSecretsItem.ValueString())
+	for userSecretsIndex := range r.Launch.UserSecrets {
+		userSecrets = append(userSecrets, r.Launch.UserSecrets[userSecretsIndex].ValueString())
 	}
 	workspaceSecrets := make([]string, 0, len(r.Launch.WorkspaceSecrets))
-	for _, workspaceSecretsItem := range r.Launch.WorkspaceSecrets {
-		workspaceSecrets = append(workspaceSecrets, workspaceSecretsItem.ValueString())
+	for workspaceSecretsIndex := range r.Launch.WorkspaceSecrets {
+		workspaceSecrets = append(workspaceSecrets, r.Launch.WorkspaceSecrets[workspaceSecretsIndex].ValueString())
 	}
 	configText := new(string)
 	if !r.Launch.ConfigText.IsUnknown() && !r.Launch.ConfigText.IsNull() {
@@ -483,8 +483,8 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		stubRun = nil
 	}
 	labelIds := make([]int64, 0, len(r.Launch.LabelIds))
-	for _, labelIdsItem := range r.Launch.LabelIds {
-		labelIds = append(labelIds, labelIdsItem.ValueInt64())
+	for labelIdsIndex := range r.Launch.LabelIds {
+		labelIds = append(labelIds, r.Launch.LabelIds[labelIdsIndex].ValueInt64())
 	}
 	headJobCpus := new(int)
 	if !r.Launch.HeadJobCpus.IsUnknown() && !r.Launch.HeadJobCpus.IsNull() {
