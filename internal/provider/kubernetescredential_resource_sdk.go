@@ -178,12 +178,18 @@ func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx con
 	} else {
 		providerType = nil
 	}
-	keys := shared.KubernetesCredentialKeys{}
+	keys, keysDiags := r.ToSharedKubernetesCredentialKeys(ctx)
+	diags.Append(keysDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := shared.KubernetesCredential{
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
-		Keys:         keys,
+		Keys:         *keys,
 	}
 
 	return &out, diags

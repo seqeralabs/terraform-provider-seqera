@@ -40,6 +40,19 @@ type KubernetesCredentialKeys struct {
 	ClientCertificate *string `json:"certificate,omitempty"`
 	// Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
 	PrivateKey *string `json:"privateKey,omitempty"`
+	// Type of key (always "kubernetes") - not exposed in Terraform
+	KeyType *string `default:"kubernetes" json:"keyType"`
+}
+
+func (k KubernetesCredentialKeys) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *KubernetesCredentialKeys) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (k *KubernetesCredentialKeys) GetToken() *string {
@@ -61,6 +74,13 @@ func (k *KubernetesCredentialKeys) GetPrivateKey() *string {
 		return nil
 	}
 	return k.PrivateKey
+}
+
+func (k *KubernetesCredentialKeys) GetKeyType() *string {
+	if k == nil {
+		return nil
+	}
+	return k.KeyType
 }
 
 type KubernetesCredential struct {
@@ -149,6 +169,26 @@ func (k *KubernetesCredential) GetKeys() KubernetesCredentialKeys {
 }
 
 type KubernetesCredentialKeysOutput struct {
+	// Type of key (always "kubernetes") - not exposed in Terraform
+	KeyType *string `default:"kubernetes" json:"keyType"`
+}
+
+func (k KubernetesCredentialKeysOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *KubernetesCredentialKeysOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (k *KubernetesCredentialKeysOutput) GetKeyType() *string {
+	if k == nil {
+		return nil
+	}
+	return k.KeyType
 }
 
 type KubernetesCredentialOutput struct {

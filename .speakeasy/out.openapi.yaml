@@ -16342,9 +16342,15 @@ components:
               type: string
               description: Google Cloud service account key JSON (required, sensitive).
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
               example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
               writeOnly: true
+            keyType:
+              type: string
+              description: Type of key (always "google") - not exposed in Terraform
+              default: google
+              x-speakeasy-param-readonly: true
+              x-speakeasy-param-computed: true
+              x-speakeasy-terraform-ignore: true
     CreateGoogleCredentialsRequest:
       type: object
       required:
@@ -17041,15 +17047,6 @@ components:
           required:
             - privateKey
           properties:
-            # This value is not part of our API but included to fix generation. 
-            keyType:
-              type: string
-              description: Type of SSH key (always "ssh")
-              default: ssh
-              example: ssh
-              x-speakeasy-param-readonly: true
-              x-speakeasy-param-computed: true
-              x-speakeasy-name-override: key_type
             privateKey:
               type: string
               description: 'SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen'
@@ -17062,6 +17059,13 @@ components:
               x-speakeasy-param-sensitive: true
               x-speakeasy-param-force-new: true
               writeOnly: true
+            keyType:
+              type: string
+              description: Type of key (always "ssh") - not exposed in Terraform
+              default: ssh
+              x-speakeasy-param-readonly: true
+              x-speakeasy-param-computed: true
+              x-speakeasy-terraform-ignore: true
     CreateSSHCredentialsRequest:
       type: object
       properties:
@@ -17263,6 +17267,13 @@ components:
               x-speakeasy-param-computed: false
               x-speakeasy-name-override: private_key
               writeOnly: true
+            keyType:
+              type: string
+              description: Type of key (always "kubernetes") - not exposed in Terraform
+              default: kubernetes
+              x-speakeasy-param-readonly: true
+              x-speakeasy-param-computed: true
+              x-speakeasy-terraform-ignore: true
     CreateKubernetesCredentialsRequest:
       type: object
       properties:

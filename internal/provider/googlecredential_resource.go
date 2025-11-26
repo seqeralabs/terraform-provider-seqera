@@ -17,7 +17,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"regexp"
 )
@@ -38,13 +37,12 @@ type GoogleCredentialResource struct {
 
 // GoogleCredentialResourceModel describes the resource data model.
 type GoogleCredentialResourceModel struct {
-	CredentialsID types.String                 `tfsdk:"credentials_id"`
-	Data          types.String                 `tfsdk:"data"`
-	ID            types.String                 `tfsdk:"id"`
-	Keys          tfTypes.GoogleCredentialKeys `tfsdk:"keys"`
-	Name          types.String                 `tfsdk:"name"`
-	ProviderType  types.String                 `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64                  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	CredentialsID types.String `tfsdk:"credentials_id"`
+	Data          types.String `tfsdk:"data"`
+	ID            types.String `tfsdk:"id"`
+	Name          types.String `tfsdk:"name"`
+	ProviderType  types.String `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GoogleCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,9 +68,6 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
-			},
-			"keys": schema.SingleNestedAttribute{
-				Computed: true,
 			},
 			"name": schema.StringAttribute{
 				Required: true,

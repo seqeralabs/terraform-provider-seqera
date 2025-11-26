@@ -6,6 +6,9 @@ FIX:
 - **GitHub Credentials** - Fixed an issue where the GitHub Personal Access Token field was using incorrect API field name `accessToken` instead of `password`, resulting in invalid credentials.
 - **CodeCommit Credentials** - Fixed an issue where AWS credential fields were using incorrect API field names `accessKey`/`secretKey` instead of `username`/`password`, resulting in authentication failures.
 - **Container Registry Credentials** - Fixed an issue where the `registry` field was incorrectly marked as write-only, preventing the registry URL from being readable in API responses.
+- **Google Cloud Credentials** - Fixed critical issue where the service account JSON (`data` field) was not being sent in API requests, causing credential creation to fail. Added internal `keyType` field to SDK models to enable proper code generation while keeping it hidden from Terraform schema and documentation.
+- **Kubernetes Credentials** - Fixed critical issue where authentication fields (`token`, `certificate`, `private_key`) were not being sent in API requests, causing credential creation to fail. Added internal `keyType` field to SDK models to enable proper code generation while keeping it hidden from Terraform schema and documentation.
+- **SSH Credentials** - Improved implementation by hiding internal `key_type` field from Terraform schema and documentation while maintaining correct API request generation. This field is now only present in SDK models for code generation purposes.
 
 
 # v0.26.4

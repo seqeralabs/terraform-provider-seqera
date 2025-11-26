@@ -178,12 +178,18 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	} else {
 		providerType = nil
 	}
-	keys := shared.GoogleCredentialKeys{}
+	keys, keysDiags := r.ToSharedGoogleCredentialKeys(ctx)
+	diags.Append(keysDiags...)
+
+	if diags.HasError() {
+		return nil, diags
+	}
+
 	out := shared.GoogleCredential{
 		ID:           id,
 		Name:         name,
 		ProviderType: providerType,
-		Keys:         keys,
+		Keys:         *keys,
 	}
 
 	return &out, diags
