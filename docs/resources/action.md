@@ -125,7 +125,7 @@ resource "seqera_action" "github_webhook" {
 ### Required
 
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
-- `name` (String)
+- `name` (String) Human-readable name for the action
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional
@@ -147,6 +147,7 @@ resource "seqera_action" "github_webhook" {
 
 Optional:
 
+- `commit_id` (String)
 - `compute_env_id` (String)
 - `config_profiles` (List of String)
 - `config_text` (String)
@@ -157,8 +158,8 @@ Optional:
 - `main_script` (String)
 - `params_text` (String)
 - `pipeline` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String)
+- `pre_run_script` (String)
 - `pull_latest` (Boolean)
 - `resume` (Boolean)
 - `revision` (String)
@@ -178,6 +179,7 @@ Read-Only:
 - `optimization_targets` (String)
 - `resume_launch_id` (String)
 - `session_id` (String)
+- `workspace_id` (Number)
 
 
 <a id="nestedatt--config"></a>
@@ -193,7 +195,7 @@ Read-Only:
 
 Read-Only:
 
-- `discriminator` (String)
+- `action_config_type` (String)
 
 
 <a id="nestedatt--config--tower"></a>
@@ -201,6 +203,7 @@ Read-Only:
 
 Read-Only:
 
+- `action_config_type` (String)
 - `discriminator` (String)
 
 ## Import

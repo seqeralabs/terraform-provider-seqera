@@ -7,23 +7,17 @@ import (
 	"net/http"
 )
 
-type Dir struct {
-}
-
-type File struct {
-}
-
 type GenerateDownloadScriptRequest struct {
 	// Data-link string identifier
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Credentials identifier
+	// Credentials string identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
 	// List of paths to directories to download
-	Dirs []Dir `queryParam:"style=form,explode=true,name=dirs"`
+	Dirs []string `queryParam:"style=form,explode=true,name=dirs"`
 	// List of paths to files to download
-	Files []File `queryParam:"style=form,explode=true,name=files"`
+	Files []string `queryParam:"style=form,explode=true,name=files"`
 }
 
 func (g *GenerateDownloadScriptRequest) GetDataLinkID() string {
@@ -47,14 +41,14 @@ func (g *GenerateDownloadScriptRequest) GetCredentialsID() *string {
 	return g.CredentialsID
 }
 
-func (g *GenerateDownloadScriptRequest) GetDirs() []Dir {
+func (g *GenerateDownloadScriptRequest) GetDirs() []string {
 	if g == nil {
 		return nil
 	}
 	return g.Dirs
 }
 
-func (g *GenerateDownloadScriptRequest) GetFiles() []File {
+func (g *GenerateDownloadScriptRequest) GetFiles() []string {
 	if g == nil {
 		return nil
 	}

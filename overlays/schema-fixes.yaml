@@ -4,31 +4,54 @@ info:
   title: Schema Fixes Overlay
   version: 0.0.0
 actions:
-  # Fix AWS Batch Config terraform-ignore
-  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["forgedResources"]
+  # Fix AWS Batch Config terraform-ignore (note: AwsBatchConfig uses allOf)
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["allOf"][1]["properties"]["forgedResources"]
     update:
       x-speakeasy-terraform-ignore: true
 
   # Fix discriminator mapping validation errors by removing problematic mappings
-  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["google-cloud"]
+  # Note: The discriminator is on ComputeConfigUnion, not ComputeConfig
+  - target: $["components"]["schemas"]["ComputeConfigUnion"]["discriminator"]["mapping"]["google-cloud"]
     remove: true
-  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["azure-cloud"]
+  - target: $["components"]["schemas"]["ComputeConfigUnion"]["discriminator"]["mapping"]["azure-cloud"]
     remove: true
-  - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["seqeracompute"]
+  # Note: PlatformMetainfoUnion has the discriminator, not PlatformMetainfo
+  - target: $["components"]["schemas"]["PlatformMetainfoUnion"]["discriminator"]["mapping"]["seqeracompute"]
     remove: true
-  - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["google-cloud"]
+  - target: $["components"]["schemas"]["PlatformMetainfoUnion"]["discriminator"]["mapping"]["google-cloud"]
     remove: true
-  - target: $.components.schemas.ComputeConfig.discriminator.mapping["google-cloud"]
-    remove: true
-  - target: $.components.schemas.ComputeConfig.discriminator.mapping["azure-cloud"]
-    remove: true
-  - target: $.components.schemas.PlatformMetainfo.discriminator.mapping["seqeracompute"]
+  - target: $["components"]["schemas"]["PlatformMetainfoUnion"]["discriminator"]["mapping"]["azure-cloud"]
     remove: true
 
-  # Update PlatformMetainfo oneOf references
-  - target: $["components"]["schemas"]["PlatformMetainfo"]["oneOf"][*]
+  # Update ComputeConfigUnion oneOf to remove references to deprecated schemas
+  # First remove all existing oneOf items
+  - target: $["components"]["schemas"]["ComputeConfigUnion"]["oneOf"][*]
     remove: true
-  - target: $["components"]["schemas"]["PlatformMetainfo"]["oneOf"]
+  # Then set the new oneOf array
+  - target: $["components"]["schemas"]["ComputeConfigUnion"]["oneOf"]
+    update:
+      - $ref: "#/components/schemas/AwsBatchConfig"
+      - $ref: "#/components/schemas/AwsCloudConfig"
+      - $ref: "#/components/schemas/SeqeraComputeConfig"
+      - $ref: "#/components/schemas/GoogleLifeSciencesConfig"
+      - $ref: "#/components/schemas/GoogleBatchConfig"
+      - $ref: "#/components/schemas/AzBatchConfig"
+      - $ref: "#/components/schemas/LsfComputeConfig"
+      - $ref: "#/components/schemas/SlurmComputeConfig"
+      - $ref: "#/components/schemas/K8sComputeConfig"
+      - $ref: "#/components/schemas/EksComputeConfig"
+      - $ref: "#/components/schemas/GkeComputeConfig"
+      - $ref: "#/components/schemas/UnivaComputeConfig"
+      - $ref: "#/components/schemas/AltairPbsComputeConfig"
+      - $ref: "#/components/schemas/MoabComputeConfig"
+      - $ref: "#/components/schemas/LocalComputeConfig"
+
+  # Update PlatformMetainfoUnion oneOf references to remove deprecated schemas
+  # First remove all existing oneOf items
+  - target: $["components"]["schemas"]["PlatformMetainfoUnion"]["oneOf"][*]
+    remove: true
+  # Then set the new oneOf array
+  - target: $["components"]["schemas"]["PlatformMetainfoUnion"]["oneOf"]
     update:
       - $ref: "#/components/schemas/AwsBatchPlatformMetainfo"
       - $ref: "#/components/schemas/AwsCloudPlatformMetainfo"
@@ -40,20 +63,10 @@ actions:
       - $ref: "#/components/schemas/GridPlatformMetainfo"
       - $ref: "#/components/schemas/LocalPlatformMetainfo"
 
-  # SeqeraComputeConfig modifications
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["region"]
+  # SeqeraComputeConfig modifications (note: SeqeraComputeConfig uses allOf)
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["allOf"][1]["properties"]["region"]
     remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["workDir"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["preRunScript"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["postRunScript"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["defaultDataRetentionPolicy"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["nextflowConfig"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["allOf"][1]["properties"]["defaultDataRetentionPolicy"]
     remove: true
   - target: $["components"]["schemas"]["SeqeraComputeConfig"]
     update:
@@ -84,8 +97,8 @@ actions:
   - target: $["components"]["schemas"]["WfWaveMeta"]
     remove: true
 
-  # AWS Cloud Config terraform-ignore
-  - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
+  # AWS Cloud Config terraform-ignore (note: AwsCloudConfig uses allOf)
+  - target: $["components"]["schemas"]["AwsCloudConfig"]["allOf"][1]["properties"]["forgedResources"]
     update:
       x-speakeasy-terraform-ignore: true
 

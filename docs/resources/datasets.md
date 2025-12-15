@@ -3,22 +3,12 @@
 page_title: "seqera_datasets Resource - terraform-provider-seqera"
 subcategory: ""
 description: |-
-  Manage datasets for storing and versioning research data.
-  Datasets in Seqera are CSV (comma-separated values) and TSV
-  (tab-separated values) files stored in a workspace.
-  They are used as inputs to pipelines to simplify data management,
-  minimize user data-input errors, and facilitate reproducible workflows.
+  Datasets Resource
 ---
 
 # seqera_datasets (Resource)
 
-Manage datasets for storing and versioning research data.
-
-Datasets in Seqera are CSV (comma-separated values) and TSV
-(tab-separated values) files stored in a workspace.
-
-They are used as inputs to pipelines to simplify data management,
-minimize user data-input errors, and facilitate reproducible workflows.
+Datasets Resource
 
 ## Example Usage
 
@@ -44,8 +34,68 @@ resource "seqera_datasets" "my_datasets" {
 
 ### Read-Only
 
+- `dataset` (Attributes) (see [below for nested schema](#nestedatt--dataset))
+
+<a id="nestedatt--dataset"></a>
+### Nested Schema for `dataset`
+
+Read-Only:
+
 - `date_created` (String)
-- `deleted` (Boolean) Read-only flag indicating if the dataset has been deleted
-- `id` (String) Unique identifier for the dataset (max 22 characters)
+- `deleted` (Boolean)
+- `description` (String)
+- `hidden` (Boolean)
+- `id` (String)
+- `labels` (Attributes List) (see [below for nested schema](#nestedatt--dataset--labels))
 - `last_updated` (String)
-- `media_type` (String) MIME type or media type of the dataset content (max 80 characters)
+- `last_updated_by` (Attributes) (see [below for nested schema](#nestedatt--dataset--last_updated_by))
+- `media_type` (String)
+- `name` (String)
+- `organization_id` (Number)
+- `runs_info` (Attributes) (see [below for nested schema](#nestedatt--dataset--runs_info))
+- `user` (Attributes) (see [below for nested schema](#nestedatt--dataset--user))
+- `version` (Number)
+- `workspace_id` (Number)
+
+<a id="nestedatt--dataset--labels"></a>
+### Nested Schema for `dataset.labels`
+
+Read-Only:
+
+- `date_created` (String) Timestamp when the label was created
+- `id` (Number) Unique numeric identifier for the label
+- `is_default` (Boolean) Flag indicating if this is a default system label
+- `name` (String) Name or key of the label
+- `resource` (Boolean) Flag indicating if this is a resource-level label
+- `value` (String) Value associated with the label
+
+
+<a id="nestedatt--dataset--last_updated_by"></a>
+### Nested Schema for `dataset.last_updated_by`
+
+Read-Only:
+
+- `avatar` (String)
+- `email` (String)
+- `id` (Number)
+- `user_name` (String)
+
+
+<a id="nestedatt--dataset--runs_info"></a>
+### Nested Schema for `dataset.runs_info`
+
+Read-Only:
+
+- `last_used` (String)
+- `runs_count` (Number)
+
+
+<a id="nestedatt--dataset--user"></a>
+### Nested Schema for `dataset.user`
+
+Read-Only:
+
+- `avatar` (String)
+- `email` (String)
+- `id` (Number)
+- `user_name` (String)

@@ -7,7 +7,8 @@ import (
 )
 
 type AgentSecurityKeys struct {
-	ConnectionID types.String `tfsdk:"connection_id"`
-	Shared       types.Bool   `tfsdk:"shared"`
-	WorkDir      types.String `tfsdk:"work_dir"`
+	ConnectionID   types.String `tfsdk:"connection_id"`
+	CredentialType types.String `tfsdk:"credential_type"`
+	Shared         types.Bool   `tfsdk:"shared"`
+	WorkDir        types.String `tfsdk:"work_dir"`
 }

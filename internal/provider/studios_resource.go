@@ -31,6 +31,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
+	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -58,6 +59,7 @@ type StudiosResourceModel struct {
 	IsPrivate           types.Bool                      `tfsdk:"is_private"`
 	LabelIds            []types.Int64                   `tfsdk:"label_ids"`
 	Name                types.String                    `tfsdk:"name"`
+	RemoteConfig        *tfTypes.RemoteConfig           `tfsdk:"remote_config"`
 	SessionID           types.String                    `tfsdk:"session_id"`
 	Spot                types.Bool                      `tfsdk:"spot"`
 	WorkspaceID         types.Int64                     `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
@@ -178,9 +180,6 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtLeast(1),
-				},
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
@@ -189,7 +188,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Description of the Studio session's purpose. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2048),
 				},
@@ -224,14 +223,55 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Display name for the Studio session. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 80),
 				},
 			},
+			"remote_config": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"repository": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Not Null; Requires replacement if changed.`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+					"revision": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+				},
+				Description: `Requires replacement if changed.`,
+			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Unique identifier for the Studio session`,
+				Description: `Studio session numeric identifier`,
 			},
 			"spot": schema.BoolAttribute{
 				Optional: true,

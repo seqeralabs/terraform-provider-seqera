@@ -12,7 +12,7 @@ type DeleteDataLinkItemRequest struct {
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Credentials identifier
+	// Credentials string identifier
 	CredentialsID             *string                          `queryParam:"style=form,explode=true,name=credentialsId"`
 	DataLinkDeleteItemRequest shared.DataLinkDeleteItemRequest `request:"mediaType=application/json"`
 }

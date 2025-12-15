@@ -2,6 +2,33 @@
 
 package shared
 
+type RemoteConfig struct {
+	Repository string  `json:"repository"`
+	Revision   *string `json:"revision,omitempty"`
+	CommitID   *string `json:"commitId,omitempty"`
+}
+
+func (r *RemoteConfig) GetRepository() string {
+	if r == nil {
+		return ""
+	}
+	return r.Repository
+}
+
+func (r *RemoteConfig) GetRevision() *string {
+	if r == nil {
+		return nil
+	}
+	return r.Revision
+}
+
+func (r *RemoteConfig) GetCommitID() *string {
+	if r == nil {
+		return nil
+	}
+	return r.CommitID
+}
+
 type DataStudioCreateRequest struct {
 	Name                string                  `json:"name"`
 	Description         *string                 `json:"description,omitempty"`
@@ -9,6 +36,7 @@ type DataStudioCreateRequest struct {
 	ComputeEnvID        string                  `json:"computeEnvId"`
 	InitialCheckpointID *int64                  `json:"initialCheckpointId,omitempty"`
 	Configuration       DataStudioConfiguration `json:"configuration"`
+	RemoteConfig        *RemoteConfig           `json:"remoteConfig,omitempty"`
 	IsPrivate           *bool                   `json:"isPrivate,omitempty"`
 	// List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id
 	LabelIds []int64 `json:"labelIds,omitempty"`
@@ -56,6 +84,13 @@ func (d *DataStudioCreateRequest) GetConfiguration() DataStudioConfiguration {
 		return DataStudioConfiguration{}
 	}
 	return d.Configuration
+}
+
+func (d *DataStudioCreateRequest) GetRemoteConfig() *RemoteConfig {
+	if d == nil {
+		return nil
+	}
+	return d.RemoteConfig
 }
 
 func (d *DataStudioCreateRequest) GetIsPrivate() *bool {

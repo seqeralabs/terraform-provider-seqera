@@ -10,7 +10,7 @@ import (
 type FinishDataLinkUploadRequest struct {
 	// Data-link string identifier
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
-	// Credentials identifier
+	// Credentials string identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
 	// Workspace numeric identifier
 	WorkspaceID                          *int64                                      `queryParam:"style=form,explode=true,name=workspaceId"`

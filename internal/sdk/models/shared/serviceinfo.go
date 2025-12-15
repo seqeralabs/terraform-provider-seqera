@@ -2,33 +2,49 @@
 
 package shared
 
+// Navbar
+//
+// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+type Navbar struct {
+	Menus []NavbarConfigNavbarMenu `json:"menus,omitempty"`
+}
+
+func (n *Navbar) GetMenus() []NavbarConfigNavbarMenu {
+	if n == nil {
+		return nil
+	}
+	return n.Menus
+}
+
 type ServiceInfo struct {
-	Version                  *string       `json:"version,omitempty"`
-	APIVersion               *string       `json:"apiVersion,omitempty"`
-	CommitID                 *string       `json:"commitId,omitempty"`
-	AuthTypes                []string      `json:"authTypes,omitempty"`
-	LoginPath                *string       `json:"loginPath,omitempty"`
-	Navbar                   *NavbarConfig `json:"navbar,omitempty"`
-	HeartbeatInterval        *int          `json:"heartbeatInterval,omitempty"`
-	UserWorkspaceEnabled     *bool         `json:"userWorkspaceEnabled,omitempty"`
-	AllowInstanceCredentials *bool         `json:"allowInstanceCredentials,omitempty"`
-	LandingURL               *string       `json:"landingUrl,omitempty"`
-	TermsOfUseURL            *string       `json:"termsOfUseUrl,omitempty"`
-	ContentURL               *string       `json:"contentUrl,omitempty"`
-	Analytics                *Analytics    `json:"analytics,omitempty"`
+	Version    *string  `json:"version,omitempty"`
+	APIVersion *string  `json:"apiVersion,omitempty"`
+	CommitID   *string  `json:"commitId,omitempty"`
+	AuthTypes  []string `json:"authTypes,omitempty"`
+	LoginPath  *string  `json:"loginPath,omitempty"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	Navbar                   *Navbar    `json:"navbar,omitempty"`
+	HeartbeatInterval        *int       `json:"heartbeatInterval,omitempty"`
+	UserWorkspaceEnabled     *bool      `json:"userWorkspaceEnabled,omitempty"`
+	AllowInstanceCredentials *bool      `json:"allowInstanceCredentials,omitempty"`
+	LandingURL               *string    `json:"landingUrl,omitempty"`
+	TermsOfUseURL            *string    `json:"termsOfUseUrl,omitempty"`
+	ContentURL               *string    `json:"contentUrl,omitempty"`
+	Analytics                *Analytics `json:"analytics,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	AllowLocalRepos              *bool   `json:"allowLocalRepos,omitempty"`
 	ContentMaxFileSize           *int64  `json:"contentMaxFileSize,omitempty"`
 	WaveEnabled                  *bool   `json:"waveEnabled,omitempty"`
 	GroundswellEnabled           *bool   `json:"groundswellEnabled,omitempty"`
 	GroundswellAllowedWorkspaces []int64 `json:"groundswellAllowedWorkspaces,omitempty"`
-	ScmsServerURL                *string `json:"scmsServerUrl,omitempty"`
+	SeqeraComputeEnabled         *bool   `json:"seqeraComputeEnabled,omitempty"`
 	ForgePrefix                  *string `json:"forgePrefix,omitempty"`
 	SeqeraCloud                  *bool   `json:"seqeraCloud,omitempty"`
 	EvalWorkspaceIds             []int64 `json:"evalWorkspaceIds,omitempty"`
 	ContactEmail                 *string `json:"contactEmail,omitempty"`
 	AllowNextflowCliLogs         *bool   `json:"allowNextflowCliLogs,omitempty"`
 	LogoutURL                    *string `json:"logoutUrl,omitempty"`
+	SeqeraAiBaseURL              *string `json:"seqeraAiBaseUrl,omitempty"`
 }
 
 func (s *ServiceInfo) GetVersion() *string {
@@ -66,7 +82,7 @@ func (s *ServiceInfo) GetLoginPath() *string {
 	return s.LoginPath
 }
 
-func (s *ServiceInfo) GetNavbar() *NavbarConfig {
+func (s *ServiceInfo) GetNavbar() *Navbar {
 	if s == nil {
 		return nil
 	}
@@ -157,11 +173,11 @@ func (s *ServiceInfo) GetGroundswellAllowedWorkspaces() []int64 {
 	return s.GroundswellAllowedWorkspaces
 }
 
-func (s *ServiceInfo) GetScmsServerURL() *string {
+func (s *ServiceInfo) GetSeqeraComputeEnabled() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.ScmsServerURL
+	return s.SeqeraComputeEnabled
 }
 
 func (s *ServiceInfo) GetForgePrefix() *string {
@@ -204,4 +220,11 @@ func (s *ServiceInfo) GetLogoutURL() *string {
 		return nil
 	}
 	return s.LogoutURL
+}
+
+func (s *ServiceInfo) GetSeqeraAiBaseURL() *string {
+	if s == nil {
+		return nil
+	}
+	return s.SeqeraAiBaseURL
 }

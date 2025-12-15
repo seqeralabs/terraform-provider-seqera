@@ -38,7 +38,7 @@ type ActionResource struct {
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
 	ActionID    types.String                  `tfsdk:"action_id"`
-	Config      *tfTypes.ActionConfigType     `tfsdk:"config"`
+	Config      *tfTypes.ActionConfigUnion    `tfsdk:"config"`
 	HookID      types.String                  `tfsdk:"hook_id"`
 	HookURL     types.String                  `tfsdk:"hook_url"`
 	ID          types.String                  `tfsdk:"id"`
@@ -69,7 +69,7 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"github": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
-							"discriminator": schema.StringAttribute{
+							"action_config_type": schema.StringAttribute{
 								Computed: true,
 							},
 						},
@@ -77,6 +77,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"tower": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
+							"action_config_type": schema.StringAttribute{
+								Computed: true,
+							},
 							"discriminator": schema.StringAttribute{
 								Computed: true,
 							},
@@ -99,6 +102,13 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 			"launch": schema.SingleNestedAttribute{
 				Required: true,
 				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						Validators: []validator.String{
+							stringvalidator.UTF8LengthAtMost(40),
+						},
+					},
 					"compute_env_id": schema.StringAttribute{
 						Optional: true,
 					},
@@ -161,14 +171,12 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 					"post_run_script": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Computed: true,
+						Optional: true,
 					},
 					"pre_run_script": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Computed: true,
+						Optional: true,
 					},
 					"pull_latest": schema.BoolAttribute{
 						Computed: true,
@@ -223,6 +231,9 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Computed: true,
 						Optional: true,
 					},
+					"workspace_id": schema.Int64Attribute{
+						Computed: true,
+					},
 					"workspace_secrets": schema.ListAttribute{
 						Computed:    true,
 						Optional:    true,
@@ -235,7 +246,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Status or informational message about the action`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Human-readable name for the action`,
 			},
 			"source": schema.StringAttribute{
 				Computed: true,

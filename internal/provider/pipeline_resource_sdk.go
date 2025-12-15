@@ -207,6 +207,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		revision = nil
 	}
+	commitID := new(string)
+	if !r.Launch.CommitID.IsUnknown() && !r.Launch.CommitID.IsNull() {
+		*commitID = r.Launch.CommitID.ValueString()
+	} else {
+		commitID = nil
+	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
 	for configProfilesIndex := range r.Launch.ConfigProfiles {
 		configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
@@ -307,6 +313,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		Pipeline:         pipeline,
 		WorkDir:          workDir,
 		Revision:         revision,
+		CommitID:         commitID,
 		ConfigProfiles:   configProfiles,
 		UserSecrets:      userSecrets,
 		WorkspaceSecrets: workspaceSecrets,
@@ -388,6 +395,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		*revision = r.Launch.Revision.ValueString()
 	} else {
 		revision = nil
+	}
+	commitID := new(string)
+	if !r.Launch.CommitID.IsUnknown() && !r.Launch.CommitID.IsNull() {
+		*commitID = r.Launch.CommitID.ValueString()
+	} else {
+		commitID = nil
 	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
 	for configProfilesIndex := range r.Launch.ConfigProfiles {
@@ -489,6 +502,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		Pipeline:         pipeline,
 		WorkDir:          workDir,
 		Revision:         revision,
+		CommitID:         commitID,
 		ConfigProfiles:   configProfiles,
 		UserSecrets:      userSecrets,
 		WorkspaceSecrets: workspaceSecrets,

@@ -7,7 +7,8 @@ import (
 )
 
 type AwsCloudPlatformMetainfo struct {
-	Discriminator  *string         `json:"discriminator,omitempty"`
+	// property to select the platform metainfo type
+	PlatformType   string          `json:"platformType"`
 	Warnings       []string        `json:"warnings,omitempty"`
 	Buckets        []Bucket        `json:"buckets,omitempty"`
 	KeyPairs       []string        `json:"keyPairs,omitempty"`
@@ -29,11 +30,11 @@ func (a *AwsCloudPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AwsCloudPlatformMetainfo) GetDiscriminator() *string {
+func (a *AwsCloudPlatformMetainfo) GetPlatformType() string {
 	if a == nil {
-		return nil
+		return ""
 	}
-	return a.Discriminator
+	return a.PlatformType
 }
 
 func (a *AwsCloudPlatformMetainfo) GetWarnings() []string {

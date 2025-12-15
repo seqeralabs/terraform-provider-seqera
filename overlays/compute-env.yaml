@@ -281,13 +281,14 @@ actions:
       x-speakeasy-terraform-ignore: true
 
   # Ignore discriminator fields in all compute config schemas to prevent state changes
+  # Note: All compute config schemas use allOf, so paths must include allOf[1]
   - target: $.components.schemas.AltairPbsComputeConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.AwsBatchConfig.properties.discriminator
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.AzBatchConfig.properties.discriminator
+  - target: $.components.schemas.AzBatchConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.EksComputeConfig.allOf[1].properties.discriminator
@@ -296,13 +297,13 @@ actions:
   - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.GoogleBatchConfig.properties.discriminator
+  - target: $.components.schemas.GoogleBatchConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.discriminator
+  - target: $.components.schemas.GoogleLifeSciencesConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.K8sComputeConfig.properties.discriminator
+  - target: $.components.schemas.K8sComputeConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.LsfComputeConfig.allOf[1].properties.discriminator
@@ -311,7 +312,7 @@ actions:
   - target: $.components.schemas.MoabComputeConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.SeqeraComputeConfig.properties.discriminator
+  - target: $.components.schemas.SeqeraComputeConfig.allOf[1].properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.SlurmComputeConfig.allOf[1].properties.discriminator
@@ -326,9 +327,9 @@ actions:
     update:
       x-speakeasy-plan-validators: awsForgeValidator
 
-  # Add Azure Batch work directory pattern validation
+  # Add Azure Batch work directory pattern validation (note: AzBatchConfig uses allOf)
   # Must be a valid Azure Blob container URL with az:// prefix
-  - target: $.components.schemas.AzBatchConfig.properties.workDir
+  - target: $.components.schemas.AzBatchConfig.allOf[1].properties.workDir
     update:
       title: "Azure Batch Work Directory"
       description: "Must be a valid Azure Blob container URL with format az://container-name/path"
@@ -355,7 +356,7 @@ actions:
       maximum: 100
 
   # Add wave_enabled validator to ensure fusion2_enabled is explicitly set
-  - target: $.components.schemas.AwsBatchConfig.properties.waveEnabled
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
@@ -371,13 +372,13 @@ actions:
   # ============================================================================
 
   # Rename waveEnabled -> enable_wave across all compute configs
-  - target: $.components.schemas.AwsBatchConfig.properties.waveEnabled
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
-  - target: $.components.schemas.AwsCloudConfig.properties.waveEnabled
+  - target: $.components.schemas.AwsCloudConfig.allOf[1].properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
-  - target: $.components.schemas.AzBatchConfig.properties.waveEnabled
+  - target: $.components.schemas.AzBatchConfig.allOf[1].properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
   - target: $.components.schemas.EksComputeConfig.allOf[1].properties.waveEnabled
@@ -386,21 +387,18 @@ actions:
   - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
-  - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
-    update:
-      x-speakeasy-name-override: enable_wave
-  - target: $.components.schemas.SeqeraComputeConfig.properties.waveEnabled
+  - target: $.components.schemas.GoogleBatchConfig.allOf[1].properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
 
   # Rename fusion2Enabled -> enable_fusion across all compute configs
-  - target: $.components.schemas.AwsBatchConfig.properties.fusion2Enabled
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
-  - target: $.components.schemas.AwsCloudConfig.properties.fusion2Enabled
+  - target: $.components.schemas.AwsCloudConfig.allOf[1].properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
-  - target: $.components.schemas.AzBatchConfig.properties.fusion2Enabled
+  - target: $.components.schemas.AzBatchConfig.allOf[1].properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
   - target: $.components.schemas.EksComputeConfig.allOf[1].properties.fusion2Enabled
@@ -409,7 +407,7 @@ actions:
   - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
-  - target: $.components.schemas.GoogleBatchConfig.properties.fusion2Enabled
+  - target: $.components.schemas.GoogleBatchConfig.allOf[1].properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
 

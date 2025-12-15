@@ -106,7 +106,7 @@ func (k KubernetesCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (k *KubernetesCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -214,7 +214,7 @@ func (k KubernetesCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (k *KubernetesCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
 		return err
 	}
 	return nil

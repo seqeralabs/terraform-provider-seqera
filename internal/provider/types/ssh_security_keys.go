@@ -7,6 +7,7 @@ import (
 )
 
 type SSHSecurityKeys struct {
-	Passphrase types.String `tfsdk:"passphrase"`
-	PrivateKey types.String `tfsdk:"private_key"`
+	CredentialType types.String `tfsdk:"credential_type"`
+	Passphrase     types.String `tfsdk:"passphrase"`
+	PrivateKey     types.String `tfsdk:"private_key"`
 }

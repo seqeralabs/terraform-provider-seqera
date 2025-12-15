@@ -8,25 +8,24 @@ type WorkflowLaunchRequest struct {
 	Pipeline         *string  `json:"pipeline,omitempty"`
 	WorkDir          string   `json:"workDir"`
 	Revision         *string  `json:"revision,omitempty"`
+	CommitID         *string  `json:"commitId,omitempty"`
 	ConfigProfiles   []string `json:"configProfiles,omitempty"`
 	UserSecrets      []string `json:"userSecrets,omitempty"`
 	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
 	ConfigText       *string  `json:"configText,omitempty"`
 	TowerConfig      *string  `json:"towerConfig,omitempty"`
 	ParamsText       *string  `json:"paramsText,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript   *string `json:"postRunScript,omitempty"`
-	MainScript      *string `json:"mainScript,omitempty"`
-	EntryName       *string `json:"entryName,omitempty"`
-	SchemaName      *string `json:"schemaName,omitempty"`
-	Resume          *bool   `json:"resume,omitempty"`
-	PullLatest      *bool   `json:"pullLatest,omitempty"`
-	StubRun         *bool   `json:"stubRun,omitempty"`
-	LabelIds        []int64 `json:"labelIds,omitempty"`
-	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	PreRunScript     *string  `json:"preRunScript,omitempty"`
+	PostRunScript    *string  `json:"postRunScript,omitempty"`
+	MainScript       *string  `json:"mainScript,omitempty"`
+	EntryName        *string  `json:"entryName,omitempty"`
+	SchemaName       *string  `json:"schemaName,omitempty"`
+	Resume           *bool    `json:"resume,omitempty"`
+	PullLatest       *bool    `json:"pullLatest,omitempty"`
+	StubRun          *bool    `json:"stubRun,omitempty"`
+	LabelIds         []int64  `json:"labelIds,omitempty"`
+	HeadJobCpus      *int     `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb  *int     `json:"headJobMemoryMb,omitempty"`
 }
 
 func (w *WorkflowLaunchRequest) GetComputeEnvID() *string {
@@ -62,6 +61,13 @@ func (w *WorkflowLaunchRequest) GetRevision() *string {
 		return nil
 	}
 	return w.Revision
+}
+
+func (w *WorkflowLaunchRequest) GetCommitID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.CommitID
 }
 
 func (w *WorkflowLaunchRequest) GetConfigProfiles() []string {

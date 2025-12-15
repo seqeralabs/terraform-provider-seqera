@@ -7,5 +7,6 @@ import (
 )
 
 type ActionTowerActionConfig struct {
-	Discriminator types.String `tfsdk:"discriminator"`
+	ActionConfigType types.String `tfsdk:"action_config_type"`
+	Discriminator    types.String `tfsdk:"discriminator"`
 }

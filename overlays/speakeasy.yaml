@@ -4,64 +4,66 @@ info:
   title: Overlay seqera-api-latest.yml => seqera-final.yaml
   version: 0.0.0
 actions:
-  - target: $["components"]["schemas"]["AgentSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  # Note: Most schemas use allOf for inheritance, requiring allOf[1] in paths
+  # Exception: SecurityKeys and ComputeConfig are base schemas without allOf
+  - target: $["components"]["schemas"]["AgentSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["AltairPbsComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AwsBatchConfig"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["AwsBatchConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AwsSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["AwsSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AzBatchConfig"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["AzBatchConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["AzureEntraKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AzureReposSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["AzureReposSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["AzureSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["AzureSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["BitBucketSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["BitBucketSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["CodeCommitSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["CodeCommitSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["ComputeConfig"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["ContainerRegistryKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["ContainerRegistryKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["EksComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["GitHubSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GitLabSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["GitLabSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GiteaSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["GiteaSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["GkeComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GoogleBatchConfig"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["GoogleBatchConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["GoogleLifeSciencesConfig"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["GoogleLifeSciencesConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   # - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["data"]["type"]
   #   remove: true
   # - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["data"]
   #   update:
   #     type: object
-  - target: $["components"]["schemas"]["GoogleSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["GoogleSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["K8sComputeConfig"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["K8sComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["K8sSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["K8sSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["LsfComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["MoabComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["SSHSecurityKeys"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["SSHSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["SecurityKeys"]["properties"]["discriminator"]["readOnly"]
     remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["discriminator"]["readOnly"]
+  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true
   - target: $["components"]["schemas"]["SeqeraComputeSecurityKeys"]["allOf"][1]["properties"]["discriminator"]["readOnly"]
     remove: true

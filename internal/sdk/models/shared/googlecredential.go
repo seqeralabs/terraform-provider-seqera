@@ -45,7 +45,7 @@ func (g GoogleCredentialKeys) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GoogleCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"data"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -88,7 +88,7 @@ func (g GoogleCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GoogleCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -196,7 +196,7 @@ func (g GoogleCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GoogleCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil

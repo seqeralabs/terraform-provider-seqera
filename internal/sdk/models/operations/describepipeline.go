@@ -14,7 +14,7 @@ type DescribePipelineRequest struct {
 	Attributes []shared.PipelineQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 	// Workspace numeric identifier
 	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Source Optional workspace numeric identifier
+	// Source workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 }
 

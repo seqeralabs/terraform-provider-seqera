@@ -74,49 +74,13 @@ func (e *ComputeEnvComputeConfigPlatform) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type ComputeEnvComputeConfigStatus string
-
-const (
-	ComputeEnvComputeConfigStatusCreating  ComputeEnvComputeConfigStatus = "CREATING"
-	ComputeEnvComputeConfigStatusAvailable ComputeEnvComputeConfigStatus = "AVAILABLE"
-	ComputeEnvComputeConfigStatusErrored   ComputeEnvComputeConfigStatus = "ERRORED"
-	ComputeEnvComputeConfigStatusInvalid   ComputeEnvComputeConfigStatus = "INVALID"
-)
-
-func (e ComputeEnvComputeConfigStatus) ToPointer() *ComputeEnvComputeConfigStatus {
-	return &e
-}
-func (e *ComputeEnvComputeConfigStatus) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "CREATING":
-		fallthrough
-	case "AVAILABLE":
-		fallthrough
-	case "ERRORED":
-		fallthrough
-	case "INVALID":
-		*e = ComputeEnvComputeConfigStatus(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ComputeEnvComputeConfigStatus: %v", v)
-	}
-}
-
 type ComputeEnvComputeConfigInput struct {
 	CredentialsID string                          `json:"credentialsId"`
 	Name          string                          `json:"name"`
 	Description   *string                         `json:"description,omitempty"`
 	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
-	// Configuration settings for compute environments including work directories,
-	// pre/post run scripts, and environment-specific parameters.
-	//
-	Config  ComputeConfig                  `json:"config"`
-	Status  *ComputeEnvComputeConfigStatus `json:"status,omitempty"`
-	Message *string                        `json:"message,omitempty"`
+	Config        ComputeConfigUnion              `json:"config"`
+	Message       *string                         `json:"message,omitempty"`
 }
 
 func (c *ComputeEnvComputeConfigInput) GetCredentialsID() string {
@@ -147,74 +111,71 @@ func (c *ComputeEnvComputeConfigInput) GetPlatform() ComputeEnvComputeConfigPlat
 	return c.Platform
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
+func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfigUnion {
 	if c == nil {
-		return ComputeConfig{}
+		return ComputeConfigUnion{}
 	}
 	return c.Config
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigMoabPlatform() *MoabConfiguration {
-	return c.GetConfig().MoabConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigMoabPlatform() *MoabComputeConfig {
+	return c.GetConfig().MoabComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return c.GetConfig().AWSBatchConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigAwsBatch() *AwsBatchConfig {
+	return c.GetConfig().AwsBatchConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return c.GetConfig().GoogleGKEClusterConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigLocalPlatform() *LocalComputeConfig {
+	return c.GetConfig().LocalComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return c.GetConfig().GoogleBatchServiceConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigGkePlatform() *GkeComputeConfig {
+	return c.GetConfig().GkeComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return c.GetConfig().AWSCloudConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigGoogleBatch() *GoogleBatchConfig {
+	return c.GetConfig().GoogleBatchConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return c.GetConfig().SlurmConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigAwsCloud() *AwsCloudConfig {
+	return c.GetConfig().AwsCloudConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return c.GetConfig().KubernetesComputeConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigSlurmPlatform() *SlurmComputeConfig {
+	return c.GetConfig().SlurmComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return c.GetConfig().AltairPBSConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigK8sPlatform() *K8sComputeConfig {
+	return c.GetConfig().K8sComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return c.GetConfig().IBMLSFConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigAltairPlatform() *AltairPbsComputeConfig {
+	return c.GetConfig().AltairPbsComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return c.GetConfig().AzureBatchConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigLsfPlatform() *LsfComputeConfig {
+	return c.GetConfig().LsfComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return c.GetConfig().SeqeraComputeConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigAzureBatch() *AzBatchConfig {
+	return c.GetConfig().AzBatchConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return c.GetConfig().AmazonEKSClusterConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigSeqeracomputePlatform() *SeqeraComputeConfig {
+	return c.GetConfig().SeqeraComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	return c.GetConfig().GoogleLifeSciencesConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigEksPlatform() *EksComputeConfig {
+	return c.GetConfig().EksComputeConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return c.GetConfig().UnivaGridEngineConfiguration
+func (c *ComputeEnvComputeConfigInput) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfig {
+	return c.GetConfig().GoogleLifeSciencesConfig
 }
 
-func (c *ComputeEnvComputeConfigInput) GetStatus() *ComputeEnvComputeConfigStatus {
-	if c == nil {
-		return nil
-	}
-	return c.Status
+func (c *ComputeEnvComputeConfigInput) GetConfigUgePlatform() *UnivaComputeConfig {
+	return c.GetConfig().UnivaComputeConfig
 }
 
 func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
@@ -222,6 +183,41 @@ func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
 		return nil
 	}
 	return c.Message
+}
+
+type ComputeEnvComputeConfigStatus string
+
+const (
+	ComputeEnvComputeConfigStatusCreating  ComputeEnvComputeConfigStatus = "CREATING"
+	ComputeEnvComputeConfigStatusAvailable ComputeEnvComputeConfigStatus = "AVAILABLE"
+	ComputeEnvComputeConfigStatusDeleting  ComputeEnvComputeConfigStatus = "DELETING"
+	ComputeEnvComputeConfigStatusErrored   ComputeEnvComputeConfigStatus = "ERRORED"
+	ComputeEnvComputeConfigStatusInvalid   ComputeEnvComputeConfigStatus = "INVALID"
+)
+
+func (e ComputeEnvComputeConfigStatus) ToPointer() *ComputeEnvComputeConfigStatus {
+	return &e
+}
+func (e *ComputeEnvComputeConfigStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "CREATING":
+		fallthrough
+	case "AVAILABLE":
+		fallthrough
+	case "DELETING":
+		fallthrough
+	case "ERRORED":
+		fallthrough
+	case "INVALID":
+		*e = ComputeEnvComputeConfigStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ComputeEnvComputeConfigStatus: %v", v)
+	}
 }
 
 type ComputeEnvComputeConfig struct {
@@ -232,17 +228,14 @@ type ComputeEnvComputeConfig struct {
 	Name          string                          `json:"name"`
 	Description   *string                         `json:"description,omitempty"`
 	Platform      ComputeEnvComputeConfigPlatform `json:"platform"`
-	// Configuration settings for compute environments including work directories,
-	// pre/post run scripts, and environment-specific parameters.
-	//
-	Config      ComputeConfig                  `json:"config"`
-	DateCreated *time.Time                     `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time                     `json:"lastUpdated,omitempty"`
-	LastUsed    *time.Time                     `json:"lastUsed,omitempty"`
-	Deleted     *bool                          `json:"deleted,omitempty"`
-	Status      *ComputeEnvComputeConfigStatus `json:"status,omitempty"`
-	Message     *string                        `json:"message,omitempty"`
-	Primary     *bool                          `json:"primary,omitempty"`
+	Config        ComputeConfigUnion              `json:"config"`
+	DateCreated   *time.Time                      `json:"dateCreated,omitempty"`
+	LastUpdated   *time.Time                      `json:"lastUpdated,omitempty"`
+	LastUsed      *time.Time                      `json:"lastUsed,omitempty"`
+	Deleted       *bool                           `json:"deleted,omitempty"`
+	Status        *ComputeEnvComputeConfigStatus  `json:"status,omitempty"`
+	Message       *string                         `json:"message,omitempty"`
+	Primary       *bool                           `json:"primary,omitempty"`
 }
 
 func (c ComputeEnvComputeConfig) MarshalJSON() ([]byte, error) {
@@ -250,7 +243,7 @@ func (c ComputeEnvComputeConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ComputeEnvComputeConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"credentialsId", "name", "platform", "config"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -305,67 +298,71 @@ func (c *ComputeEnvComputeConfig) GetPlatform() ComputeEnvComputeConfigPlatform 
 	return c.Platform
 }
 
-func (c *ComputeEnvComputeConfig) GetConfig() ComputeConfig {
+func (c *ComputeEnvComputeConfig) GetConfig() ComputeConfigUnion {
 	if c == nil {
-		return ComputeConfig{}
+		return ComputeConfigUnion{}
 	}
 	return c.Config
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigMoabPlatform() *MoabConfiguration {
-	return c.GetConfig().MoabConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigMoabPlatform() *MoabComputeConfig {
+	return c.GetConfig().MoabComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return c.GetConfig().AWSBatchConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigAwsBatch() *AwsBatchConfig {
+	return c.GetConfig().AwsBatchConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return c.GetConfig().GoogleGKEClusterConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigLocalPlatform() *LocalComputeConfig {
+	return c.GetConfig().LocalComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return c.GetConfig().GoogleBatchServiceConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigGkePlatform() *GkeComputeConfig {
+	return c.GetConfig().GkeComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return c.GetConfig().AWSCloudConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigGoogleBatch() *GoogleBatchConfig {
+	return c.GetConfig().GoogleBatchConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return c.GetConfig().SlurmConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigAwsCloud() *AwsCloudConfig {
+	return c.GetConfig().AwsCloudConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return c.GetConfig().KubernetesComputeConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigSlurmPlatform() *SlurmComputeConfig {
+	return c.GetConfig().SlurmComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return c.GetConfig().AltairPBSConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigK8sPlatform() *K8sComputeConfig {
+	return c.GetConfig().K8sComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return c.GetConfig().IBMLSFConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigAltairPlatform() *AltairPbsComputeConfig {
+	return c.GetConfig().AltairPbsComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return c.GetConfig().AzureBatchConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigLsfPlatform() *LsfComputeConfig {
+	return c.GetConfig().LsfComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return c.GetConfig().SeqeraComputeConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigAzureBatch() *AzBatchConfig {
+	return c.GetConfig().AzBatchConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return c.GetConfig().AmazonEKSClusterConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigSeqeracomputePlatform() *SeqeraComputeConfig {
+	return c.GetConfig().SeqeraComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	return c.GetConfig().GoogleLifeSciencesConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigEksPlatform() *EksComputeConfig {
+	return c.GetConfig().EksComputeConfig
 }
 
-func (c *ComputeEnvComputeConfig) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return c.GetConfig().UnivaGridEngineConfiguration
+func (c *ComputeEnvComputeConfig) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfig {
+	return c.GetConfig().GoogleLifeSciencesConfig
+}
+
+func (c *ComputeEnvComputeConfig) GetConfigUgePlatform() *UnivaComputeConfig {
+	return c.GetConfig().UnivaComputeConfig
 }
 
 func (c *ComputeEnvComputeConfig) GetDateCreated() *time.Time {

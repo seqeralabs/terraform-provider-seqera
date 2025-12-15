@@ -27,6 +27,7 @@ resource "seqera_pipeline" "my_pipeline" {
     7
   ]
   launch = {
+    commit_id      = "...my_commit_id..."
     compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
       "docker",
@@ -74,18 +75,18 @@ resource "seqera_pipeline" "my_pipeline" {
 ### Required
 
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
-- `name` (String)
+- `name` (String) Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores
 
 ### Optional
 
-- `description` (String)
-- `icon` (String)
+- `description` (String) Detailed description of the pipeline's purpose and functionality
+- `icon` (String) Icon identifier or URL for visual representation
 - `label_ids` (List of Number)
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 
-- `pipeline_id` (Number) Unique numeric identifier for the pipeline
+- `pipeline_id` (Number) Pipeline numeric identifier
 - `repository` (String) Git repository URL containing the pipeline source code
 - `user_first_name` (String)
 - `user_id` (Number)
@@ -96,6 +97,7 @@ resource "seqera_pipeline" "my_pipeline" {
 
 Optional:
 
+- `commit_id` (String)
 - `compute_env_id` (String)
 - `config_profiles` (List of String)
 - `config_text` (String)
@@ -106,8 +108,8 @@ Optional:
 - `main_script` (String)
 - `params_text` (String)
 - `pipeline` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String)
+- `pre_run_script` (String)
 - `pull_latest` (Boolean)
 - `resume` (Boolean)
 - `revision` (String)

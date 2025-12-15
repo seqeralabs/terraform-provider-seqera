@@ -3,28 +3,36 @@
 package shared
 
 type DataStudioWorkspaceSettingsResponse struct {
-	OrgID         int64 `json:"orgId"`
-	WspID         int64 `json:"wspId"`
-	LifespanHours int   `json:"lifespanHours"`
+	OrgID               *int64  `json:"orgId,omitempty"`
+	WspID               *int64  `json:"wspId,omitempty"`
+	LifespanHours       *int    `json:"lifespanHours,omitempty"`
+	ContainerRepository *string `json:"containerRepository,omitempty"`
 }
 
-func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() int64 {
+func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() *int64 {
 	if d == nil {
-		return 0
+		return nil
 	}
 	return d.OrgID
 }
 
-func (d *DataStudioWorkspaceSettingsResponse) GetWspID() int64 {
+func (d *DataStudioWorkspaceSettingsResponse) GetWspID() *int64 {
 	if d == nil {
-		return 0
+		return nil
 	}
 	return d.WspID
 }
 
-func (d *DataStudioWorkspaceSettingsResponse) GetLifespanHours() int {
+func (d *DataStudioWorkspaceSettingsResponse) GetLifespanHours() *int {
 	if d == nil {
-		return 0
+		return nil
 	}
 	return d.LifespanHours
+}
+
+func (d *DataStudioWorkspaceSettingsResponse) GetContainerRepository() *string {
+	if d == nil {
+		return nil
+	}
+	return d.ContainerRepository
 }

@@ -7,5 +7,6 @@ import (
 )
 
 type GoogleSecurityKeys struct {
-	Data types.String `tfsdk:"data"`
+	CredentialType types.String `tfsdk:"credential_type"`
+	Data           types.String `tfsdk:"data"`
 }

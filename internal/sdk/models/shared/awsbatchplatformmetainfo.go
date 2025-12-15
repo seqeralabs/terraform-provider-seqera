@@ -7,7 +7,8 @@ import (
 )
 
 type AwsBatchPlatformMetainfo struct {
-	Discriminator    *string         `json:"discriminator,omitempty"`
+	// property to select the platform metainfo type
+	PlatformType     string          `json:"platformType"`
 	Warnings         []string        `json:"warnings,omitempty"`
 	JobQueues        []JobQueue      `json:"jobQueues,omitempty"`
 	Buckets          []Bucket        `json:"buckets,omitempty"`
@@ -33,11 +34,11 @@ func (a *AwsBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AwsBatchPlatformMetainfo) GetDiscriminator() *string {
+func (a *AwsBatchPlatformMetainfo) GetPlatformType() string {
 	if a == nil {
-		return nil
+		return ""
 	}
-	return a.Discriminator
+	return a.PlatformType
 }
 
 func (a *AwsBatchPlatformMetainfo) GetWarnings() []string {

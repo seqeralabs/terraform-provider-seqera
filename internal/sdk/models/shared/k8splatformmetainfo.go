@@ -7,7 +7,8 @@ import (
 )
 
 type K8sPlatformMetaInfo struct {
-	Discriminator *string `json:"discriminator,omitempty"`
+	// property to select the platform metainfo type
+	PlatformType string `json:"platformType"`
 }
 
 func (k K8sPlatformMetaInfo) MarshalJSON() ([]byte, error) {
@@ -21,9 +22,9 @@ func (k *K8sPlatformMetaInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (k *K8sPlatformMetaInfo) GetDiscriminator() *string {
+func (k *K8sPlatformMetaInfo) GetPlatformType() string {
 	if k == nil {
-		return nil
+		return ""
 	}
-	return k.Discriminator
+	return k.PlatformType
 }

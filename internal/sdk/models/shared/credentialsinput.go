@@ -89,7 +89,7 @@ type CredentialsInput struct {
 	ProviderType CredentialsProviderType `json:"provider"`
 	BaseURL      *string                 `json:"baseUrl,omitempty"`
 	Category     *string                 `json:"category,omitempty"`
-	Keys         SecurityKeys            `json:"keys"`
+	Keys         SecurityKeysUnion       `json:"keys"`
 }
 
 func (c *CredentialsInput) GetID() *string {
@@ -134,11 +134,15 @@ func (c *CredentialsInput) GetCategory() *string {
 	return c.Category
 }
 
-func (c *CredentialsInput) GetKeys() SecurityKeys {
+func (c *CredentialsInput) GetKeys() SecurityKeysUnion {
 	if c == nil {
-		return SecurityKeys{}
+		return SecurityKeysUnion{}
 	}
 	return c.Keys
+}
+
+func (c *CredentialsInput) GetKeysS3() *S3SecurityKeys {
+	return c.GetKeys().S3SecurityKeys
 }
 
 func (c *CredentialsInput) GetKeysGithub() *GitHubSecurityKeys {
@@ -175,6 +179,14 @@ func (c *CredentialsInput) GetKeysGoogle() *GoogleSecurityKeys {
 
 func (c *CredentialsInput) GetKeysBitbucket() *BitBucketSecurityKeys {
 	return c.GetKeys().BitBucketSecurityKeys
+}
+
+func (c *CredentialsInput) GetKeysAzureCloud() *AzureCloudKeys {
+	return c.GetKeys().AzureCloudKeys
+}
+
+func (c *CredentialsInput) GetKeysLocal() *LocalSecurityKeys {
+	return c.GetKeys().LocalSecurityKeys
 }
 
 func (c *CredentialsInput) GetKeysGitea() *GiteaSecurityKeys {
@@ -220,9 +232,9 @@ type CredentialsOutput struct {
 	// Timestamp when the credential was last used
 	LastUsed *time.Time `json:"lastUsed,omitempty"`
 	// Timestamp when the credential was created
-	DateCreated *time.Time         `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time         `json:"lastUpdated,omitempty"`
-	Keys        SecurityKeysOutput `json:"keys"`
+	DateCreated *time.Time              `json:"dateCreated,omitempty"`
+	LastUpdated *time.Time              `json:"lastUpdated,omitempty"`
+	Keys        SecurityKeysUnionOutput `json:"keys"`
 }
 
 func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
@@ -230,7 +242,7 @@ func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CredentialsOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"name", "provider", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -306,11 +318,15 @@ func (c *CredentialsOutput) GetLastUpdated() *time.Time {
 	return c.LastUpdated
 }
 
-func (c *CredentialsOutput) GetKeys() SecurityKeysOutput {
+func (c *CredentialsOutput) GetKeys() SecurityKeysUnionOutput {
 	if c == nil {
-		return SecurityKeysOutput{}
+		return SecurityKeysUnionOutput{}
 	}
 	return c.Keys
+}
+
+func (c *CredentialsOutput) GetKeysS3() *S3SecurityKeysOutput {
+	return c.GetKeys().S3SecurityKeysOutput
 }
 
 func (c *CredentialsOutput) GetKeysGithub() *GitHubSecurityKeysOutput {
@@ -347,6 +363,14 @@ func (c *CredentialsOutput) GetKeysGoogle() *GoogleSecurityKeysOutput {
 
 func (c *CredentialsOutput) GetKeysBitbucket() *BitBucketSecurityKeysOutput {
 	return c.GetKeys().BitBucketSecurityKeysOutput
+}
+
+func (c *CredentialsOutput) GetKeysAzureCloud() *AzureCloudKeysOutput {
+	return c.GetKeys().AzureCloudKeysOutput
+}
+
+func (c *CredentialsOutput) GetKeysLocal() *LocalSecurityKeysOutput {
+	return c.GetKeys().LocalSecurityKeysOutput
 }
 
 func (c *CredentialsOutput) GetKeysGitea() *GiteaSecurityKeysOutput {

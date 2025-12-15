@@ -64,7 +64,7 @@ func (a AWSBatchCEComputeConfigInput) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSBatchCEComputeConfigInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"credentialsId", "name", "platform", "config"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -186,7 +186,7 @@ func (a AWSBatchCEComputeConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSBatchCEComputeConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"credentialsId", "name", "platform", "config"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil

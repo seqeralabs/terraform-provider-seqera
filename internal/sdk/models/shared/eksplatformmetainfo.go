@@ -7,9 +7,10 @@ import (
 )
 
 type EksPlatformMetaInfo struct {
-	Discriminator *string  `json:"discriminator,omitempty"`
-	Warnings      []string `json:"warnings,omitempty"`
-	Clusters      []string `json:"clusters,omitempty"`
+	// property to select the platform metainfo type
+	PlatformType string   `json:"platformType"`
+	Warnings     []string `json:"warnings,omitempty"`
+	Clusters     []string `json:"clusters,omitempty"`
 }
 
 func (e EksPlatformMetaInfo) MarshalJSON() ([]byte, error) {
@@ -23,11 +24,11 @@ func (e *EksPlatformMetaInfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (e *EksPlatformMetaInfo) GetDiscriminator() *string {
+func (e *EksPlatformMetaInfo) GetPlatformType() string {
 	if e == nil {
-		return nil
+		return ""
 	}
-	return e.Discriminator
+	return e.PlatformType
 }
 
 func (e *EksPlatformMetaInfo) GetWarnings() []string {

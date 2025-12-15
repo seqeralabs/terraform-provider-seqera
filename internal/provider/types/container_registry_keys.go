@@ -7,7 +7,8 @@ import (
 )
 
 type ContainerRegistryKeys struct {
-	Password types.String `tfsdk:"password"`
-	Registry types.String `tfsdk:"registry"`
-	UserName types.String `tfsdk:"user_name"`
+	CredentialType types.String `tfsdk:"credential_type"`
+	Password       types.String `tfsdk:"password"`
+	Registry       types.String `tfsdk:"registry"`
+	UserName       types.String `tfsdk:"user_name"`
 }

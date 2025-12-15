@@ -68,27 +68,76 @@ func (e *ComputeEnvResponseDtoPlatform) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type ComputeEnvResponseDtoResources struct {
+	Cpus           *int     `json:"cpus,omitempty"`
+	Memory         *int     `json:"memory,omitempty"`
+	Gpus           *int     `json:"gpus,omitempty"`
+	DiskSize       *int     `json:"diskSize,omitempty"`
+	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	InstanceType   *string  `json:"instanceType,omitempty"`
+}
+
+func (c *ComputeEnvResponseDtoResources) GetCpus() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Cpus
+}
+
+func (c *ComputeEnvResponseDtoResources) GetMemory() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Memory
+}
+
+func (c *ComputeEnvResponseDtoResources) GetGpus() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Gpus
+}
+
+func (c *ComputeEnvResponseDtoResources) GetDiskSize() *int {
+	if c == nil {
+		return nil
+	}
+	return c.DiskSize
+}
+
+func (c *ComputeEnvResponseDtoResources) GetEstimatedPrice() *float32 {
+	if c == nil {
+		return nil
+	}
+	return c.EstimatedPrice
+}
+
+func (c *ComputeEnvResponseDtoResources) GetInstanceType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.InstanceType
+}
+
 type ComputeEnvResponseDto struct {
-	ComputeEnvID *string                        `json:"id,omitempty"`
-	Name         *string                        `json:"name,omitempty"`
-	Description  *string                        `json:"description,omitempty"`
-	Platform     *ComputeEnvResponseDtoPlatform `json:"platform,omitempty"`
-	// Configuration settings for compute environments including work directories,
-	// pre/post run scripts, and environment-specific parameters.
-	//
-	Config            *ComputeConfig    `json:"config,omitempty"`
-	DateCreated       *time.Time        `json:"dateCreated,omitempty"`
-	LastUpdated       *time.Time        `json:"lastUpdated,omitempty"`
-	LastUsed          *time.Time        `json:"lastUsed,omitempty"`
-	Deleted           *bool             `json:"deleted,omitempty"`
-	Status            *ComputeEnvStatus `json:"status,omitempty"`
-	Message           *string           `json:"message,omitempty"`
-	Primary           *bool             `json:"primary,omitempty"`
-	CredentialsID     *string           `json:"credentialsId,omitempty"`
-	ManagedIdentityID *string           `json:"managedIdentityId,omitempty"`
-	OrgID             *int64            `json:"orgId,omitempty"`
-	WorkspaceID       *int64            `json:"workspaceId,omitempty"`
-	Labels            []LabelDbDto      `json:"labels,omitempty"`
+	ComputeEnvID      *string                         `json:"id,omitempty"`
+	Name              *string                         `json:"name,omitempty"`
+	Description       *string                         `json:"description,omitempty"`
+	Platform          *ComputeEnvResponseDtoPlatform  `json:"platform,omitempty"`
+	Config            *ComputeConfigUnion             `json:"config,omitempty"`
+	DateCreated       *time.Time                      `json:"dateCreated,omitempty"`
+	LastUpdated       *time.Time                      `json:"lastUpdated,omitempty"`
+	LastUsed          *time.Time                      `json:"lastUsed,omitempty"`
+	Deleted           *bool                           `json:"deleted,omitempty"`
+	Status            *ComputeEnvStatus               `json:"status,omitempty"`
+	Message           *string                         `json:"message,omitempty"`
+	Primary           *bool                           `json:"primary,omitempty"`
+	CredentialsID     *string                         `json:"credentialsId,omitempty"`
+	ManagedIdentityID *string                         `json:"managedIdentityId,omitempty"`
+	OrgID             *int64                          `json:"orgId,omitempty"`
+	WorkspaceID       *int64                          `json:"workspaceId,omitempty"`
+	Labels            []LabelDbDto                    `json:"labels,omitempty"`
+	Resources         *ComputeEnvResponseDtoResources `json:"resources,omitempty"`
 }
 
 func (c ComputeEnvResponseDto) MarshalJSON() ([]byte, error) {
@@ -130,107 +179,114 @@ func (c *ComputeEnvResponseDto) GetPlatform() *ComputeEnvResponseDtoPlatform {
 	return c.Platform
 }
 
-func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfig {
+func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfigUnion {
 	if c == nil {
 		return nil
 	}
 	return c.Config
 }
 
-func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.MoabConfiguration
+		return v.MoabComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigAwsBatch() *AWSBatchConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigAwsBatch() *AwsBatchConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.AWSBatchConfiguration
+		return v.AwsBatchConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigLocalPlatform() *LocalComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.GoogleGKEClusterConfiguration
+		return v.LocalComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigGkePlatform() *GkeComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.GoogleBatchServiceConfiguration
+		return v.GkeComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigAwsCloud() *AWSCloudConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigGoogleBatch() *GoogleBatchConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.AWSCloudConfiguration
+		return v.GoogleBatchConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigAwsCloud() *AwsCloudConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.SlurmConfiguration
+		return v.AwsCloudConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.KubernetesComputeConfiguration
+		return v.SlurmComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPBSConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigK8sPlatform() *K8sComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.AltairPBSConfiguration
+		return v.K8sComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigLsfPlatform() *IBMLSFConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPbsComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.IBMLSFConfiguration
+		return v.AltairPbsComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigAzureBatch() *AzureBatchConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigLsfPlatform() *LsfComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.AzureBatchConfiguration
+		return v.LsfComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigAzureBatch() *AzBatchConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.SeqeraComputeConfiguration
+		return v.AzBatchConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigSeqeracomputePlatform() *SeqeraComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.AmazonEKSClusterConfiguration
+		return v.SeqeraComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *EksComputeConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.GoogleLifeSciencesConfiguration
+		return v.EksComputeConfig
 	}
 	return nil
 }
 
-func (c *ComputeEnvResponseDto) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfig {
 	if v := c.GetConfig(); v != nil {
-		return v.UnivaGridEngineConfiguration
+		return v.GoogleLifeSciencesConfig
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigUgePlatform() *UnivaComputeConfig {
+	if v := c.GetConfig(); v != nil {
+		return v.UnivaComputeConfig
 	}
 	return nil
 }
@@ -317,4 +373,11 @@ func (c *ComputeEnvResponseDto) GetLabels() []LabelDbDto {
 		return nil
 	}
 	return c.Labels
+}
+
+func (c *ComputeEnvResponseDto) GetResources() *ComputeEnvResponseDtoResources {
+	if c == nil {
+		return nil
+	}
+	return c.Resources
 }

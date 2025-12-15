@@ -8,12 +8,13 @@ import (
 )
 
 type DataStudioCheckpointDto struct {
-	ID          int64      `json:"id"`
-	Name        string     `json:"name"`
-	DateCreated time.Time  `json:"dateCreated"`
-	DateSaved   time.Time  `json:"dateSaved"`
-	Author      StudioUser `json:"author"`
-	Path        string     `json:"path"`
+	ID          int64                  `json:"id"`
+	Name        string                 `json:"name"`
+	DateCreated time.Time              `json:"dateCreated"`
+	DateSaved   time.Time              `json:"dateSaved"`
+	Author      UserInfo               `json:"author"`
+	Path        string                 `json:"path"`
+	Status      StudioCheckpointStatus `json:"status"`
 }
 
 func (d DataStudioCheckpointDto) MarshalJSON() ([]byte, error) {
@@ -21,7 +22,7 @@ func (d DataStudioCheckpointDto) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DataStudioCheckpointDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"id", "name", "dateCreated", "dateSaved", "author", "path"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -55,9 +56,9 @@ func (d *DataStudioCheckpointDto) GetDateSaved() time.Time {
 	return d.DateSaved
 }
 
-func (d *DataStudioCheckpointDto) GetAuthor() StudioUser {
+func (d *DataStudioCheckpointDto) GetAuthor() UserInfo {
 	if d == nil {
-		return StudioUser{}
+		return UserInfo{}
 	}
 	return d.Author
 }
@@ -67,4 +68,11 @@ func (d *DataStudioCheckpointDto) GetPath() string {
 		return ""
 	}
 	return d.Path
+}
+
+func (d *DataStudioCheckpointDto) GetStatus() StudioCheckpointStatus {
+	if d == nil {
+		return StudioCheckpointStatus("")
+	}
+	return d.Status
 }

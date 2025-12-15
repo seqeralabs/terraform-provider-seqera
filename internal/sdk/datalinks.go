@@ -85,7 +85,7 @@ func (s *DataLinks) ListDataLinks(ctx context.Context, request operations.ListDa
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -252,7 +252,7 @@ func (s *DataLinks) CreateCustomDataLink(ctx context.Context, request operations
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -358,7 +358,7 @@ func (s *DataLinks) CreateCustomDataLink(ctx context.Context, request operations
 }
 
 // RefreshDataLinkCache - Refresh data-link cache
-// Refreshes the data-link cache for the given `workspaceId` or `credentialsId`.
+// Refreshes the data-link cache for the given `workspaceId` or `credentialsId`
 func (s *DataLinks) RefreshDataLinkCache(ctx context.Context, request operations.RefreshDataLinkCacheRequest, opts ...operations.Option) (*operations.RefreshDataLinkCacheResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -410,7 +410,7 @@ func (s *DataLinks) RefreshDataLinkCache(ctx context.Context, request operations
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -525,7 +525,7 @@ func (s *DataLinks) DescribeDataLink(ctx context.Context, request operations.Des
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -690,7 +690,7 @@ func (s *DataLinks) UpdateCustomDataLink(ctx context.Context, request operations
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -848,7 +848,7 @@ func (s *DataLinks) DeleteCustomDataLink(ctx context.Context, request operations
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -936,7 +936,7 @@ func (s *DataLinks) DeleteCustomDataLink(ctx context.Context, request operations
 }
 
 // ExploreDataLink - Explore data-link
-// Retrieves the content of the data-link associated with the given `dataLinkId`.
+// Retrieves the content of the data-link associated with the given `dataLinkId`
 func (s *DataLinks) ExploreDataLink(ctx context.Context, request operations.ExploreDataLinkRequest, opts ...operations.Option) (*operations.ExploreDataLinkResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -988,7 +988,7 @@ func (s *DataLinks) ExploreDataLink(ctx context.Context, request operations.Expl
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1146,7 +1146,7 @@ func (s *DataLinks) ExploreDataLinkTree(ctx context.Context, request operations.
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1251,9 +1251,9 @@ func (s *DataLinks) ExploreDataLinkTree(ctx context.Context, request operations.
 
 }
 
-// ExploreDataLink1 - Explore data-link path
+// ExploreDataLinkWithPath - Explore data-link path
 // Retrieves the content of the data-link associated with the given `dataLinkId`, at the given `path`.
-func (s *DataLinks) ExploreDataLink1(ctx context.Context, request operations.ExploreDataLink1Request, opts ...operations.Option) (*operations.ExploreDataLink1Response, error) {
+func (s *DataLinks) ExploreDataLinkWithPath(ctx context.Context, request operations.ExploreDataLinkWithPathRequest, opts ...operations.Option) (*operations.ExploreDataLinkWithPathResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1281,7 +1281,7 @@ func (s *DataLinks) ExploreDataLink1(ctx context.Context, request operations.Exp
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "ExploreDataLink_1",
+		OperationID:      "ExploreDataLinkWithPath",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -1304,7 +1304,7 @@ func (s *DataLinks) ExploreDataLink1(ctx context.Context, request operations.Exp
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1345,7 +1345,7 @@ func (s *DataLinks) ExploreDataLink1(ctx context.Context, request operations.Exp
 		}
 	}
 
-	res := &operations.ExploreDataLink1Response{
+	res := &operations.ExploreDataLinkWithPathResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -1469,7 +1469,7 @@ func (s *DataLinks) DeleteDataLinkItem(ctx context.Context, request operations.D
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1627,7 +1627,7 @@ func (s *DataLinks) DownloadDataLink(ctx context.Context, request operations.Dow
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1780,7 +1780,7 @@ func (s *DataLinks) GenerateDownloadURLDataLink(ctx context.Context, request ope
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1938,7 +1938,7 @@ func (s *DataLinks) GenerateDownloadScript(ctx context.Context, request operatio
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -2043,7 +2043,7 @@ func (s *DataLinks) GenerateDownloadScript(ctx context.Context, request operatio
 
 }
 
-// GenerateDataLinkUploadURL - Generate file upload URL
+// GenerateDataLinkUploadURL - Generate data-link file upload URL
 // Creates a URL to upload files to the data-link associated with the given `dataLinkId`.
 // For AWS S3 data-links, an additional follow-up request must be sent after your file upload has completed (or encountered an error) to finalize the upload - see the `/upload/finish` endpoint.
 func (s *DataLinks) GenerateDataLinkUploadURL(ctx context.Context, request operations.GenerateDataLinkUploadURLRequest, opts ...operations.Option) (*operations.GenerateDataLinkUploadURLResponse, error) {
@@ -2106,7 +2106,7 @@ func (s *DataLinks) GenerateDataLinkUploadURL(ctx context.Context, request opera
 
 	utils.PopulateHeaders(ctx, req, request, nil)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -2271,7 +2271,7 @@ func (s *DataLinks) FinishDataLinkUpload(ctx context.Context, request operations
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -2377,9 +2377,9 @@ func (s *DataLinks) FinishDataLinkUpload(ctx context.Context, request operations
 
 }
 
-// FinishDataLinkUpload1 - Finish data-link file upload to given path
+// FinishDataLinkUploadWithPath - Finish data-link file upload to given path
 // Finish upload of a data-link file, specifying a file path (`dirPath`). This is necessary for AWS S3 data-links (`DataLinkProvider=aws`) to finalize a successful file upload, or abort an upload if an error was encountered while uploading a file using an upload URL from the `/upload` endpoint.
-func (s *DataLinks) FinishDataLinkUpload1(ctx context.Context, request operations.FinishDataLinkUpload1Request, opts ...operations.Option) (*operations.FinishDataLinkUpload1Response, error) {
+func (s *DataLinks) FinishDataLinkUploadWithPath(ctx context.Context, request operations.FinishDataLinkUploadWithPathRequest, opts ...operations.Option) (*operations.FinishDataLinkUploadWithPathResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2407,7 +2407,7 @@ func (s *DataLinks) FinishDataLinkUpload1(ctx context.Context, request operation
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "FinishDataLinkUpload_1",
+		OperationID:      "FinishDataLinkUploadWithPath",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -2437,7 +2437,7 @@ func (s *DataLinks) FinishDataLinkUpload1(ctx context.Context, request operation
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -2478,7 +2478,7 @@ func (s *DataLinks) FinishDataLinkUpload1(ctx context.Context, request operation
 		}
 	}
 
-	res := &operations.FinishDataLinkUpload1Response{
+	res := &operations.FinishDataLinkUploadWithPathResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -2493,7 +2493,7 @@ func (s *DataLinks) FinishDataLinkUpload1(ctx context.Context, request operation
 				return nil, err
 			}
 
-			var out operations.FinishDataLinkUpload1ResponseBody
+			var out operations.FinishDataLinkUploadWithPathResponseBody
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
@@ -2543,10 +2543,10 @@ func (s *DataLinks) FinishDataLinkUpload1(ctx context.Context, request operation
 
 }
 
-// GenerateDataLinkUploadURL1 - Generate data-link file upload URL (to given path)
+// GenerateDataLinkUploadURLWithPath - Generate data-link file upload URL (to given path)
 // Creates a URL to upload files to the data-link associated with the given `dataLinkId`, specifying a file path (`dirPath`).
 // For AWS S3 data-links, an additional follow-up request must be sent after your file upload has completed (or encountered an error) to finalize the upload - see the `/upload/finish` endpoint.
-func (s *DataLinks) GenerateDataLinkUploadURL1(ctx context.Context, request operations.GenerateDataLinkUploadURL1Request, opts ...operations.Option) (*operations.GenerateDataLinkUploadURL1Response, error) {
+func (s *DataLinks) GenerateDataLinkUploadURLWithPath(ctx context.Context, request operations.GenerateDataLinkUploadURLWithPathRequest, opts ...operations.Option) (*operations.GenerateDataLinkUploadURLWithPathResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -2574,7 +2574,7 @@ func (s *DataLinks) GenerateDataLinkUploadURL1(ctx context.Context, request oper
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "GenerateDataLinkUploadUrl_1",
+		OperationID:      "GenerateDataLinkUploadUrlWithPath",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -2606,7 +2606,7 @@ func (s *DataLinks) GenerateDataLinkUploadURL1(ctx context.Context, request oper
 
 	utils.PopulateHeaders(ctx, req, request, nil)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -2647,7 +2647,7 @@ func (s *DataLinks) GenerateDataLinkUploadURL1(ctx context.Context, request oper
 		}
 	}
 
-	res := &operations.GenerateDataLinkUploadURL1Response{
+	res := &operations.GenerateDataLinkUploadURLWithPathResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,

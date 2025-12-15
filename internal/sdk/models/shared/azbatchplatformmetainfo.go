@@ -7,11 +7,12 @@ import (
 )
 
 type AzBatchPlatformMetainfo struct {
-	Discriminator *string  `json:"discriminator,omitempty"`
-	Warnings      []string `json:"warnings,omitempty"`
-	Pools         []string `json:"pools,omitempty"`
-	Containers    []string `json:"containers,omitempty"`
-	VMTypes       []string `json:"vmTypes,omitempty"`
+	// property to select the platform metainfo type
+	PlatformType string   `json:"platformType"`
+	Warnings     []string `json:"warnings,omitempty"`
+	Pools        []string `json:"pools,omitempty"`
+	Containers   []string `json:"containers,omitempty"`
+	VMTypes      []string `json:"vmTypes,omitempty"`
 }
 
 func (a AzBatchPlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -25,11 +26,11 @@ func (a *AzBatchPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AzBatchPlatformMetainfo) GetDiscriminator() *string {
+func (a *AzBatchPlatformMetainfo) GetPlatformType() string {
 	if a == nil {
-		return nil
+		return ""
 	}
-	return a.Discriminator
+	return a.PlatformType
 }
 
 func (a *AzBatchPlatformMetainfo) GetWarnings() []string {

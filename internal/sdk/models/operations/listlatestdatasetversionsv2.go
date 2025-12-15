@@ -12,6 +12,12 @@ type ListLatestDatasetVersionsV2Request struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Dataset MIME type
 	MimeType *string `queryParam:"style=form,explode=true,name=mimeType"`
+	// Pagination max results
+	Max *int `queryParam:"style=form,explode=true,name=max"`
+	// Pagination offset
+	Offset *int `queryParam:"style=form,explode=true,name=offset"`
+	// Search query
+	Search *string `queryParam:"style=form,explode=true,name=search"`
 }
 
 func (l *ListLatestDatasetVersionsV2Request) GetWorkspaceID() *int64 {
@@ -26,6 +32,27 @@ func (l *ListLatestDatasetVersionsV2Request) GetMimeType() *string {
 		return nil
 	}
 	return l.MimeType
+}
+
+func (l *ListLatestDatasetVersionsV2Request) GetMax() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Max
+}
+
+func (l *ListLatestDatasetVersionsV2Request) GetOffset() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Offset
+}
+
+func (l *ListLatestDatasetVersionsV2Request) GetSearch() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Search
 }
 
 type ListLatestDatasetVersionsV2Response struct {

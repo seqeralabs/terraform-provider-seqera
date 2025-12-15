@@ -16,6 +16,10 @@ type ListPipelinesRequest struct {
 	Max *int `queryParam:"style=form,explode=true,name=max"`
 	// Pagination offset
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
+	// Sort field (`NAME` by default)
+	SortBy *shared.PipelineListParamsSortBy `queryParam:"style=form,explode=true,name=sortBy"`
+	// Sort direction (`ASCENDING` by default)
+	SortDir *shared.PipelineListParamsSortDir `queryParam:"style=form,explode=true,name=sortDir"`
 	// Filter search parameter
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Filter visibility parameter
@@ -48,6 +52,20 @@ func (l *ListPipelinesRequest) GetOffset() *int {
 		return nil
 	}
 	return l.Offset
+}
+
+func (l *ListPipelinesRequest) GetSortBy() *shared.PipelineListParamsSortBy {
+	if l == nil {
+		return nil
+	}
+	return l.SortBy
+}
+
+func (l *ListPipelinesRequest) GetSortDir() *shared.PipelineListParamsSortDir {
+	if l == nil {
+		return nil
+	}
+	return l.SortDir
 }
 
 func (l *ListPipelinesRequest) GetSearch() *string {

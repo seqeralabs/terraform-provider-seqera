@@ -3,11 +3,11 @@
 package shared
 
 type ListParticipantsResponse struct {
-	Participants []ParticipantDbDto `json:"participants,omitempty"`
-	TotalSize    *int64             `json:"totalSize,omitempty"`
+	Participants []ParticipantResponseDto `json:"participants,omitempty"`
+	TotalSize    *int64                   `json:"totalSize,omitempty"`
 }
 
-func (l *ListParticipantsResponse) GetParticipants() []ParticipantDbDto {
+func (l *ListParticipantsResponse) GetParticipants() []ParticipantResponseDto {
 	if l == nil {
 		return nil
 	}

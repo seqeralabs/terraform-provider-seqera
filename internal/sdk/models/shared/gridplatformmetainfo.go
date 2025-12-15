@@ -7,7 +7,8 @@ import (
 )
 
 type GridPlatformMetainfo struct {
-	Discriminator *string `json:"discriminator,omitempty"`
+	// property to select the platform metainfo type
+	PlatformType string `json:"platformType"`
 }
 
 func (g GridPlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -21,9 +22,9 @@ func (g *GridPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GridPlatformMetainfo) GetDiscriminator() *string {
+func (g *GridPlatformMetainfo) GetPlatformType() string {
 	if g == nil {
-		return nil
+		return ""
 	}
-	return g.Discriminator
+	return g.PlatformType
 }

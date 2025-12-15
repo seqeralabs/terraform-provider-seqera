@@ -37,7 +37,6 @@ import (
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -122,6 +121,14 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
 						Description: `Name of the AWS Batch compute queue. Requires replacement if changed.`,
+					},
+					"config_type": schema.StringAttribute{
+						Required: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `property to select the compute config platform. Requires replacement if changed.`,
 					},
 					"dragen_instance_type": schema.StringAttribute{
 						Computed: true,
@@ -230,7 +237,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 								},
 							},
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
 					},
 					"execution_role": schema.StringAttribute{
 						Computed: true,
@@ -676,7 +683,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
 					},
 					"nvme_storage_enabled": schema.BoolAttribute{
 						Computed: true,
@@ -696,9 +703,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						MarkdownDescription: `Bash script to run after workflow execution completes.` + "\n" +
-							`Use for cleanup, archiving results, sending notifications, etc.` + "\n" +
-							`Requires replacement if changed.`,
+						Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
 					},
 					"pre_run_script": schema.StringAttribute{
 						Computed: true,
@@ -707,9 +712,7 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						MarkdownDescription: `Bash script to run before workflow execution begins.` + "\n" +
-							`Use for environment setup, loading modules, downloading reference data, etc.` + "\n" +
-							`Requires replacement if changed.`,
+						Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
 					},
 					"region": schema.StringAttribute{
 						Required: true,
@@ -747,15 +750,12 @@ func (r *AWSComputeEnvResource) Schema(ctx context.Context, req resource.SchemaR
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						MarkdownDescription: `S3 bucket path for Nextflow work directory where intermediate files will be stored.` + "\n" +
-							`Format: s3://bucket-name/path` + "\n" +
-							`Requires replacement if changed.`,
-						Validators: []validator.String{
-							stringvalidator.RegexMatches(regexp.MustCompile(`^s3://.+`), "must match pattern "+regexp.MustCompile(`^s3://.+`).String()),
-						},
+						Description: `Working directory path for workflow execution. Requires replacement if changed.`,
 					},
 				},
-				Description: `Requires replacement if changed.`,
+				MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+					`pre/post run scripts, and environment-specific parameters.` + "\n" +
+					`Requires replacement if changed.`,
 				Validators: []validator.Object{
 					custom_objectvalidators.AwsForgeValidator(),
 				},

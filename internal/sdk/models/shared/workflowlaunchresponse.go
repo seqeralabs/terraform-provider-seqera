@@ -8,36 +8,35 @@ import (
 )
 
 type WorkflowLaunchResponse struct {
-	ID               *string                  `json:"id,omitempty"`
-	ComputeEnv       *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
-	Pipeline         *string                  `json:"pipeline,omitempty"`
-	PipelineID       *int64                   `json:"pipelineId,omitempty"`
-	WorkDir          *string                  `json:"workDir,omitempty"`
-	Revision         *string                  `json:"revision,omitempty"`
-	SessionID        *string                  `json:"sessionId,omitempty"`
-	ConfigProfiles   []string                 `json:"configProfiles,omitempty"`
-	UserSecrets      []string                 `json:"userSecrets,omitempty"`
-	WorkspaceSecrets []string                 `json:"workspaceSecrets,omitempty"`
-	ConfigText       *string                  `json:"configText,omitempty"`
-	TowerConfig      *string                  `json:"towerConfig,omitempty"`
-	ParamsText       *string                  `json:"paramsText,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript       *string    `json:"postRunScript,omitempty"`
-	MainScript          *string    `json:"mainScript,omitempty"`
-	EntryName           *string    `json:"entryName,omitempty"`
-	SchemaName          *string    `json:"schemaName,omitempty"`
-	Resume              *bool      `json:"resume,omitempty"`
-	PullLatest          *bool      `json:"pullLatest,omitempty"`
-	StubRun             *bool      `json:"stubRun,omitempty"`
-	ResumeDir           *string    `json:"resumeDir,omitempty"`
-	ResumeCommitID      *string    `json:"resumeCommitId,omitempty"`
-	HeadJobMemoryMb     *int       `json:"headJobMemoryMb,omitempty"`
-	HeadJobCpus         *int       `json:"headJobCpus,omitempty"`
-	OptimizationID      *string    `json:"optimizationId,omitempty"`
-	OptimizationTargets *string    `json:"optimizationTargets,omitempty"`
-	DateCreated         *time.Time `json:"dateCreated,omitempty"`
+	ID                  *string                  `json:"id,omitempty"`
+	ComputeEnv          *ComputeEnvComputeConfig `json:"computeEnv,omitempty"`
+	Pipeline            *string                  `json:"pipeline,omitempty"`
+	PipelineID          *int64                   `json:"pipelineId,omitempty"`
+	WorkDir             *string                  `json:"workDir,omitempty"`
+	Revision            *string                  `json:"revision,omitempty"`
+	CommitID            *string                  `json:"commitId,omitempty"`
+	SessionID           *string                  `json:"sessionId,omitempty"`
+	ConfigProfiles      []string                 `json:"configProfiles,omitempty"`
+	UserSecrets         []string                 `json:"userSecrets,omitempty"`
+	WorkspaceSecrets    []string                 `json:"workspaceSecrets,omitempty"`
+	ConfigText          *string                  `json:"configText,omitempty"`
+	TowerConfig         *string                  `json:"towerConfig,omitempty"`
+	ParamsText          *string                  `json:"paramsText,omitempty"`
+	PreRunScript        *string                  `json:"preRunScript,omitempty"`
+	PostRunScript       *string                  `json:"postRunScript,omitempty"`
+	MainScript          *string                  `json:"mainScript,omitempty"`
+	EntryName           *string                  `json:"entryName,omitempty"`
+	SchemaName          *string                  `json:"schemaName,omitempty"`
+	Resume              *bool                    `json:"resume,omitempty"`
+	PullLatest          *bool                    `json:"pullLatest,omitempty"`
+	StubRun             *bool                    `json:"stubRun,omitempty"`
+	ResumeDir           *string                  `json:"resumeDir,omitempty"`
+	ResumeCommitID      *string                  `json:"resumeCommitId,omitempty"`
+	HeadJobMemoryMb     *int                     `json:"headJobMemoryMb,omitempty"`
+	HeadJobCpus         *int                     `json:"headJobCpus,omitempty"`
+	OptimizationID      *string                  `json:"optimizationId,omitempty"`
+	OptimizationTargets *string                  `json:"optimizationTargets,omitempty"`
+	DateCreated         *time.Time               `json:"dateCreated,omitempty"`
 }
 
 func (w WorkflowLaunchResponse) MarshalJSON() ([]byte, error) {
@@ -91,6 +90,13 @@ func (w *WorkflowLaunchResponse) GetRevision() *string {
 		return nil
 	}
 	return w.Revision
+}
+
+func (w *WorkflowLaunchResponse) GetCommitID() *string {
+	if w == nil {
+		return nil
+	}
+	return w.CommitID
 }
 
 func (w *WorkflowLaunchResponse) GetSessionID() *string {

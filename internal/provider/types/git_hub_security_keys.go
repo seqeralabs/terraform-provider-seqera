@@ -7,6 +7,8 @@ import (
 )
 
 type GitHubSecurityKeys struct {
-	Password types.String `tfsdk:"password"`
-	Username types.String `tfsdk:"username"`
+	CredentialType types.String `tfsdk:"credential_type"`
+	Password       types.String `tfsdk:"password"`
+	Token          types.String `tfsdk:"token"`
+	Username       types.String `tfsdk:"username"`
 }

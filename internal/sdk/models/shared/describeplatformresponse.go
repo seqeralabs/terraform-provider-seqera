@@ -3,10 +3,10 @@
 package shared
 
 type DescribePlatformResponse struct {
-	Metainfo *PlatformMetainfo `json:"metainfo,omitempty"`
+	Metainfo *PlatformMetainfoUnion `json:"metainfo,omitempty"`
 }
 
-func (d *DescribePlatformResponse) GetMetainfo() *PlatformMetainfo {
+func (d *DescribePlatformResponse) GetMetainfo() *PlatformMetainfoUnion {
 	if d == nil {
 		return nil
 	}
@@ -51,6 +51,13 @@ func (d *DescribePlatformResponse) GetMetainfoAwsBatch() *AwsBatchPlatformMetain
 func (d *DescribePlatformResponse) GetMetainfoLocalPlatform() *LocalPlatformMetainfo {
 	if v := d.GetMetainfo(); v != nil {
 		return v.LocalPlatformMetainfo
+	}
+	return nil
+}
+
+func (d *DescribePlatformResponse) GetMetainfoGoogle() *GooglePlatformMetainfo {
+	if v := d.GetMetainfo(); v != nil {
+		return v.GooglePlatformMetainfo
 	}
 	return nil
 }

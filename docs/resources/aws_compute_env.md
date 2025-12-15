@@ -23,6 +23,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     cli_path             = "/home/ec2-user/miniconda/bin/aws"
     compute_job_role     = "arn:aws:iam::123456789012:role/BatchJobRole"
     compute_queue        = "...my_compute_queue..."
+    config_type          = "...my_config_type..."
     dragen_instance_type = "...my_dragen_instance_type..."
     dragen_queue         = "...my_dragen_queue..."
     enable_fusion        = false
@@ -98,7 +99,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     volumes = [
       "..."
     ]
-    work_dir = "s3://my-nextflow-bucket/work"
+    work_dir = "...my_work_dir..."
   }
   credentials_id = "...my_credentials_id..."
   description    = "...my_description..."
@@ -116,7 +117,9 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
 
 ### Required
 
-- `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
+- `config` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) AWS credentials identifier. Requires replacement if changed.
 - `name` (String) Display name for the compute environment. Requires replacement if changed.
 - `platform` (String) AWS platform type. must be "aws-batch"; Requires replacement if changed.
@@ -143,12 +146,11 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
 
 Required:
 
+- `config_type` (String) property to select the compute config platform. Requires replacement if changed.
 - `region` (String) AWS region where the Batch compute environment will be created.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Requires replacement if changed.
-- `work_dir` (String) S3 bucket path for Nextflow work directory where intermediate files will be stored.
-Format: s3://bucket-name/path
-Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Requires replacement if changed.
 
 Optional:
 
@@ -167,7 +169,7 @@ and augmentation capabilities for Nextflow workflows.
 When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 Note: If Fusion2 is enabled, Wave must also be enabled.
 Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
 Must have permissions for ECR and CloudWatch Logs.
 Format: arn:aws:iam::account-id:role/role-name
@@ -182,16 +184,12 @@ Requires replacement if changed.
 - `head_queue` (String) Name of the head job queue. Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
 When enabled, NVMe storage volumes are automatically mounted and configured.
 Requires replacement if changed.
-- `post_run_script` (String) Bash script to run after workflow execution completes.
-Use for cleanup, archiving results, sending notifications, etc.
-Requires replacement if changed.
-- `pre_run_script` (String) Bash script to run before workflow execution begins.
-Use for environment setup, loading modules, downloading reference data, etc.
-Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
 - `volumes` (List of String) Requires replacement if changed.
 

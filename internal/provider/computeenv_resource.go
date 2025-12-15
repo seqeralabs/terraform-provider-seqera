@@ -25,6 +25,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_float32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/float32planmodifier"
+	speakeasy_int32planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int32planmodifier"
 	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_listplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
@@ -104,6 +106,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -264,18 +277,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -315,6 +331,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Name of the AWS Batch compute queue. Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -891,18 +918,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -933,6 +963,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"ebs_boot_size": schema.Int32Attribute{
 										Computed: true,
@@ -1129,18 +1170,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -1162,6 +1206,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 										Description:        `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"delete_jobs_on_completion": schema.StringAttribute{
 										Computed: true,
@@ -1386,18 +1441,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -1429,6 +1487,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"enable_fusion": schema.BoolAttribute{
 										Computed: true,
@@ -1662,18 +1731,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -1705,6 +1777,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"enable_fusion": schema.BoolAttribute{
 										Computed: true,
@@ -1938,18 +2021,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -1978,6 +2064,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"copy_image": schema.StringAttribute{
 										Computed: true,
@@ -2243,18 +2340,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -2275,6 +2375,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"copy_image": schema.StringAttribute{
 										Computed: true,
@@ -2493,18 +2604,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										Description: `Requires replacement if changed.`,
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -2525,6 +2639,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2731,17 +2856,170 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
+										path.MatchRelative().AtParent().AtName("moab_platform"),
+										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
+										path.MatchRelative().AtParent().AtName("slurm_platform"),
+										path.MatchRelative().AtParent().AtName("uge_platform"),
+									}...),
+								},
+							},
+							"local_platform": schema.SingleNestedAttribute{
+								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									objectplanmodifier.RequiresReplaceIfConfigured(),
+								},
+								Attributes: map[string]schema.Attribute{
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+									"environment": schema.ListNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+												custom_objectvalidators.ConfigEnvVariableValidator(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												objectplanmodifier.RequiresReplaceIfConfigured(),
+											},
+											Attributes: map[string]schema.Attribute{
+												"compute": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"head": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+											},
+										},
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"fusion2_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+									},
+									"wave_enabled": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+								},
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch"),
+										path.MatchRelative().AtParent().AtName("aws_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
+										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("google_lifesciences"),
+										path.MatchRelative().AtParent().AtName("k8s_platform"),
 										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
@@ -2763,6 +3041,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2947,18 +3236,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -2979,6 +3271,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -3139,19 +3442,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
@@ -3190,6 +3496,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										Description: `Name of the AWS Batch compute queue. Requires replacement if changed.`,
+									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
 									},
 									"dragen_instance_type": schema.StringAttribute{
 										Computed: true,
@@ -3766,19 +4083,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
@@ -3800,6 +4120,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -3959,19 +4290,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("uge_platform"),
@@ -3992,6 +4326,17 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 										Description: `Requires replacement if changed.`,
 									},
+									"config_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `property to select the compute config platform. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
 										Optional: true,
@@ -4151,19 +4496,22 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										},
 									},
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
+									`pre/post run scripts, and environment-specific parameters.` + "\n" +
+									`Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
+										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("k8s_platform"),
+										path.MatchRelative().AtParent().AtName("local_platform"),
+										path.MatchRelative().AtParent().AtName("lsf_platform"),
 										path.MatchRelative().AtParent().AtName("moab_platform"),
 										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
 										path.MatchRelative().AtParent().AtName("slurm_platform"),
@@ -4171,9 +4519,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 						},
-						MarkdownDescription: `Configuration settings for compute environments including work directories,` + "\n" +
-							`pre/post run scripts, and environment-specific parameters.` + "\n" +
-							`Requires replacement if changed.`,
+						Description: `Requires replacement if changed.`,
 					},
 					"credentials_id": schema.StringAttribute{
 						Required: true,
@@ -4341,6 +4687,50 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Computed: true,
 						PlanModifiers: []planmodifier.Bool{
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+					},
+					"resources": schema.SingleNestedAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
+						Attributes: map[string]schema.Attribute{
+							"cpus": schema.Int32Attribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.Int32{
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+							},
+							"disk_size": schema.Int32Attribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.Int32{
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+							},
+							"estimated_price": schema.Float32Attribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.Float32{
+									speakeasy_float32planmodifier.SuppressDiff(speakeasy_float32planmodifier.ExplicitSuppress),
+								},
+							},
+							"gpus": schema.Int32Attribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.Int32{
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+							},
+							"instance_type": schema.StringAttribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
+							},
+							"memory": schema.Int32Attribute{
+								Computed: true,
+								PlanModifiers: []planmodifier.Int32{
+									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
+								},
+							},
 						},
 					},
 					"status": schema.StringAttribute{

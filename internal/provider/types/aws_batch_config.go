@@ -10,6 +10,7 @@ type AwsBatchConfig struct {
 	CliPath            types.String        `tfsdk:"cli_path"`
 	ComputeJobRole     types.String        `tfsdk:"compute_job_role"`
 	ComputeQueue       types.String        `tfsdk:"compute_queue"`
+	ConfigType         types.String        `tfsdk:"config_type"`
 	DragenInstanceType types.String        `tfsdk:"dragen_instance_type"`
 	DragenQueue        types.String        `tfsdk:"dragen_queue"`
 	EnableFusion       types.Bool          `tfsdk:"enable_fusion"`

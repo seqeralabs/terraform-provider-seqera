@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -50,6 +51,14 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 		r.Description = types.StringPointerValue(resp.Description)
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
 		r.Name = types.StringPointerValue(resp.Name)
+		if resp.RemoteConfig == nil {
+			r.RemoteConfig = nil
+		} else {
+			r.RemoteConfig = &tfTypes.RemoteConfig{}
+			r.RemoteConfig.CommitID = types.StringPointerValue(resp.RemoteConfig.CommitID)
+			r.RemoteConfig.Repository = types.StringValue(resp.RemoteConfig.Repository)
+			r.RemoteConfig.Revision = types.StringPointerValue(resp.RemoteConfig.Revision)
+		}
 		r.SessionID = types.StringPointerValue(resp.SessionID)
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
@@ -205,6 +214,29 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		CondaEnvironment: condaEnvironment,
 		LifespanHours:    lifespanHours,
 	}
+	var remoteConfig *shared.RemoteConfig
+	if r.RemoteConfig != nil {
+		var repository string
+		repository = r.RemoteConfig.Repository.ValueString()
+
+		revision := new(string)
+		if !r.RemoteConfig.Revision.IsUnknown() && !r.RemoteConfig.Revision.IsNull() {
+			*revision = r.RemoteConfig.Revision.ValueString()
+		} else {
+			revision = nil
+		}
+		commitID := new(string)
+		if !r.RemoteConfig.CommitID.IsUnknown() && !r.RemoteConfig.CommitID.IsNull() {
+			*commitID = r.RemoteConfig.CommitID.ValueString()
+		} else {
+			commitID = nil
+		}
+		remoteConfig = &shared.RemoteConfig{
+			Repository: repository,
+			Revision:   revision,
+			CommitID:   commitID,
+		}
+	}
 	isPrivate := new(bool)
 	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {
 		*isPrivate = r.IsPrivate.ValueBool()
@@ -231,6 +263,7 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 		ComputeEnvID:        computeEnvID,
 		InitialCheckpointID: initialCheckpointID,
 		Configuration:       configuration,
+		RemoteConfig:        remoteConfig,
 		IsPrivate:           isPrivate,
 		LabelIds:            labelIds,
 		Spot:                spot,

@@ -35,11 +35,11 @@ resource "seqera_data_link" "my_datalink" {
 
 ### Required
 
-- `description` (String)
-- `name` (String)
+- `description` (String) Description of the data link's purpose and contents
+- `name` (String) Display name for the data link connection
 - `provider_type` (String) must be one of ["aws", "google", "azure", "azure_entra", "seqeracompute"]; Requires replacement if changed.
 - `public_accessible` (Boolean) Requires replacement if changed.
-- `resource_ref` (String) Requires replacement if changed.
+- `resource_ref` (String) Reference identifier for the external resource. Requires replacement if changed.
 - `type` (String) must be "bucket"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier
 
@@ -50,7 +50,7 @@ resource "seqera_data_link" "my_datalink" {
 ### Read-Only
 
 - `credentials` (Attributes List) Array of credentials required to access the data link (see [below for nested schema](#nestedatt--credentials))
-- `data_link_id` (String) Unique identifier for the data link
+- `data_link_id` (String) Data-link string identifier
 - `hidden` (Boolean)
 - `message` (String)
 - `region` (String) Geographic region where the data link is hosted

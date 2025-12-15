@@ -12,6 +12,7 @@ type ComputeEnvStatus string
 const (
 	ComputeEnvStatusCreating  ComputeEnvStatus = "CREATING"
 	ComputeEnvStatusAvailable ComputeEnvStatus = "AVAILABLE"
+	ComputeEnvStatusDeleting  ComputeEnvStatus = "DELETING"
 	ComputeEnvStatusErrored   ComputeEnvStatus = "ERRORED"
 	ComputeEnvStatusInvalid   ComputeEnvStatus = "INVALID"
 )
@@ -28,6 +29,8 @@ func (e *ComputeEnvStatus) UnmarshalJSON(data []byte) error {
 	case "CREATING":
 		fallthrough
 	case "AVAILABLE":
+		fallthrough
+	case "DELETING":
 		fallthrough
 	case "ERRORED":
 		fallthrough

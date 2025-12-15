@@ -67,7 +67,7 @@ func (r *CredentialsDataSource) Schema(ctx context.Context, req datasource.Schem
 			"workspace_id": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Workspace numeric identifier`,
+				Description: `Workspace ID used for filtering`,
 			},
 		},
 	}

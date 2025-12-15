@@ -354,8 +354,8 @@ actions:
     update:
       x-speakeasy-param-force-new: true
 
-  # Add descriptions to AwsBatchConfig fields
-  - target: $.components.schemas.AwsBatchConfig.properties.region
+  # Add descriptions to AwsBatchConfig fields (note: AwsBatchConfig uses allOf)
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.region
     update:
       description: |
         AWS region where the Batch compute environment will be created.
@@ -364,7 +364,7 @@ actions:
       x-speakeasy-param-force-new: true
       x-speakeasy-param-optional: false
 
-  - target: $.components.schemas.AwsBatchConfig.properties.workDir
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.workDir
     update:
       description: |
         S3 bucket path for Nextflow work directory where intermediate files will be stored.
@@ -374,17 +374,17 @@ actions:
       x-speakeasy-param-force-new: true
       x-speakeasy-param-optional: false
 
-  - target: $.components.schemas.AwsBatchConfig.properties.computeQueue
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.computeQueue
     update:
       description: Name of the AWS Batch compute queue
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.headQueue
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.headQueue
     update:
       description: Name of the head job queue
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.executionRole
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.executionRole
     update:
       description: |
         IAM role ARN for Batch execution (pulling container images, writing logs).
@@ -393,7 +393,7 @@ actions:
       example: "arn:aws:iam::123456789012:role/BatchExecutionRole"
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.computeJobRole
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.computeJobRole
     update:
       description: |
         IAM role ARN for compute jobs. Jobs assume this role during execution.
@@ -402,7 +402,7 @@ actions:
       example: "arn:aws:iam::123456789012:role/BatchJobRole"
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.headJobRole
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.headJobRole
     update:
       description: |
         IAM role ARN for the head job.
@@ -410,34 +410,34 @@ actions:
       example: "arn:aws:iam::123456789012:role/BatchHeadJobRole"
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.cliPath
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.cliPath
     update:
       description: |
         Path to AWS CLI on compute instances. AWS CLI must be available at this path.
       example: "/home/ec2-user/miniconda/bin/aws"
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.preRunScript
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.preRunScript
     update:
       description: |
         Bash script to run before workflow execution begins.
         Use for environment setup, loading modules, downloading reference data, etc.
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.postRunScript
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.postRunScript
     update:
       description: |
         Bash script to run after workflow execution completes.
         Use for cleanup, archiving results, sending notifications, etc.
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.headJobCpus
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.headJobCpus
     update:
       description: "Number of CPUs allocated for the head job (default: 1)"
       example: 4
       x-speakeasy-param-force-new: true
 
-  - target: $.components.schemas.AwsBatchConfig.properties.headJobMemoryMb
+  - target: $.components.schemas.AwsBatchConfig.allOf[1].properties.headJobMemoryMb
     update:
       description: "Memory allocation for the head job in MB (default: 1024)"
       example: 8192

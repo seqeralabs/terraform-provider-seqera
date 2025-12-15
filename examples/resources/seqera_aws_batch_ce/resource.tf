@@ -3,6 +3,7 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
     cli_path             = "/home/ec2-user/miniconda/bin/aws"
     compute_job_role     = "arn:aws:iam::123456789012:role/BatchJobRole"
     compute_queue        = "...my_compute_queue..."
+    config_type          = "...my_config_type..."
     dragen_instance_type = "...my_dragen_instance_type..."
     dragen_queue         = "...my_dragen_queue..."
     enable_fusion        = true
@@ -78,7 +79,7 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
     volumes = [
       "..."
     ]
-    work_dir = "s3://my-nextflow-bucket/work"
+    work_dir = "...my_work_dir..."
   }
   credentials_id = "...my_credentials_id..."
   description    = "...my_description..."

@@ -17,14 +17,15 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 
 	if resp != nil {
 		if resp.Config != nil {
-			r.Config = &tfTypes.ActionConfigType{}
+			r.Config = &tfTypes.ActionConfigUnion{}
 			if resp.Config.ActionTowerActionConfig != nil {
 				r.Config.Tower = &tfTypes.ActionTowerActionConfig{}
+				r.Config.Tower.ActionConfigType = types.StringValue(resp.Config.ActionTowerActionConfig.ActionConfigType)
 				r.Config.Tower.Discriminator = types.StringPointerValue(resp.Config.ActionTowerActionConfig.Discriminator)
 			}
 			if resp.Config.GithubActionConfig != nil {
 				r.Config.Github = &tfTypes.GithubActionConfig{}
-				r.Config.Github.Discriminator = types.StringPointerValue(resp.Config.GithubActionConfig.Discriminator)
+				r.Config.Github.ActionConfigType = types.StringValue(resp.Config.GithubActionConfig.ActionConfigType)
 			}
 		}
 		r.HookID = types.StringPointerValue(resp.HookID)
@@ -32,6 +33,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 		r.ID = types.StringPointerValue(resp.ID)
 		if resp.Launch != nil {
 			launchPriorData := r.Launch
+			r.Launch.CommitID = types.StringPointerValue(resp.Launch.CommitID)
 			r.Launch.ConfigProfiles = make([]types.String, 0, len(resp.Launch.ConfigProfiles))
 			for _, v := range resp.Launch.ConfigProfiles {
 				r.Launch.ConfigProfiles = append(r.Launch.ConfigProfiles, types.StringValue(v))
@@ -63,6 +65,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Launch.UserSecrets = append(r.Launch.UserSecrets, types.StringValue(v))
 			}
 			r.Launch.WorkDir = types.StringPointerValue(resp.Launch.WorkDir)
+			r.Launch.WorkspaceID = types.Int64PointerValue(resp.Launch.WorkspaceID)
 			r.Launch.WorkspaceSecrets = make([]types.String, 0, len(resp.Launch.WorkspaceSecrets))
 			for _, v := range resp.Launch.WorkspaceSecrets {
 				r.Launch.WorkspaceSecrets = append(r.Launch.WorkspaceSecrets, types.StringValue(v))
@@ -240,6 +243,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		revision = nil
 	}
+	commitID := new(string)
+	if !r.Launch.CommitID.IsUnknown() && !r.Launch.CommitID.IsNull() {
+		*commitID = r.Launch.CommitID.ValueString()
+	} else {
+		commitID = nil
+	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
 	for configProfilesIndex := range r.Launch.ConfigProfiles {
 		configProfiles = append(configProfiles, r.Launch.ConfigProfiles[configProfilesIndex].ValueString())
@@ -340,6 +349,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		Pipeline:         pipeline,
 		WorkDir:          workDir,
 		Revision:         revision,
+		CommitID:         commitID,
 		ConfigProfiles:   configProfiles,
 		UserSecrets:      userSecrets,
 		WorkspaceSecrets: workspaceSecrets,
@@ -403,6 +413,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		*revision = r.Launch.Revision.ValueString()
 	} else {
 		revision = nil
+	}
+	commitID := new(string)
+	if !r.Launch.CommitID.IsUnknown() && !r.Launch.CommitID.IsNull() {
+		*commitID = r.Launch.CommitID.ValueString()
+	} else {
+		commitID = nil
 	}
 	configProfiles := make([]string, 0, len(r.Launch.ConfigProfiles))
 	for configProfilesIndex := range r.Launch.ConfigProfiles {
@@ -504,6 +520,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		Pipeline:         pipeline,
 		WorkDir:          workDir,
 		Revision:         revision,
+		CommitID:         commitID,
 		ConfigProfiles:   configProfiles,
 		UserSecrets:      userSecrets,
 		WorkspaceSecrets: workspaceSecrets,

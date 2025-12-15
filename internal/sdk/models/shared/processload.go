@@ -52,7 +52,7 @@ func (p ProcessLoad) MarshalJSON() ([]byte, error) {
 }
 
 func (p *ProcessLoad) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"pending", "submitted", "running", "succeeded", "failed", "cached", "aborted", "process", "cpus", "cpuTime", "cpuLoad", "memoryRss", "memoryReq", "readBytes", "writeBytes", "volCtxSwitch", "invCtxSwitch", "loadTasks", "loadCpus", "loadMemory", "peakCpus", "peakTasks", "peakMemory"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

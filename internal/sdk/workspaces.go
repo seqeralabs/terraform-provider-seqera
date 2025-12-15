@@ -344,9 +344,9 @@ func (s *Workspaces) CreateWorkspace(ctx context.Context, request operations.Cre
 
 }
 
-// WorkspaceValidate - Validate workspace name
+// ValidateWorkspaceName - Validate workspace name
 // Confirms the validity of the given workspace name. Append `?name=<your_workspace_name>`.
-func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.WorkspaceValidateRequest, opts ...operations.Option) (*operations.WorkspaceValidateResponse, error) {
+func (s *Workspaces) ValidateWorkspaceName(ctx context.Context, request operations.ValidateWorkspaceNameRequest, opts ...operations.Option) (*operations.ValidateWorkspaceNameResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -374,7 +374,7 @@ func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.W
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "WorkspaceValidate",
+		OperationID:      "ValidateWorkspaceName",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -397,7 +397,7 @@ func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.W
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -438,7 +438,7 @@ func (s *Workspaces) WorkspaceValidate(ctx context.Context, request operations.W
 		}
 	}
 
-	res := &operations.WorkspaceValidateResponse{
+	res := &operations.ValidateWorkspaceNameResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -982,7 +982,7 @@ func (s *Workspaces) ListWorkspaceParticipants(ctx context.Context, request oper
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1914,27 +1914,6 @@ func (s *Workspaces) UpdateDataStudiosWorkspaceSettings(ctx context.Context, req
 	}
 
 	switch {
-	case httpRes.StatusCode == 200:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out operations.UpdateDataStudiosWorkspaceSettingsResponseBody
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Object = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
 	case httpRes.StatusCode == 204:
 	case httpRes.StatusCode == 403:
 	case httpRes.StatusCode == 400:

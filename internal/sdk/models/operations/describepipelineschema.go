@@ -12,7 +12,7 @@ type DescribePipelineSchemaRequest struct {
 	PipelineID int64 `pathParam:"style=simple,explode=false,name=pipelineId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Source Optional workspace numeric identifier
+	// Source workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 	// Additional attribute values to include in the response: `schema` returns the pipeline schema, `params` returns the pipeline config. Returns all if `attributes` is omitted.
 	Attributes []shared.PipelineSchemaAttributes `queryParam:"style=form,explode=false,name=attributes"`

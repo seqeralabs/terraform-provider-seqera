@@ -5,8 +5,10 @@ resource "seqera_credential" "my_credential" {
   description = "Google Cloud credentials for production workloads"
   id          = "...my_id..."
   keys = {
-    google = {
-      data = "...my_data..."
+    local = {
+      credential_type = "...my_credential_type..."
+      discriminator   = "...my_discriminator..."
+      password        = "...my_password..."
     }
   }
   name          = "my-gcp-credentials"

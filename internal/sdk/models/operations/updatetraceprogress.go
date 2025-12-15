@@ -8,11 +8,11 @@ import (
 )
 
 type UpdateTraceProgressRequest struct {
-	// Workflow string identifier.
+	// Workflow string identifier
 	WorkflowID string `pathParam:"style=simple,explode=false,name=workflowId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Trace progress request.
+	// Trace progress request
 	TraceProgressRequest shared.TraceProgressRequest `request:"mediaType=application/json"`
 }
 

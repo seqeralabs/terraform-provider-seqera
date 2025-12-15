@@ -84,7 +84,7 @@ func (s *Pipelines) ListPipelines(ctx context.Context, request operations.ListPi
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -247,7 +247,7 @@ func (s *Pipelines) CreatePipeline(ctx context.Context, request operations.Creat
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -405,7 +405,7 @@ func (s *Pipelines) DescribePipelineRepository(ctx context.Context, request oper
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -561,7 +561,7 @@ func (s *Pipelines) ListPipelineRepositories(ctx context.Context, request operat
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -717,7 +717,7 @@ func (s *Pipelines) ValidatePipelineName(ctx context.Context, request operations
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -855,7 +855,7 @@ func (s *Pipelines) DescribePipeline(ctx context.Context, request operations.Des
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -962,7 +962,7 @@ func (s *Pipelines) DescribePipeline(ctx context.Context, request operations.Des
 // UpdatePipeline - Update pipeline
 // Updates the details of the pipeline identified by the given `pipelineId`.
 //
-//	**Note**: If `labelIds` is `null`, empty, or ommitted, existing pipeline labels are removed.
+//	**Note**: If `labelIds` is `null`, empty, or omitted, existing pipeline labels are removed.
 //	Include `labelIds: [<label-id-1>,<label-id-2>]` to override existing labels. Labels to be preserved must be included.
 //	To append a list of labels to multiple pipelines, use `/pipelines/labels/add`.
 func (s *Pipelines) UpdatePipeline(ctx context.Context, request operations.UpdatePipelineRequest, opts ...operations.Option) (*operations.UpdatePipelineResponse, error) {
@@ -1023,7 +1023,7 @@ func (s *Pipelines) UpdatePipeline(ctx context.Context, request operations.Updat
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1181,7 +1181,7 @@ func (s *Pipelines) DeletePipeline(ctx context.Context, request operations.Delet
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1318,7 +1318,7 @@ func (s *Pipelines) DescribePipelineLaunch(ctx context.Context, request operatio
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -1477,7 +1477,7 @@ func (s *Pipelines) DescribePipelineSchema(ctx context.Context, request operatio
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 

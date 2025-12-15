@@ -7,7 +7,8 @@ import (
 )
 
 type AwsSecurityKeys struct {
-	AccessKey     types.String `tfsdk:"access_key"`
-	AssumeRoleArn types.String `tfsdk:"assume_role_arn"`
-	SecretKey     types.String `tfsdk:"secret_key"`
+	AccessKey      types.String `tfsdk:"access_key"`
+	AssumeRoleArn  types.String `tfsdk:"assume_role_arn"`
+	CredentialType types.String `tfsdk:"credential_type"`
+	SecretKey      types.String `tfsdk:"secret_key"`
 }

@@ -10,7 +10,7 @@ import (
 type CreateWorkflowLaunchRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Source Optional workspace numeric identifier
+	// Source workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 	// Workflow launch request
 	SubmitWorkflowLaunchRequest shared.SubmitWorkflowLaunchRequest `request:"mediaType=application/json"`

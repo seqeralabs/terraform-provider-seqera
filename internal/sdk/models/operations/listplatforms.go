@@ -10,7 +10,7 @@ import (
 type ListPlatformsRequest struct {
 	// Organization numeric identifier
 	OrgID *int64 `queryParam:"style=form,explode=true,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 }
 

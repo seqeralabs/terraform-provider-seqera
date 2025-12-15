@@ -16,10 +16,10 @@ type ActionResponseDto struct {
 	// URL endpoint for the webhook that triggers this action
 	HookURL *string `json:"hookUrl,omitempty"`
 	// Status or informational message about the action
-	Message *string           `json:"message,omitempty"`
-	Source  *ActionSource     `json:"source,omitempty"`
-	Status  *ActionStatus     `json:"status,omitempty"`
-	Config  *ActionConfigType `json:"config,omitempty"`
+	Message *string            `json:"message,omitempty"`
+	Source  *ActionSource      `json:"source,omitempty"`
+	Status  *ActionStatus      `json:"status,omitempty"`
+	Config  *ActionConfigUnion `json:"config,omitempty"`
 }
 
 func (a *ActionResponseDto) GetID() *string {
@@ -78,23 +78,23 @@ func (a *ActionResponseDto) GetStatus() *ActionStatus {
 	return a.Status
 }
 
-func (a *ActionResponseDto) GetConfig() *ActionConfigType {
+func (a *ActionResponseDto) GetConfig() *ActionConfigUnion {
 	if a == nil {
 		return nil
 	}
 	return a.Config
 }
 
-func (a *ActionResponseDto) GetConfigGithub() *GithubActionConfig {
+func (a *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
 	if v := a.GetConfig(); v != nil {
-		return v.GithubActionConfig
+		return v.ActionTowerActionConfig
 	}
 	return nil
 }
 
-func (a *ActionResponseDto) GetConfigTower() *ActionTowerActionConfig {
+func (a *ActionResponseDto) GetConfigGithub() *GithubActionConfig {
 	if v := a.GetConfig(); v != nil {
-		return v.ActionTowerActionConfig
+		return v.GithubActionConfig
 	}
 	return nil
 }

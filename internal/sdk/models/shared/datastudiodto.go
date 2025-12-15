@@ -13,9 +13,10 @@ type DataStudioDto struct {
 	// Display name for the Studio session
 	Name *string `json:"name,omitempty"`
 	// Description of the Studio session's purpose
-	Description   *string                  `json:"description,omitempty"`
-	Configuration *DataStudioConfiguration `json:"configuration,omitempty"`
-	IsPrivate     *bool                    `json:"isPrivate,omitempty"`
+	Description   *string                    `json:"description,omitempty"`
+	RemoteConfig  *StudioRemoteConfiguration `json:"remoteConfig,omitempty"`
+	Configuration *DataStudioConfiguration   `json:"configuration,omitempty"`
+	IsPrivate     *bool                      `json:"isPrivate,omitempty"`
 }
 
 func (d *DataStudioDto) GetSessionID() *string {
@@ -44,6 +45,13 @@ func (d *DataStudioDto) GetDescription() *string {
 		return nil
 	}
 	return d.Description
+}
+
+func (d *DataStudioDto) GetRemoteConfig() *StudioRemoteConfiguration {
+	if d == nil {
+		return nil
+	}
+	return d.RemoteConfig
 }
 
 func (d *DataStudioDto) GetConfiguration() *DataStudioConfiguration {

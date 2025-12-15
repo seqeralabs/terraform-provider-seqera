@@ -38,6 +38,7 @@ type WorkflowsResource struct {
 
 // WorkflowsResourceModel describes the resource data model.
 type WorkflowsResourceModel struct {
+	CommitID          types.String      `tfsdk:"commit_id"`
 	ComputeEnvID      types.String      `tfsdk:"compute_env_id"`
 	ConfigProfiles    []types.String    `tfsdk:"config_profiles"`
 	ConfigText        types.String      `tfsdk:"config_text"`
@@ -75,6 +76,13 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage workflow executions and pipeline runs.\n\nWorkflows represent individual executions of Nextflow pipelines,\ncontaining execution status, parameters, results, and monitoring\ninformation for computational workflows.\n",
 		Attributes: map[string]schema.Attribute{
+			"commit_id": schema.StringAttribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
+			},
 			"compute_env_id": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
@@ -156,14 +164,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+				Description: `Requires replacement if changed.`,
 			},
 			"pre_run_script": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+				Description: `Requires replacement if changed.`,
 			},
 			"pull_latest": schema.BoolAttribute{
 				Optional: true,
@@ -205,7 +213,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Source Optional workspace numeric identifier. Requires replacement if changed.`,
+				Description: `Source workspace numeric identifier. Requires replacement if changed.`,
 			},
 			"stub_run": schema.BoolAttribute{
 				Optional: true,

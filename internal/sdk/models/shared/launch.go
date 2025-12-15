@@ -3,16 +3,16 @@
 package shared
 
 type Launch struct {
-	ID          *string `json:"id,omitempty"`
-	Pipeline    string  `json:"pipeline"`
-	WorkDir     *string `json:"workDir,omitempty"`
-	Revision    *string `json:"revision,omitempty"`
-	ConfigText  *string `json:"configText,omitempty"`
-	TowerConfig *string `json:"towerConfig,omitempty"`
-	ParamsText  *string `json:"paramsText,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	ID                  *string  `json:"id,omitempty"`
+	WorkspaceID         *int64   `json:"workspaceId,omitempty"`
+	Pipeline            string   `json:"pipeline"`
+	WorkDir             *string  `json:"workDir,omitempty"`
+	Revision            *string  `json:"revision,omitempty"`
+	CommitID            *string  `json:"commitId,omitempty"`
+	ConfigText          *string  `json:"configText,omitempty"`
+	TowerConfig         *string  `json:"towerConfig,omitempty"`
+	ParamsText          *string  `json:"paramsText,omitempty"`
+	PreRunScript        *string  `json:"preRunScript,omitempty"`
 	PostRunScript       *string  `json:"postRunScript,omitempty"`
 	MainScript          *string  `json:"mainScript,omitempty"`
 	EntryName           *string  `json:"entryName,omitempty"`
@@ -40,6 +40,13 @@ func (l *Launch) GetID() *string {
 	return l.ID
 }
 
+func (l *Launch) GetWorkspaceID() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.WorkspaceID
+}
+
 func (l *Launch) GetPipeline() string {
 	if l == nil {
 		return ""
@@ -59,6 +66,13 @@ func (l *Launch) GetRevision() *string {
 		return nil
 	}
 	return l.Revision
+}
+
+func (l *Launch) GetCommitID() *string {
+	if l == nil {
+		return nil
+	}
+	return l.CommitID
 }
 
 func (l *Launch) GetConfigText() *string {

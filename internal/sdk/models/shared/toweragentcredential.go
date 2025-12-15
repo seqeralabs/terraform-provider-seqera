@@ -45,7 +45,7 @@ func (t TowerAgentCredentialKeys) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TowerAgentCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"connectionId"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -88,7 +88,7 @@ func (t TowerAgentCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TowerAgentCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -196,7 +196,7 @@ func (t TowerAgentCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TowerAgentCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

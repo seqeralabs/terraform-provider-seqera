@@ -7,7 +7,8 @@ import (
 )
 
 type LocalPlatformMetainfo struct {
-	Discriminator *string `json:"discriminator,omitempty"`
+	// property to select the platform metainfo type
+	PlatformType string `json:"platformType"`
 }
 
 func (l LocalPlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -21,9 +22,9 @@ func (l *LocalPlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (l *LocalPlatformMetainfo) GetDiscriminator() *string {
+func (l *LocalPlatformMetainfo) GetPlatformType() string {
 	if l == nil {
-		return nil
+		return ""
 	}
-	return l.Discriminator
+	return l.PlatformType
 }

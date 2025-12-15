@@ -7,14 +7,11 @@ import (
 	"net/http"
 )
 
-type Include struct {
-}
-
 type DescribeOrganizationQuotasRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
 	// Optional list of quota names to include
-	Include []Include `queryParam:"style=form,explode=true,name=include"`
+	Include []string `queryParam:"style=form,explode=true,name=include"`
 }
 
 func (d *DescribeOrganizationQuotasRequest) GetOrgID() int64 {
@@ -24,7 +21,7 @@ func (d *DescribeOrganizationQuotasRequest) GetOrgID() int64 {
 	return d.OrgID
 }
 
-func (d *DescribeOrganizationQuotasRequest) GetInclude() []Include {
+func (d *DescribeOrganizationQuotasRequest) GetInclude() []string {
 	if d == nil {
 		return nil
 	}

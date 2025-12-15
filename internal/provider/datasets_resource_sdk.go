@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -15,28 +16,61 @@ func (r *DatasetsResourceModel) RefreshFromSharedCreateDatasetResponse(ctx conte
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedDataset(ctx, resp.Dataset)...)
+		if resp.Dataset == nil {
+			r.Dataset = nil
+		} else {
+			r.Dataset = &tfTypes.DatasetDto{}
+			r.Dataset.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.DateCreated))
+			r.Dataset.Deleted = types.BoolPointerValue(resp.Dataset.Deleted)
+			r.Dataset.Description = types.StringPointerValue(resp.Dataset.Description)
+			r.Dataset.Hidden = types.BoolPointerValue(resp.Dataset.Hidden)
+			r.Dataset.ID = types.StringPointerValue(resp.Dataset.ID)
+			r.Dataset.Labels = []tfTypes.LabelDbDto{}
 
-		if diags.HasError() {
-			return diags
+			for _, labelsItem := range resp.Dataset.Labels {
+				var labels tfTypes.LabelDbDto
+
+				labels.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(labelsItem.DateCreated))
+				labels.ID = types.Int64PointerValue(labelsItem.ID)
+				labels.IsDefault = types.BoolPointerValue(labelsItem.IsDefault)
+				labels.Name = types.StringPointerValue(labelsItem.Name)
+				labels.Resource = types.BoolPointerValue(labelsItem.Resource)
+				labels.Value = types.StringPointerValue(labelsItem.Value)
+
+				r.Dataset.Labels = append(r.Dataset.Labels, labels)
+			}
+			r.Dataset.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.LastUpdated))
+			if resp.Dataset.LastUpdatedBy == nil {
+				r.Dataset.LastUpdatedBy = nil
+			} else {
+				r.Dataset.LastUpdatedBy = &tfTypes.UserInfo{}
+				r.Dataset.LastUpdatedBy.Avatar = types.StringPointerValue(resp.Dataset.LastUpdatedBy.Avatar)
+				r.Dataset.LastUpdatedBy.Email = types.StringPointerValue(resp.Dataset.LastUpdatedBy.Email)
+				r.Dataset.LastUpdatedBy.ID = types.Int64PointerValue(resp.Dataset.LastUpdatedBy.ID)
+				r.Dataset.LastUpdatedBy.UserName = types.StringPointerValue(resp.Dataset.LastUpdatedBy.UserName)
+			}
+			r.Dataset.MediaType = types.StringPointerValue(resp.Dataset.MediaType)
+			r.Dataset.Name = types.StringPointerValue(resp.Dataset.Name)
+			r.Dataset.OrganizationID = types.Int64PointerValue(resp.Dataset.OrganizationID)
+			if resp.Dataset.RunsInfo == nil {
+				r.Dataset.RunsInfo = nil
+			} else {
+				r.Dataset.RunsInfo = &tfTypes.DatasetRunsInfo{}
+				r.Dataset.RunsInfo.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Dataset.RunsInfo.LastUsed))
+				r.Dataset.RunsInfo.RunsCount = types.Int64PointerValue(resp.Dataset.RunsInfo.RunsCount)
+			}
+			if resp.Dataset.User == nil {
+				r.Dataset.User = nil
+			} else {
+				r.Dataset.User = &tfTypes.UserInfo{}
+				r.Dataset.User.Avatar = types.StringPointerValue(resp.Dataset.User.Avatar)
+				r.Dataset.User.Email = types.StringPointerValue(resp.Dataset.User.Email)
+				r.Dataset.User.ID = types.Int64PointerValue(resp.Dataset.User.ID)
+				r.Dataset.User.UserName = types.StringPointerValue(resp.Dataset.User.UserName)
+			}
+			r.Dataset.Version = types.Int64PointerValue(resp.Dataset.Version)
+			r.Dataset.WorkspaceID = types.Int64PointerValue(resp.Dataset.WorkspaceID)
 		}
-
-	}
-
-	return diags
-}
-
-func (r *DatasetsResourceModel) RefreshFromSharedDataset(ctx context.Context, resp *shared.Dataset) diag.Diagnostics {
-	var diags diag.Diagnostics
-
-	if resp != nil {
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
-		r.Description = types.StringPointerValue(resp.Description)
-		r.ID = types.StringPointerValue(resp.ID)
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.MediaType = types.StringPointerValue(resp.MediaType)
-		r.Name = types.StringValue(resp.Name)
 	}
 
 	return diags

@@ -260,7 +260,8 @@ actions:
     remove: true
 
   # Remove events field from GithubActionConfig (runtime/response field)
-  - target: $.components.schemas.GithubActionConfig.properties.events
+  # Note: GithubActionConfig uses allOf
+  - target: $.components.schemas.GithubActionConfig.allOf[1].properties.events
     remove: true
 
   # Remove timestamp fields

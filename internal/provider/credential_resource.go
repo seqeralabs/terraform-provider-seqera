@@ -38,20 +38,20 @@ type CredentialResource struct {
 
 // CredentialResourceModel describes the resource data model.
 type CredentialResourceModel struct {
-	BaseURL       types.String         `tfsdk:"base_url"`
-	Category      types.String         `tfsdk:"category"`
-	Checked       types.Bool           `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
-	CredentialsID types.String         `tfsdk:"credentials_id"`
-	DateCreated   types.String         `tfsdk:"date_created"`
-	Deleted       types.Bool           `tfsdk:"deleted"`
-	Description   types.String         `tfsdk:"description"`
-	ID            types.String         `tfsdk:"id"`
-	Keys          tfTypes.SecurityKeys `tfsdk:"keys"`
-	LastUpdated   types.String         `tfsdk:"last_updated"`
-	LastUsed      types.String         `tfsdk:"last_used"`
-	Name          types.String         `tfsdk:"name"`
-	ProviderType  types.String         `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64          `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL       types.String              `tfsdk:"base_url"`
+	Category      types.String              `tfsdk:"category"`
+	Checked       types.Bool                `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
+	CredentialsID types.String              `tfsdk:"credentials_id"`
+	DateCreated   types.String              `tfsdk:"date_created"`
+	Deleted       types.Bool                `tfsdk:"deleted"`
+	Description   types.String              `tfsdk:"description"`
+	ID            types.String              `tfsdk:"id"`
+	Keys          tfTypes.SecurityKeysUnion `tfsdk:"keys"`
+	LastUpdated   types.String              `tfsdk:"last_updated"`
+	LastUsed      types.String              `tfsdk:"last_used"`
+	Name          types.String              `tfsdk:"name"`
+	ProviderType  types.String              `tfsdk:"provider_type"`
+	WorkspaceID   types.Int64               `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *CredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -125,6 +125,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								Optional: true,
 							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"secret_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -132,6 +135,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Validators: []validator.Object{
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -143,6 +147,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -158,6 +164,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								Optional: true,
 							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"storage_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -170,6 +179,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
@@ -180,6 +190,70 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
+								path.MatchRelative().AtParent().AtName("seqeracompute"),
+								path.MatchRelative().AtParent().AtName("ssh"),
+							}...),
+						},
+					},
+					"azure_cloud": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"batch_key": schema.StringAttribute{
+								Optional: true,
+							},
+							"batch_name": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"client_id": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"client_secret": schema.StringAttribute{
+								Optional: true,
+							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"storage_key": schema.StringAttribute{
+								Optional: true,
+							},
+							"storage_name": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"subscription_id": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"tenant_id": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+						},
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_entra"),
+								path.MatchRelative().AtParent().AtName("azurerepos"),
+								path.MatchRelative().AtParent().AtName("azure"),
+								path.MatchRelative().AtParent().AtName("bitbucket"),
+								path.MatchRelative().AtParent().AtName("codecommit"),
+								path.MatchRelative().AtParent().AtName("container_reg"),
+								path.MatchRelative().AtParent().AtName("gitea"),
+								path.MatchRelative().AtParent().AtName("github"),
+								path.MatchRelative().AtParent().AtName("gitlab"),
+								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -202,6 +276,13 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"client_secret": schema.StringAttribute{
 								Optional: true,
 							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
 							"storage_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -218,6 +299,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
@@ -228,6 +310,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -236,7 +320,14 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"azurerepos": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"password": schema.StringAttribute{
+								Optional: true,
+							},
+							"token": schema.StringAttribute{
+								Computed: true,
 								Optional: true,
 							},
 							"username": schema.StringAttribute{
@@ -248,6 +339,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azure"),
 								path.MatchRelative().AtParent().AtName("bitbucket"),
@@ -258,6 +350,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -266,7 +360,13 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"bitbucket": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"password": schema.StringAttribute{
+								Optional: true,
+							},
+							"token": schema.StringAttribute{
 								Optional: true,
 							},
 							"username": schema.StringAttribute{
@@ -278,6 +378,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -288,6 +389,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -296,7 +399,14 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"codecommit": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"password": schema.StringAttribute{
+								Optional: true,
+							},
+							"token": schema.StringAttribute{
+								Computed: true,
 								Optional: true,
 							},
 							"username": schema.StringAttribute{
@@ -308,6 +418,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -318,6 +429,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -326,6 +439,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"container_reg": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -342,6 +458,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -352,6 +469,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -360,7 +479,14 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"gitea": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"password": schema.StringAttribute{
+								Optional: true,
+							},
+							"token": schema.StringAttribute{
+								Computed: true,
 								Optional: true,
 							},
 							"username": schema.StringAttribute{
@@ -372,6 +498,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -382,6 +509,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -390,9 +519,15 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"github": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"password": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional: true,
+							},
+							"token": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
 							},
 							"username": schema.StringAttribute{
 								Computed: true,
@@ -403,6 +538,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -413,6 +549,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -421,6 +559,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"gitlab": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"password": schema.StringAttribute{
 								Optional: true,
 							},
@@ -436,6 +577,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -446,6 +588,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -454,15 +598,18 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"google": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"data": schema.StringAttribute{
-								Optional:  true,
-								Sensitive: true,
+								Optional: true,
 							},
 						},
 						Validators: []validator.Object{
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -473,6 +620,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -486,6 +635,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								Optional: true,
 							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"private_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -497,6 +649,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -507,6 +660,88 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("github"),
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
+								path.MatchRelative().AtParent().AtName("seqeracompute"),
+								path.MatchRelative().AtParent().AtName("ssh"),
+							}...),
+						},
+					},
+					"local": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"password": schema.StringAttribute{
+								Optional: true,
+							},
+						},
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
+								path.MatchRelative().AtParent().AtName("azure_entra"),
+								path.MatchRelative().AtParent().AtName("azurerepos"),
+								path.MatchRelative().AtParent().AtName("azure"),
+								path.MatchRelative().AtParent().AtName("bitbucket"),
+								path.MatchRelative().AtParent().AtName("codecommit"),
+								path.MatchRelative().AtParent().AtName("container_reg"),
+								path.MatchRelative().AtParent().AtName("gitea"),
+								path.MatchRelative().AtParent().AtName("github"),
+								path.MatchRelative().AtParent().AtName("gitlab"),
+								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("s3"),
+								path.MatchRelative().AtParent().AtName("seqeracompute"),
+								path.MatchRelative().AtParent().AtName("ssh"),
+							}...),
+						},
+					},
+					"s3": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"access_key": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
+							"discriminator": schema.StringAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"path_style_access_enabled": schema.BoolAttribute{
+								Computed: true,
+								Optional: true,
+							},
+							"secret_key": schema.StringAttribute{
+								Optional: true,
+							},
+						},
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("tw_agent"),
+								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
+								path.MatchRelative().AtParent().AtName("azure_entra"),
+								path.MatchRelative().AtParent().AtName("azurerepos"),
+								path.MatchRelative().AtParent().AtName("azure"),
+								path.MatchRelative().AtParent().AtName("bitbucket"),
+								path.MatchRelative().AtParent().AtName("codecommit"),
+								path.MatchRelative().AtParent().AtName("container_reg"),
+								path.MatchRelative().AtParent().AtName("gitea"),
+								path.MatchRelative().AtParent().AtName("github"),
+								path.MatchRelative().AtParent().AtName("gitlab"),
+								path.MatchRelative().AtParent().AtName("google"),
+								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
@@ -523,6 +758,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Computed: true,
 								Optional: true,
 							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"secret_key": schema.StringAttribute{
 								Optional: true,
 							},
@@ -531,6 +769,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -542,6 +781,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),
 						},
@@ -549,6 +790,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"ssh": schema.SingleNestedAttribute{
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
+							"credential_type": schema.StringAttribute{
+								Required: true,
+							},
 							"passphrase": schema.StringAttribute{
 								Optional: true,
 							},
@@ -560,6 +804,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("tw_agent"),
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -571,6 +816,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 							}...),
 						},
@@ -581,6 +828,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 							"connection_id": schema.StringAttribute{
 								Computed: true,
 								Optional: true,
+							},
+							"credential_type": schema.StringAttribute{
+								Required: true,
 							},
 							"shared": schema.BoolAttribute{
 								Computed: true,
@@ -594,6 +844,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Validators: []validator.Object{
 							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("aws"),
+								path.MatchRelative().AtParent().AtName("azure_cloud"),
 								path.MatchRelative().AtParent().AtName("azure_entra"),
 								path.MatchRelative().AtParent().AtName("azurerepos"),
 								path.MatchRelative().AtParent().AtName("azure"),
@@ -605,6 +856,8 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 								path.MatchRelative().AtParent().AtName("gitlab"),
 								path.MatchRelative().AtParent().AtName("google"),
 								path.MatchRelative().AtParent().AtName("k8s"),
+								path.MatchRelative().AtParent().AtName("local"),
+								path.MatchRelative().AtParent().AtName("s3"),
 								path.MatchRelative().AtParent().AtName("seqeracompute"),
 								path.MatchRelative().AtParent().AtName("ssh"),
 							}...),

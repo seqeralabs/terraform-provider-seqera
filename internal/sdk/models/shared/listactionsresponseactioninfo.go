@@ -3,22 +3,113 @@
 package shared
 
 import (
+	"errors"
+	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 	"time"
 )
 
+type EventUnionType string
+
+const (
+	EventUnionTypeActionTowerActionEvent EventUnionType = "Action.TowerActionEvent"
+	EventUnionTypeGithubActionEvent      EventUnionType = "GithubActionEvent"
+)
+
+type Event struct {
+	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline,name=event" union:"member"`
+	GithubActionEvent      *GithubActionEvent      `queryParam:"inline,name=event" union:"member"`
+
+	Type EventUnionType
+}
+
+func CreateEventActionTowerActionEvent(actionTowerActionEvent ActionTowerActionEvent) Event {
+	typ := EventUnionTypeActionTowerActionEvent
+
+	return Event{
+		ActionTowerActionEvent: &actionTowerActionEvent,
+		Type:                   typ,
+	}
+}
+
+func CreateEventGithubActionEvent(githubActionEvent GithubActionEvent) Event {
+	typ := EventUnionTypeGithubActionEvent
+
+	return Event{
+		GithubActionEvent: &githubActionEvent,
+		Type:              typ,
+	}
+}
+
+func (u *Event) UnmarshalJSON(data []byte) error {
+
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
+	var actionTowerActionEvent ActionTowerActionEvent = ActionTowerActionEvent{}
+	if err := utils.UnmarshalJSON(data, &actionTowerActionEvent, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  EventUnionTypeActionTowerActionEvent,
+			Value: &actionTowerActionEvent,
+		})
+	}
+
+	var githubActionEvent GithubActionEvent = GithubActionEvent{}
+	if err := utils.UnmarshalJSON(data, &githubActionEvent, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  EventUnionTypeGithubActionEvent,
+			Value: &githubActionEvent,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Event", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestUnionCandidate(candidates, data)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for Event", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(EventUnionType)
+	switch best.Type {
+	case EventUnionTypeActionTowerActionEvent:
+		u.ActionTowerActionEvent = best.Value.(*ActionTowerActionEvent)
+		return nil
+	case EventUnionTypeGithubActionEvent:
+		u.GithubActionEvent = best.Value.(*GithubActionEvent)
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for Event", string(data))
+}
+
+func (u Event) MarshalJSON() ([]byte, error) {
+	if u.ActionTowerActionEvent != nil {
+		return utils.MarshalJSON(u.ActionTowerActionEvent, "", true)
+	}
+
+	if u.GithubActionEvent != nil {
+		return utils.MarshalJSON(u.GithubActionEvent, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type Event: all fields are null")
+}
+
 type ListActionsResponseActionInfo struct {
-	ID          *string          `json:"id,omitempty"`
-	Name        *string          `json:"name,omitempty"`
-	Pipeline    *string          `json:"pipeline,omitempty"`
-	Source      *ActionSource    `json:"source,omitempty"`
-	Status      *ActionStatus    `json:"status,omitempty"`
-	LastSeen    *time.Time       `json:"lastSeen,omitempty"`
-	DateCreated *time.Time       `json:"dateCreated,omitempty"`
-	Event       *ActionEventType `json:"event,omitempty"`
-	Endpoint    *string          `json:"endpoint,omitempty"`
-	Labels      []LabelDbDto     `json:"labels,omitempty"`
-	UsageCmd    *string          `json:"usageCmd,omitempty"`
+	ID          *string       `json:"id,omitempty"`
+	Name        *string       `json:"name,omitempty"`
+	Pipeline    *string       `json:"pipeline,omitempty"`
+	Source      *ActionSource `json:"source,omitempty"`
+	Status      *ActionStatus `json:"status,omitempty"`
+	LastSeen    *time.Time    `json:"lastSeen,omitempty"`
+	DateCreated *time.Time    `json:"dateCreated,omitempty"`
+	Event       *Event        `json:"event,omitempty"`
+	Endpoint    *string       `json:"endpoint,omitempty"`
+	Labels      []LabelDbDto  `json:"labels,omitempty"`
+	UsageCmd    *string       `json:"usageCmd,omitempty"`
 }
 
 func (l ListActionsResponseActionInfo) MarshalJSON() ([]byte, error) {
@@ -81,25 +172,11 @@ func (l *ListActionsResponseActionInfo) GetDateCreated() *time.Time {
 	return l.DateCreated
 }
 
-func (l *ListActionsResponseActionInfo) GetEvent() *ActionEventType {
+func (l *ListActionsResponseActionInfo) GetEvent() *Event {
 	if l == nil {
 		return nil
 	}
 	return l.Event
-}
-
-func (l *ListActionsResponseActionInfo) GetEventGithub() *GithubActionEvent {
-	if v := l.GetEvent(); v != nil {
-		return v.GithubActionEvent
-	}
-	return nil
-}
-
-func (l *ListActionsResponseActionInfo) GetEventTower() *ActionTowerActionEvent {
-	if v := l.GetEvent(); v != nil {
-		return v.ActionTowerActionEvent
-	}
-	return nil
 }
 
 func (l *ListActionsResponseActionInfo) GetEndpoint() *string {

@@ -59,8 +59,9 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `URL to the team's avatar or profile image`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Description of the team's purpose and responsibilities`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(250),
 				},
@@ -70,7 +71,8 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Total number of members in the team`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Display name for the team`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(40),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$`).String()),
@@ -82,7 +84,7 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"team_id": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Unique numeric identifier for the team`,
+				Description: `Team numeric identifier`,
 			},
 		},
 	}

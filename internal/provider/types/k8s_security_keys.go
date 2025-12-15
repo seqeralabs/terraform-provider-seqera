@@ -7,7 +7,8 @@ import (
 )
 
 type K8sSecurityKeys struct {
-	Certificate types.String `tfsdk:"certificate"`
-	PrivateKey  types.String `tfsdk:"private_key"`
-	Token       types.String `tfsdk:"token"`
+	Certificate    types.String `tfsdk:"certificate"`
+	CredentialType types.String `tfsdk:"credential_type"`
+	PrivateKey     types.String `tfsdk:"private_key"`
+	Token          types.String `tfsdk:"token"`
 }

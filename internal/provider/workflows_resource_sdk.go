@@ -259,6 +259,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		revision = nil
 	}
+	commitID := new(string)
+	if !r.CommitID.IsUnknown() && !r.CommitID.IsNull() {
+		*commitID = r.CommitID.ValueString()
+	} else {
+		commitID = nil
+	}
 	configProfiles := make([]string, 0, len(r.ConfigProfiles))
 	for configProfilesIndex := range r.ConfigProfiles {
 		configProfiles = append(configProfiles, r.ConfigProfiles[configProfilesIndex].ValueString())
@@ -359,6 +365,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		Pipeline:         pipeline,
 		WorkDir:          workDir,
 		Revision:         revision,
+		CommitID:         commitID,
 		ConfigProfiles:   configProfiles,
 		UserSecrets:      userSecrets,
 		WorkspaceSecrets: workspaceSecrets,

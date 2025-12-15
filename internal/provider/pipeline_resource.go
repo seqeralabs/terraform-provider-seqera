@@ -56,12 +56,14 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 		MarkdownDescription: "Manage Nextflow pipeline definitions and configurations.\n\nPipelines define reusable workflow templates with parameters,\ncompute environment settings, and execution configurations\nfor scalable bioinformatics and data processing workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Detailed description of the pipeline's purpose and functionality`,
 			},
 			"icon": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Icon identifier or URL for visual representation`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional:    true,
@@ -70,6 +72,9 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			"launch": schema.SingleNestedAttribute{
 				Required: true,
 				Attributes: map[string]schema.Attribute{
+					"commit_id": schema.StringAttribute{
+						Optional: true,
+					},
 					"compute_env_id": schema.StringAttribute{
 						Optional: true,
 					},
@@ -103,12 +108,10 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Optional: true,
 					},
 					"post_run_script": schema.StringAttribute{
-						Optional:    true,
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Optional: true,
 					},
 					"pre_run_script": schema.StringAttribute{
-						Optional:    true,
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Optional: true,
 					},
 					"pull_latest": schema.BoolAttribute{
 						Optional: true,
@@ -145,14 +148,15 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores`,
 				Validators: []validator.String{
 					custom_stringvalidators.PipelineNameValidator(),
 				},
 			},
 			"pipeline_id": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Unique numeric identifier for the pipeline`,
+				Description: `Pipeline numeric identifier`,
 			},
 			"repository": schema.StringAttribute{
 				Computed:    true,

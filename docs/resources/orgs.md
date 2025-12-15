@@ -66,7 +66,7 @@ resource "seqera_orgs" "research" {
 
 - `member_id` (Number)
 - `member_role` (String)
-- `org_id` (Number) Unique numeric identifier for the organization
+- `org_id` (Number) Organization numeric identifier
 
 ## Import
 

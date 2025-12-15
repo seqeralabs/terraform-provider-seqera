@@ -1,0 +1,50 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    Seqera API:
+        inputs:
+            - location: specs/seqera-api-cloud.yaml
+        overlays:
+            - location: overlays/api-description.yaml
+            - location: overlays/speakeasy.yaml
+            - location: overlays/required.yaml
+            - location: overlays/datalinks.yaml
+            - location: overlays/actions.yaml
+            - location: overlays/credentials.yaml
+            - location: overlays/credentials-aws.yaml
+            - location: overlays/credentials-azure.yaml
+            - location: overlays/credentials-gcp.yaml
+            - location: overlays/credentials-bitbucket.yaml
+            - location: overlays/credentials-codecommit.yaml
+            - location: overlays/credentials-container-registry.yaml
+            - location: overlays/credentials-gitea.yaml
+            - location: overlays/credentials-github.yaml
+            - location: overlays/credentials-gitlab.yaml
+            - location: overlays/credentials-ssh.yaml
+            - location: overlays/credentials-tower-agent.yaml
+            - location: overlays/credentials-kubernetes.yaml
+            - location: overlays/datasource-credentials.yaml
+            - location: overlays/datasource-datalinks.yaml
+            - location: overlays/compute-env.yaml
+            - location: overlays/compute-env-aws-batch.yaml
+            - location: overlays/aws-compute-env.yaml
+            - location: overlays/datasets.yaml
+            - location: overlays/labels.yaml
+            - location: overlays/orgs.yaml
+            - location: overlays/pipeline-secrets.yaml
+            - location: overlays/pipelines.yaml
+            - location: overlays/studios.yaml
+            - location: overlays/teams.yaml
+            - location: overlays/tokens.yaml
+            - location: overlays/workflows.yaml
+            - location: overlays/workspaces.yaml
+            - location: overlays/users.yaml
+            - location: overlays/schema-fixes.yaml
+            - location: overlays/primary-compute-env.yaml
+        output: .speakeasy/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/seqera/seqera/seqera-api
+targets:
+    seqera:
+        target: terraform
+        source: Seqera API

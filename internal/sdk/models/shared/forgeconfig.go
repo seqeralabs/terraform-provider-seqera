@@ -201,7 +201,7 @@ func (f ForgeConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (f *ForgeConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &f, "", false, []string{"type", "minCpus", "maxCpus"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
 		return err
 	}
 	return nil

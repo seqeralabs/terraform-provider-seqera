@@ -5,6 +5,7 @@ resource "seqera_pipeline" "my_pipeline" {
     7
   ]
   launch = {
+    commit_id      = "...my_commit_id..."
     compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
     config_profiles = [
       "docker",

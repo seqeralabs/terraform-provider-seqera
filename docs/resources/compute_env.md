@@ -28,12 +28,15 @@ and execution parameters.
 resource "seqera_compute_env" "my_computeenv" {
   compute_env = {
     config = {
-      azure_batch = {
-        auto_pool_mode             = false
-        delete_jobs_on_completion  = "on_success"
-        delete_pools_on_completion = false
-        enable_fusion              = true
-        enable_wave                = false
+      aws_batch = {
+        cli_path             = "/home/ec2-user/miniconda/bin/aws"
+        compute_job_role     = "arn:aws:iam::123456789012:role/BatchJobRole"
+        compute_queue        = "...my_compute_queue..."
+        config_type          = "...my_config_type..."
+        dragen_instance_type = "...my_dragen_instance_type..."
+        dragen_queue         = "...my_dragen_queue..."
+        enable_fusion        = false
+        enable_wave          = true
         environment = [
           {
             compute = false
@@ -42,23 +45,152 @@ resource "seqera_compute_env" "my_computeenv" {
             value   = "...my_value..."
           }
         ]
+        execution_role = "arn:aws:iam::123456789012:role/BatchExecutionRole"
         forge = {
-          auto_scale = false
-          container_reg_ids = [
+          alloc_strategy = "SPOT_CAPACITY_OPTIMIZED"
+          allow_buckets = [
             "..."
           ]
-          dispose_on_deletion = true
-          vm_count            = 2
-          vm_type             = "...my_vm_type..."
+          arm64_enabled        = true
+          bid_percentage       = 20
+          dispose_on_deletion  = true
+          dragen_ami_id        = "...my_dragen_ami_id..."
+          dragen_enabled       = true
+          dragen_instance_type = "...my_dragen_instance_type..."
+          ebs_auto_scale       = true
+          ebs_block_size       = 100
+          ebs_boot_size        = 0
+          ec2_key_pair         = "my-keypair"
+          ecs_config           = "...my_ecs_config..."
+          efs_create           = false
+          efs_id               = "fs-1234567890abcdef0"
+          efs_mount            = "/mnt/efs"
+          fargate_head_enabled = false
+          fsx_mount            = "/fsx"
+          fsx_name             = "my-fsx-filesystem"
+          fsx_size             = 1200
+          gpu_enabled          = false
+          image_id             = "...my_image_id..."
+          instance_types = [
+            "m5.xlarge",
+            "m5.2xlarge",
+            "m5.xlarge",
+            "m5.2xlarge",
+          ]
+          max_cpus = 256
+          min_cpus = 0
+          security_groups = [
+            "sg-12345678",
+            "sg-12345678",
+          ]
+          subnets = [
+            "subnet-12345",
+            "subnet-67890",
+            "subnet-12345",
+            "subnet-67890",
+          ]
+          type   = "SPOT"
+          vpc_id = "vpc-1234567890abcdef0"
         }
-        head_pool                  = "...my_head_pool..."
-        managed_identity_client_id = "...my_managed_identity_client_id..."
-        nextflow_config            = "...my_nextflow_config..."
-        post_run_script            = "...my_post_run_script..."
-        pre_run_script             = "...my_pre_run_script..."
-        region                     = "...my_region..."
-        token_duration             = "...my_token_duration..."
-        work_dir                   = "...my_work_dir..."
+        fusion_snapshots     = true
+        head_job_cpus        = 4
+        head_job_memory_mb   = 8192
+        head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
+        head_queue           = "...my_head_queue..."
+        log_group            = "...my_log_group..."
+        lustre_id            = "...my_lustre_id..."
+        nextflow_config      = "...my_nextflow_config..."
+        nvme_storage_enabled = true
+        post_run_script      = "...my_post_run_script..."
+        pre_run_script       = "...my_pre_run_script..."
+        region               = "us-east-1"
+        storage_type         = "...my_storage_type..."
+        volumes = [
+          "..."
+        ]
+        work_dir = "...my_work_dir..."
+      }
+      seqeracompute_platform = {
+        cli_path             = "/home/ec2-user/miniconda/bin/aws"
+        compute_job_role     = "arn:aws:iam::123456789012:role/BatchJobRole"
+        compute_queue        = "...my_compute_queue..."
+        config_type          = "...my_config_type..."
+        dragen_instance_type = "...my_dragen_instance_type..."
+        dragen_queue         = "...my_dragen_queue..."
+        enable_fusion        = true
+        enable_wave          = false
+        environment = [
+          {
+            compute = false
+            head    = false
+            name    = "...my_name..."
+            value   = "...my_value..."
+          }
+        ]
+        execution_role = "arn:aws:iam::123456789012:role/BatchExecutionRole"
+        forge = {
+          alloc_strategy = "SPOT_CAPACITY_OPTIMIZED"
+          allow_buckets = [
+            "..."
+          ]
+          arm64_enabled        = true
+          bid_percentage       = 20
+          dispose_on_deletion  = true
+          dragen_ami_id        = "...my_dragen_ami_id..."
+          dragen_enabled       = false
+          dragen_instance_type = "...my_dragen_instance_type..."
+          ebs_auto_scale       = true
+          ebs_block_size       = 100
+          ebs_boot_size        = 5
+          ec2_key_pair         = "my-keypair"
+          ecs_config           = "...my_ecs_config..."
+          efs_create           = false
+          efs_id               = "fs-1234567890abcdef0"
+          efs_mount            = "/mnt/efs"
+          fargate_head_enabled = false
+          fsx_mount            = "/fsx"
+          fsx_name             = "my-fsx-filesystem"
+          fsx_size             = 1200
+          gpu_enabled          = false
+          image_id             = "...my_image_id..."
+          instance_types = [
+            "m5.xlarge",
+            "m5.2xlarge",
+            "m5.xlarge",
+            "m5.2xlarge",
+          ]
+          max_cpus = 256
+          min_cpus = 0
+          security_groups = [
+            "sg-12345678",
+            "sg-12345678",
+          ]
+          subnets = [
+            "subnet-12345",
+            "subnet-67890",
+            "subnet-12345",
+            "subnet-67890",
+          ]
+          type   = "SPOT"
+          vpc_id = "vpc-1234567890abcdef0"
+        }
+        fusion_snapshots     = true
+        head_job_cpus        = 4
+        head_job_memory_mb   = 8192
+        head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
+        head_queue           = "...my_head_queue..."
+        log_group            = "...my_log_group..."
+        lustre_id            = "...my_lustre_id..."
+        nextflow_config      = "...my_nextflow_config..."
+        nvme_storage_enabled = true
+        post_run_script      = "...my_post_run_script..."
+        pre_run_script       = "...my_pre_run_script..."
+        region               = "us-east-1"
+        storage_type         = "...my_storage_type..."
+        volumes = [
+          "..."
+        ]
+        work_dir = "...my_work_dir..."
       }
     }
     credentials_id = "...my_credentials_id..."
@@ -95,9 +227,7 @@ resource "seqera_compute_env" "my_computeenv" {
 
 Required:
 
-- `config` (Attributes) Configuration settings for compute environments including work directories,
-pre/post run scripts, and environment-specific parameters.
-Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config))
+- `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config))
 - `credentials_id` (String) Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `platform` (String) must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "azure-batch", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "local-platform", "seqeracompute-platform"]; Requires replacement if changed.
@@ -118,6 +248,7 @@ Read-Only:
 - `managed_identity_id` (String)
 - `org_id` (Number)
 - `primary` (Boolean)
+- `resources` (Attributes) (see [below for nested schema](#nestedatt--compute_env--resources))
 - `status` (String)
 - `workspace_id` (Number)
 
@@ -126,20 +257,51 @@ Read-Only:
 
 Optional:
 
-- `altair_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--altair_platform))
-- `aws_batch` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch))
-- `aws_cloud` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud))
-- `azure_batch` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch))
-- `eks_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform))
-- `gke_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform))
-- `google_batch` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch))
-- `google_lifesciences` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences))
-- `k8s_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform))
-- `lsf_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform))
-- `moab_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--moab_platform))
-- `seqeracompute_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform))
-- `slurm_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--slurm_platform))
-- `uge_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--uge_platform))
+- `altair_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--altair_platform))
+- `aws_batch` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch))
+- `aws_cloud` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud))
+- `azure_batch` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch))
+- `eks_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform))
+- `gke_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform))
+- `google_batch` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch))
+- `google_lifesciences` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences))
+- `k8s_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform))
+- `local_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform))
+- `lsf_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform))
+- `moab_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--moab_platform))
+- `seqeracompute_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform))
+- `slurm_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--slurm_platform))
+- `uge_platform` (Attributes) Configuration settings for compute environments including work directories,
+pre/post run scripts, and environment-specific parameters.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--uge_platform))
 
 <a id="nestedatt--compute_env--config--altair_platform"></a>
 ### Nested Schema for `compute_env.config.altair_platform`
@@ -147,6 +309,7 @@ Optional:
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--altair_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -190,6 +353,7 @@ Must have permissions for S3, CloudWatch, etc.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `compute_queue` (String) Name of the AWS Batch compute queue. Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
@@ -350,6 +514,7 @@ Optional:
 
 - `allow_buckets` (List of String) Requires replacement if changed.
 - `arm64_enabled` (Boolean) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `ebs_boot_size` (Number) Requires replacement if changed.
 - `ec2_key_pair` (String) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
@@ -392,6 +557,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
@@ -444,6 +610,7 @@ Optional:
 
 - `cluster_name` (String) The AWS EKS cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
@@ -489,6 +656,7 @@ Optional:
 
 - `cluster_name` (String) The GKE cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
@@ -534,6 +702,7 @@ Optional:
 
 - `boot_disk_size_gb` (Number) Requires replacement if changed.
 - `compute_jobs_instance_template` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `copy_image` (String) Requires replacement if changed.
 - `cpu_platform` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
@@ -585,6 +754,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `boot_disk_size_gb` (Number) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `copy_image` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences--environment))
@@ -630,6 +800,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `compute_service_account` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
@@ -665,12 +836,45 @@ Default: false; Requires replacement if changed.
 
 
 
+<a id="nestedatt--compute_env--config--local_platform"></a>
+### Nested Schema for `compute_env.config.local_platform`
+
+Optional:
+
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--environment))
+- `fusion2_enabled` (Boolean) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
+- `wave_enabled` (Boolean) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--local_platform--environment"></a>
+### Nested Schema for `compute_env.config.local_platform.environment`
+
+Optional:
+
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `name` (String) Requires replacement if changed.
+- `value` (String) Requires replacement if changed.
+
+
+
 <a id="nestedatt--compute_env--config--lsf_platform"></a>
 ### Nested Schema for `compute_env.config.lsf_platform`
 
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -712,6 +916,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--moab_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -755,6 +960,7 @@ Must have permissions for S3, CloudWatch, etc.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `compute_queue` (String) Name of the AWS Batch compute queue. Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `dragen_instance_type` (String) Requires replacement if changed.
 - `dragen_queue` (String) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
@@ -914,6 +1120,7 @@ Requires replacement if changed.
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--slurm_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -952,6 +1159,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `compute_queue` (String) Requires replacement if changed.
+- `config_type` (String) property to select the compute config platform. Not Null; Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--uge_platform--environment))
 - `head_job_options` (String) Requires replacement if changed.
 - `head_queue` (String) Requires replacement if changed.
@@ -996,6 +1204,19 @@ Read-Only:
 - `name` (String) Name or key of the label
 - `resource` (Boolean) Flag indicating if this is a resource-level label
 - `value` (String) Value associated with the label
+
+
+<a id="nestedatt--compute_env--resources"></a>
+### Nested Schema for `compute_env.resources`
+
+Read-Only:
+
+- `cpus` (Number)
+- `disk_size` (Number)
+- `estimated_price` (Number)
+- `gpus` (Number)
+- `instance_type` (String)
+- `memory` (Number)
 
 ## Import
 

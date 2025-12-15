@@ -10,7 +10,7 @@ import (
 type UpdateWorkspaceParticipantRoleRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Participant numeric identifier
 	ParticipantID int64 `pathParam:"style=simple,explode=false,name=participantId"`
