@@ -79,7 +79,7 @@ func (b BitbucketCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BitbucketCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -185,7 +185,7 @@ func (b BitbucketCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BitbucketCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &b, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &b, "", false, nil); err != nil {
 		return err
 	}
 	return nil

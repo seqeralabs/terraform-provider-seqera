@@ -86,7 +86,7 @@ func (c ContainerRegistryCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ContainerRegistryCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -192,7 +192,7 @@ func (c ContainerRegistryCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ContainerRegistryCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

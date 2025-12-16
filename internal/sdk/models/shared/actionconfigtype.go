@@ -61,8 +61,8 @@ const (
 )
 
 type ActionConfigType struct {
-	ActionTowerActionConfig *ActionTowerActionConfig `queryParam:"inline,name=Action_ConfigType"`
-	GithubActionConfig      *GithubActionConfig      `queryParam:"inline,name=Action_ConfigType"`
+	ActionTowerActionConfig *ActionTowerActionConfig `queryParam:"inline,name=Action_ConfigType" union:"member"`
+	GithubActionConfig      *GithubActionConfig      `queryParam:"inline,name=Action_ConfigType" union:"member"`
 
 	Type ActionConfigTypeType
 }

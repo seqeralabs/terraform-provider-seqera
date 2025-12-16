@@ -12,6 +12,7 @@ type ActionStatus string
 const (
 	ActionStatusCreating ActionStatus = "CREATING"
 	ActionStatusActive   ActionStatus = "ACTIVE"
+	ActionStatusDeleting ActionStatus = "DELETING"
 	ActionStatusError    ActionStatus = "ERROR"
 	ActionStatusPaused   ActionStatus = "PAUSED"
 )
@@ -28,6 +29,8 @@ func (e *ActionStatus) UnmarshalJSON(data []byte) error {
 	case "CREATING":
 		fallthrough
 	case "ACTIVE":
+		fallthrough
+	case "DELETING":
 		fallthrough
 	case "ERROR":
 		fallthrough

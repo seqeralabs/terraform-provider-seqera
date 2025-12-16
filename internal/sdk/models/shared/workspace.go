@@ -22,7 +22,7 @@ func (w Workspace) MarshalJSON() ([]byte, error) {
 }
 
 func (w *Workspace) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &w, "", false, []string{"name", "fullName", "visibility"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &w, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -125,7 +125,7 @@ resource "seqera_action" "github_webhook" {
 ### Required
 
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
-- `name` (String)
+- `name` (String) Human-readable name for the action
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Optional

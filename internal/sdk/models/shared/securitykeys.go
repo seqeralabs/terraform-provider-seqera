@@ -696,21 +696,21 @@ const (
 )
 
 type SecurityKeys struct {
-	AwsSecurityKeys           *AwsSecurityKeys           `queryParam:"inline,name=SecurityKeys"`
-	GoogleSecurityKeys        *GoogleSecurityKeys        `queryParam:"inline,name=SecurityKeys"`
-	GitHubSecurityKeys        *GitHubSecurityKeys        `queryParam:"inline,name=SecurityKeys"`
-	GitLabSecurityKeys        *GitLabSecurityKeys        `queryParam:"inline,name=SecurityKeys"`
-	BitBucketSecurityKeys     *BitBucketSecurityKeys     `queryParam:"inline,name=SecurityKeys"`
-	GiteaSecurityKeys         *GiteaSecurityKeys         `queryParam:"inline,name=SecurityKeys"`
-	SSHSecurityKeys           *SSHSecurityKeys           `queryParam:"inline,name=SecurityKeys"`
-	K8sSecurityKeys           *K8sSecurityKeys           `queryParam:"inline,name=SecurityKeys"`
-	AzureSecurityKeys         *AzureSecurityKeys         `queryParam:"inline,name=SecurityKeys"`
-	AzureReposSecurityKeys    *AzureReposSecurityKeys    `queryParam:"inline,name=SecurityKeys"`
-	ContainerRegistryKeys     *ContainerRegistryKeys     `queryParam:"inline,name=SecurityKeys"`
-	AgentSecurityKeys         *AgentSecurityKeys         `queryParam:"inline,name=SecurityKeys"`
-	CodeCommitSecurityKeys    *CodeCommitSecurityKeys    `queryParam:"inline,name=SecurityKeys"`
-	AzureEntraKeys            *AzureEntraKeys            `queryParam:"inline,name=SecurityKeys"`
-	SeqeraComputeSecurityKeys *SeqeraComputeSecurityKeys `queryParam:"inline,name=SecurityKeys"`
+	AwsSecurityKeys           *AwsSecurityKeys           `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GoogleSecurityKeys        *GoogleSecurityKeys        `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GitHubSecurityKeys        *GitHubSecurityKeys        `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GitLabSecurityKeys        *GitLabSecurityKeys        `queryParam:"inline,name=SecurityKeys" union:"member"`
+	BitBucketSecurityKeys     *BitBucketSecurityKeys     `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GiteaSecurityKeys         *GiteaSecurityKeys         `queryParam:"inline,name=SecurityKeys" union:"member"`
+	SSHSecurityKeys           *SSHSecurityKeys           `queryParam:"inline,name=SecurityKeys" union:"member"`
+	K8sSecurityKeys           *K8sSecurityKeys           `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AzureSecurityKeys         *AzureSecurityKeys         `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AzureReposSecurityKeys    *AzureReposSecurityKeys    `queryParam:"inline,name=SecurityKeys" union:"member"`
+	ContainerRegistryKeys     *ContainerRegistryKeys     `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AgentSecurityKeys         *AgentSecurityKeys         `queryParam:"inline,name=SecurityKeys" union:"member"`
+	CodeCommitSecurityKeys    *CodeCommitSecurityKeys    `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AzureEntraKeys            *AzureEntraKeys            `queryParam:"inline,name=SecurityKeys" union:"member"`
+	SeqeraComputeSecurityKeys *SeqeraComputeSecurityKeys `queryParam:"inline,name=SecurityKeys" union:"member"`
 
 	Type SecurityKeysType
 }
@@ -1592,21 +1592,21 @@ const (
 )
 
 type SecurityKeysOutput struct {
-	AwsSecurityKeysOutput           *AwsSecurityKeysOutput           `queryParam:"inline,name=SecurityKeys"`
-	GoogleSecurityKeysOutput        *GoogleSecurityKeysOutput        `queryParam:"inline,name=SecurityKeys"`
-	GitHubSecurityKeysOutput        *GitHubSecurityKeysOutput        `queryParam:"inline,name=SecurityKeys"`
-	GitLabSecurityKeysOutput        *GitLabSecurityKeysOutput        `queryParam:"inline,name=SecurityKeys"`
-	BitBucketSecurityKeysOutput     *BitBucketSecurityKeysOutput     `queryParam:"inline,name=SecurityKeys"`
-	GiteaSecurityKeysOutput         *GiteaSecurityKeysOutput         `queryParam:"inline,name=SecurityKeys"`
-	SSHSecurityKeysOutput           *SSHSecurityKeysOutput           `queryParam:"inline,name=SecurityKeys"`
-	K8sSecurityKeysOutput           *K8sSecurityKeysOutput           `queryParam:"inline,name=SecurityKeys"`
-	AzureSecurityKeysOutput         *AzureSecurityKeysOutput         `queryParam:"inline,name=SecurityKeys"`
-	AzureReposSecurityKeysOutput    *AzureReposSecurityKeysOutput    `queryParam:"inline,name=SecurityKeys"`
-	ContainerRegistryKeysOutput     *ContainerRegistryKeysOutput     `queryParam:"inline,name=SecurityKeys"`
-	AgentSecurityKeys               *AgentSecurityKeys               `queryParam:"inline,name=SecurityKeys"`
-	CodeCommitSecurityKeysOutput    *CodeCommitSecurityKeysOutput    `queryParam:"inline,name=SecurityKeys"`
-	AzureEntraKeysOutput            *AzureEntraKeysOutput            `queryParam:"inline,name=SecurityKeys"`
-	SeqeraComputeSecurityKeysOutput *SeqeraComputeSecurityKeysOutput `queryParam:"inline,name=SecurityKeys"`
+	AwsSecurityKeysOutput           *AwsSecurityKeysOutput           `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GoogleSecurityKeysOutput        *GoogleSecurityKeysOutput        `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GitHubSecurityKeysOutput        *GitHubSecurityKeysOutput        `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GitLabSecurityKeysOutput        *GitLabSecurityKeysOutput        `queryParam:"inline,name=SecurityKeys" union:"member"`
+	BitBucketSecurityKeysOutput     *BitBucketSecurityKeysOutput     `queryParam:"inline,name=SecurityKeys" union:"member"`
+	GiteaSecurityKeysOutput         *GiteaSecurityKeysOutput         `queryParam:"inline,name=SecurityKeys" union:"member"`
+	SSHSecurityKeysOutput           *SSHSecurityKeysOutput           `queryParam:"inline,name=SecurityKeys" union:"member"`
+	K8sSecurityKeysOutput           *K8sSecurityKeysOutput           `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AzureSecurityKeysOutput         *AzureSecurityKeysOutput         `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AzureReposSecurityKeysOutput    *AzureReposSecurityKeysOutput    `queryParam:"inline,name=SecurityKeys" union:"member"`
+	ContainerRegistryKeysOutput     *ContainerRegistryKeysOutput     `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AgentSecurityKeys               *AgentSecurityKeys               `queryParam:"inline,name=SecurityKeys" union:"member"`
+	CodeCommitSecurityKeysOutput    *CodeCommitSecurityKeysOutput    `queryParam:"inline,name=SecurityKeys" union:"member"`
+	AzureEntraKeysOutput            *AzureEntraKeysOutput            `queryParam:"inline,name=SecurityKeys" union:"member"`
+	SeqeraComputeSecurityKeysOutput *SeqeraComputeSecurityKeysOutput `queryParam:"inline,name=SecurityKeys" union:"member"`
 
 	Type SecurityKeysOutputType
 }

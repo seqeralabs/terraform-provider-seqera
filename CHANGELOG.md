@@ -1,3 +1,11 @@
+# v0.26.6
+
+FIX
+
+- **Cloud / 25.3**
+
+- **Compute Resources** - Support the new deleting lifecycle phase for Compute environments to avoid plan / state errors.
+
 # v0.26.5
 
 FIX:
@@ -9,7 +17,6 @@ FIX:
 - **Google Cloud Credentials** - Fixed critical issue where the service account JSON (`data` field) was not being sent in API requests, causing credential creation to fail. Added internal `keyType` field to SDK models to enable proper code generation while keeping it hidden from Terraform schema and documentation.
 - **Kubernetes Credentials** - Fixed critical issue where authentication fields (`token`, `certificate`, `private_key`) were not being sent in API requests, causing credential creation to fail. Added internal `keyType` field to SDK models to enable proper code generation while keeping it hidden from Terraform schema and documentation.
 - **SSH Credentials** - Improved implementation by hiding internal `key_type` field from Terraform schema and documentation while maintaining correct API request generation. This field is now only present in SDK models for code generation purposes.
-
 
 # v0.26.4
 

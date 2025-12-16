@@ -10371,6 +10371,7 @@ components:
       enum:
         - CREATING
         - ACTIVE
+        - DELETING
         - ERROR
         - PAUSED
     Action.TowerActionConfig:

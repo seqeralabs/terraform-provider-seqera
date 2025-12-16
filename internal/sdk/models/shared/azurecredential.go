@@ -87,7 +87,7 @@ func (a AzureCredentialKeys) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"batchName", "storageName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -172,7 +172,7 @@ func (a AzureCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -248,7 +248,7 @@ func (a AzureCredentialKeysOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureCredentialKeysOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"batchName", "storageName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -298,7 +298,7 @@ func (a AzureCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil

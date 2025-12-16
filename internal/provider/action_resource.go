@@ -235,7 +235,8 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `Status or informational message about the action`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Human-readable name for the action`,
 			},
 			"source": schema.StringAttribute{
 				Computed: true,

@@ -16,7 +16,7 @@ func (i InstanceType) MarshalJSON() ([]byte, error) {
 }
 
 func (i *InstanceType) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"arch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -24,7 +24,7 @@ func (c ContainerData) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ContainerData) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"targetImage"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

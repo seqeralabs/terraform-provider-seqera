@@ -79,7 +79,7 @@ func (g GiteaCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GiteaCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -185,7 +185,7 @@ func (g GiteaCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GiteaCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil

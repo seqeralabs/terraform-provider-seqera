@@ -27,7 +27,7 @@ func (p PipelineSecret) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PipelineSecret) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"name"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -86,7 +86,7 @@ func (a AWSCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -183,7 +183,7 @@ func (a AWSCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
