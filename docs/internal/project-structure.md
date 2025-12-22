@@ -39,7 +39,7 @@ internal/
 
 ```
 schemas/
-├── seqera-api-latest.yml   # Base OpenAPI specification
+├── seqera-api-latest-flattened.yml   # Base OpenAPI specification
 ├── seqera-final.yaml       # Modified OpenAPI spec with Speakeasy annotations
 └── overlay.yaml            # Speakeasy overlay for customizations
 

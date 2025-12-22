@@ -67,7 +67,7 @@ actions:
 To apply an overlay to your OpenAPI schema:
 
 ```bash
-speakeasy overlay apply --schema seqera-api-latest.yml --overlay overlay_new.yaml
+speakeasy overlay apply --schema seqera-api-latest-flattened.yml --overlay overlay_new.yaml
 ```
 
 ### Generating Overlays
@@ -75,7 +75,7 @@ speakeasy overlay apply --schema seqera-api-latest.yml --overlay overlay_new.yam
 You can generate an overlay by comparing two OpenAPI specifications. This is useful when you've manually edited a schema and want to create a reusable overlay:
 
 ```bash
-speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml
+speakeasy overlay compare --before=seqera-api-latest-flattened.yml --after=seqera-final.yaml > overlay_new.yaml
 ```
 
 > **Note**: As documented in CLAUDE.md, the final schema file must be named `seqera-final.yaml` for Speakeasy to pick it up during generation.

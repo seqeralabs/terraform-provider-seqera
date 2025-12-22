@@ -38,7 +38,7 @@ go build
 ```bash
 
 # Create a new overaly file from the update openAPI spec (example). The file must be name seqera-final.yaml for speakeasy to pick it up.
-speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml
+speakeasy overlay compare --before=seqera-api-latest-flattened.yml --after=seqera-final.yaml > overlay_new.yaml
 # Regenerate provider code using Speakeasy
 speakeasy run --skip-versioning 
 
@@ -108,7 +108,7 @@ speakeasy run --skip-versioning
 
 ### Code Generation Workflow
 1. Only modify the OpenAPI specifications in `schemas/seqera-final.yaml` to add speakeasy annotations.
-2. Generate the overlay file from the edited specification using `speakeasy overlay compare --before=seqera-api-latest.yml --after=seqera-final.yaml > overlay_new.yaml`.
+2. Generate the overlay file from the edited specification using `speakeasy overlay compare --before=seqera-api-latest-flattened.yml --after=seqera-final.yaml > overlay_new.yaml`.
 3. Edit overlay files in `overlays/` directory following patterns in `internal-docs/OVERLAY_GUIDE.md`
 4. Create custom examples in `examples/resources/seqera_[resource]/resource.tf` and protect them with `.genignore`
 5. Run `speakeasy run --skip-versioning` to regenerate provider code

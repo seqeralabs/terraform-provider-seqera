@@ -1,7 +1,7 @@
 overlay: 1.0.0
 x-speakeasy-jsonpath: rfc9535
 info:
-  title: Overlay seqera-api-latest.yml => seqera-final.yaml
+  title: Overlay seqera-api-latest-flattened.yml => seqera-final.yaml
   version: 0.0.0
 actions:
   - target: $.components.schemas.CreateComputeEnvRequest
