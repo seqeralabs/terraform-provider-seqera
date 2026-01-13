@@ -214,12 +214,12 @@ resource "seqera_studios" "studio_with_env_vars" {
 - `compute_env_id` (String) Requires replacement if changed.
 - `configuration` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration))
 - `data_studio_tool_url` (String) Requires replacement if changed.
-- `name` (String) Requires replacement if changed.
+- `name` (String) Display name for the Studio session. Requires replacement if changed.
 
 ### Optional
 
 - `auto_start` (Boolean) Optionally disable the Studio's automatic launch when it is created. Requires replacement if changed.
-- `description` (String) Requires replacement if changed.
+- `description` (String) Description of the Studio session's purpose. Requires replacement if changed.
 - `initial_checkpoint_id` (Number) Requires replacement if changed.
 - `is_private` (Boolean) Requires replacement if changed.
 - `label_ids` (List of Number) List of resource label IDs to associate with this Studio. Reference labels using seqera_labels.label_name.id. Requires replacement if changed.
@@ -228,7 +228,7 @@ resource "seqera_studios" "studio_with_env_vars" {
 
 ### Read-Only
 
-- `session_id` (String) Unique identifier for the Studio session
+- `session_id` (String) Studio session numeric identifier
 
 <a id="nestedatt--configuration"></a>
 ### Nested Schema for `configuration`

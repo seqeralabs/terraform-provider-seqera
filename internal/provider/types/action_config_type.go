@@ -3,6 +3,6 @@
 package types
 
 type ActionConfigType struct {
-	Tower  *ActionTowerActionConfig `queryParam:"inline" tfsdk:"tower" tfPlanOnly:"true"`
-	Github *GithubActionConfig      `queryParam:"inline" tfsdk:"github" tfPlanOnly:"true"`
+	Tower  *ActionTowerActionConfig `queryParam:"inline" tfsdk:"tower"`
+	Github *GithubActionConfig      `queryParam:"inline" tfsdk:"github"`
 }

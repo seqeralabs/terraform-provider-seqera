@@ -126,8 +126,8 @@ const (
 )
 
 type ActionEventType struct {
-	GithubActionEvent      *GithubActionEvent      `queryParam:"inline,name=Action_EventType"`
-	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline,name=Action_EventType"`
+	GithubActionEvent      *GithubActionEvent      `queryParam:"inline" union:"member"`
+	ActionTowerActionEvent *ActionTowerActionEvent `queryParam:"inline" union:"member"`
 
 	Type ActionEventTypeType
 }

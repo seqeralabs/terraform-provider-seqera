@@ -22,7 +22,8 @@ terraform {
 }
 
 provider "seqera" {
-  # Configuration options
+  bearer_auth = "<YOUR_BEARER_AUTH>" # Required
+  server_url  = "..."                # Optional
 }
 ```
 

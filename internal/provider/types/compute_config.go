@@ -3,18 +3,18 @@
 package types
 
 type ComputeConfig struct {
-	AltairPlatform        *AltairPBSConfiguration          `queryParam:"inline" tfsdk:"altair_platform" tfPlanOnly:"true"`
-	EksPlatform           *AmazonEKSClusterConfiguration   `queryParam:"inline" tfsdk:"eks_platform" tfPlanOnly:"true"`
-	AwsBatch              *AWSBatchConfiguration           `queryParam:"inline" tfsdk:"aws_batch" tfPlanOnly:"true"`
-	AwsCloud              *AWSCloudConfiguration           `queryParam:"inline" tfsdk:"aws_cloud" tfPlanOnly:"true"`
-	AzureBatch            *AzureBatchConfiguration         `queryParam:"inline" tfsdk:"azure_batch" tfPlanOnly:"true"`
-	GoogleBatch           *GoogleBatchServiceConfiguration `queryParam:"inline" tfsdk:"google_batch" tfPlanOnly:"true"`
-	GkePlatform           *GoogleGKEClusterConfiguration   `queryParam:"inline" tfsdk:"gke_platform" tfPlanOnly:"true"`
-	GoogleLifesciences    *GoogleLifeSciencesConfiguration `queryParam:"inline" tfsdk:"google_lifesciences" tfPlanOnly:"true"`
-	LsfPlatform           *IBMLSFConfiguration             `queryParam:"inline" tfsdk:"lsf_platform" tfPlanOnly:"true"`
-	K8sPlatform           *KubernetesComputeConfiguration  `queryParam:"inline" tfsdk:"k8s_platform" tfPlanOnly:"true"`
-	MoabPlatform          *MoabConfiguration               `queryParam:"inline" tfsdk:"moab_platform" tfPlanOnly:"true"`
-	SeqeracomputePlatform *SeqeraComputeConfiguration      `queryParam:"inline" tfsdk:"seqeracompute_platform" tfPlanOnly:"true"`
-	SlurmPlatform         *SlurmConfiguration              `queryParam:"inline" tfsdk:"slurm_platform" tfPlanOnly:"true"`
-	UgePlatform           *UnivaGridEngineConfiguration    `queryParam:"inline" tfsdk:"uge_platform" tfPlanOnly:"true"`
+	AltairPlatform        *AltairPBSConfiguration          `queryParam:"inline" tfsdk:"altair_platform"`
+	EksPlatform           *AmazonEKSClusterConfiguration   `queryParam:"inline" tfsdk:"eks_platform"`
+	AwsBatch              *AWSBatchConfiguration           `queryParam:"inline" tfsdk:"aws_batch"`
+	AwsCloud              *AWSCloudConfiguration           `queryParam:"inline" tfsdk:"aws_cloud"`
+	AzureBatch            *AzureBatchConfiguration         `queryParam:"inline" tfsdk:"azure_batch"`
+	GoogleBatch           *GoogleBatchServiceConfiguration `queryParam:"inline" tfsdk:"google_batch"`
+	GkePlatform           *GoogleGKEClusterConfiguration   `queryParam:"inline" tfsdk:"gke_platform"`
+	GoogleLifesciences    *GoogleLifeSciencesConfiguration `queryParam:"inline" tfsdk:"google_lifesciences"`
+	LsfPlatform           *IBMLSFConfiguration             `queryParam:"inline" tfsdk:"lsf_platform"`
+	K8sPlatform           *KubernetesComputeConfiguration  `queryParam:"inline" tfsdk:"k8s_platform"`
+	MoabPlatform          *MoabConfiguration               `queryParam:"inline" tfsdk:"moab_platform"`
+	SeqeracomputePlatform *SeqeraComputeConfiguration      `queryParam:"inline" tfsdk:"seqeracompute_platform"`
+	SlurmPlatform         *SlurmConfiguration              `queryParam:"inline" tfsdk:"slurm_platform"`
+	UgePlatform           *UnivaGridEngineConfiguration    `queryParam:"inline" tfsdk:"uge_platform"`
 }

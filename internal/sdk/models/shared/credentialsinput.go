@@ -230,7 +230,7 @@ func (c CredentialsOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CredentialsOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"name", "provider", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -35,12 +35,12 @@ resource "seqera_datasets" "my_datasets" {
 
 ### Required
 
-- `name` (String) Requires replacement if changed.
+- `name` (String) Dataset name following naming conventions (1-100 characters). Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Optional
 
-- `description` (String) Requires replacement if changed.
+- `description` (String) Detailed description of the dataset contents and purpose (max 1000 characters). Requires replacement if changed.
 
 ### Read-Only
 

@@ -90,7 +90,7 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			},
 			"org_id": schema.Int64Attribute{
 				Computed:    true,
-				Description: `Unique numeric identifier for the organization`,
+				Description: `Organization numeric identifier`,
 			},
 			"website": schema.StringAttribute{
 				Computed:    true,

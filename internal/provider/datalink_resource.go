@@ -83,10 +83,11 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"data_link_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Unique identifier for the data link`,
+				Description: `Data-link string identifier`,
 			},
 			"description": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Description of the data link's purpose and contents`,
 			},
 			"hidden": schema.BoolAttribute{
 				Computed: true,
@@ -95,7 +96,8 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed: true,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Required:    true,
+				Description: `Display name for the data link connection`,
 			},
 			"provider_type": schema.StringAttribute{
 				Required: true,
@@ -132,7 +134,7 @@ func (r *DataLinkResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Reference identifier for the external resource. Requires replacement if changed.`,
 			},
 			"status": schema.StringAttribute{
 				Computed: true,

@@ -95,6 +95,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -287,6 +288,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cli_path": schema.StringAttribute{
@@ -915,6 +917,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"allow_buckets": schema.ListAttribute{
@@ -1152,6 +1155,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"auto_pool_mode": schema.BoolAttribute{
@@ -1409,6 +1413,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cluster_name": schema.StringAttribute{
@@ -1685,6 +1690,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cluster_name": schema.StringAttribute{
@@ -1961,6 +1967,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"boot_disk_size_gb": schema.Int32Attribute{
@@ -2266,6 +2273,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"boot_disk_size_gb": schema.Int32Attribute{
@@ -2516,6 +2524,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_service_account": schema.StringAttribute{
@@ -2754,6 +2763,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -2970,6 +2980,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -3162,6 +3173,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"cli_path": schema.StringAttribute{
@@ -3790,6 +3802,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -3982,6 +3995,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
+									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"compute_queue": schema.StringAttribute{
@@ -4697,7 +4711,7 @@ func (r *ComputeEnvResource) ImportState(ctx context.Context, req resource.Impor
 	}
 
 	if len(data.ComputeEnvID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field compute_env_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field compute_env_id is required but was not found in the json encoded ID.`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("compute_env_id"), data.ComputeEnvID)...)

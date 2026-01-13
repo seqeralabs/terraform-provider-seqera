@@ -16,7 +16,7 @@ func (j JobQueue) MarshalJSON() ([]byte, error) {
 }
 
 func (j *JobQueue) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &j, "", false, []string{"name", "state"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &j, "", false, nil); err != nil {
 		return err
 	}
 	return nil

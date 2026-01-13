@@ -1126,7 +1126,7 @@ func (r *AWSComputeEnvResource) ImportState(ctx context.Context, req resource.Im
 	}
 
 	if len(data.ComputeEnvID) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field compute_env_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field compute_env_id is required but was not found in the json encoded ID.`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("compute_env_id"), data.ComputeEnvID)...)

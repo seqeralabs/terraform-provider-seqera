@@ -64,7 +64,7 @@ func (a AWSComputeEnvComputeConfigInput) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSComputeEnvComputeConfigInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"credentialsId", "name", "platform", "config"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -186,7 +186,7 @@ func (a AWSComputeEnvComputeConfig) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSComputeEnvComputeConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"credentialsId", "name", "platform", "config"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil

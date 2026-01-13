@@ -74,18 +74,18 @@ resource "seqera_pipeline" "my_pipeline" {
 ### Required
 
 - `launch` (Attributes) (see [below for nested schema](#nestedatt--launch))
-- `name` (String)
+- `name` (String) Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores
 
 ### Optional
 
-- `description` (String)
-- `icon` (String)
+- `description` (String) Detailed description of the pipeline's purpose and functionality
+- `icon` (String) Icon identifier or URL for visual representation
 - `label_ids` (List of Number)
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
 
-- `pipeline_id` (Number) Unique numeric identifier for the pipeline
+- `pipeline_id` (Number) Pipeline numeric identifier
 - `repository` (String) Git repository URL containing the pipeline source code
 - `user_first_name` (String)
 - `user_id` (Number)

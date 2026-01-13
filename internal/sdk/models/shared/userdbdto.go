@@ -31,7 +31,7 @@ func (u UserDbDto) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UserDbDto) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"userName", "email"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
