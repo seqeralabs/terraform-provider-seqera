@@ -33,19 +33,19 @@ resource "seqera_teams" "my_teams" {
 
 ### Required
 
-- `name` (String)
+- `name` (String) Display name for the team
 - `org_id` (Number) Organization numeric identifier
 
 ### Optional
 
 - `avatar_id` (String)
-- `description` (String)
+- `description` (String) Description of the team's purpose and responsibilities
 
 ### Read-Only
 
 - `avatar_url` (String) URL to the team's avatar or profile image
 - `members_count` (Number) Total number of members in the team
-- `team_id` (Number) Unique numeric identifier for the team
+- `team_id` (Number) Team numeric identifier
 
 ## Import
 

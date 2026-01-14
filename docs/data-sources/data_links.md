@@ -79,7 +79,7 @@ resource "seqera_pipeline" "example" {
 
 ### Optional
 
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace ID used for filtering
 
 ### Read-Only
 

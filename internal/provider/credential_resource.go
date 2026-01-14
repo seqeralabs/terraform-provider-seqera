@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
@@ -116,6 +117,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Attributes: map[string]schema.Attribute{
 					"aws": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
 								Computed: true,
@@ -150,6 +154,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"azure": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
 								Optional: true,
@@ -187,6 +194,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"azure_entra": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"batch_key": schema.StringAttribute{
 								Optional: true,
@@ -235,6 +245,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"azurerepos": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
 								Optional: true,
@@ -265,6 +278,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"bitbucket": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
 								Optional: true,
@@ -295,6 +311,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"codecommit": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
 								Optional: true,
@@ -325,6 +344,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"container_reg": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
 								Optional: true,
@@ -359,6 +381,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"gitea": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
 								Optional: true,
@@ -389,6 +414,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"github": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
 								Optional:  true,
@@ -420,6 +448,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"gitlab": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"password": schema.StringAttribute{
 								Optional: true,
@@ -453,6 +484,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"google": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"data": schema.StringAttribute{
 								Optional:  true,
@@ -481,6 +515,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"k8s": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"certificate": schema.StringAttribute{
 								Computed: true,
@@ -514,6 +551,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"seqeracompute": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"access_key": schema.StringAttribute{
 								Computed: true,
@@ -548,6 +588,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"ssh": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"passphrase": schema.StringAttribute{
 								Optional: true,
@@ -577,6 +620,9 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 					"tw_agent": schema.SingleNestedAttribute{
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.UseConfigValue(),
+						},
 						Attributes: map[string]schema.Attribute{
 							"connection_id": schema.StringAttribute{
 								Computed: true,

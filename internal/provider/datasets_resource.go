@@ -67,7 +67,7 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Detailed description of the dataset contents and purpose (max 1000 characters). Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1000),
 				},
@@ -89,7 +89,7 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Dataset name following naming conventions (1-100 characters). Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$`).String()),

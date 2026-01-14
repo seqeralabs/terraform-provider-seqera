@@ -18,7 +18,7 @@ func (i Image) MarshalJSON() ([]byte, error) {
 }
 
 func (i *Image) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"id", "name", "description", "arch"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil

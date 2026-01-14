@@ -47,7 +47,7 @@ func (s SSHCredentialKeys) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SSHCredentialKeys) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"privateKey"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -97,7 +97,7 @@ func (s SSHCredential) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SSHCredential) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -205,7 +205,7 @@ func (s SSHCredentialOutput) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SSHCredentialOutput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"name", "keys"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -38,7 +38,7 @@ func (m MoabConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (m *MoabConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"workDir"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -178,7 +178,7 @@ func (a AltairPBSConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AltairPBSConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"workDir"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -318,7 +318,7 @@ func (u UnivaGridEngineConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (u *UnivaGridEngineConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &u, "", false, []string{"workDir"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &u, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -467,7 +467,7 @@ func (g GoogleGKEClusterConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GoogleGKEClusterConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"server", "sslCert", "namespace", "headServiceAccount", "storageClaimName", "region", "clusterName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -665,7 +665,7 @@ func (a AmazonEKSClusterConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AmazonEKSClusterConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"server", "sslCert", "namespace", "headServiceAccount", "storageClaimName", "region", "clusterName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -857,7 +857,7 @@ func (k KubernetesComputeConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (k *KubernetesComputeConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"server", "sslCert", "namespace", "headServiceAccount", "storageClaimName"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1018,7 +1018,7 @@ func (s SlurmConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SlurmConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"workDir"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1161,7 +1161,7 @@ func (i IBMLSFConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IBMLSFConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &i, "", false, []string{"workDir"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &i, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1324,7 +1324,7 @@ func (a AzureBatchConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -1962,7 +1962,7 @@ func (s SeqeraComputeConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SeqeraComputeConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -2192,7 +2192,7 @@ func (a AWSCloudConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSCloudConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -2417,7 +2417,7 @@ func (a AWSBatchConfiguration) MarshalJSON() ([]byte, error) {
 }
 
 func (a *AWSBatchConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"region"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -2634,20 +2634,20 @@ const (
 // ComputeConfig - Configuration settings for compute environments including work directories,
 // pre/post run scripts, and environment-specific parameters.
 type ComputeConfig struct {
-	AWSBatchConfiguration           *AWSBatchConfiguration           `queryParam:"inline,name=ComputeConfig"`
-	AWSCloudConfiguration           *AWSCloudConfiguration           `queryParam:"inline,name=ComputeConfig"`
-	SeqeraComputeConfiguration      *SeqeraComputeConfiguration      `queryParam:"inline,name=ComputeConfig"`
-	GoogleLifeSciencesConfiguration *GoogleLifeSciencesConfiguration `queryParam:"inline,name=ComputeConfig"`
-	GoogleBatchServiceConfiguration *GoogleBatchServiceConfiguration `queryParam:"inline,name=ComputeConfig"`
-	AzureBatchConfiguration         *AzureBatchConfiguration         `queryParam:"inline,name=ComputeConfig"`
-	IBMLSFConfiguration             *IBMLSFConfiguration             `queryParam:"inline,name=ComputeConfig"`
-	SlurmConfiguration              *SlurmConfiguration              `queryParam:"inline,name=ComputeConfig"`
-	KubernetesComputeConfiguration  *KubernetesComputeConfiguration  `queryParam:"inline,name=ComputeConfig"`
-	AmazonEKSClusterConfiguration   *AmazonEKSClusterConfiguration   `queryParam:"inline,name=ComputeConfig"`
-	GoogleGKEClusterConfiguration   *GoogleGKEClusterConfiguration   `queryParam:"inline,name=ComputeConfig"`
-	UnivaGridEngineConfiguration    *UnivaGridEngineConfiguration    `queryParam:"inline,name=ComputeConfig"`
-	AltairPBSConfiguration          *AltairPBSConfiguration          `queryParam:"inline,name=ComputeConfig"`
-	MoabConfiguration               *MoabConfiguration               `queryParam:"inline,name=ComputeConfig"`
+	AWSBatchConfiguration           *AWSBatchConfiguration           `queryParam:"inline" union:"member"`
+	AWSCloudConfiguration           *AWSCloudConfiguration           `queryParam:"inline" union:"member"`
+	SeqeraComputeConfiguration      *SeqeraComputeConfiguration      `queryParam:"inline" union:"member"`
+	GoogleLifeSciencesConfiguration *GoogleLifeSciencesConfiguration `queryParam:"inline" union:"member"`
+	GoogleBatchServiceConfiguration *GoogleBatchServiceConfiguration `queryParam:"inline" union:"member"`
+	AzureBatchConfiguration         *AzureBatchConfiguration         `queryParam:"inline" union:"member"`
+	IBMLSFConfiguration             *IBMLSFConfiguration             `queryParam:"inline" union:"member"`
+	SlurmConfiguration              *SlurmConfiguration              `queryParam:"inline" union:"member"`
+	KubernetesComputeConfiguration  *KubernetesComputeConfiguration  `queryParam:"inline" union:"member"`
+	AmazonEKSClusterConfiguration   *AmazonEKSClusterConfiguration   `queryParam:"inline" union:"member"`
+	GoogleGKEClusterConfiguration   *GoogleGKEClusterConfiguration   `queryParam:"inline" union:"member"`
+	UnivaGridEngineConfiguration    *UnivaGridEngineConfiguration    `queryParam:"inline" union:"member"`
+	AltairPBSConfiguration          *AltairPBSConfiguration          `queryParam:"inline" union:"member"`
+	MoabConfiguration               *MoabConfiguration               `queryParam:"inline" union:"member"`
 
 	Type ComputeConfigType
 }

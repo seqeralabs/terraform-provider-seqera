@@ -189,7 +189,7 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Description of the Studio session's purpose. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(2048),
 				},
@@ -224,14 +224,14 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Display name for the Studio session. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 80),
 				},
 			},
 			"session_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Unique identifier for the Studio session`,
+				Description: `Studio session numeric identifier`,
 			},
 			"spot": schema.BoolAttribute{
 				Optional: true,
