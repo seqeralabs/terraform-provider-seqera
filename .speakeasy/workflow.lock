@@ -1,4 +1,4 @@
-speakeasyVersion: 1.690.0
+speakeasyVersion: 1.690.1
 sources:
     Seqera API:
         sourceNamespace: seqera-api

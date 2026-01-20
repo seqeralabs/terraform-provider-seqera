@@ -29,14 +29,41 @@ generation:
     skipResponseBodyAssertions: false
 terraform:
   version: 0.26.5
-  additionalDataSources: []
+  additionalDataSources:
+    - datasource: organization_member_data.NewDataSource
+      importAlias: organization_member_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member_data
+    - datasource: workspace_data.NewDataSource
+      importAlias: workspace_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data
+    - datasource: workspace_participant_data.NewDataSource
+      importAlias: workspace_participant_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant_data
+    - datasource: pipeline_data.NewDataSource
+      importAlias: pipeline_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_data
+    - datasource: pipeline_secret_data.NewDataSource
+      importAlias: pipeline_secret_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_secret_data
   additionalDependencies: {}
   additionalEphemeralResources: []
   additionalListResources: []
   additionalProviderAttributes:
     httpHeaders: ""
     tlsSkipVerify: ""
-  additionalResources: []
+  additionalResources:
+    - importAlias: workspace_participant
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant
+      resource: workspace_participant.NewResource
+    - importAlias: organization_member
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member
+      resource: organization_member.NewResource
+    - importAlias: team_member
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_member
+      resource: team_member.NewResource
+    - importAlias: dataset_version
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version
+      resource: dataset_version.NewResource
   allowUnknownFieldsInWeakUnions: false
   author: seqeralabs
   baseErrorName: SeqeraError
