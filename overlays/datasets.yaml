@@ -39,7 +39,7 @@ actions:
         terraform-resource: Dataset#read
 
   # Dataset entity annotation
-  - target: $["components"]["schemas"]["Dataset"]
+  - target: $["components"]["schemas"]["DatasetDto"]
     update:
       x-speakeasy-entity: Datasets
       x-speakeasy-entity-description: |
@@ -65,26 +65,72 @@ actions:
       example: "Dataset containing sample genomic data"
 
   # Schema description
-  - target: $.components.schemas.Dataset
+  - target: $.components.schemas.DatasetDto
     update:
       description: |
         Represents a dataset in the Seqera Platform.
         Contains dataset metadata, versioning information, and access
         controls for data management and sharing.
 
-  # Field descriptions for Dataset
-  - target: $.components.schemas.Dataset.properties.id
+  # Field descriptions for DatasetDto
+  - target: $.components.schemas.DatasetDto.properties.id
     update:
       description: Unique identifier for the dataset (max 22 characters)
-  - target: $.components.schemas.Dataset.properties.name
+  - target: $.components.schemas.DatasetDto.properties.name
     update:
       description: Dataset name following naming conventions (1-100 characters)
-  - target: $.components.schemas.Dataset.properties.description
+  - target: $.components.schemas.DatasetDto.properties.description
     update:
       description: Detailed description of the dataset contents and purpose (max 1000 characters)
-  - target: $.components.schemas.Dataset.properties.mediaType
+  - target: $.components.schemas.DatasetDto.properties.mediaType
     update:
       description: MIME type or media type of the dataset content (max 80 characters)
-  - target: $.components.schemas.Dataset.properties.deleted
+  - target: $.components.schemas.DatasetDto.properties.workspaceId
     update:
-      description: Read-only flag indicating if the dataset has been deleted
+      description: Numeric identifier of the workspace containing this dataset
+
+  # ============================================================================
+  # CLEANUP - Remove runtime and unmanageable fields
+  # ============================================================================
+
+  # Remove user information (runtime data - who created the dataset)
+  - target: $.components.schemas.DatasetDto.properties.user
+    remove: true
+
+  # Remove lastUpdatedBy (runtime data - who last modified)
+  - target: $.components.schemas.DatasetDto.properties.lastUpdatedBy
+    remove: true
+
+  # Remove runsInfo (runtime statistics)
+  - target: $.components.schemas.DatasetDto.properties.runsInfo
+    remove: true
+
+  # Remove labels (managed separately via label resources)
+  - target: $.components.schemas.DatasetDto.properties.labels
+    remove: true
+
+  # Remove hidden (internal visibility state)
+  - target: $.components.schemas.DatasetDto.properties.hidden
+    remove: true
+
+  # Remove deleted (internal deletion flag)
+  - target: $.components.schemas.DatasetDto.properties.deleted
+    remove: true
+
+  # Remove organizationId (derived from workspace)
+  - target: $.components.schemas.DatasetDto.properties.organizationId
+    remove: true
+
+  # Remove version (read-only internal versioning)
+  - target: $.components.schemas.DatasetDto.properties.version
+    remove: true
+
+  # Remove dateCreated (use lastUpdated instead)
+  - target: $.components.schemas.DatasetDto.properties.dateCreated
+    remove: true
+
+  # Mark lastUpdated as read-only
+  - target: $.components.schemas.DatasetDto.properties.lastUpdated
+    update:
+      x-speakeasy-param-readonly: true
+      description: Timestamp when the dataset was last modified

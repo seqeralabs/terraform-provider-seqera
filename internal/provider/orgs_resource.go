@@ -75,10 +75,12 @@ func (r *OrgsResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"member_id": schema.Int64Attribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Member ID (can be null for collaborators)`,
 			},
 			"member_role": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Member role (can be null for collaborators)`,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,

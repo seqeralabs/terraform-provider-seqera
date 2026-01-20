@@ -1,0 +1,2453 @@
+overlay: 1.0.0
+info:
+  title: Nullable Fields Overlay
+  version: 2.0.0
+  description: |
+    Fix nullable fields that can return null from the API but are not marked as nullable.
+    This fixes "unexpected byte 110 'n'" errors when the API returns null values.
+
+    Based on analysis of domain models in tower-core and tower-enterprise:
+    - Fields with @Column(nullable = true)
+    - Wrapper types (Integer, Long, Boolean, BigDecimal) without @NotNull
+    - Optional @ManyToOne/@OneToOne relationships
+    - Fields with @Nullable annotation
+
+actions:
+  # =============================================================================
+  # Icon fields - API can return null for these string fields
+  # =============================================================================
+
+  - target: $.components.schemas.PipelineDbDto.properties.icon
+    update:
+      type: string
+      nullable: true
+      description: Icon identifier or URL for visual representation
+
+  - target: $.components.schemas.CreatePipelineRequest.properties.icon
+    update:
+      type: string
+      nullable: true
+      description: Icon identifier or URL for visual representation
+
+  - target: $.components.schemas.UpdatePipelineRequest.properties.icon
+    update:
+      type: string
+      nullable: true
+      description: Icon identifier or URL for visual representation
+
+  - target: $.components.schemas.DataStudioTemplate.properties.icon
+    update:
+      type: string
+      nullable: true
+      description: Icon identifier or URL for visual representation
+
+  # =============================================================================
+  # Date/Time fields - null when never used/accessed
+  # =============================================================================
+
+  # AccessToken
+  - target: $.components.schemas.AccessToken.properties.lastUsed
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Last time this token was used (null if never used)
+
+  # Credentials
+  - target: $.components.schemas.Credentials.properties.lastUsed
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      readOnly: true
+      description: Last time these credentials were used (null if never used)
+
+  # ComputeEnvResponseDto
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.lastUsed
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Last time this compute environment was used (null if never used)
+
+  # ComputeEnvDbDto
+  - target: $.components.schemas.ComputeEnvDbDto.properties.lastUsed
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Last time this compute environment was used (null if never used)
+
+  # WorkflowDbDto - start/complete timestamps
+  - target: $.components.schemas.WorkflowDbDto.properties.start
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Workflow start time (null if not started)
+
+  - target: $.components.schemas.WorkflowDbDto.properties.complete
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Workflow completion time (null if not completed)
+
+  - target: $.components.schemas.WorkflowDbDto.properties.errorMessage
+    update:
+      type: string
+      nullable: true
+      description: Error message (null if no error)
+
+  # Workflow schema (used by DescribeWorkflowResponse)
+  - target: $.components.schemas.Workflow.properties.errorMessage
+    update:
+      type: string
+      nullable: true
+      description: Error message (null if no error)
+
+  - target: $.components.schemas.Workflow.properties.errorReport
+    update:
+      type: string
+      nullable: true
+      description: Error report (null if no error)
+
+  - target: $.components.schemas.Workflow.properties.deleted
+    update:
+      type: boolean
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.resume
+    update:
+      type: boolean
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.success
+    update:
+      type: boolean
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.revision
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.commitId
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.duration
+    update:
+      type: integer
+      format: int64
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.exitStatus
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.container
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.containerEngine
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.profile
+    update:
+      type: string
+      maxLength: 100
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.scriptId
+    update:
+      type: string
+      maxLength: 40
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.scriptName
+    update:
+      type: string
+      maxLength: 100
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.launchId
+    update:
+      type: string
+      maxLength: 22
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.configFiles
+    update:
+      type: array
+      nullable: true
+      items:
+        type: string
+
+  - target: $.components.schemas.Workflow.properties.params
+    update:
+      type: object
+      additionalProperties: true
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.configText
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.projectDir
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.homeDir
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.scriptFile
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.launchDir
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.logFile
+    update:
+      type: string
+      maxLength: 255
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.outFile
+    update:
+      type: string
+      maxLength: 255
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.operationId
+    update:
+      type: string
+      maxLength: 110
+      nullable: true
+
+  - target: $.components.schemas.Workflow.properties.repository
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.WorkflowDbDto.properties.errorReport
+    update:
+      type: string
+      nullable: true
+      description: Error report (null if no error)
+
+  - target: $.components.schemas.WorkflowDbDto.properties.exitStatus
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Exit status (null if not completed)
+
+  - target: $.components.schemas.WorkflowDbDto.properties.duration
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Duration (null if not completed)
+
+  - target: $.components.schemas.WorkflowDbDto.properties.userName
+    update:
+      type: string
+      nullable: true
+      description: User name
+
+  - target: $.components.schemas.WorkflowDbDto.properties.repository
+    update:
+      type: string
+      nullable: true
+      description: Repository
+
+  - target: $.components.schemas.WorkflowDbDto.properties.revision
+    update:
+      type: string
+      nullable: true
+      description: Revision
+
+  - target: $.components.schemas.WorkflowDbDto.properties.commitId
+    update:
+      type: string
+      nullable: true
+      description: Commit ID
+
+  - target: $.components.schemas.WorkflowDbDto.properties.projectName
+    update:
+      type: string
+      nullable: true
+      description: Project name
+
+  - target: $.components.schemas.WorkflowDbDto.properties.sessionId
+    update:
+      type: string
+      nullable: true
+      description: Session ID
+
+  - target: $.components.schemas.WorkflowDbDto.properties.runName
+    update:
+      type: string
+      nullable: true
+      description: Run name
+
+  - target: $.components.schemas.WorkflowDbDto.properties.workDir
+    update:
+      type: string
+      nullable: true
+      description: Work directory
+
+  - target: $.components.schemas.WorkflowDbDto.properties.icon
+    update:
+      type: string
+      nullable: true
+      description: Icon
+
+  - target: $.components.schemas.WorkflowDbDto.properties.deleted
+    update:
+      type: boolean
+      nullable: true
+      description: Whether the workflow is deleted
+
+  - target: $.components.schemas.WorkflowDbDto.properties.ownerId
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Owner ID
+
+  - target: $.components.schemas.WorkflowDbDto.properties.container
+    update:
+      type: string
+      nullable: true
+      description: Container
+
+  - target: $.components.schemas.WorkflowDbDto.properties.containerEngine
+    update:
+      type: string
+      nullable: true
+      description: Container engine
+
+  - target: $.components.schemas.WorkflowDbDto.properties.scriptFile
+    update:
+      type: string
+      nullable: true
+      description: Script file
+
+  - target: $.components.schemas.WorkflowDbDto.properties.launchDir
+    update:
+      type: string
+      nullable: true
+      description: Launch directory
+
+  - target: $.components.schemas.WorkflowDbDto.properties.projectDir
+    update:
+      type: string
+      nullable: true
+      description: Project directory
+
+  - target: $.components.schemas.WorkflowDbDto.properties.homeDir
+    update:
+      type: string
+      nullable: true
+      description: Home directory
+
+  - target: $.components.schemas.WorkflowDbDto.properties.profile
+    update:
+      type: string
+      nullable: true
+      description: Profile
+
+  - target: $.components.schemas.WorkflowDbDto.properties.scriptName
+    update:
+      type: string
+      nullable: true
+      description: Script name
+
+  - target: $.components.schemas.WorkflowDbDto.properties.scriptId
+    update:
+      type: string
+      nullable: true
+      description: Script ID
+
+  - target: $.components.schemas.WorkflowDbDto.properties.commandLine
+    update:
+      type: string
+      nullable: true
+      description: Command line
+
+  - target: $.components.schemas.WorkflowDbDto.properties.configText
+    update:
+      type: string
+      nullable: true
+      description: Config text
+
+  - target: $.components.schemas.WorkflowDbDto.properties.launchId
+    update:
+      type: string
+      nullable: true
+      description: Launch ID
+
+  - target: $.components.schemas.WorkflowDbDto.properties.resume
+    update:
+      type: boolean
+      nullable: true
+      description: Resume flag
+
+  - target: $.components.schemas.WorkflowDbDto.properties.success
+    update:
+      type: boolean
+      nullable: true
+      description: Success flag
+
+  - target: $.components.schemas.WorkflowDbDto.properties.requiresAttention
+    update:
+      type: boolean
+      nullable: true
+      description: Requires attention flag
+
+  - target: $.components.schemas.WorkflowDbDto.properties.configFiles
+    update:
+      type: array
+      items:
+        type: string
+      nullable: true
+      description: Config files (can be null)
+
+  - target: $.components.schemas.WorkflowDbDto.properties.messages
+    update:
+      type: array
+      items:
+        type: string
+      nullable: true
+      description: Messages (can be null)
+
+  - target: $.components.schemas.WorkflowDbDto.properties.params
+    update:
+      type: object
+      additionalProperties: true
+      nullable: true
+      description: Workflow parameters (can be null)
+
+  # Workflow - start/complete timestamps
+  - target: $.components.schemas.Workflow.properties.start
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Workflow start time (null if not started)
+
+  - target: $.components.schemas.Workflow.properties.complete
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Workflow completion time (null if not completed)
+
+  # DataStudioCheckpointDto
+  - target: $.components.schemas.DataStudioCheckpointDto.properties.dateSaved
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Date checkpoint was saved (null if not saved)
+
+  # =============================================================================
+  # Boolean wrapper fields - null vs false semantics
+  # =============================================================================
+
+  # ComputeEnvResponseDto
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.deleted
+    update:
+      type: boolean
+      nullable: true
+      description: Whether compute environment is deleted (null means not deleted)
+
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.primary
+    update:
+      type: boolean
+      nullable: true
+      description: Whether this is the primary compute environment
+
+  # ComputeEnvDbDto
+  - target: $.components.schemas.ComputeEnvDbDto.properties.deleted
+    update:
+      type: boolean
+      nullable: true
+      description: Whether compute environment is deleted (null means not deleted)
+
+  - target: $.components.schemas.ComputeEnvDbDto.properties.primary
+    update:
+      type: boolean
+      nullable: true
+      description: Whether this is the primary compute environment
+
+  # Credentials
+  - target: $.components.schemas.Credentials.properties.deleted
+    update:
+      type: boolean
+      nullable: true
+      readOnly: true
+      description: Whether credentials are deleted (null means not deleted)
+
+  # ActionResponseDto
+  - target: $.components.schemas.ActionResponseDto.properties.deleted
+    update:
+      type: boolean
+      nullable: true
+      description: Whether action is deleted (null means not deleted)
+
+  # DatasetDto
+  - target: $.components.schemas.DatasetDto.properties.deleted
+    update:
+      type: boolean
+      nullable: true
+      description: Whether dataset is deleted
+
+  - target: $.components.schemas.DatasetDto.properties.labels
+    update:
+      type: array
+      items:
+        $ref: "#/components/schemas/LabelDbDto"
+      nullable: true
+      description: Dataset labels (can be null)
+
+  - target: $.components.schemas.DatasetDto.properties.hidden
+    update:
+      type: boolean
+      nullable: true
+      description: Whether dataset is hidden
+
+  # DatasetRunsInfo
+  - target: $.components.schemas.DatasetRunsInfo.properties.lastUsed
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Last used timestamp (null if never used)
+
+  - target: $.components.schemas.DatasetRunsInfo.properties.runsCount
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Number of runs
+
+  # Make DatasetRunsInfo itself nullable
+  - target: $.components.schemas.DatasetRunsInfo
+    update:
+      nullable: true
+
+  # =============================================================================
+  # ComputeEnv optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.credentialsId
+    update:
+      type: string
+      nullable: true
+      description: Associated credentials ID (null if using managed identity or none)
+
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.managedIdentityId
+    update:
+      type: string
+      nullable: true
+      description: Associated managed identity ID (null if using credentials or none)
+
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.message
+    update:
+      type: string
+      nullable: true
+      description: Status message (null if no message)
+
+  - target: $.components.schemas.ComputeEnvResponseDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Compute environment description
+
+  # ComputeEnvDbDto
+  - target: $.components.schemas.ComputeEnvDbDto.properties.credentialsId
+    update:
+      type: string
+      nullable: true
+      description: Associated credentials ID
+
+  - target: $.components.schemas.ComputeEnvDbDto.properties.message
+    update:
+      type: string
+      nullable: true
+      description: Status message
+
+  - target: $.components.schemas.ComputeEnvDbDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Compute environment description
+
+  - target: $.components.schemas.ComputeEnvDbDto.properties.region
+    update:
+      type: string
+      nullable: true
+      description: Compute environment region
+
+  # =============================================================================
+  # Launch/WorkflowLaunchRequest optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.Launch.properties.workDir
+    update:
+      type: string
+      nullable: true
+      description: Working directory
+
+  - target: $.components.schemas.Launch.properties.revision
+    update:
+      type: string
+      maxLength: 100
+      nullable: true
+      description: Pipeline revision
+
+  - target: $.components.schemas.Launch.properties.commitId
+    update:
+      type: string
+      maxLength: 40
+      nullable: true
+      description: Git commit ID
+
+  - target: $.components.schemas.Launch.properties.configText
+    update:
+      type: string
+      nullable: true
+      description: Nextflow configuration text
+
+  - target: $.components.schemas.Launch.properties.towerConfig
+    update:
+      type: string
+      nullable: true
+      description: Tower-specific configuration
+
+  - target: $.components.schemas.Launch.properties.paramsText
+    update:
+      type: string
+      nullable: true
+      description: Pipeline parameters text
+
+  - target: $.components.schemas.Launch.properties.preRunScript
+    update:
+      type: string
+      nullable: true
+      description: Script to run before pipeline execution
+
+  - target: $.components.schemas.Launch.properties.postRunScript
+    update:
+      type: string
+      nullable: true
+      description: Script to run after pipeline execution
+
+  - target: $.components.schemas.Launch.properties.mainScript
+    update:
+      type: string
+      maxLength: 200
+      nullable: true
+      description: Main script path
+
+  - target: $.components.schemas.Launch.properties.entryName
+    update:
+      type: string
+      maxLength: 80
+      nullable: true
+      description: Entry workflow name
+
+  - target: $.components.schemas.Launch.properties.schemaName
+    update:
+      type: string
+      maxLength: 100
+      nullable: true
+      description: Pipeline schema name
+
+  - target: $.components.schemas.Launch.properties.runName
+    update:
+      type: string
+      maxLength: 80
+      nullable: true
+      description: Custom run name
+
+  - target: $.components.schemas.Launch.properties.sessionId
+    update:
+      type: string
+      maxLength: 36
+      nullable: true
+      description: Session ID for resuming
+
+  - target: $.components.schemas.Launch.properties.resumeLaunchId
+    update:
+      type: string
+      maxLength: 22
+      nullable: true
+      description: Launch ID to resume from
+
+  - target: $.components.schemas.Launch.properties.optimizationId
+    update:
+      type: string
+      nullable: true
+      description: Optimization profile ID
+
+  - target: $.components.schemas.Launch.properties.optimizationTargets
+    update:
+      type: string
+      nullable: true
+      description: Optimization targets
+
+  - target: $.components.schemas.Launch.properties.headJobCpus
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Head job CPU allocation
+
+  - target: $.components.schemas.Launch.properties.headJobMemoryMb
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Head job memory allocation in MB
+
+  # WorkflowLaunchRequest - same fields
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.workDir
+    update:
+      type: string
+      nullable: true
+      description: Working directory
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.revision
+    update:
+      type: string
+      nullable: true
+      description: Pipeline revision
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.commitId
+    update:
+      type: string
+      nullable: true
+      description: Git commit ID
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.configText
+    update:
+      type: string
+      nullable: true
+      description: Nextflow configuration text
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.towerConfig
+    update:
+      type: string
+      nullable: true
+      description: Tower-specific configuration
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.paramsText
+    update:
+      type: string
+      nullable: true
+      description: Pipeline parameters text
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.preRunScript
+    update:
+      type: string
+      nullable: true
+      description: Script to run before pipeline execution
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.postRunScript
+    update:
+      type: string
+      nullable: true
+      description: Script to run after pipeline execution
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.mainScript
+    update:
+      type: string
+      nullable: true
+      description: Main script path
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.entryName
+    update:
+      type: string
+      nullable: true
+      description: Entry workflow name
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.schemaName
+    update:
+      type: string
+      nullable: true
+      description: Pipeline schema name
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.runName
+    update:
+      type: string
+      nullable: true
+      description: Custom run name
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.sessionId
+    update:
+      type: string
+      nullable: true
+      description: Session ID for resuming
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.optimizationId
+    update:
+      type: string
+      nullable: true
+      description: Optimization profile ID
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.optimizationTargets
+    update:
+      type: string
+      nullable: true
+      description: Optimization targets
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.headJobCpus
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Head job CPU allocation
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.headJobMemoryMb
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Head job memory allocation in MB
+
+  # =============================================================================
+  # Task fields - many nullable numeric and string fields
+  # =============================================================================
+
+  - target: $.components.schemas.Task.properties.submit
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Task submission time
+
+  - target: $.components.schemas.Task.properties.start
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Task start time
+
+  - target: $.components.schemas.Task.properties.complete
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Task completion time
+
+  - target: $.components.schemas.Task.properties.process
+    update:
+      type: string
+      nullable: true
+      description: Process name
+
+  - target: $.components.schemas.Task.properties.tag
+    update:
+      type: string
+      nullable: true
+      description: Task tag
+
+  - target: $.components.schemas.Task.properties.container
+    update:
+      type: string
+      nullable: true
+      description: Container image
+
+  - target: $.components.schemas.Task.properties.attempt
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Attempt number
+
+  - target: $.components.schemas.Task.properties.script
+    update:
+      type: string
+      nullable: true
+      description: Task script
+
+  - target: $.components.schemas.Task.properties.scratch
+    update:
+      type: string
+      nullable: true
+      description: Scratch directory
+
+  - target: $.components.schemas.Task.properties.workdir
+    update:
+      type: string
+      nullable: true
+      description: Working directory
+
+  - target: $.components.schemas.Task.properties.queue
+    update:
+      type: string
+      nullable: true
+      description: Execution queue
+
+  - target: $.components.schemas.Task.properties.cpus
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: CPU allocation
+
+  - target: $.components.schemas.Task.properties.memory
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Memory allocation in bytes
+
+  - target: $.components.schemas.Task.properties.disk
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Disk allocation in bytes
+
+  - target: $.components.schemas.Task.properties.time
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Time limit in milliseconds
+
+  - target: $.components.schemas.Task.properties.env
+    update:
+      type: string
+      nullable: true
+      description: Environment variables
+
+  - target: $.components.schemas.Task.properties.executor
+    update:
+      type: string
+      nullable: true
+      description: Executor name
+
+  - target: $.components.schemas.Task.properties.machineType
+    update:
+      type: string
+      nullable: true
+      description: Cloud machine type
+
+  - target: $.components.schemas.Task.properties.cloudZone
+    update:
+      type: string
+      nullable: true
+      description: Cloud zone/region
+
+  - target: $.components.schemas.Task.properties.cost
+    update:
+      type: number
+      nullable: true
+      description: Estimated cost
+
+  - target: $.components.schemas.Task.properties.errorAction
+    update:
+      type: string
+      nullable: true
+      description: Error handling action
+
+  - target: $.components.schemas.Task.properties.exitStatus
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Exit status code
+
+  - target: $.components.schemas.Task.properties.duration
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Task duration in milliseconds
+
+  - target: $.components.schemas.Task.properties.realtime
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Real execution time in milliseconds
+
+  - target: $.components.schemas.Task.properties.nativeId
+    update:
+      type: string
+      nullable: true
+      description: Native job ID from executor
+
+  - target: $.components.schemas.Task.properties.pcpu
+    update:
+      type: number
+      format: double
+      nullable: true
+      description: CPU usage percentage
+
+  - target: $.components.schemas.Task.properties.pmem
+    update:
+      type: number
+      format: double
+      nullable: true
+      description: Memory usage percentage
+
+  - target: $.components.schemas.Task.properties.rss
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Resident set size
+
+  - target: $.components.schemas.Task.properties.vmem
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Virtual memory size
+
+  - target: $.components.schemas.Task.properties.peakRss
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Peak resident set size
+
+  - target: $.components.schemas.Task.properties.peakVmem
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Peak virtual memory size
+
+  - target: $.components.schemas.Task.properties.rchar
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Characters read
+
+  - target: $.components.schemas.Task.properties.wchar
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Characters written
+
+  - target: $.components.schemas.Task.properties.syscr
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: System read calls
+
+  - target: $.components.schemas.Task.properties.syscw
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: System write calls
+
+  - target: $.components.schemas.Task.properties.readBytes
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Bytes read from disk
+
+  - target: $.components.schemas.Task.properties.writeBytes
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Bytes written to disk
+
+  - target: $.components.schemas.Task.properties.volCtxt
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Voluntary context switches
+
+  - target: $.components.schemas.Task.properties.invCtxt
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Involuntary context switches
+
+  # =============================================================================
+  # Credentials optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.Credentials.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Credentials description
+
+  - target: $.components.schemas.Credentials.properties.baseUrl
+    update:
+      type: string
+      maxLength: 200
+      nullable: true
+      description: Base URL for the credential provider
+
+  - target: $.components.schemas.Credentials.properties.category
+    update:
+      type: string
+      maxLength: 20
+      nullable: true
+      description: Credentials category
+
+  # AwsSecurityKeys - secretKey is writeOnly but can be null in responses
+  - target: "$.components.schemas.AwsSecurityKeys.properties.secretKey"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.AwsSecurityKeys.properties.accessKey"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.AwsSecurityKeys.properties.assumeRoleArn"
+    update:
+      type: string
+      nullable: true
+
+  # S3SecurityKeys - similar to AWS
+  - target: "$.components.schemas.S3SecurityKeys.properties.secretKey"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.S3SecurityKeys.properties.accessKey"
+    update:
+      type: string
+      nullable: true
+
+  # ContainerRegistryKeys
+  - target: "$.components.schemas.ContainerRegistryKeys.properties.password"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.ContainerRegistryKeys.properties.userName"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.ContainerRegistryKeys.properties.registry"
+    update:
+      type: string
+      nullable: true
+
+  # GitHubSecurityKeys (capital H)
+  - target: "$.components.schemas.GitHubSecurityKeys.properties.token"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.GitHubSecurityKeys.properties.username"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.GitHubSecurityKeys.properties.password"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  # GitLabSecurityKeys (capital L)
+  - target: "$.components.schemas.GitLabSecurityKeys.properties.token"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.GitLabSecurityKeys.properties.username"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.GitLabSecurityKeys.properties.password"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  # BitBucketSecurityKeys (note capital B in Bucket)
+  - target: "$.components.schemas.BitBucketSecurityKeys.properties.token"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.BitBucketSecurityKeys.properties.username"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.BitBucketSecurityKeys.properties.password"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  # AzureSecurityKeys
+  - target: "$.components.schemas.AzureSecurityKeys.properties.batchKey"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.AzureSecurityKeys.properties.storageKey"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.AzureSecurityKeys.properties.batchName"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.AzureSecurityKeys.properties.storageName"
+    update:
+      type: string
+      nullable: true
+
+  # GoogleSecurityKeys
+  - target: "$.components.schemas.GoogleSecurityKeys.properties.data"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  # SshSecurityKeys
+  - target: "$.components.schemas.SSHSecurityKeys.properties.privateKey"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.SSHSecurityKeys.properties.passphrase"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  # K8sSecurityKeys
+  - target: "$.components.schemas.K8sSecurityKeys.properties.certificate"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.K8sSecurityKeys.properties.privateKey"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.K8sSecurityKeys.properties.token"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  # TwSecurityKeys
+  - target: "$.components.schemas.TwSecurityKeys.properties.token"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  # AgentSecurityKeys
+  - target: "$.components.schemas.AgentSecurityKeys.properties.connectionId"
+    update:
+      type: string
+      nullable: true
+
+  # CodeCommitSecurityKeys
+  - target: "$.components.schemas.CodeCommitSecurityKeys.properties.password"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.CodeCommitSecurityKeys.properties.username"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas.CodeCommitSecurityKeys.properties.token"
+    update:
+      type: string
+      nullable: true
+
+  # GiteaSecurityKeys
+  - target: "$.components.schemas.GiteaSecurityKeys.properties.token"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.GiteaSecurityKeys.properties.username"
+    update:
+      type: string
+      nullable: true
+
+  # AzureReposSecurityKeys
+  - target: "$.components.schemas.AzureReposSecurityKeys.properties.token"
+    update:
+      type: string
+      writeOnly: true
+      nullable: true
+
+  - target: "$.components.schemas.AzureReposSecurityKeys.properties.username"
+    update:
+      type: string
+      nullable: true
+
+  # =============================================================================
+  # Action optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.ActionResponseDto.properties.hookId
+    update:
+      type: string
+      nullable: true
+      description: Webhook hook ID
+
+  - target: $.components.schemas.ActionResponseDto.properties.hookUrl
+    update:
+      type: string
+      nullable: true
+      description: Webhook URL
+
+  - target: $.components.schemas.ActionResponseDto.properties.message
+    update:
+      type: string
+      nullable: true
+      description: Action status message
+
+  # ListActionsResponse.ActionInfo optional fields
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.lastSeen"
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Last seen timestamp (null if never seen)
+
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.pipeline"
+    update:
+      type: string
+      nullable: true
+      description: Pipeline name
+
+  # =============================================================================
+  # Pipeline optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.PipelineDbDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Pipeline description
+
+  - target: $.components.schemas.PipelineDbDto.properties.optimizationId
+    update:
+      type: string
+      nullable: true
+      description: Pipeline optimization ID
+
+  - target: $.components.schemas.PipelineDbDto.properties.optimizationTargets
+    update:
+      type: string
+      nullable: true
+      description: Pipeline optimization targets
+
+  - target: $.components.schemas.PipelineDbDto.properties.userFirstName
+    update:
+      type: string
+      nullable: true
+      description: User first name
+
+  - target: $.components.schemas.PipelineDbDto.properties.userLastName
+    update:
+      type: string
+      nullable: true
+      description: User last name
+
+  # Make the PipelineOptimizationStatus enum nullable
+  - target: $.components.schemas.PipelineOptimizationStatus
+    update:
+      nullable: true
+
+  # Make ProgressData nullable (can be null when workflow has no progress)
+  - target: $.components.schemas.ProgressData
+    update:
+      nullable: true
+
+  # Make UserInfo nullable (can be null for user references)
+  - target: $.components.schemas.UserInfo
+    update:
+      nullable: true
+
+  # Make ComputeEnvDbDto nullable (can be null in pipeline responses)
+  - target: $.components.schemas.ComputeEnvDbDto
+    update:
+      nullable: true
+
+  # Make DataStudioDto.ParentCheckpoint nullable
+  - target: "$.components.schemas['DataStudioDto.ParentCheckpoint']"
+    update:
+      nullable: true
+
+  - target: "$.components.schemas['DataStudioDto.ParentCheckpoint'].properties.checkpointId"
+    update:
+      type: integer
+      format: int64
+      nullable: true
+
+  - target: "$.components.schemas['DataStudioDto.ParentCheckpoint'].properties.checkpointName"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas['DataStudioDto.ParentCheckpoint'].properties.sessionId"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas['DataStudioDto.ParentCheckpoint'].properties.studioName"
+    update:
+      type: string
+      nullable: true
+
+  # DataStudioDto optional fields
+  - target: $.components.schemas.DataStudioDto.properties.description
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.studioUrl
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.lastStarted
+    update:
+      type: string
+      format: date-time
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.effectiveLifespanHours
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.waveBuildUrl
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.baseImage
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.customImage
+    update:
+      type: boolean
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.isPrivate
+    update:
+      type: boolean
+      nullable: true
+
+  - target: $.components.schemas.DataStudioDto.properties.mountedDataLinks
+    update:
+      type: array
+      nullable: true
+      items:
+        $ref: "#/components/schemas/DataLinkDto"
+
+  - target: $.components.schemas.DataStudioDto.properties.progress
+    update:
+      type: array
+      nullable: true
+      items:
+        $ref: "#/components/schemas/DataStudioProgressStep"
+
+  # DataStudioConfiguration optional fields
+  - target: $.components.schemas.DataStudioConfiguration.properties.condaEnvironment
+    update:
+      type: string
+      maxLength: 2048
+      nullable: true
+
+  - target: $.components.schemas.DataStudioConfiguration.properties.gpu
+    update:
+      type: integer
+      format: int32
+      minimum: 0
+      nullable: true
+
+  - target: $.components.schemas.DataStudioConfiguration.properties.cpu
+    update:
+      type: integer
+      format: int32
+      minimum: 0
+      nullable: true
+
+  - target: $.components.schemas.DataStudioConfiguration.properties.memory
+    update:
+      type: integer
+      format: int32
+      minimum: 0
+      nullable: true
+
+  - target: $.components.schemas.DataStudioConfiguration.properties.mountData
+    update:
+      type: array
+      items:
+        type: string
+      nullable: true
+
+  - target: $.components.schemas.DataStudioConfiguration.properties.lifespanHours
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  # DataStudioStatusInfo optional fields - make enum nullable
+  - target: $.components.schemas.DataStudioStopReason.enum
+    remove: true
+  - target: $.components.schemas.DataStudioStopReason
+    update:
+      type: string
+      nullable: true
+      enum:
+        - CREDITS_RUN_OUT
+        - LIFESPAN_EXPIRED
+        - SPOT_RECLAMATION
+
+  # DataLinkDto optional fields
+  - target: $.components.schemas.DataLinkDto.properties.message
+    update:
+      type: string
+      nullable: true
+
+  # ListWorkflowsResponseListWorkflowsElement optional fields
+  - target: "$.components.schemas['ListWorkflowsResponse.ListWorkflowsElement'].properties.optimized"
+    update:
+      type: boolean
+      nullable: true
+      description: Whether workflow is optimized
+
+  - target: "$.components.schemas['ListWorkflowsResponse.ListWorkflowsElement'].properties.starred"
+    update:
+      type: boolean
+      nullable: true
+      description: Whether workflow is starred
+
+  - target: "$.components.schemas['ListWorkflowsResponse.ListWorkflowsElement'].properties.orgId"
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Organization ID
+
+  - target: "$.components.schemas['ListWorkflowsResponse.ListWorkflowsElement'].properties.orgName"
+    update:
+      type: string
+      nullable: true
+      description: Organization name
+
+  - target: "$.components.schemas['ListWorkflowsResponse.ListWorkflowsElement'].properties.workspaceId"
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Workspace ID
+
+  - target: "$.components.schemas['ListWorkflowsResponse.ListWorkflowsElement'].properties.workspaceName"
+    update:
+      type: string
+      nullable: true
+      description: Workspace name
+
+  # =============================================================================
+  # Label fields
+  # =============================================================================
+
+  - target: $.components.schemas.LabelDbDto.properties.value
+    update:
+      type: string
+      nullable: true
+      description: Label value (can be null for labels without values)
+
+  # =============================================================================
+  # WfManifest optional fields
+  # =============================================================================
+
+  # Make WfManifest itself nullable (can be null when not set)
+  - target: $.components.schemas.WfManifest
+    update:
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.defaultBranch
+    update:
+      type: string
+      maxLength: 20
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.nextflowVersion
+    update:
+      type: string
+      maxLength: 20
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.version
+    update:
+      type: string
+      maxLength: 20
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.homePage
+    update:
+      type: string
+      maxLength: 200
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.gitmodules
+    update:
+      type: string
+      maxLength: 150
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.description
+    update:
+      type: string
+      maxLength: 1024
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.name
+    update:
+      type: string
+      maxLength: 150
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.mainScript
+    update:
+      type: string
+      maxLength: 100
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.author
+    update:
+      type: string
+      maxLength: 150
+      nullable: true
+
+  - target: $.components.schemas.WfManifest.properties.icon
+    update:
+      type: string
+      nullable: true
+
+  # =============================================================================
+  # WfStats optional fields (percentages and counts can be null)
+  # =============================================================================
+
+  # Make WfStats itself nullable (can be null when not set)
+  - target: $.components.schemas.WfStats
+    update:
+      nullable: true
+
+  # Make WfNextflow nullable (can be null when not set)
+  - target: $.components.schemas.WfNextflow
+    update:
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.failedPct
+    update:
+      type: number
+      format: float
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.cachedPct
+    update:
+      type: number
+      format: float
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.succeedPct
+    update:
+      type: number
+      format: float
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.ignoredPct
+    update:
+      type: number
+      format: float
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.computeTimeFmt
+    update:
+      type: string
+      maxLength: 50
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.cachedCountFmt
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.succeedCountFmt
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.failedCountFmt
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.ignoredCountFmt
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.cachedCount
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.failedCount
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.ignoredCount
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.succeedCount
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.cachedDuration
+    update:
+      type: integer
+      format: int64
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.failedDuration
+    update:
+      type: integer
+      format: int64
+      nullable: true
+
+  - target: $.components.schemas.WfStats.properties.succeedDuration
+    update:
+      type: integer
+      format: int64
+      nullable: true
+
+  # =============================================================================
+  # Workspace optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.Workspace.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Workspace description
+
+  - target: $.components.schemas.WorkspaceDbDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Workspace description
+
+  # =============================================================================
+  # Organization optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.Organization.properties.description
+    update:
+      type: string
+      maxLength: 1000
+      nullable: true
+      description: Organization description
+
+  - target: $.components.schemas.Organization.properties.location
+    update:
+      type: string
+      maxLength: 100
+      nullable: true
+      description: Organization location
+
+  - target: $.components.schemas.Organization.properties.website
+    update:
+      type: string
+      nullable: true
+      description: Organization website URL
+
+  - target: $.components.schemas.OrganizationDbDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Organization description
+
+  - target: $.components.schemas.OrganizationDbDto.properties.location
+    update:
+      type: string
+      nullable: true
+      description: Organization location
+
+  - target: $.components.schemas.OrganizationDbDto.properties.website
+    update:
+      type: string
+      nullable: true
+      description: Organization website URL
+
+  - target: $.components.schemas.OrganizationDbDto.properties.fullName
+    update:
+      type: string
+      nullable: true
+      description: Organization full name
+
+  - target: $.components.schemas.OrganizationDbDto.properties.logoId
+    update:
+      type: string
+      nullable: true
+      description: Organization logo ID
+
+  - target: $.components.schemas.OrganizationDbDto.properties.logoUrl
+    update:
+      type: string
+      nullable: true
+      description: Organization logo URL
+
+  # =============================================================================
+  # Dataset optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.DatasetDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Dataset description
+
+  - target: $.components.schemas.DatasetDto.properties.mediaType
+    update:
+      type: string
+      nullable: true
+      description: Dataset media type
+
+  # =============================================================================
+  # Secret optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.PipelineSecret.properties.lastUsed
+    update:
+      type: string
+      format: date-time
+      nullable: true
+      description: Last time secret was accessed
+
+  # =============================================================================
+  # CloudPrice optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.CloudPrice.properties.gpus
+    update:
+      type: integer
+      format: int32
+      nullable: true
+      description: Number of GPUs (null if not applicable)
+
+  # =============================================================================
+  # Team optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.Team.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Team description
+
+  - target: $.components.schemas.TeamDbDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Team description
+
+  # =============================================================================
+  # DataLink optional fields
+  # =============================================================================
+
+  - target: $.components.schemas.DataLinkDto.properties.description
+    update:
+      type: string
+      nullable: true
+      description: Data link description
+
+  - target: $.components.schemas.DataLinkDto.properties.region
+    update:
+      type: string
+      nullable: true
+      description: Cloud region
+
+  - target: $.components.schemas.DataLinkDto.properties.resourceRef
+    update:
+      type: string
+      nullable: true
+      description: Resource reference (bucket path, etc.)
+
+  # JobInfoDto optional fields
+  - target: $.components.schemas.JobInfoDto.properties.exitCode
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.JobInfoDto.properties.message
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.JobInfoDto.properties.operationId
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.JobInfoDto.properties.status
+    update:
+      type: string
+      nullable: true
+
+  # Make JobInfoDto schema itself nullable (used by DescribeWorkflowResponse)
+  - target: $.components.schemas.JobInfoDto
+    update:
+      nullable: true
+
+  # DescribeWorkflowResponse optional fields
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.optimized
+    update:
+      type: boolean
+      nullable: true
+
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.orgId
+    update:
+      type: integer
+      format: int64
+      nullable: true
+
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.orgName
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.workspaceId
+    update:
+      type: integer
+      format: int64
+      nullable: true
+
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.workspaceName
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.labels
+    update:
+      type: array
+      nullable: true
+      items:
+        $ref: "#/components/schemas/LabelDbDto"
+
+  - target: $.components.schemas.DescribeWorkflowResponse.properties.messages
+    update:
+      type: array
+      nullable: true
+      items:
+        type: string
+
+  # Fix ListActionsResponse.ActionInfo.event - change oneOf to nullable object
+  # The oneOf/discriminator causes issues when the field is null
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.event"
+    update:
+      type: object
+      nullable: true
+      additionalProperties: true
+      description: Action event configuration (tower or github)
+
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.labels"
+    update:
+      type: array
+      nullable: true
+      items:
+        $ref: "#/components/schemas/LabelDbDto"
+
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.endpoint"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.usageCmd"
+    update:
+      type: string
+      nullable: true
+
+  # =============================================================================
+  # Task.priceModel - enum can be null
+  # =============================================================================
+
+  - target: $.components.schemas.Task.properties.priceModel
+    update:
+      $ref: "#/components/schemas/CloudPriceModel"
+      nullable: true
+
+  # Make CloudPriceModel enum nullable
+  - target: $.components.schemas.CloudPriceModel
+    update:
+      nullable: true
+
+  # =============================================================================
+  # WorkflowMetrics - ALL ResourceData fields can be null
+  # =============================================================================
+
+  - target: $.components.schemas.WorkflowMetrics.properties.cpu
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.mem
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.vmem
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.time
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.reads
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.writes
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.cpuUsage
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.memUsage
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  - target: $.components.schemas.WorkflowMetrics.properties.timeUsage
+    update:
+      $ref: "#/components/schemas/ResourceData"
+      nullable: true
+
+  # Make ResourceData itself nullable
+  - target: $.components.schemas.ResourceData
+    update:
+      nullable: true
+
+  # =============================================================================
+  # LogPage.entries - should be array of strings, not object
+  # The Iterator_String_ type is incorrectly defined as object
+  # First remove the $ref, then set the correct type
+  # =============================================================================
+
+  - target: $.components.schemas.LogPage.properties.entries.$ref
+    remove: true
+
+  - target: $.components.schemas.LogPage.properties.entries
+    update:
+      type: array
+      nullable: true
+      items:
+        type: string
+      description: Log entries (can be null)
+
+  # =============================================================================
+  # Task.exit - API returns string but spec says integer
+  # =============================================================================
+
+  - target: $.components.schemas.Task.properties.exit
+    update:
+      type: string
+      nullable: true
+      description: Task exit value (can be string)
+
+  # LogPage.message can be null
+  - target: $.components.schemas.LogPage.properties.message
+    update:
+      type: string
+      nullable: true
+      description: Log message (can be null)
+
+  # Make LogPage optional string fields nullable
+  - target: $.components.schemas.LogPage.properties.rewindToken
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.LogPage.properties.forwardToken
+    update:
+      type: string
+      nullable: true
+
+  # =============================================================================
+  # Fix Iterator_String_ type definition - should be array, not object
+  # Although we removed the only reference, fix the definition for consistency
+  # =============================================================================
+
+  - target: $.components.schemas.Iterator_String_
+    update:
+      type: array
+      nullable: true
+      items:
+        type: string
+      description: Iterator of strings (can be null)
+
+  # =============================================================================
+  # Status enums that may be null in certain states
+  # =============================================================================
+
+  # DataStudioStatus can be null before studio is initialized
+  - target: $.components.schemas.DataStudioStatus
+    update:
+      nullable: true
+
+  # DataStudioStatusInfo.status can be null
+  - target: $.components.schemas.DataStudioStatusInfo.properties.status
+    update:
+      $ref: "#/components/schemas/DataStudioStatus"
+      nullable: true
+
+  # DataStudioStatusInfo.message can be null
+  - target: $.components.schemas.DataStudioStatusInfo.properties.message
+    update:
+      type: string
+      nullable: true
+
+  # StudioCheckpointStatus can be null
+  - target: $.components.schemas.StudioCheckpointStatus
+    update:
+      nullable: true
+
+  # DataStudioVersionStatus can be null
+  - target: $.components.schemas.DataStudioVersionStatus
+    update:
+      nullable: true
+
+  # DataStudioProgressStep.Status can be null
+  - target: "$.components.schemas['DataStudioProgressStep.Status']"
+    update:
+      nullable: true
+
+  # TraceProcessingStatus can be null
+  - target: $.components.schemas.TraceProcessingStatus
+    update:
+      nullable: true
+
+  # =============================================================================
+  # Common nullable string fields across schemas
+  # =============================================================================
+
+  # ActionResponseDto fields
+  - target: $.components.schemas.ActionResponseDto.properties.name
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.ActionResponseDto.properties.pipeline
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.ActionResponseDto.properties.source
+    update:
+      type: string
+      nullable: true
+
+  # ListActionsResponse.ActionInfo additional nullable fields
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.name"
+    update:
+      type: string
+      nullable: true
+
+  - target: "$.components.schemas['ListActionsResponse.ActionInfo'].properties.source"
+    update:
+      type: string
+      nullable: true
+
+  # ComputeEnv additional nullable fields
+  - target: $.components.schemas.ComputeEnvDbDto.properties.name
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.ComputeEnvDbDto.properties.platform
+    update:
+      type: string
+      nullable: true
+
+  # DataLinkDto additional nullable fields
+  - target: $.components.schemas.DataLinkDto.properties.name
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DataLinkDto.properties.provider
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.DataLinkDto.properties.credentialsId
+    update:
+      type: string
+      nullable: true
+
+  # =============================================================================
+  # RunLog and GA4GH types that may have nullable fields
+  # =============================================================================
+
+  - target: $.components.schemas.RunLog.properties.cmd
+    update:
+      type: array
+      nullable: true
+      items:
+        type: string
+
+  - target: $.components.schemas.RunLog.properties.exit_code
+    update:
+      type: integer
+      format: int32
+      nullable: true
+
+  - target: $.components.schemas.RunLog.properties.stdout
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.RunLog.properties.stderr
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.RunLog.properties.start_time
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.RunLog.properties.end_time
+    update:
+      type: string
+      nullable: true
+
+  # RunStatus nullable fields
+  - target: $.components.schemas.RunStatus.properties.state
+    update:
+      $ref: "#/components/schemas/State"
+      nullable: true
+
+  # State enum can be null
+  - target: $.components.schemas.State
+    update:
+      nullable: true
+
+  # =============================================================================
+  # Additional common nullable patterns
+  # =============================================================================
+
+  # Make email fields nullable (often not set)
+  - target: $.components.schemas.User.properties.email
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.UserDbDto.properties.email
+    update:
+      type: string
+      nullable: true
+
+  # Make avatar fields nullable
+  - target: $.components.schemas.User.properties.avatar
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.UserDbDto.properties.avatar
+    update:
+      type: string
+      nullable: true
+
+  # Make firstName/lastName nullable
+  - target: $.components.schemas.User.properties.firstName
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.User.properties.lastName
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.UserDbDto.properties.firstName
+    update:
+      type: string
+      nullable: true
+
+  - target: $.components.schemas.UserDbDto.properties.lastName
+    update:
+      type: string
+      nullable: true
+
+  # =============================================================================
+  # Download endpoint content type fixes
+  # The API returns text/plain but the spec says application/json
+  # =============================================================================
+
+  # Fix DownloadWorkflowLog response content type
+  - target: $.paths["/workflow/{workflowId}/download"].get.responses["200"].content["application/json"]
+    remove: true
+
+  - target: $.paths["/workflow/{workflowId}/download"].get.responses["200"].content
+    update:
+      text/plain:
+        schema:
+          type: string
+
+  # Fix DownloadWorkflowTaskLog response content type
+  - target: $.paths["/workflow/{workflowId}/download/{taskId}"].get.responses["200"].content["application/json"]
+    remove: true
+
+  - target: $.paths["/workflow/{workflowId}/download/{taskId}"].get.responses["200"].content
+    update:
+      text/plain:
+        schema:
+          type: string
+
+  # OrganizationDbDto.memberId can be null
+  - target: $.components.schemas.OrganizationDbDto.properties.memberId
+    update:
+      type: integer
+      format: int64
+      nullable: true
+      description: Member ID (can be null for collaborators)
+
+  # OrganizationDbDto.memberRole can be null (collaborators don't have a role)
+  # First remove the $ref, then add nullable string type
+  - target: $.components.schemas.OrganizationDbDto.properties.memberRole.$ref
+    remove: true
+
+  - target: $.components.schemas.OrganizationDbDto.properties.memberRole
+    update:
+      type: string
+      nullable: true
+      enum:
+        - owner
+        - member
+        - collaborator
+      description: Member role (can be null for collaborators)
+
+  # DataStudioProgressStep.warnings can be null
+  - target: $.components.schemas.DataStudioProgressStep.properties.warnings
+    update:
+      type: array
+      nullable: true
+      items:
+        type: string
+      description: Step warnings (can be null)
+
+  # =============================================================================
+  # Additional download endpoint content type fixes
+  # These endpoints return binary/text content, not JSON
+  # =============================================================================
+
+  # Fix DownloadAvatar - returns image content
+  - target: $.paths["/avatars/{avatarId}"].get.responses["200"].content["application/json"]
+    remove: true
+
+  - target: $.paths["/avatars/{avatarId}"].get.responses["200"].content
+    update:
+      application/octet-stream:
+        schema:
+          type: string
+          format: binary
+
+  # Fix DownloadDataLink - returns file content
+  - target: $.paths["/data-links/{dataLinkId}/download/{filePath}"].get.responses["200"].content["application/json"]
+    remove: true
+
+  - target: $.paths["/data-links/{dataLinkId}/download/{filePath}"].get.responses["200"].content
+    update:
+      application/octet-stream:
+        schema:
+          type: string
+          format: binary
+
+  # Fix DownloadDataset - returns CSV/text content  
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/v/{version}/n/{fileName}"].get.responses["200"].content["application/json"]
+    remove: true
+
+  - target: $.paths["/workspaces/{workspaceId}/datasets/{datasetId}/v/{version}/n/{fileName}"].get.responses["200"].content
+    update:
+      text/plain:
+        schema:
+          type: string

@@ -3,12 +3,12 @@
 package shared
 
 type DescribeUserResponse struct {
-	User               *UserDbDto `json:"user,omitempty"`
-	NeedConsent        *bool      `json:"needConsent,omitempty"`
-	DefaultWorkspaceID *int64     `json:"defaultWorkspaceId,omitempty"`
+	User               *UserResponseDto `json:"user,omitempty"`
+	NeedConsent        *bool            `json:"needConsent,omitempty"`
+	DefaultWorkspaceID *int64           `json:"defaultWorkspaceId,omitempty"`
 }
 
-func (d *DescribeUserResponse) GetUser() *UserDbDto {
+func (d *DescribeUserResponse) GetUser() *UserResponseDto {
 	if d == nil {
 		return nil
 	}

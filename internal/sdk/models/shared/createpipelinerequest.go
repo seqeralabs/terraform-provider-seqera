@@ -3,11 +3,12 @@
 package shared
 
 type CreatePipelineRequest struct {
-	Name        string                `json:"name"`
-	Description *string               `json:"description,omitempty"`
-	Icon        *string               `json:"icon,omitempty"`
-	Launch      WorkflowLaunchRequest `json:"launch"`
-	LabelIds    []int64               `json:"labelIds,omitempty"`
+	Name        string  `json:"name"`
+	Description *string `json:"description,omitempty"`
+	// Icon identifier or URL for visual representation
+	Icon     *string               `json:"icon,omitempty"`
+	Launch   WorkflowLaunchRequest `json:"launch"`
+	LabelIds []int64               `json:"labelIds,omitempty"`
 }
 
 func (c *CreatePipelineRequest) GetName() string {

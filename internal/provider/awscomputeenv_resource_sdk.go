@@ -263,6 +263,63 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		deleted = nil
 	}
+	workDir := new(string)
+	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
+		*workDir = r.Config.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
+	preRunScript := new(string)
+	if !r.Config.PreRunScript.IsUnknown() && !r.Config.PreRunScript.IsNull() {
+		*preRunScript = r.Config.PreRunScript.ValueString()
+	} else {
+		preRunScript = nil
+	}
+	postRunScript := new(string)
+	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
+		*postRunScript = r.Config.PostRunScript.ValueString()
+	} else {
+		postRunScript = nil
+	}
+	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
+	for environmentIndex := range r.Config.Environment {
+		name1 := new(string)
+		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
+			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
+		} else {
+			name1 = nil
+		}
+		value := new(string)
+		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
+			*value = r.Config.Environment[environmentIndex].Value.ValueString()
+		} else {
+			value = nil
+		}
+		head := new(bool)
+		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
+			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
+		} else {
+			head = nil
+		}
+		compute := new(bool)
+		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
+			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
+		} else {
+			compute = nil
+		}
+		environment = append(environment, shared.ConfigEnvVariable{
+			Name:    name1,
+			Value:   value,
+			Head:    head,
+			Compute: compute,
+		})
+	}
+	nextflowConfig := new(string)
+	if !r.Config.NextflowConfig.IsUnknown() && !r.Config.NextflowConfig.IsNull() {
+		*nextflowConfig = r.Config.NextflowConfig.ValueString()
+	} else {
+		nextflowConfig = nil
+	}
 	storageType := new(string)
 	if !r.Config.StorageType.IsUnknown() && !r.Config.StorageType.IsNull() {
 		*storageType = r.Config.StorageType.ValueString()
@@ -330,24 +387,6 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 	} else {
 		cliPath = nil
 	}
-	workDir := new(string)
-	if !r.Config.WorkDir.IsUnknown() && !r.Config.WorkDir.IsNull() {
-		*workDir = r.Config.WorkDir.ValueString()
-	} else {
-		workDir = nil
-	}
-	preRunScript := new(string)
-	if !r.Config.PreRunScript.IsUnknown() && !r.Config.PreRunScript.IsNull() {
-		*preRunScript = r.Config.PreRunScript.ValueString()
-	} else {
-		preRunScript = nil
-	}
-	postRunScript := new(string)
-	if !r.Config.PostRunScript.IsUnknown() && !r.Config.PostRunScript.IsNull() {
-		*postRunScript = r.Config.PostRunScript.ValueString()
-	} else {
-		postRunScript = nil
-	}
 	headJobCpus := new(int)
 	if !r.Config.HeadJobCpus.IsUnknown() && !r.Config.HeadJobCpus.IsNull() {
 		*headJobCpus = int(r.Config.HeadJobCpus.ValueInt32())
@@ -359,39 +398,6 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		*headJobMemoryMb = int(r.Config.HeadJobMemoryMb.ValueInt32())
 	} else {
 		headJobMemoryMb = nil
-	}
-	environment := make([]shared.ConfigEnvVariable, 0, len(r.Config.Environment))
-	for environmentIndex := range r.Config.Environment {
-		name1 := new(string)
-		if !r.Config.Environment[environmentIndex].Name.IsUnknown() && !r.Config.Environment[environmentIndex].Name.IsNull() {
-			*name1 = r.Config.Environment[environmentIndex].Name.ValueString()
-		} else {
-			name1 = nil
-		}
-		value := new(string)
-		if !r.Config.Environment[environmentIndex].Value.IsUnknown() && !r.Config.Environment[environmentIndex].Value.IsNull() {
-			*value = r.Config.Environment[environmentIndex].Value.ValueString()
-		} else {
-			value = nil
-		}
-		head := new(bool)
-		if !r.Config.Environment[environmentIndex].Head.IsUnknown() && !r.Config.Environment[environmentIndex].Head.IsNull() {
-			*head = r.Config.Environment[environmentIndex].Head.ValueBool()
-		} else {
-			head = nil
-		}
-		compute := new(bool)
-		if !r.Config.Environment[environmentIndex].Compute.IsUnknown() && !r.Config.Environment[environmentIndex].Compute.IsNull() {
-			*compute = r.Config.Environment[environmentIndex].Compute.ValueBool()
-		} else {
-			compute = nil
-		}
-		environment = append(environment, shared.ConfigEnvVariable{
-			Name:    name1,
-			Value:   value,
-			Head:    head,
-			Compute: compute,
-		})
 	}
 	enableWave := new(bool)
 	if !r.Config.EnableWave.IsUnknown() && !r.Config.EnableWave.IsNull() {
@@ -416,12 +422,6 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		*logGroup = r.Config.LogGroup.ValueString()
 	} else {
 		logGroup = nil
-	}
-	nextflowConfig := new(string)
-	if !r.Config.NextflowConfig.IsUnknown() && !r.Config.NextflowConfig.IsNull() {
-		*nextflowConfig = r.Config.NextflowConfig.ValueString()
-	} else {
-		nextflowConfig = nil
 	}
 	fusionSnapshots := new(bool)
 	if !r.Config.FusionSnapshots.IsUnknown() && !r.Config.FusionSnapshots.IsNull() {
@@ -619,6 +619,11 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		}
 	}
 	config := shared.AwsBatchConfig{
+		WorkDir:            workDir,
+		PreRunScript:       preRunScript,
+		PostRunScript:      postRunScript,
+		Environment:        environment,
+		NextflowConfig:     nextflowConfig,
 		StorageType:        storageType,
 		LustreID:           lustreID,
 		Volumes:            volumes,
@@ -631,17 +636,12 @@ func (r *AWSComputeEnvResourceModel) ToSharedAWSComputeEnvComputeConfigInput(ctx
 		HeadQueue:          headQueue,
 		HeadJobRole:        headJobRole,
 		CliPath:            cliPath,
-		WorkDir:            workDir,
-		PreRunScript:       preRunScript,
-		PostRunScript:      postRunScript,
 		HeadJobCpus:        headJobCpus,
 		HeadJobMemoryMb:    headJobMemoryMb,
-		Environment:        environment,
 		EnableWave:         enableWave,
 		EnableFusion:       enableFusion,
 		NvmeStorageEnabled: nvmeStorageEnabled,
 		LogGroup:           logGroup,
-		NextflowConfig:     nextflowConfig,
 		FusionSnapshots:    fusionSnapshots,
 		Forge:              forge,
 	}

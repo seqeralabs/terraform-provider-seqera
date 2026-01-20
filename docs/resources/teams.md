@@ -39,7 +39,7 @@ resource "seqera_teams" "my_teams" {
 ### Optional
 
 - `avatar_id` (String)
-- `description` (String) Description of the team's purpose and responsibilities
+- `description` (String) Team description
 
 ### Read-Only
 

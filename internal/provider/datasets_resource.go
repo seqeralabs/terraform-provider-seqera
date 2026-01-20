@@ -5,18 +5,16 @@ package provider
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -35,8 +33,6 @@ type DatasetsResource struct {
 
 // DatasetsResourceModel describes the resource data model.
 type DatasetsResourceModel struct {
-	DateCreated types.String `tfsdk:"date_created"`
-	Deleted     types.Bool   `tfsdk:"deleted"`
 	Description types.String `tfsdk:"description"`
 	ID          types.String `tfsdk:"id"`
 	LastUpdated types.String `tfsdk:"last_updated"`
@@ -53,13 +49,6 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage datasets for storing and versioning research data.\n\nDatasets in Seqera are CSV (comma-separated values) and TSV\n(tab-separated values) files stored in a workspace.\n\nThey are used as inputs to pipelines to simplify data management,\nminimize user data-input errors, and facilitate reproducible workflows.\n",
 		Attributes: map[string]schema.Attribute{
-			"date_created": schema.StringAttribute{
-				Computed: true,
-			},
-			"deleted": schema.BoolAttribute{
-				Computed:    true,
-				Description: `Read-only flag indicating if the dataset has been deleted`,
-			},
 			"description": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -68,16 +57,14 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Detailed description of the dataset contents and purpose (max 1000 characters). Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(1000),
-				},
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the dataset (max 22 characters)`,
 			},
 			"last_updated": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Timestamp when the dataset was last modified`,
 			},
 			"media_type": schema.StringAttribute{
 				Computed:    true,
@@ -90,15 +77,12 @@ func (r *DatasetsResource) Schema(ctx context.Context, req resource.SchemaReques
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Dataset name following naming conventions (1-100 characters). Requires replacement if changed.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(100),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$`).String()),
-				},
 			},
 			"workspace_id": schema.Int64Attribute{
 				Required: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
 				},
 				Description: `Workspace numeric identifier. Requires replacement if changed.`,
 			},

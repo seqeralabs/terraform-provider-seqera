@@ -12,6 +12,8 @@ type ListComputeEnvsRequest struct {
 	Status *string `queryParam:"style=form,explode=true,name=status"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Additional attribute values to include in the response (`labels`, `resources`). Returns an empty value (ex. `labels: null`) if omitted.
+	Attributes []shared.ComputeEnvQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 }
 
 func (l *ListComputeEnvsRequest) GetStatus() *string {
@@ -26,6 +28,13 @@ func (l *ListComputeEnvsRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return l.WorkspaceID
+}
+
+func (l *ListComputeEnvsRequest) GetAttributes() []shared.ComputeEnvQueryAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.Attributes
 }
 
 type ListComputeEnvsResponse struct {

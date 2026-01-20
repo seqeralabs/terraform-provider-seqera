@@ -23,11 +23,12 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 		} else {
 			r.Workflow = &tfTypes.Workflow{}
 			r.Workflow.CommandLine = types.StringValue(resp.Workflow.CommandLine)
-			r.Workflow.CommitID = types.StringPointerValue(resp.Workflow.CommitID)
 			r.Workflow.Complete = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Complete))
-			r.Workflow.ConfigFiles = make([]types.String, 0, len(resp.Workflow.ConfigFiles))
-			for _, v := range resp.Workflow.ConfigFiles {
-				r.Workflow.ConfigFiles = append(r.Workflow.ConfigFiles, types.StringValue(v))
+			if resp.Workflow.ConfigFiles != nil {
+				r.Workflow.ConfigFiles = make([]types.String, 0, len(resp.Workflow.ConfigFiles))
+				for _, v := range resp.Workflow.ConfigFiles {
+					r.Workflow.ConfigFiles = append(r.Workflow.ConfigFiles, types.StringValue(v))
+				}
 			}
 			r.Workflow.ConfigText = types.StringPointerValue(resp.Workflow.ConfigText)
 			r.Workflow.Container = types.StringPointerValue(resp.Workflow.Container)
@@ -70,7 +71,7 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 			r.Workflow.OperationID = types.StringPointerValue(resp.Workflow.OperationID)
 			r.Workflow.OutFile = types.StringPointerValue(resp.Workflow.OutFile)
 			r.Workflow.OwnerID = types.Int64PointerValue(resp.Workflow.OwnerID)
-			if len(resp.Workflow.Params) > 0 {
+			if resp.Workflow.Params != nil {
 				r.Workflow.Params = make(map[string]jsontypes.Normalized, len(resp.Workflow.Params))
 				for key, value := range resp.Workflow.Params {
 					result, _ := json.Marshal(value)
@@ -250,9 +251,12 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		pipeline = nil
 	}
-	var workDir string
-	workDir = r.WorkDir.ValueString()
-
+	workDir := new(string)
+	if !r.WorkDir.IsUnknown() && !r.WorkDir.IsNull() {
+		*workDir = r.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	revision := new(string)
 	if !r.Revision.IsUnknown() && !r.Revision.IsNull() {
 		*revision = r.Revision.ValueString()

@@ -64,8 +64,8 @@ resource "seqera_orgs" "research" {
 
 ### Read-Only
 
-- `member_id` (Number)
-- `member_role` (String)
+- `member_id` (Number) Member ID (can be null for collaborators)
+- `member_role` (String) Member role (can be null for collaborators)
 - `org_id` (Number) Organization numeric identifier
 
 ## Import

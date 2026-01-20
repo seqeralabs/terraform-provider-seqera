@@ -3,10 +3,10 @@
 package shared
 
 type AddParticipantResponse struct {
-	Participant *ParticipantDbDto `json:"participant,omitempty"`
+	Participant *ParticipantResponseDto `json:"participant,omitempty"`
 }
 
-func (a *AddParticipantResponse) GetParticipant() *ParticipantDbDto {
+func (a *AddParticipantResponse) GetParticipant() *ParticipantResponseDto {
 	if a == nil {
 		return nil
 	}

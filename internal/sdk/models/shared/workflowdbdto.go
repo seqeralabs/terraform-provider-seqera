@@ -22,26 +22,42 @@ type WorkflowDbDto struct {
 	// Timestamp when the workflow execution actually started
 	Start *time.Time `json:"start,omitempty"`
 	// Timestamp when the workflow execution completed
-	Complete          *time.Time      `json:"complete,omitempty"`
-	DateCreated       *time.Time      `json:"dateCreated,omitempty"`
-	LastUpdated       *time.Time      `json:"lastUpdated,omitempty"`
-	RunName           *string         `json:"runName,omitempty"`
-	SessionID         *string         `json:"sessionId,omitempty"`
-	Profile           *string         `json:"profile,omitempty"`
-	WorkDir           *string         `json:"workDir,omitempty"`
-	Revision          *string         `json:"revision,omitempty"`
-	CommandLine       *string         `json:"commandLine,omitempty"`
-	ProjectName       *string         `json:"projectName,omitempty"`
-	ScriptName        *string         `json:"scriptName,omitempty"`
-	LaunchID          *string         `json:"launchId,omitempty"`
-	Status            *WorkflowStatus `json:"status,omitempty"`
-	RequiresAttention *bool           `json:"requiresAttention,omitempty"`
-	ConfigFiles       []string        `json:"configFiles,omitempty"`
-	Params            map[string]any  `json:"params,omitempty"`
-	ConfigText        *string         `json:"configText,omitempty"`
-	Deleted           *bool           `json:"deleted,omitempty"`
-	Repository        *string         `json:"repository,omitempty"`
-	Resume            *bool           `json:"resume,omitempty"`
+	Complete    *time.Time `json:"complete,omitempty"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	// Run name
+	RunName *string `json:"runName,omitempty"`
+	// Session ID
+	SessionID *string `json:"sessionId,omitempty"`
+	// Profile
+	Profile *string `json:"profile,omitempty"`
+	// Work directory
+	WorkDir *string `json:"workDir,omitempty"`
+	// Revision
+	Revision *string `json:"revision,omitempty"`
+	// Command line
+	CommandLine *string `json:"commandLine,omitempty"`
+	// Project name
+	ProjectName *string `json:"projectName,omitempty"`
+	// Script name
+	ScriptName *string `json:"scriptName,omitempty"`
+	// Launch ID
+	LaunchID *string         `json:"launchId,omitempty"`
+	Status   *WorkflowStatus `json:"status,omitempty"`
+	// Requires attention flag
+	RequiresAttention *bool `json:"requiresAttention,omitempty"`
+	// Config files (can be null)
+	ConfigFiles []string `json:"configFiles,omitempty"`
+	// Workflow parameters (can be null)
+	Params map[string]any `json:"params,omitempty"`
+	// Config text
+	ConfigText *string `json:"configText,omitempty"`
+	// Whether the workflow is deleted
+	Deleted *bool `json:"deleted,omitempty"`
+	// Repository
+	Repository *string `json:"repository,omitempty"`
+	// Resume flag
+	Resume *bool `json:"resume,omitempty"`
 }
 
 func (w WorkflowDbDto) MarshalJSON() ([]byte, error) {

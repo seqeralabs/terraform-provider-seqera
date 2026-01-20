@@ -2,16 +2,13 @@
 
 package shared
 
-type Outputs struct {
-}
-
 type RunLog struct {
 	RunID    *string     `json:"run_id,omitempty"`
 	Request  *RunRequest `json:"request,omitempty"`
 	State    *State      `json:"state,omitempty"`
 	RunLog   *Log        `json:"run_log,omitempty"`
 	TaskLogs []Log       `json:"task_logs,omitempty"`
-	Outputs  *Outputs    `json:"outputs,omitempty"`
+	Outputs  any         `json:"outputs,omitempty"`
 }
 
 func (r *RunLog) GetRunID() *string {
@@ -49,7 +46,7 @@ func (r *RunLog) GetTaskLogs() []Log {
 	return r.TaskLogs
 }
 
-func (r *RunLog) GetOutputs() *Outputs {
+func (r *RunLog) GetOutputs() any {
 	if r == nil {
 		return nil
 	}

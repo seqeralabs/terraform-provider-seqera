@@ -8,9 +8,10 @@ import (
 )
 
 type Workspace struct {
-	ID          *int64     `json:"id,omitempty"`
-	Name        string     `json:"name"`
-	FullName    string     `json:"fullName"`
+	ID       *int64 `json:"id,omitempty"`
+	Name     string `json:"name"`
+	FullName string `json:"fullName"`
+	// Workspace description
 	Description *string    `json:"description,omitempty"`
 	Visibility  Visibility `json:"visibility"`
 	DateCreated *time.Time `json:"dateCreated,omitempty"`

@@ -87,7 +87,7 @@ resource "seqera_pipeline" "my_pipeline" {
 
 - `pipeline_id` (Number) Pipeline numeric identifier
 - `repository` (String) Git repository URL containing the pipeline source code
-- `user_first_name` (String)
+- `user_first_name` (String) User first name
 - `user_id` (Number)
 - `user_name` (String)
 
@@ -98,25 +98,25 @@ Optional:
 
 - `compute_env_id` (String)
 - `config_profiles` (List of String)
-- `config_text` (String)
-- `entry_name` (String)
-- `head_job_cpus` (Number)
-- `head_job_memory_mb` (Number)
+- `config_text` (String) Nextflow configuration text
+- `entry_name` (String) Entry workflow name
+- `head_job_cpus` (Number) Head job CPU allocation
+- `head_job_memory_mb` (Number) Head job memory allocation in MB
 - `label_ids` (List of Number)
-- `main_script` (String)
-- `params_text` (String)
+- `main_script` (String) Main script path
+- `params_text` (String) Pipeline parameters text
 - `pipeline` (String)
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+- `post_run_script` (String) Script to run after pipeline execution
+- `pre_run_script` (String) Script to run before pipeline execution
 - `pull_latest` (Boolean)
 - `resume` (Boolean)
-- `revision` (String)
-- `run_name` (String)
-- `schema_name` (String)
+- `revision` (String) Pipeline revision
+- `run_name` (String) Custom run name
+- `schema_name` (String) Pipeline schema name
 - `stub_run` (Boolean)
-- `tower_config` (String)
+- `tower_config` (String) Tower-specific configuration
 - `user_secrets` (List of String)
-- `work_dir` (String)
+- `work_dir` (String) Working directory
 - `workspace_secrets` (List of String)
 
 ## Import

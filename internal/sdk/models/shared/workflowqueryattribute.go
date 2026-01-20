@@ -10,10 +10,11 @@ import (
 type WorkflowQueryAttribute string
 
 const (
-	WorkflowQueryAttributeOptimized WorkflowQueryAttribute = "optimized"
-	WorkflowQueryAttributeLabels    WorkflowQueryAttribute = "labels"
-	WorkflowQueryAttributeMessages  WorkflowQueryAttribute = "messages"
-	WorkflowQueryAttributeMinimal   WorkflowQueryAttribute = "minimal"
+	WorkflowQueryAttributeOptimized       WorkflowQueryAttribute = "optimized"
+	WorkflowQueryAttributeLabels          WorkflowQueryAttribute = "labels"
+	WorkflowQueryAttributeMessages        WorkflowQueryAttribute = "messages"
+	WorkflowQueryAttributeMinimal         WorkflowQueryAttribute = "minimal"
+	WorkflowQueryAttributePipelineVersion WorkflowQueryAttribute = "pipelineVersion"
 )
 
 func (e WorkflowQueryAttribute) ToPointer() *WorkflowQueryAttribute {
@@ -32,6 +33,8 @@ func (e *WorkflowQueryAttribute) UnmarshalJSON(data []byte) error {
 	case "messages":
 		fallthrough
 	case "minimal":
+		fallthrough
+	case "pipelineVersion":
 		*e = WorkflowQueryAttribute(v)
 		return nil
 	default:

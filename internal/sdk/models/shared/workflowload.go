@@ -8,34 +8,35 @@ import (
 )
 
 type WorkflowLoad struct {
-	Pending          int64      `json:"pending"`
-	Submitted        int64      `json:"submitted"`
-	Running          int64      `json:"running"`
-	Succeeded        int64      `json:"succeeded"`
-	Failed           int64      `json:"failed"`
-	Cached           int64      `json:"cached"`
-	Aborted          int64      `json:"aborted"`
-	MemoryEfficiency *float32   `json:"memoryEfficiency,omitempty"`
-	CPUEfficiency    *float32   `json:"cpuEfficiency,omitempty"`
-	DateCreated      *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated      *time.Time `json:"lastUpdated,omitempty"`
-	Executors        []string   `json:"executors,omitempty"`
-	Cpus             int64      `json:"cpus"`
-	CPUTime          int64      `json:"cpuTime"`
-	CPULoad          int64      `json:"cpuLoad"`
-	MemoryRss        int64      `json:"memoryRss"`
-	MemoryReq        int64      `json:"memoryReq"`
-	ReadBytes        int64      `json:"readBytes"`
-	WriteBytes       int64      `json:"writeBytes"`
-	VolCtxSwitch     int64      `json:"volCtxSwitch"`
-	InvCtxSwitch     int64      `json:"invCtxSwitch"`
-	LoadTasks        int64      `json:"loadTasks"`
-	LoadCpus         int64      `json:"loadCpus"`
-	LoadMemory       int64      `json:"loadMemory"`
-	PeakCpus         int64      `json:"peakCpus"`
-	PeakTasks        int64      `json:"peakTasks"`
-	PeakMemory       int64      `json:"peakMemory"`
-	Cost             *float64   `json:"cost,omitempty"`
+	Pending              int64      `json:"pending"`
+	Submitted            int64      `json:"submitted"`
+	Running              int64      `json:"running"`
+	Succeeded            int64      `json:"succeeded"`
+	Failed               int64      `json:"failed"`
+	Cached               int64      `json:"cached"`
+	Aborted              int64      `json:"aborted"`
+	MemoryEfficiency     *float32   `json:"memoryEfficiency,omitempty"`
+	CPUEfficiency        *float32   `json:"cpuEfficiency,omitempty"`
+	DateCreated          *time.Time `json:"dateCreated,omitempty"`
+	LastUpdated          *time.Time `json:"lastUpdated,omitempty"`
+	Executors            []string   `json:"executors,omitempty"`
+	Cpus                 int64      `json:"cpus"`
+	CPUTime              int64      `json:"cpuTime"`
+	CPULoad              int64      `json:"cpuLoad"`
+	MemoryRss            int64      `json:"memoryRss"`
+	MemoryReq            int64      `json:"memoryReq"`
+	ReadBytes            int64      `json:"readBytes"`
+	WriteBytes           int64      `json:"writeBytes"`
+	VolCtxSwitch         int64      `json:"volCtxSwitch"`
+	InvCtxSwitch         int64      `json:"invCtxSwitch"`
+	LoadTasks            int64      `json:"loadTasks"`
+	LoadCpus             int64      `json:"loadCpus"`
+	LoadMemory           int64      `json:"loadMemory"`
+	PeakCpus             int64      `json:"peakCpus"`
+	PeakTasks            int64      `json:"peakTasks"`
+	PeakMemory           int64      `json:"peakMemory"`
+	NumSpotInterruptions *int       `json:"numSpotInterruptions,omitempty"`
+	Cost                 *float64   `json:"cost,omitempty"`
 }
 
 func (w WorkflowLoad) MarshalJSON() ([]byte, error) {
@@ -236,6 +237,13 @@ func (w *WorkflowLoad) GetPeakMemory() int64 {
 		return 0
 	}
 	return w.PeakMemory
+}
+
+func (w *WorkflowLoad) GetNumSpotInterruptions() *int {
+	if w == nil {
+		return nil
+	}
+	return w.NumSpotInterruptions
 }
 
 func (w *WorkflowLoad) GetCost() *float64 {

@@ -7,15 +7,21 @@ type ListWorkflowsResponseListWorkflowsElement struct {
 	// Contains execution status, metadata, and results from pipeline
 	// runs including logs and performance metrics.
 	//
-	Workflow      *WorkflowDbDto `json:"workflow,omitempty"`
-	Progress      *ProgressData  `json:"progress,omitempty"`
-	OrgID         *int64         `json:"orgId,omitempty"`
-	OrgName       *string        `json:"orgName,omitempty"`
-	WorkspaceID   *int64         `json:"workspaceId,omitempty"`
-	WorkspaceName *string        `json:"workspaceName,omitempty"`
-	Labels        []LabelDbDto   `json:"labels,omitempty"`
-	Starred       *bool          `json:"starred,omitempty"`
-	Optimized     *bool          `json:"optimized,omitempty"`
+	Workflow *WorkflowDbDto `json:"workflow,omitempty"`
+	Progress *ProgressData  `json:"progress,omitempty"`
+	// Organization ID
+	OrgID *int64 `json:"orgId,omitempty"`
+	// Organization name
+	OrgName *string `json:"orgName,omitempty"`
+	// Workspace ID
+	WorkspaceID *int64 `json:"workspaceId,omitempty"`
+	// Workspace name
+	WorkspaceName *string      `json:"workspaceName,omitempty"`
+	Labels        []LabelDbDto `json:"labels,omitempty"`
+	// Whether workflow is starred
+	Starred *bool `json:"starred,omitempty"`
+	// Whether workflow is optimized
+	Optimized *bool `json:"optimized,omitempty"`
 }
 
 func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowDbDto {

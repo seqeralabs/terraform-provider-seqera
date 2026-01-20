@@ -4,33 +4,49 @@ package shared
 
 type Launch struct {
 	ID          *string `json:"id,omitempty"`
+	WorkspaceID *int64  `json:"workspaceId,omitempty"`
 	Pipeline    string  `json:"pipeline"`
-	WorkDir     *string `json:"workDir,omitempty"`
-	Revision    *string `json:"revision,omitempty"`
-	ConfigText  *string `json:"configText,omitempty"`
+	// Working directory
+	WorkDir *string `json:"workDir,omitempty"`
+	// Pipeline revision
+	Revision *string `json:"revision,omitempty"`
+	// Nextflow configuration text
+	ConfigText *string `json:"configText,omitempty"`
+	// Tower-specific configuration
 	TowerConfig *string `json:"towerConfig,omitempty"`
-	ParamsText  *string `json:"paramsText,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Pipeline parameters text
+	ParamsText *string `json:"paramsText,omitempty"`
+	// Script to run before pipeline execution
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript       *string  `json:"postRunScript,omitempty"`
-	MainScript          *string  `json:"mainScript,omitempty"`
-	EntryName           *string  `json:"entryName,omitempty"`
-	SchemaName          *string  `json:"schemaName,omitempty"`
-	Resume              *bool    `json:"resume,omitempty"`
-	ResumeLaunchID      *string  `json:"resumeLaunchId,omitempty"`
-	PullLatest          *bool    `json:"pullLatest,omitempty"`
-	StubRun             *bool    `json:"stubRun,omitempty"`
-	SessionID           *string  `json:"sessionId,omitempty"`
-	RunName             *string  `json:"runName,omitempty"`
-	ConfigProfiles      []string `json:"configProfiles,omitempty"`
-	UserSecrets         []string `json:"userSecrets,omitempty"`
-	WorkspaceSecrets    []string `json:"workspaceSecrets,omitempty"`
-	OptimizationID      *string  `json:"optimizationId,omitempty"`
-	OptimizationTargets *string  `json:"optimizationTargets,omitempty"`
-	HeadJobCpus         *int     `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb     *int     `json:"headJobMemoryMb,omitempty"`
-	LaunchContainer     *string  `json:"launchContainer,omitempty"`
+	// Script to run after pipeline execution
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Main script path
+	MainScript *string `json:"mainScript,omitempty"`
+	// Entry workflow name
+	EntryName *string `json:"entryName,omitempty"`
+	// Pipeline schema name
+	SchemaName *string `json:"schemaName,omitempty"`
+	Resume     *bool   `json:"resume,omitempty"`
+	// Launch ID to resume from
+	ResumeLaunchID *string `json:"resumeLaunchId,omitempty"`
+	PullLatest     *bool   `json:"pullLatest,omitempty"`
+	StubRun        *bool   `json:"stubRun,omitempty"`
+	// Session ID for resuming
+	SessionID *string `json:"sessionId,omitempty"`
+	// Custom run name
+	RunName          *string  `json:"runName,omitempty"`
+	ConfigProfiles   []string `json:"configProfiles,omitempty"`
+	UserSecrets      []string `json:"userSecrets,omitempty"`
+	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
+	// Optimization profile ID
+	OptimizationID *string `json:"optimizationId,omitempty"`
+	// Optimization targets
+	OptimizationTargets *string `json:"optimizationTargets,omitempty"`
+	// Head job CPU allocation
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Head job memory allocation in MB
+	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	LaunchContainer *string `json:"launchContainer,omitempty"`
 }
 
 func (l *Launch) GetID() *string {
@@ -38,6 +54,13 @@ func (l *Launch) GetID() *string {
 		return nil
 	}
 	return l.ID
+}
+
+func (l *Launch) GetWorkspaceID() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.WorkspaceID
 }
 
 func (l *Launch) GetPipeline() string {

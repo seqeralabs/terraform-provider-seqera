@@ -28,38 +28,7 @@ and execution parameters.
 resource "seqera_compute_env" "my_computeenv" {
   compute_env = {
     config = {
-      azure_batch = {
-        auto_pool_mode             = false
-        delete_jobs_on_completion  = "on_success"
-        delete_pools_on_completion = false
-        enable_fusion              = true
-        enable_wave                = false
-        environment = [
-          {
-            compute = false
-            head    = true
-            name    = "...my_name..."
-            value   = "...my_value..."
-          }
-        ]
-        forge = {
-          auto_scale = false
-          container_reg_ids = [
-            "..."
-          ]
-          dispose_on_deletion = true
-          vm_count            = 2
-          vm_type             = "...my_vm_type..."
-        }
-        head_pool                  = "...my_head_pool..."
-        managed_identity_client_id = "...my_managed_identity_client_id..."
-        nextflow_config            = "...my_nextflow_config..."
-        post_run_script            = "...my_post_run_script..."
-        pre_run_script             = "...my_pre_run_script..."
-        region                     = "...my_region..."
-        token_duration             = "...my_token_duration..."
-        work_dir                   = "...my_work_dir..."
-      }
+      # ...
     }
     credentials_id = "...my_credentials_id..."
     description    = "...my_description..."
@@ -98,26 +67,27 @@ Required:
 - `config` (Attributes) Configuration settings for compute environments including work directories,
 pre/post run scripts, and environment-specific parameters.
 Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config))
-- `credentials_id` (String) Requires replacement if changed.
+- `credentials_id` (String) Associated credentials ID (null if using managed identity or none). Requires replacement if changed.
 - `name` (String) Requires replacement if changed.
 - `platform` (String) must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "azure-batch", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "local-platform", "seqeracompute-platform"]; Requires replacement if changed.
 
 Optional:
 
-- `description` (String) Requires replacement if changed.
-- `message` (String) Requires replacement if changed.
+- `description` (String) Compute environment description. Requires replacement if changed.
+- `message` (String) Status message (null if no message). Requires replacement if changed.
 
 Read-Only:
 
 - `compute_env_id` (String)
 - `date_created` (String)
-- `deleted` (Boolean)
+- `deleted` (Boolean) Whether compute environment is deleted (null means not deleted)
 - `labels` (Attributes List) (see [below for nested schema](#nestedatt--compute_env--labels))
 - `last_updated` (String)
-- `last_used` (String)
-- `managed_identity_id` (String)
+- `last_used` (String) Last time this compute environment was used (null if never used)
+- `managed_identity_id` (String) Associated managed identity ID (null if using credentials or none)
 - `org_id` (Number)
-- `primary` (Boolean)
+- `primary` (Boolean) Whether this is the primary compute environment
+- `resources` (Attributes) (see [below for nested schema](#nestedatt--compute_env--resources))
 - `status` (String)
 - `workspace_id` (Number)
 
@@ -130,11 +100,14 @@ Optional:
 - `aws_batch` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch))
 - `aws_cloud` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud))
 - `azure_batch` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch))
+- `azure_cloud` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud))
 - `eks_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform))
 - `gke_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform))
 - `google_batch` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch))
+- `google_cloud` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud))
 - `google_lifesciences` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_lifesciences))
 - `k8s_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--k8s_platform))
+- `local_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform))
 - `lsf_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--lsf_platform))
 - `moab_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--moab_platform))
 - `seqeracompute_platform` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--seqeracompute_platform))
@@ -353,7 +326,12 @@ Optional:
 - `ebs_boot_size` (Number) Requires replacement if changed.
 - `ec2_key_pair` (String) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud--environment))
 - `gpu_enabled` (Boolean) Requires replacement if changed.
 - `image_id` (String) Requires replacement if changed.
@@ -395,7 +373,12 @@ Optional:
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch--forge))
 - `head_pool` (String) Requires replacement if changed.
@@ -437,6 +420,58 @@ Optional:
 
 
 
+<a id="nestedatt--compute_env--config--azure_cloud"></a>
+### Nested Schema for `compute_env.config.azure_cloud`
+
+Optional:
+
+- `data_collection_endpoint` (String) Requires replacement if changed.
+- `data_collection_rule_id` (String) Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--environment))
+- `forged_resources` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_cloud--forged_resources))
+- `fusion2_enabled` (Boolean) Requires replacement if changed.
+- `instance_type` (String) Requires replacement if changed.
+- `log_table_name` (String) Requires replacement if changed.
+- `log_workspace_id` (String) Requires replacement if changed.
+- `managed_identity_client_id` (String) Requires replacement if changed.
+- `managed_identity_id` (String) Requires replacement if changed.
+- `network_id` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
+- `region` (String) Requires replacement if changed.
+- `resource_group` (String) Requires replacement if changed.
+- `subscription_id` (String) Requires replacement if changed.
+- `wave_enabled` (Boolean) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--azure_cloud--environment"></a>
+### Nested Schema for `compute_env.config.azure_cloud.environment`
+
+Optional:
+
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `name` (String) Requires replacement if changed.
+- `value` (String) Requires replacement if changed.
+
+
+<a id="nestedatt--compute_env--config--azure_cloud--forged_resources"></a>
+### Nested Schema for `compute_env.config.azure_cloud.forged_resources`
+
+Optional:
+
+- `key` (String) Requires replacement if changed.
+- `value` (String) Requires replacement if changed.
+
+
+
 <a id="nestedatt--compute_env--config--eks_platform"></a>
 ### Nested Schema for `compute_env.config.eks_platform`
 
@@ -445,22 +480,27 @@ Optional:
 - `cluster_name` (String) The AWS EKS cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--eks_platform--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
-- `head_service_account` (String) Not Null; Requires replacement if changed.
-- `namespace` (String) Not Null; Requires replacement if changed.
+- `head_service_account` (String) Requires replacement if changed.
+- `namespace` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) AWS region. Not Null; Requires replacement if changed.
-- `server` (String) Not Null; Requires replacement if changed.
+- `server` (String) Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
-- `ssl_cert` (String) Not Null; Requires replacement if changed.
-- `storage_claim_name` (String) Not Null; Requires replacement if changed.
+- `ssl_cert` (String) Requires replacement if changed.
+- `storage_claim_name` (String) Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
@@ -490,22 +530,27 @@ Optional:
 - `cluster_name` (String) The GKE cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--gke_platform--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `head_pod_spec` (String) Requires replacement if changed.
-- `head_service_account` (String) Not Null; Requires replacement if changed.
-- `namespace` (String) Not Null; Requires replacement if changed.
+- `head_service_account` (String) Requires replacement if changed.
+- `namespace` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) The GKE cluster region - or - zone. Not Null; Requires replacement if changed.
-- `server` (String) Not Null; Requires replacement if changed.
+- `server` (String) Requires replacement if changed.
 - `service_pod_spec` (String) Requires replacement if changed.
-- `ssl_cert` (String) Not Null; Requires replacement if changed.
-- `storage_claim_name` (String) Not Null; Requires replacement if changed.
+- `ssl_cert` (String) Requires replacement if changed.
+- `storage_claim_name` (String) Requires replacement if changed.
 - `storage_mount_path` (String) Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
@@ -538,13 +583,18 @@ Optional:
 - `cpu_platform` (String) Requires replacement if changed.
 - `debug_mode` (Number) Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Requires replacement if changed.
+- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
+and augmentation capabilities for Nextflow workflows.
+
+When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
 - `head_job_instance_template` (String) Requires replacement if changed.
 - `head_job_memory_mb` (Number) Requires replacement if changed.
 - `labels` (Map of String) Requires replacement if changed.
-- `location` (String) Requires replacement if changed.
+- `location` (String) Not Null; Requires replacement if changed.
 - `machine_type` (String) Requires replacement if changed.
 - `network` (String) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
@@ -563,6 +613,47 @@ Optional:
 
 <a id="nestedatt--compute_env--config--google_batch--environment"></a>
 ### Nested Schema for `compute_env.config.google_batch.environment`
+
+Optional:
+
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `name` (String) Requires replacement if changed.
+- `value` (String) Requires replacement if changed.
+
+
+
+<a id="nestedatt--compute_env--config--google_cloud"></a>
+### Nested Schema for `compute_env.config.google_cloud`
+
+Optional:
+
+- `arm64_enabled` (Boolean) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Requires replacement if changed.
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_cloud--environment))
+- `forged_resources` (List of Map of String) Requires replacement if changed.
+- `fusion2_enabled` (Boolean) Requires replacement if changed.
+- `gpu_enabled` (Boolean) Requires replacement if changed.
+- `image_id` (String) Requires replacement if changed.
+- `instance_type` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
+- `project_id` (String) Requires replacement if changed.
+- `region` (String) Requires replacement if changed.
+- `service_account_email` (String) Requires replacement if changed.
+- `wave_enabled` (Boolean) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+- `zone` (String) Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--google_cloud--environment"></a>
+### Nested Schema for `compute_env.config.google_cloud.environment`
 
 Optional:
 
@@ -649,6 +740,37 @@ Optional:
 
 <a id="nestedatt--compute_env--config--k8s_platform--environment"></a>
 ### Nested Schema for `compute_env.config.k8s_platform.environment`
+
+Optional:
+
+- `compute` (Boolean) Whether this environment variable should be applied to compute/worker nodes.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `head` (Boolean) Whether this environment variable should be applied to the head/master node.
+At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.
+Requires replacement if changed.
+Default: false; Requires replacement if changed.
+- `name` (String) Requires replacement if changed.
+- `value` (String) Requires replacement if changed.
+
+
+
+<a id="nestedatt--compute_env--config--local_platform"></a>
+### Nested Schema for `compute_env.config.local_platform`
+
+Optional:
+
+- `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--local_platform--environment))
+- `fusion2_enabled` (Boolean) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
+- `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
+- `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
+- `wave_enabled` (Boolean) Requires replacement if changed.
+- `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
+
+<a id="nestedatt--compute_env--config--local_platform--environment"></a>
+### Nested Schema for `compute_env.config.local_platform.environment`
 
 Optional:
 
@@ -777,6 +899,7 @@ Requires replacement if changed.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `head_queue` (String) Name of the head job queue. Requires replacement if changed.
+- `instance_type_size` (String) Size of the Data Studios instance (SMALL, MEDIUM, LARGE). must be one of ["SMALL", "MEDIUM", "LARGE"]; Requires replacement if changed.
 - `log_group` (String) Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
@@ -996,6 +1119,19 @@ Read-Only:
 - `name` (String) Name or key of the label
 - `resource` (Boolean) Flag indicating if this is a resource-level label
 - `value` (String) Value associated with the label
+
+
+<a id="nestedatt--compute_env--resources"></a>
+### Nested Schema for `compute_env.resources`
+
+Read-Only:
+
+- `cpus` (Number)
+- `disk_size` (Number)
+- `estimated_price` (Number)
+- `gpus` (Number)
+- `instance_type` (String)
+- `memory` (Number)
 
 ## Import
 

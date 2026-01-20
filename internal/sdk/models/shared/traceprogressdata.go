@@ -3,22 +3,23 @@
 package shared
 
 type TraceProgressData struct {
-	Pending     *int                  `json:"pending,omitempty"`
-	Submitted   *int                  `json:"submitted,omitempty"`
-	Running     *int                  `json:"running,omitempty"`
-	Succeeded   *int                  `json:"succeeded,omitempty"`
-	Cached      *int                  `json:"cached,omitempty"`
-	Failed      *int                  `json:"failed,omitempty"`
-	Aborted     *int                  `json:"aborted,omitempty"`
-	Stored      *int                  `json:"stored,omitempty"`
-	Ignored     *int                  `json:"ignored,omitempty"`
-	Retries     *int                  `json:"retries,omitempty"`
-	LoadCpus    *int64                `json:"loadCpus,omitempty"`
-	LoadMemory  *int64                `json:"loadMemory,omitempty"`
-	PeakRunning *int                  `json:"peakRunning,omitempty"`
-	PeakCpus    *int64                `json:"peakCpus,omitempty"`
-	PeakMemory  *int64                `json:"peakMemory,omitempty"`
-	Processes   []TraceProgressDetail `json:"processes,omitempty"`
+	Pending              *int                  `json:"pending,omitempty"`
+	Submitted            *int                  `json:"submitted,omitempty"`
+	Running              *int                  `json:"running,omitempty"`
+	Succeeded            *int                  `json:"succeeded,omitempty"`
+	Cached               *int                  `json:"cached,omitempty"`
+	Failed               *int                  `json:"failed,omitempty"`
+	Aborted              *int                  `json:"aborted,omitempty"`
+	Stored               *int                  `json:"stored,omitempty"`
+	Ignored              *int                  `json:"ignored,omitempty"`
+	Retries              *int                  `json:"retries,omitempty"`
+	LoadCpus             *int64                `json:"loadCpus,omitempty"`
+	LoadMemory           *int64                `json:"loadMemory,omitempty"`
+	PeakRunning          *int                  `json:"peakRunning,omitempty"`
+	PeakCpus             *int64                `json:"peakCpus,omitempty"`
+	PeakMemory           *int64                `json:"peakMemory,omitempty"`
+	NumSpotInterruptions *int                  `json:"numSpotInterruptions,omitempty"`
+	Processes            []TraceProgressDetail `json:"processes,omitempty"`
 }
 
 func (t *TraceProgressData) GetPending() *int {
@@ -124,6 +125,13 @@ func (t *TraceProgressData) GetPeakMemory() *int64 {
 		return nil
 	}
 	return t.PeakMemory
+}
+
+func (t *TraceProgressData) GetNumSpotInterruptions() *int {
+	if t == nil {
+		return nil
+	}
+	return t.NumSpotInterruptions
 }
 
 func (t *TraceProgressData) GetProcesses() []TraceProgressDetail {

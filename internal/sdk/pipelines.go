@@ -962,7 +962,7 @@ func (s *Pipelines) DescribePipeline(ctx context.Context, request operations.Des
 // UpdatePipeline - Update pipeline
 // Updates the details of the pipeline identified by the given `pipelineId`.
 //
-//	**Note**: If `labelIds` is `null`, empty, or ommitted, existing pipeline labels are removed.
+//	**Note**: If `labelIds` is `null`, empty, or omitted, existing pipeline labels are removed.
 //	Include `labelIds: [<label-id-1>,<label-id-2>]` to override existing labels. Labels to be preserved must be included.
 //	To append a list of labels to multiple pipelines, use `/pipelines/labels/add`.
 func (s *Pipelines) UpdatePipeline(ctx context.Context, request operations.UpdatePipelineRequest, opts ...operations.Option) (*operations.UpdatePipelineResponse, error) {

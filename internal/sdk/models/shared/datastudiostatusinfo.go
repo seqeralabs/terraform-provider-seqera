@@ -8,9 +8,10 @@ import (
 )
 
 type DataStudioStatusInfo struct {
-	Status     *DataStudioStatus `json:"status,omitempty"`
-	Message    *string           `json:"message,omitempty"`
-	LastUpdate *time.Time        `json:"lastUpdate,omitempty"`
+	Status     *DataStudioStatus     `json:"status,omitempty"`
+	Message    *string               `json:"message,omitempty"`
+	LastUpdate *time.Time            `json:"lastUpdate,omitempty"`
+	StopReason *DataStudioStopReason `json:"stopReason,omitempty"`
 }
 
 func (d DataStudioStatusInfo) MarshalJSON() ([]byte, error) {
@@ -43,4 +44,11 @@ func (d *DataStudioStatusInfo) GetLastUpdate() *time.Time {
 		return nil
 	}
 	return d.LastUpdate
+}
+
+func (d *DataStudioStatusInfo) GetStopReason() *DataStudioStopReason {
+	if d == nil {
+		return nil
+	}
+	return d.StopReason
 }

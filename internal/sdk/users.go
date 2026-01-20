@@ -506,7 +506,7 @@ func (s *Users) UpdateUser(ctx context.Context, request operations.UpdateUserReq
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UserDbDto", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "UpsertUserRequest", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}

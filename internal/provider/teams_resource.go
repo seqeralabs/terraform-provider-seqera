@@ -61,7 +61,7 @@ func (r *TeamsResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Description of the team's purpose and responsibilities`,
+				Description: `Team description`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(250),
 				},

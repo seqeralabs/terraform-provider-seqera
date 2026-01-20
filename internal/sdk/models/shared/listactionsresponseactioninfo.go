@@ -8,11 +8,13 @@ import (
 )
 
 type ListActionsResponseActionInfo struct {
-	ID          *string          `json:"id,omitempty"`
-	Name        *string          `json:"name,omitempty"`
-	Pipeline    *string          `json:"pipeline,omitempty"`
-	Source      *ActionSource    `json:"source,omitempty"`
-	Status      *ActionStatus    `json:"status,omitempty"`
+	ID   *string `json:"id,omitempty"`
+	Name *string `json:"name,omitempty"`
+	// Pipeline name
+	Pipeline *string       `json:"pipeline,omitempty"`
+	Source   *ActionSource `json:"source,omitempty"`
+	Status   *ActionStatus `json:"status,omitempty"`
+	// Last seen timestamp (null if never seen)
 	LastSeen    *time.Time       `json:"lastSeen,omitempty"`
 	DateCreated *time.Time       `json:"dateCreated,omitempty"`
 	Event       *ActionEventType `json:"event,omitempty"`

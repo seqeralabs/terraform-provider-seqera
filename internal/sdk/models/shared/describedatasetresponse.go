@@ -7,10 +7,10 @@ type DescribeDatasetResponse struct {
 	// Contains dataset metadata, versioning information, and access
 	// controls for data management and sharing.
 	//
-	Dataset *Dataset `json:"dataset,omitempty"`
+	Dataset *DatasetDto `json:"dataset,omitempty"`
 }
 
-func (d *DescribeDatasetResponse) GetDataset() *Dataset {
+func (d *DescribeDatasetResponse) GetDataset() *DatasetDto {
 	if d == nil {
 		return nil
 	}

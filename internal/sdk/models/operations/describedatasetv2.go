@@ -12,6 +12,8 @@ type DescribeDatasetV2Request struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Dataset string identifier
 	DatasetID string `pathParam:"style=simple,explode=false,name=datasetId"`
+	// Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.
+	Attributes []shared.DatasetQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 }
 
 func (d *DescribeDatasetV2Request) GetWorkspaceID() *int64 {
@@ -26,6 +28,13 @@ func (d *DescribeDatasetV2Request) GetDatasetID() string {
 		return ""
 	}
 	return d.DatasetID
+}
+
+func (d *DescribeDatasetV2Request) GetAttributes() []shared.DatasetQueryAttribute {
+	if d == nil {
+		return nil
+	}
+	return d.Attributes
 }
 
 type DescribeDatasetV2Response struct {

@@ -62,7 +62,7 @@ actions:
       required:
         - vmCount
 
-  - target: $.components.schemas.GoogleBatchComputeConfig
+  - target: $.components.schemas.GoogleBatchConfig
     update:
       required:
         - location

@@ -73,27 +73,27 @@ resource "seqera_workflows" "my_workflows" {
 
 - `compute_env_id` (String) Requires replacement if changed.
 - `config_profiles` (List of String) Requires replacement if changed.
-- `config_text` (String) Requires replacement if changed.
-- `entry_name` (String) Requires replacement if changed.
+- `config_text` (String) Nextflow configuration text. Requires replacement if changed.
+- `entry_name` (String) Entry workflow name. Requires replacement if changed.
 - `force` (Boolean) Force the deletion even if the workflow is active
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
+- `head_job_cpus` (Number) Head job CPU allocation. Requires replacement if changed.
+- `head_job_memory_mb` (Number) Head job memory allocation in MB. Requires replacement if changed.
 - `label_ids` (List of Number) Requires replacement if changed.
-- `main_script` (String) Requires replacement if changed.
-- `params_text` (String) Requires replacement if changed.
+- `main_script` (String) Main script path. Requires replacement if changed.
+- `params_text` (String) Pipeline parameters text. Requires replacement if changed.
 - `pipeline` (String) Requires replacement if changed.
-- `post_run_script` (String) Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
-- `pre_run_script` (String) Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.
+- `post_run_script` (String) Script to run after pipeline execution. Requires replacement if changed.
+- `pre_run_script` (String) Script to run before pipeline execution. Requires replacement if changed.
 - `pull_latest` (Boolean) Requires replacement if changed.
 - `resume` (Boolean) Requires replacement if changed.
-- `revision` (String) Requires replacement if changed.
-- `run_name` (String) Requires replacement if changed.
-- `schema_name` (String) Requires replacement if changed.
-- `source_workspace_id` (Number) Source Optional workspace numeric identifier. Requires replacement if changed.
+- `revision` (String) Pipeline revision. Requires replacement if changed.
+- `run_name` (String) Custom run name. Requires replacement if changed.
+- `schema_name` (String) Pipeline schema name. Requires replacement if changed.
+- `source_workspace_id` (Number) Source workspace numeric identifier. Requires replacement if changed.
 - `stub_run` (Boolean) Requires replacement if changed.
-- `tower_config` (String) Requires replacement if changed.
+- `tower_config` (String) Tower-specific configuration. Requires replacement if changed.
 - `user_secrets` (List of String) Requires replacement if changed.
-- `work_dir` (String) Requires replacement if changed.
+- `work_dir` (String) Working directory. Requires replacement if changed.
 - `workspace_secrets` (List of String) Requires replacement if changed.
 
 ### Read-Only
@@ -107,8 +107,7 @@ resource "seqera_workflows" "my_workflows" {
 Read-Only:
 
 - `command_line` (String)
-- `commit_id` (String)
-- `complete` (String)
+- `complete` (String) Workflow completion time (null if not completed)
 - `config_files` (List of String)
 - `config_text` (String)
 - `container` (String)
@@ -116,8 +115,8 @@ Read-Only:
 - `date_created` (String)
 - `deleted` (Boolean)
 - `duration` (Number)
-- `error_message` (String)
-- `error_report` (String)
+- `error_message` (String) Error message (null if no error)
+- `error_report` (String) Error report (null if no error)
 - `exit_status` (Number)
 - `home_dir` (String)
 - `id` (String)
@@ -143,7 +142,7 @@ Read-Only:
 - `script_id` (String)
 - `script_name` (String)
 - `session_id` (String)
-- `start` (String)
+- `start` (String) Workflow start time (null if not started)
 - `stats` (Attributes) (see [below for nested schema](#nestedatt--workflow--stats))
 - `status` (String)
 - `submit` (String)

@@ -281,7 +281,7 @@ actions:
       x-speakeasy-terraform-ignore: true
 
   # Ignore discriminator fields in all compute config schemas to prevent state changes
-  - target: $.components.schemas.AltairPbsComputeConfig.allOf[1].properties.discriminator
+  - target: $.components.schemas.AltairPbsComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.AwsBatchConfig.properties.discriminator
@@ -290,10 +290,10 @@ actions:
   - target: $.components.schemas.AzBatchConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.discriminator
+  - target: $.components.schemas.EksComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.discriminator
+  - target: $.components.schemas.GkeComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.GoogleBatchConfig.properties.discriminator
@@ -305,19 +305,19 @@ actions:
   - target: $.components.schemas.K8sComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.LsfComputeConfig.allOf[1].properties.discriminator
+  - target: $.components.schemas.LsfComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.MoabComputeConfig.allOf[1].properties.discriminator
+  - target: $.components.schemas.MoabComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.SeqeraComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.SlurmComputeConfig.allOf[1].properties.discriminator
+  - target: $.components.schemas.SlurmComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.UnivaComputeConfig.allOf[1].properties.discriminator
+  - target: $.components.schemas.UnivaComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
 
@@ -365,6 +365,66 @@ actions:
         When enable_wave is true, enable_fusion must be explicitly set to either true or false.
         Note: If Fusion2 is enabled, Wave must also be enabled.
       x-speakeasy-plan-validators: WaveEnabledValidator
+  - target: $.components.schemas.AwsCloudConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Enable Wave containers for this compute environment. Wave provides container provisioning
+        and augmentation capabilities for Nextflow workflows.
+
+        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+        Note: If Fusion2 is enabled, Wave must also be enabled.
+      x-speakeasy-plan-validators: WaveEnabledValidator
+  - target: $.components.schemas.AzBatchConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Enable Wave containers for this compute environment. Wave provides container provisioning
+        and augmentation capabilities for Nextflow workflows.
+
+        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+        Note: If Fusion2 is enabled, Wave must also be enabled.
+      x-speakeasy-plan-validators: WaveEnabledValidator
+  - target: $.components.schemas.EksComputeConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Enable Wave containers for this compute environment. Wave provides container provisioning
+        and augmentation capabilities for Nextflow workflows.
+
+        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+        Note: If Fusion2 is enabled, Wave must also be enabled.
+      x-speakeasy-plan-validators: WaveEnabledValidator
+  - target: $.components.schemas.GkeComputeConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Enable Wave containers for this compute environment. Wave provides container provisioning
+        and augmentation capabilities for Nextflow workflows.
+
+        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+        Note: If Fusion2 is enabled, Wave must also be enabled.
+      x-speakeasy-plan-validators: WaveEnabledValidator
+  - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Enable Wave containers for this compute environment. Wave provides container provisioning
+        and augmentation capabilities for Nextflow workflows.
+
+        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+        Note: If Fusion2 is enabled, Wave must also be enabled.
+      x-speakeasy-plan-validators: WaveEnabledValidator
+  - target: $.components.schemas.SeqeraComputeConfig.properties.waveEnabled
+    update:
+      title: "Wave Enabled"
+      description: |
+        Enable Wave containers for this compute environment. Wave provides container provisioning
+        and augmentation capabilities for Nextflow workflows.
+
+        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+        Note: If Fusion2 is enabled, Wave must also be enabled.
+      x-speakeasy-plan-validators: WaveEnabledValidator
 
   # ============================================================================
   # FIELD RENAMES - Consistent naming conventions
@@ -380,10 +440,10 @@ actions:
   - target: $.components.schemas.AzBatchConfig.properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
-  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.waveEnabled
+  - target: $.components.schemas.EksComputeConfig.properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
-  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.waveEnabled
+  - target: $.components.schemas.GkeComputeConfig.properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
   - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
@@ -403,10 +463,10 @@ actions:
   - target: $.components.schemas.AzBatchConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
-  - target: $.components.schemas.EksComputeConfig.allOf[1].properties.fusion2Enabled
+  - target: $.components.schemas.EksComputeConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
-  - target: $.components.schemas.GkeComputeConfig.allOf[1].properties.fusion2Enabled
+  - target: $.components.schemas.GkeComputeConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
   - target: $.components.schemas.GoogleBatchConfig.properties.fusion2Enabled

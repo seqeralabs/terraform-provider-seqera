@@ -54,7 +54,7 @@ type DownloadDatasetResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	Bytes []byte
+	Res *string
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -80,11 +80,11 @@ func (d *DownloadDatasetResponse) GetRawResponse() *http.Response {
 	return d.RawResponse
 }
 
-func (d *DownloadDatasetResponse) GetBytes() []byte {
+func (d *DownloadDatasetResponse) GetRes() *string {
 	if d == nil {
 		return nil
 	}
-	return d.Bytes
+	return d.Res
 }
 
 func (d *DownloadDatasetResponse) GetErrorResponse() *shared.ErrorResponse {

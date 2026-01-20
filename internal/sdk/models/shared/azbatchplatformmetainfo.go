@@ -7,6 +7,7 @@ import (
 )
 
 type AzBatchPlatformMetainfo struct {
+	// property to select the platform metainfo type
 	Discriminator *string  `json:"discriminator,omitempty"`
 	Warnings      []string `json:"warnings,omitempty"`
 	Pools         []string `json:"pools,omitempty"`

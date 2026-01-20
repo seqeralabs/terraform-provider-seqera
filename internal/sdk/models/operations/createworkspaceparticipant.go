@@ -10,7 +10,7 @@ import (
 type CreateWorkspaceParticipantRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Participant addition request
 	AddParticipantRequest shared.AddParticipantRequest `request:"mediaType=application/json"`

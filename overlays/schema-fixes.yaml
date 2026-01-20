@@ -10,17 +10,9 @@ actions:
       x-speakeasy-terraform-ignore: true
 
   # Fix discriminator mapping validation errors by removing problematic mappings
-  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["google-cloud"]
-    remove: true
-  - target: $["components"]["schemas"]["ComputeConfig"]["discriminator"]["mapping"]["azure-cloud"]
-    remove: true
   - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["seqeracompute"]
     remove: true
   - target: $["components"]["schemas"]["PlatformMetainfo"]["discriminator"]["mapping"]["google-cloud"]
-    remove: true
-  - target: $.components.schemas.ComputeConfig.discriminator.mapping["google-cloud"]
-    remove: true
-  - target: $.components.schemas.ComputeConfig.discriminator.mapping["azure-cloud"]
     remove: true
   - target: $.components.schemas.PlatformMetainfo.discriminator.mapping["seqeracompute"]
     remove: true
@@ -61,22 +53,6 @@ actions:
         - $ref: "#/components/schemas/AwsBatchConfig"
 
   # Remove deprecated schemas
-  - target: $["components"]["schemas"]["AzCloudConfig"]
-    remove: true
-  - target: $["components"]["schemas"]["GoogleBucket"]
-    remove: true
-  - target: $["components"]["schemas"]["GoogleCloudConfig"]
-    remove: true
-  - target: $["components"]["schemas"]["GoogleCloudPlatformMetaInfo"]
-    remove: true
-  - target: $["components"]["schemas"]["GoogleImage"]
-    remove: true
-  - target: $["components"]["schemas"]["GoogleInstanceType"]
-    remove: true
-  - target: $["components"]["schemas"]["Map.Entry_String.String_"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputePlatformDescriber"]
-    remove: true
   - target: $["components"]["schemas"]["SeqeraComputePlatformMetainfo"]
     remove: true
   - target: $["components"]["schemas"]["WfFusionMeta"]

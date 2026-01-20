@@ -10,7 +10,8 @@ import (
 type ComputeEnvQueryAttribute string
 
 const (
-	ComputeEnvQueryAttributeLabels ComputeEnvQueryAttribute = "labels"
+	ComputeEnvQueryAttributeLabels    ComputeEnvQueryAttribute = "labels"
+	ComputeEnvQueryAttributeResources ComputeEnvQueryAttribute = "resources"
 )
 
 func (e ComputeEnvQueryAttribute) ToPointer() *ComputeEnvQueryAttribute {
@@ -23,6 +24,8 @@ func (e *ComputeEnvQueryAttribute) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "labels":
+		fallthrough
+	case "resources":
 		*e = ComputeEnvQueryAttribute(v)
 		return nil
 	default:

@@ -3,13 +3,15 @@
 package shared
 
 type LogPage struct {
-	Truncated    *bool             `json:"truncated,omitempty"`
-	Entries      *IteratorString   `json:"entries,omitempty"`
-	RewindToken  *string           `json:"rewindToken,omitempty"`
-	ForwardToken *string           `json:"forwardToken,omitempty"`
-	Pending      *bool             `json:"pending,omitempty"`
-	Message      *string           `json:"message,omitempty"`
-	Downloads    []LogPageDownload `json:"downloads,omitempty"`
+	Truncated *bool `json:"truncated,omitempty"`
+	// Log entries (can be null)
+	Entries      []string `json:"entries,omitempty"`
+	RewindToken  *string  `json:"rewindToken,omitempty"`
+	ForwardToken *string  `json:"forwardToken,omitempty"`
+	Pending      *bool    `json:"pending,omitempty"`
+	// Log message (can be null)
+	Message   *string           `json:"message,omitempty"`
+	Downloads []LogPageDownload `json:"downloads,omitempty"`
 }
 
 func (l *LogPage) GetTruncated() *bool {
@@ -19,7 +21,7 @@ func (l *LogPage) GetTruncated() *bool {
 	return l.Truncated
 }
 
-func (l *LogPage) GetEntries() *IteratorString {
+func (l *LogPage) GetEntries() []string {
 	if l == nil {
 		return nil
 	}

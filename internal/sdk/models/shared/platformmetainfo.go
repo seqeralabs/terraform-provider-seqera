@@ -3,7 +3,6 @@
 package shared
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
@@ -12,14 +11,15 @@ import (
 type PlatformMetainfoType string
 
 const (
-	PlatformMetainfoTypeGkePlatform   PlatformMetainfoType = "gke-platform"
-	PlatformMetainfoTypeAwsCloud      PlatformMetainfoType = "aws-cloud"
-	PlatformMetainfoTypeK8sPlatform   PlatformMetainfoType = "k8s-platform"
-	PlatformMetainfoTypeGrid          PlatformMetainfoType = "grid"
-	PlatformMetainfoTypeAwsBatch      PlatformMetainfoType = "aws-batch"
-	PlatformMetainfoTypeLocalPlatform PlatformMetainfoType = "local-platform"
-	PlatformMetainfoTypeAzureBatch    PlatformMetainfoType = "azure-batch"
-	PlatformMetainfoTypeEksPlatform   PlatformMetainfoType = "eks-platform"
+	PlatformMetainfoTypeAwsBatchPlatformMetainfo PlatformMetainfoType = "AwsBatchPlatformMetainfo"
+	PlatformMetainfoTypeAwsCloudPlatformMetainfo PlatformMetainfoType = "AwsCloudPlatformMetainfo"
+	PlatformMetainfoTypeGooglePlatformMetainfo   PlatformMetainfoType = "GooglePlatformMetainfo"
+	PlatformMetainfoTypeAzBatchPlatformMetainfo  PlatformMetainfoType = "AzBatchPlatformMetainfo"
+	PlatformMetainfoTypeEksPlatformMetaInfo      PlatformMetainfoType = "EksPlatformMetaInfo"
+	PlatformMetainfoTypeGkePlatformMetaInfo      PlatformMetainfoType = "GkePlatformMetaInfo"
+	PlatformMetainfoTypeK8sPlatformMetaInfo      PlatformMetainfoType = "K8sPlatformMetaInfo"
+	PlatformMetainfoTypeGridPlatformMetainfo     PlatformMetainfoType = "GridPlatformMetainfo"
+	PlatformMetainfoTypeLocalPlatformMetainfo    PlatformMetainfoType = "LocalPlatformMetainfo"
 )
 
 type PlatformMetainfo struct {
@@ -36,185 +36,203 @@ type PlatformMetainfo struct {
 	Type PlatformMetainfoType
 }
 
-func CreatePlatformMetainfoGkePlatform(gkePlatform GkePlatformMetaInfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeGkePlatform
-
-	typStr := string(typ)
-	gkePlatform.Discriminator = &typStr
+func CreatePlatformMetainfoAwsBatchPlatformMetainfo(awsBatchPlatformMetainfo AwsBatchPlatformMetainfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeAwsBatchPlatformMetainfo
 
 	return PlatformMetainfo{
-		GkePlatformMetaInfo: &gkePlatform,
-		Type:                typ,
-	}
-}
-
-func CreatePlatformMetainfoAwsCloud(awsCloud AwsCloudPlatformMetainfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeAwsCloud
-
-	typStr := string(typ)
-	awsCloud.Discriminator = &typStr
-
-	return PlatformMetainfo{
-		AwsCloudPlatformMetainfo: &awsCloud,
+		AwsBatchPlatformMetainfo: &awsBatchPlatformMetainfo,
 		Type:                     typ,
 	}
 }
 
-func CreatePlatformMetainfoK8sPlatform(k8sPlatform K8sPlatformMetaInfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeK8sPlatform
-
-	typStr := string(typ)
-	k8sPlatform.Discriminator = &typStr
+func CreatePlatformMetainfoAwsCloudPlatformMetainfo(awsCloudPlatformMetainfo AwsCloudPlatformMetainfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeAwsCloudPlatformMetainfo
 
 	return PlatformMetainfo{
-		K8sPlatformMetaInfo: &k8sPlatform,
-		Type:                typ,
-	}
-}
-
-func CreatePlatformMetainfoGrid(grid GridPlatformMetainfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeGrid
-
-	typStr := string(typ)
-	grid.Discriminator = &typStr
-
-	return PlatformMetainfo{
-		GridPlatformMetainfo: &grid,
-		Type:                 typ,
-	}
-}
-
-func CreatePlatformMetainfoAwsBatch(awsBatch AwsBatchPlatformMetainfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeAwsBatch
-
-	typStr := string(typ)
-	awsBatch.Discriminator = &typStr
-
-	return PlatformMetainfo{
-		AwsBatchPlatformMetainfo: &awsBatch,
+		AwsCloudPlatformMetainfo: &awsCloudPlatformMetainfo,
 		Type:                     typ,
 	}
 }
 
-func CreatePlatformMetainfoLocalPlatform(localPlatform LocalPlatformMetainfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeLocalPlatform
-
-	typStr := string(typ)
-	localPlatform.Discriminator = &typStr
+func CreatePlatformMetainfoGooglePlatformMetainfo(googlePlatformMetainfo GooglePlatformMetainfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeGooglePlatformMetainfo
 
 	return PlatformMetainfo{
-		LocalPlatformMetainfo: &localPlatform,
-		Type:                  typ,
+		GooglePlatformMetainfo: &googlePlatformMetainfo,
+		Type:                   typ,
 	}
 }
 
-func CreatePlatformMetainfoAzureBatch(azureBatch AzBatchPlatformMetainfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeAzureBatch
-
-	typStr := string(typ)
-	azureBatch.Discriminator = &typStr
+func CreatePlatformMetainfoAzBatchPlatformMetainfo(azBatchPlatformMetainfo AzBatchPlatformMetainfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeAzBatchPlatformMetainfo
 
 	return PlatformMetainfo{
-		AzBatchPlatformMetainfo: &azureBatch,
+		AzBatchPlatformMetainfo: &azBatchPlatformMetainfo,
 		Type:                    typ,
 	}
 }
 
-func CreatePlatformMetainfoEksPlatform(eksPlatform EksPlatformMetaInfo) PlatformMetainfo {
-	typ := PlatformMetainfoTypeEksPlatform
-
-	typStr := string(typ)
-	eksPlatform.Discriminator = &typStr
+func CreatePlatformMetainfoEksPlatformMetaInfo(eksPlatformMetaInfo EksPlatformMetaInfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeEksPlatformMetaInfo
 
 	return PlatformMetainfo{
-		EksPlatformMetaInfo: &eksPlatform,
+		EksPlatformMetaInfo: &eksPlatformMetaInfo,
 		Type:                typ,
+	}
+}
+
+func CreatePlatformMetainfoGkePlatformMetaInfo(gkePlatformMetaInfo GkePlatformMetaInfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeGkePlatformMetaInfo
+
+	return PlatformMetainfo{
+		GkePlatformMetaInfo: &gkePlatformMetaInfo,
+		Type:                typ,
+	}
+}
+
+func CreatePlatformMetainfoK8sPlatformMetaInfo(k8sPlatformMetaInfo K8sPlatformMetaInfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeK8sPlatformMetaInfo
+
+	return PlatformMetainfo{
+		K8sPlatformMetaInfo: &k8sPlatformMetaInfo,
+		Type:                typ,
+	}
+}
+
+func CreatePlatformMetainfoGridPlatformMetainfo(gridPlatformMetainfo GridPlatformMetainfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeGridPlatformMetainfo
+
+	return PlatformMetainfo{
+		GridPlatformMetainfo: &gridPlatformMetainfo,
+		Type:                 typ,
+	}
+}
+
+func CreatePlatformMetainfoLocalPlatformMetainfo(localPlatformMetainfo LocalPlatformMetainfo) PlatformMetainfo {
+	typ := PlatformMetainfoTypeLocalPlatformMetainfo
+
+	return PlatformMetainfo{
+		LocalPlatformMetainfo: &localPlatformMetainfo,
+		Type:                  typ,
 	}
 }
 
 func (u *PlatformMetainfo) UnmarshalJSON(data []byte) error {
 
-	type discriminator struct {
-		Discriminator string `json:"discriminator"`
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
+	var awsBatchPlatformMetainfo AwsBatchPlatformMetainfo = AwsBatchPlatformMetainfo{}
+	if err := utils.UnmarshalJSON(data, &awsBatchPlatformMetainfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeAwsBatchPlatformMetainfo,
+			Value: &awsBatchPlatformMetainfo,
+		})
 	}
 
-	dis := new(discriminator)
-	if err := json.Unmarshal(data, &dis); err != nil {
-		return fmt.Errorf("could not unmarshal discriminator: %w", err)
+	var awsCloudPlatformMetainfo AwsCloudPlatformMetainfo = AwsCloudPlatformMetainfo{}
+	if err := utils.UnmarshalJSON(data, &awsCloudPlatformMetainfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeAwsCloudPlatformMetainfo,
+			Value: &awsCloudPlatformMetainfo,
+		})
 	}
 
-	switch dis.Discriminator {
-	case "gke-platform":
-		gkePlatformMetaInfo := new(GkePlatformMetaInfo)
-		if err := utils.UnmarshalJSON(data, &gkePlatformMetaInfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gke-platform) type GkePlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
-		}
+	var googlePlatformMetainfo GooglePlatformMetainfo = GooglePlatformMetainfo{}
+	if err := utils.UnmarshalJSON(data, &googlePlatformMetainfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeGooglePlatformMetainfo,
+			Value: &googlePlatformMetainfo,
+		})
+	}
 
-		u.GkePlatformMetaInfo = gkePlatformMetaInfo
-		u.Type = PlatformMetainfoTypeGkePlatform
+	var azBatchPlatformMetainfo AzBatchPlatformMetainfo = AzBatchPlatformMetainfo{}
+	if err := utils.UnmarshalJSON(data, &azBatchPlatformMetainfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeAzBatchPlatformMetainfo,
+			Value: &azBatchPlatformMetainfo,
+		})
+	}
+
+	var eksPlatformMetaInfo EksPlatformMetaInfo = EksPlatformMetaInfo{}
+	if err := utils.UnmarshalJSON(data, &eksPlatformMetaInfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeEksPlatformMetaInfo,
+			Value: &eksPlatformMetaInfo,
+		})
+	}
+
+	var gkePlatformMetaInfo GkePlatformMetaInfo = GkePlatformMetaInfo{}
+	if err := utils.UnmarshalJSON(data, &gkePlatformMetaInfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeGkePlatformMetaInfo,
+			Value: &gkePlatformMetaInfo,
+		})
+	}
+
+	var k8sPlatformMetaInfo K8sPlatformMetaInfo = K8sPlatformMetaInfo{}
+	if err := utils.UnmarshalJSON(data, &k8sPlatformMetaInfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeK8sPlatformMetaInfo,
+			Value: &k8sPlatformMetaInfo,
+		})
+	}
+
+	var gridPlatformMetainfo GridPlatformMetainfo = GridPlatformMetainfo{}
+	if err := utils.UnmarshalJSON(data, &gridPlatformMetainfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeGridPlatformMetainfo,
+			Value: &gridPlatformMetainfo,
+		})
+	}
+
+	var localPlatformMetainfo LocalPlatformMetainfo = LocalPlatformMetainfo{}
+	if err := utils.UnmarshalJSON(data, &localPlatformMetainfo, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  PlatformMetainfoTypeLocalPlatformMetainfo,
+			Value: &localPlatformMetainfo,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for PlatformMetainfo", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestUnionCandidate(candidates, data)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for PlatformMetainfo", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(PlatformMetainfoType)
+	switch best.Type {
+	case PlatformMetainfoTypeAwsBatchPlatformMetainfo:
+		u.AwsBatchPlatformMetainfo = best.Value.(*AwsBatchPlatformMetainfo)
 		return nil
-	case "aws-cloud":
-		awsCloudPlatformMetainfo := new(AwsCloudPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &awsCloudPlatformMetainfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AwsCloudPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
-		}
-
-		u.AwsCloudPlatformMetainfo = awsCloudPlatformMetainfo
-		u.Type = PlatformMetainfoTypeAwsCloud
+	case PlatformMetainfoTypeAwsCloudPlatformMetainfo:
+		u.AwsCloudPlatformMetainfo = best.Value.(*AwsCloudPlatformMetainfo)
 		return nil
-	case "k8s-platform":
-		k8sPlatformMetaInfo := new(K8sPlatformMetaInfo)
-		if err := utils.UnmarshalJSON(data, &k8sPlatformMetaInfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s-platform) type K8sPlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
-		}
-
-		u.K8sPlatformMetaInfo = k8sPlatformMetaInfo
-		u.Type = PlatformMetainfoTypeK8sPlatform
+	case PlatformMetainfoTypeGooglePlatformMetainfo:
+		u.GooglePlatformMetainfo = best.Value.(*GooglePlatformMetainfo)
 		return nil
-	case "grid":
-		gridPlatformMetainfo := new(GridPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &gridPlatformMetainfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == grid) type GridPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
-		}
-
-		u.GridPlatformMetainfo = gridPlatformMetainfo
-		u.Type = PlatformMetainfoTypeGrid
+	case PlatformMetainfoTypeAzBatchPlatformMetainfo:
+		u.AzBatchPlatformMetainfo = best.Value.(*AzBatchPlatformMetainfo)
 		return nil
-	case "aws-batch":
-		awsBatchPlatformMetainfo := new(AwsBatchPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &awsBatchPlatformMetainfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-batch) type AwsBatchPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
-		}
-
-		u.AwsBatchPlatformMetainfo = awsBatchPlatformMetainfo
-		u.Type = PlatformMetainfoTypeAwsBatch
+	case PlatformMetainfoTypeEksPlatformMetaInfo:
+		u.EksPlatformMetaInfo = best.Value.(*EksPlatformMetaInfo)
 		return nil
-	case "local-platform":
-		localPlatformMetainfo := new(LocalPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &localPlatformMetainfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
-		}
-
-		u.LocalPlatformMetainfo = localPlatformMetainfo
-		u.Type = PlatformMetainfoTypeLocalPlatform
+	case PlatformMetainfoTypeGkePlatformMetaInfo:
+		u.GkePlatformMetaInfo = best.Value.(*GkePlatformMetaInfo)
 		return nil
-	case "azure-batch":
-		azBatchPlatformMetainfo := new(AzBatchPlatformMetainfo)
-		if err := utils.UnmarshalJSON(data, &azBatchPlatformMetainfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzBatchPlatformMetainfo within PlatformMetainfo: %w", string(data), err)
-		}
-
-		u.AzBatchPlatformMetainfo = azBatchPlatformMetainfo
-		u.Type = PlatformMetainfoTypeAzureBatch
+	case PlatformMetainfoTypeK8sPlatformMetaInfo:
+		u.K8sPlatformMetaInfo = best.Value.(*K8sPlatformMetaInfo)
 		return nil
-	case "eks-platform":
-		eksPlatformMetaInfo := new(EksPlatformMetaInfo)
-		if err := utils.UnmarshalJSON(data, &eksPlatformMetaInfo, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type EksPlatformMetaInfo within PlatformMetainfo: %w", string(data), err)
-		}
-
-		u.EksPlatformMetaInfo = eksPlatformMetaInfo
-		u.Type = PlatformMetainfoTypeEksPlatform
+	case PlatformMetainfoTypeGridPlatformMetainfo:
+		u.GridPlatformMetainfo = best.Value.(*GridPlatformMetainfo)
+		return nil
+	case PlatformMetainfoTypeLocalPlatformMetainfo:
+		u.LocalPlatformMetainfo = best.Value.(*LocalPlatformMetainfo)
 		return nil
 	}
 

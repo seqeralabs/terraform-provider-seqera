@@ -15,9 +15,10 @@ type PipelineDbDto struct {
 	// Icon identifier or URL for visual representation
 	Icon *string `json:"icon,omitempty"`
 	// Git repository URL containing the pipeline source code
-	Repository    *string `json:"repository,omitempty"`
-	UserID        *int64  `json:"userId,omitempty"`
-	UserName      *string `json:"userName,omitempty"`
+	Repository *string `json:"repository,omitempty"`
+	UserID     *int64  `json:"userId,omitempty"`
+	UserName   *string `json:"userName,omitempty"`
+	// User first name
 	UserFirstName *string `json:"userFirstName,omitempty"`
 	WorkspaceID   *int64  `json:"workspaceId,omitempty"`
 }
