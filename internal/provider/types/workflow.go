@@ -22,7 +22,6 @@ type Workflow struct {
 	SessionID         types.String                    `tfsdk:"session_id"`
 	Profile           types.String                    `tfsdk:"profile"`
 	WorkDir           types.String                    `tfsdk:"work_dir"`
-	CommitID          types.String                    `tfsdk:"commit_id"`
 	UserName          types.String                    `tfsdk:"user_name"`
 	ScriptID          types.String                    `tfsdk:"script_id"`
 	Revision          types.String                    `tfsdk:"revision"`

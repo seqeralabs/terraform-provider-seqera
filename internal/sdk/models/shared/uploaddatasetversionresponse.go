@@ -3,10 +3,10 @@
 package shared
 
 type UploadDatasetVersionResponse struct {
-	Version *DatasetVersionDbDto `json:"version,omitempty"`
+	Version *DatasetVersionDto `json:"version,omitempty"`
 }
 
-func (u *UploadDatasetVersionResponse) GetVersion() *DatasetVersionDbDto {
+func (u *UploadDatasetVersionResponse) GetVersion() *DatasetVersionDto {
 	if u == nil {
 		return nil
 	}

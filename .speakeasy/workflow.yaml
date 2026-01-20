@@ -6,6 +6,7 @@ sources:
             - location: specs/seqera-api-cloud.yaml
         overlays:
             - location: overlays/api-description.yaml
+            - location: overlays/nullable-fixes.yaml
             - location: overlays/speakeasy.yaml
             - location: overlays/required.yaml
             - location: overlays/datalinks.yaml

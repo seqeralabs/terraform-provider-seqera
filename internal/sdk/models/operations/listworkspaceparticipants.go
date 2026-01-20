@@ -10,7 +10,7 @@ import (
 type ListWorkspaceParticipantsRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`

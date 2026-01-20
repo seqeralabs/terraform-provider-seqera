@@ -8,55 +8,96 @@ import (
 )
 
 type Task struct {
-	Hash        *string          `json:"hash,omitempty"`
-	Name        *string          `json:"name,omitempty"`
-	Process     *string          `json:"process,omitempty"`
-	Tag         *string          `json:"tag,omitempty"`
-	Submit      *time.Time       `json:"submit,omitempty"`
-	Start       *time.Time       `json:"start,omitempty"`
-	Complete    *time.Time       `json:"complete,omitempty"`
-	Module      []string         `json:"module,omitempty"`
-	Container   *string          `json:"container,omitempty"`
-	Attempt     *int             `json:"attempt,omitempty"`
-	Script      *string          `json:"script,omitempty"`
-	Scratch     *string          `json:"scratch,omitempty"`
-	Workdir     *string          `json:"workdir,omitempty"`
-	Queue       *string          `json:"queue,omitempty"`
-	Cpus        *int             `json:"cpus,omitempty"`
-	Memory      *int64           `json:"memory,omitempty"`
-	Disk        *int64           `json:"disk,omitempty"`
-	Time        *int64           `json:"time,omitempty"`
-	Env         *string          `json:"env,omitempty"`
-	Executor    *string          `json:"executor,omitempty"`
-	MachineType *string          `json:"machineType,omitempty"`
-	CloudZone   *string          `json:"cloudZone,omitempty"`
-	PriceModel  *CloudPriceModel `json:"priceModel,omitempty"`
-	Cost        *float64         `json:"cost,omitempty"`
-	ErrorAction *string          `json:"errorAction,omitempty"`
-	ExitStatus  *int             `json:"exitStatus,omitempty"`
-	Duration    *int64           `json:"duration,omitempty"`
-	Realtime    *int64           `json:"realtime,omitempty"`
-	NativeID    *string          `json:"nativeId,omitempty"`
-	Pcpu        *float64         `json:"pcpu,omitempty"`
-	Pmem        *float64         `json:"pmem,omitempty"`
-	Rss         *int64           `json:"rss,omitempty"`
-	Vmem        *int64           `json:"vmem,omitempty"`
-	PeakRss     *int64           `json:"peakRss,omitempty"`
-	PeakVmem    *int64           `json:"peakVmem,omitempty"`
-	Rchar       *int64           `json:"rchar,omitempty"`
-	Wchar       *int64           `json:"wchar,omitempty"`
-	Syscr       *int64           `json:"syscr,omitempty"`
-	Syscw       *int64           `json:"syscw,omitempty"`
-	ReadBytes   *int64           `json:"readBytes,omitempty"`
-	WriteBytes  *int64           `json:"writeBytes,omitempty"`
-	VolCtxt     *int64           `json:"volCtxt,omitempty"`
-	InvCtxt     *int64           `json:"invCtxt,omitempty"`
-	Exit        *int             `json:"exit,omitempty"`
-	ID          *int64           `json:"id,omitempty"`
-	TaskID      int64            `json:"taskId"`
-	Status      TaskStatus       `json:"status"`
-	DateCreated *time.Time       `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time       `json:"lastUpdated,omitempty"`
+	Hash *string `json:"hash,omitempty"`
+	Name *string `json:"name,omitempty"`
+	// Process name
+	Process *string `json:"process,omitempty"`
+	// Task tag
+	Tag *string `json:"tag,omitempty"`
+	// Task submission time
+	Submit *time.Time `json:"submit,omitempty"`
+	// Task start time
+	Start *time.Time `json:"start,omitempty"`
+	// Task completion time
+	Complete *time.Time `json:"complete,omitempty"`
+	Module   []string   `json:"module,omitempty"`
+	// Container image
+	Container *string `json:"container,omitempty"`
+	// Attempt number
+	Attempt *int `json:"attempt,omitempty"`
+	// Task script
+	Script *string `json:"script,omitempty"`
+	// Scratch directory
+	Scratch *string `json:"scratch,omitempty"`
+	// Working directory
+	Workdir *string `json:"workdir,omitempty"`
+	// Execution queue
+	Queue *string `json:"queue,omitempty"`
+	// CPU allocation
+	Cpus *int `json:"cpus,omitempty"`
+	// Memory allocation in bytes
+	Memory *int64 `json:"memory,omitempty"`
+	// Disk allocation in bytes
+	Disk *int64 `json:"disk,omitempty"`
+	// Time limit in milliseconds
+	Time *int64 `json:"time,omitempty"`
+	// Environment variables
+	Env *string `json:"env,omitempty"`
+	// Executor name
+	Executor *string `json:"executor,omitempty"`
+	// Cloud machine type
+	MachineType *string `json:"machineType,omitempty"`
+	// Cloud zone/region
+	CloudZone  *string          `json:"cloudZone,omitempty"`
+	PriceModel *CloudPriceModel `json:"priceModel,omitempty"`
+	// Estimated cost
+	Cost *float64 `json:"cost,omitempty"`
+	// Error handling action
+	ErrorAction *string `json:"errorAction,omitempty"`
+	// Exit status code
+	ExitStatus *int `json:"exitStatus,omitempty"`
+	// Task duration in milliseconds
+	Duration *int64 `json:"duration,omitempty"`
+	// Real execution time in milliseconds
+	Realtime *int64 `json:"realtime,omitempty"`
+	// Native job ID from executor
+	NativeID *string `json:"nativeId,omitempty"`
+	// CPU usage percentage
+	Pcpu *float64 `json:"pcpu,omitempty"`
+	// Memory usage percentage
+	Pmem *float64 `json:"pmem,omitempty"`
+	// Resident set size
+	Rss *int64 `json:"rss,omitempty"`
+	// Virtual memory size
+	Vmem *int64 `json:"vmem,omitempty"`
+	// Peak resident set size
+	PeakRss *int64 `json:"peakRss,omitempty"`
+	// Peak virtual memory size
+	PeakVmem *int64 `json:"peakVmem,omitempty"`
+	// Characters read
+	Rchar *int64 `json:"rchar,omitempty"`
+	// Characters written
+	Wchar *int64 `json:"wchar,omitempty"`
+	// System read calls
+	Syscr *int64 `json:"syscr,omitempty"`
+	// System write calls
+	Syscw *int64 `json:"syscw,omitempty"`
+	// Bytes read from disk
+	ReadBytes *int64 `json:"readBytes,omitempty"`
+	// Bytes written to disk
+	WriteBytes *int64 `json:"writeBytes,omitempty"`
+	// Voluntary context switches
+	VolCtxt *int64 `json:"volCtxt,omitempty"`
+	// Involuntary context switches
+	InvCtxt              *int64 `json:"invCtxt,omitempty"`
+	NumSpotInterruptions *int   `json:"numSpotInterruptions,omitempty"`
+	// Task exit value (can be string)
+	Exit        *string    `json:"exit,omitempty"`
+	ID          *int64     `json:"id,omitempty"`
+	TaskID      int64      `json:"taskId"`
+	Status      TaskStatus `json:"status"`
+	DateCreated *time.Time `json:"dateCreated,omitempty"`
+	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
 }
 
 func (t Task) MarshalJSON() ([]byte, error) {
@@ -371,7 +412,14 @@ func (t *Task) GetInvCtxt() *int64 {
 	return t.InvCtxt
 }
 
-func (t *Task) GetExit() *int {
+func (t *Task) GetNumSpotInterruptions() *int {
+	if t == nil {
+		return nil
+	}
+	return t.NumSpotInterruptions
+}
+
+func (t *Task) GetExit() *string {
 	if t == nil {
 		return nil
 	}

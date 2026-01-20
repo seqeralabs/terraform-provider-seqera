@@ -54,7 +54,7 @@ type DownloadWorkflowTaskLogResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	Bytes []byte
+	Res *string
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
 }
@@ -80,11 +80,11 @@ func (d *DownloadWorkflowTaskLogResponse) GetRawResponse() *http.Response {
 	return d.RawResponse
 }
 
-func (d *DownloadWorkflowTaskLogResponse) GetBytes() []byte {
+func (d *DownloadWorkflowTaskLogResponse) GetRes() *string {
 	if d == nil {
 		return nil
 	}
-	return d.Bytes
+	return d.Res
 }
 
 func (d *DownloadWorkflowTaskLogResponse) GetErrorResponse() *shared.ErrorResponse {

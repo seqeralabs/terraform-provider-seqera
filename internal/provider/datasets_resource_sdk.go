@@ -15,7 +15,7 @@ func (r *DatasetsResourceModel) RefreshFromSharedCreateDatasetResponse(ctx conte
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		diags.Append(r.RefreshFromSharedDataset(ctx, resp.Dataset)...)
+		diags.Append(r.RefreshFromSharedDatasetDto(ctx, resp.Dataset)...)
 
 		if diags.HasError() {
 			return diags
@@ -26,17 +26,16 @@ func (r *DatasetsResourceModel) RefreshFromSharedCreateDatasetResponse(ctx conte
 	return diags
 }
 
-func (r *DatasetsResourceModel) RefreshFromSharedDataset(ctx context.Context, resp *shared.Dataset) diag.Diagnostics {
+func (r *DatasetsResourceModel) RefreshFromSharedDatasetDto(ctx context.Context, resp *shared.DatasetDto) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
 		r.MediaType = types.StringPointerValue(resp.MediaType)
-		r.Name = types.StringValue(resp.Name)
+		r.Name = types.StringPointerValue(resp.Name)
+		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
 	return diags

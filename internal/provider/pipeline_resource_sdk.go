@@ -198,9 +198,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		pipeline = nil
 	}
-	var workDir string
-	workDir = r.Launch.WorkDir.ValueString()
-
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
 		*revision = r.Launch.Revision.ValueString()
@@ -380,9 +383,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		pipeline = nil
 	}
-	var workDir string
-	workDir = r.Launch.WorkDir.ValueString()
-
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
 		*revision = r.Launch.Revision.ValueString()

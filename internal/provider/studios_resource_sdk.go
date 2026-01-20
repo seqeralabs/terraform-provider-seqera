@@ -42,9 +42,11 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			r.Configuration.Gpu = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Gpu))
 			r.Configuration.LifespanHours = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.LifespanHours))
 			r.Configuration.Memory = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Configuration.Memory))
-			r.Configuration.MountData = make([]types.String, 0, len(resp.Configuration.MountData))
-			for _, v := range resp.Configuration.MountData {
-				r.Configuration.MountData = append(r.Configuration.MountData, types.StringValue(v))
+			if resp.Configuration.MountData != nil {
+				r.Configuration.MountData = make([]types.String, 0, len(resp.Configuration.MountData))
+				for _, v := range resp.Configuration.MountData {
+					r.Configuration.MountData = append(r.Configuration.MountData, types.StringValue(v))
+				}
 			}
 		}
 		r.Description = types.StringPointerValue(resp.Description)
@@ -170,9 +172,12 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	} else {
 		memory = nil
 	}
-	mountData := make([]string, 0, len(r.Configuration.MountData))
-	for mountDataIndex := range r.Configuration.MountData {
-		mountData = append(mountData, r.Configuration.MountData[mountDataIndex].ValueString())
+	var mountData []string
+	if r.Configuration.MountData != nil {
+		mountData = make([]string, 0, len(r.Configuration.MountData))
+		for mountDataIndex := range r.Configuration.MountData {
+			mountData = append(mountData, r.Configuration.MountData[mountDataIndex].ValueString())
+		}
 	}
 	var environment map[string]string
 	if r.Configuration.Environment != nil {

@@ -15,8 +15,8 @@ type OrganizationQuotas struct {
 	MaxLabelsPerWorkspace       *int64 `json:"maxLabelsPerWorkspace,omitempty"`
 	MaxDataStudiosRunning       *int64 `json:"maxDataStudiosRunning,omitempty"`
 	MaxSeqeraComputeComputeEnvs *int64 `json:"maxSeqeraComputeComputeEnvs,omitempty"`
-	// Max Fusion throughput (read and write) in bytes
-	MaxFusionThroughputBytes *int64 `json:"maxFusionThroughputBytes,omitempty"`
+	MaxFusionThroughputBytes    *int64 `json:"maxFusionThroughputBytes,omitempty"`
+	MaxCustomRolesPerOrg        *int64 `json:"maxCustomRolesPerOrg,omitempty"`
 }
 
 func (o *OrganizationQuotas) GetMaxWorkspaces() *int64 {
@@ -108,4 +108,11 @@ func (o *OrganizationQuotas) GetMaxFusionThroughputBytes() *int64 {
 		return nil
 	}
 	return o.MaxFusionThroughputBytes
+}
+
+func (o *OrganizationQuotas) GetMaxCustomRolesPerOrg() *int64 {
+	if o == nil {
+		return nil
+	}
+	return o.MaxCustomRolesPerOrg
 }

@@ -12,7 +12,7 @@ type ListDataStudioCheckpointsRequest struct {
 	SessionID string `pathParam:"style=simple,explode=false,name=sessionId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Optional search criteria, allowing free text search on name and keywords: `before` and `after`.
+	// Optional search criteria, allowing free text search on name and keywords: `status`, `before` and `after` for saved date
 	Search *string `queryParam:"style=form,explode=true,name=search"`
 	// Pagination max results
 	Max *int `queryParam:"style=form,explode=true,name=max"`

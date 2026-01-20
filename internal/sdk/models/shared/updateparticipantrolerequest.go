@@ -3,10 +3,10 @@
 package shared
 
 type UpdateParticipantRoleRequest struct {
-	Role *WspRole `json:"role,omitempty"`
+	Role *string `json:"role,omitempty"`
 }
 
-func (u *UpdateParticipantRoleRequest) GetRole() *WspRole {
+func (u *UpdateParticipantRoleRequest) GetRole() *string {
 	if u == nil {
 		return nil
 	}

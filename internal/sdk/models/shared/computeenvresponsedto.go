@@ -68,27 +68,86 @@ func (e *ComputeEnvResponseDtoPlatform) UnmarshalJSON(data []byte) error {
 	}
 }
 
+type ComputeEnvResponseDtoResources struct {
+	Cpus           *int     `json:"cpus,omitempty"`
+	Memory         *int     `json:"memory,omitempty"`
+	Gpus           *int     `json:"gpus,omitempty"`
+	DiskSize       *int     `json:"diskSize,omitempty"`
+	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	InstanceType   *string  `json:"instanceType,omitempty"`
+}
+
+func (c *ComputeEnvResponseDtoResources) GetCpus() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Cpus
+}
+
+func (c *ComputeEnvResponseDtoResources) GetMemory() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Memory
+}
+
+func (c *ComputeEnvResponseDtoResources) GetGpus() *int {
+	if c == nil {
+		return nil
+	}
+	return c.Gpus
+}
+
+func (c *ComputeEnvResponseDtoResources) GetDiskSize() *int {
+	if c == nil {
+		return nil
+	}
+	return c.DiskSize
+}
+
+func (c *ComputeEnvResponseDtoResources) GetEstimatedPrice() *float32 {
+	if c == nil {
+		return nil
+	}
+	return c.EstimatedPrice
+}
+
+func (c *ComputeEnvResponseDtoResources) GetInstanceType() *string {
+	if c == nil {
+		return nil
+	}
+	return c.InstanceType
+}
+
 type ComputeEnvResponseDto struct {
-	ComputeEnvID *string                        `json:"id,omitempty"`
-	Name         *string                        `json:"name,omitempty"`
-	Description  *string                        `json:"description,omitempty"`
-	Platform     *ComputeEnvResponseDtoPlatform `json:"platform,omitempty"`
+	ComputeEnvID *string `json:"id,omitempty"`
+	Name         *string `json:"name,omitempty"`
+	// Compute environment description
+	Description *string                        `json:"description,omitempty"`
+	Platform    *ComputeEnvResponseDtoPlatform `json:"platform,omitempty"`
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config            *ComputeConfig    `json:"config,omitempty"`
-	DateCreated       *time.Time        `json:"dateCreated,omitempty"`
-	LastUpdated       *time.Time        `json:"lastUpdated,omitempty"`
-	LastUsed          *time.Time        `json:"lastUsed,omitempty"`
-	Deleted           *bool             `json:"deleted,omitempty"`
-	Status            *ComputeEnvStatus `json:"status,omitempty"`
-	Message           *string           `json:"message,omitempty"`
-	Primary           *bool             `json:"primary,omitempty"`
-	CredentialsID     *string           `json:"credentialsId,omitempty"`
-	ManagedIdentityID *string           `json:"managedIdentityId,omitempty"`
-	OrgID             *int64            `json:"orgId,omitempty"`
-	WorkspaceID       *int64            `json:"workspaceId,omitempty"`
-	Labels            []LabelDbDto      `json:"labels,omitempty"`
+	Config      *ComputeConfig `json:"config,omitempty"`
+	DateCreated *time.Time     `json:"dateCreated,omitempty"`
+	LastUpdated *time.Time     `json:"lastUpdated,omitempty"`
+	// Last time this compute environment was used (null if never used)
+	LastUsed *time.Time `json:"lastUsed,omitempty"`
+	// Whether compute environment is deleted (null means not deleted)
+	Deleted *bool             `json:"deleted,omitempty"`
+	Status  *ComputeEnvStatus `json:"status,omitempty"`
+	// Status message (null if no message)
+	Message *string `json:"message,omitempty"`
+	// Whether this is the primary compute environment
+	Primary *bool `json:"primary,omitempty"`
+	// Associated credentials ID (null if using managed identity or none)
+	CredentialsID *string `json:"credentialsId,omitempty"`
+	// Associated managed identity ID (null if using credentials or none)
+	ManagedIdentityID *string                         `json:"managedIdentityId,omitempty"`
+	OrgID             *int64                          `json:"orgId,omitempty"`
+	WorkspaceID       *int64                          `json:"workspaceId,omitempty"`
+	Labels            []LabelDbDto                    `json:"labels,omitempty"`
+	Resources         *ComputeEnvResponseDtoResources `json:"resources,omitempty"`
 }
 
 func (c ComputeEnvResponseDto) MarshalJSON() ([]byte, error) {
@@ -147,6 +206,27 @@ func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
 func (c *ComputeEnvResponseDto) GetConfigAwsBatch() *AWSBatchConfiguration {
 	if v := c.GetConfig(); v != nil {
 		return v.AWSBatchConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleCloudConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.LocalExecutionConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigAzureCloud() *AzureCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AzureCloudConfiguration
 	}
 	return nil
 }
@@ -317,4 +397,11 @@ func (c *ComputeEnvResponseDto) GetLabels() []LabelDbDto {
 		return nil
 	}
 	return c.Labels
+}
+
+func (c *ComputeEnvResponseDto) GetResources() *ComputeEnvResponseDtoResources {
+	if c == nil {
+		return nil
+	}
+	return c.Resources
 }

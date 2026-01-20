@@ -1204,7 +1204,7 @@ func (s *Studios) DeleteDataStudio(ctx context.Context, request operations.Delet
 }
 
 // ListDataStudioCheckpoints - List Studio checkpoints
-// Retrieves the list of checkpoints for the given Studio session ID.
+// Retrieves the list of checkpoints for the given Studio session ID, sorted by creation date in descending order.
 func (s *Studios) ListDataStudioCheckpoints(ctx context.Context, request operations.ListDataStudioCheckpointsRequest, opts ...operations.Option) (*operations.ListDataStudioCheckpointsResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -1843,7 +1843,7 @@ func (s *Studios) ExtendDataStudioLifespan(ctx context.Context, request operatio
 
 }
 
-// StartDataStudio - Start Studio
+// StartDataStudio - Starts a Studio
 // Starts the given Studio session ID.
 func (s *Studios) StartDataStudio(ctx context.Context, request operations.StartDataStudioRequest, opts ...operations.Option) (*operations.StartDataStudioResponse, error) {
 	o := operations.Options{}

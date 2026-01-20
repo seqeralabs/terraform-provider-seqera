@@ -11,11 +11,11 @@ type Path struct {
 }
 
 type ExploreDataLinkTreeRequest struct {
-	// Datalink identifier
+	// Data-link string identifier
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Optional credentials identifier
+	// Credentials string identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
 	// List of paths
 	Paths []Path `queryParam:"style=form,explode=true,name=paths"`

@@ -3,12 +3,20 @@
 package shared
 
 type ListDatasetsResponse struct {
-	Datasets []Dataset `json:"datasets,omitempty"`
+	Datasets  []DatasetDto `json:"datasets,omitempty"`
+	TotalSize *int64       `json:"totalSize,omitempty"`
 }
 
-func (l *ListDatasetsResponse) GetDatasets() []Dataset {
+func (l *ListDatasetsResponse) GetDatasets() []DatasetDto {
 	if l == nil {
 		return nil
 	}
 	return l.Datasets
+}
+
+func (l *ListDatasetsResponse) GetTotalSize() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.TotalSize
 }

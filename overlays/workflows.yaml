@@ -450,3 +450,16 @@ actions:
     remove: true
   - target: $["components"]["schemas"]["ProcessLoad"]["properties"]["version"]
     remove: true
+
+  # ============================================================================
+  # TODO - Review once pipeline versioning goes live
+  # ============================================================================
+
+  - target: $.components.schemas.WorkflowLaunchRequest.properties.commitId
+    remove: true
+  - target: $.components.schemas.WorkflowInput.properties.commitId
+    remove: true
+  - target: $.components.schemas.WorkflowLoad.properties.commitId
+    remove: true
+  - target: $.components.schemas.Workflow.properties.commitId
+    remove: true

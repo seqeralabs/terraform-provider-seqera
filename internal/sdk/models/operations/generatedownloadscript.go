@@ -18,7 +18,7 @@ type GenerateDownloadScriptRequest struct {
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Credentials identifier
+	// Credentials string identifier
 	CredentialsID *string `queryParam:"style=form,explode=true,name=credentialsId"`
 	// List of paths to directories to download
 	Dirs []Dir `queryParam:"style=form,explode=true,name=dirs"`

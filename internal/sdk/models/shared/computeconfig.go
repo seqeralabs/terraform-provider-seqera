@@ -9,6 +9,90 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
+type LocalExecutionConfiguration struct {
+	// Working directory path for workflow execution
+	WorkDir string `json:"workDir"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator  *string `json:"discriminator,omitempty"`
+	WaveEnabled    *bool   `json:"waveEnabled,omitempty"`
+	Fusion2Enabled *bool   `json:"fusion2Enabled,omitempty"`
+}
+
+func (l LocalExecutionConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LocalExecutionConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (l *LocalExecutionConfiguration) GetWorkDir() string {
+	if l == nil {
+		return ""
+	}
+	return l.WorkDir
+}
+
+func (l *LocalExecutionConfiguration) GetPreRunScript() *string {
+	if l == nil {
+		return nil
+	}
+	return l.PreRunScript
+}
+
+func (l *LocalExecutionConfiguration) GetPostRunScript() *string {
+	if l == nil {
+		return nil
+	}
+	return l.PostRunScript
+}
+
+func (l *LocalExecutionConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if l == nil {
+		return nil
+	}
+	return l.Environment
+}
+
+func (l *LocalExecutionConfiguration) GetNextflowConfig() *string {
+	if l == nil {
+		return nil
+	}
+	return l.NextflowConfig
+}
+
+func (l *LocalExecutionConfiguration) GetDiscriminator() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Discriminator
+}
+
+func (l *LocalExecutionConfiguration) GetWaveEnabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.WaveEnabled
+}
+
+func (l *LocalExecutionConfiguration) GetFusion2Enabled() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.Fusion2Enabled
+}
+
 type MoabConfiguration struct {
 	// Working directory path for workflow execution
 	WorkDir string `json:"workDir"`
@@ -16,8 +100,12 @@ type MoabConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator           *string `json:"discriminator,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
 	HostName                *string `json:"hostName,omitempty"`
@@ -27,10 +115,6 @@ type MoabConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (m MoabConfiguration) MarshalJSON() ([]byte, error) {
@@ -65,11 +149,25 @@ func (m *MoabConfiguration) GetPostRunScript() *string {
 	return m.PostRunScript
 }
 
+func (m *MoabConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if m == nil {
+		return nil
+	}
+	return m.Environment
+}
+
 func (m *MoabConfiguration) GetNextflowConfig() *string {
 	if m == nil {
 		return nil
 	}
 	return m.NextflowConfig
+}
+
+func (m *MoabConfiguration) GetDiscriminator() *string {
+	if m == nil {
+		return nil
+	}
+	return m.Discriminator
 }
 
 func (m *MoabConfiguration) GetLaunchDir() *string {
@@ -135,20 +233,6 @@ func (m *MoabConfiguration) GetPropagateHeadJobOptions() *bool {
 	return m.PropagateHeadJobOptions
 }
 
-func (m *MoabConfiguration) GetDiscriminator() *string {
-	if m == nil {
-		return nil
-	}
-	return m.Discriminator
-}
-
-func (m *MoabConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if m == nil {
-		return nil
-	}
-	return m.Environment
-}
-
 type AltairPBSConfiguration struct {
 	// Working directory path for workflow execution
 	WorkDir string `json:"workDir"`
@@ -156,8 +240,12 @@ type AltairPBSConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator           *string `json:"discriminator,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
 	HostName                *string `json:"hostName,omitempty"`
@@ -167,10 +255,6 @@ type AltairPBSConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (a AltairPBSConfiguration) MarshalJSON() ([]byte, error) {
@@ -205,11 +289,25 @@ func (a *AltairPBSConfiguration) GetPostRunScript() *string {
 	return a.PostRunScript
 }
 
+func (a *AltairPBSConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
 func (a *AltairPBSConfiguration) GetNextflowConfig() *string {
 	if a == nil {
 		return nil
 	}
 	return a.NextflowConfig
+}
+
+func (a *AltairPBSConfiguration) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 func (a *AltairPBSConfiguration) GetLaunchDir() *string {
@@ -275,20 +373,6 @@ func (a *AltairPBSConfiguration) GetPropagateHeadJobOptions() *bool {
 	return a.PropagateHeadJobOptions
 }
 
-func (a *AltairPBSConfiguration) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
-func (a *AltairPBSConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
-}
-
 type UnivaGridEngineConfiguration struct {
 	// Working directory path for workflow execution
 	WorkDir string `json:"workDir"`
@@ -296,8 +380,12 @@ type UnivaGridEngineConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator           *string `json:"discriminator,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
 	HostName                *string `json:"hostName,omitempty"`
@@ -307,10 +395,6 @@ type UnivaGridEngineConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (u UnivaGridEngineConfiguration) MarshalJSON() ([]byte, error) {
@@ -345,11 +429,25 @@ func (u *UnivaGridEngineConfiguration) GetPostRunScript() *string {
 	return u.PostRunScript
 }
 
+func (u *UnivaGridEngineConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if u == nil {
+		return nil
+	}
+	return u.Environment
+}
+
 func (u *UnivaGridEngineConfiguration) GetNextflowConfig() *string {
 	if u == nil {
 		return nil
 	}
 	return u.NextflowConfig
+}
+
+func (u *UnivaGridEngineConfiguration) GetDiscriminator() *string {
+	if u == nil {
+		return nil
+	}
+	return u.Discriminator
 }
 
 func (u *UnivaGridEngineConfiguration) GetLaunchDir() *string {
@@ -415,51 +513,43 @@ func (u *UnivaGridEngineConfiguration) GetPropagateHeadJobOptions() *bool {
 	return u.PropagateHeadJobOptions
 }
 
-func (u *UnivaGridEngineConfiguration) GetDiscriminator() *string {
-	if u == nil {
-		return nil
-	}
-	return u.Discriminator
-}
-
-func (u *UnivaGridEngineConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if u == nil {
-		return nil
-	}
-	return u.Environment
-}
-
 type GoogleGKEClusterConfiguration struct {
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
-	PostRunScript         *string           `json:"postRunScript,omitempty"`
-	Server                string            `json:"server"`
-	SslCert               string            `json:"sslCert"`
-	Namespace             string            `json:"namespace"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator         *string           `json:"discriminator,omitempty"`
+	Server                *string           `json:"server,omitempty"`
+	SslCert               *string           `json:"sslCert,omitempty"`
+	Namespace             *string           `json:"namespace,omitempty"`
 	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    string            `json:"headServiceAccount"`
-	StorageClaimName      string            `json:"storageClaimName"`
+	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
+	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
 	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
 	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
 	ServicePodSpec        *string           `json:"servicePodSpec,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
-	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	HeadJobCpus           *int              `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb       *int              `json:"headJobMemoryMb,omitempty"`
 	// The GKE cluster region - or - zone
 	Region string `json:"region"`
 	// The GKE cluster name
 	ClusterName  string `json:"clusterName"`
 	EnableFusion *bool  `json:"fusion2Enabled,omitempty"`
-	EnableWave   *bool  `json:"waveEnabled,omitempty"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave *bool `json:"waveEnabled,omitempty"`
 }
 
 func (g GoogleGKEClusterConfiguration) MarshalJSON() ([]byte, error) {
@@ -471,13 +561,6 @@ func (g *GoogleGKEClusterConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (g *GoogleGKEClusterConfiguration) GetDiscriminator() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Discriminator
 }
 
 func (g *GoogleGKEClusterConfiguration) GetWorkDir() *string {
@@ -501,23 +584,44 @@ func (g *GoogleGKEClusterConfiguration) GetPostRunScript() *string {
 	return g.PostRunScript
 }
 
-func (g *GoogleGKEClusterConfiguration) GetServer() string {
+func (g *GoogleGKEClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
 	if g == nil {
-		return ""
+		return nil
+	}
+	return g.Environment
+}
+
+func (g *GoogleGKEClusterConfiguration) GetNextflowConfig() *string {
+	if g == nil {
+		return nil
+	}
+	return g.NextflowConfig
+}
+
+func (g *GoogleGKEClusterConfiguration) GetDiscriminator() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Discriminator
+}
+
+func (g *GoogleGKEClusterConfiguration) GetServer() *string {
+	if g == nil {
+		return nil
 	}
 	return g.Server
 }
 
-func (g *GoogleGKEClusterConfiguration) GetSslCert() string {
+func (g *GoogleGKEClusterConfiguration) GetSslCert() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.SslCert
 }
 
-func (g *GoogleGKEClusterConfiguration) GetNamespace() string {
+func (g *GoogleGKEClusterConfiguration) GetNamespace() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.Namespace
 }
@@ -529,16 +633,16 @@ func (g *GoogleGKEClusterConfiguration) GetComputeServiceAccount() *string {
 	return g.ComputeServiceAccount
 }
 
-func (g *GoogleGKEClusterConfiguration) GetHeadServiceAccount() string {
+func (g *GoogleGKEClusterConfiguration) GetHeadServiceAccount() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.HeadServiceAccount
 }
 
-func (g *GoogleGKEClusterConfiguration) GetStorageClaimName() string {
+func (g *GoogleGKEClusterConfiguration) GetStorageClaimName() *string {
 	if g == nil {
-		return ""
+		return nil
 	}
 	return g.StorageClaimName
 }
@@ -571,13 +675,6 @@ func (g *GoogleGKEClusterConfiguration) GetServicePodSpec() *string {
 	return g.ServicePodSpec
 }
 
-func (g *GoogleGKEClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if g == nil {
-		return nil
-	}
-	return g.Environment
-}
-
 func (g *GoogleGKEClusterConfiguration) GetHeadJobCpus() *int {
 	if g == nil {
 		return nil
@@ -590,13 +687,6 @@ func (g *GoogleGKEClusterConfiguration) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return g.HeadJobMemoryMb
-}
-
-func (g *GoogleGKEClusterConfiguration) GetNextflowConfig() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NextflowConfig
 }
 
 func (g *GoogleGKEClusterConfiguration) GetRegion() string {
@@ -628,36 +718,42 @@ func (g *GoogleGKEClusterConfiguration) GetEnableWave() *bool {
 }
 
 type AmazonEKSClusterConfiguration struct {
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
-	PostRunScript         *string           `json:"postRunScript,omitempty"`
-	Server                string            `json:"server"`
-	SslCert               string            `json:"sslCert"`
-	Namespace             string            `json:"namespace"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator         *string           `json:"discriminator,omitempty"`
+	Server                *string           `json:"server,omitempty"`
+	SslCert               *string           `json:"sslCert,omitempty"`
+	Namespace             *string           `json:"namespace,omitempty"`
 	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    string            `json:"headServiceAccount"`
-	StorageClaimName      string            `json:"storageClaimName"`
+	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
+	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
 	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
 	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
 	ServicePodSpec        *string           `json:"servicePodSpec,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
-	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	HeadJobCpus           *int              `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb       *int              `json:"headJobMemoryMb,omitempty"`
 	// AWS region
 	Region string `json:"region"`
 	// The AWS EKS cluster name
-	ClusterName  string `json:"clusterName"`
-	EnableWave   *bool  `json:"waveEnabled,omitempty"`
-	EnableFusion *bool  `json:"fusion2Enabled,omitempty"`
+	ClusterName string `json:"clusterName"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
 }
 
 func (a AmazonEKSClusterConfiguration) MarshalJSON() ([]byte, error) {
@@ -669,13 +765,6 @@ func (a *AmazonEKSClusterConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (a *AmazonEKSClusterConfiguration) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
 }
 
 func (a *AmazonEKSClusterConfiguration) GetWorkDir() *string {
@@ -699,23 +788,44 @@ func (a *AmazonEKSClusterConfiguration) GetPostRunScript() *string {
 	return a.PostRunScript
 }
 
-func (a *AmazonEKSClusterConfiguration) GetServer() string {
+func (a *AmazonEKSClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
 	if a == nil {
-		return ""
+		return nil
+	}
+	return a.Environment
+}
+
+func (a *AmazonEKSClusterConfiguration) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
+}
+
+func (a *AmazonEKSClusterConfiguration) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
+}
+
+func (a *AmazonEKSClusterConfiguration) GetServer() *string {
+	if a == nil {
+		return nil
 	}
 	return a.Server
 }
 
-func (a *AmazonEKSClusterConfiguration) GetSslCert() string {
+func (a *AmazonEKSClusterConfiguration) GetSslCert() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.SslCert
 }
 
-func (a *AmazonEKSClusterConfiguration) GetNamespace() string {
+func (a *AmazonEKSClusterConfiguration) GetNamespace() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.Namespace
 }
@@ -727,16 +837,16 @@ func (a *AmazonEKSClusterConfiguration) GetComputeServiceAccount() *string {
 	return a.ComputeServiceAccount
 }
 
-func (a *AmazonEKSClusterConfiguration) GetHeadServiceAccount() string {
+func (a *AmazonEKSClusterConfiguration) GetHeadServiceAccount() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.HeadServiceAccount
 }
 
-func (a *AmazonEKSClusterConfiguration) GetStorageClaimName() string {
+func (a *AmazonEKSClusterConfiguration) GetStorageClaimName() *string {
 	if a == nil {
-		return ""
+		return nil
 	}
 	return a.StorageClaimName
 }
@@ -769,13 +879,6 @@ func (a *AmazonEKSClusterConfiguration) GetServicePodSpec() *string {
 	return a.ServicePodSpec
 }
 
-func (a *AmazonEKSClusterConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
-}
-
 func (a *AmazonEKSClusterConfiguration) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -788,13 +891,6 @@ func (a *AmazonEKSClusterConfiguration) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return a.HeadJobMemoryMb
-}
-
-func (a *AmazonEKSClusterConfiguration) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
 }
 
 func (a *AmazonEKSClusterConfiguration) GetRegion() string {
@@ -826,14 +922,18 @@ func (a *AmazonEKSClusterConfiguration) GetEnableFusion() *bool {
 }
 
 type KubernetesComputeConfiguration struct {
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
-	PostRunScript         *string           `json:"postRunScript,omitempty"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator         *string           `json:"discriminator,omitempty"`
 	Server                string            `json:"server"`
 	SslCert               string            `json:"sslCert"`
 	Namespace             string            `json:"namespace"`
@@ -844,12 +944,8 @@ type KubernetesComputeConfiguration struct {
 	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
 	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
 	ServicePodSpec        *string           `json:"servicePodSpec,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
-	HeadJobCpus     *int                `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	HeadJobCpus           *int              `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb       *int              `json:"headJobMemoryMb,omitempty"`
 }
 
 func (k KubernetesComputeConfiguration) MarshalJSON() ([]byte, error) {
@@ -861,13 +957,6 @@ func (k *KubernetesComputeConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (k *KubernetesComputeConfiguration) GetDiscriminator() *string {
-	if k == nil {
-		return nil
-	}
-	return k.Discriminator
 }
 
 func (k *KubernetesComputeConfiguration) GetWorkDir() *string {
@@ -889,6 +978,27 @@ func (k *KubernetesComputeConfiguration) GetPostRunScript() *string {
 		return nil
 	}
 	return k.PostRunScript
+}
+
+func (k *KubernetesComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if k == nil {
+		return nil
+	}
+	return k.Environment
+}
+
+func (k *KubernetesComputeConfiguration) GetNextflowConfig() *string {
+	if k == nil {
+		return nil
+	}
+	return k.NextflowConfig
+}
+
+func (k *KubernetesComputeConfiguration) GetDiscriminator() *string {
+	if k == nil {
+		return nil
+	}
+	return k.Discriminator
 }
 
 func (k *KubernetesComputeConfiguration) GetServer() string {
@@ -961,13 +1071,6 @@ func (k *KubernetesComputeConfiguration) GetServicePodSpec() *string {
 	return k.ServicePodSpec
 }
 
-func (k *KubernetesComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if k == nil {
-		return nil
-	}
-	return k.Environment
-}
-
 func (k *KubernetesComputeConfiguration) GetHeadJobCpus() *int {
 	if k == nil {
 		return nil
@@ -982,13 +1085,6 @@ func (k *KubernetesComputeConfiguration) GetHeadJobMemoryMb() *int {
 	return k.HeadJobMemoryMb
 }
 
-func (k *KubernetesComputeConfiguration) GetNextflowConfig() *string {
-	if k == nil {
-		return nil
-	}
-	return k.NextflowConfig
-}
-
 type SlurmConfiguration struct {
 	// Working directory path for workflow execution
 	WorkDir string `json:"workDir"`
@@ -996,8 +1092,12 @@ type SlurmConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator           *string `json:"discriminator,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
 	HostName                *string `json:"hostName,omitempty"`
@@ -1007,10 +1107,6 @@ type SlurmConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 }
 
 func (s SlurmConfiguration) MarshalJSON() ([]byte, error) {
@@ -1045,11 +1141,25 @@ func (s *SlurmConfiguration) GetPostRunScript() *string {
 	return s.PostRunScript
 }
 
+func (s *SlurmConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if s == nil {
+		return nil
+	}
+	return s.Environment
+}
+
 func (s *SlurmConfiguration) GetNextflowConfig() *string {
 	if s == nil {
 		return nil
 	}
 	return s.NextflowConfig
+}
+
+func (s *SlurmConfiguration) GetDiscriminator() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Discriminator
 }
 
 func (s *SlurmConfiguration) GetLaunchDir() *string {
@@ -1115,20 +1225,6 @@ func (s *SlurmConfiguration) GetPropagateHeadJobOptions() *bool {
 	return s.PropagateHeadJobOptions
 }
 
-func (s *SlurmConfiguration) GetDiscriminator() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Discriminator
-}
-
-func (s *SlurmConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if s == nil {
-		return nil
-	}
-	return s.Environment
-}
-
 type IBMLSFConfiguration struct {
 	// Working directory path for workflow execution
 	WorkDir string `json:"workDir"`
@@ -1136,8 +1232,12 @@ type IBMLSFConfiguration struct {
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Nextflow configuration settings and parameters
-	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator           *string `json:"discriminator,omitempty"`
 	LaunchDir               *string `json:"launchDir,omitempty"`
 	UserName                *string `json:"userName,omitempty"`
 	HostName                *string `json:"hostName,omitempty"`
@@ -1147,13 +1247,9 @@ type IBMLSFConfiguration struct {
 	MaxQueueSize            *int    `json:"maxQueueSize,omitempty"`
 	HeadJobOptions          *string `json:"headJobOptions,omitempty"`
 	PropagateHeadJobOptions *bool   `json:"propagateHeadJobOptions,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator  *string `json:"discriminator,omitempty"`
-	UnitForLimits  *string `json:"unitForLimits,omitempty"`
-	PerJobMemLimit *bool   `json:"perJobMemLimit,omitempty"`
-	PerTaskReserve *bool   `json:"perTaskReserve,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	UnitForLimits           *string `json:"unitForLimits,omitempty"`
+	PerJobMemLimit          *bool   `json:"perJobMemLimit,omitempty"`
+	PerTaskReserve          *bool   `json:"perTaskReserve,omitempty"`
 }
 
 func (i IBMLSFConfiguration) MarshalJSON() ([]byte, error) {
@@ -1188,11 +1284,25 @@ func (i *IBMLSFConfiguration) GetPostRunScript() *string {
 	return i.PostRunScript
 }
 
+func (i *IBMLSFConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if i == nil {
+		return nil
+	}
+	return i.Environment
+}
+
 func (i *IBMLSFConfiguration) GetNextflowConfig() *string {
 	if i == nil {
 		return nil
 	}
 	return i.NextflowConfig
+}
+
+func (i *IBMLSFConfiguration) GetDiscriminator() *string {
+	if i == nil {
+		return nil
+	}
+	return i.Discriminator
 }
 
 func (i *IBMLSFConfiguration) GetLaunchDir() *string {
@@ -1258,13 +1368,6 @@ func (i *IBMLSFConfiguration) GetPropagateHeadJobOptions() *bool {
 	return i.PropagateHeadJobOptions
 }
 
-func (i *IBMLSFConfiguration) GetDiscriminator() *string {
-	if i == nil {
-		return nil
-	}
-	return i.Discriminator
-}
-
 func (i *IBMLSFConfiguration) GetUnitForLimits() *string {
 	if i == nil {
 		return nil
@@ -1286,22 +1389,199 @@ func (i *IBMLSFConfiguration) GetPerTaskReserve() *bool {
 	return i.PerTaskReserve
 }
 
-func (i *IBMLSFConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if i == nil {
-		return nil
-	}
-	return i.Environment
-}
-
-type AzureBatchConfiguration struct {
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
+type AzureCloudConfiguration struct {
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator           *string                `json:"discriminator,omitempty"`
+	WaveEnabled             *bool                  `json:"waveEnabled,omitempty"`
+	Fusion2Enabled          *bool                  `json:"fusion2Enabled,omitempty"`
+	InstanceType            *string                `json:"instanceType,omitempty"`
+	Region                  *string                `json:"region,omitempty"`
+	ResourceGroup           *string                `json:"resourceGroup,omitempty"`
+	NetworkID               *string                `json:"networkId,omitempty"`
+	SubscriptionID          *string                `json:"subscriptionId,omitempty"`
+	ManagedIdentityID       *string                `json:"managedIdentityId,omitempty"`
+	ManagedIdentityClientID *string                `json:"managedIdentityClientId,omitempty"`
+	LogWorkspaceID          *string                `json:"logWorkspaceId,omitempty"`
+	LogTableName            *string                `json:"logTableName,omitempty"`
+	DataCollectionEndpoint  *string                `json:"dataCollectionEndpoint,omitempty"`
+	DataCollectionRuleID    *string                `json:"dataCollectionRuleId,omitempty"`
+	ForgedResources         []MapEntryStringString `json:"forgedResources,omitempty"`
+}
+
+func (a AzureCloudConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AzureCloudConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AzureCloudConfiguration) GetWorkDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkDir
+}
+
+func (a *AzureCloudConfiguration) GetPreRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PreRunScript
+}
+
+func (a *AzureCloudConfiguration) GetPostRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PostRunScript
+}
+
+func (a *AzureCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
+func (a *AzureCloudConfiguration) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
+}
+
+func (a *AzureCloudConfiguration) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
+}
+
+func (a *AzureCloudConfiguration) GetWaveEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.WaveEnabled
+}
+
+func (a *AzureCloudConfiguration) GetFusion2Enabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.Fusion2Enabled
+}
+
+func (a *AzureCloudConfiguration) GetInstanceType() *string {
+	if a == nil {
+		return nil
+	}
+	return a.InstanceType
+}
+
+func (a *AzureCloudConfiguration) GetRegion() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Region
+}
+
+func (a *AzureCloudConfiguration) GetResourceGroup() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ResourceGroup
+}
+
+func (a *AzureCloudConfiguration) GetNetworkID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NetworkID
+}
+
+func (a *AzureCloudConfiguration) GetSubscriptionID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.SubscriptionID
+}
+
+func (a *AzureCloudConfiguration) GetManagedIdentityID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityID
+}
+
+func (a *AzureCloudConfiguration) GetManagedIdentityClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ManagedIdentityClientID
+}
+
+func (a *AzureCloudConfiguration) GetLogWorkspaceID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.LogWorkspaceID
+}
+
+func (a *AzureCloudConfiguration) GetLogTableName() *string {
+	if a == nil {
+		return nil
+	}
+	return a.LogTableName
+}
+
+func (a *AzureCloudConfiguration) GetDataCollectionEndpoint() *string {
+	if a == nil {
+		return nil
+	}
+	return a.DataCollectionEndpoint
+}
+
+func (a *AzureCloudConfiguration) GetDataCollectionRuleID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.DataCollectionRuleID
+}
+
+func (a *AzureCloudConfiguration) GetForgedResources() []MapEntryStringString {
+	if a == nil {
+		return nil
+	}
+	return a.ForgedResources
+}
+
+type AzureBatchConfiguration struct {
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
 	Region        string  `json:"region"`
 	HeadPool      *string `json:"headPool,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
@@ -1310,12 +1590,14 @@ type AzureBatchConfiguration struct {
 	TokenDuration           *string             `json:"tokenDuration,omitempty"`
 	DeleteJobsOnCompletion  *JobCleanupPolicy   `json:"deleteJobsOnCompletion,omitempty"`
 	DeletePoolsOnCompletion *bool               `json:"deletePoolsOnCompletion,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment  []ConfigEnvVariable `json:"environment,omitempty"`
-	EnableWave   *bool               `json:"waveEnabled,omitempty"`
-	EnableFusion *bool               `json:"fusion2Enabled,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig          *string `json:"nextflowConfig,omitempty"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave              *bool   `json:"waveEnabled,omitempty"`
+	EnableFusion            *bool   `json:"fusion2Enabled,omitempty"`
 	ManagedIdentityClientID *string `json:"managedIdentityClientId,omitempty"`
 }
 
@@ -1328,13 +1610,6 @@ func (a *AzureBatchConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (a *AzureBatchConfiguration) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
 }
 
 func (a *AzureBatchConfiguration) GetWorkDir() *string {
@@ -1356,6 +1631,27 @@ func (a *AzureBatchConfiguration) GetPostRunScript() *string {
 		return nil
 	}
 	return a.PostRunScript
+}
+
+func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
+func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
+}
+
+func (a *AzureBatchConfiguration) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 func (a *AzureBatchConfiguration) GetRegion() string {
@@ -1407,13 +1703,6 @@ func (a *AzureBatchConfiguration) GetDeletePoolsOnCompletion() *bool {
 	return a.DeletePoolsOnCompletion
 }
 
-func (a *AzureBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
-}
-
 func (a *AzureBatchConfiguration) GetEnableWave() *bool {
 	if a == nil {
 		return nil
@@ -1428,13 +1717,6 @@ func (a *AzureBatchConfiguration) GetEnableFusion() *bool {
 	return a.EnableFusion
 }
 
-func (a *AzureBatchConfiguration) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
-}
-
 func (a *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
 	if a == nil {
 		return nil
@@ -1442,12 +1724,184 @@ func (a *AzureBatchConfiguration) GetManagedIdentityClientID() *string {
 	return a.ManagedIdentityClientID
 }
 
-type GoogleBatchServiceConfiguration struct {
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
-	Location      *string `json:"location,omitempty"`
+type GoogleCloudConfiguration struct {
 	// Working directory path for workflow execution
-	WorkDir           *string           `json:"workDir,omitempty"`
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator       *string          `json:"discriminator,omitempty"`
+	WaveEnabled         *bool            `json:"waveEnabled,omitempty"`
+	Fusion2Enabled      *bool            `json:"fusion2Enabled,omitempty"`
+	ProjectID           *string          `json:"projectId,omitempty"`
+	Region              *string          `json:"region,omitempty"`
+	Zone                *string          `json:"zone,omitempty"`
+	ServiceAccountEmail *string          `json:"serviceAccountEmail,omitempty"`
+	InstanceType        *string          `json:"instanceType,omitempty"`
+	ImageID             *string          `json:"imageId,omitempty"`
+	Arm64Enabled        *bool            `json:"arm64Enabled,omitempty"`
+	GpuEnabled          *bool            `json:"gpuEnabled,omitempty"`
+	BootDiskSizeGb      *int             `json:"bootDiskSizeGb,omitempty"`
+	ForgedResources     []map[string]any `json:"forgedResources,omitempty"`
+}
+
+func (g GoogleCloudConfiguration) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GoogleCloudConfiguration) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (g *GoogleCloudConfiguration) GetWorkDir() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WorkDir
+}
+
+func (g *GoogleCloudConfiguration) GetPreRunScript() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PreRunScript
+}
+
+func (g *GoogleCloudConfiguration) GetPostRunScript() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PostRunScript
+}
+
+func (g *GoogleCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if g == nil {
+		return nil
+	}
+	return g.Environment
+}
+
+func (g *GoogleCloudConfiguration) GetNextflowConfig() *string {
+	if g == nil {
+		return nil
+	}
+	return g.NextflowConfig
+}
+
+func (g *GoogleCloudConfiguration) GetDiscriminator() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Discriminator
+}
+
+func (g *GoogleCloudConfiguration) GetWaveEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.WaveEnabled
+}
+
+func (g *GoogleCloudConfiguration) GetFusion2Enabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.Fusion2Enabled
+}
+
+func (g *GoogleCloudConfiguration) GetProjectID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ProjectID
+}
+
+func (g *GoogleCloudConfiguration) GetRegion() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Region
+}
+
+func (g *GoogleCloudConfiguration) GetZone() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Zone
+}
+
+func (g *GoogleCloudConfiguration) GetServiceAccountEmail() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ServiceAccountEmail
+}
+
+func (g *GoogleCloudConfiguration) GetInstanceType() *string {
+	if g == nil {
+		return nil
+	}
+	return g.InstanceType
+}
+
+func (g *GoogleCloudConfiguration) GetImageID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ImageID
+}
+
+func (g *GoogleCloudConfiguration) GetArm64Enabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.Arm64Enabled
+}
+
+func (g *GoogleCloudConfiguration) GetGpuEnabled() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.GpuEnabled
+}
+
+func (g *GoogleCloudConfiguration) GetBootDiskSizeGb() *int {
+	if g == nil {
+		return nil
+	}
+	return g.BootDiskSizeGb
+}
+
+func (g *GoogleCloudConfiguration) GetForgedResources() []map[string]any {
+	if g == nil {
+		return nil
+	}
+	return g.ForgedResources
+}
+
+type GoogleBatchServiceConfiguration struct {
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator     *string           `json:"discriminator,omitempty"`
+	Location          string            `json:"location"`
 	Spot              *bool             `json:"spot,omitempty"`
 	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
 	CPUPlatform       *string           `json:"cpuPlatform,omitempty"`
@@ -1459,25 +1913,23 @@ type GoogleBatchServiceConfiguration struct {
 	CopyImage         *string           `json:"copyImage,omitempty"`
 	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
 	Labels            map[string]string `json:"labels,omitempty"`
-	// Shell script to execute before workflow starts
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Shell script to execute after workflow completes
-	PostRunScript   *string `json:"postRunScript,omitempty"`
-	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	NfsTarget      *string `json:"nfsTarget,omitempty"`
-	NfsMount       *string `json:"nfsMount,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment                 []ConfigEnvVariable `json:"environment,omitempty"`
-	EnableWave                  *bool               `json:"waveEnabled,omitempty"`
-	EnableFusion                *bool               `json:"fusion2Enabled,omitempty"`
-	ServiceAccount              *string             `json:"serviceAccount,omitempty"`
-	Network                     *string             `json:"network,omitempty"`
-	Subnetwork                  *string             `json:"subnetwork,omitempty"`
-	HeadJobInstanceTemplate     *string             `json:"headJobInstanceTemplate,omitempty"`
-	ComputeJobsInstanceTemplate *string             `json:"computeJobsInstanceTemplate,omitempty"`
+	HeadJobCpus       *int              `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb   *int              `json:"headJobMemoryMb,omitempty"`
+	NfsTarget         *string           `json:"nfsTarget,omitempty"`
+	NfsMount          *string           `json:"nfsMount,omitempty"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave                  *bool   `json:"waveEnabled,omitempty"`
+	EnableFusion                *bool   `json:"fusion2Enabled,omitempty"`
+	ServiceAccount              *string `json:"serviceAccount,omitempty"`
+	Network                     *string `json:"network,omitempty"`
+	Subnetwork                  *string `json:"subnetwork,omitempty"`
+	HeadJobInstanceTemplate     *string `json:"headJobInstanceTemplate,omitempty"`
+	ComputeJobsInstanceTemplate *string `json:"computeJobsInstanceTemplate,omitempty"`
 }
 
 func (g GoogleBatchServiceConfiguration) MarshalJSON() ([]byte, error) {
@@ -1491,6 +1943,41 @@ func (g *GoogleBatchServiceConfiguration) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (g *GoogleBatchServiceConfiguration) GetWorkDir() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WorkDir
+}
+
+func (g *GoogleBatchServiceConfiguration) GetPreRunScript() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PreRunScript
+}
+
+func (g *GoogleBatchServiceConfiguration) GetPostRunScript() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PostRunScript
+}
+
+func (g *GoogleBatchServiceConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if g == nil {
+		return nil
+	}
+	return g.Environment
+}
+
+func (g *GoogleBatchServiceConfiguration) GetNextflowConfig() *string {
+	if g == nil {
+		return nil
+	}
+	return g.NextflowConfig
+}
+
 func (g *GoogleBatchServiceConfiguration) GetDiscriminator() *string {
 	if g == nil {
 		return nil
@@ -1498,18 +1985,11 @@ func (g *GoogleBatchServiceConfiguration) GetDiscriminator() *string {
 	return g.Discriminator
 }
 
-func (g *GoogleBatchServiceConfiguration) GetLocation() *string {
+func (g *GoogleBatchServiceConfiguration) GetLocation() string {
 	if g == nil {
-		return nil
+		return ""
 	}
 	return g.Location
-}
-
-func (g *GoogleBatchServiceConfiguration) GetWorkDir() *string {
-	if g == nil {
-		return nil
-	}
-	return g.WorkDir
 }
 
 func (g *GoogleBatchServiceConfiguration) GetSpot() *bool {
@@ -1589,20 +2069,6 @@ func (g *GoogleBatchServiceConfiguration) GetLabels() map[string]string {
 	return g.Labels
 }
 
-func (g *GoogleBatchServiceConfiguration) GetPreRunScript() *string {
-	if g == nil {
-		return nil
-	}
-	return g.PreRunScript
-}
-
-func (g *GoogleBatchServiceConfiguration) GetPostRunScript() *string {
-	if g == nil {
-		return nil
-	}
-	return g.PostRunScript
-}
-
 func (g *GoogleBatchServiceConfiguration) GetHeadJobCpus() *int {
 	if g == nil {
 		return nil
@@ -1617,13 +2083,6 @@ func (g *GoogleBatchServiceConfiguration) GetHeadJobMemoryMb() *int {
 	return g.HeadJobMemoryMb
 }
 
-func (g *GoogleBatchServiceConfiguration) GetNextflowConfig() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NextflowConfig
-}
-
 func (g *GoogleBatchServiceConfiguration) GetNfsTarget() *string {
 	if g == nil {
 		return nil
@@ -1636,13 +2095,6 @@ func (g *GoogleBatchServiceConfiguration) GetNfsMount() *string {
 		return nil
 	}
 	return g.NfsMount
-}
-
-func (g *GoogleBatchServiceConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if g == nil {
-		return nil
-	}
-	return g.Environment
 }
 
 func (g *GoogleBatchServiceConfiguration) GetEnableWave() *bool {
@@ -1695,13 +2147,21 @@ func (g *GoogleBatchServiceConfiguration) GetComputeJobsInstanceTemplate() *stri
 }
 
 type GoogleLifeSciencesConfiguration struct {
-	// Read-only property identifying the compute platform type
-	Discriminator *string  `json:"discriminator,omitempty"`
-	Region        *string  `json:"region,omitempty"`
-	Zones         []string `json:"zones,omitempty"`
-	Location      *string  `json:"location,omitempty"`
 	// Working directory path for workflow execution
-	WorkDir           *string           `json:"workDir,omitempty"`
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator     *string           `json:"discriminator,omitempty"`
+	Region            *string           `json:"region,omitempty"`
+	Zones             []string          `json:"zones,omitempty"`
+	Location          *string           `json:"location,omitempty"`
 	Preemptible       *bool             `json:"preemptible,omitempty"`
 	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
 	ProjectID         *string           `json:"projectId,omitempty"`
@@ -1711,18 +2171,10 @@ type GoogleLifeSciencesConfiguration struct {
 	CopyImage         *string           `json:"copyImage,omitempty"`
 	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
 	Labels            map[string]string `json:"labels,omitempty"`
-	// Shell script to execute before workflow starts
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Shell script to execute after workflow completes
-	PostRunScript   *string `json:"postRunScript,omitempty"`
-	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	NfsTarget      *string `json:"nfsTarget,omitempty"`
-	NfsMount       *string `json:"nfsMount,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	HeadJobCpus       *int              `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb   *int              `json:"headJobMemoryMb,omitempty"`
+	NfsTarget         *string           `json:"nfsTarget,omitempty"`
+	NfsMount          *string           `json:"nfsMount,omitempty"`
 }
 
 func (g GoogleLifeSciencesConfiguration) MarshalJSON() ([]byte, error) {
@@ -1734,6 +2186,41 @@ func (g *GoogleLifeSciencesConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (g *GoogleLifeSciencesConfiguration) GetWorkDir() *string {
+	if g == nil {
+		return nil
+	}
+	return g.WorkDir
+}
+
+func (g *GoogleLifeSciencesConfiguration) GetPreRunScript() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PreRunScript
+}
+
+func (g *GoogleLifeSciencesConfiguration) GetPostRunScript() *string {
+	if g == nil {
+		return nil
+	}
+	return g.PostRunScript
+}
+
+func (g *GoogleLifeSciencesConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if g == nil {
+		return nil
+	}
+	return g.Environment
+}
+
+func (g *GoogleLifeSciencesConfiguration) GetNextflowConfig() *string {
+	if g == nil {
+		return nil
+	}
+	return g.NextflowConfig
 }
 
 func (g *GoogleLifeSciencesConfiguration) GetDiscriminator() *string {
@@ -1762,13 +2249,6 @@ func (g *GoogleLifeSciencesConfiguration) GetLocation() *string {
 		return nil
 	}
 	return g.Location
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetWorkDir() *string {
-	if g == nil {
-		return nil
-	}
-	return g.WorkDir
 }
 
 func (g *GoogleLifeSciencesConfiguration) GetPreemptible() *bool {
@@ -1834,20 +2314,6 @@ func (g *GoogleLifeSciencesConfiguration) GetLabels() map[string]string {
 	return g.Labels
 }
 
-func (g *GoogleLifeSciencesConfiguration) GetPreRunScript() *string {
-	if g == nil {
-		return nil
-	}
-	return g.PreRunScript
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetPostRunScript() *string {
-	if g == nil {
-		return nil
-	}
-	return g.PostRunScript
-}
-
 func (g *GoogleLifeSciencesConfiguration) GetHeadJobCpus() *int {
 	if g == nil {
 		return nil
@@ -1860,13 +2326,6 @@ func (g *GoogleLifeSciencesConfiguration) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return g.HeadJobMemoryMb
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetNextflowConfig() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NextflowConfig
 }
 
 func (g *GoogleLifeSciencesConfiguration) GetNfsTarget() *string {
@@ -1883,21 +2342,24 @@ func (g *GoogleLifeSciencesConfiguration) GetNfsMount() *string {
 	return g.NfsMount
 }
 
-func (g *GoogleLifeSciencesConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if g == nil {
-		return nil
-	}
-	return g.Environment
-}
-
 type SeqeraComputeConfiguration struct {
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
 	// AWS region where the Batch compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
@@ -1925,18 +2387,10 @@ type SeqeraComputeConfiguration struct {
 	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
 	//
 	CliPath *string `json:"cliPath,omitempty"`
-	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
-	// Shell script to execute before workflow starts
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Shell script to execute after workflow completes
-	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Enable Wave containers for this compute environment. Wave provides container provisioning
 	// and augmentation capabilities for Nextflow workflows.
 	//
@@ -1948,13 +2402,13 @@ type SeqeraComputeConfiguration struct {
 	// Enable NVMe instance storage for high-performance I/O.
 	// When enabled, NVMe storage volumes are automatically mounted and configured.
 	//
-	NvmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup           *string `json:"logGroup,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
-	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
+	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string          `json:"logGroup,omitempty"`
+	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
+	Forge              *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
+	// Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
+	InstanceTypeSize *SeqeraComputeCloudInstanceTypeSize `json:"instanceTypeSize,omitempty"`
 }
 
 func (s SeqeraComputeConfiguration) MarshalJSON() ([]byte, error) {
@@ -1966,6 +2420,48 @@ func (s *SeqeraComputeConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (s *SeqeraComputeConfiguration) GetWorkDir() *string {
+	if s == nil {
+		return nil
+	}
+	return s.WorkDir
+}
+
+func (s *SeqeraComputeConfiguration) GetPreRunScript() *string {
+	if s == nil {
+		return nil
+	}
+	return s.PreRunScript
+}
+
+func (s *SeqeraComputeConfiguration) GetPostRunScript() *string {
+	if s == nil {
+		return nil
+	}
+	return s.PostRunScript
+}
+
+func (s *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if s == nil {
+		return nil
+	}
+	return s.Environment
+}
+
+func (s *SeqeraComputeConfiguration) GetNextflowConfig() *string {
+	if s == nil {
+		return nil
+	}
+	return s.NextflowConfig
+}
+
+func (s *SeqeraComputeConfiguration) GetDiscriminator() *string {
+	if s == nil {
+		return nil
+	}
+	return s.Discriminator
 }
 
 func (s *SeqeraComputeConfiguration) GetStorageType() *string {
@@ -1987,13 +2483,6 @@ func (s *SeqeraComputeConfiguration) GetVolumes() []string {
 		return nil
 	}
 	return s.Volumes
-}
-
-func (s *SeqeraComputeConfiguration) GetDiscriminator() *string {
-	if s == nil {
-		return nil
-	}
-	return s.Discriminator
 }
 
 func (s *SeqeraComputeConfiguration) GetRegion() string {
@@ -2059,27 +2548,6 @@ func (s *SeqeraComputeConfiguration) GetCliPath() *string {
 	return s.CliPath
 }
 
-func (s *SeqeraComputeConfiguration) GetWorkDir() *string {
-	if s == nil {
-		return nil
-	}
-	return s.WorkDir
-}
-
-func (s *SeqeraComputeConfiguration) GetPreRunScript() *string {
-	if s == nil {
-		return nil
-	}
-	return s.PreRunScript
-}
-
-func (s *SeqeraComputeConfiguration) GetPostRunScript() *string {
-	if s == nil {
-		return nil
-	}
-	return s.PostRunScript
-}
-
 func (s *SeqeraComputeConfiguration) GetHeadJobCpus() *int {
 	if s == nil {
 		return nil
@@ -2092,13 +2560,6 @@ func (s *SeqeraComputeConfiguration) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return s.HeadJobMemoryMb
-}
-
-func (s *SeqeraComputeConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if s == nil {
-		return nil
-	}
-	return s.Environment
 }
 
 func (s *SeqeraComputeConfiguration) GetEnableWave() *bool {
@@ -2129,13 +2590,6 @@ func (s *SeqeraComputeConfiguration) GetLogGroup() *string {
 	return s.LogGroup
 }
 
-func (s *SeqeraComputeConfiguration) GetNextflowConfig() *string {
-	if s == nil {
-		return nil
-	}
-	return s.NextflowConfig
-}
-
 func (s *SeqeraComputeConfiguration) GetFusionSnapshots() *bool {
 	if s == nil {
 		return nil
@@ -2157,34 +2611,47 @@ func (s *SeqeraComputeConfiguration) GetForgedResources() []map[string]any {
 	return s.ForgedResources
 }
 
+func (s *SeqeraComputeConfiguration) GetInstanceTypeSize() *SeqeraComputeCloudInstanceTypeSize {
+	if s == nil {
+		return nil
+	}
+	return s.InstanceTypeSize
+}
+
 type AWSCloudConfiguration struct {
-	// Read-only property identifying the compute platform type
-	Discriminator *string  `json:"discriminator,omitempty"`
-	AllowBuckets  []string `json:"allowBuckets,omitempty"`
-	Region        string   `json:"region"`
-	InstanceType  *string  `json:"instanceType,omitempty"`
-	ImageID       *string  `json:"imageId,omitempty"`
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
 	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment        []ConfigEnvVariable `json:"environment,omitempty"`
-	EnableWave         *bool               `json:"waveEnabled,omitempty"`
-	EnableFusion       *bool               `json:"fusion2Enabled,omitempty"`
-	LogGroup           *string             `json:"logGroup,omitempty"`
-	Arm64Enabled       *bool               `json:"arm64Enabled,omitempty"`
-	GpuEnabled         *bool               `json:"gpuEnabled,omitempty"`
-	Ec2KeyPair         *string             `json:"ec2KeyPair,omitempty"`
-	EbsBootSize        *int                `json:"ebsBootSize,omitempty"`
-	InstanceProfileArn *string             `json:"instanceProfileArn,omitempty"`
-	SubnetID           *string             `json:"subnetId,omitempty"`
-	SecurityGroups     []string            `json:"securityGroups,omitempty"`
-	ForgedResources    []map[string]any    `json:"forgedResources,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string  `json:"discriminator,omitempty"`
+	AllowBuckets  []string `json:"allowBuckets,omitempty"`
+	Region        string   `json:"region"`
+	InstanceType  *string  `json:"instanceType,omitempty"`
+	ImageID       *string  `json:"imageId,omitempty"`
+	// Enable Wave containers for this compute environment. Wave provides container provisioning
+	// and augmentation capabilities for Nextflow workflows.
+	//
+	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
+	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	//
+	EnableWave         *bool            `json:"waveEnabled,omitempty"`
+	EnableFusion       *bool            `json:"fusion2Enabled,omitempty"`
+	LogGroup           *string          `json:"logGroup,omitempty"`
+	Arm64Enabled       *bool            `json:"arm64Enabled,omitempty"`
+	GpuEnabled         *bool            `json:"gpuEnabled,omitempty"`
+	Ec2KeyPair         *string          `json:"ec2KeyPair,omitempty"`
+	EbsBootSize        *int             `json:"ebsBootSize,omitempty"`
+	InstanceProfileArn *string          `json:"instanceProfileArn,omitempty"`
+	SubnetID           *string          `json:"subnetId,omitempty"`
+	SecurityGroups     []string         `json:"securityGroups,omitempty"`
+	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (a AWSCloudConfiguration) MarshalJSON() ([]byte, error) {
@@ -2196,6 +2663,41 @@ func (a *AWSCloudConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *AWSCloudConfiguration) GetWorkDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkDir
+}
+
+func (a *AWSCloudConfiguration) GetPreRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PreRunScript
+}
+
+func (a *AWSCloudConfiguration) GetPostRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PostRunScript
+}
+
+func (a *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
+func (a *AWSCloudConfiguration) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
 }
 
 func (a *AWSCloudConfiguration) GetDiscriminator() *string {
@@ -2231,41 +2733,6 @@ func (a *AWSCloudConfiguration) GetImageID() *string {
 		return nil
 	}
 	return a.ImageID
-}
-
-func (a *AWSCloudConfiguration) GetWorkDir() *string {
-	if a == nil {
-		return nil
-	}
-	return a.WorkDir
-}
-
-func (a *AWSCloudConfiguration) GetPreRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PreRunScript
-}
-
-func (a *AWSCloudConfiguration) GetPostRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PostRunScript
-}
-
-func (a *AWSCloudConfiguration) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
-}
-
-func (a *AWSCloudConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
 }
 
 func (a *AWSCloudConfiguration) GetEnableWave() *bool {
@@ -2346,13 +2813,23 @@ func (a *AWSCloudConfiguration) GetForgedResources() []map[string]any {
 }
 
 type AWSBatchConfiguration struct {
+	// Working directory path for workflow execution
+	WorkDir *string `json:"workDir,omitempty"`
+	// Shell script to execute before workflow starts
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Shell script to execute after workflow completes
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings and parameters
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
+	// Read-only property identifying the compute platform type
+	Discriminator *string `json:"discriminator,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
 	// AWS region where the Batch compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
@@ -2380,18 +2857,10 @@ type AWSBatchConfiguration struct {
 	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
 	//
 	CliPath *string `json:"cliPath,omitempty"`
-	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
-	// Shell script to execute before workflow starts
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Shell script to execute after workflow completes
-	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
 	// Enable Wave containers for this compute environment. Wave provides container provisioning
 	// and augmentation capabilities for Nextflow workflows.
 	//
@@ -2403,13 +2872,11 @@ type AWSBatchConfiguration struct {
 	// Enable NVMe instance storage for high-performance I/O.
 	// When enabled, NVMe storage volumes are automatically mounted and configured.
 	//
-	NvmeStorageEnabled *bool   `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup           *string `json:"logGroup,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig  *string          `json:"nextflowConfig,omitempty"`
-	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
-	Forge           *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
+	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
+	LogGroup           *string          `json:"logGroup,omitempty"`
+	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
+	Forge              *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (a AWSBatchConfiguration) MarshalJSON() ([]byte, error) {
@@ -2421,6 +2888,48 @@ func (a *AWSBatchConfiguration) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *AWSBatchConfiguration) GetWorkDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkDir
+}
+
+func (a *AWSBatchConfiguration) GetPreRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PreRunScript
+}
+
+func (a *AWSBatchConfiguration) GetPostRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PostRunScript
+}
+
+func (a *AWSBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
+func (a *AWSBatchConfiguration) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
+}
+
+func (a *AWSBatchConfiguration) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 func (a *AWSBatchConfiguration) GetStorageType() *string {
@@ -2442,13 +2951,6 @@ func (a *AWSBatchConfiguration) GetVolumes() []string {
 		return nil
 	}
 	return a.Volumes
-}
-
-func (a *AWSBatchConfiguration) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
 }
 
 func (a *AWSBatchConfiguration) GetRegion() string {
@@ -2514,27 +3016,6 @@ func (a *AWSBatchConfiguration) GetCliPath() *string {
 	return a.CliPath
 }
 
-func (a *AWSBatchConfiguration) GetWorkDir() *string {
-	if a == nil {
-		return nil
-	}
-	return a.WorkDir
-}
-
-func (a *AWSBatchConfiguration) GetPreRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PreRunScript
-}
-
-func (a *AWSBatchConfiguration) GetPostRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PostRunScript
-}
-
 func (a *AWSBatchConfiguration) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -2547,13 +3028,6 @@ func (a *AWSBatchConfiguration) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return a.HeadJobMemoryMb
-}
-
-func (a *AWSBatchConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
 }
 
 func (a *AWSBatchConfiguration) GetEnableWave() *bool {
@@ -2584,13 +3058,6 @@ func (a *AWSBatchConfiguration) GetLogGroup() *string {
 	return a.LogGroup
 }
 
-func (a *AWSBatchConfiguration) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
-}
-
 func (a *AWSBatchConfiguration) GetFusionSnapshots() *bool {
 	if a == nil {
 		return nil
@@ -2617,6 +3084,9 @@ type ComputeConfigType string
 const (
 	ComputeConfigTypeMoabPlatform          ComputeConfigType = "moab-platform"
 	ComputeConfigTypeAwsBatch              ComputeConfigType = "aws-batch"
+	ComputeConfigTypeGoogleCloud           ComputeConfigType = "google-cloud"
+	ComputeConfigTypeLocalPlatform         ComputeConfigType = "local-platform"
+	ComputeConfigTypeAzureCloud            ComputeConfigType = "azure-cloud"
 	ComputeConfigTypeGkePlatform           ComputeConfigType = "gke-platform"
 	ComputeConfigTypeGoogleBatch           ComputeConfigType = "google-batch"
 	ComputeConfigTypeAwsCloud              ComputeConfigType = "aws-cloud"
@@ -2639,7 +3109,9 @@ type ComputeConfig struct {
 	SeqeraComputeConfiguration      *SeqeraComputeConfiguration      `queryParam:"inline" union:"member"`
 	GoogleLifeSciencesConfiguration *GoogleLifeSciencesConfiguration `queryParam:"inline" union:"member"`
 	GoogleBatchServiceConfiguration *GoogleBatchServiceConfiguration `queryParam:"inline" union:"member"`
+	GoogleCloudConfiguration        *GoogleCloudConfiguration        `queryParam:"inline" union:"member"`
 	AzureBatchConfiguration         *AzureBatchConfiguration         `queryParam:"inline" union:"member"`
+	AzureCloudConfiguration         *AzureCloudConfiguration         `queryParam:"inline" union:"member"`
 	IBMLSFConfiguration             *IBMLSFConfiguration             `queryParam:"inline" union:"member"`
 	SlurmConfiguration              *SlurmConfiguration              `queryParam:"inline" union:"member"`
 	KubernetesComputeConfiguration  *KubernetesComputeConfiguration  `queryParam:"inline" union:"member"`
@@ -2648,6 +3120,7 @@ type ComputeConfig struct {
 	UnivaGridEngineConfiguration    *UnivaGridEngineConfiguration    `queryParam:"inline" union:"member"`
 	AltairPBSConfiguration          *AltairPBSConfiguration          `queryParam:"inline" union:"member"`
 	MoabConfiguration               *MoabConfiguration               `queryParam:"inline" union:"member"`
+	LocalExecutionConfiguration     *LocalExecutionConfiguration     `queryParam:"inline" union:"member"`
 
 	Type ComputeConfigType
 }
@@ -2673,6 +3146,42 @@ func CreateComputeConfigAwsBatch(awsBatch AWSBatchConfiguration) ComputeConfig {
 	return ComputeConfig{
 		AWSBatchConfiguration: &awsBatch,
 		Type:                  typ,
+	}
+}
+
+func CreateComputeConfigGoogleCloud(googleCloud GoogleCloudConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeGoogleCloud
+
+	typStr := string(typ)
+	googleCloud.Discriminator = &typStr
+
+	return ComputeConfig{
+		GoogleCloudConfiguration: &googleCloud,
+		Type:                     typ,
+	}
+}
+
+func CreateComputeConfigLocalPlatform(localPlatform LocalExecutionConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeLocalPlatform
+
+	typStr := string(typ)
+	localPlatform.Discriminator = &typStr
+
+	return ComputeConfig{
+		LocalExecutionConfiguration: &localPlatform,
+		Type:                        typ,
+	}
+}
+
+func CreateComputeConfigAzureCloud(azureCloud AzureCloudConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAzureCloud
+
+	typStr := string(typ)
+	azureCloud.Discriminator = &typStr
+
+	return ComputeConfig{
+		AzureCloudConfiguration: &azureCloud,
+		Type:                    typ,
 	}
 }
 
@@ -2850,6 +3359,33 @@ func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 		u.AWSBatchConfiguration = awsBatchConfiguration
 		u.Type = ComputeConfigTypeAwsBatch
 		return nil
+	case "google-cloud":
+		googleCloudConfiguration := new(GoogleCloudConfiguration)
+		if err := utils.UnmarshalJSON(data, &googleCloudConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-cloud) type GoogleCloudConfiguration within ComputeConfig: %w", string(data), err)
+		}
+
+		u.GoogleCloudConfiguration = googleCloudConfiguration
+		u.Type = ComputeConfigTypeGoogleCloud
+		return nil
+	case "local-platform":
+		localExecutionConfiguration := new(LocalExecutionConfiguration)
+		if err := utils.UnmarshalJSON(data, &localExecutionConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalExecutionConfiguration within ComputeConfig: %w", string(data), err)
+		}
+
+		u.LocalExecutionConfiguration = localExecutionConfiguration
+		u.Type = ComputeConfigTypeLocalPlatform
+		return nil
+	case "azure-cloud":
+		azureCloudConfiguration := new(AzureCloudConfiguration)
+		if err := utils.UnmarshalJSON(data, &azureCloudConfiguration, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudConfiguration within ComputeConfig: %w", string(data), err)
+		}
+
+		u.AzureCloudConfiguration = azureCloudConfiguration
+		u.Type = ComputeConfigTypeAzureCloud
+		return nil
 	case "gke-platform":
 		googleGKEClusterConfiguration := new(GoogleGKEClusterConfiguration)
 		if err := utils.UnmarshalJSON(data, &googleGKEClusterConfiguration, "", true, nil); err != nil {
@@ -2984,8 +3520,16 @@ func (u ComputeConfig) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.GoogleBatchServiceConfiguration, "", true)
 	}
 
+	if u.GoogleCloudConfiguration != nil {
+		return utils.MarshalJSON(u.GoogleCloudConfiguration, "", true)
+	}
+
 	if u.AzureBatchConfiguration != nil {
 		return utils.MarshalJSON(u.AzureBatchConfiguration, "", true)
+	}
+
+	if u.AzureCloudConfiguration != nil {
+		return utils.MarshalJSON(u.AzureCloudConfiguration, "", true)
 	}
 
 	if u.IBMLSFConfiguration != nil {
@@ -3018,6 +3562,10 @@ func (u ComputeConfig) MarshalJSON() ([]byte, error) {
 
 	if u.MoabConfiguration != nil {
 		return utils.MarshalJSON(u.MoabConfiguration, "", true)
+	}
+
+	if u.LocalExecutionConfiguration != nil {
+		return utils.MarshalJSON(u.LocalExecutionConfiguration, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ComputeConfig: all fields are null")

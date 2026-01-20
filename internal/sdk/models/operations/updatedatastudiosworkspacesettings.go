@@ -10,7 +10,7 @@ import (
 type UpdateDataStudiosWorkspaceSettingsRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Workspace update request
 	UpdateWorkspaceRequest shared.UpdateWorkspaceRequest `request:"mediaType=application/json"`
@@ -37,10 +37,6 @@ func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetUpdateWorkspaceRequest() 
 	return u.UpdateWorkspaceRequest
 }
 
-// UpdateDataStudiosWorkspaceSettingsResponseBody - UpdateDataStudiosWorkspaceSettings 200 response
-type UpdateDataStudiosWorkspaceSettingsResponseBody struct {
-}
-
 type UpdateDataStudiosWorkspaceSettingsResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -50,8 +46,6 @@ type UpdateDataStudiosWorkspaceSettingsResponse struct {
 	RawResponse *http.Response
 	// Bad request
 	ErrorResponse *shared.ErrorResponse
-	// UpdateDataStudiosWorkspaceSettings 200 response
-	Object *UpdateDataStudiosWorkspaceSettingsResponseBody
 }
 
 func (u *UpdateDataStudiosWorkspaceSettingsResponse) GetContentType() string {
@@ -80,11 +74,4 @@ func (u *UpdateDataStudiosWorkspaceSettingsResponse) GetErrorResponse() *shared.
 		return nil
 	}
 	return u.ErrorResponse
-}
-
-func (u *UpdateDataStudiosWorkspaceSettingsResponse) GetObject() *UpdateDataStudiosWorkspaceSettingsResponseBody {
-	if u == nil {
-		return nil
-	}
-	return u.Object
 }

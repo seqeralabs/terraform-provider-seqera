@@ -62,7 +62,7 @@ resource "seqera_tower_agent_credential" "shared" {
 ### Optional
 
 - `shared` (Boolean) When enabled, all workspace users can access the same Tower Agent instance. Default: false
-- `workspace_id` (Number) Workspace numeric identifier
+- `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 

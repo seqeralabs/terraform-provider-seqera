@@ -11,7 +11,9 @@ type CancelWorkflowRequest struct {
 	// Workflow string identifier
 	WorkflowID string `pathParam:"style=simple,explode=false,name=workflowId"`
 	// Workspace numeric identifier
-	WorkspaceID      *int64                   `queryParam:"style=form,explode=true,name=workspaceId"`
+	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Cancel on the Platform side even if it cannot be cancelled on the CE provider side
+	Force            *bool                    `queryParam:"style=form,explode=true,name=force"`
 	EmptyBodyRequest *shared.EmptyBodyRequest `request:"mediaType=application/json"`
 }
 
@@ -27,6 +29,13 @@ func (c *CancelWorkflowRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return c.WorkspaceID
+}
+
+func (c *CancelWorkflowRequest) GetForce() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Force
 }
 
 func (c *CancelWorkflowRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {

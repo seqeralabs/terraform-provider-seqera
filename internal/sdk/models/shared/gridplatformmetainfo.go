@@ -7,6 +7,7 @@ import (
 )
 
 type GridPlatformMetainfo struct {
+	// property to select the platform metainfo type
 	Discriminator *string `json:"discriminator,omitempty"`
 }
 

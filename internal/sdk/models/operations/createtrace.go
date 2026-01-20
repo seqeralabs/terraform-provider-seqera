@@ -10,7 +10,7 @@ import (
 type CreateTraceRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Trace create request.
+	// Trace create request
 	TraceCreateRequest shared.TraceCreateRequest `request:"mediaType=application/json"`
 }
 

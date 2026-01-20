@@ -44,8 +44,6 @@ resource "seqera_datasets" "my_datasets" {
 
 ### Read-Only
 
-- `date_created` (String)
-- `deleted` (Boolean) Read-only flag indicating if the dataset has been deleted
 - `id` (String) Unique identifier for the dataset (max 22 characters)
-- `last_updated` (String)
+- `last_updated` (String) Timestamp when the dataset was last modified
 - `media_type` (String) MIME type or media type of the dataset content (max 80 characters)

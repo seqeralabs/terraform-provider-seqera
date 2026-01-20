@@ -5,6 +5,7 @@ package shared
 type ListWorkflowsResponse struct {
 	Workflows []ListWorkflowsResponseListWorkflowsElement `json:"workflows,omitempty"`
 	TotalSize *int64                                      `json:"totalSize,omitempty"`
+	HasMore   *bool                                       `json:"hasMore,omitempty"`
 }
 
 func (l *ListWorkflowsResponse) GetWorkflows() []ListWorkflowsResponseListWorkflowsElement {
@@ -19,4 +20,11 @@ func (l *ListWorkflowsResponse) GetTotalSize() *int64 {
 		return nil
 	}
 	return l.TotalSize
+}
+
+func (l *ListWorkflowsResponse) GetHasMore() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.HasMore
 }

@@ -12,8 +12,10 @@ type ComputeEnvStatus string
 const (
 	ComputeEnvStatusCreating  ComputeEnvStatus = "CREATING"
 	ComputeEnvStatusAvailable ComputeEnvStatus = "AVAILABLE"
+	ComputeEnvStatusDeleting  ComputeEnvStatus = "DELETING"
 	ComputeEnvStatusErrored   ComputeEnvStatus = "ERRORED"
 	ComputeEnvStatusInvalid   ComputeEnvStatus = "INVALID"
+	ComputeEnvStatusDisabled  ComputeEnvStatus = "DISABLED"
 )
 
 func (e ComputeEnvStatus) ToPointer() *ComputeEnvStatus {
@@ -29,9 +31,13 @@ func (e *ComputeEnvStatus) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "AVAILABLE":
 		fallthrough
+	case "DELETING":
+		fallthrough
 	case "ERRORED":
 		fallthrough
 	case "INVALID":
+		fallthrough
+	case "DISABLED":
 		*e = ComputeEnvStatus(v)
 		return nil
 	default:

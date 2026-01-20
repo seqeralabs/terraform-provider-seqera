@@ -1293,6 +1293,7 @@ func (s *Workflows) DownloadWorkflowLog(ctx context.Context, request operations.
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
+		operations.SupportedOptionAcceptHeaderOverride,
 	}
 
 	for _, opt := range opts {
@@ -1337,7 +1338,12 @@ func (s *Workflows) DownloadWorkflowLog(ctx context.Context, request operations.
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
-	req.Header.Set("Accept", "application/json")
+	if o.AcceptHeaderOverride != nil {
+		req.Header.Set("Accept", string(*o.AcceptHeaderOverride))
+	} else {
+		req.Header.Set("Accept", "application/json;q=1, text/plain;q=0")
+	}
+
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
@@ -1390,13 +1396,14 @@ func (s *Workflows) DownloadWorkflowLog(ctx context.Context, request operations.
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `text/plain`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
 				return nil, err
 			}
 
-			res.Bytes = rawBody
+			out := string(rawBody)
+			res.Res = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1444,6 +1451,7 @@ func (s *Workflows) DownloadWorkflowTaskLog(ctx context.Context, request operati
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
+		operations.SupportedOptionAcceptHeaderOverride,
 	}
 
 	for _, opt := range opts {
@@ -1488,7 +1496,12 @@ func (s *Workflows) DownloadWorkflowTaskLog(ctx context.Context, request operati
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
-	req.Header.Set("Accept", "application/json")
+	if o.AcceptHeaderOverride != nil {
+		req.Header.Set("Accept", string(*o.AcceptHeaderOverride))
+	} else {
+		req.Header.Set("Accept", "application/json;q=1, text/plain;q=0")
+	}
+
 	req.Header.Set("User-Agent", s.sdkConfiguration.UserAgent)
 
 	if err := utils.PopulateQueryParams(ctx, req, request, nil, nil); err != nil {
@@ -1541,13 +1554,14 @@ func (s *Workflows) DownloadWorkflowTaskLog(ctx context.Context, request operati
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `text/plain`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
 				return nil, err
 			}
 
-			res.Bytes = rawBody
+			out := string(rawBody)
+			res.Res = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -1747,9 +1761,9 @@ func (s *Workflows) DescribeWorkflowLaunch(ctx context.Context, request operatio
 
 }
 
-// WorkflowLogs - Get workflow logs
+// GetWorkflowLog - Get workflow logs
 // Retrieves the output logs for the Nextflow main job of the workflow identified by the given `workflowId`.
-func (s *Workflows) WorkflowLogs(ctx context.Context, request operations.WorkflowLogsRequest, opts ...operations.Option) (*operations.WorkflowLogsResponse, error) {
+func (s *Workflows) GetWorkflowLog(ctx context.Context, request operations.GetWorkflowLogRequest, opts ...operations.Option) (*operations.GetWorkflowLogResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -1777,7 +1791,7 @@ func (s *Workflows) WorkflowLogs(ctx context.Context, request operations.Workflo
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "WorkflowLogs",
+		OperationID:      "GetWorkflowLog",
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -1841,7 +1855,7 @@ func (s *Workflows) WorkflowLogs(ctx context.Context, request operations.Workflo
 		}
 	}
 
-	res := &operations.WorkflowLogsResponse{
+	res := &operations.GetWorkflowLogResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,

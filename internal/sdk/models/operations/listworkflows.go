@@ -18,6 +18,8 @@ type ListWorkflowsRequest struct {
 	Offset *int `queryParam:"style=form,explode=true,name=offset"`
 	// Filter search parameter
 	Search *string `queryParam:"style=form,explode=true,name=search"`
+	// Include total size in the response
+	IncludeTotalSize *bool `queryParam:"style=form,explode=true,name=includeTotalSize"`
 }
 
 func (l *ListWorkflowsRequest) GetAttributes() []shared.WorkflowQueryAttribute {
@@ -53,6 +55,13 @@ func (l *ListWorkflowsRequest) GetSearch() *string {
 		return nil
 	}
 	return l.Search
+}
+
+func (l *ListWorkflowsRequest) GetIncludeTotalSize() *bool {
+	if l == nil {
+		return nil
+	}
+	return l.IncludeTotalSize
 }
 
 type ListWorkflowsResponse struct {

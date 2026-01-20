@@ -8,7 +8,7 @@ import (
 )
 
 type DeleteCustomDataLinkRequest struct {
-	// Data-link identifier
+	// Data-link string identifier
 	DataLinkID string `pathParam:"style=simple,explode=false,name=dataLinkId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`

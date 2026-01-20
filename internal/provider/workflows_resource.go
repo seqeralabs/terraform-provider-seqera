@@ -95,14 +95,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Nextflow configuration text. Requires replacement if changed.`,
 			},
 			"entry_name": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Entry workflow name. Requires replacement if changed.`,
 			},
 			"force": schema.BoolAttribute{
 				Optional:    true,
@@ -113,14 +113,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.Int32{
 					int32planmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Head job CPU allocation. Requires replacement if changed.`,
 			},
 			"head_job_memory_mb": schema.Int32Attribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Int32{
 					int32planmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Head job memory allocation in MB. Requires replacement if changed.`,
 			},
 			"label_ids": schema.ListAttribute{
 				Optional: true,
@@ -135,14 +135,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Main script path. Requires replacement if changed.`,
 			},
 			"params_text": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pipeline parameters text. Requires replacement if changed.`,
 			},
 			"pipeline": schema.StringAttribute{
 				Optional: true,
@@ -156,14 +156,14 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+				Description: `Script to run after pipeline execution. Requires replacement if changed.`,
 			},
 			"pre_run_script": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts). Requires replacement if changed.`,
+				Description: `Script to run before pipeline execution. Requires replacement if changed.`,
 			},
 			"pull_latest": schema.BoolAttribute{
 				Optional: true,
@@ -184,28 +184,28 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pipeline revision. Requires replacement if changed.`,
 			},
 			"run_name": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Custom run name. Requires replacement if changed.`,
 			},
 			"schema_name": schema.StringAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Pipeline schema name. Requires replacement if changed.`,
 			},
 			"source_workspace_id": schema.Int64Attribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Source Optional workspace numeric identifier. Requires replacement if changed.`,
+				Description: `Source workspace numeric identifier. Requires replacement if changed.`,
 			},
 			"stub_run": schema.BoolAttribute{
 				Optional: true,
@@ -219,7 +219,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Tower-specific configuration. Requires replacement if changed.`,
 			},
 			"user_secrets": schema.ListAttribute{
 				Optional: true,
@@ -234,7 +234,7 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 				},
-				Description: `Requires replacement if changed.`,
+				Description: `Working directory. Requires replacement if changed.`,
 			},
 			"workflow": schema.SingleNestedAttribute{
 				Computed: true,
@@ -242,11 +242,9 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 					"command_line": schema.StringAttribute{
 						Computed: true,
 					},
-					"commit_id": schema.StringAttribute{
-						Computed: true,
-					},
 					"complete": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Workflow completion time (null if not completed)`,
 					},
 					"config_files": schema.ListAttribute{
 						Computed:    true,
@@ -271,10 +269,12 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 					},
 					"error_message": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Error message (null if no error)`,
 					},
 					"error_report": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Error report (null if no error)`,
 					},
 					"exit_status": schema.Int32Attribute{
 						Computed: true,
@@ -396,7 +396,8 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 					},
 					"start": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Workflow start time (null if not started)`,
 					},
 					"stats": schema.SingleNestedAttribute{
 						Computed: true,

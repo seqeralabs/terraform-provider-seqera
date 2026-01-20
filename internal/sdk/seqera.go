@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.56.0 and generator version 2.794.1
+// Generated from OpenAPI doc version 1.102.0 and generator version 2.797.1
 
 import (
 	"context"
@@ -65,7 +65,8 @@ type Seqera struct {
 	// Pipeline input datasets (samplesheets) in CSV or TSV format
 	Datasets *Datasets
 	// GA4GH workflow execution service runs
-	Ga4gh *Ga4gh
+	Ga4gh      *Ga4gh
+	Identities *Identities
 	// Workflow launch events
 	Launch *Launch
 	// Organizations
@@ -170,7 +171,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.26.5",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.26.5 2.794.1 1.56.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.26.5 2.797.1 1.102.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -199,6 +200,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.DataLinks = newDataLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Datasets = newDatasets(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Ga4gh = newGa4gh(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Identities = newIdentities(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Launch = newLaunch(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)

@@ -10,7 +10,7 @@ import (
 type FindDataStudiosWorkspaceSettingsRequest struct {
 	// Organization numeric identifier
 	OrgID int64 `pathParam:"style=simple,explode=false,name=orgId"`
-	// Optional workspace numeric identifier
+	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Workspace update request
 	UpdateWorkspaceRequest *shared.UpdateWorkspaceRequest `request:"mediaType=application/json"`

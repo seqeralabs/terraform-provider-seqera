@@ -7,19 +7,72 @@ import (
 	"time"
 )
 
+type ListComputeEnvsResponseEntryResources struct {
+	Cpus           *int     `json:"cpus,omitempty"`
+	Memory         *int     `json:"memory,omitempty"`
+	Gpus           *int     `json:"gpus,omitempty"`
+	DiskSize       *int     `json:"diskSize,omitempty"`
+	EstimatedPrice *float32 `json:"estimatedPrice,omitempty"`
+	InstanceType   *string  `json:"instanceType,omitempty"`
+}
+
+func (l *ListComputeEnvsResponseEntryResources) GetCpus() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Cpus
+}
+
+func (l *ListComputeEnvsResponseEntryResources) GetMemory() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Memory
+}
+
+func (l *ListComputeEnvsResponseEntryResources) GetGpus() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Gpus
+}
+
+func (l *ListComputeEnvsResponseEntryResources) GetDiskSize() *int {
+	if l == nil {
+		return nil
+	}
+	return l.DiskSize
+}
+
+func (l *ListComputeEnvsResponseEntryResources) GetEstimatedPrice() *float32 {
+	if l == nil {
+		return nil
+	}
+	return l.EstimatedPrice
+}
+
+func (l *ListComputeEnvsResponseEntryResources) GetInstanceType() *string {
+	if l == nil {
+		return nil
+	}
+	return l.InstanceType
+}
+
 type ListComputeEnvsResponseEntry struct {
-	ID            *string           `json:"id,omitempty"`
-	Name          *string           `json:"name,omitempty"`
-	Platform      *string           `json:"platform,omitempty"`
-	Status        *ComputeEnvStatus `json:"status,omitempty"`
-	Message       *string           `json:"message,omitempty"`
-	LastUsed      *time.Time        `json:"lastUsed,omitempty"`
-	Primary       *bool             `json:"primary,omitempty"`
-	WorkspaceName *string           `json:"workspaceName,omitempty"`
-	Visibility    *string           `json:"visibility,omitempty"`
-	WorkDir       *string           `json:"workDir,omitempty"`
-	CredentialsID *string           `json:"credentialsId,omitempty"`
-	Region        *string           `json:"region,omitempty"`
+	ID            *string                                `json:"id,omitempty"`
+	Name          *string                                `json:"name,omitempty"`
+	Platform      *string                                `json:"platform,omitempty"`
+	Status        *ComputeEnvStatus                      `json:"status,omitempty"`
+	Message       *string                                `json:"message,omitempty"`
+	LastUsed      *time.Time                             `json:"lastUsed,omitempty"`
+	Primary       *bool                                  `json:"primary,omitempty"`
+	WorkspaceName *string                                `json:"workspaceName,omitempty"`
+	Visibility    *string                                `json:"visibility,omitempty"`
+	WorkDir       *string                                `json:"workDir,omitempty"`
+	CredentialsID *string                                `json:"credentialsId,omitempty"`
+	Region        *string                                `json:"region,omitempty"`
+	Labels        []LabelDbDto                           `json:"labels,omitempty"`
+	Resources     *ListComputeEnvsResponseEntryResources `json:"resources,omitempty"`
 }
 
 func (l ListComputeEnvsResponseEntry) MarshalJSON() ([]byte, error) {
@@ -115,4 +168,18 @@ func (l *ListComputeEnvsResponseEntry) GetRegion() *string {
 		return nil
 	}
 	return l.Region
+}
+
+func (l *ListComputeEnvsResponseEntry) GetLabels() []LabelDbDto {
+	if l == nil {
+		return nil
+	}
+	return l.Labels
+}
+
+func (l *ListComputeEnvsResponseEntry) GetResources() *ListComputeEnvsResponseEntryResources {
+	if l == nil {
+		return nil
+	}
+	return l.Resources
 }

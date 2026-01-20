@@ -46,7 +46,7 @@ type StartDataStudioResponse struct {
 	RawResponse *http.Response
 	// OK
 	DataStudioStartResponse *shared.DataStudioStartResponse
-	// NotFound, when the studio is not found or when the API is disabled for the workspace
+	// NotFound, when the Studio is not found or when the API is disabled for the workspace.
 	ErrorResponse *shared.ErrorResponse
 }
 

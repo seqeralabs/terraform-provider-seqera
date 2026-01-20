@@ -273,3 +273,9 @@ actions:
     remove: true
   - target: $.components.schemas.PipelineInfo.properties.warnings
     remove: true
+
+  # TODO - Review once pipeline versioning goes live
+  - target: $.components.schemas.PipelineDbDto.properties.commitId
+    remove: true
+  - target: $.components.schemas.Launch.properties.commitId
+    remove: true

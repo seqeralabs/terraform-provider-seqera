@@ -7,8 +7,9 @@ import (
 )
 
 type GooglePlatformMetainfo struct {
-	Locations     []string                          `json:"locations,omitempty"`
+	// property to select the platform metainfo type
 	Discriminator *string                           `json:"discriminator,omitempty"`
+	Locations     []string                          `json:"locations,omitempty"`
 	Warnings      []string                          `json:"warnings,omitempty"`
 	Zones         []string                          `json:"zones,omitempty"`
 	Buckets       []GooglePlatformMetainfoBucket    `json:"buckets,omitempty"`
@@ -26,18 +27,18 @@ func (g *GooglePlatformMetainfo) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GooglePlatformMetainfo) GetLocations() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Locations
-}
-
 func (g *GooglePlatformMetainfo) GetDiscriminator() *string {
 	if g == nil {
 		return nil
 	}
 	return g.Discriminator
+}
+
+func (g *GooglePlatformMetainfo) GetLocations() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Locations
 }
 
 func (g *GooglePlatformMetainfo) GetWarnings() []string {

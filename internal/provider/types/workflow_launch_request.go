@@ -34,5 +34,6 @@ type WorkflowLaunchRequest struct {
 	TowerConfig         types.String   `tfsdk:"tower_config"`
 	UserSecrets         []types.String `tfsdk:"user_secrets"`
 	WorkDir             types.String   `tfsdk:"work_dir"`
+	WorkspaceID         types.Int64    `tfsdk:"workspace_id"`
 	WorkspaceSecrets    []types.String `tfsdk:"workspace_secrets"`
 }

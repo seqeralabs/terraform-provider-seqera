@@ -3,30 +3,41 @@
 package shared
 
 type WorkflowLaunchRequest struct {
-	ComputeEnvID     *string  `json:"computeEnvId,omitempty"`
-	RunName          *string  `json:"runName,omitempty"`
-	Pipeline         *string  `json:"pipeline,omitempty"`
-	WorkDir          string   `json:"workDir"`
+	ComputeEnvID *string `json:"computeEnvId,omitempty"`
+	// Custom run name
+	RunName  *string `json:"runName,omitempty"`
+	Pipeline *string `json:"pipeline,omitempty"`
+	// Working directory
+	WorkDir *string `json:"workDir"`
+	// Pipeline revision
 	Revision         *string  `json:"revision,omitempty"`
 	ConfigProfiles   []string `json:"configProfiles,omitempty"`
 	UserSecrets      []string `json:"userSecrets,omitempty"`
 	WorkspaceSecrets []string `json:"workspaceSecrets,omitempty"`
-	ConfigText       *string  `json:"configText,omitempty"`
-	TowerConfig      *string  `json:"towerConfig,omitempty"`
-	ParamsText       *string  `json:"paramsText,omitempty"`
-	// Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
+	// Nextflow configuration text
+	ConfigText *string `json:"configText,omitempty"`
+	// Tower-specific configuration
+	TowerConfig *string `json:"towerConfig,omitempty"`
+	// Pipeline parameters text
+	ParamsText *string `json:"paramsText,omitempty"`
+	// Script to run before pipeline execution
 	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).
-	PostRunScript   *string `json:"postRunScript,omitempty"`
-	MainScript      *string `json:"mainScript,omitempty"`
-	EntryName       *string `json:"entryName,omitempty"`
-	SchemaName      *string `json:"schemaName,omitempty"`
-	Resume          *bool   `json:"resume,omitempty"`
-	PullLatest      *bool   `json:"pullLatest,omitempty"`
-	StubRun         *bool   `json:"stubRun,omitempty"`
-	LabelIds        []int64 `json:"labelIds,omitempty"`
-	HeadJobCpus     *int    `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
+	// Script to run after pipeline execution
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Main script path
+	MainScript *string `json:"mainScript,omitempty"`
+	// Entry workflow name
+	EntryName *string `json:"entryName,omitempty"`
+	// Pipeline schema name
+	SchemaName *string `json:"schemaName,omitempty"`
+	Resume     *bool   `json:"resume,omitempty"`
+	PullLatest *bool   `json:"pullLatest,omitempty"`
+	StubRun    *bool   `json:"stubRun,omitempty"`
+	LabelIds   []int64 `json:"labelIds,omitempty"`
+	// Head job CPU allocation
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Head job memory allocation in MB
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 }
 
 func (w *WorkflowLaunchRequest) GetComputeEnvID() *string {
@@ -50,9 +61,9 @@ func (w *WorkflowLaunchRequest) GetPipeline() *string {
 	return w.Pipeline
 }
 
-func (w *WorkflowLaunchRequest) GetWorkDir() string {
+func (w *WorkflowLaunchRequest) GetWorkDir() *string {
 	if w == nil {
-		return ""
+		return nil
 	}
 	return w.WorkDir
 }

@@ -3,13 +3,27 @@
 package shared
 
 type AwsBatchConfig struct {
+	// S3 bucket path for Nextflow work directory where intermediate files will be stored.
+	// Format: s3://bucket-name/path
+	//
+	WorkDir *string `json:"workDir,omitempty"`
+	// Bash script to run before workflow execution begins.
+	// Use for environment setup, loading modules, downloading reference data, etc.
+	//
+	PreRunScript *string `json:"preRunScript,omitempty"`
+	// Bash script to run after workflow execution completes.
+	// Use for cleanup, archiving results, sending notifications, etc.
+	//
+	PostRunScript  *string             `json:"postRunScript,omitempty"`
+	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
+	NextflowConfig *string             `json:"nextflowConfig,omitempty"`
+	// property to select the compute config platform
+	Discriminator *string `json:"discriminator,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	LustreID *string  `json:"lustreId,omitempty"`
 	Volumes  []string `json:"volumes,omitempty"`
-	// property to select the compute config platform
-	Discriminator *string `json:"discriminator,omitempty"`
 	// AWS region where the Batch compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
@@ -37,23 +51,10 @@ type AwsBatchConfig struct {
 	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
 	//
 	CliPath *string `json:"cliPath,omitempty"`
-	// S3 bucket path for Nextflow work directory where intermediate files will be stored.
-	// Format: s3://bucket-name/path
-	//
-	WorkDir *string `json:"workDir,omitempty"`
-	// Bash script to run before workflow execution begins.
-	// Use for environment setup, loading modules, downloading reference data, etc.
-	//
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Bash script to run after workflow execution completes.
-	// Use for cleanup, archiving results, sending notifications, etc.
-	//
-	PostRunScript *string `json:"postRunScript,omitempty"`
 	// Number of CPUs allocated for the head job (default: 1)
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
-	HeadJobMemoryMb *int                `json:"headJobMemoryMb,omitempty"`
-	Environment     []ConfigEnvVariable `json:"environment,omitempty"`
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 	// Enable Wave containers for this compute environment. Wave provides container provisioning
 	// and augmentation capabilities for Nextflow workflows.
 	//
@@ -67,10 +68,51 @@ type AwsBatchConfig struct {
 	//
 	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
 	LogGroup           *string          `json:"logGroup,omitempty"`
-	NextflowConfig     *string          `json:"nextflowConfig,omitempty"`
 	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
 	Forge              *ForgeConfig     `json:"forge,omitempty"`
 	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
+}
+
+func (a *AwsBatchConfig) GetWorkDir() *string {
+	if a == nil {
+		return nil
+	}
+	return a.WorkDir
+}
+
+func (a *AwsBatchConfig) GetPreRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PreRunScript
+}
+
+func (a *AwsBatchConfig) GetPostRunScript() *string {
+	if a == nil {
+		return nil
+	}
+	return a.PostRunScript
+}
+
+func (a *AwsBatchConfig) GetEnvironment() []ConfigEnvVariable {
+	if a == nil {
+		return nil
+	}
+	return a.Environment
+}
+
+func (a *AwsBatchConfig) GetNextflowConfig() *string {
+	if a == nil {
+		return nil
+	}
+	return a.NextflowConfig
+}
+
+func (a *AwsBatchConfig) GetDiscriminator() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Discriminator
 }
 
 func (a *AwsBatchConfig) GetStorageType() *string {
@@ -92,13 +134,6 @@ func (a *AwsBatchConfig) GetVolumes() []string {
 		return nil
 	}
 	return a.Volumes
-}
-
-func (a *AwsBatchConfig) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
 }
 
 func (a *AwsBatchConfig) GetRegion() string {
@@ -164,27 +199,6 @@ func (a *AwsBatchConfig) GetCliPath() *string {
 	return a.CliPath
 }
 
-func (a *AwsBatchConfig) GetWorkDir() *string {
-	if a == nil {
-		return nil
-	}
-	return a.WorkDir
-}
-
-func (a *AwsBatchConfig) GetPreRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PreRunScript
-}
-
-func (a *AwsBatchConfig) GetPostRunScript() *string {
-	if a == nil {
-		return nil
-	}
-	return a.PostRunScript
-}
-
 func (a *AwsBatchConfig) GetHeadJobCpus() *int {
 	if a == nil {
 		return nil
@@ -197,13 +211,6 @@ func (a *AwsBatchConfig) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return a.HeadJobMemoryMb
-}
-
-func (a *AwsBatchConfig) GetEnvironment() []ConfigEnvVariable {
-	if a == nil {
-		return nil
-	}
-	return a.Environment
 }
 
 func (a *AwsBatchConfig) GetEnableWave() *bool {
@@ -232,13 +239,6 @@ func (a *AwsBatchConfig) GetLogGroup() *string {
 		return nil
 	}
 	return a.LogGroup
-}
-
-func (a *AwsBatchConfig) GetNextflowConfig() *string {
-	if a == nil {
-		return nil
-	}
-	return a.NextflowConfig
 }
 
 func (a *AwsBatchConfig) GetFusionSnapshots() *bool {

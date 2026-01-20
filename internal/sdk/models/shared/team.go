@@ -3,7 +3,8 @@
 package shared
 
 type Team struct {
-	Name        string  `json:"name"`
+	Name string `json:"name"`
+	// Team description
 	Description *string `json:"description,omitempty"`
 }
 

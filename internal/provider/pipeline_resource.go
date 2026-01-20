@@ -80,37 +80,43 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						ElementType: types.StringType,
 					},
 					"config_text": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Nextflow configuration text`,
 					},
 					"entry_name": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Entry workflow name`,
 					},
 					"head_job_cpus": schema.Int32Attribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Head job CPU allocation`,
 					},
 					"head_job_memory_mb": schema.Int32Attribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Head job memory allocation in MB`,
 					},
 					"label_ids": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.Int64Type,
 					},
 					"main_script": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Main script path`,
 					},
 					"params_text": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Pipeline parameters text`,
 					},
 					"pipeline": schema.StringAttribute{
 						Optional: true,
 					},
 					"post_run_script": schema.StringAttribute{
 						Optional:    true,
-						Description: `Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Description: `Script to run after pipeline execution`,
 					},
 					"pre_run_script": schema.StringAttribute{
 						Optional:    true,
-						Description: `Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts).`,
+						Description: `Script to run before pipeline execution`,
 					},
 					"pull_latest": schema.BoolAttribute{
 						Optional: true,
@@ -119,26 +125,31 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Optional: true,
 					},
 					"revision": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Pipeline revision`,
 					},
 					"run_name": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Custom run name`,
 					},
 					"schema_name": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Pipeline schema name`,
 					},
 					"stub_run": schema.BoolAttribute{
 						Optional: true,
 					},
 					"tower_config": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Tower-specific configuration`,
 					},
 					"user_secrets": schema.ListAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
 					},
 					"work_dir": schema.StringAttribute{
-						Optional: true,
+						Optional:    true,
+						Description: `Working directory`,
 					},
 					"workspace_secrets": schema.ListAttribute{
 						Optional:    true,
@@ -162,7 +173,8 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 				Description: `Git repository URL containing the pipeline source code`,
 			},
 			"user_first_name": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `User first name`,
 			},
 			"user_id": schema.Int64Attribute{
 				Computed: true,

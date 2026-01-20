@@ -12,7 +12,7 @@ type DescribePipelineLaunchRequest struct {
 	PipelineID int64 `pathParam:"style=simple,explode=false,name=pipelineId"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
-	// Source Optional workspace numeric identifier
+	// Source workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 }
 

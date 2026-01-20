@@ -4,11 +4,12 @@ package shared
 
 type UpdatePipelineRequest struct {
 	// Pipeline name must contain a minimum of 2 and a maximum of 99 alphanumeric characters separated by dashes, dots or underscores
-	Name        *string                `json:"name,omitempty"`
-	Description *string                `json:"description,omitempty"`
-	Icon        *string                `json:"icon,omitempty"`
-	Launch      *WorkflowLaunchRequest `json:"launch,omitempty"`
-	LabelIds    []int64                `json:"labelIds,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	// Icon identifier or URL for visual representation
+	Icon     *string                `json:"icon,omitempty"`
+	Launch   *WorkflowLaunchRequest `json:"launch,omitempty"`
+	LabelIds []int64                `json:"labelIds,omitempty"`
 }
 
 func (u *UpdatePipelineRequest) GetName() *string {

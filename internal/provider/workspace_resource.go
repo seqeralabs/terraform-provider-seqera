@@ -69,8 +69,9 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				Computed:    true,
+				Optional:    true,
+				Description: `Workspace description`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1000),
 				},
@@ -84,7 +85,7 @@ func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"id": schema.Int64Attribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Optional workspace numeric identifier`,
+				Description: `Workspace numeric identifier`,
 			},
 			"last_updated": schema.StringAttribute{
 				Computed: true,

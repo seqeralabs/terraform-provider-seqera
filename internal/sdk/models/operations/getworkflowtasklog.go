@@ -16,6 +16,8 @@ type GetWorkflowTaskLogRequest struct {
 	Next *string `queryParam:"style=form,explode=true,name=next"`
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Maximum length in bytes of the log to retrieve
+	MaxLength *int64 `queryParam:"style=form,explode=true,name=maxLength"`
 }
 
 func (g *GetWorkflowTaskLogRequest) GetWorkflowID() string {
@@ -44,6 +46,13 @@ func (g *GetWorkflowTaskLogRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return g.WorkspaceID
+}
+
+func (g *GetWorkflowTaskLogRequest) GetMaxLength() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.MaxLength
 }
 
 type GetWorkflowTaskLogResponse struct {

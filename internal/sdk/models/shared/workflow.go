@@ -14,44 +14,47 @@ type Workflow struct {
 	Repository        *string         `json:"repository,omitempty"`
 	ID                *string         `json:"id,omitempty"`
 	Submit            time.Time       `json:"submit"`
-	Start             *time.Time      `json:"start,omitempty"`
-	Complete          *time.Time      `json:"complete,omitempty"`
-	DateCreated       *time.Time      `json:"dateCreated,omitempty"`
-	LastUpdated       *time.Time      `json:"lastUpdated,omitempty"`
-	RunName           string          `json:"runName"`
-	SessionID         string          `json:"sessionId"`
-	Profile           *string         `json:"profile,omitempty"`
-	WorkDir           string          `json:"workDir"`
-	CommitID          *string         `json:"commitId,omitempty"`
-	UserName          string          `json:"userName"`
-	ScriptID          *string         `json:"scriptId,omitempty"`
-	Revision          *string         `json:"revision,omitempty"`
-	CommandLine       string          `json:"commandLine"`
-	ProjectName       string          `json:"projectName"`
-	ScriptName        *string         `json:"scriptName,omitempty"`
-	LaunchID          *string         `json:"launchId,omitempty"`
-	ConfigFiles       []string        `json:"configFiles,omitempty"`
-	Params            map[string]any  `json:"params,omitempty"`
-	ConfigText        *string         `json:"configText,omitempty"`
-	Manifest          *WfManifest     `json:"manifest,omitempty"`
-	Nextflow          *WfNextflow     `json:"nextflow,omitempty"`
-	Stats             *WfStats        `json:"stats,omitempty"`
-	ErrorMessage      *string         `json:"errorMessage,omitempty"`
-	ErrorReport       *string         `json:"errorReport,omitempty"`
-	Deleted           *bool           `json:"deleted,omitempty"`
-	ProjectDir        *string         `json:"projectDir,omitempty"`
-	HomeDir           *string         `json:"homeDir,omitempty"`
-	Container         *string         `json:"container,omitempty"`
-	ContainerEngine   *string         `json:"containerEngine,omitempty"`
-	ScriptFile        *string         `json:"scriptFile,omitempty"`
-	LaunchDir         *string         `json:"launchDir,omitempty"`
-	Duration          *int64          `json:"duration,omitempty"`
-	ExitStatus        *int            `json:"exitStatus,omitempty"`
-	Resume            *bool           `json:"resume,omitempty"`
-	Success           *bool           `json:"success,omitempty"`
-	LogFile           *string         `json:"logFile,omitempty"`
-	OutFile           *string         `json:"outFile,omitempty"`
-	OperationID       *string         `json:"operationId,omitempty"`
+	// Workflow start time (null if not started)
+	Start *time.Time `json:"start,omitempty"`
+	// Workflow completion time (null if not completed)
+	Complete    *time.Time     `json:"complete,omitempty"`
+	DateCreated *time.Time     `json:"dateCreated,omitempty"`
+	LastUpdated *time.Time     `json:"lastUpdated,omitempty"`
+	RunName     string         `json:"runName"`
+	SessionID   string         `json:"sessionId"`
+	Profile     *string        `json:"profile,omitempty"`
+	WorkDir     string         `json:"workDir"`
+	UserName    string         `json:"userName"`
+	ScriptID    *string        `json:"scriptId,omitempty"`
+	Revision    *string        `json:"revision,omitempty"`
+	CommandLine string         `json:"commandLine"`
+	ProjectName string         `json:"projectName"`
+	ScriptName  *string        `json:"scriptName,omitempty"`
+	LaunchID    *string        `json:"launchId,omitempty"`
+	ConfigFiles []string       `json:"configFiles,omitempty"`
+	Params      map[string]any `json:"params,omitempty"`
+	ConfigText  *string        `json:"configText,omitempty"`
+	Manifest    *WfManifest    `json:"manifest,omitempty"`
+	Nextflow    *WfNextflow    `json:"nextflow,omitempty"`
+	Stats       *WfStats       `json:"stats,omitempty"`
+	// Error message (null if no error)
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	// Error report (null if no error)
+	ErrorReport     *string `json:"errorReport,omitempty"`
+	Deleted         *bool   `json:"deleted,omitempty"`
+	ProjectDir      *string `json:"projectDir,omitempty"`
+	HomeDir         *string `json:"homeDir,omitempty"`
+	Container       *string `json:"container,omitempty"`
+	ContainerEngine *string `json:"containerEngine,omitempty"`
+	ScriptFile      *string `json:"scriptFile,omitempty"`
+	LaunchDir       *string `json:"launchDir,omitempty"`
+	Duration        *int64  `json:"duration,omitempty"`
+	ExitStatus      *int    `json:"exitStatus,omitempty"`
+	Resume          *bool   `json:"resume,omitempty"`
+	Success         *bool   `json:"success,omitempty"`
+	LogFile         *string `json:"logFile,omitempty"`
+	OutFile         *string `json:"outFile,omitempty"`
+	OperationID     *string `json:"operationId,omitempty"`
 }
 
 func (w Workflow) MarshalJSON() ([]byte, error) {
@@ -161,13 +164,6 @@ func (w *Workflow) GetWorkDir() string {
 		return ""
 	}
 	return w.WorkDir
-}
-
-func (w *Workflow) GetCommitID() *string {
-	if w == nil {
-		return nil
-	}
-	return w.CommitID
 }
 
 func (w *Workflow) GetUserName() string {

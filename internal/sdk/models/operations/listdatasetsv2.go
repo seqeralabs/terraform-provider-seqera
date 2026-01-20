@@ -10,6 +10,20 @@ import (
 type ListDatasetsV2Request struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Pagination max results
+	Max *int `queryParam:"style=form,explode=true,name=max"`
+	// Pagination offset
+	Offset *int `queryParam:"style=form,explode=true,name=offset"`
+	// Search query
+	Search *string `queryParam:"style=form,explode=true,name=search"`
+	// Sort field supports (`name`, `modified`), defaults to `name`
+	SortBy *string `queryParam:"style=form,explode=true,name=sortBy"`
+	// Sort direction supports (`asc`, `desc`), defaults to `asc`
+	SortDir *string `queryParam:"style=form,explode=true,name=sortDir"`
+	// Visibility option supports (`visible`, `hidden`, `all`), defaults to `visible`
+	Visibility *string `queryParam:"style=form,explode=true,name=visibility"`
+	// Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted.
+	Attributes []shared.DatasetQueryAttribute `queryParam:"style=form,explode=false,name=attributes"`
 }
 
 func (l *ListDatasetsV2Request) GetWorkspaceID() *int64 {
@@ -17,6 +31,55 @@ func (l *ListDatasetsV2Request) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return l.WorkspaceID
+}
+
+func (l *ListDatasetsV2Request) GetMax() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Max
+}
+
+func (l *ListDatasetsV2Request) GetOffset() *int {
+	if l == nil {
+		return nil
+	}
+	return l.Offset
+}
+
+func (l *ListDatasetsV2Request) GetSearch() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Search
+}
+
+func (l *ListDatasetsV2Request) GetSortBy() *string {
+	if l == nil {
+		return nil
+	}
+	return l.SortBy
+}
+
+func (l *ListDatasetsV2Request) GetSortDir() *string {
+	if l == nil {
+		return nil
+	}
+	return l.SortDir
+}
+
+func (l *ListDatasetsV2Request) GetVisibility() *string {
+	if l == nil {
+		return nil
+	}
+	return l.Visibility
+}
+
+func (l *ListDatasetsV2Request) GetAttributes() []shared.DatasetQueryAttribute {
+	if l == nil {
+		return nil
+	}
+	return l.Attributes
 }
 
 type ListDatasetsV2Response struct {

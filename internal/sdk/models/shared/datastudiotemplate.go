@@ -3,10 +3,11 @@
 package shared
 
 type DataStudioTemplate struct {
-	Repository *string                  `json:"repository,omitempty"`
-	Icon       *string                  `json:"icon,omitempty"`
-	Status     *DataStudioVersionStatus `json:"status,omitempty"`
-	Tool       *string                  `json:"tool,omitempty"`
+	Repository *string `json:"repository,omitempty"`
+	// Icon identifier or URL for visual representation
+	Icon   *string                  `json:"icon,omitempty"`
+	Status *DataStudioVersionStatus `json:"status,omitempty"`
+	Tool   *string                  `json:"tool,omitempty"`
 }
 
 func (d *DataStudioTemplate) GetRepository() *string {

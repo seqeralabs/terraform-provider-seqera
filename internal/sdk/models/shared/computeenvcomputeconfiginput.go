@@ -74,38 +74,6 @@ func (e *ComputeEnvComputeConfigPlatform) UnmarshalJSON(data []byte) error {
 	}
 }
 
-type ComputeEnvComputeConfigStatus string
-
-const (
-	ComputeEnvComputeConfigStatusCreating  ComputeEnvComputeConfigStatus = "CREATING"
-	ComputeEnvComputeConfigStatusAvailable ComputeEnvComputeConfigStatus = "AVAILABLE"
-	ComputeEnvComputeConfigStatusErrored   ComputeEnvComputeConfigStatus = "ERRORED"
-	ComputeEnvComputeConfigStatusInvalid   ComputeEnvComputeConfigStatus = "INVALID"
-)
-
-func (e ComputeEnvComputeConfigStatus) ToPointer() *ComputeEnvComputeConfigStatus {
-	return &e
-}
-func (e *ComputeEnvComputeConfigStatus) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "CREATING":
-		fallthrough
-	case "AVAILABLE":
-		fallthrough
-	case "ERRORED":
-		fallthrough
-	case "INVALID":
-		*e = ComputeEnvComputeConfigStatus(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ComputeEnvComputeConfigStatus: %v", v)
-	}
-}
-
 type ComputeEnvComputeConfigInput struct {
 	CredentialsID string                          `json:"credentialsId"`
 	Name          string                          `json:"name"`
@@ -114,9 +82,8 @@ type ComputeEnvComputeConfigInput struct {
 	// Configuration settings for compute environments including work directories,
 	// pre/post run scripts, and environment-specific parameters.
 	//
-	Config  ComputeConfig                  `json:"config"`
-	Status  *ComputeEnvComputeConfigStatus `json:"status,omitempty"`
-	Message *string                        `json:"message,omitempty"`
+	Config  ComputeConfig `json:"config"`
+	Message *string       `json:"message,omitempty"`
 }
 
 func (c *ComputeEnvComputeConfigInput) GetCredentialsID() string {
@@ -160,6 +127,18 @@ func (c *ComputeEnvComputeConfigInput) GetConfigMoabPlatform() *MoabConfiguratio
 
 func (c *ComputeEnvComputeConfigInput) GetConfigAwsBatch() *AWSBatchConfiguration {
 	return c.GetConfig().AWSBatchConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	return c.GetConfig().GoogleCloudConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	return c.GetConfig().LocalExecutionConfiguration
+}
+
+func (c *ComputeEnvComputeConfigInput) GetConfigAzureCloud() *AzureCloudConfiguration {
+	return c.GetConfig().AzureCloudConfiguration
 }
 
 func (c *ComputeEnvComputeConfigInput) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
@@ -210,18 +189,49 @@ func (c *ComputeEnvComputeConfigInput) GetConfigUgePlatform() *UnivaGridEngineCo
 	return c.GetConfig().UnivaGridEngineConfiguration
 }
 
-func (c *ComputeEnvComputeConfigInput) GetStatus() *ComputeEnvComputeConfigStatus {
-	if c == nil {
-		return nil
-	}
-	return c.Status
-}
-
 func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
 	if c == nil {
 		return nil
 	}
 	return c.Message
+}
+
+type ComputeEnvComputeConfigStatus string
+
+const (
+	ComputeEnvComputeConfigStatusCreating  ComputeEnvComputeConfigStatus = "CREATING"
+	ComputeEnvComputeConfigStatusAvailable ComputeEnvComputeConfigStatus = "AVAILABLE"
+	ComputeEnvComputeConfigStatusDeleting  ComputeEnvComputeConfigStatus = "DELETING"
+	ComputeEnvComputeConfigStatusErrored   ComputeEnvComputeConfigStatus = "ERRORED"
+	ComputeEnvComputeConfigStatusInvalid   ComputeEnvComputeConfigStatus = "INVALID"
+	ComputeEnvComputeConfigStatusDisabled  ComputeEnvComputeConfigStatus = "DISABLED"
+)
+
+func (e ComputeEnvComputeConfigStatus) ToPointer() *ComputeEnvComputeConfigStatus {
+	return &e
+}
+func (e *ComputeEnvComputeConfigStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "CREATING":
+		fallthrough
+	case "AVAILABLE":
+		fallthrough
+	case "DELETING":
+		fallthrough
+	case "ERRORED":
+		fallthrough
+	case "INVALID":
+		fallthrough
+	case "DISABLED":
+		*e = ComputeEnvComputeConfigStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ComputeEnvComputeConfigStatus: %v", v)
+	}
 }
 
 type ComputeEnvComputeConfig struct {
@@ -318,6 +328,18 @@ func (c *ComputeEnvComputeConfig) GetConfigMoabPlatform() *MoabConfiguration {
 
 func (c *ComputeEnvComputeConfig) GetConfigAwsBatch() *AWSBatchConfiguration {
 	return c.GetConfig().AWSBatchConfiguration
+}
+
+func (c *ComputeEnvComputeConfig) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	return c.GetConfig().GoogleCloudConfiguration
+}
+
+func (c *ComputeEnvComputeConfig) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	return c.GetConfig().LocalExecutionConfiguration
+}
+
+func (c *ComputeEnvComputeConfig) GetConfigAzureCloud() *AzureCloudConfiguration {
+	return c.GetConfig().AzureCloudConfiguration
 }
 
 func (c *ComputeEnvComputeConfig) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {

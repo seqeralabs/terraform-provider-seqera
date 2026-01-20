@@ -9,50 +9,6 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-type GithubActionConfig struct {
-	Discriminator *string `json:"discriminator,omitempty"`
-}
-
-func (g GithubActionConfig) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GithubActionConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GithubActionConfig) GetDiscriminator() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Discriminator
-}
-
-type ActionTowerActionConfig struct {
-	Discriminator *string `json:"discriminator,omitempty"`
-}
-
-func (a ActionTowerActionConfig) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *ActionTowerActionConfig) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *ActionTowerActionConfig) GetDiscriminator() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Discriminator
-}
-
 type ActionConfigTypeType string
 
 const (

@@ -318,3 +318,9 @@ actions:
   # Remove runtime label associations (managed separately)
   - target: $.components.schemas.DataStudioDto.properties.labels
     remove: true
+
+  # Remove remoteConfig (not supported yet)
+  - target: $.components.schemas.DataStudioDto.properties.remoteConfig
+    remove: true
+  - target: $.components.schemas.DataStudioCreateRequest.properties.remoteConfig
+    remove: true

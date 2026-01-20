@@ -63,6 +63,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 				r.Launch.UserSecrets = append(r.Launch.UserSecrets, types.StringValue(v))
 			}
 			r.Launch.WorkDir = types.StringPointerValue(resp.Launch.WorkDir)
+			r.Launch.WorkspaceID = types.Int64PointerValue(resp.Launch.WorkspaceID)
 			r.Launch.WorkspaceSecrets = make([]types.String, 0, len(resp.Launch.WorkspaceSecrets))
 			for _, v := range resp.Launch.WorkspaceSecrets {
 				r.Launch.WorkspaceSecrets = append(r.Launch.WorkspaceSecrets, types.StringValue(v))
@@ -231,9 +232,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		pipeline = nil
 	}
-	var workDir string
-	workDir = r.Launch.WorkDir.ValueString()
-
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
 		*revision = r.Launch.Revision.ValueString()
@@ -395,9 +399,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	} else {
 		pipeline = nil
 	}
-	var workDir string
-	workDir = r.Launch.WorkDir.ValueString()
-
+	workDir := new(string)
+	if !r.Launch.WorkDir.IsUnknown() && !r.Launch.WorkDir.IsNull() {
+		*workDir = r.Launch.WorkDir.ValueString()
+	} else {
+		workDir = nil
+	}
 	revision := new(string)
 	if !r.Launch.Revision.IsUnknown() && !r.Launch.Revision.IsNull() {
 		*revision = r.Launch.Revision.ValueString()

@@ -64,8 +64,8 @@ resource "seqera_workspace" "my_workspace" {
 ### Optional
 
 - `date_created` (String) Requires replacement if changed.
-- `description` (String)
-- `id` (Number) Optional workspace numeric identifier
+- `description` (String) Workspace description
+- `id` (Number) Workspace numeric identifier
 - `last_updated` (String) Requires replacement if changed.
 
 ## Import

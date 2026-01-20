@@ -11,7 +11,7 @@ type UpdateUserRequest struct {
 	// User numeric identifier
 	UserID int64 `pathParam:"style=simple,explode=false,name=userId"`
 	// User update request
-	UserDbDto shared.UserDbDto `request:"mediaType=application/json"`
+	UpsertUserRequest shared.UpsertUserRequest `request:"mediaType=application/json"`
 }
 
 func (u *UpdateUserRequest) GetUserID() int64 {
@@ -21,11 +21,11 @@ func (u *UpdateUserRequest) GetUserID() int64 {
 	return u.UserID
 }
 
-func (u *UpdateUserRequest) GetUserDbDto() shared.UserDbDto {
+func (u *UpdateUserRequest) GetUpsertUserRequest() shared.UpsertUserRequest {
 	if u == nil {
-		return shared.UserDbDto{}
+		return shared.UpsertUserRequest{}
 	}
-	return u.UserDbDto
+	return u.UpsertUserRequest
 }
 
 type UpdateUserResponse struct {

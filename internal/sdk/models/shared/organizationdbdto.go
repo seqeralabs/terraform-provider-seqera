@@ -2,6 +2,41 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// MemberRole - Member role (can be null for collaborators)
+type MemberRole string
+
+const (
+	MemberRoleOwner        MemberRole = "owner"
+	MemberRoleMember       MemberRole = "member"
+	MemberRoleCollaborator MemberRole = "collaborator"
+)
+
+func (e MemberRole) ToPointer() *MemberRole {
+	return &e
+}
+func (e *MemberRole) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "owner":
+		fallthrough
+	case "member":
+		fallthrough
+	case "collaborator":
+		*e = MemberRole(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for MemberRole: %v", v)
+	}
+}
+
 // OrganizationDbDto - Represents an organization in the Seqera Platform.
 // Contains organizational metadata, settings, and member management
 // information for multi-tenant environments.
@@ -17,9 +52,11 @@ type OrganizationDbDto struct {
 	// Geographic location or address of the organization
 	Location *string `json:"location,omitempty"`
 	// Official website URL for the organization
-	Website    *string  `json:"website,omitempty"`
-	MemberID   *int64   `json:"memberId,omitempty"`
-	MemberRole *OrgRole `json:"memberRole,omitempty"`
+	Website *string `json:"website,omitempty"`
+	// Member ID (can be null for collaborators)
+	MemberID *int64 `json:"memberId,omitempty"`
+	// Member role (can be null for collaborators)
+	MemberRole *MemberRole `json:"memberRole,omitempty"`
 }
 
 func (o *OrganizationDbDto) GetOrgID() *int64 {
@@ -71,7 +108,7 @@ func (o *OrganizationDbDto) GetMemberID() *int64 {
 	return o.MemberID
 }
 
-func (o *OrganizationDbDto) GetMemberRole() *OrgRole {
+func (o *OrganizationDbDto) GetMemberRole() *MemberRole {
 	if o == nil {
 		return nil
 	}

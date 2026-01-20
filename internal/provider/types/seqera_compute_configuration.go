@@ -22,6 +22,7 @@ type SeqeraComputeConfiguration struct {
 	HeadJobMemoryMb    types.Int32         `tfsdk:"head_job_memory_mb"`
 	HeadJobRole        types.String        `tfsdk:"head_job_role"`
 	HeadQueue          types.String        `tfsdk:"head_queue"`
+	InstanceTypeSize   types.String        `tfsdk:"instance_type_size"`
 	LogGroup           types.String        `tfsdk:"log_group"`
 	LustreID           types.String        `tfsdk:"lustre_id"`
 	NextflowConfig     types.String        `tfsdk:"nextflow_config"`

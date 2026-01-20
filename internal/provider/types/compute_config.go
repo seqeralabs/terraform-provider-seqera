@@ -8,11 +8,14 @@ type ComputeConfig struct {
 	AwsBatch              *AWSBatchConfiguration           `queryParam:"inline" tfsdk:"aws_batch"`
 	AwsCloud              *AWSCloudConfiguration           `queryParam:"inline" tfsdk:"aws_cloud"`
 	AzureBatch            *AzureBatchConfiguration         `queryParam:"inline" tfsdk:"azure_batch"`
+	AzureCloud            *AzureCloudConfiguration         `queryParam:"inline" tfsdk:"azure_cloud"`
 	GoogleBatch           *GoogleBatchServiceConfiguration `queryParam:"inline" tfsdk:"google_batch"`
+	GoogleCloud           *GoogleCloudConfiguration        `queryParam:"inline" tfsdk:"google_cloud"`
 	GkePlatform           *GoogleGKEClusterConfiguration   `queryParam:"inline" tfsdk:"gke_platform"`
 	GoogleLifesciences    *GoogleLifeSciencesConfiguration `queryParam:"inline" tfsdk:"google_lifesciences"`
 	LsfPlatform           *IBMLSFConfiguration             `queryParam:"inline" tfsdk:"lsf_platform"`
 	K8sPlatform           *KubernetesComputeConfiguration  `queryParam:"inline" tfsdk:"k8s_platform"`
+	LocalPlatform         *LocalExecutionConfiguration     `queryParam:"inline" tfsdk:"local_platform"`
 	MoabPlatform          *MoabConfiguration               `queryParam:"inline" tfsdk:"moab_platform"`
 	SeqeracomputePlatform *SeqeraComputeConfiguration      `queryParam:"inline" tfsdk:"seqeracompute_platform"`
 	SlurmPlatform         *SlurmConfiguration              `queryParam:"inline" tfsdk:"slurm_platform"`

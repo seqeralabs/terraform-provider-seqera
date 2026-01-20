@@ -22,13 +22,14 @@ type ServiceInfo struct {
 	WaveEnabled                  *bool   `json:"waveEnabled,omitempty"`
 	GroundswellEnabled           *bool   `json:"groundswellEnabled,omitempty"`
 	GroundswellAllowedWorkspaces []int64 `json:"groundswellAllowedWorkspaces,omitempty"`
-	ScmsServerURL                *string `json:"scmsServerUrl,omitempty"`
+	SeqeraComputeEnabled         *bool   `json:"seqeraComputeEnabled,omitempty"`
 	ForgePrefix                  *string `json:"forgePrefix,omitempty"`
 	SeqeraCloud                  *bool   `json:"seqeraCloud,omitempty"`
 	EvalWorkspaceIds             []int64 `json:"evalWorkspaceIds,omitempty"`
 	ContactEmail                 *string `json:"contactEmail,omitempty"`
 	AllowNextflowCliLogs         *bool   `json:"allowNextflowCliLogs,omitempty"`
 	LogoutURL                    *string `json:"logoutUrl,omitempty"`
+	SeqeraAiBaseURL              *string `json:"seqeraAiBaseUrl,omitempty"`
 }
 
 func (s *ServiceInfo) GetVersion() *string {
@@ -157,11 +158,11 @@ func (s *ServiceInfo) GetGroundswellAllowedWorkspaces() []int64 {
 	return s.GroundswellAllowedWorkspaces
 }
 
-func (s *ServiceInfo) GetScmsServerURL() *string {
+func (s *ServiceInfo) GetSeqeraComputeEnabled() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.ScmsServerURL
+	return s.SeqeraComputeEnabled
 }
 
 func (s *ServiceInfo) GetForgePrefix() *string {
@@ -204,4 +205,11 @@ func (s *ServiceInfo) GetLogoutURL() *string {
 		return nil
 	}
 	return s.LogoutURL
+}
+
+func (s *ServiceInfo) GetSeqeraAiBaseURL() *string {
+	if s == nil {
+		return nil
+	}
+	return s.SeqeraAiBaseURL
 }
