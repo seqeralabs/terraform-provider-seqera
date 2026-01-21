@@ -265,10 +265,6 @@ actions:
     update:
       x-speakeasy-entity: ComputeEnv
 
-  # SeqeraComputeConfig modifications
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
-    remove: true
-
   # Remove confusing fusionEnabled from ForgeConfig
   # Use enable_fusion at the compute config level instead (e.g., AwsBatchConfig.enable_fusion)
   - target: $.components.schemas.ForgeConfig.properties.fusionEnabled
@@ -311,9 +307,7 @@ actions:
   - target: $.components.schemas.MoabComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.SeqeraComputeConfig.properties.discriminator
-    update:
-      x-speakeasy-terraform-ignore: true
+  # NOTE: SeqeraComputeConfig.discriminator moved to compute-env-seqeracompute.yaml
   - target: $.components.schemas.SlurmComputeConfig.properties.discriminator
     update:
       x-speakeasy-terraform-ignore: true
@@ -415,16 +409,7 @@ actions:
         When enable_wave is true, enable_fusion must be explicitly set to either true or false.
         Note: If Fusion2 is enabled, Wave must also be enabled.
       x-speakeasy-plan-validators: WaveEnabledValidator
-  - target: $.components.schemas.SeqeraComputeConfig.properties.waveEnabled
-    update:
-      title: "Wave Enabled"
-      description: |
-        Enable Wave containers for this compute environment. Wave provides container provisioning
-        and augmentation capabilities for Nextflow workflows.
-
-        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-        Note: If Fusion2 is enabled, Wave must also be enabled.
-      x-speakeasy-plan-validators: WaveEnabledValidator
+  # NOTE: SeqeraComputeConfig.waveEnabled moved to compute-env-seqeracompute.yaml
 
   # ============================================================================
   # FIELD RENAMES - Consistent naming conventions
@@ -449,9 +434,7 @@ actions:
   - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
     update:
       x-speakeasy-name-override: enable_wave
-  - target: $.components.schemas.SeqeraComputeConfig.properties.waveEnabled
-    update:
-      x-speakeasy-name-override: enable_wave
+  # NOTE: SeqeraComputeConfig.waveEnabled name override moved to compute-env-seqeracompute.yaml
 
   # Rename fusion2Enabled -> enable_fusion across all compute configs
   - target: $.components.schemas.AwsBatchConfig.properties.fusion2Enabled

@@ -96,6 +96,7 @@ Available configuration:
 * [seqera_google_credential](docs/resources/google_credential.md)
 * [seqera_kubernetes_credential](docs/resources/kubernetes_credential.md)
 * [seqera_labels](docs/resources/labels.md)
+* [seqera_managed_compute_ce](docs/resources/managed_compute_ce.md)
 * [seqera_orgs](docs/resources/orgs.md)
 * [seqera_pipeline](docs/resources/pipeline.md)
 * [seqera_pipeline_secret](docs/resources/pipeline_secret.md)

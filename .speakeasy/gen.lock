@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
 management:
-  docChecksum: 3414e5e8295c03f009ad2756765a7173
+  docChecksum: e06d17fa0fa1261d6f51f6be8d3e2ef2
   docVersion: 1.102.0
-  speakeasyVersion: 1.690.1
+  speakeasyVersion: 1.691.0
   generationVersion: 2.797.1
   releaseVersion: 0.26.5
   configChecksum: 3668820dc276b31d9f17fb7c49b85269
 persistentEdits:
-  generation_id: b2373690-4b2f-463d-b300-d534223ae132
-  pristine_commit_hash: 947aab1dfb484687c00335173cea9395b712d967
-  pristine_tree_hash: d35252d4a86c45b5a57561695113b91675f5df21
+  generation_id: e298aa0e-1ed0-409e-a040-9795f0922c3d
+  pristine_commit_hash: ef0513ce86dd21fefd2eaa46af9aa48d8061eb75
+  pristine_tree_hash: 229fe0d79cd4abd81fc60ae29c06a068476a7bc2
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -184,6 +184,18 @@ trackedFiles:
     id: f8fe469e9196
     last_write_checksum: sha1:f47415abb290619e743d453ddfa4bfaaf683afd1
     pristine_git_object: 3f3f73233c1026ed25f8fd50fd8fcdd71c107aa5
+  examples/resources/seqera_managed_compute_ce/import-by-string-id.tf:
+    id: 2a079c451bbd
+    last_write_checksum: sha1:70c3b6e7f275c68809e853b298f5cd08f37a3557
+    pristine_git_object: f540828ca83f1472495bf88c7549f8b3ecd4d66b
+  examples/resources/seqera_managed_compute_ce/import.sh:
+    id: 345c7266fa17
+    last_write_checksum: sha1:7c39153c91be3cd0ffadb4181b4872711d63abc0
+    pristine_git_object: 97c1684a05abcc044a2cb9479f8ed106aebd9140
+  examples/resources/seqera_managed_compute_ce/resource.tf:
+    id: 14655989a794
+    last_write_checksum: sha1:402c04c783f47b145a1fa8cedd2006be2bc49054
+    pristine_git_object: 01619d769473311f9267f2f639bd4b53b2cfc251
   examples/resources/seqera_orgs/import-by-string-id.tf:
     id: 5a507b0e72f0
     last_write_checksum: sha1:b62969f364fff9b09c96a75b1558066577785983
@@ -426,12 +438,12 @@ trackedFiles:
     pristine_git_object: 0c1b43d5db49b023cf3c7408c198a4d66c795d8a
   internal/provider/computeenv_resource.go:
     id: f4162f219efd
-    last_write_checksum: sha1:34f83803a950f0c75d8c543603e52b26a0f9a247
-    pristine_git_object: 7af339c758be98d3207846623530c150a21cc163
+    last_write_checksum: sha1:92bae84402595f9411adcfdba63c2558de4c6945
+    pristine_git_object: 5cd7325b13293c851cb71f0d7b2fab5334775ac7
   internal/provider/computeenv_resource_sdk.go:
     id: 1e29eea44332
-    last_write_checksum: sha1:ba92478fce9c7bfc5d8ee8068b2f18ef56d36614
-    pristine_git_object: 0989a3051d10207f0051f9ca971bec48937c7463
+    last_write_checksum: sha1:d9fb1a97f94be7f009e46ecca21c6f8f004457c0
+    pristine_git_object: 2e933070714e8aa8d9ab83f2e1b81abd6f262ade
   internal/provider/containerregistrycredential_resource.go:
     id: f0a18857f2ea
     last_write_checksum: sha1:3686b9a8753cb7c76dd9fd875a45d782fee0e815
@@ -528,6 +540,14 @@ trackedFiles:
     id: 720ad0a834ae
     last_write_checksum: sha1:65f35afb05f12a071ef25a94f975527c82a56bfa
     pristine_git_object: 287907880a7125e9ffa8b77e8bbaa57d776887c4
+  internal/provider/managedcomputece_resource.go:
+    id: 7e0eecddbc1e
+    last_write_checksum: sha1:37f42ad2e51b6301171a11d7ad2980cbb515bded
+    pristine_git_object: adccfb0da743b49f39ee880f81d9b6a12b4a2e27
+  internal/provider/managedcomputece_resource_sdk.go:
+    id: 834a6a05996d
+    last_write_checksum: sha1:6b1d4b69201cc8fe9b478dc91cd38899066009da
+    pristine_git_object: 2200507ea00d48e6fa7ee4f3f2e51571f17226c3
   internal/provider/orgs_resource.go:
     id: 28df60f6d9c9
     last_write_checksum: sha1:38c29a90e47588cfeeaf56ccc1bb336fc44f1ea7
@@ -562,8 +582,8 @@ trackedFiles:
     pristine_git_object: 8271b7fae7ec72fa236df95b6cb1c021ff466b99
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:87ce76dddfbb662e1dc314e971b409d5d3d109e1
-    pristine_git_object: 0c1eafc1c45add642de2cad9de7e61fe2a5cf790
+    last_write_checksum: sha1:e2f1aceb0fe43db0cfb5952270ac8c93fb35d7ea
+    pristine_git_object: 59e2d96c95caa4a388b52d0a027c7e9588c15ca2
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:ace8bc53054bb1d8ee8689acf3e4323de75a6297
@@ -854,8 +874,8 @@ trackedFiles:
     pristine_git_object: 74d3a8fbffd1853a8c5bc5b4f41b775b322ecf79
   internal/provider/types/seqera_compute_configuration.go:
     id: 60600ba28c1c
-    last_write_checksum: sha1:b27a19f4fa0b4fae01ec57890f0b5a27ba59e8ff
-    pristine_git_object: ec0e77ff52b64bf5523e98ae573d3aa15115bd73
+    last_write_checksum: sha1:a2d9599a171cfad178e99465c82de603bdbdd125
+    pristine_git_object: 6be055a610d9da430ce64a4e925deeb2cb009314
   internal/provider/types/seqera_compute_credentials.go:
     id: 6333241c47ee
     last_write_checksum: sha1:5b888ffbe2dd246cfb27492baa3dca5bc8bd1ec3
@@ -934,12 +954,12 @@ trackedFiles:
     pristine_git_object: eeb2138186ead7a043a4156ca999876ae1ef98ad
   internal/sdk/computeenvs.go:
     id: 966f951685a1
-    last_write_checksum: sha1:8ed8c01ba66f9c17020a8a5d3d1db8a8b53e8058
-    pristine_git_object: acc9cdc2e3e5c6e49410495a97b409ae7a7bc8bd
+    last_write_checksum: sha1:558210d8fcfd53dd35ff7eaf0db94caeaad38eec
+    pristine_git_object: 2088635cf294256f64e87885c0426517fb230861
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
-    last_write_checksum: sha1:c8026702d439a86e6d7de6ea069805a068b4e9aa
-    pristine_git_object: ca9cee1825d3aa0212804451cc271b57df2f578c
+    last_write_checksum: sha1:a58ae7f141dae8db5cfef6b12afb076b3dec27cb
+    pristine_git_object: 47bd93d33a5187778e37e15f28a86920d700bb6d
   internal/sdk/datalinks.go:
     id: ef6966e16293
     last_write_checksum: sha1:372b033f8365761fc565de70f2f37a1b5bc75119
@@ -1152,6 +1172,10 @@ trackedFiles:
     id: f04470a238d7
     last_write_checksum: sha1:d605c136c388dcd9c1c939cf025c0f829a3a1840
     pristine_git_object: a6e5043a03672264b74ad36910cff26e6ae6d377
+  internal/sdk/models/operations/createmanagedcomputece.go:
+    id: 86580a360920
+    last_write_checksum: sha1:380a594652c22526b873404c4accd541fe4959c4
+    pristine_git_object: 51a35fd9bcad1e9f060ff62b40fc12ddff6dfb81
   internal/sdk/models/operations/createmanagedcredentials.go:
     id: 20465813e0ae
     last_write_checksum: sha1:f24c0187d90fcdb871634bb9f23e7c54ceaaeed2
@@ -1308,6 +1332,10 @@ trackedFiles:
     id: 0137e86b7026
     last_write_checksum: sha1:3be763b1cc5e9ce72e51ae3e76993353ba5564b8
     pristine_git_object: 3cc227b504c8fa30d7aa9b5516b4f90bbf901290
+  internal/sdk/models/operations/deletemanagedcomputece.go:
+    id: b2c3256dc4f8
+    last_write_checksum: sha1:2e54483979996bff787aa508d6014ec4143a163a
+    pristine_git_object: a11e5411457641157666703ec6c6dec40c3d864c
   internal/sdk/models/operations/deletemanagedcredentials.go:
     id: 23349038a2a7
     last_write_checksum: sha1:9fa58203842419b47bd5cd4ffad0059f1f208703
@@ -1456,6 +1484,10 @@ trackedFiles:
     id: c45eb8993de2
     last_write_checksum: sha1:2befbce0362a7c231d60e7aa869b26fa03ca5727
     pristine_git_object: 254c3f91754533cb29a9387f133a03d51cee12cf
+  internal/sdk/models/operations/describemanagedcomputece.go:
+    id: fcf1a41bcd96
+    last_write_checksum: sha1:b15c12826e6f98f7081b6e70b1c28d30d1a5bbbc
+    pristine_git_object: a148d9ca12698ac1d111a134e259f2693944e72f
   internal/sdk/models/operations/describemanagedidentity.go:
     id: df3cc8ceaf9e
     last_write_checksum: sha1:ae63c845ecd9c856e8fcc5daebe94d0eeae65783
@@ -2202,8 +2234,8 @@ trackedFiles:
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
     id: 21b317c8a966
-    last_write_checksum: sha1:64d08942f3d33383bff132c27d455e45b4b939c6
-    pristine_git_object: e401bc940f40656b29aa12fbb1332d6bf8cffeb0
+    last_write_checksum: sha1:9d919797b79a75b6cf9963baa7447e0569ed8f97
+    pristine_git_object: 42560fcd114408129519a9f9092b24fab369ef65
   internal/sdk/models/shared/computeenvcomputeconfiginput.go:
     id: 6ad5da9244fb
     last_write_checksum: sha1:e54c4e7a88e204a7c72b4cd001ad7f4a35f7f9ac
@@ -2388,6 +2420,14 @@ trackedFiles:
     id: 20e6917be565
     last_write_checksum: sha1:671f8a98e375c5587a0819ec8ee0c32763c247b6
     pristine_git_object: 2f3d3956bbda89b74c6567e36b85e13806a818a0
+  internal/sdk/models/shared/createmanagedcomputecerequest.go:
+    id: 794725842e1b
+    last_write_checksum: sha1:f37a684c723b58d65b26b1674fd77d642cc10b2d
+    pristine_git_object: a016e4b2b022ca6011d9ab76a46d718626558b1a
+  internal/sdk/models/shared/createmanagedcomputeceresponse.go:
+    id: 0453e76c20cc
+    last_write_checksum: sha1:eb69dd3f2064e1ea1f73ec70134ab1cab067ace5
+    pristine_git_object: fc5583a70660cf9b743b49b9e8c94c73d0659fdf
   internal/sdk/models/shared/createmanagedcredentialsrequest.go:
     id: ce11a3910aca
     last_write_checksum: sha1:f2aa30615a918c48a5a1f3c7c2243bf119db47e0
@@ -2740,6 +2780,10 @@ trackedFiles:
     id: 8bac3ea3f695
     last_write_checksum: sha1:caf83d5c811a6a4a70cc647180e3c8707633135c
     pristine_git_object: cc828502467c3acfd6735be0f16693c9bc45d011
+  internal/sdk/models/shared/describemanagedcomputeceresponse.go:
+    id: f95224111ee9
+    last_write_checksum: sha1:d556ca73fc4c92638d2226f21591961e39b4359d
+    pristine_git_object: f0a842f8ef24d51b7852174545391fe83af04d3c
   internal/sdk/models/shared/describeorganizationquotasresponse.go:
     id: 310fea62d258
     last_write_checksum: sha1:66c4b21de06cf1f1159fc4de2b4b4e9fa329f864
@@ -3052,6 +3096,10 @@ trackedFiles:
     id: 6b1375e92968
     last_write_checksum: sha1:73784a272bbf5923e8267fdcc7bbe4d39a0203a4
     pristine_git_object: 26b3bbf325408f55485076ebeb3735ff106e85b9
+  internal/sdk/models/shared/managedcomputececomputeconfiginput.go:
+    id: b61b6426185b
+    last_write_checksum: sha1:56484208a38529e7b1bd97cafd40fed29558c802
+    pristine_git_object: c42c622e89e5569eeae7f55d32b4b51e9d21655c
   internal/sdk/models/shared/managedcredentialsdbdto.go:
     id: 1c90d0daeff5
     last_write_checksum: sha1:f783e52fefe66aa8b3eb568069e704e195bc412b
@@ -6524,6 +6572,70 @@ examples:
       responses:
         "200":
           application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateSeqeraComputeCE:
+    speakeasy-default-create-seqera-compute-CE:
+      parameters:
+        query:
+          workspaceId: 607711
+      requestBody:
+        application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"workDir": "work", "region": "us-east-1", "defaultDataRetentionPolicy": true, "instanceTypeSize": "SMALL"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeSeqeraComputeCE:
+    speakeasy-default-describe-seqera-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 565858
+      responses:
+        "200":
+          application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"workDir": "work", "region": "us-east-1", "defaultDataRetentionPolicy": true, "instanceTypeSize": "SMALL"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteSeqeraComputeCE:
+    speakeasy-default-delete-seqera-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedComputeCE:
+    speakeasy-default-create-managed-compute-CE:
+      parameters:
+        query:
+          workspaceId: 5152
+      requestBody:
+        application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeManagedComputeCE:
+    speakeasy-default-describe-managed-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 990670
+      responses:
+        "200":
+          application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedComputeCE:
+    speakeasy-default-delete-managed-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

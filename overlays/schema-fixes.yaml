@@ -32,25 +32,7 @@ actions:
       - $ref: "#/components/schemas/GridPlatformMetainfo"
       - $ref: "#/components/schemas/LocalPlatformMetainfo"
 
-  # SeqeraComputeConfig modifications
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["region"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["workDir"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["preRunScript"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["postRunScript"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["defaultDataRetentionPolicy"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["nextflowConfig"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]["properties"]["environment"]
-    remove: true
-  - target: $["components"]["schemas"]["SeqeraComputeConfig"]
-    update:
-      allOf:
-        - $ref: "#/components/schemas/AwsBatchConfig"
+  # NOTE: SeqeraComputeConfig modifications have been moved to compute-env-seqeracompute.yaml
 
   # Remove deprecated schemas
   - target: $["components"]["schemas"]["SeqeraComputePlatformMetainfo"]

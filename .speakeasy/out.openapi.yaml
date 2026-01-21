@@ -8724,6 +8724,469 @@ paths:
       deprecated: true
       security:
         - BearerAuth: []
+  "/compute-envs#aws-compute-env":
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSComputeEnv#create
+      x-speakeasy-name-override: CreateAWSComputeEnv
+      summary: Create AWS compute environment
+      description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000
+          maxInterval: 5000
+          maxElapsedTime: 30000
+          exponent: 1.0
+        statusCodes:
+          - 429
+          - 500
+          - 502
+          - 503
+          - 504
+      tags:
+        - compute-envs
+      operationId: CreateAWSComputeEnv
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: AWS compute environment create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAWSComputeEnvRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateAWSComputeEnvResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+  "/compute-envs/{computeEnvId}#aws-compute-env":
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSComputeEnv#read
+      x-speakeasy-name-override: DescribeAWSComputeEnv
+      summary: Describe AWS compute environment
+      description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DescribeAWSComputeEnv
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: attributes
+          in: query
+          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeAWSComputeEnvResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "404":
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSComputeEnv#delete
+      x-speakeasy-name-override: DeleteAWSComputeEnv
+      summary: Delete AWS compute environment
+      description: Deletes the AWS compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DeleteAWSComputeEnv
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/compute-envs#aws":
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSBatchCE#create
+      x-speakeasy-name-override: CreateAWSBatchCE
+      summary: Create AWS compute environment
+      description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000
+          maxInterval: 5000
+          maxElapsedTime: 30000
+          exponent: 1.0
+        statusCodes:
+          - 429
+          - 500
+          - 502
+          - 503
+          - 504
+      tags:
+        - compute-envs
+      operationId: CreateAWSBatchCE
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: AWS compute environment create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAWSBatchCERequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateAWSBatchCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+  "/compute-envs/{computeEnvId}#aws":
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSBatchCE#read
+      x-speakeasy-name-override: DescribeAWSBatchCE
+      summary: Describe AWS compute environment
+      description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DescribeAWSBatchCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: attributes
+          in: query
+          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeAWSBatchCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "404":
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: AWSBatchCE#delete
+      x-speakeasy-name-override: DeleteAWSBatchCE
+      summary: Delete AWS compute environment
+      description: Deletes the AWS compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DeleteAWSBatchCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+  "/compute-envs#seqeracompute":
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ManagedComputeCE#create
+      x-speakeasy-name-override: CreateManagedComputeCE
+      summary: Create Seqera Compute compute environment
+      description: |
+        Creates a new Seqera Compute compute environment.
+        Seqera Compute is a fully managed compute service that handles
+        infrastructure provisioning automatically.
+        Append `?workspaceId` to create the environment in a workspace context.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000
+          maxInterval: 5000
+          maxElapsedTime: 30000
+          exponent: 1.0
+        statusCodes:
+          - 429
+          - 500
+          - 502
+          - 503
+          - 504
+      tags:
+        - compute-envs
+      operationId: CreateManagedComputeCE
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: Seqera Compute compute environment create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateManagedComputeCERequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateManagedComputeCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+  "/compute-envs/{computeEnvId}#seqeracompute":
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ManagedComputeCE#read
+      x-speakeasy-name-override: DescribeManagedComputeCE
+      summary: Describe Seqera Compute compute environment
+      description: Retrieves the details of the Seqera Compute compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DescribeManagedComputeCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: attributes
+          in: query
+          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeManagedComputeCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "404":
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: ManagedComputeCE#delete
+      x-speakeasy-name-override: DeleteManagedComputeCE
+      summary: Delete Seqera Compute compute environment
+      description: Deletes the Seqera Compute compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DeleteManagedComputeCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
   /credentials#aws:
     post:
       x-speakeasy-entity-operation:
@@ -9054,187 +9517,6 @@ paths:
       tags:
         - credentials
       operationId: DeleteAzureCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '204':
-          description: OK - No content
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-        '409':
-          description: Running jobs block the deletion of this credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeleteCredentialsConflictResponse'
-      security:
-        - BearerAuth: []
-  /credentials#google:
-    post:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: GoogleCredential#create
-      x-speakeasy-name-override: CreateGoogleCredentials
-      summary: Create Google credentials
-      description: Creates new Google credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-      tags:
-        - credentials
-      operationId: CreateGoogleCredentials
-      parameters:
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier where the credentials will be stored
-          schema:
-            type: integer
-            format: int64
-          x-speakeasy-param-force-new: true
-      requestBody:
-        description: Google credentials create request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateGoogleCredentialsRequest'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateGoogleCredentialsResponse'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-        '409':
-          description: Conflict - resource already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - BearerAuth: []
-  /credentials/{credentialsId}#google:
-    get:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: GoogleCredential#read
-      x-speakeasy-name-override: DescribeGoogleCredentials
-      summary: Describe Google credentials
-      description: Retrieves the details of the Google credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: DescribeGoogleCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DescribeGoogleCredentialsResponse'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-        '404':
-          description: Not Found - Credential does not exist or has been deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - BearerAuth: []
-    put:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: GoogleCredential#update
-      x-speakeasy-name-override: UpdateGoogleCredentials
-      summary: Update Google credentials
-      description: Updates the details of the Google credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: UpdateGoogleCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: Google credentials update request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateGoogleCredentialsRequest'
-        required: true
-      responses:
-        '204':
-          description: OK - No content
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-    delete:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: GoogleCredential#delete
-      x-speakeasy-name-override: DeleteGoogleCredentials
-      summary: Delete Google credentials
-      description: Deletes the Google credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: DeleteGoogleCredentials
       parameters:
         - name: credentialsId
           in: path
@@ -9792,6 +10074,187 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+  /credentials#google:
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#create
+      x-speakeasy-name-override: CreateGoogleCredentials
+      summary: Create Google credentials
+      description: Creates new Google credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateGoogleCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier where the credentials will be stored
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Google credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGoogleCredentialsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGoogleCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+  /credentials/{credentialsId}#google:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#read
+      x-speakeasy-name-override: DescribeGoogleCredentials
+      summary: Describe Google credentials
+      description: Retrieves the details of the Google credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeGoogleCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeGoogleCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#update
+      x-speakeasy-name-override: UpdateGoogleCredentials
+      summary: Update Google credentials
+      description: Updates the details of the Google credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateGoogleCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Google credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGoogleCredentialsRequest'
+        required: true
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleCredential#delete
+      x-speakeasy-name-override: DeleteGoogleCredentials
+      summary: Delete Google credentials
+      description: Deletes the Google credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteGoogleCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Running jobs block the deletion of this credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCredentialsConflictResponse'
+      security:
+        - BearerAuth: []
   /credentials#gitea:
     post:
       x-speakeasy-entity-operation:
@@ -10317,6 +10780,181 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+  /credentials#k8s:
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#create
+      x-speakeasy-name-override: CreateKubernetesCredentials
+      summary: Create Kubernetes credentials
+      description: Creates new Kubernetes credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
+      tags:
+        - credentials
+      operationId: CreateKubernetesCredentials
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          x-speakeasy-param-force-new: true
+      requestBody:
+        description: Kubernetes credentials create request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKubernetesCredentialsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateKubernetesCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '409':
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+  /credentials/{credentialsId}#k8s:
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#read
+      x-speakeasy-name-override: DescribeKubernetesCredentials
+      summary: Describe Kubernetes credentials
+      description: Retrieves the details of the Kubernetes credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DescribeKubernetesCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescribeKubernetesCredentialsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+        '404':
+          description: Not Found - Credential does not exist or has been deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - BearerAuth: []
+    put:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#update
+      x-speakeasy-name-override: UpdateKubernetesCredentials
+      summary: Update Kubernetes credentials
+      description: Updates the details of the Kubernetes credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: UpdateKubernetesCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Kubernetes credentials update request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateKubernetesCredentialsRequest'
+        required: true
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: KubernetesCredential#delete
+      x-speakeasy-name-override: DeleteKubernetesCredentials
+      summary: Delete Kubernetes credentials
+      description: Deletes the Kubernetes credentials identified by the given `credentialsId`.
+      tags:
+        - credentials
+      operationId: DeleteKubernetesCredentials
+      parameters:
+        - name: credentialsId
+          in: path
+          description: Credentials string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK - No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
   /credentials#ssh:
     post:
       x-speakeasy-entity-operation:
@@ -10664,487 +11302,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '403':
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-  /credentials#k8s:
-    post:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: KubernetesCredential#create
-      x-speakeasy-name-override: CreateKubernetesCredentials
-      summary: Create Kubernetes credentials
-      description: Creates new Kubernetes credentials in a user context. Append `?workspaceId` to create the credentials in a workspace context.
-      tags:
-        - credentials
-      operationId: CreateKubernetesCredentials
-      parameters:
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-          x-speakeasy-param-force-new: true
-      requestBody:
-        description: Kubernetes credentials create request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateKubernetesCredentialsRequest'
-        required: true
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateKubernetesCredentialsResponse'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-        '409':
-          description: Conflict - resource already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - BearerAuth: []
-  /credentials/{credentialsId}#k8s:
-    get:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: KubernetesCredential#read
-      x-speakeasy-name-override: DescribeKubernetesCredentials
-      summary: Describe Kubernetes credentials
-      description: Retrieves the details of the Kubernetes credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: DescribeKubernetesCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DescribeKubernetesCredentialsResponse'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-        '404':
-          description: Not Found - Credential does not exist or has been deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - BearerAuth: []
-    put:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: KubernetesCredential#update
-      x-speakeasy-name-override: UpdateKubernetesCredentials
-      summary: Update Kubernetes credentials
-      description: Updates the details of the Kubernetes credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: UpdateKubernetesCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        description: Kubernetes credentials update request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateKubernetesCredentialsRequest'
-        required: true
-      responses:
-        '204':
-          description: OK - No content
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-    delete:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: KubernetesCredential#delete
-      x-speakeasy-name-override: DeleteKubernetesCredentials
-      summary: Delete Kubernetes credentials
-      description: Deletes the Kubernetes credentials identified by the given `credentialsId`.
-      tags:
-        - credentials
-      operationId: DeleteKubernetesCredentials
-      parameters:
-        - name: credentialsId
-          in: path
-          description: Credentials string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '204':
-          description: OK - No content
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-  "/compute-envs#aws":
-    post:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: AWSBatchCE#create
-      x-speakeasy-name-override: CreateAWSBatchCE
-      summary: Create AWS compute environment
-      description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
-      x-speakeasy-retries:
-        strategy: backoff
-        backoff:
-          initialInterval: 5000
-          maxInterval: 5000
-          maxElapsedTime: 30000
-          exponent: 1.0
-        statusCodes:
-          - 429
-          - 500
-          - 502
-          - 503
-          - 504
-      tags:
-        - compute-envs
-      operationId: CreateAWSBatchCE
-      parameters:
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-          required: true
-      requestBody:
-        description: AWS compute environment create request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateAWSBatchCERequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreateAWSBatchCEResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-        "409":
-          description: Conflict - resource already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      security:
-        - BearerAuth: []
-  "/compute-envs/{computeEnvId}#aws":
-    get:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: AWSBatchCE#read
-      x-speakeasy-name-override: DescribeAWSBatchCE
-      summary: Describe AWS compute environment
-      description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
-      tags:
-        - compute-envs
-      operationId: DescribeAWSBatchCE
-      parameters:
-        - name: computeEnvId
-          in: path
-          description: Compute environment string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-          required: true
-        - name: attributes
-          in: query
-          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DescribeAWSBatchCEResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-        "404":
-          description: Compute environment not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      security:
-        - BearerAuth: []
-    delete:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: AWSBatchCE#delete
-      x-speakeasy-name-override: DeleteAWSBatchCE
-      summary: Delete AWS compute environment
-      description: Deletes the AWS compute environment identified by the given `computeEnvId`.
-      tags:
-        - compute-envs
-      operationId: DeleteAWSBatchCE
-      parameters:
-        - name: computeEnvId
-          in: path
-          description: Compute environment string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "204":
-          description: OK - No content
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-      security:
-        - BearerAuth: []
-  "/compute-envs#aws-compute-env":
-    post:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: AWSComputeEnv#create
-      x-speakeasy-name-override: CreateAWSComputeEnv
-      summary: Create AWS compute environment
-      description: Creates a new AWS compute environment. Append `?workspaceId` to create the environment in a workspace context.
-      x-speakeasy-retries:
-        strategy: backoff
-        backoff:
-          initialInterval: 5000
-          maxInterval: 5000
-          maxElapsedTime: 30000
-          exponent: 1.0
-        statusCodes:
-          - 429
-          - 500
-          - 502
-          - 503
-          - 504
-      tags:
-        - compute-envs
-      operationId: CreateAWSComputeEnv
-      parameters:
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-          required: true
-      requestBody:
-        description: AWS compute environment create request
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateAWSComputeEnvRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreateAWSComputeEnvResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-        "409":
-          description: Conflict - resource already exists
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      security:
-        - BearerAuth: []
-  "/compute-envs/{computeEnvId}#aws-compute-env":
-    get:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: AWSComputeEnv#read
-      x-speakeasy-name-override: DescribeAWSComputeEnv
-      summary: Describe AWS compute environment
-      description: Retrieves the details of the AWS compute environment identified by the given `computeEnvId`.
-      tags:
-        - compute-envs
-      operationId: DescribeAWSComputeEnv
-      parameters:
-        - name: computeEnvId
-          in: path
-          description: Compute environment string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-          required: true
-        - name: attributes
-          in: query
-          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DescribeAWSComputeEnvResponse"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
-          description: Operation not allowed
-        "404":
-          description: Compute environment not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-      security:
-        - BearerAuth: []
-    delete:
-      x-speakeasy-entity-operation:
-        terraform-datasource: null
-        terraform-resource: AWSComputeEnv#delete
-      x-speakeasy-name-override: DeleteAWSComputeEnv
-      summary: Delete AWS compute environment
-      description: Deletes the AWS compute environment identified by the given `computeEnvId`.
-      tags:
-        - compute-envs
-      operationId: DeleteAWSComputeEnv
-      parameters:
-        - name: computeEnvId
-          in: path
-          description: Compute environment string identifier
-          required: true
-          schema:
-            type: string
-        - name: workspaceId
-          in: query
-          description: Workspace numeric identifier
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "204":
-          description: OK - No content
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-        "403":
           description: Operation not allowed
       security:
         - BearerAuth: []
@@ -11671,9 +11828,9 @@ components:
             type: object
             additionalProperties: true
           x-speakeasy-terraform-ignore: true
+      x-speakeasy-plan-validators: awsForgeValidator
       required:
         - region
-      x-speakeasy-plan-validators: awsForgeValidator
     AwsBatchPlatformMetainfo:
       title: AWS Batch platform metainfo
       type: object
@@ -12634,12 +12791,6 @@ components:
           items:
             type: integer
             format: int64
-      required:
-        - computeEnv
-        - credentialsId
-        - config
-        - name
-        - platform
       x-speakeasy-entity: ComputeEnv
       x-speakeasy-entity-description: |
         This resource allows the management of Seqera compute environments.
@@ -12650,6 +12801,12 @@ components:
         Compute environments define the computational resources and configuration needed
         to run Nextflow workflows, including cloud provider settings, resource limits,
         and execution parameters.
+      required:
+        - computeEnv
+        - credentialsId
+        - config
+        - name
+        - platform
     CreateComputeEnvResponse:
       type: object
       properties:
@@ -16440,10 +16597,28 @@ components:
       title: Seqera Compute configuration
       type: object
       properties:
+        workDir:
+          type: string
+          description: Compute environment working directory
+        preRunScript:
+          type: string
+          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+        postRunScript:
+          type: string
+          description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+        environment:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConfigEnvVariable"
+        nextflowConfig:
+          type: string
         discriminator:
           type: string
           description: property to select the compute config platform
-          x-speakeasy-terraform-ignore: true
+        region:
+          type: string
+        defaultDataRetentionPolicy:
+          type: boolean
         instanceTypeSize:
           description: "Size of the Data Studios instance (SMALL, MEDIUM, LARGE)"
           allOf:
@@ -16451,8 +16626,6 @@ components:
       required:
         - region
         # Pipeline requests
-      allOf:
-        - $ref: "#/components/schemas/AwsBatchConfig"
     SeqeraComputeSecurityKeys:
       title: Seqera Compute credentials
       type: object
@@ -17997,8 +18170,7 @@ components:
           nullable: true
           description: Head job memory allocation in MB
           example: 4096
-      required:
-        - workDir
+      required: [workDir]
       x-speakeasy-entity: Workflows
     WorkflowLaunchResponse:
       type: object
@@ -18353,6 +18525,435 @@ components:
           format: int64
         participantRole:
           type: string
+    # AWS-specific compute environment schema
+    AWSComputeEnv_ComputeConfig:
+      x-speakeasy-entity: AWSComputeEnv
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: |
+        Manage AWS compute environments in Seqera platform using this resource.
+
+        AWS compute environments define the execution platform where a pipeline will run
+        on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
+      required:
+        - config
+        - name
+        - platform
+        - credentialsId
+      type: object
+      properties:
+        credentialsId:
+          type: string
+          description: AWS credentials identifier
+          x-speakeasy-param-force-new: true
+        orgId:
+          type: integer
+          format: int64
+          readOnly: true
+          x-speakeasy-param-readonly: true
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+          x-speakeasy-param-force-new: true
+        id:
+          type: string
+          description: Unique identifier for the compute environment
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the compute environment
+        description:
+          type: string
+          description: Optional description of the compute environment
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-force-new: true
+        platform:
+          type: string
+          enum:
+            - aws-batch
+          description: AWS platform type
+          x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
+        status:
+          type: string
+          description: Compute environment status
+          x-speakeasy-param-readonly: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was created
+          x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last updated
+          x-speakeasy-param-readonly: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last used
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the compute environment has been deleted
+          x-speakeasy-param-readonly: true
+        config:
+          description: AWS-specific compute environment configuration
+          $ref: '#/components/schemas/AwsBatchConfig'
+          x-speakeasy-param-force-new: true
+    # AWS-specific request/response schemas
+    CreateAWSComputeEnvRequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateAWSComputeEnvResponse:
+      type: object
+      properties:
+        computeEnvId:
+          type: string
+    UpdateAWSComputeEnvRequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+    DescribeAWSComputeEnvResponse:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+    ListAWSComputeEnvsResponse:
+      type: object
+      properties:
+        computeEnvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
+        totalSize:
+          type: integer
+          format: int64
+    # AWS-specific compute environment schema
+    AWSBatchCE_ComputeConfig:
+      x-speakeasy-entity: AWSBatchCE
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: |
+        Manage AWS compute environments in Seqera platform using this resource.
+
+        AWS compute environments define the execution platform where a pipeline will run
+        on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
+      required:
+        - config
+        - name
+        - platform
+        - credentialsId
+      type: object
+      properties:
+        credentialsId:
+          type: string
+          description: AWS credentials identifier
+          x-speakeasy-param-force-new: true
+        orgId:
+          type: integer
+          format: int64
+          readOnly: true
+          x-speakeasy-param-readonly: true
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+          x-speakeasy-param-force-new: true
+        id:
+          type: string
+          description: Unique identifier for the compute environment
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the compute environment
+        description:
+          type: string
+          description: Optional description of the compute environment
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-force-new: true
+        platform:
+          type: string
+          enum:
+            - aws-batch
+          description: AWS platform type
+          x-speakeasy-param-optional: false
+          x-speakeasy-param-force-new: true
+        status:
+          type: string
+          description: Compute environment status
+          x-speakeasy-param-readonly: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was created
+          x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last updated
+          x-speakeasy-param-readonly: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last used
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the compute environment has been deleted
+          x-speakeasy-param-readonly: true
+        config:
+          description: AWS-specific compute environment configuration
+          $ref: '#/components/schemas/AwsBatchConfig'
+          x-speakeasy-param-force-new: true
+    # AWS-specific request/response schemas
+    CreateAWSBatchCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateAWSBatchCEResponse:
+      type: object
+      properties:
+        computeEnvId:
+          type: string
+    UpdateAWSBatchCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+    DescribeAWSBatchCEResponse:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+    ListAWSBatchCEsResponse:
+      type: object
+      properties:
+        computeEnvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
+        totalSize:
+          type: integer
+          format: int64
+    # Seqera Managed Compute environment schema
+    # Uses hoisting pattern: x-speakeasy-entity on 'config' property hoists fields to root level
+    ManagedComputeCE_ComputeConfig:
+      required:
+        - config
+        - name
+      type: object
+      properties:
+        orgId:
+          type: integer
+          format: int64
+          readOnly: true
+          x-speakeasy-param-readonly: true
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+          x-speakeasy-param-force-new: true
+        id:
+          type: string
+          description: Unique identifier for the compute environment
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for the compute environment
+        description:
+          type: string
+          description: Optional description of the compute environment
+          x-speakeasy-terraform-ignore: true
+        platform:
+          type: string
+          enum:
+            - seqeracompute-platform
+          default: "seqeracompute-platform"
+          description: Platform type for Seqera Managed Compute environment.
+          x-speakeasy-param-readonly: true
+        status:
+          type: string
+          description: Compute environment status
+          x-speakeasy-param-readonly: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was created
+          x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last updated
+          x-speakeasy-param-readonly: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last used
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the compute environment has been deleted
+          x-speakeasy-param-readonly: true
+        # Config property with hoisting - fields defined here appear at Terraform root level
+        config:
+          x-speakeasy-entity: ManagedComputeCE
+          x-speakeasy-entity-version: 1
+          x-speakeasy-entity-description: |
+            Manage Seqera Managed Compute environments in Seqera Platform.
+
+            Seqera Managed Compute is a fully managed compute service that handles infrastructure
+            provisioning and management automatically. Unlike AWS Batch or other compute
+            environments where you need to configure VPCs, subnets, and IAM roles,
+            Seqera Managed Compute only requires you to specify the region and instance size.
+
+            Key benefits:
+            - No infrastructure setup required
+            - Automatic scaling and resource management
+            - Simplified configuration with just region and instance size
+
+            Available instance sizes:
+            - SMALL: Suitable for lightweight workflows (default)
+            - MEDIUM: Balanced compute resources
+            - LARGE: High-performance compute for demanding workflows
+          type: object
+          properties:
+            # Primary hoisted fields - appear at root level in Terraform
+            region:
+              type: string
+              description: |
+                AWS region for Seqera Managed Compute resources.
+                Examples: us-east-1, eu-west-1, ap-southeast-2
+              example: "us-east-1"
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-optional: false
+              x-speakeasy-plan-validators: SeqeraComputeRegionValidator
+            instanceTypeSize:
+              type: string
+              enum:
+                - SMALL
+                - MEDIUM
+                - LARGE
+              description: |
+                Size of the compute instance.
+                - SMALL: Lightweight workflows (default)
+                - MEDIUM: Balanced compute resources
+                - LARGE: High-performance compute for demanding workflows
+              example: "SMALL"
+              default: "SMALL"
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-optional: true
+              x-speakeasy-name-override: instance_size
+              x-speakeasy-plan-validators: InstanceTypeSizeValidator
+            # Additional optional fields
+            workDir:
+              type: string
+              description: |
+                Work directory suffix relative to the S3 bucket provisioned by Seqera.
+                Optional - a default work directory is used if not specified.
+              example: "work"
+              x-speakeasy-param-optional: true
+              x-speakeasy-param-force-new: true
+              x-speakeasy-name-override: work_dir
+            defaultDataRetentionPolicy:
+              type: boolean
+              description: |
+                Enable automatic data retention policy.
+                When enabled, intermediary files are automatically deleted after 28 days.
+              default: true
+              x-speakeasy-param-optional: true
+              x-speakeasy-param-force-new: true
+              x-speakeasy-name-override: data_retention_policy
+            resourceLabelIds:
+              type: array
+              items:
+                type: integer
+                format: int64
+              description: List of resource label IDs to associate with this compute environment.
+              x-speakeasy-param-optional: true
+              x-speakeasy-param-force-new: true
+              x-speakeasy-name-override: resource_label_ids
+            preRunScript:
+              type: string
+              description: Bash script to run before workflow execution begins.
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-optional: true
+              x-speakeasy-name-override: pre_run_script
+            postRunScript:
+              type: string
+              description: Bash script to run after workflow execution completes.
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-optional: true
+              x-speakeasy-name-override: post_run_script
+            nextflowConfig:
+              type: string
+              description: Global Nextflow configuration settings for workflows.
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-optional: true
+              x-speakeasy-name-override: nextflow_config
+            environment:
+              type: array
+              items:
+                $ref: "#/components/schemas/ConfigEnvVariable"
+              description: Environment variables for the compute environment.
+              x-speakeasy-param-force-new: true
+              x-speakeasy-param-optional: true
+            discriminator:
+              type: string
+              description: Internal platform discriminator
+              x-speakeasy-terraform-ignore: true
+    # Seqera Compute request/response schemas
+    CreateManagedComputeCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateManagedComputeCEResponse:
+      type: object
+      properties:
+        computeEnvId:
+          type: string
+    UpdateManagedComputeCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+    DescribeManagedComputeCEResponse:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+    ListManagedComputeCEsResponse:
+      type: object
+      properties:
+        computeEnvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+        totalSize:
+          type: integer
+          format: int64
     AWSCredential:
       required:
         - name
@@ -18623,106 +19224,6 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/AzureCredential'
-    GoogleCredential:
-      required:
-        - name
-        - keys
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-param-readonly: true
-          x-speakeasy-param-suppress-computed-diff: true
-        name:
-          minLength: 2
-          maxLength: 99
-          type: string
-          pattern: '^[a-zA-Z0-9_-]+$'
-          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
-          x-speakeasy-param-force-new: true
-        provider:
-          type: string
-          enum:
-            - google
-          default: google
-          description: Cloud provider type (automatically set to "google")
-          x-speakeasy-name-override: providerType
-          x-speakeasy-param-readonly: true
-        deleted:
-          type: boolean
-          description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        lastUsed:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was last used
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        dateCreated:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was created
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        lastUpdated:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was last updated
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-entity: GoogleCredential
-          x-speakeasy-entity-description: 'Manage Google credentials in Seqera platform using this resource.
-
-
-            Google credentials store authentication information for accessing Google Cloud services
-
-            within the Seqera Platform workflows.
-
-'
-          type: object
-          required:
-            - data
-          properties:
-            data:
-              type: string
-              description: Google Cloud service account key JSON (required, sensitive).
-              x-speakeasy-param-sensitive: true
-              example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
-              writeOnly: true
-            keyType:
-              type: string
-              description: Type of key (always "google") - not exposed in Terraform
-              default: google
-              x-speakeasy-param-readonly: true
-              x-speakeasy-param-computed: true
-              x-speakeasy-terraform-ignore: true
-    CreateGoogleCredentialsRequest:
-      type: object
-      required:
-        - credentials
-      properties:
-        credentials:
-          $ref: '#/components/schemas/GoogleCredential'
-    CreateGoogleCredentialsResponse:
-      type: object
-      properties:
-        credentialsId:
-          type: string
-    UpdateGoogleCredentialsRequest:
-      type: object
-      required:
-        - credentials
-      properties:
-        credentials:
-          $ref: '#/components/schemas/GoogleCredential'
-    DescribeGoogleCredentialsResponse:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/GoogleCredential'
     BitbucketCredential:
       required:
         - name
@@ -19033,6 +19534,106 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/ContainerRegistryCredential'
+    GoogleCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        name:
+          minLength: 2
+          maxLength: 99
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum:
+            - google
+          default: google
+          description: Cloud provider type (automatically set to "google")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: GoogleCredential
+          x-speakeasy-entity-description: 'Manage Google credentials in Seqera platform using this resource.
+
+
+            Google credentials store authentication information for accessing Google Cloud services
+
+            within the Seqera Platform workflows.
+
+'
+          type: object
+          required:
+            - data
+          properties:
+            data:
+              type: string
+              description: Google Cloud service account key JSON (required, sensitive).
+              x-speakeasy-param-sensitive: true
+              example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
+              writeOnly: true
+            keyType:
+              type: string
+              description: Type of key (always "google") - not exposed in Terraform
+              default: google
+              x-speakeasy-param-readonly: true
+              x-speakeasy-param-computed: true
+              x-speakeasy-terraform-ignore: true
+    CreateGoogleCredentialsRequest:
+      type: object
+      required:
+        - credentials
+      properties:
+        credentials:
+          $ref: '#/components/schemas/GoogleCredential'
+    CreateGoogleCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateGoogleCredentialsRequest:
+      type: object
+      required:
+        - credentials
+      properties:
+        credentials:
+          $ref: '#/components/schemas/GoogleCredential'
+    DescribeGoogleCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/GoogleCredential'
     GiteaCredential:
       required:
         - name
@@ -19340,6 +19941,112 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/GitlabCredential'
+    KubernetesCredential:
+      required:
+        - name
+        - keys
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
+        name:
+          minLength: 2
+          maxLength: 99
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
+          x-speakeasy-param-force-new: true
+        provider:
+          type: string
+          enum:
+            - k8s
+          default: k8s
+          description: Cloud provider type (automatically set to "k8s")
+          x-speakeasy-name-override: providerType
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the credential has been soft-deleted
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last used
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was created
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the credential was last updated
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
+        keys:
+          x-speakeasy-entity: KubernetesCredential
+          x-speakeasy-entity-description: 'Manage Kubernetes credentials in Seqera platform using this resource.
+
+
+            Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
+
+            execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.'
+          type: object
+          properties:
+            token:
+              type: string
+              description: Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              writeOnly: true
+            certificate:
+              type: string
+              description: X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: client_certificate
+              writeOnly: true
+            privateKey:
+              type: string
+              description: Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
+              x-speakeasy-param-sensitive: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-name-override: private_key
+              writeOnly: true
+            keyType:
+              type: string
+              description: Type of key (always "kubernetes") - not exposed in Terraform
+              default: kubernetes
+              x-speakeasy-param-readonly: true
+              x-speakeasy-param-computed: true
+              x-speakeasy-terraform-ignore: true
+    CreateKubernetesCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/KubernetesCredential'
+    CreateKubernetesCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+    UpdateKubernetesCredentialsRequest:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/KubernetesCredential'
+    DescribeKubernetesCredentialsResponse:
+      type: object
+      properties:
+        credentials:
+          $ref: '#/components/schemas/KubernetesCredential'
     SSHCredential:
       required:
         - name
@@ -19536,112 +20243,6 @@ components:
       properties:
         credentials:
           $ref: '#/components/schemas/TowerAgentCredential'
-    KubernetesCredential:
-      required:
-        - name
-        - keys
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the credential (max 22 characters)
-          x-speakeasy-param-readonly: true
-          x-speakeasy-param-suppress-computed-diff: true
-        name:
-          minLength: 2
-          maxLength: 99
-          type: string
-          pattern: '^[a-zA-Z0-9_-]+$'
-          description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
-          x-speakeasy-param-force-new: true
-        provider:
-          type: string
-          enum:
-            - k8s
-          default: k8s
-          description: Cloud provider type (automatically set to "k8s")
-          x-speakeasy-name-override: providerType
-          x-speakeasy-param-readonly: true
-        deleted:
-          type: boolean
-          description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        lastUsed:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was last used
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        dateCreated:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was created
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        lastUpdated:
-          type: string
-          format: date-time
-          description: Timestamp when the credential was last updated
-          x-speakeasy-param-readonly: true
-          x-speakeasy-terraform-ignore: true
-        keys:
-          x-speakeasy-entity: KubernetesCredential
-          x-speakeasy-entity-description: 'Manage Kubernetes credentials in Seqera platform using this resource.
-
-
-            Kubernetes credentials enable secure connections to Kubernetes clusters for workflow
-
-            execution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.'
-          type: object
-          properties:
-            token:
-              type: string
-              description: Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
-              writeOnly: true
-            certificate:
-              type: string
-              description: X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: client_certificate
-              writeOnly: true
-            privateKey:
-              type: string
-              description: Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
-              x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
-              x-speakeasy-name-override: private_key
-              writeOnly: true
-            keyType:
-              type: string
-              description: Type of key (always "kubernetes") - not exposed in Terraform
-              default: kubernetes
-              x-speakeasy-param-readonly: true
-              x-speakeasy-param-computed: true
-              x-speakeasy-terraform-ignore: true
-    CreateKubernetesCredentialsRequest:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/KubernetesCredential'
-    CreateKubernetesCredentialsResponse:
-      type: object
-      properties:
-        credentialsId:
-          type: string
-    UpdateKubernetesCredentialsRequest:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/KubernetesCredential'
-    DescribeKubernetesCredentialsResponse:
-      type: object
-      properties:
-        credentials:
-          $ref: '#/components/schemas/KubernetesCredential'
     ListCredentialsDataSourceResponse:
       type: object
       required:
@@ -19710,232 +20311,6 @@ components:
         This data source returns all data links accessible to the authenticated user,
         with optional filtering by workspace. Use Terraform locals with for expressions
         to filter by provider type or name.
-    # AWS-specific compute environment schema
-    AWSBatchCE_ComputeConfig:
-      x-speakeasy-entity: AWSBatchCE
-      x-speakeasy-entity-version: 1
-      x-speakeasy-entity-description: |
-        Manage AWS compute environments in Seqera platform using this resource.
-
-        AWS compute environments define the execution platform where a pipeline will run
-        on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
-      required:
-        - config
-        - name
-        - platform
-        - credentialsId
-      type: object
-      properties:
-        credentialsId:
-          type: string
-          description: AWS credentials identifier
-          x-speakeasy-param-force-new: true
-        orgId:
-          type: integer
-          format: int64
-          readOnly: true
-          x-speakeasy-param-readonly: true
-        workspaceId:
-          type: integer
-          format: int64
-          description: Workspace numeric identifier
-          x-speakeasy-param-force-new: true
-        id:
-          type: string
-          description: Unique identifier for the compute environment
-          x-speakeasy-param-readonly: true
-        name:
-          maxLength: 100
-          type: string
-          description: Display name for the compute environment
-        description:
-          type: string
-          description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
-        platform:
-          type: string
-          enum:
-            - aws-batch
-          description: AWS platform type
-          x-speakeasy-param-optional: false
-          x-speakeasy-param-force-new: true
-        status:
-          type: string
-          description: Compute environment status
-          x-speakeasy-param-readonly: true
-        dateCreated:
-          type: string
-          format: date-time
-          description: Timestamp when the compute environment was created
-          x-speakeasy-param-readonly: true
-        lastUpdated:
-          type: string
-          format: date-time
-          description: Timestamp when the compute environment was last updated
-          x-speakeasy-param-readonly: true
-        lastUsed:
-          type: string
-          format: date-time
-          description: Timestamp when the compute environment was last used
-          x-speakeasy-param-readonly: true
-        deleted:
-          type: boolean
-          description: Flag indicating if the compute environment has been deleted
-          x-speakeasy-param-readonly: true
-        config:
-          description: AWS-specific compute environment configuration
-          $ref: '#/components/schemas/AwsBatchConfig'
-          x-speakeasy-param-force-new: true
-    # AWS-specific request/response schemas
-    CreateAWSBatchCERequest:
-      type: object
-      properties:
-        computeEnv:
-          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
-        labelIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-    CreateAWSBatchCEResponse:
-      type: object
-      properties:
-        computeEnvId:
-          type: string
-    UpdateAWSBatchCERequest:
-      type: object
-      properties:
-        computeEnv:
-          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
-    DescribeAWSBatchCEResponse:
-      type: object
-      properties:
-        computeEnv:
-          $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
-    ListAWSBatchCEsResponse:
-      type: object
-      properties:
-        computeEnvs:
-          type: array
-          items:
-            $ref: '#/components/schemas/AWSBatchCE_ComputeConfig'
-        totalSize:
-          type: integer
-          format: int64
-    # AWS-specific compute environment schema
-    AWSComputeEnv_ComputeConfig:
-      x-speakeasy-entity: AWSComputeEnv
-      x-speakeasy-entity-version: 1
-      x-speakeasy-entity-description: |
-        Manage AWS compute environments in Seqera platform using this resource.
-
-        AWS compute environments define the execution platform where a pipeline will run
-        on AWS infrastructure (AWS Batch, AWS Cloud, EKS).
-      required:
-        - config
-        - name
-        - platform
-        - credentialsId
-      type: object
-      properties:
-        credentialsId:
-          type: string
-          description: AWS credentials identifier
-          x-speakeasy-param-force-new: true
-        orgId:
-          type: integer
-          format: int64
-          readOnly: true
-          x-speakeasy-param-readonly: true
-        workspaceId:
-          type: integer
-          format: int64
-          description: Workspace numeric identifier
-          x-speakeasy-param-force-new: true
-        id:
-          type: string
-          description: Unique identifier for the compute environment
-          x-speakeasy-param-readonly: true
-        name:
-          maxLength: 100
-          type: string
-          description: Display name for the compute environment
-        description:
-          type: string
-          description: Optional description of the compute environment
-          x-speakeasy-param-computed: false
-          x-speakeasy-param-force-new: true
-        platform:
-          type: string
-          enum:
-            - aws-batch
-          description: AWS platform type
-          x-speakeasy-param-optional: false
-          x-speakeasy-param-force-new: true
-        status:
-          type: string
-          description: Compute environment status
-          x-speakeasy-param-readonly: true
-        dateCreated:
-          type: string
-          format: date-time
-          description: Timestamp when the compute environment was created
-          x-speakeasy-param-readonly: true
-        lastUpdated:
-          type: string
-          format: date-time
-          description: Timestamp when the compute environment was last updated
-          x-speakeasy-param-readonly: true
-        lastUsed:
-          type: string
-          format: date-time
-          description: Timestamp when the compute environment was last used
-          x-speakeasy-param-readonly: true
-        deleted:
-          type: boolean
-          description: Flag indicating if the compute environment has been deleted
-          x-speakeasy-param-readonly: true
-        config:
-          description: AWS-specific compute environment configuration
-          $ref: '#/components/schemas/AwsBatchConfig'
-          x-speakeasy-param-force-new: true
-    # AWS-specific request/response schemas
-    CreateAWSComputeEnvRequest:
-      type: object
-      properties:
-        computeEnv:
-          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
-        labelIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-    CreateAWSComputeEnvResponse:
-      type: object
-      properties:
-        computeEnvId:
-          type: string
-    UpdateAWSComputeEnvRequest:
-      type: object
-      properties:
-        computeEnv:
-          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
-    DescribeAWSComputeEnvResponse:
-      type: object
-      properties:
-        computeEnv:
-          $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
-    ListAWSComputeEnvsResponse:
-      type: object
-      properties:
-        computeEnvs:
-          type: array
-          items:
-            $ref: '#/components/schemas/AWSComputeEnv_ComputeConfig'
-        totalSize:
-          type: integer
-          format: int64
   securitySchemes:
     BearerAuth:
       type: http

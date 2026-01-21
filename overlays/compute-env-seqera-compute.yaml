@@ -1,0 +1,444 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Seqera Compute Compute Environment Overlay
+  version: 1.0.0
+
+# ==============================================================================
+# SEQERA COMPUTE COMPUTE ENVIRONMENT RESOURCE OVERLAY
+# ==============================================================================
+#
+# This overlay enhances the Seqera Compute compute environment resource with
+# improved descriptions, validators, and Terraform-friendly naming.
+#
+# Seqera Compute is a fully managed compute environment provided by Seqera.
+# It simplifies workflow execution by handling infrastructure provisioning
+# and management automatically. Users only need to specify the region and
+# optional configuration settings.
+#
+# IMPORTANT: Seqera Compute has a LIMITED set of configurable fields compared
+# to AWS Batch. The following fields are supported:
+#   - region (required)
+#   - instance_type_size (optional, defaults to MEDIUM)
+#   - default_data_retention_policy (optional, defaults to true)
+#   - work_dir (optional suffix)
+#   - resource_label_ids (optional)
+#   - pre_run_script (optional)
+#   - post_run_script (optional)
+#   - nextflow_config (optional)
+#   - environment (optional)
+#
+# Fields like fusion, wave, forge, VPC, subnets, etc. are NOT supported.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Minimal configuration (uses defaults)
+# resource "seqera_managed_compute_ce" "basic" {
+#   name         = "my-managed-compute"
+#   workspace_id = data.seqera_workspace.main.id
+#   region       = "us-east-1"
+# }
+#
+# Example 2: With instance size
+# resource "seqera_managed_compute_ce" "medium" {
+#   name          = "my-medium-compute"
+#   workspace_id  = data.seqera_workspace.main.id
+#   region        = "us-east-1"
+#   instance_size = "MEDIUM"
+# }
+#
+# Example 3: Full configuration
+# resource "seqera_managed_compute_ce" "full" {
+#   name                  = "my-full-compute"
+#   workspace_id          = data.seqera_workspace.main.id
+#   region                = "us-east-1"
+#   instance_size         = "LARGE"
+#   data_retention_policy = false
+#   work_dir              = "my-project/work"
+#   pre_run_script        = "echo 'Starting workflow'"
+#   post_run_script       = "echo 'Workflow complete'"
+# }
+#
+# ==============================================================================
+
+actions:
+  - target: $.paths
+    update:
+      "/compute-envs#seqeracompute":
+        post:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: ManagedComputeCE#create
+          x-speakeasy-name-override: CreateManagedComputeCE
+          summary: Create Seqera Compute compute environment
+          description: |
+            Creates a new Seqera Compute compute environment.
+            Seqera Compute is a fully managed compute service that handles
+            infrastructure provisioning automatically.
+            Append `?workspaceId` to create the environment in a workspace context.
+          x-speakeasy-retries:
+            strategy: backoff
+            backoff:
+              initialInterval: 5000
+              maxInterval: 5000
+              maxElapsedTime: 30000
+              exponent: 1.0
+            statusCodes:
+              - 429
+              - 500
+              - 502
+              - 503
+              - 504
+          tags:
+            - compute-envs
+          operationId: CreateManagedComputeCE
+          parameters:
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+              required: true
+          requestBody:
+            description: Seqera Compute compute environment create request
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/CreateManagedComputeCERequest"
+            required: true
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/CreateManagedComputeCEResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "409":
+              description: Conflict - resource already exists
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
+
+      "/compute-envs/{computeEnvId}#seqeracompute":
+        get:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: ManagedComputeCE#read
+          x-speakeasy-name-override: DescribeManagedComputeCE
+          summary: Describe Seqera Compute compute environment
+          description: Retrieves the details of the Seqera Compute compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DescribeManagedComputeCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+              required: true
+            - name: attributes
+              in: query
+              description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/DescribeManagedComputeCEResponse"
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+            "404":
+              description: Compute environment not found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+          security:
+            - BearerAuth: []
+        delete:
+          x-speakeasy-entity-operation:
+            terraform-datasource: null
+            terraform-resource: ManagedComputeCE#delete
+          x-speakeasy-name-override: DeleteManagedComputeCE
+          summary: Delete Seqera Compute compute environment
+          description: Deletes the Seqera Compute compute environment identified by the given `computeEnvId`.
+          tags:
+            - compute-envs
+          operationId: DeleteManagedComputeCE
+          parameters:
+            - name: computeEnvId
+              in: path
+              description: Compute environment string identifier
+              required: true
+              schema:
+                type: string
+            - name: workspaceId
+              in: query
+              description: Workspace numeric identifier
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "204":
+              description: OK - No content
+            "400":
+              description: Bad request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ErrorResponse"
+            "403":
+              description: Operation not allowed
+          security:
+            - BearerAuth: []
+
+  - target: $.components.schemas
+    update:
+      # Seqera Managed Compute environment schema
+      # Uses hoisting pattern: x-speakeasy-entity on 'config' property hoists fields to root level
+      ManagedComputeCE_ComputeConfig:
+        required:
+          - config
+          - name
+        type: object
+        properties:
+          orgId:
+            type: integer
+            format: int64
+            readOnly: true
+            x-speakeasy-param-readonly: true
+          workspaceId:
+            type: integer
+            format: int64
+            description: Workspace numeric identifier
+          id:
+            type: string
+            description: Unique identifier for the compute environment
+            x-speakeasy-param-readonly: true
+          name:
+            maxLength: 100
+            type: string
+            description: Display name for the compute environment
+          description:
+            type: string
+            description: Optional description of the compute environment
+            x-speakeasy-terraform-ignore: true
+          platform:
+            type: string
+            enum:
+              - seqeracompute-platform
+            default: "seqeracompute-platform"
+            description: Platform type for Seqera Managed Compute environment.
+            x-speakeasy-param-readonly: true
+          status:
+            type: string
+            description: Compute environment status
+            x-speakeasy-param-readonly: true
+          dateCreated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was created
+            x-speakeasy-param-readonly: true
+          lastUpdated:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was last updated
+            x-speakeasy-param-readonly: true
+          lastUsed:
+            type: string
+            format: date-time
+            description: Timestamp when the compute environment was last used
+            x-speakeasy-param-readonly: true
+          deleted:
+            type: boolean
+            description: Flag indicating if the compute environment has been deleted
+            x-speakeasy-param-readonly: true
+          # Config property with hoisting - fields defined here appear at Terraform root level
+          config:
+            x-speakeasy-entity: ManagedComputeCE
+            x-speakeasy-entity-version: 1
+            x-speakeasy-entity-description: |
+              Manage Seqera Managed Compute environments in Seqera Platform.
+
+              Seqera Managed Compute is a fully managed compute service that handles infrastructure
+              provisioning and management automatically. Unlike AWS Batch or other compute
+              environments where you need to configure VPCs, subnets, and IAM roles,
+              Seqera Managed Compute only requires you to specify the region and instance size.
+
+              Key benefits:
+              - No infrastructure setup required
+              - Automatic scaling and resource management
+              - Simplified configuration with just region and instance size
+
+              Available instance sizes:
+              - SMALL: Suitable for lightweight workflows (default)
+              - MEDIUM: Balanced compute resources
+              - LARGE: High-performance compute for demanding workflows
+            type: object
+            properties:
+              # Primary hoisted fields - appear at root level in Terraform
+              region:
+                type: string
+                description: |
+                  AWS region for Seqera Managed Compute resources.
+                  Examples: us-east-1, eu-west-1, ap-southeast-2
+                example: "us-east-1"
+                x-speakeasy-param-force-new: true
+                x-speakeasy-param-optional: false
+                x-speakeasy-plan-validators: SeqeraComputeRegionValidator
+              instanceTypeSize:
+                type: string
+                enum:
+                  - SMALL
+                  - MEDIUM
+                  - LARGE
+                description: |
+                  Size of the compute instance.
+                  - SMALL: Lightweight workflows (default)
+                  - MEDIUM: Balanced compute resources
+                  - LARGE: High-performance compute for demanding workflows
+                example: "SMALL"
+                default: "SMALL"
+                x-speakeasy-param-force-new: true
+                x-speakeasy-param-optional: true
+                x-speakeasy-name-override: instance_size
+                x-speakeasy-plan-validators: InstanceTypeSizeValidator
+              # Additional optional fields
+              workDir:
+                type: string
+                description: |
+                  Work directory suffix relative to the S3 bucket provisioned by Seqera.
+                  Optional - a default work directory is used if not specified.
+                example: "work"
+                x-speakeasy-param-optional: true
+                x-speakeasy-param-force-new: true
+                x-speakeasy-name-override: work_dir
+              defaultDataRetentionPolicy:
+                type: boolean
+                description: |
+                  Enable automatic data retention policy.
+                  When enabled, intermediary files are automatically deleted after 28 days.
+                default: true
+                x-speakeasy-param-optional: true
+                x-speakeasy-param-force-new: true
+                x-speakeasy-name-override: data_retention_policy
+              resourceLabelIds:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+                description: List of resource label IDs to associate with this compute environment.
+                x-speakeasy-param-optional: true
+                x-speakeasy-param-force-new: true
+                x-speakeasy-name-override: resource_label_ids
+              preRunScript:
+                type: string
+                description: Bash script to run before workflow execution begins.
+                x-speakeasy-param-force-new: true
+                x-speakeasy-param-optional: true
+                x-speakeasy-name-override: pre_run_script
+              postRunScript:
+                type: string
+                description: Bash script to run after workflow execution completes.
+                x-speakeasy-param-force-new: true
+                x-speakeasy-param-optional: true
+                x-speakeasy-name-override: post_run_script
+              nextflowConfig:
+                type: string
+                description: Global Nextflow configuration settings for workflows.
+                x-speakeasy-param-force-new: true
+                x-speakeasy-param-optional: true
+                x-speakeasy-name-override: nextflow_config
+              environment:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConfigEnvVariable"
+                description: Environment variables for the compute environment.
+                x-speakeasy-param-force-new: true
+                x-speakeasy-param-optional: true
+              discriminator:
+                type: string
+                description: Internal platform discriminator
+                x-speakeasy-terraform-ignore: true
+
+      # Seqera Compute request/response schemas
+      CreateManagedComputeCERequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+          labelIds:
+            type: array
+            items:
+              type: integer
+              format: int64
+
+      CreateManagedComputeCEResponse:
+        type: object
+        properties:
+          computeEnvId:
+            type: string
+
+      UpdateManagedComputeCERequest:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+
+      DescribeManagedComputeCEResponse:
+        type: object
+        properties:
+          computeEnv:
+            $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+
+      ListManagedComputeCEsResponse:
+        type: object
+        properties:
+          computeEnvs:
+            type: array
+            items:
+              $ref: '#/components/schemas/ManagedComputeCE_ComputeConfig'
+          totalSize:
+            type: integer
+            format: int64
+
+  # ============================================================================
+  # FIELD MODIFIERS
+  # ============================================================================
+  # Additional field modifiers for the parent schema (not the hoisted config)
+
+  - target: $.components.schemas.ManagedComputeCE_ComputeConfig.properties.workspaceId
+    update:
+      x-speakeasy-param-force-new: true
