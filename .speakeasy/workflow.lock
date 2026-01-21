@@ -1,9 +1,9 @@
-speakeasyVersion: 1.690.1
+speakeasyVersion: 1.691.0
 sources:
     Seqera API:
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:e32cc580661b0ce33aa3fe80e9f8620672ca425aee8b8664024ba539e610d8bb
-        sourceBlobDigest: sha256:a50bf916b9404d26cb59dd98a2a8724fa9bc90e95f0a11777288166f62dc3122
+        sourceRevisionDigest: sha256:5c60eab3f84a133da0c03938853e66305349915eb3941e7bceeb79018d47e51d
+        sourceBlobDigest: sha256:c9d0d1be9466742a83a8018a2e999e8335e31ad74b7701ca6128fff864150938
         tags:
             - latest
             - 1.102.0
@@ -11,8 +11,8 @@ targets:
     seqera:
         source: Seqera API
         sourceNamespace: seqera-api
-        sourceRevisionDigest: sha256:e32cc580661b0ce33aa3fe80e9f8620672ca425aee8b8664024ba539e610d8bb
-        sourceBlobDigest: sha256:a50bf916b9404d26cb59dd98a2a8724fa9bc90e95f0a11777288166f62dc3122
+        sourceRevisionDigest: sha256:5c60eab3f84a133da0c03938853e66305349915eb3941e7bceeb79018d47e51d
+        sourceBlobDigest: sha256:c9d0d1be9466742a83a8018a2e999e8335e31ad74b7701ca6128fff864150938
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -21,43 +21,44 @@ workflow:
             inputs:
                 - location: specs/seqera-api-cloud.yaml
             overlays:
-                - location: overlays/api-description.yaml
                 - location: overlays/nullable-fixes.yaml
-                - location: overlays/speakeasy.yaml
-                - location: overlays/required.yaml
-                - location: overlays/datalinks.yaml
                 - location: overlays/actions.yaml
-                - location: overlays/credentials.yaml
+                - location: overlays/api-description.yaml
+                - location: overlays/aws-compute-env.yaml
+                - location: overlays/compute-env-aws-batch.yaml
+                - location: overlays/compute-env-seqera-compute.yaml
+                - location: overlays/compute-env.yaml
                 - location: overlays/credentials-aws.yaml
                 - location: overlays/credentials-azure.yaml
-                - location: overlays/credentials-gcp.yaml
                 - location: overlays/credentials-bitbucket.yaml
                 - location: overlays/credentials-codecommit.yaml
                 - location: overlays/credentials-container-registry.yaml
+                - location: overlays/credentials-gcp.yaml
                 - location: overlays/credentials-gitea.yaml
                 - location: overlays/credentials-github.yaml
                 - location: overlays/credentials-gitlab.yaml
+                - location: overlays/credentials-kubernetes.yaml
                 - location: overlays/credentials-ssh.yaml
                 - location: overlays/credentials-tower-agent.yaml
-                - location: overlays/credentials-kubernetes.yaml
+                - location: overlays/credentials.yaml
+                - location: overlays/datalinks.yaml
+                - location: overlays/datasets.yaml
                 - location: overlays/datasource-credentials.yaml
                 - location: overlays/datasource-datalinks.yaml
-                - location: overlays/compute-env.yaml
-                - location: overlays/compute-env-aws-batch.yaml
-                - location: overlays/aws-compute-env.yaml
-                - location: overlays/datasets.yaml
                 - location: overlays/labels.yaml
                 - location: overlays/orgs.yaml
                 - location: overlays/pipeline-secrets.yaml
                 - location: overlays/pipelines.yaml
+                - location: overlays/primary-compute-env.yaml
+                - location: overlays/required.yaml
+                - location: overlays/schema-fixes.yaml
+                - location: overlays/speakeasy.yaml
                 - location: overlays/studios.yaml
                 - location: overlays/teams.yaml
                 - location: overlays/tokens.yaml
+                - location: overlays/users.yaml
                 - location: overlays/workflows.yaml
                 - location: overlays/workspaces.yaml
-                - location: overlays/users.yaml
-                - location: overlays/schema-fixes.yaml
-                - location: overlays/primary-compute-env.yaml
             output: .speakeasy/out.openapi.yaml
             registry:
                 location: registry.speakeasyapi.dev/seqera/seqera/seqera-api

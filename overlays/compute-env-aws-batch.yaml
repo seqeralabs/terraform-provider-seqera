@@ -58,9 +58,7 @@ actions:
       "/compute-envs#aws":
         post:
           x-speakeasy-entity-operation:
-
             terraform-datasource: null
-
             terraform-resource: AWSBatchCE#create
           x-speakeasy-name-override: CreateAWSBatchCE
           summary: Create AWS compute environment

@@ -604,13 +604,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 				}
 				if resp.ComputeEnv.Config.SeqeraComputeConfiguration != nil {
 					r.ComputeEnv.Config.SeqeracomputePlatform = &tfTypes.SeqeraComputeConfiguration{}
-					r.ComputeEnv.Config.SeqeracomputePlatform.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.CliPath)
-					r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeJobRole)
-					r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenInstanceType)
-					r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DragenQueue)
-					r.ComputeEnv.Config.SeqeracomputePlatform.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.EnableFusion)
-					r.ComputeEnv.Config.SeqeracomputePlatform.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.EnableWave)
+					r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.DefaultDataRetentionPolicy)
 					r.ComputeEnv.Config.SeqeracomputePlatform.Environment = []tfTypes.ConfigEnvVariable{}
 
 					for _, environmentItem14 := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Environment {
@@ -623,79 +617,15 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 
 						r.ComputeEnv.Config.SeqeracomputePlatform.Environment = append(r.ComputeEnv.Config.SeqeracomputePlatform.Environment, environment14)
 					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.ExecutionRole)
-					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge == nil {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge = nil
-					} else {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge = &tfTypes.ForgeConfig{}
-						if resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy != nil {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringValue(string(*resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllocStrategy))
-						} else {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy = types.StringNull()
-						}
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets))
-						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.AllowBuckets {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets, types.StringValue(v))
-						}
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Arm64Enabled)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.BidPercentage))
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DisposeOnDeletion)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenAmiID)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenEnabled)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.DragenInstanceType)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsAutoScale)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBlockSize))
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EbsBootSize))
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Ec2KeyPair)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EcsConfig)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsCreate)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsID)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.EfsMount)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FargateHeadEnabled)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxMount)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxName)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.FsxSize))
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.GpuEnabled)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.ImageID)
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes))
-						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.InstanceTypes {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes, types.StringValue(v))
-						}
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MaxCpus))
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus = types.Int32Value(int32(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.MinCpus))
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups))
-						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.SecurityGroups {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups, types.StringValue(v))
-						}
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets))
-						for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Subnets {
-							r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets = append(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets, types.StringValue(v))
-						}
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type = types.StringValue(string(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.Type))
-						r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Forge.VpcID)
-					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.FusionSnapshots)
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobMemoryMb))
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadJobRole)
-					r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.HeadQueue)
 					if resp.ComputeEnv.Config.SeqeraComputeConfiguration.InstanceTypeSize != nil {
 						r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize = types.StringValue(string(*resp.ComputeEnv.Config.SeqeraComputeConfiguration.InstanceTypeSize))
 					} else {
 						r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize = types.StringNull()
 					}
-					r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.LogGroup)
-					r.ComputeEnv.Config.SeqeracomputePlatform.LustreID = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.LustreID)
 					r.ComputeEnv.Config.SeqeracomputePlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.NvmeStorageEnabled)
 					r.ComputeEnv.Config.SeqeracomputePlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PostRunScript)
 					r.ComputeEnv.Config.SeqeracomputePlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.PreRunScript)
 					r.ComputeEnv.Config.SeqeracomputePlatform.Region = types.StringValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Region)
-					r.ComputeEnv.Config.SeqeracomputePlatform.StorageType = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.StorageType)
-					r.ComputeEnv.Config.SeqeracomputePlatform.Volumes = make([]types.String, 0, len(resp.ComputeEnv.Config.SeqeraComputeConfiguration.Volumes))
-					for _, v := range resp.ComputeEnv.Config.SeqeraComputeConfiguration.Volumes {
-						r.ComputeEnv.Config.SeqeracomputePlatform.Volumes = append(r.ComputeEnv.Config.SeqeracomputePlatform.Volumes, types.StringValue(v))
-					}
 					r.ComputeEnv.Config.SeqeracomputePlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.SeqeraComputeConfiguration.WorkDir)
 				}
 				if resp.ComputeEnv.Config.SlurmConfiguration != nil {
@@ -1523,303 +1453,14 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			nextflowConfig2 = nil
 		}
-		storageType1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.StorageType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.StorageType.IsNull() {
-			*storageType1 = r.ComputeEnv.Config.SeqeracomputePlatform.StorageType.ValueString()
-		} else {
-			storageType1 = nil
-		}
-		lustreId1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.LustreID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.LustreID.IsNull() {
-			*lustreId1 = r.ComputeEnv.Config.SeqeracomputePlatform.LustreID.ValueString()
-		} else {
-			lustreId1 = nil
-		}
-		volumes1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Volumes))
-		for volumesIndex1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Volumes {
-			volumes1 = append(volumes1, r.ComputeEnv.Config.SeqeracomputePlatform.Volumes[volumesIndex1].ValueString())
-		}
 		var region2 string
 		region2 = r.ComputeEnv.Config.SeqeracomputePlatform.Region.ValueString()
 
-		computeQueue1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue.IsNull() {
-			*computeQueue1 = r.ComputeEnv.Config.SeqeracomputePlatform.ComputeQueue.ValueString()
+		defaultDataRetentionPolicy := new(bool)
+		if !r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy.IsNull() {
+			*defaultDataRetentionPolicy = r.ComputeEnv.Config.SeqeracomputePlatform.DefaultDataRetentionPolicy.ValueBool()
 		} else {
-			computeQueue1 = nil
-		}
-		dragenQueue1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue.IsNull() {
-			*dragenQueue1 = r.ComputeEnv.Config.SeqeracomputePlatform.DragenQueue.ValueString()
-		} else {
-			dragenQueue1 = nil
-		}
-		dragenInstanceType2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType.IsNull() {
-			*dragenInstanceType2 = r.ComputeEnv.Config.SeqeracomputePlatform.DragenInstanceType.ValueString()
-		} else {
-			dragenInstanceType2 = nil
-		}
-		computeJobRole1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole.IsNull() {
-			*computeJobRole1 = r.ComputeEnv.Config.SeqeracomputePlatform.ComputeJobRole.ValueString()
-		} else {
-			computeJobRole1 = nil
-		}
-		executionRole1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole.IsNull() {
-			*executionRole1 = r.ComputeEnv.Config.SeqeracomputePlatform.ExecutionRole.ValueString()
-		} else {
-			executionRole1 = nil
-		}
-		headQueue1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue.IsNull() {
-			*headQueue1 = r.ComputeEnv.Config.SeqeracomputePlatform.HeadQueue.ValueString()
-		} else {
-			headQueue1 = nil
-		}
-		headJobRole1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole.IsNull() {
-			*headJobRole1 = r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobRole.ValueString()
-		} else {
-			headJobRole1 = nil
-		}
-		cliPath1 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.CliPath.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.CliPath.IsNull() {
-			*cliPath1 = r.ComputeEnv.Config.SeqeracomputePlatform.CliPath.ValueString()
-		} else {
-			cliPath1 = nil
-		}
-		headJobCpus1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus.IsNull() {
-			*headJobCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobCpus.ValueInt32())
-		} else {
-			headJobCpus1 = nil
-		}
-		headJobMemoryMb1 := new(int)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.HeadJobMemoryMb.ValueInt32())
-		} else {
-			headJobMemoryMb1 = nil
-		}
-		enableWave2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.EnableWave.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.EnableWave.IsNull() {
-			*enableWave2 = r.ComputeEnv.Config.SeqeracomputePlatform.EnableWave.ValueBool()
-		} else {
-			enableWave2 = nil
-		}
-		enableFusion2 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.EnableFusion.IsNull() {
-			*enableFusion2 = r.ComputeEnv.Config.SeqeracomputePlatform.EnableFusion.ValueBool()
-		} else {
-			enableFusion2 = nil
-		}
-		nvmeStorageEnabled1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled.IsNull() {
-			*nvmeStorageEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.NvmeStorageEnabled.ValueBool()
-		} else {
-			nvmeStorageEnabled1 = nil
-		}
-		logGroup2 := new(string)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.IsNull() {
-			*logGroup2 = r.ComputeEnv.Config.SeqeracomputePlatform.LogGroup.ValueString()
-		} else {
-			logGroup2 = nil
-		}
-		fusionSnapshots1 := new(bool)
-		if !r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots.IsNull() {
-			*fusionSnapshots1 = r.ComputeEnv.Config.SeqeracomputePlatform.FusionSnapshots.ValueBool()
-		} else {
-			fusionSnapshots1 = nil
-		}
-		var forge1 *shared.ForgeConfig
-		if r.ComputeEnv.Config.SeqeracomputePlatform.Forge != nil {
-			typeVar1 := shared.ForgeConfigType(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Type.ValueString())
-			var minCpus1 int
-			minCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MinCpus.ValueInt32())
-
-			var maxCpus1 int
-			maxCpus1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.MaxCpus.ValueInt32())
-
-			gpuEnabled2 := new(bool)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.IsNull() {
-				*gpuEnabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.GpuEnabled.ValueBool()
-			} else {
-				gpuEnabled2 = nil
-			}
-			ebsAutoScale1 := new(bool)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.IsNull() {
-				*ebsAutoScale1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsAutoScale.ValueBool()
-			} else {
-				ebsAutoScale1 = nil
-			}
-			instanceTypes1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes))
-			for instanceTypesIndex1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes {
-				instanceTypes1 = append(instanceTypes1, r.ComputeEnv.Config.SeqeracomputePlatform.Forge.InstanceTypes[instanceTypesIndex1].ValueString())
-			}
-			allocStrategy1 := new(shared.AllocStrategy)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.IsNull() {
-				*allocStrategy1 = shared.AllocStrategy(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllocStrategy.ValueString())
-			} else {
-				allocStrategy1 = nil
-			}
-			imageId2 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.IsNull() {
-				*imageId2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.ImageID.ValueString()
-			} else {
-				imageId2 = nil
-			}
-			vpcId1 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.IsNull() {
-				*vpcId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.VpcID.ValueString()
-			} else {
-				vpcId1 = nil
-			}
-			subnets1 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets))
-			for subnetsIndex1 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets {
-				subnets1 = append(subnets1, r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Subnets[subnetsIndex1].ValueString())
-			}
-			securityGroups2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups))
-			for securityGroupsIndex2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups {
-				securityGroups2 = append(securityGroups2, r.ComputeEnv.Config.SeqeracomputePlatform.Forge.SecurityGroups[securityGroupsIndex2].ValueString())
-			}
-			fsxMount1 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.IsNull() {
-				*fsxMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxMount.ValueString()
-			} else {
-				fsxMount1 = nil
-			}
-			fsxName1 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.IsNull() {
-				*fsxName1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxName.ValueString()
-			} else {
-				fsxName1 = nil
-			}
-			fsxSize1 := new(int)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.IsNull() {
-				*fsxSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FsxSize.ValueInt32())
-			} else {
-				fsxSize1 = nil
-			}
-			disposeOnDeletion1 := new(bool)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.IsNull() {
-				*disposeOnDeletion1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DisposeOnDeletion.ValueBool()
-			} else {
-				disposeOnDeletion1 = nil
-			}
-			ec2KeyPair2 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.IsNull() {
-				*ec2KeyPair2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Ec2KeyPair.ValueString()
-			} else {
-				ec2KeyPair2 = nil
-			}
-			allowBuckets2 := make([]string, 0, len(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets))
-			for allowBucketsIndex2 := range r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets {
-				allowBuckets2 = append(allowBuckets2, r.ComputeEnv.Config.SeqeracomputePlatform.Forge.AllowBuckets[allowBucketsIndex2].ValueString())
-			}
-			ebsBlockSize1 := new(int)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.IsNull() {
-				*ebsBlockSize1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBlockSize.ValueInt32())
-			} else {
-				ebsBlockSize1 = nil
-			}
-			bidPercentage1 := new(int)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.IsNull() {
-				*bidPercentage1 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.BidPercentage.ValueInt32())
-			} else {
-				bidPercentage1 = nil
-			}
-			efsCreate1 := new(bool)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.IsNull() {
-				*efsCreate1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsCreate.ValueBool()
-			} else {
-				efsCreate1 = nil
-			}
-			efsId1 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.IsNull() {
-				*efsId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsID.ValueString()
-			} else {
-				efsId1 = nil
-			}
-			efsMount1 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.IsNull() {
-				*efsMount1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EfsMount.ValueString()
-			} else {
-				efsMount1 = nil
-			}
-			dragenEnabled1 := new(bool)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.IsNull() {
-				*dragenEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenEnabled.ValueBool()
-			} else {
-				dragenEnabled1 = nil
-			}
-			dragenAmiId1 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.IsNull() {
-				*dragenAmiId1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenAmiID.ValueString()
-			} else {
-				dragenAmiId1 = nil
-			}
-			ebsBootSize2 := new(int)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.IsNull() {
-				*ebsBootSize2 = int(r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EbsBootSize.ValueInt32())
-			} else {
-				ebsBootSize2 = nil
-			}
-			ecsConfig1 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.IsNull() {
-				*ecsConfig1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.EcsConfig.ValueString()
-			} else {
-				ecsConfig1 = nil
-			}
-			fargateHeadEnabled1 := new(bool)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.IsNull() {
-				*fargateHeadEnabled1 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.FargateHeadEnabled.ValueBool()
-			} else {
-				fargateHeadEnabled1 = nil
-			}
-			arm64Enabled2 := new(bool)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.IsNull() {
-				*arm64Enabled2 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.Arm64Enabled.ValueBool()
-			} else {
-				arm64Enabled2 = nil
-			}
-			dragenInstanceType3 := new(string)
-			if !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.IsNull() {
-				*dragenInstanceType3 = r.ComputeEnv.Config.SeqeracomputePlatform.Forge.DragenInstanceType.ValueString()
-			} else {
-				dragenInstanceType3 = nil
-			}
-			forge1 = &shared.ForgeConfig{
-				Type:               typeVar1,
-				MinCpus:            minCpus1,
-				MaxCpus:            maxCpus1,
-				GpuEnabled:         gpuEnabled2,
-				EbsAutoScale:       ebsAutoScale1,
-				InstanceTypes:      instanceTypes1,
-				AllocStrategy:      allocStrategy1,
-				ImageID:            imageId2,
-				VpcID:              vpcId1,
-				Subnets:            subnets1,
-				SecurityGroups:     securityGroups2,
-				FsxMount:           fsxMount1,
-				FsxName:            fsxName1,
-				FsxSize:            fsxSize1,
-				DisposeOnDeletion:  disposeOnDeletion1,
-				Ec2KeyPair:         ec2KeyPair2,
-				AllowBuckets:       allowBuckets2,
-				EbsBlockSize:       ebsBlockSize1,
-				BidPercentage:      bidPercentage1,
-				EfsCreate:          efsCreate1,
-				EfsID:              efsId1,
-				EfsMount:           efsMount1,
-				DragenEnabled:      dragenEnabled1,
-				DragenAmiID:        dragenAmiId1,
-				EbsBootSize:        ebsBootSize2,
-				EcsConfig:          ecsConfig1,
-				FargateHeadEnabled: fargateHeadEnabled1,
-				Arm64Enabled:       arm64Enabled2,
-				DragenInstanceType: dragenInstanceType3,
-			}
+			defaultDataRetentionPolicy = nil
 		}
 		instanceTypeSize := new(shared.SeqeraComputeCloudInstanceTypeSize)
 		if !r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.IsUnknown() && !r.ComputeEnv.Config.SeqeracomputePlatform.InstanceTypeSize.IsNull() {
@@ -1828,32 +1469,14 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			instanceTypeSize = nil
 		}
 		seqeraComputeConfiguration = &shared.SeqeraComputeConfiguration{
-			WorkDir:            workDir2,
-			PreRunScript:       preRunScript2,
-			PostRunScript:      postRunScript2,
-			Environment:        environment2,
-			NextflowConfig:     nextflowConfig2,
-			StorageType:        storageType1,
-			LustreID:           lustreId1,
-			Volumes:            volumes1,
-			Region:             region2,
-			ComputeQueue:       computeQueue1,
-			DragenQueue:        dragenQueue1,
-			DragenInstanceType: dragenInstanceType2,
-			ComputeJobRole:     computeJobRole1,
-			ExecutionRole:      executionRole1,
-			HeadQueue:          headQueue1,
-			HeadJobRole:        headJobRole1,
-			CliPath:            cliPath1,
-			HeadJobCpus:        headJobCpus1,
-			HeadJobMemoryMb:    headJobMemoryMb1,
-			EnableWave:         enableWave2,
-			EnableFusion:       enableFusion2,
-			NvmeStorageEnabled: nvmeStorageEnabled1,
-			LogGroup:           logGroup2,
-			FusionSnapshots:    fusionSnapshots1,
-			Forge:              forge1,
-			InstanceTypeSize:   instanceTypeSize,
+			WorkDir:                    workDir2,
+			PreRunScript:               preRunScript2,
+			PostRunScript:              postRunScript2,
+			Environment:                environment2,
+			NextflowConfig:             nextflowConfig2,
+			Region:                     region2,
+			DefaultDataRetentionPolicy: defaultDataRetentionPolicy,
+			InstanceTypeSize:           instanceTypeSize,
 		}
 	}
 	if seqeraComputeConfiguration != nil {
@@ -1991,17 +1614,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 
 			labels[labelsKey] = labelsInst
 		}
-		headJobCpus2 := new(int)
+		headJobCpus1 := new(int)
 		if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.IsNull() {
-			*headJobCpus2 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.ValueInt32())
+			*headJobCpus1 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus2 = nil
+			headJobCpus1 = nil
 		}
-		headJobMemoryMb2 := new(int)
+		headJobMemoryMb1 := new(int)
 		if !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb2 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb1 = int(r.ComputeEnv.Config.GoogleLifesciences.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb2 = nil
+			headJobMemoryMb1 = nil
 		}
 		nfsTarget := new(string)
 		if !r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.IsUnknown() && !r.ComputeEnv.Config.GoogleLifesciences.NfsTarget.IsNull() {
@@ -2033,8 +1656,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			CopyImage:         copyImage,
 			UsePrivateAddress: usePrivateAddress,
 			Labels:            labels,
-			HeadJobCpus:       headJobCpus2,
-			HeadJobMemoryMb:   headJobMemoryMb2,
+			HeadJobCpus:       headJobCpus1,
+			HeadJobMemoryMb:   headJobMemoryMb1,
 			NfsTarget:         nfsTarget,
 			NfsMount:          nfsMount,
 		}
@@ -2173,17 +1796,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 
 			labels1[labelsKey1] = labelsInst1
 		}
-		headJobCpus3 := new(int)
+		headJobCpus2 := new(int)
 		if !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.IsNull() {
-			*headJobCpus3 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.ValueInt32())
+			*headJobCpus2 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus3 = nil
+			headJobCpus2 = nil
 		}
-		headJobMemoryMb3 := new(int)
+		headJobMemoryMb2 := new(int)
 		if !r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb3 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb2 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb3 = nil
+			headJobMemoryMb2 = nil
 		}
 		nfsTarget1 := new(string)
 		if !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsNull() {
@@ -2197,17 +1820,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			nfsMount1 = nil
 		}
-		enableWave3 := new(bool)
+		enableWave2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.EnableWave.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.EnableWave.IsNull() {
-			*enableWave3 = r.ComputeEnv.Config.GoogleBatch.EnableWave.ValueBool()
+			*enableWave2 = r.ComputeEnv.Config.GoogleBatch.EnableWave.ValueBool()
 		} else {
-			enableWave3 = nil
+			enableWave2 = nil
 		}
-		enableFusion3 := new(bool)
+		enableFusion2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.EnableFusion.IsNull() {
-			*enableFusion3 = r.ComputeEnv.Config.GoogleBatch.EnableFusion.ValueBool()
+			*enableFusion2 = r.ComputeEnv.Config.GoogleBatch.EnableFusion.ValueBool()
 		} else {
-			enableFusion3 = nil
+			enableFusion2 = nil
 		}
 		serviceAccount := new(string)
 		if !r.ComputeEnv.Config.GoogleBatch.ServiceAccount.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ServiceAccount.IsNull() {
@@ -2257,12 +1880,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			CopyImage:                   copyImage1,
 			UsePrivateAddress:           usePrivateAddress1,
 			Labels:                      labels1,
-			HeadJobCpus:                 headJobCpus3,
-			HeadJobMemoryMb:             headJobMemoryMb3,
+			HeadJobCpus:                 headJobCpus2,
+			HeadJobMemoryMb:             headJobMemoryMb2,
 			NfsTarget:                   nfsTarget1,
 			NfsMount:                    nfsMount1,
-			EnableWave:                  enableWave3,
-			EnableFusion:                enableFusion3,
+			EnableWave:                  enableWave2,
+			EnableFusion:                enableFusion2,
 			ServiceAccount:              serviceAccount,
 			Network:                     network,
 			Subnetwork:                  subnetwork,
@@ -2376,23 +1999,23 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			instanceType1 = nil
 		}
-		imageId3 := new(string)
+		imageId2 := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.ImageID.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.ImageID.IsNull() {
-			*imageId3 = r.ComputeEnv.Config.GoogleCloud.ImageID.ValueString()
+			*imageId2 = r.ComputeEnv.Config.GoogleCloud.ImageID.ValueString()
 		} else {
-			imageId3 = nil
+			imageId2 = nil
 		}
-		arm64Enabled3 := new(bool)
+		arm64Enabled2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleCloud.Arm64Enabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.Arm64Enabled.IsNull() {
-			*arm64Enabled3 = r.ComputeEnv.Config.GoogleCloud.Arm64Enabled.ValueBool()
+			*arm64Enabled2 = r.ComputeEnv.Config.GoogleCloud.Arm64Enabled.ValueBool()
 		} else {
-			arm64Enabled3 = nil
+			arm64Enabled2 = nil
 		}
-		gpuEnabled3 := new(bool)
+		gpuEnabled2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.GpuEnabled.IsNull() {
-			*gpuEnabled3 = r.ComputeEnv.Config.GoogleCloud.GpuEnabled.ValueBool()
+			*gpuEnabled2 = r.ComputeEnv.Config.GoogleCloud.GpuEnabled.ValueBool()
 		} else {
-			gpuEnabled3 = nil
+			gpuEnabled2 = nil
 		}
 		bootDiskSizeGb2 := new(int)
 		if !r.ComputeEnv.Config.GoogleCloud.BootDiskSizeGb.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.BootDiskSizeGb.IsNull() {
@@ -2423,9 +2046,9 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Zone:                zone,
 			ServiceAccountEmail: serviceAccountEmail,
 			InstanceType:        instanceType1,
-			ImageID:             imageId3,
-			Arm64Enabled:        arm64Enabled3,
-			GpuEnabled:          gpuEnabled3,
+			ImageID:             imageId2,
+			Arm64Enabled:        arm64Enabled2,
+			GpuEnabled:          gpuEnabled2,
 			BootDiskSizeGb:      bootDiskSizeGb2,
 			ForgedResources:     forgedResources,
 		}
@@ -2509,7 +2132,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			autoPoolMode = nil
 		}
-		var forge2 *shared.AzBatchForgeConfig
+		var forge1 *shared.AzBatchForgeConfig
 		if r.ComputeEnv.Config.AzureBatch.Forge != nil {
 			vmType := new(string)
 			if !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.VMType.IsNull() {
@@ -2526,21 +2149,21 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			} else {
 				autoScale = nil
 			}
-			disposeOnDeletion2 := new(bool)
+			disposeOnDeletion1 := new(bool)
 			if !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.IsNull() {
-				*disposeOnDeletion2 = r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.ValueBool()
+				*disposeOnDeletion1 = r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion.ValueBool()
 			} else {
-				disposeOnDeletion2 = nil
+				disposeOnDeletion1 = nil
 			}
 			containerRegIds := make([]string, 0, len(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds))
 			for containerRegIdsIndex := range r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds {
 				containerRegIds = append(containerRegIds, r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds[containerRegIdsIndex].ValueString())
 			}
-			forge2 = &shared.AzBatchForgeConfig{
+			forge1 = &shared.AzBatchForgeConfig{
 				VMType:            vmType,
 				VMCount:           vmCount,
 				AutoScale:         autoScale,
-				DisposeOnDeletion: disposeOnDeletion2,
+				DisposeOnDeletion: disposeOnDeletion1,
 				ContainerRegIds:   containerRegIds,
 			}
 		}
@@ -2562,17 +2185,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			deletePoolsOnCompletion = nil
 		}
-		enableWave4 := new(bool)
+		enableWave3 := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.EnableWave.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.EnableWave.IsNull() {
-			*enableWave4 = r.ComputeEnv.Config.AzureBatch.EnableWave.ValueBool()
+			*enableWave3 = r.ComputeEnv.Config.AzureBatch.EnableWave.ValueBool()
 		} else {
-			enableWave4 = nil
+			enableWave3 = nil
 		}
-		enableFusion4 := new(bool)
+		enableFusion3 := new(bool)
 		if !r.ComputeEnv.Config.AzureBatch.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.EnableFusion.IsNull() {
-			*enableFusion4 = r.ComputeEnv.Config.AzureBatch.EnableFusion.ValueBool()
+			*enableFusion3 = r.ComputeEnv.Config.AzureBatch.EnableFusion.ValueBool()
 		} else {
-			enableFusion4 = nil
+			enableFusion3 = nil
 		}
 		managedIdentityClientID := new(string)
 		if !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsUnknown() && !r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID.IsNull() {
@@ -2589,12 +2212,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Region:                  region5,
 			HeadPool:                headPool,
 			AutoPoolMode:            autoPoolMode,
-			Forge:                   forge2,
+			Forge:                   forge1,
 			TokenDuration:           tokenDuration,
 			DeleteJobsOnCompletion:  deleteJobsOnCompletion,
 			DeletePoolsOnCompletion: deletePoolsOnCompletion,
-			EnableWave:              enableWave4,
-			EnableFusion:            enableFusion4,
+			EnableWave:              enableWave3,
+			EnableFusion:            enableFusion3,
 			ManagedIdentityClientID: managedIdentityClientID,
 		}
 	}
@@ -2866,17 +2489,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			port = nil
 		}
-		headQueue2 := new(string)
+		headQueue1 := new(string)
 		if !r.ComputeEnv.Config.LsfPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.HeadQueue.IsNull() {
-			*headQueue2 = r.ComputeEnv.Config.LsfPlatform.HeadQueue.ValueString()
+			*headQueue1 = r.ComputeEnv.Config.LsfPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue2 = nil
+			headQueue1 = nil
 		}
-		computeQueue2 := new(string)
+		computeQueue1 := new(string)
 		if !r.ComputeEnv.Config.LsfPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.ComputeQueue.IsNull() {
-			*computeQueue2 = r.ComputeEnv.Config.LsfPlatform.ComputeQueue.ValueString()
+			*computeQueue1 = r.ComputeEnv.Config.LsfPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue2 = nil
+			computeQueue1 = nil
 		}
 		maxQueueSize := new(int)
 		if !r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.LsfPlatform.MaxQueueSize.IsNull() {
@@ -2924,8 +2547,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName,
 			HostName:                hostName,
 			Port:                    port,
-			HeadQueue:               headQueue2,
-			ComputeQueue:            computeQueue2,
+			HeadQueue:               headQueue1,
+			ComputeQueue:            computeQueue1,
 			MaxQueueSize:            maxQueueSize,
 			HeadJobOptions:          headJobOptions,
 			PropagateHeadJobOptions: propagateHeadJobOptions,
@@ -3019,17 +2642,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			port1 = nil
 		}
-		headQueue3 := new(string)
+		headQueue2 := new(string)
 		if !r.ComputeEnv.Config.SlurmPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.HeadQueue.IsNull() {
-			*headQueue3 = r.ComputeEnv.Config.SlurmPlatform.HeadQueue.ValueString()
+			*headQueue2 = r.ComputeEnv.Config.SlurmPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue3 = nil
+			headQueue2 = nil
 		}
-		computeQueue3 := new(string)
+		computeQueue2 := new(string)
 		if !r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.IsNull() {
-			*computeQueue3 = r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.ValueString()
+			*computeQueue2 = r.ComputeEnv.Config.SlurmPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue3 = nil
+			computeQueue2 = nil
 		}
 		maxQueueSize1 := new(int)
 		if !r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.SlurmPlatform.MaxQueueSize.IsNull() {
@@ -3059,8 +2682,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName1,
 			HostName:                hostName1,
 			Port:                    port1,
-			HeadQueue:               headQueue3,
-			ComputeQueue:            computeQueue3,
+			HeadQueue:               headQueue2,
+			ComputeQueue:            computeQueue2,
 			MaxQueueSize:            maxQueueSize1,
 			HeadJobOptions:          headJobOptions1,
 			PropagateHeadJobOptions: propagateHeadJobOptions1,
@@ -3175,17 +2798,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			servicePodSpec = nil
 		}
-		headJobCpus4 := new(int)
+		headJobCpus3 := new(int)
 		if !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.IsNull() {
-			*headJobCpus4 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.ValueInt32())
+			*headJobCpus3 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus4 = nil
+			headJobCpus3 = nil
 		}
-		headJobMemoryMb4 := new(int)
+		headJobMemoryMb3 := new(int)
 		if !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb4 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb3 = int(r.ComputeEnv.Config.K8sPlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb4 = nil
+			headJobMemoryMb3 = nil
 		}
 		kubernetesComputeConfiguration = &shared.KubernetesComputeConfiguration{
 			WorkDir:               workDir10,
@@ -3203,8 +2826,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			PodCleanup:            podCleanup,
 			HeadPodSpec:           headPodSpec,
 			ServicePodSpec:        servicePodSpec,
-			HeadJobCpus:           headJobCpus4,
-			HeadJobMemoryMb:       headJobMemoryMb4,
+			HeadJobCpus:           headJobCpus3,
+			HeadJobMemoryMb:       headJobMemoryMb3,
 		}
 	}
 	if kubernetesComputeConfiguration != nil {
@@ -3331,17 +2954,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			servicePodSpec1 = nil
 		}
-		headJobCpus5 := new(int)
+		headJobCpus4 := new(int)
 		if !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobCpus.IsNull() {
-			*headJobCpus5 = int(r.ComputeEnv.Config.EksPlatform.HeadJobCpus.ValueInt32())
+			*headJobCpus4 = int(r.ComputeEnv.Config.EksPlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus5 = nil
+			headJobCpus4 = nil
 		}
-		headJobMemoryMb5 := new(int)
+		headJobMemoryMb4 := new(int)
 		if !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb5 = int(r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb4 = int(r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb5 = nil
+			headJobMemoryMb4 = nil
 		}
 		var region7 string
 		region7 = r.ComputeEnv.Config.EksPlatform.Region.ValueString()
@@ -3349,17 +2972,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		var clusterName string
 		clusterName = r.ComputeEnv.Config.EksPlatform.ClusterName.ValueString()
 
-		enableWave5 := new(bool)
+		enableWave4 := new(bool)
 		if !r.ComputeEnv.Config.EksPlatform.EnableWave.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.EnableWave.IsNull() {
-			*enableWave5 = r.ComputeEnv.Config.EksPlatform.EnableWave.ValueBool()
+			*enableWave4 = r.ComputeEnv.Config.EksPlatform.EnableWave.ValueBool()
 		} else {
-			enableWave5 = nil
+			enableWave4 = nil
 		}
-		enableFusion5 := new(bool)
+		enableFusion4 := new(bool)
 		if !r.ComputeEnv.Config.EksPlatform.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.EksPlatform.EnableFusion.IsNull() {
-			*enableFusion5 = r.ComputeEnv.Config.EksPlatform.EnableFusion.ValueBool()
+			*enableFusion4 = r.ComputeEnv.Config.EksPlatform.EnableFusion.ValueBool()
 		} else {
-			enableFusion5 = nil
+			enableFusion4 = nil
 		}
 		amazonEKSClusterConfiguration = &shared.AmazonEKSClusterConfiguration{
 			WorkDir:               workDir11,
@@ -3377,12 +3000,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			PodCleanup:            podCleanup1,
 			HeadPodSpec:           headPodSpec1,
 			ServicePodSpec:        servicePodSpec1,
-			HeadJobCpus:           headJobCpus5,
-			HeadJobMemoryMb:       headJobMemoryMb5,
+			HeadJobCpus:           headJobCpus4,
+			HeadJobMemoryMb:       headJobMemoryMb4,
 			Region:                region7,
 			ClusterName:           clusterName,
-			EnableWave:            enableWave5,
-			EnableFusion:          enableFusion5,
+			EnableWave:            enableWave4,
+			EnableFusion:          enableFusion4,
 		}
 	}
 	if amazonEKSClusterConfiguration != nil {
@@ -3509,17 +3132,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			servicePodSpec2 = nil
 		}
-		headJobCpus6 := new(int)
+		headJobCpus5 := new(int)
 		if !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobCpus.IsNull() {
-			*headJobCpus6 = int(r.ComputeEnv.Config.GkePlatform.HeadJobCpus.ValueInt32())
+			*headJobCpus5 = int(r.ComputeEnv.Config.GkePlatform.HeadJobCpus.ValueInt32())
 		} else {
-			headJobCpus6 = nil
+			headJobCpus5 = nil
 		}
-		headJobMemoryMb6 := new(int)
+		headJobMemoryMb5 := new(int)
 		if !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.IsNull() {
-			*headJobMemoryMb6 = int(r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.ValueInt32())
+			*headJobMemoryMb5 = int(r.ComputeEnv.Config.GkePlatform.HeadJobMemoryMb.ValueInt32())
 		} else {
-			headJobMemoryMb6 = nil
+			headJobMemoryMb5 = nil
 		}
 		var region8 string
 		region8 = r.ComputeEnv.Config.GkePlatform.Region.ValueString()
@@ -3527,17 +3150,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		var clusterName1 string
 		clusterName1 = r.ComputeEnv.Config.GkePlatform.ClusterName.ValueString()
 
-		enableFusion6 := new(bool)
+		enableFusion5 := new(bool)
 		if !r.ComputeEnv.Config.GkePlatform.EnableFusion.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.EnableFusion.IsNull() {
-			*enableFusion6 = r.ComputeEnv.Config.GkePlatform.EnableFusion.ValueBool()
+			*enableFusion5 = r.ComputeEnv.Config.GkePlatform.EnableFusion.ValueBool()
 		} else {
-			enableFusion6 = nil
+			enableFusion5 = nil
 		}
-		enableWave6 := new(bool)
+		enableWave5 := new(bool)
 		if !r.ComputeEnv.Config.GkePlatform.EnableWave.IsUnknown() && !r.ComputeEnv.Config.GkePlatform.EnableWave.IsNull() {
-			*enableWave6 = r.ComputeEnv.Config.GkePlatform.EnableWave.ValueBool()
+			*enableWave5 = r.ComputeEnv.Config.GkePlatform.EnableWave.ValueBool()
 		} else {
-			enableWave6 = nil
+			enableWave5 = nil
 		}
 		googleGKEClusterConfiguration = &shared.GoogleGKEClusterConfiguration{
 			WorkDir:               workDir12,
@@ -3555,12 +3178,12 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			PodCleanup:            podCleanup2,
 			HeadPodSpec:           headPodSpec2,
 			ServicePodSpec:        servicePodSpec2,
-			HeadJobCpus:           headJobCpus6,
-			HeadJobMemoryMb:       headJobMemoryMb6,
+			HeadJobCpus:           headJobCpus5,
+			HeadJobMemoryMb:       headJobMemoryMb5,
 			Region:                region8,
 			ClusterName:           clusterName1,
-			EnableFusion:          enableFusion6,
-			EnableWave:            enableWave6,
+			EnableFusion:          enableFusion5,
+			EnableWave:            enableWave5,
 		}
 	}
 	if googleGKEClusterConfiguration != nil {
@@ -3648,17 +3271,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			port2 = nil
 		}
-		headQueue4 := new(string)
+		headQueue3 := new(string)
 		if !r.ComputeEnv.Config.UgePlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.HeadQueue.IsNull() {
-			*headQueue4 = r.ComputeEnv.Config.UgePlatform.HeadQueue.ValueString()
+			*headQueue3 = r.ComputeEnv.Config.UgePlatform.HeadQueue.ValueString()
 		} else {
-			headQueue4 = nil
+			headQueue3 = nil
 		}
-		computeQueue4 := new(string)
+		computeQueue3 := new(string)
 		if !r.ComputeEnv.Config.UgePlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.ComputeQueue.IsNull() {
-			*computeQueue4 = r.ComputeEnv.Config.UgePlatform.ComputeQueue.ValueString()
+			*computeQueue3 = r.ComputeEnv.Config.UgePlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue4 = nil
+			computeQueue3 = nil
 		}
 		maxQueueSize2 := new(int)
 		if !r.ComputeEnv.Config.UgePlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.UgePlatform.MaxQueueSize.IsNull() {
@@ -3688,8 +3311,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName2,
 			HostName:                hostName2,
 			Port:                    port2,
-			HeadQueue:               headQueue4,
-			ComputeQueue:            computeQueue4,
+			HeadQueue:               headQueue3,
+			ComputeQueue:            computeQueue3,
 			MaxQueueSize:            maxQueueSize2,
 			HeadJobOptions:          headJobOptions2,
 			PropagateHeadJobOptions: propagateHeadJobOptions2,
@@ -3780,17 +3403,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			port3 = nil
 		}
-		headQueue5 := new(string)
+		headQueue4 := new(string)
 		if !r.ComputeEnv.Config.AltairPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.HeadQueue.IsNull() {
-			*headQueue5 = r.ComputeEnv.Config.AltairPlatform.HeadQueue.ValueString()
+			*headQueue4 = r.ComputeEnv.Config.AltairPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue5 = nil
+			headQueue4 = nil
 		}
-		computeQueue5 := new(string)
+		computeQueue4 := new(string)
 		if !r.ComputeEnv.Config.AltairPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.ComputeQueue.IsNull() {
-			*computeQueue5 = r.ComputeEnv.Config.AltairPlatform.ComputeQueue.ValueString()
+			*computeQueue4 = r.ComputeEnv.Config.AltairPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue5 = nil
+			computeQueue4 = nil
 		}
 		maxQueueSize3 := new(int)
 		if !r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.AltairPlatform.MaxQueueSize.IsNull() {
@@ -3820,8 +3443,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName3,
 			HostName:                hostName3,
 			Port:                    port3,
-			HeadQueue:               headQueue5,
-			ComputeQueue:            computeQueue5,
+			HeadQueue:               headQueue4,
+			ComputeQueue:            computeQueue4,
 			MaxQueueSize:            maxQueueSize3,
 			HeadJobOptions:          headJobOptions3,
 			PropagateHeadJobOptions: propagateHeadJobOptions3,
@@ -3912,17 +3535,17 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			port4 = nil
 		}
-		headQueue6 := new(string)
+		headQueue5 := new(string)
 		if !r.ComputeEnv.Config.MoabPlatform.HeadQueue.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.HeadQueue.IsNull() {
-			*headQueue6 = r.ComputeEnv.Config.MoabPlatform.HeadQueue.ValueString()
+			*headQueue5 = r.ComputeEnv.Config.MoabPlatform.HeadQueue.ValueString()
 		} else {
-			headQueue6 = nil
+			headQueue5 = nil
 		}
-		computeQueue6 := new(string)
+		computeQueue5 := new(string)
 		if !r.ComputeEnv.Config.MoabPlatform.ComputeQueue.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.ComputeQueue.IsNull() {
-			*computeQueue6 = r.ComputeEnv.Config.MoabPlatform.ComputeQueue.ValueString()
+			*computeQueue5 = r.ComputeEnv.Config.MoabPlatform.ComputeQueue.ValueString()
 		} else {
-			computeQueue6 = nil
+			computeQueue5 = nil
 		}
 		maxQueueSize4 := new(int)
 		if !r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.IsUnknown() && !r.ComputeEnv.Config.MoabPlatform.MaxQueueSize.IsNull() {
@@ -3952,8 +3575,8 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			UserName:                userName4,
 			HostName:                hostName4,
 			Port:                    port4,
-			HeadQueue:               headQueue6,
-			ComputeQueue:            computeQueue6,
+			HeadQueue:               headQueue5,
+			ComputeQueue:            computeQueue5,
 			MaxQueueSize:            maxQueueSize4,
 			HeadJobOptions:          headJobOptions4,
 			PropagateHeadJobOptions: propagateHeadJobOptions4,
