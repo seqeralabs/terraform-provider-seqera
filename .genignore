@@ -17,6 +17,8 @@ internal/provider/tokens_resource.go
 internal/validators/mapvalidators/studio_environment_variable_validator.go
 internal/validators/objectvalidators/config_env_variable_validator.go
 internal/validators/stringvalidators/aws_credential_keys_validator.go
+internal/validators/stringvalidators/instance_type_size_validator.go
+internal/validators/stringvalidators/seqera_compute_region_validator.go
 
 # Custom state upgraders for field renames and migrations
 internal/stateupgraders/awsbatchce_v0.go
@@ -50,6 +52,7 @@ examples/resources/seqera_kubernetes_credential/resource.tf
 # Custom data source examples that should be manually maintained
 examples/data-sources/seqera_credentials/data-source.tf
 examples/data-sources/seqera_data_links/data-source.tf
+examples/data-sources/seqera_organization/data-source.tf
 
 # Custom resources (manually maintained, outside of Speakeasy generation)
 internal/seqera/

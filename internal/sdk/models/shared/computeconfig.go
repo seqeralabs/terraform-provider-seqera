@@ -2354,59 +2354,9 @@ type SeqeraComputeConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator *string `json:"discriminator,omitempty"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	StorageType *string `json:"storageType,omitempty"`
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LustreID *string  `json:"lustreId,omitempty"`
-	Volumes  []string `json:"volumes,omitempty"`
-	// AWS region where the Batch compute environment will be created.
-	// Examples: us-east-1, eu-west-1, ap-southeast-2
-	//
-	Region string `json:"region"`
-	// Name of the AWS Batch compute queue
-	ComputeQueue       *string `json:"computeQueue,omitempty"`
-	DragenQueue        *string `json:"dragenQueue,omitempty"`
-	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
-	// IAM role ARN for compute jobs. Jobs assume this role during execution.
-	// Must have permissions for S3, CloudWatch, etc.
-	// Format: arn:aws:iam::account-id:role/role-name
-	//
-	ComputeJobRole *string `json:"computeJobRole,omitempty"`
-	// IAM role ARN for Batch execution (pulling container images, writing logs).
-	// Must have permissions for ECR and CloudWatch Logs.
-	// Format: arn:aws:iam::account-id:role/role-name
-	//
-	ExecutionRole *string `json:"executionRole,omitempty"`
-	// Name of the head job queue
-	HeadQueue *string `json:"headQueue,omitempty"`
-	// IAM role ARN for the head job.
-	// Format: arn:aws:iam::account-id:role/role-name
-	//
-	HeadJobRole *string `json:"headJobRole,omitempty"`
-	// Path to AWS CLI on compute instances. AWS CLI must be available at this path.
-	//
-	CliPath *string `json:"cliPath,omitempty"`
-	// Number of CPUs allocated for the head job (default: 1)
-	HeadJobCpus *int `json:"headJobCpus,omitempty"`
-	// Memory allocation for the head job in MB (default: 1024)
-	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Enable Wave containers for this compute environment. Wave provides container provisioning
-	// and augmentation capabilities for Nextflow workflows.
-	//
-	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-	// Note: If Fusion2 is enabled, Wave must also be enabled.
-	//
-	EnableWave   *bool `json:"waveEnabled,omitempty"`
-	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
-	// Enable NVMe instance storage for high-performance I/O.
-	// When enabled, NVMe storage volumes are automatically mounted and configured.
-	//
-	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup           *string          `json:"logGroup,omitempty"`
-	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
-	Forge              *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
+	Discriminator              *string `json:"discriminator,omitempty"`
+	Region                     string  `json:"region"`
+	DefaultDataRetentionPolicy *bool   `json:"defaultDataRetentionPolicy,omitempty"`
 	// Size of the Data Studios instance (SMALL, MEDIUM, LARGE)
 	InstanceTypeSize *SeqeraComputeCloudInstanceTypeSize `json:"instanceTypeSize,omitempty"`
 }
@@ -2464,27 +2414,6 @@ func (s *SeqeraComputeConfiguration) GetDiscriminator() *string {
 	return s.Discriminator
 }
 
-func (s *SeqeraComputeConfiguration) GetStorageType() *string {
-	if s == nil {
-		return nil
-	}
-	return s.StorageType
-}
-
-func (s *SeqeraComputeConfiguration) GetLustreID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.LustreID
-}
-
-func (s *SeqeraComputeConfiguration) GetVolumes() []string {
-	if s == nil {
-		return nil
-	}
-	return s.Volumes
-}
-
 func (s *SeqeraComputeConfiguration) GetRegion() string {
 	if s == nil {
 		return ""
@@ -2492,123 +2421,11 @@ func (s *SeqeraComputeConfiguration) GetRegion() string {
 	return s.Region
 }
 
-func (s *SeqeraComputeConfiguration) GetComputeQueue() *string {
+func (s *SeqeraComputeConfiguration) GetDefaultDataRetentionPolicy() *bool {
 	if s == nil {
 		return nil
 	}
-	return s.ComputeQueue
-}
-
-func (s *SeqeraComputeConfiguration) GetDragenQueue() *string {
-	if s == nil {
-		return nil
-	}
-	return s.DragenQueue
-}
-
-func (s *SeqeraComputeConfiguration) GetDragenInstanceType() *string {
-	if s == nil {
-		return nil
-	}
-	return s.DragenInstanceType
-}
-
-func (s *SeqeraComputeConfiguration) GetComputeJobRole() *string {
-	if s == nil {
-		return nil
-	}
-	return s.ComputeJobRole
-}
-
-func (s *SeqeraComputeConfiguration) GetExecutionRole() *string {
-	if s == nil {
-		return nil
-	}
-	return s.ExecutionRole
-}
-
-func (s *SeqeraComputeConfiguration) GetHeadQueue() *string {
-	if s == nil {
-		return nil
-	}
-	return s.HeadQueue
-}
-
-func (s *SeqeraComputeConfiguration) GetHeadJobRole() *string {
-	if s == nil {
-		return nil
-	}
-	return s.HeadJobRole
-}
-
-func (s *SeqeraComputeConfiguration) GetCliPath() *string {
-	if s == nil {
-		return nil
-	}
-	return s.CliPath
-}
-
-func (s *SeqeraComputeConfiguration) GetHeadJobCpus() *int {
-	if s == nil {
-		return nil
-	}
-	return s.HeadJobCpus
-}
-
-func (s *SeqeraComputeConfiguration) GetHeadJobMemoryMb() *int {
-	if s == nil {
-		return nil
-	}
-	return s.HeadJobMemoryMb
-}
-
-func (s *SeqeraComputeConfiguration) GetEnableWave() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.EnableWave
-}
-
-func (s *SeqeraComputeConfiguration) GetEnableFusion() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.EnableFusion
-}
-
-func (s *SeqeraComputeConfiguration) GetNvmeStorageEnabled() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.NvmeStorageEnabled
-}
-
-func (s *SeqeraComputeConfiguration) GetLogGroup() *string {
-	if s == nil {
-		return nil
-	}
-	return s.LogGroup
-}
-
-func (s *SeqeraComputeConfiguration) GetFusionSnapshots() *bool {
-	if s == nil {
-		return nil
-	}
-	return s.FusionSnapshots
-}
-
-func (s *SeqeraComputeConfiguration) GetForge() *ForgeConfig {
-	if s == nil {
-		return nil
-	}
-	return s.Forge
-}
-
-func (s *SeqeraComputeConfiguration) GetForgedResources() []map[string]any {
-	if s == nil {
-		return nil
-	}
-	return s.ForgedResources
+	return s.DefaultDataRetentionPolicy
 }
 
 func (s *SeqeraComputeConfiguration) GetInstanceTypeSize() *SeqeraComputeCloudInstanceTypeSize {

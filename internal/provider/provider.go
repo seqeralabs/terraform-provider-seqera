@@ -14,6 +14,7 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 	dataset_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version"
+	organization_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_data"
 	organization_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member"
 	organization_member_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member_data"
 	pipeline_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_data"
@@ -132,6 +133,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewGoogleCredentialResource,
 		NewKubernetesCredentialResource,
 		NewLabelsResource,
+		NewManagedComputeCEResource,
 		NewOrgsResource,
 		NewPipelineResource,
 		NewPipelineSecretResource,
@@ -154,6 +156,7 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 	return []func() datasource.DataSource{
 		NewCredentialsDataSource,
 		NewDataLinksDataSource,
+		organization_data.NewDataSource,
 		organization_member_data.NewDataSource,
 		workspace_data.NewDataSource,
 		workspace_participant_data.NewDataSource,
