@@ -824,9 +824,10 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Display name for the compute environment. Requires replacement if changed.`,
+				Description: `A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
 				},
 			},
 			"org_id": schema.Int64Attribute{

@@ -1,15 +1,15 @@
 lockVersion: 2.0.0
-id: 8f132ad9-4841-4d16-98f8-e2b5bdc8b848
+id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: e06d17fa0fa1261d6f51f6be8d3e2ef2
+  docChecksum: 4abd56c9f698bfe42d54150f076440e1
   docVersion: 1.102.0
-  speakeasyVersion: 1.697.2
+  speakeasyVersion: 1.697.4
   generationVersion: 2.799.0
   releaseVersion: 0.30.0
-  configChecksum: 1402c1b88405af90df0d551ea6386e8e
+  configChecksum: 4673f77a43aac5b2f0cbb50f21ee7ba9
 persistentEdits:
-  generation_id: a2e8bbd2-2690-46b3-92b5-a8722c0b0f6c
-  pristine_commit_hash: eeae22870d14edd5d448f91d13118b282a33cb29
+  generation_id: fa9416b7-6c9d-4aa5-b5cb-f5815d4b62d8
+  pristine_commit_hash: 8b727d9d7ead153a998336c81b01bdba5fdfbcbb
   pristine_tree_hash: b3d47adce710b785609eded2094c6f6a941f5420
 features:
   terraform:
@@ -390,7 +390,7 @@ trackedFiles:
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
-    last_write_checksum: sha1:5d439cae683d6db78d783772f5986fdd417bf2e2
+    last_write_checksum: sha1:60ad48132d2fc5aa96d7255037cad863dbd3dc83
     pristine_git_object: 136a1cfb3f23c1c396175224b78c790e8d4b9808
   internal/provider/awsbatchce_resource_sdk.go:
     id: acddb134f02d
@@ -542,7 +542,7 @@ trackedFiles:
     pristine_git_object: 287907880a7125e9ffa8b77e8bbaa57d776887c4
   internal/provider/managedcomputece_resource.go:
     id: 7e0eecddbc1e
-    last_write_checksum: sha1:37f42ad2e51b6301171a11d7ad2980cbb515bded
+    last_write_checksum: sha1:3f1bf1258a23371f5e8d0d1f9172ac5bb772bdd2
     pristine_git_object: adccfb0da743b49f39ee880f81d9b6a12b4a2e27
   internal/provider/managedcomputece_resource_sdk.go:
     id: 834a6a05996d
@@ -2178,7 +2178,7 @@ trackedFiles:
     pristine_git_object: eef8d70634addb13e9644d304a3f0b81bca78049
   internal/sdk/models/shared/awsbatchcecomputeconfiginput.go:
     id: 1c8b4e56d2b4
-    last_write_checksum: sha1:381f48f6b04529bdac7c0f1afd207f48a6c8acf8
+    last_write_checksum: sha1:f6683e926ee620d5521ca580591b2b3a31ffd69a
     pristine_git_object: 18e30f40d1932fcb8ee01325e79f17ee3d77c716
   internal/sdk/models/shared/awsbatchconfig.go:
     id: aa4705d45858
@@ -3098,7 +3098,7 @@ trackedFiles:
     pristine_git_object: 26b3bbf325408f55485076ebeb3735ff106e85b9
   internal/sdk/models/shared/managedcomputececomputeconfiginput.go:
     id: b61b6426185b
-    last_write_checksum: sha1:56484208a38529e7b1bd97cafd40fed29558c802
+    last_write_checksum: sha1:84990c7b087925fcbda36cc9a823f7fe260c8a6e
     pristine_git_object: c42c622e89e5569eeae7f55d32b4b51e9d21655c
   internal/sdk/models/shared/managedcredentialsdbdto.go:
     id: 1c90d0daeff5
@@ -3824,6 +3824,18 @@ examples:
     speakeasy-default-remove-labels-from-actions:
       requestBody:
         application/json: {}
+  AddLabelsToDatasets:
+    speakeasy-default-add-labels-to-datasets:
+      requestBody:
+        application/json: {}
+  ApplyLabelsToDatasets:
+    speakeasy-default-apply-labels-to-datasets:
+      requestBody:
+        application/json: {}
+  RemoveLabelsFromDatasets:
+    speakeasy-default-remove-labels-from-datasets:
+      requestBody:
+        application/json: {}
   ListLabels:
     speakeasy-default-list-labels:
       responses:
@@ -3884,6 +3896,13 @@ examples:
     speakeasy-default-remove-labels-from-workflows:
       requestBody:
         application/json: {}
+  CreateAvatar:
+    speakeasy-default-create-avatar:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
   DownloadAvatar:
     speakeasy-default-download-avatar:
       parameters:
@@ -3891,7 +3910,6 @@ examples:
           avatarId: "<id>"
       responses:
         "200":
-          application/json: "0x1AcCAFd27D"
           application/octet-stream: "0x1AcCAFd27D"
         "400":
           application/json: {"message": "<value>"}
@@ -3906,9 +3924,9 @@ examples:
     speakeasy-default-create-compute-env:
       parameters:
         query:
-          workspaceId: 692724
+          workspaceId: 884946
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "lsf-platform", "config": {"discriminator": "aws-cloud", "region": "<value>"}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "lsf-platform", "config": {"discriminator": "gke-platform", "region": "<value>", "clusterName": "<value>"}}}
       responses:
         "200":
           application/json: {}
@@ -3928,7 +3946,7 @@ examples:
           workspaceId: 90014
       responses:
         "200":
-          application/json: {"computeEnv": {"config": {"discriminator": "aws-batch", "region": "us-east-1"}}}
+          application/json: {"computeEnv": {"config": {"discriminator": "aws-cloud", "region": "<value>"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateComputeEnv:
@@ -3949,6 +3967,22 @@ examples:
       responses:
         "400":
           application/json: {"message": "<value>"}
+  DisableComputeEnv:
+    speakeasy-default-disable-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  EnableComputeEnv:
+    speakeasy-default-enable-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
   UpdateComputeEnvPrimary:
     speakeasy-default-update-compute-env-primary:
       parameters:
@@ -3959,8 +3993,104 @@ examples:
       responses:
         "400":
           application/json: {"message": "<value>"}
-  ListCredentials:
-    speakeasy-default-list-credentials:
+  CreateAWSComputeEnv:
+    speakeasy-default-create-AWS-compute-env:
+      parameters:
+        query:
+          workspaceId: 814681
+      requestBody:
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAWSComputeEnv:
+    speakeasy-default-describe-AWS-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 757884
+      responses:
+        "200":
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAWSComputeEnv:
+    speakeasy-default-delete-AWS-compute-env:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateAWSBatchCE:
+    speakeasy-default-create-AWS-batch-CE:
+      parameters:
+        query:
+          workspaceId: 890311
+      requestBody:
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAWSBatchCE:
+    speakeasy-default-describe-AWS-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 651683
+      responses:
+        "200":
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAWSBatchCE:
+    speakeasy-default-delete-AWS-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedComputeCE:
+    speakeasy-default-create-managed-compute-CE:
+      parameters:
+        query:
+          workspaceId: 5152
+      requestBody:
+        application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeManagedComputeCE:
+    speakeasy-default-describe-managed-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 990670
+      responses:
+        "200":
+          application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedComputeCE:
+    speakeasy-default-delete-managed-compute-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListCredentialsDataSource:
+    speakeasy-default-list-credentials-data-source:
       responses:
         "200":
           application/json: {"credentials": [{}]}
@@ -3970,9 +4100,9 @@ examples:
     speakeasy-default-create-credentials:
       parameters:
         query:
-          workspaceId: 555782
+          workspaceId: 823696
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws", "accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure-cloud"}}}
       responses:
         "200":
           application/json: {}
@@ -3990,7 +4120,7 @@ examples:
           credentialsId: "<id>"
       responses:
         "200":
-          application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws", "accessKey": "AKIAIOSFODNN7EXAMPLE", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+          application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure"}}}
         "400":
           application/json: {"message": "<value>"}
   UpdateCredentials:
@@ -3999,7 +4129,7 @@ examples:
         path:
           credentialsId: "<id>"
       requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws", "accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure-cloud"}}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4013,20 +4143,468 @@ examples:
           application/json: {"message": "<value>"}
         "409":
           application/json: {}
-  ListDataLinks:
-    speakeasy-default-list-data-links:
+  CreateAWSCredentials:
+    speakeasy-default-create-AWS-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
       responses:
         "200":
-          application/json: {"dataLinks": []}
+          application/json: {}
         "400":
           application/json: {"message": "<value>"}
-        "202":
+  DescribeAWSCredentials:
+    speakeasy-default-describe-AWS-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAWSCredentials:
+    speakeasy-default-update-AWS-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAWSCredentials:
+    speakeasy-default-delete-AWS-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
           application/json: {}
+  CreateAzureCredentials:
+    speakeasy-default-create-azure-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeAzureCredentials:
+    speakeasy-default-describe-azure-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateAzureCredentials:
+    speakeasy-default-update-azure-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteAzureCredentials:
+    speakeasy-default-delete-azure-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  CreateBitbucketCredentials:
+    speakeasy-default-create-bitbucket-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeBitbucketCredentials:
+    speakeasy-default-describe-bitbucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateBitbucketCredentials:
+    speakeasy-default-update-bitbucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteBitbucketCredentials:
+    speakeasy-default-delete-bitbucket-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateCodecommitCredentials:
+    speakeasy-default-create-codecommit-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeCodecommitCredentials:
+    speakeasy-default-describe-codecommit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateCodecommitCredentials:
+    speakeasy-default-update-codecommit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteCodecommitCredentials:
+    speakeasy-default-delete-codecommit-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateContainerRegistryCredentials:
+    speakeasy-default-create-container-registry-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeContainerRegistryCredentials:
+    speakeasy-default-describe-container-registry-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "registry": "docker.io"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateContainerRegistryCredentials:
+    speakeasy-default-update-container-registry-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteContainerRegistryCredentials:
+    speakeasy-default-delete-container-registry-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGoogleCredentials:
+    speakeasy-default-create-google-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGoogleCredentials:
+    speakeasy-default-describe-google-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGoogleCredentials:
+    speakeasy-default-update-google-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGoogleCredentials:
+    speakeasy-default-delete-google-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  CreateGiteaCredentials:
+    speakeasy-default-create-gitea-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGiteaCredentials:
+    speakeasy-default-describe-gitea-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGiteaCredentials:
+    speakeasy-default-update-gitea-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGiteaCredentials:
+    speakeasy-default-delete-gitea-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGithubCredentials:
+    speakeasy-default-create-github-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGithubCredentials:
+    speakeasy-default-describe-github-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGithubCredentials:
+    speakeasy-default-update-github-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGithubCredentials:
+    speakeasy-default-delete-github-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateGitlabCredentials:
+    speakeasy-default-create-gitlab-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGitlabCredentials:
+    speakeasy-default-describe-gitlab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateGitlabCredentials:
+    speakeasy-default-update-gitlab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGitlabCredentials:
+    speakeasy-default-delete-gitlab-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateKubernetesCredentials:
+    speakeasy-default-create-kubernetes-credentials:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeKubernetesCredentials:
+    speakeasy-default-describe-kubernetes-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateKubernetesCredentials:
+    speakeasy-default-update-kubernetes-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteKubernetesCredentials:
+    speakeasy-default-delete-kubernetes-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateSSHCredentials:
+    speakeasy-default-create-SSH-credentials:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeSSHCredentials:
+    speakeasy-default-describe-SSH-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateSSHCredentials:
+    speakeasy-default-update-SSH-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteSSHCredentials:
+    speakeasy-default-delete-SSH-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreateTowerAgentCredentials:
+    speakeasy-default-create-tower-agent-credentials:
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeTowerAgentCredentials:
+    speakeasy-default-describe-tower-agent-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateTowerAgentCredentials:
+    speakeasy-default-update-tower-agent-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      requestBody:
+        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteTowerAgentCredentials:
+    speakeasy-default-delete-tower-agent-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListDataLinksDataSource:
+    speakeasy-default-list-data-links-data-source:
+      responses:
+        "200":
+          application/json: {"dataLinks": [{}]}
+        "400":
+          application/json: {"message": "<value>"}
   CreateCustomDataLink:
     speakeasy-default-create-custom-data-link:
       parameters:
         query:
-          workspaceId: 601301
+          workspaceId: 850888
       requestBody:
         application/json: {"name": "my-s3-datalink", "description": "S3 bucket for production data storage", "type": "bucket", "provider": "google", "resourceRef": "s3://my-bucket", "publicAccessible": false, "credentialsId": "aws-credentials-id"}
       responses:
@@ -4085,12 +4663,12 @@ examples:
           application/json: {"items": []}
         "400":
           application/json: {"message": "<value>"}
-  ExploreDataLink_1:
-    speakeasy-default-explore-data-link-1:
+  ExploreDataLinkWithPath:
+    speakeasy-default-explore-data-link-with-path:
       parameters:
         path:
           dataLinkId: "<id>"
-          path: "/srv"
+          path: "/home"
       responses:
         "200":
           application/json: {}
@@ -4114,12 +4692,9 @@ examples:
         path:
           dataLinkId: "<id>"
           filePath: "/etc/yowza_into.mid"
-        query:
-          filePath: "/etc/yowza_into.mid"
       responses:
         "200":
-          application/json: "0xaaA09d62eD"
-          application/octet-stream: "0x190E6c6f3e"
+          application/octet-stream: "0xaaA09d62eD"
         "400":
           application/json: {"message": "<value>"}
   GenerateDownloadUrlDataLink:
@@ -4166,8 +4741,8 @@ examples:
           application/json: {}
         "400":
           application/json: {"message": "<value>"}
-  FinishDataLinkUpload_1:
-    speakeasy-default-finish-data-link-upload-1:
+  FinishDataLinkUploadWithPath:
+    speakeasy-default-finish-data-link-upload-with-path:
       parameters:
         path:
           dataLinkId: "<id>"
@@ -4179,8 +4754,8 @@ examples:
           application/json: {}
         "400":
           application/json: {"message": "<value>"}
-  GenerateDataLinkUploadUrl_1:
-    speakeasy-default-generate-data-link-upload-url-1:
+  GenerateDataLinkUploadUrlWithPath:
+    speakeasy-default-generate-data-link-upload-url-with-path:
       parameters:
         path:
           dataLinkId: "<id>"
@@ -4209,6 +4784,29 @@ examples:
       responses:
         "200":
           application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteDatasets:
+    speakeasy-default-delete-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  HideDatasets:
+    speakeasy-default-hide-datasets:
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ShowDatasets:
+    speakeasy-default-show-datasets:
+      requestBody:
+        application/json: {}
+      responses:
         "400":
           application/json: {"message": "<value>"}
   ListLatestDatasetVersionsV2:
@@ -4278,6 +4876,15 @@ examples:
       responses:
         "200":
           application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DisableDatasetVersion:
+    speakeasy-default-disable-dataset-version:
+      parameters:
+        path:
+          datasetId: "<id>"
+          version: 656549
+      responses:
         "400":
           application/json: {"message": "<value>"}
   ListLaunchDatasetVersions:
@@ -4374,7 +4981,6 @@ examples:
           fileName: "example.file"
       responses:
         "200":
-          application/json: "0x509fBD6Aaf"
           text/plain: "<value>"
         "400":
           application/json: {"message": "<value>"}
@@ -4442,6 +5048,96 @@ examples:
         "200":
           application/json: {}
         "400":
+          application/json: {}
+  ListManagedIdentities:
+    speakeasy-default-list-managed-identities:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedIdentity:
+    speakeasy-default-create-managed-identity:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {"config": {"discriminator": "aws-cloud", "region": "<value>"}}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeManagedIdentity:
+    speakeasy-default-describe-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 934481
+      responses:
+        "200":
+          application/json: {"config": {"discriminator": "google-lifesciences"}}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateManagedIdentity:
+    speakeasy-default-update-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 255440
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedIdentity:
+    speakeasy-default-delete-managed-identity:
+      parameters:
+        path:
+          managedIdentityId: 510937
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
+          application/json: {}
+  ListManagedCredentials:
+    speakeasy-default-list-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 552174
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateManagedCredentials:
+    speakeasy-default-create-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 540701
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "container-reg"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateManagedCredentials:
+    speakeasy-default-update-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 221555
+          managedCredentialsId: 485576
+      requestBody:
+        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure-cloud"}}}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteManagedCredentials:
+    speakeasy-default-delete-managed-credentials:
+      parameters:
+        path:
+          managedIdentityId: 64238
+          managedCredentialsId: 728918
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+        "409":
           application/json: {}
   DescribeLaunch:
     speakeasy-default-describe-launch:
@@ -4692,7 +5388,7 @@ examples:
     speakeasy-default-create-workspace:
       parameters:
         path:
-          orgId: 726719
+          orgId: 876383
       requestBody:
         application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
       responses:
@@ -4700,11 +5396,11 @@ examples:
           application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
         "400":
           application/json: {"message": "<value>"}
-  WorkspaceValidate:
-    speakeasy-default-workspace-validate:
+  ValidateWorkspaceName:
+    speakeasy-default-validate-workspace-name:
       parameters:
         path:
-          orgId: 102493
+          orgId: 741883
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -4729,7 +5425,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "SHARED"}}
+          application/json: {"workspace": {"name": "genomics-research", "fullName": "Genomics Research Workspace", "description": "Workspace for genomics research projects and computational biology workflows", "visibility": "PRIVATE"}}
         "400":
           application/json: {"message": "<value>"}
   DeleteWorkspace:
@@ -4816,8 +5512,6 @@ examples:
       requestBody:
         application/json: {}
       responses:
-        "200":
-          application/json: {}
         "400":
           application/json: {"message": "<value>"}
   ListWorkspacesUser:
@@ -4892,7 +5586,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "terraform-hello-world", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
+        application/json: {"name": "<value>", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -4923,7 +5617,7 @@ examples:
         path:
           pipelineId: 589518
         query:
-          workspaceId: 589518
+          workspaceId: 180178
       responses:
         "200":
           application/json: {}
@@ -5010,7 +5704,7 @@ examples:
     speakeasy-default-list-data-studios:
       responses:
         "200":
-          application/json: {"studios": [{}], "totalSize": 186382}
+          application/json: {"studios": [{"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}], "totalSize": 186382}
         "400":
           application/json: {"message": "<value>"}
   CreateDataStudio:
@@ -5022,8 +5716,6 @@ examples:
           application/json: {"studio": {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}}
         "400":
           application/json: {"message": "<value>"}
-        "201":
-          application/json: {"studio": {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}}
   ListMountedDataLinkIds:
     speakeasy-default-list-mounted-data-link-ids:
       responses:
@@ -5073,7 +5765,7 @@ examples:
           checkpointId: 674924
       responses:
         "200":
-          application/json: {"id": 650158, "name": "<value>", "dateCreated": "2023-09-09T23:15:18.409Z", "dateSaved": "2025-08-27T11:46:26.393Z", "author": {}, "path": "/usr/src", "status": "finalized"}
+          application/json: {"id": 650158, "name": "<value>", "dateCreated": "2024-09-08T23:15:18.409Z", "dateSaved": "2024-08-17T09:59:58.876Z", "author": {}, "path": "/media", "status": "empty"}
         "400":
           application/json: {"message": "<value>"}
   UpdateDataStudioCheckpoint:
@@ -5086,7 +5778,7 @@ examples:
         application/json: {}
       responses:
         "200":
-          application/json: {"id": 30064, "name": "<value>", "dateCreated": "2024-08-15T11:49:05.950Z", "dateSaved": "2024-07-04T01:04:00.041Z", "author": {}, "path": "/opt/lib", "status": "finalized"}
+          application/json: {"id": 30064, "name": "<value>", "dateCreated": "2025-08-15T11:49:05.950Z", "dateSaved": "2025-01-31T05:16:20.912Z", "author": {}, "path": "/boot", "status": "interim"}
         "400":
           application/json: {"message": "<value>"}
   ExtendDataStudioLifespan:
@@ -5318,7 +6010,6 @@ examples:
           workflowId: "<id>"
       responses:
         "200":
-          application/json: "0x21dDAb1CED"
           text/plain: "<value>"
         "400":
           application/json: {"message": "<value>"}
@@ -5330,7 +6021,6 @@ examples:
           taskId: 679525
       responses:
         "200":
-          application/json: "0x8d3d3E235F"
           text/plain: "<value>"
         "400":
           application/json: {"message": "<value>"}
@@ -5344,8 +6034,8 @@ examples:
           application/json: {"launch": {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "<value>", "discriminator": "moab-platform"}}}}
         "400":
           application/json: {"message": "<value>"}
-  WorkflowLogs:
-    speakeasy-default-workflow-logs:
+  GetWorkflowLog:
+    speakeasy-default-get-workflow-log:
       parameters:
         path:
           workflowId: "<id>"
@@ -5385,6 +6075,27 @@ examples:
           application/json: {}
         "400":
           application/json: {"message": "<value>"}
+  DescribeWorkflowTask:
+    speakeasy-default-describe-workflow-task:
+      parameters:
+        path:
+          workflowId: "<id>"
+          taskId: 295094
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListWorkflowTasks:
+    speakeasy-default-list-workflow-tasks:
+      parameters:
+        path:
+          workflowId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
   DescribeWorkflowStar:
     speakeasy-default-describe-workflow-star:
       parameters:
@@ -5415,2072 +6126,4 @@ examples:
           application/json: {}
         "404":
           application/json: {"message": "<value>"}
-  DescribeWorkflowTask:
-    speakeasy-default-describe-workflow-task:
-      parameters:
-        path:
-          workflowId: "<id>"
-          taskId: 295094
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  ListWorkflowTasks:
-    speakeasy-default-list-workflow-tasks:
-      parameters:
-        path:
-          workflowId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  CreateAWSCredentials:
-    speakeasy-default-create-AWS-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeAWSCredentials:
-    speakeasy-default-describe-AWS-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "my-gcp-credentials", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateAWSCredentials:
-    speakeasy-default-update-AWS-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "aws", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "assumeRoleArn": "arn:aws:iam::123456789012:role/SeqeraRole"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteAWSCredentials:
-    speakeasy-default-delete-AWS-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-        "409":
-          application/json: {}
-  CreateAzureCredentials:
-    speakeasy-default-create-azure-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeAzureCredentials:
-    speakeasy-default-describe-azure-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateAzureCredentials:
-    speakeasy-default-update-azure-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "azure", "keys": {"discriminator": "azure", "batchName": "myazurebatch", "storageName": "myazurestorage", "batchKey": "YourAzureBatchAccountKeyHere==", "storageKey": "YourAzureStorageAccountKeyHere==", "tenantId": "00000000-0000-0000-0000-000000000000", "clientId": "00000000-0000-0000-0000-000000000000", "clientSecret": "YourAzureClientSecretHere"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteAzureCredentials:
-    speakeasy-default-delete-azure-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-        "409":
-          application/json: {}
-  CreateGoogleCredentials:
-    speakeasy-default-create-google-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeGoogleCredentials:
-    speakeasy-default-describe-google-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateGoogleCredentials:
-    speakeasy-default-update-google-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "google", "keys": {"data": "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n", "keyType": "google"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteGoogleCredentials:
-    speakeasy-default-delete-google-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-        "409":
-          application/json: {}
-  CreateAWSComputeEnv:
-    speakeasy-default-create-AWS-compute-env:
-      parameters:
-        query:
-          workspaceId: 814681
-      requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeAWSComputeEnv:
-    speakeasy-default-describe-AWS-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-        query:
-          workspaceId: 757884
-      responses:
-        "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateAWSComputeEnv:
-    speakeasy-default-update-AWS-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteAWSComputeEnv:
-    speakeasy-default-delete-AWS-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateBitBucketCredentials:
-    speakeasy-default-create-bit-bucket-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeBitBucketCredentials:
-    speakeasy-default-describe-bit-bucket-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateBitBucketCredentials:
-    speakeasy-default-update-bit-bucket-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "keys": {"username": "myuser@example.com", "token": "ATBB...", "baseUrl": "https://bitbucket.org/myorg"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteBitBucketCredentials:
-    speakeasy-default-delete-bit-bucket-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateCodeCommitCredentials:
-    speakeasy-default-create-code-commit-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeCodeCommitCredentials:
-    speakeasy-default-describe-code-commit-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateCodeCommitCredentials:
-    speakeasy-default-update-code-commit-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "keys": {"accessKey": "AKIAIOSFODNN7EXAMPLE", "secretKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteCodeCommitCredentials:
-    speakeasy-default-delete-code-commit-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateGiteaCredentials:
-    speakeasy-default-create-gitea-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeGiteaCredentials:
-    speakeasy-default-describe-gitea-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateGiteaCredentials:
-    speakeasy-default-update-gitea-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitea", "baseUrl": "https://gitea.mycompany.com", "keys": {"username": "myuser", "password": "mypassword"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteGiteaCredentials:
-    speakeasy-default-delete-gitea-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateGitHubCredentials:
-    speakeasy-default-create-git-hub-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeGitHubCredentials:
-    speakeasy-default-describe-git-hub-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateGitHubCredentials:
-    speakeasy-default-update-git-hub-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "keys": {"accessToken": "ghp_1234567890abcdefghijklmnopqrstuvwxyz", "baseUrl": "https://github.mycompany.com"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteGitHubCredentials:
-    speakeasy-default-delete-git-hub-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateGitLabCredentials:
-    speakeasy-default-create-git-lab-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeGitLabCredentials:
-    speakeasy-default-describe-git-lab-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateGitLabCredentials:
-    speakeasy-default-update-git-lab-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "keys": {"token": "glpat-xxxxxxxxxxxxxxxxxxxx", "baseUrl": "https://gitlab.mycompany.com"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteGitLabCredentials:
-    speakeasy-default-delete-git-lab-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateContainerRegistryCredentials:
-    speakeasy-default-create-container-registry-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeContainerRegistryCredentials:
-    speakeasy-default-describe-container-registry-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "registry": "docker.io"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateContainerRegistryCredentials:
-    speakeasy-default-update-container-registry-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "container-reg", "keys": {"userName": "myuser", "password": "mypassword", "registry": "docker.io"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteContainerRegistryCredentials:
-    speakeasy-default-delete-container-registry-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateSSHCredentials:
-    speakeasy-default-create-SSH-credentials:
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeSSHCredentials:
-    speakeasy-default-describe-SSH-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateSSHCredentials:
-    speakeasy-default-update-SSH-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteSSHCredentials:
-    speakeasy-default-delete-SSH-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateTowerAgentCredentials:
-    speakeasy-default-create-tower-agent-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeTowerAgentCredentials:
-    speakeasy-default-describe-tower-agent-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateTowerAgentCredentials:
-    speakeasy-default-update-tower-agent-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "tw-agent", "keys": {"connectionId": "31e42060-7985-4727-aca1-4071c819ad8e", "shared": false}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteTowerAgentCredentials:
-    speakeasy-default-delete-tower-agent-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateKubernetesCredentials:
-    speakeasy-default-create-kubernetes-credentials:
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeKubernetesCredentials:
-    speakeasy-default-describe-kubernetes-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateKubernetesCredentials:
-    speakeasy-default-update-kubernetes-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteKubernetesCredentials:
-    speakeasy-default-delete-kubernetes-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateBitbucketCredentials:
-    speakeasy-default-create-bitbucket-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeBitbucketCredentials:
-    speakeasy-default-describe-bitbucket-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateBitbucketCredentials:
-    speakeasy-default-update-bitbucket-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "bitbucket", "baseUrl": "https://bitbucket.org/myorg", "keys": {"username": "myuser@example.com", "token": "ATBB..."}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteBitbucketCredentials:
-    speakeasy-default-delete-bitbucket-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateCodecommitCredentials:
-    speakeasy-default-create-codecommit-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeCodecommitCredentials:
-    speakeasy-default-describe-codecommit-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateCodecommitCredentials:
-    speakeasy-default-update-codecommit-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "codecommit", "baseUrl": "https://git-codecommit.us-east-1.amazonaws.com", "keys": {"username": "AKIAIOSFODNN7EXAMPLE", "password": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteCodecommitCredentials:
-    speakeasy-default-delete-codecommit-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateGithubCredentials:
-    speakeasy-default-create-github-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeGithubCredentials:
-    speakeasy-default-describe-github-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateGithubCredentials:
-    speakeasy-default-update-github-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "github", "baseUrl": "https://github.mycompany.com", "keys": {"username": "octocat", "password": "ghp_1234567890abcdefghijklmnopqrstuvwxyz"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteGithubCredentials:
-    speakeasy-default-delete-github-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateGitlabCredentials:
-    speakeasy-default-create-gitlab-credentials:
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeGitlabCredentials:
-    speakeasy-default-describe-gitlab-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "200":
-          application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateGitlabCredentials:
-    speakeasy-default-update-gitlab-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      requestBody:
-        application/json: {"credentials": {"name": "<value>", "provider": "gitlab", "baseUrl": "https://gitlab.mycompany.com", "keys": {"username": "gitlab-user", "token": "glpat-xxxxxxxxxxxxxxxxxxxx"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteGitlabCredentials:
-    speakeasy-default-delete-gitlab-credentials:
-      parameters:
-        path:
-          credentialsId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateAWSBatchComputeEnv:
-    speakeasy-default-create-AWS-batch-compute-env:
-      parameters:
-        query:
-          workspaceId: 880713
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeAWSBatchComputeEnv:
-    speakeasy-default-describe-AWS-batch-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-        query:
-          workspaceId: 740771
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateAWSBatchComputeEnv:
-    speakeasy-default-update-AWS-batch-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteAWSBatchComputeEnv:
-    speakeasy-default-delete-AWS-batch-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateAWSBatchCE:
-    speakeasy-default-create-AWS-batch-CE:
-      parameters:
-        query:
-          workspaceId: 890311
-      requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeAWSBatchCE:
-    speakeasy-default-describe-AWS-batch-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-        query:
-          workspaceId: 651683
-      responses:
-        "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateAWSBatchCE:
-    speakeasy-default-update-AWS-batch-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteAWSBatchCE:
-    speakeasy-default-delete-AWS-batch-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateAWSBatchComputeCE:
-    speakeasy-default-create-AWS-batch-compute-CE:
-      parameters:
-        query:
-          workspaceId: 960865
-      requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeAWSBatchComputeCE:
-    speakeasy-default-describe-AWS-batch-compute-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-        query:
-          workspaceId: 564591
-      responses:
-        "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "workDir": "s3://my-nextflow-bucket/work", "headJobCpus": 4, "headJobMemoryMb": 8192, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteAWSBatchComputeCE:
-    speakeasy-default-delete-AWS-batch-compute-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  ListAWSCredentials:
-    speakeasy-default-list-AWS-credentials:
-      parameters:
-        query:
-          platformId: "aws"
-          name: "my-aws-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "bitbucket"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListAzureCredentials:
-    speakeasy-default-list-azure-credentials:
-      parameters:
-        query:
-          platformId: "azure"
-          name: "my-azure-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azurerepos"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListGoogleCredentials:
-    speakeasy-default-list-google-credentials:
-      parameters:
-        query:
-          platformId: "google"
-          name: "my-gcp-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "ssh"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListGithubCredentials:
-    speakeasy-default-list-github-credentials:
-      parameters:
-        query:
-          platformId: "github"
-          name: "my-github-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azurerepos"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListGitlabCredentials:
-    speakeasy-default-list-gitlab-credentials:
-      parameters:
-        query:
-          platformId: "gitlab"
-          name: "my-gitlab-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "gitea"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListBitbucketCredentials:
-    speakeasy-default-list-bitbucket-credentials:
-      parameters:
-        query:
-          platformId: "bitbucket"
-          name: "my-bitbucket-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "bitbucket"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListSSHCredentials:
-    speakeasy-default-list-SSH-credentials:
-      parameters:
-        query:
-          platformId: "ssh"
-          name: "my-ssh-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure_entra"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListKubernetesCredentials:
-    speakeasy-default-list-kubernetes-credentials:
-      parameters:
-        query:
-          platformId: "k8s"
-          name: "my-k8s-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "github"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListContainerRegistryCredentials:
-    speakeasy-default-list-container-registry-credentials:
-      parameters:
-        query:
-          platformId: "container-reg"
-          name: "my-registry-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "ssh"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListTowerAgentCredentials:
-    speakeasy-default-list-tower-agent-credentials:
-      parameters:
-        query:
-          platformId: "tw-agent"
-          name: "my-agent-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "aws"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListCodecommitCredentials:
-    speakeasy-default-list-codecommit-credentials:
-      parameters:
-        query:
-          platformId: "codecommit"
-          name: "my-codecommit-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "github"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListGiteaCredentials:
-    speakeasy-default-list-gitea-credentials:
-      parameters:
-        query:
-          platformId: "gitea"
-          name: "my-gitea-credentials"
-      responses:
-        "200":
-          application/json: {"credentials": [{"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "google"}}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListDataLinksDataSource:
-    speakeasy-default-list-data-links-data-source:
-      responses:
-        "200":
-          application/json: {"dataLinks": [{}]}
-        "400":
-          application/json: {"message": "<value>"}
-  ListCredentialsDataSource:
-    speakeasy-default-list-credentials-data-source:
-      responses:
-        "200":
-          application/json: {"credentials": [{}]}
-        "400":
-          application/json: {"message": "<value>"}
-  AddLabelsToDatasets:
-    speakeasy-default-add-labels-to-datasets:
-      requestBody:
-        application/json: {}
-  ApplyLabelsToDatasets:
-    speakeasy-default-apply-labels-to-datasets:
-      requestBody:
-        application/json: {}
-  RemoveLabelsFromDatasets:
-    speakeasy-default-remove-labels-from-datasets:
-      requestBody:
-        application/json: {}
-  CreateAvatar:
-    speakeasy-default-create-avatar:
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteDatasets:
-    speakeasy-default-delete-datasets:
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  HideDatasets:
-    speakeasy-default-hide-datasets:
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  ShowDatasets:
-    speakeasy-default-show-datasets:
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DisableDatasetVersion:
-    speakeasy-default-disable-dataset-version:
-      parameters:
-        path:
-          datasetId: "<id>"
-          version: 656549
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  ListManagedIdentities:
-    speakeasy-default-list-managed-identities:
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  CreateManagedIdentity:
-    speakeasy-default-create-managed-identity:
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {"config": {"workDir": "<value>", "discriminator": "altair-platform"}}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeManagedIdentity:
-    speakeasy-default-describe-managed-identity:
-      parameters:
-        path:
-          managedIdentityId: 934481
-      responses:
-        "200":
-          application/json: {"config": {"workDir": "<value>", "discriminator": "uge-platform"}}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateManagedIdentity:
-    speakeasy-default-update-managed-identity:
-      parameters:
-        path:
-          managedIdentityId: 255440
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteManagedIdentity:
-    speakeasy-default-delete-managed-identity:
-      parameters:
-        path:
-          managedIdentityId: 510937
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-        "409":
-          application/json: {}
-  ListManagedCredentials:
-    speakeasy-default-list-managed-credentials:
-      parameters:
-        path:
-          managedIdentityId: 552174
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  CreateManagedCredentials:
-    speakeasy-default-create-managed-credentials:
-      parameters:
-        path:
-          managedIdentityId: 540701
-      requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "container-reg"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  UpdateManagedCredentials:
-    speakeasy-default-update-managed-credentials:
-      parameters:
-        path:
-          managedIdentityId: 221555
-          managedCredentialsId: 485576
-      requestBody:
-        application/json: {"credentials": {"name": "my-gcp-credentials", "description": "Google Cloud credentials for production workloads", "provider": "google", "baseUrl": "https://www.googleapis.com", "category": "cloud", "keys": {"discriminator": "azure-cloud"}}}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteManagedCredentials:
-    speakeasy-default-delete-managed-credentials:
-      parameters:
-        path:
-          managedIdentityId: 64238
-          managedCredentialsId: 728918
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-        "409":
-          application/json: {}
-  ValidateWorkspaceName:
-    speakeasy-default-validate-workspace-name:
-      parameters:
-        path:
-          orgId: 741883
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  GetWorkflowLog:
-    speakeasy-default-get-workflow-log:
-      parameters:
-        path:
-          workflowId: "<id>"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  ExploreDataLinkWithPath:
-    speakeasy-default-explore-data-link-with-path:
-      parameters:
-        path:
-          dataLinkId: "<id>"
-          path: "/home"
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  FinishDataLinkUploadWithDirPath:
-    speakeasy-default-finish-data-link-upload-with-dir-path:
-      parameters:
-        path:
-          dataLinkId: "<id>"
-          dirPath: "<value>"
-      requestBody:
-        application/json: {}
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  GenerateDataLinkUploadUrlWithDirPath:
-    speakeasy-default-generate-data-link-upload-url-with-dir-path:
-      parameters:
-        path:
-          dataLinkId: "<id>"
-          dirPath: "<value>"
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DisableComputeEnv:
-    speakeasy-default-disable-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  EnableComputeEnv:
-    speakeasy-default-enable-compute-env:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  FinishDataLinkUploadWithPath:
-    speakeasy-default-finish-data-link-upload-with-path:
-      parameters:
-        path:
-          dataLinkId: "<id>"
-          dirPath: "<value>"
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  GenerateDataLinkUploadUrlWithPath:
-    speakeasy-default-generate-data-link-upload-url-with-path:
-      parameters:
-        path:
-          dataLinkId: "<id>"
-          dirPath: "<value>"
-      requestBody:
-        application/json: {}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  CreateSeqeraComputeCE:
-    speakeasy-default-create-seqera-compute-CE:
-      parameters:
-        query:
-          workspaceId: 607711
-      requestBody:
-        application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"workDir": "work", "region": "us-east-1", "defaultDataRetentionPolicy": true, "instanceTypeSize": "SMALL"}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeSeqeraComputeCE:
-    speakeasy-default-describe-seqera-compute-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-        query:
-          workspaceId: 565858
-      responses:
-        "200":
-          application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"workDir": "work", "region": "us-east-1", "defaultDataRetentionPolicy": true, "instanceTypeSize": "SMALL"}}}
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteSeqeraComputeCE:
-    speakeasy-default-delete-seqera-compute-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
-  CreateManagedComputeCE:
-    speakeasy-default-create-managed-compute-CE:
-      parameters:
-        query:
-          workspaceId: 5152
-      requestBody:
-        application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
-      responses:
-        "200":
-          application/json: {}
-        "400":
-          application/json: {"message": "<value>"}
-  DescribeManagedComputeCE:
-    speakeasy-default-describe-managed-compute-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-        query:
-          workspaceId: 990670
-      responses:
-        "200":
-          application/json: {"computeEnv": {"name": "<value>", "platform": "seqeracompute-platform", "config": {"region": "us-east-1", "instanceTypeSize": "SMALL", "workDir": "work", "defaultDataRetentionPolicy": true}}}
-        "400":
-          application/json: {"message": "<value>"}
-  DeleteManagedComputeCE:
-    speakeasy-default-delete-managed-compute-CE:
-      parameters:
-        path:
-          computeEnvId: "<id>"
-      responses:
-        "400":
-          application/json: {"message": "<value>"}
 examplesVersion: 1.0.2
-generatedTests: {}
-generatedFiles:
-  - .gitattributes
-  - USAGE.md
-  - examples/provider/provider.tf
-  - examples/resources/seqera_action/import-by-string-id.tf
-  - examples/resources/seqera_action/import.sh
-  - examples/resources/seqera_aws_batch_ce/import-by-string-id.tf
-  - examples/resources/seqera_aws_batch_ce/import.sh
-  - examples/resources/seqera_aws_batch_ce/resource.tf
-  - examples/resources/seqera_aws_compute_env/import-by-string-id.tf
-  - examples/resources/seqera_aws_compute_env/import.sh
-  - examples/resources/seqera_aws_compute_env/resource.tf
-  - examples/resources/seqera_aws_credential/import-by-string-id.tf
-  - examples/resources/seqera_aws_credential/import.sh
-  - examples/resources/seqera_azure_credential/import-by-string-id.tf
-  - examples/resources/seqera_azure_credential/import.sh
-  - examples/resources/seqera_bitbucket_credential/import-by-string-id.tf
-  - examples/resources/seqera_bitbucket_credential/import.sh
-  - examples/resources/seqera_codecommit_credential/import-by-string-id.tf
-  - examples/resources/seqera_codecommit_credential/import.sh
-  - examples/resources/seqera_compute_env/import-by-string-id.tf
-  - examples/resources/seqera_compute_env/import.sh
-  - examples/resources/seqera_compute_env/resource.tf
-  - examples/resources/seqera_container_registry_credential/import-by-string-id.tf
-  - examples/resources/seqera_container_registry_credential/import.sh
-  - examples/resources/seqera_credential/import-by-string-id.tf
-  - examples/resources/seqera_credential/import.sh
-  - examples/resources/seqera_credential/resource.tf
-  - examples/resources/seqera_data_link/import-by-string-id.tf
-  - examples/resources/seqera_data_link/import.sh
-  - examples/resources/seqera_data_link/resource.tf
-  - examples/resources/seqera_datasets/resource.tf
-  - examples/resources/seqera_gitea_credential/import-by-string-id.tf
-  - examples/resources/seqera_gitea_credential/import.sh
-  - examples/resources/seqera_github_credential/import-by-string-id.tf
-  - examples/resources/seqera_github_credential/import.sh
-  - examples/resources/seqera_gitlab_credential/import-by-string-id.tf
-  - examples/resources/seqera_gitlab_credential/import.sh
-  - examples/resources/seqera_kubernetes_credential/import-by-string-id.tf
-  - examples/resources/seqera_kubernetes_credential/import.sh
-  - examples/resources/seqera_orgs/import-by-string-id.tf
-  - examples/resources/seqera_orgs/import.sh
-  - examples/resources/seqera_pipeline/import-by-string-id.tf
-  - examples/resources/seqera_pipeline/import.sh
-  - examples/resources/seqera_pipeline/resource.tf
-  - examples/resources/seqera_pipeline_secret/import-by-string-id.tf
-  - examples/resources/seqera_pipeline_secret/import.sh
-  - examples/resources/seqera_ssh_credential/import-by-string-id.tf
-  - examples/resources/seqera_ssh_credential/import.sh
-  - examples/resources/seqera_studios/import-by-string-id.tf
-  - examples/resources/seqera_studios/import.sh
-  - examples/resources/seqera_teams/import-by-string-id.tf
-  - examples/resources/seqera_teams/import.sh
-  - examples/resources/seqera_teams/resource.tf
-  - examples/resources/seqera_tower_agent_credential/import-by-string-id.tf
-  - examples/resources/seqera_tower_agent_credential/import.sh
-  - examples/resources/seqera_workflows/import-by-string-id.tf
-  - examples/resources/seqera_workflows/import.sh
-  - examples/resources/seqera_workflows/resource.tf
-  - examples/resources/seqera_workspace/import-by-string-id.tf
-  - examples/resources/seqera_workspace/import.sh
-  - examples/resources/seqera_workspace/resource.tf
-  - go.mod
-  - go.sum
-  - internal/planmodifiers/boolplanmodifier/suppress_diff.go
-  - internal/planmodifiers/float32planmodifier/suppress_diff.go
-  - internal/planmodifiers/float64planmodifier/suppress_diff.go
-  - internal/planmodifiers/int32planmodifier/suppress_diff.go
-  - internal/planmodifiers/int64planmodifier/suppress_diff.go
-  - internal/planmodifiers/listplanmodifier/suppress_diff.go
-  - internal/planmodifiers/mapplanmodifier/suppress_diff.go
-  - internal/planmodifiers/numberplanmodifier/suppress_diff.go
-  - internal/planmodifiers/objectplanmodifier/suppress_diff.go
-  - internal/planmodifiers/setplanmodifier/suppress_diff.go
-  - internal/planmodifiers/stringplanmodifier/suppress_diff.go
-  - internal/planmodifiers/utils/state_check.go
-  - internal/provider/action_resource.go
-  - internal/provider/action_resource_sdk.go
-  - internal/provider/awsbatchce_resource.go
-  - internal/provider/awsbatchce_resource_sdk.go
-  - internal/provider/awscomputeenv_resource.go
-  - internal/provider/awscomputeenv_resource_sdk.go
-  - internal/provider/awscredential_resource.go
-  - internal/provider/awscredential_resource_sdk.go
-  - internal/provider/azurecredential_resource.go
-  - internal/provider/azurecredential_resource_sdk.go
-  - internal/provider/bitbucketcredential_resource.go
-  - internal/provider/bitbucketcredential_resource_sdk.go
-  - internal/provider/codecommitcredential_resource.go
-  - internal/provider/codecommitcredential_resource_sdk.go
-  - internal/provider/computeenv_resource.go
-  - internal/provider/computeenv_resource_sdk.go
-  - internal/provider/containerregistrycredential_resource.go
-  - internal/provider/containerregistrycredential_resource_sdk.go
-  - internal/provider/credential_resource.go
-  - internal/provider/credential_resource_sdk.go
-  - internal/provider/credentials_data_source.go
-  - internal/provider/credentials_data_source_sdk.go
-  - internal/provider/datalink_resource.go
-  - internal/provider/datalink_resource_sdk.go
-  - internal/provider/datalinks_data_source.go
-  - internal/provider/datalinks_data_source_sdk.go
-  - internal/provider/datasets_resource.go
-  - internal/provider/datasets_resource_sdk.go
-  - internal/provider/giteacredential_resource.go
-  - internal/provider/giteacredential_resource_sdk.go
-  - internal/provider/githubcredential_resource.go
-  - internal/provider/githubcredential_resource_sdk.go
-  - internal/provider/gitlabcredential_resource.go
-  - internal/provider/gitlabcredential_resource_sdk.go
-  - internal/provider/googlecredential_resource.go
-  - internal/provider/googlecredential_resource_sdk.go
-  - internal/provider/kubernetescredential_resource.go
-  - internal/provider/kubernetescredential_resource_sdk.go
-  - internal/provider/labels_resource.go
-  - internal/provider/labels_resource_sdk.go
-  - internal/provider/orgs_resource.go
-  - internal/provider/orgs_resource_sdk.go
-  - internal/provider/pipeline_resource.go
-  - internal/provider/pipeline_resource_sdk.go
-  - internal/provider/pipelinesecret_resource.go
-  - internal/provider/pipelinesecret_resource_sdk.go
-  - internal/provider/primarycomputeenv_resource.go
-  - internal/provider/primarycomputeenv_resource_sdk.go
-  - internal/provider/provider.go
-  - internal/provider/reflect/diags.go
-  - internal/provider/reflect/doc.go
-  - internal/provider/reflect/generic_attr_value.go
-  - internal/provider/reflect/helpers.go
-  - internal/provider/reflect/interfaces.go
-  - internal/provider/reflect/into.go
-  - internal/provider/reflect/map.go
-  - internal/provider/reflect/number.go
-  - internal/provider/reflect/options.go
-  - internal/provider/reflect/outof.go
-  - internal/provider/reflect/pointer.go
-  - internal/provider/reflect/primitive.go
-  - internal/provider/reflect/slice.go
-  - internal/provider/reflect/struct.go
-  - internal/provider/sshcredential_resource.go
-  - internal/provider/sshcredential_resource_sdk.go
-  - internal/provider/studios_resource.go
-  - internal/provider/studios_resource_sdk.go
-  - internal/provider/teams_resource.go
-  - internal/provider/teams_resource_sdk.go
-  - internal/provider/toweragentcredential_resource.go
-  - internal/provider/toweragentcredential_resource_sdk.go
-  - internal/provider/typeconvert/date.go
-  - internal/provider/typeconvert/datetime.go
-  - internal/provider/typeconvert/int.go
-  - internal/provider/types/access_token.go
-  - internal/provider/types/action_config_type.go
-  - internal/provider/types/action_tower_action_config.go
-  - internal/provider/types/agent_security_keys.go
-  - internal/provider/types/altair_pbs_configuration.go
-  - internal/provider/types/amazon_eks_cluster_configuration.go
-  - internal/provider/types/aws_batch_config.go
-  - internal/provider/types/aws_batch_configuration.go
-  - internal/provider/types/aws_cloud_configuration.go
-  - internal/provider/types/aws_security_keys.go
-  - internal/provider/types/az_batch_forge_config.go
-  - internal/provider/types/azure_batch_configuration.go
-  - internal/provider/types/azure_entra_keys.go
-  - internal/provider/types/azure_repos_security_keys.go
-  - internal/provider/types/azure_security_keys.go
-  - internal/provider/types/bit_bucket_security_keys.go
-  - internal/provider/types/code_commit_security_keys.go
-  - internal/provider/types/compute_config.go
-  - internal/provider/types/compute_env_compute_config.go
-  - internal/provider/types/config_env_variable.go
-  - internal/provider/types/container_registry_keys.go
-  - internal/provider/types/credential.go
-  - internal/provider/types/data_link.go
-  - internal/provider/types/data_link_credentials.go
-  - internal/provider/types/data_studio_configuration.go
-  - internal/provider/types/forge_config.go
-  - internal/provider/types/git_hub_security_keys.go
-  - internal/provider/types/git_lab_security_keys.go
-  - internal/provider/types/gitea_security_keys.go
-  - internal/provider/types/github_action_config.go
-  - internal/provider/types/google_batch_service_configuration.go
-  - internal/provider/types/google_gke_cluster_configuration.go
-  - internal/provider/types/google_life_sciences_configuration.go
-  - internal/provider/types/google_security_keys.go
-  - internal/provider/types/ibmlsf_configuration.go
-  - internal/provider/types/k8s_security_keys.go
-  - internal/provider/types/kubernetes_compute_configuration.go
-  - internal/provider/types/label_db_dto.go
-  - internal/provider/types/moab_configuration.go
-  - internal/provider/types/security_keys.go
-  - internal/provider/types/seqera_compute_configuration.go
-  - internal/provider/types/seqera_compute_security_keys.go
-  - internal/provider/types/slurm_configuration.go
-  - internal/provider/types/ssh_security_keys.go
-  - internal/provider/types/univa_grid_engine_configuration.go
-  - internal/provider/types/wf_manifest.go
-  - internal/provider/types/wf_nextflow.go
-  - internal/provider/types/wf_stats.go
-  - internal/provider/types/workflow.go
-  - internal/provider/types/workflow_launch_request.go
-  - internal/provider/types/workflow_launch_request1.go
-  - internal/provider/utils.go
-  - internal/provider/workflows_resource.go
-  - internal/provider/workflows_resource_sdk.go
-  - internal/provider/workspace_resource.go
-  - internal/provider/workspace_resource_sdk.go
-  - internal/sdk/.gitattributes
-  - internal/sdk/actions.go
-  - internal/sdk/avatars.go
-  - internal/sdk/computeenvs.go
-  - internal/sdk/credentials.go
-  - internal/sdk/datalinks.go
-  - internal/sdk/datasets.go
-  - internal/sdk/docs/models/operations/option.md
-  - internal/sdk/ga4gh.go
-  - internal/sdk/internal/config/sdkconfiguration.go
-  - internal/sdk/internal/hooks/hooks.go
-  - internal/sdk/internal/utils/contenttype.go
-  - internal/sdk/internal/utils/env.go
-  - internal/sdk/internal/utils/form.go
-  - internal/sdk/internal/utils/headers.go
-  - internal/sdk/internal/utils/json.go
-  - internal/sdk/internal/utils/pathparams.go
-  - internal/sdk/internal/utils/queryparams.go
-  - internal/sdk/internal/utils/requestbody.go
-  - internal/sdk/internal/utils/retries.go
-  - internal/sdk/internal/utils/security.go
-  - internal/sdk/internal/utils/utils.go
-  - internal/sdk/labels.go
-  - internal/sdk/launch.go
-  - internal/sdk/models/errors/apierror.go
-  - internal/sdk/models/operations/addlabelstoactions.go
-  - internal/sdk/models/operations/addlabelstopipelines.go
-  - internal/sdk/models/operations/addlabelstoworkflows.go
-  - internal/sdk/models/operations/applylabelstoactions.go
-  - internal/sdk/models/operations/applylabelstopipelines.go
-  - internal/sdk/models/operations/applylabelstoworkflows.go
-  - internal/sdk/models/operations/cancelworkflow.go
-  - internal/sdk/models/operations/createaction.go
-  - internal/sdk/models/operations/createavatar.go
-  - internal/sdk/models/operations/createawsbatchce.go
-  - internal/sdk/models/operations/createawscomputeenv.go
-  - internal/sdk/models/operations/createawscredentials.go
-  - internal/sdk/models/operations/createazurecredentials.go
-  - internal/sdk/models/operations/createbitbucketcredentials.go
-  - internal/sdk/models/operations/createcodecommitcredentials.go
-  - internal/sdk/models/operations/createcomputeenv.go
-  - internal/sdk/models/operations/createcontainerregistrycredentials.go
-  - internal/sdk/models/operations/createcredentials.go
-  - internal/sdk/models/operations/createcustomdatalink.go
-  - internal/sdk/models/operations/createdataset.go
-  - internal/sdk/models/operations/createdatasetv2.go
-  - internal/sdk/models/operations/createdatastudio.go
-  - internal/sdk/models/operations/creategiteacredentials.go
-  - internal/sdk/models/operations/creategithubcredentials.go
-  - internal/sdk/models/operations/creategitlabcredentials.go
-  - internal/sdk/models/operations/creategooglecredentials.go
-  - internal/sdk/models/operations/createkubernetescredentials.go
-  - internal/sdk/models/operations/createlabel.go
-  - internal/sdk/models/operations/createorganization.go
-  - internal/sdk/models/operations/createorganizationmember.go
-  - internal/sdk/models/operations/createorganizationteam.go
-  - internal/sdk/models/operations/createorganizationteammember.go
-  - internal/sdk/models/operations/createpipeline.go
-  - internal/sdk/models/operations/createpipelinesecret.go
-  - internal/sdk/models/operations/createsshcredentials.go
-  - internal/sdk/models/operations/createtoken.go
-  - internal/sdk/models/operations/createtoweragentcredentials.go
-  - internal/sdk/models/operations/createtrace.go
-  - internal/sdk/models/operations/createworkflowlaunch.go
-  - internal/sdk/models/operations/createworkflowstar.go
-  - internal/sdk/models/operations/createworkspace.go
-  - internal/sdk/models/operations/createworkspaceparticipant.go
-  - internal/sdk/models/operations/deleteaction.go
-  - internal/sdk/models/operations/deletealltokens.go
-  - internal/sdk/models/operations/deleteawsbatchce.go
-  - internal/sdk/models/operations/deleteawscomputeenv.go
-  - internal/sdk/models/operations/deleteawscredentials.go
-  - internal/sdk/models/operations/deleteazurecredentials.go
-  - internal/sdk/models/operations/deletebitbucketcredentials.go
-  - internal/sdk/models/operations/deletecodecommitcredentials.go
-  - internal/sdk/models/operations/deletecomputeenv.go
-  - internal/sdk/models/operations/deletecontainerregistrycredentials.go
-  - internal/sdk/models/operations/deletecredentials.go
-  - internal/sdk/models/operations/deletecustomdatalink.go
-  - internal/sdk/models/operations/deletedatalinkitem.go
-  - internal/sdk/models/operations/deletedataset.go
-  - internal/sdk/models/operations/deletedatasetv2.go
-  - internal/sdk/models/operations/deletedatastudio.go
-  - internal/sdk/models/operations/deletegiteacredentials.go
-  - internal/sdk/models/operations/deletegithubcredentials.go
-  - internal/sdk/models/operations/deletegitlabcredentials.go
-  - internal/sdk/models/operations/deletegooglecredentials.go
-  - internal/sdk/models/operations/deletekubernetescredentials.go
-  - internal/sdk/models/operations/deletelabel.go
-  - internal/sdk/models/operations/deleteorganization.go
-  - internal/sdk/models/operations/deleteorganizationmember.go
-  - internal/sdk/models/operations/deleteorganizationteam.go
-  - internal/sdk/models/operations/deleteorganizationteammember.go
-  - internal/sdk/models/operations/deletepipeline.go
-  - internal/sdk/models/operations/deletepipelinesecret.go
-  - internal/sdk/models/operations/deletesshcredentials.go
-  - internal/sdk/models/operations/deletetoken.go
-  - internal/sdk/models/operations/deletetoweragentcredentials.go
-  - internal/sdk/models/operations/deleteuser.go
-  - internal/sdk/models/operations/deleteworkflow.go
-  - internal/sdk/models/operations/deleteworkflowmany.go
-  - internal/sdk/models/operations/deleteworkflowstar.go
-  - internal/sdk/models/operations/deleteworkspace.go
-  - internal/sdk/models/operations/deleteworkspaceparticipant.go
-  - internal/sdk/models/operations/describeaction.go
-  - internal/sdk/models/operations/describeawsbatchce.go
-  - internal/sdk/models/operations/describeawscomputeenv.go
-  - internal/sdk/models/operations/describeawscredentials.go
-  - internal/sdk/models/operations/describeazurecredentials.go
-  - internal/sdk/models/operations/describebitbucketcredentials.go
-  - internal/sdk/models/operations/describecodecommitcredentials.go
-  - internal/sdk/models/operations/describecomputeenv.go
-  - internal/sdk/models/operations/describecontainerregistrycredentials.go
-  - internal/sdk/models/operations/describecredentials.go
-  - internal/sdk/models/operations/describedatalink.go
-  - internal/sdk/models/operations/describedataset.go
-  - internal/sdk/models/operations/describedatasetv2.go
-  - internal/sdk/models/operations/describedatastudio.go
-  - internal/sdk/models/operations/describegiteacredentials.go
-  - internal/sdk/models/operations/describegithubcredentials.go
-  - internal/sdk/models/operations/describegitlabcredentials.go
-  - internal/sdk/models/operations/describegooglecredentials.go
-  - internal/sdk/models/operations/describekubernetescredentials.go
-  - internal/sdk/models/operations/describelaunch.go
-  - internal/sdk/models/operations/describeorganization.go
-  - internal/sdk/models/operations/describeorganizationquotas.go
-  - internal/sdk/models/operations/describeorganizationteam.go
-  - internal/sdk/models/operations/describepipeline.go
-  - internal/sdk/models/operations/describepipelinelaunch.go
-  - internal/sdk/models/operations/describepipelinerepository.go
-  - internal/sdk/models/operations/describepipelineschema.go
-  - internal/sdk/models/operations/describepipelinesecret.go
-  - internal/sdk/models/operations/describeplatform.go
-  - internal/sdk/models/operations/describesshcredentials.go
-  - internal/sdk/models/operations/describetoweragentcredentials.go
-  - internal/sdk/models/operations/describeuser.go
-  - internal/sdk/models/operations/describeworkflow.go
-  - internal/sdk/models/operations/describeworkflowlaunch.go
-  - internal/sdk/models/operations/describeworkflowmetrics.go
-  - internal/sdk/models/operations/describeworkflowprogress.go
-  - internal/sdk/models/operations/describeworkflowstar.go
-  - internal/sdk/models/operations/describeworkflowtask.go
-  - internal/sdk/models/operations/describeworkspace.go
-  - internal/sdk/models/operations/downloadavatar.go
-  - internal/sdk/models/operations/downloaddatalink.go
-  - internal/sdk/models/operations/downloaddataset.go
-  - internal/sdk/models/operations/downloaddatasetv2.go
-  - internal/sdk/models/operations/downloadworkflowlog.go
-  - internal/sdk/models/operations/downloadworkflowtasklog.go
-  - internal/sdk/models/operations/exploredatalink.go
-  - internal/sdk/models/operations/exploredatalink1.go
-  - internal/sdk/models/operations/exploredatalinktree.go
-  - internal/sdk/models/operations/extenddatastudiolifespan.go
-  - internal/sdk/models/operations/finddatastudiosworkspacesettings.go
-  - internal/sdk/models/operations/finishdatalinkupload.go
-  - internal/sdk/models/operations/finishdatalinkupload1.go
-  - internal/sdk/models/operations/ga4ghruncancel.go
-  - internal/sdk/models/operations/ga4ghruncreate.go
-  - internal/sdk/models/operations/ga4ghrundescribe.go
-  - internal/sdk/models/operations/ga4ghrunlist.go
-  - internal/sdk/models/operations/ga4ghrunstatus.go
-  - internal/sdk/models/operations/ga4ghserviceinfo.go
-  - internal/sdk/models/operations/generatedatalinkuploadurl.go
-  - internal/sdk/models/operations/generatedatalinkuploadurl1.go
-  - internal/sdk/models/operations/generatedownloadscript.go
-  - internal/sdk/models/operations/generatedownloadurldatalink.go
-  - internal/sdk/models/operations/generaterandomworkflowname.go
-  - internal/sdk/models/operations/getdatastudiocheckpoint.go
-  - internal/sdk/models/operations/getworkflowtasklog.go
-  - internal/sdk/models/operations/info.go
-  - internal/sdk/models/operations/launchaction.go
-  - internal/sdk/models/operations/leaveorganization.go
-  - internal/sdk/models/operations/leaveworkspaceparticipant.go
-  - internal/sdk/models/operations/listactions.go
-  - internal/sdk/models/operations/listactiontypes.go
-  - internal/sdk/models/operations/listcomputeenvs.go
-  - internal/sdk/models/operations/listcredentialsdatasource.go
-  - internal/sdk/models/operations/listdatalinksdatasource.go
-  - internal/sdk/models/operations/listdatasets.go
-  - internal/sdk/models/operations/listdatasetsv2.go
-  - internal/sdk/models/operations/listdatasetversions.go
-  - internal/sdk/models/operations/listdatasetversionsv2.go
-  - internal/sdk/models/operations/listdatastudiocheckpoints.go
-  - internal/sdk/models/operations/listdatastudios.go
-  - internal/sdk/models/operations/listdatastudiotemplates.go
-  - internal/sdk/models/operations/listlabels.go
-  - internal/sdk/models/operations/listlatestdatasetversionsv2.go
-  - internal/sdk/models/operations/listlaunchdatasetversions.go
-  - internal/sdk/models/operations/listmounteddatalinkids.go
-  - internal/sdk/models/operations/listorganizationcollaborators.go
-  - internal/sdk/models/operations/listorganizationmembers.go
-  - internal/sdk/models/operations/listorganizations.go
-  - internal/sdk/models/operations/listorganizationteammembers.go
-  - internal/sdk/models/operations/listorganizationteams.go
-  - internal/sdk/models/operations/listpipelinerepositories.go
-  - internal/sdk/models/operations/listpipelines.go
-  - internal/sdk/models/operations/listpipelinesecrets.go
-  - internal/sdk/models/operations/listplatformregions.go
-  - internal/sdk/models/operations/listplatforms.go
-  - internal/sdk/models/operations/listworkflows.go
-  - internal/sdk/models/operations/listworkflowtasks.go
-  - internal/sdk/models/operations/listworkspacedatasetversions.go
-  - internal/sdk/models/operations/listworkspaceparticipants.go
-  - internal/sdk/models/operations/listworkspaces.go
-  - internal/sdk/models/operations/listworkspacesbyteam.go
-  - internal/sdk/models/operations/listworkspacesuser.go
-  - internal/sdk/models/operations/options.go
-  - internal/sdk/models/operations/pauseaction.go
-  - internal/sdk/models/operations/refreshdatalinkcache.go
-  - internal/sdk/models/operations/removelabelsfromactions.go
-  - internal/sdk/models/operations/removelabelsfrompipelines.go
-  - internal/sdk/models/operations/removelabelsfromworkflows.go
-  - internal/sdk/models/operations/startdatastudio.go
-  - internal/sdk/models/operations/stopdatastudio.go
-  - internal/sdk/models/operations/tokenlist.go
-  - internal/sdk/models/operations/updateaction.go
-  - internal/sdk/models/operations/updateawscredentials.go
-  - internal/sdk/models/operations/updateazurecredentials.go
-  - internal/sdk/models/operations/updatebitbucketcredentials.go
-  - internal/sdk/models/operations/updatecodecommitcredentials.go
-  - internal/sdk/models/operations/updatecomputeenv.go
-  - internal/sdk/models/operations/updatecomputeenvprimary.go
-  - internal/sdk/models/operations/updatecontainerregistrycredentials.go
-  - internal/sdk/models/operations/updatecredentials.go
-  - internal/sdk/models/operations/updatecustomdatalink.go
-  - internal/sdk/models/operations/updatedataset.go
-  - internal/sdk/models/operations/updatedatasetv2.go
-  - internal/sdk/models/operations/updatedatastudiocheckpoint.go
-  - internal/sdk/models/operations/updatedatastudiosworkspacesettings.go
-  - internal/sdk/models/operations/updategiteacredentials.go
-  - internal/sdk/models/operations/updategithubcredentials.go
-  - internal/sdk/models/operations/updategitlabcredentials.go
-  - internal/sdk/models/operations/updategooglecredentials.go
-  - internal/sdk/models/operations/updatekubernetescredentials.go
-  - internal/sdk/models/operations/updatelabel.go
-  - internal/sdk/models/operations/updateorganization.go
-  - internal/sdk/models/operations/updateorganizationmemberrole.go
-  - internal/sdk/models/operations/updateorganizationteam.go
-  - internal/sdk/models/operations/updatepipeline.go
-  - internal/sdk/models/operations/updatepipelinesecret.go
-  - internal/sdk/models/operations/updatesshcredentials.go
-  - internal/sdk/models/operations/updatetoweragentcredentials.go
-  - internal/sdk/models/operations/updatetracebegin.go
-  - internal/sdk/models/operations/updatetracecomplete.go
-  - internal/sdk/models/operations/updatetraceheartbeat.go
-  - internal/sdk/models/operations/updatetraceprogress.go
-  - internal/sdk/models/operations/updateuser.go
-  - internal/sdk/models/operations/updateworkspace.go
-  - internal/sdk/models/operations/updateworkspaceparticipantrole.go
-  - internal/sdk/models/operations/uploaddataset.go
-  - internal/sdk/models/operations/uploaddatasetv2.go
-  - internal/sdk/models/operations/userinfo.go
-  - internal/sdk/models/operations/validateactionname.go
-  - internal/sdk/models/operations/validatecomputeenvname.go
-  - internal/sdk/models/operations/validatecredentialsname.go
-  - internal/sdk/models/operations/validatedatastudioname.go
-  - internal/sdk/models/operations/validateorganizationname.go
-  - internal/sdk/models/operations/validatepipelinename.go
-  - internal/sdk/models/operations/validatepipelinesecretname.go
-  - internal/sdk/models/operations/validateteamname.go
-  - internal/sdk/models/operations/validateusername.go
-  - internal/sdk/models/operations/validateworkflowconstraints.go
-  - internal/sdk/models/operations/workflowlogs.go
-  - internal/sdk/models/operations/workspacevalidate.go
-  - internal/sdk/models/shared/accesstoken.go
-  - internal/sdk/models/shared/actionconfigtype.go
-  - internal/sdk/models/shared/actioneventtype.go
-  - internal/sdk/models/shared/actionqueryattribute.go
-  - internal/sdk/models/shared/actionresponsedto.go
-  - internal/sdk/models/shared/actionsource.go
-  - internal/sdk/models/shared/actionstatus.go
-  - internal/sdk/models/shared/addmemberrequest.go
-  - internal/sdk/models/shared/addmemberresponse.go
-  - internal/sdk/models/shared/addparticipantrequest.go
-  - internal/sdk/models/shared/addparticipantresponse.go
-  - internal/sdk/models/shared/addteammemberresponse.go
-  - internal/sdk/models/shared/analytics.go
-  - internal/sdk/models/shared/associateactionlabelsrequest.go
-  - internal/sdk/models/shared/associatepipelinelabelsrequest.go
-  - internal/sdk/models/shared/associateworkflowlabelsrequest.go
-  - internal/sdk/models/shared/avatar.go
-  - internal/sdk/models/shared/awsbatchcecomputeconfiginput.go
-  - internal/sdk/models/shared/awsbatchconfig.go
-  - internal/sdk/models/shared/awsbatchplatformmetainfo.go
-  - internal/sdk/models/shared/awscloudplatformmetainfo.go
-  - internal/sdk/models/shared/awscomputeenvcomputeconfiginput.go
-  - internal/sdk/models/shared/awscredential.go
-  - internal/sdk/models/shared/azbatchforgeconfig.go
-  - internal/sdk/models/shared/azbatchplatformmetainfo.go
-  - internal/sdk/models/shared/azurecredential.go
-  - internal/sdk/models/shared/bitbucketcredential.go
-  - internal/sdk/models/shared/bucket.go
-  - internal/sdk/models/shared/cloudpricemodel.go
-  - internal/sdk/models/shared/codecommitcredential.go
-  - internal/sdk/models/shared/computeconfig.go
-  - internal/sdk/models/shared/computeenvcomputeconfiginput.go
-  - internal/sdk/models/shared/computeenvqueryattribute.go
-  - internal/sdk/models/shared/computeenvresponsedto.go
-  - internal/sdk/models/shared/computeenvstatus.go
-  - internal/sdk/models/shared/computeplatform.go
-  - internal/sdk/models/shared/computeregion.go
-  - internal/sdk/models/shared/configenvvariable.go
-  - internal/sdk/models/shared/containerdata.go
-  - internal/sdk/models/shared/containerregistrycredential.go
-  - internal/sdk/models/shared/createaccesstokenrequest.go
-  - internal/sdk/models/shared/createaccesstokenresponse.go
-  - internal/sdk/models/shared/createactionrequest.go
-  - internal/sdk/models/shared/createactionresponse.go
-  - internal/sdk/models/shared/createavatarresponse.go
-  - internal/sdk/models/shared/createawsbatchcerequest.go
-  - internal/sdk/models/shared/createawsbatchceresponse.go
-  - internal/sdk/models/shared/createawscomputeenvrequest.go
-  - internal/sdk/models/shared/createawscomputeenvresponse.go
-  - internal/sdk/models/shared/createawscredentialsrequest.go
-  - internal/sdk/models/shared/createawscredentialsresponse.go
-  - internal/sdk/models/shared/createazurecredentialsrequest.go
-  - internal/sdk/models/shared/createazurecredentialsresponse.go
-  - internal/sdk/models/shared/createbitbucketcredentialsrequest.go
-  - internal/sdk/models/shared/createbitbucketcredentialsresponse.go
-  - internal/sdk/models/shared/createcodecommitcredentialsrequest.go
-  - internal/sdk/models/shared/createcodecommitcredentialsresponse.go
-  - internal/sdk/models/shared/createcomputeenvrequest.go
-  - internal/sdk/models/shared/createcomputeenvresponse.go
-  - internal/sdk/models/shared/createcontainerregistrycredentialsrequest.go
-  - internal/sdk/models/shared/createcontainerregistrycredentialsresponse.go
-  - internal/sdk/models/shared/createcredentialsrequest.go
-  - internal/sdk/models/shared/createcredentialsresponse.go
-  - internal/sdk/models/shared/createdatasetrequest.go
-  - internal/sdk/models/shared/createdatasetresponse.go
-  - internal/sdk/models/shared/creategiteacredentialsrequest.go
-  - internal/sdk/models/shared/creategiteacredentialsresponse.go
-  - internal/sdk/models/shared/creategithubcredentialsrequest.go
-  - internal/sdk/models/shared/creategithubcredentialsresponse.go
-  - internal/sdk/models/shared/creategitlabcredentialsrequest.go
-  - internal/sdk/models/shared/creategitlabcredentialsresponse.go
-  - internal/sdk/models/shared/creategooglecredentialsrequest.go
-  - internal/sdk/models/shared/creategooglecredentialsresponse.go
-  - internal/sdk/models/shared/createkubernetescredentialsrequest.go
-  - internal/sdk/models/shared/createkubernetescredentialsresponse.go
-  - internal/sdk/models/shared/createlabelrequest.go
-  - internal/sdk/models/shared/createlabelresponse.go
-  - internal/sdk/models/shared/createorganizationrequest.go
-  - internal/sdk/models/shared/createorganizationresponse.go
-  - internal/sdk/models/shared/createpipelinerequest.go
-  - internal/sdk/models/shared/createpipelineresponse.go
-  - internal/sdk/models/shared/createpipelinesecretrequest.go
-  - internal/sdk/models/shared/createpipelinesecretresponse.go
-  - internal/sdk/models/shared/createsshcredentialsrequest.go
-  - internal/sdk/models/shared/createsshcredentialsresponse.go
-  - internal/sdk/models/shared/createteammemberrequest.go
-  - internal/sdk/models/shared/createteamrequest.go
-  - internal/sdk/models/shared/createteamresponse.go
-  - internal/sdk/models/shared/createtoweragentcredentialsrequest.go
-  - internal/sdk/models/shared/createtoweragentcredentialsresponse.go
-  - internal/sdk/models/shared/createworkflowstarresponse.go
-  - internal/sdk/models/shared/createworkspacerequest.go
-  - internal/sdk/models/shared/createworkspaceresponse.go
-  - internal/sdk/models/shared/credentialsinput.go
-  - internal/sdk/models/shared/datalinkcontentresponse.go
-  - internal/sdk/models/shared/datalinkcontenttreelistresponse.go
-  - internal/sdk/models/shared/datalinkcreaterequest.go
-  - internal/sdk/models/shared/datalinkcredentials.go
-  - internal/sdk/models/shared/datalinkdeleteitemrequest.go
-  - internal/sdk/models/shared/datalinkdeleteitemresponse.go
-  - internal/sdk/models/shared/datalinkdownloadscriptresponse.go
-  - internal/sdk/models/shared/datalinkdownloadurlresponse.go
-  - internal/sdk/models/shared/datalinkdto.go
-  - internal/sdk/models/shared/datalinkfinishmultipartuploadrequest.go
-  - internal/sdk/models/shared/datalinkitem.go
-  - internal/sdk/models/shared/datalinkitemdeletionfailure.go
-  - internal/sdk/models/shared/datalinkitemtype.go
-  - internal/sdk/models/shared/datalinkmultipartuploadrequest.go
-  - internal/sdk/models/shared/datalinkmultipartuploadresponse.go
-  - internal/sdk/models/shared/datalinkresponse.go
-  - internal/sdk/models/shared/datalinksimpleitem.go
-  - internal/sdk/models/shared/datalinktype.go
-  - internal/sdk/models/shared/datalinkupdaterequest.go
-  - internal/sdk/models/shared/dataset.go
-  - internal/sdk/models/shared/datasetversiondbdto.go
-  - internal/sdk/models/shared/datastudiocheckpointdto.go
-  - internal/sdk/models/shared/datastudiocheckpointupdaterequest.go
-  - internal/sdk/models/shared/datastudioconfiguration.go
-  - internal/sdk/models/shared/datastudiocreaterequest.go
-  - internal/sdk/models/shared/datastudiocreateresponse.go
-  - internal/sdk/models/shared/datastudiodto.go
-  - internal/sdk/models/shared/datastudiolistcheckpointsresponse.go
-  - internal/sdk/models/shared/datastudiolistresponse.go
-  - internal/sdk/models/shared/datastudiomountedlinksresponse.go
-  - internal/sdk/models/shared/datastudioqueryattribute.go
-  - internal/sdk/models/shared/datastudiostartrequest.go
-  - internal/sdk/models/shared/datastudiostartresponse.go
-  - internal/sdk/models/shared/datastudiostatus.go
-  - internal/sdk/models/shared/datastudiostatusinfo.go
-  - internal/sdk/models/shared/datastudiostopresponse.go
-  - internal/sdk/models/shared/datastudiotemplate.go
-  - internal/sdk/models/shared/datastudiotemplateslistresponse.go
-  - internal/sdk/models/shared/datastudioversionstatus.go
-  - internal/sdk/models/shared/datastudioworkspacesettingsresponse.go
-  - internal/sdk/models/shared/deletecredentialsconflictresponse.go
-  - internal/sdk/models/shared/deletecredentialsconflictresponseconflict.go
-  - internal/sdk/models/shared/deleteworkflowsrequest.go
-  - internal/sdk/models/shared/deleteworkflowsresponse.go
-  - internal/sdk/models/shared/describeactionresponse.go
-  - internal/sdk/models/shared/describeawsbatchceresponse.go
-  - internal/sdk/models/shared/describeawscomputeenvresponse.go
-  - internal/sdk/models/shared/describeawscredentialsresponse.go
-  - internal/sdk/models/shared/describeazurecredentialsresponse.go
-  - internal/sdk/models/shared/describebitbucketcredentialsresponse.go
-  - internal/sdk/models/shared/describecodecommitcredentialsresponse.go
-  - internal/sdk/models/shared/describecomputeenvresponse.go
-  - internal/sdk/models/shared/describecontainerregistrycredentialsresponse.go
-  - internal/sdk/models/shared/describecredentialsresponse.go
-  - internal/sdk/models/shared/describedatasetresponse.go
-  - internal/sdk/models/shared/describegiteacredentialsresponse.go
-  - internal/sdk/models/shared/describegithubcredentialsresponse.go
-  - internal/sdk/models/shared/describegitlabcredentialsresponse.go
-  - internal/sdk/models/shared/describegooglecredentialsresponse.go
-  - internal/sdk/models/shared/describekubernetescredentialsresponse.go
-  - internal/sdk/models/shared/describelaunchresponse.go
-  - internal/sdk/models/shared/describeorganizationquotasresponse.go
-  - internal/sdk/models/shared/describeorganizationresponse.go
-  - internal/sdk/models/shared/describepipelineinforesponse.go
-  - internal/sdk/models/shared/describepipelineresponse.go
-  - internal/sdk/models/shared/describepipelinesecretresponse.go
-  - internal/sdk/models/shared/describeplatformresponse.go
-  - internal/sdk/models/shared/describesshcredentialsresponse.go
-  - internal/sdk/models/shared/describetaskresponse.go
-  - internal/sdk/models/shared/describeteamresponse.go
-  - internal/sdk/models/shared/describetoweragentcredentialsresponse.go
-  - internal/sdk/models/shared/describeuserresponse.go
-  - internal/sdk/models/shared/describeworkflowlaunchresponse.go
-  - internal/sdk/models/shared/describeworkflowresponse.go
-  - internal/sdk/models/shared/describeworkspaceresponse.go
-  - internal/sdk/models/shared/efsfilesystem.go
-  - internal/sdk/models/shared/eksplatformmetainfo.go
-  - internal/sdk/models/shared/emptybodyrequest.go
-  - internal/sdk/models/shared/errorresponse.go
-  - internal/sdk/models/shared/eventtype.go
-  - internal/sdk/models/shared/forgeconfig.go
-  - internal/sdk/models/shared/fsxfilesystem.go
-  - internal/sdk/models/shared/getprogressresponse.go
-  - internal/sdk/models/shared/getworkflowmetricsresponse.go
-  - internal/sdk/models/shared/giteacredential.go
-  - internal/sdk/models/shared/githubcredential.go
-  - internal/sdk/models/shared/gitlabcredential.go
-  - internal/sdk/models/shared/gkeplatformmetainfo.go
-  - internal/sdk/models/shared/googlecredential.go
-  - internal/sdk/models/shared/googleplatformmetainfo.go
-  - internal/sdk/models/shared/googleplatformmetainfobucket.go
-  - internal/sdk/models/shared/googleplatformmetainfofilestore.go
-  - internal/sdk/models/shared/gridplatformmetainfo.go
-  - internal/sdk/models/shared/image.go
-  - internal/sdk/models/shared/instancetype.go
-  - internal/sdk/models/shared/iteratorstring.go
-  - internal/sdk/models/shared/jobcleanuppolicy.go
-  - internal/sdk/models/shared/jobqueue.go
-  - internal/sdk/models/shared/k8splatformmetainfo.go
-  - internal/sdk/models/shared/kubernetescredential.go
-  - internal/sdk/models/shared/labeldbdto.go
-  - internal/sdk/models/shared/labeltype.go
-  - internal/sdk/models/shared/launch.go
-  - internal/sdk/models/shared/launchactionrequest.go
-  - internal/sdk/models/shared/launchactionresponse.go
-  - internal/sdk/models/shared/listaccesstokensresponse.go
-  - internal/sdk/models/shared/listactionsresponse.go
-  - internal/sdk/models/shared/listactionsresponseactioninfo.go
-  - internal/sdk/models/shared/listcomputeenvsresponse.go
-  - internal/sdk/models/shared/listcomputeenvsresponseentry.go
-  - internal/sdk/models/shared/listcredentialsdatasourceresponse.go
-  - internal/sdk/models/shared/listdatalinksdatasourceresponse.go
-  - internal/sdk/models/shared/listdatasetsresponse.go
-  - internal/sdk/models/shared/listdatasetversionsresponse.go
-  - internal/sdk/models/shared/listeventtypesresponse.go
-  - internal/sdk/models/shared/listlabelsresponse.go
-  - internal/sdk/models/shared/listmembersresponse.go
-  - internal/sdk/models/shared/listorganizationsresponse.go
-  - internal/sdk/models/shared/listparticipantsresponse.go
-  - internal/sdk/models/shared/listpipelineinforesponse.go
-  - internal/sdk/models/shared/listpipelinesecretsresponse.go
-  - internal/sdk/models/shared/listpipelinesresponse.go
-  - internal/sdk/models/shared/listplatformsresponse.go
-  - internal/sdk/models/shared/listregionsresponse.go
-  - internal/sdk/models/shared/listtasksresponse.go
-  - internal/sdk/models/shared/listteamresponse.go
-  - internal/sdk/models/shared/listworkflowsresponse.go
-  - internal/sdk/models/shared/listworkflowsresponselistworkflowselement.go
-  - internal/sdk/models/shared/listworkspacesandorgresponse.go
-  - internal/sdk/models/shared/listworkspacesresponse.go
-  - internal/sdk/models/shared/localplatformmetainfo.go
-  - internal/sdk/models/shared/log.go
-  - internal/sdk/models/shared/logpage.go
-  - internal/sdk/models/shared/logpagedownload.go
-  - internal/sdk/models/shared/memberdbdto.go
-  - internal/sdk/models/shared/multirequestfileschema.go
-  - internal/sdk/models/shared/navbarconfig.go
-  - internal/sdk/models/shared/navbarconfignavbarmenu.go
-  - internal/sdk/models/shared/organdworkspacedto.go
-  - internal/sdk/models/shared/organization.go
-  - internal/sdk/models/shared/organizationdbdto.go
-  - internal/sdk/models/shared/organizationquotas.go
-  - internal/sdk/models/shared/orgrole.go
-  - internal/sdk/models/shared/orgtype.go
-  - internal/sdk/models/shared/participantdbdto.go
-  - internal/sdk/models/shared/participanttype.go
-  - internal/sdk/models/shared/pipelinedbdto.go
-  - internal/sdk/models/shared/pipelineinfo.go
-  - internal/sdk/models/shared/pipelinequeryattribute.go
-  - internal/sdk/models/shared/pipelineschemaattributes.go
-  - internal/sdk/models/shared/pipelineschemaresponse.go
-  - internal/sdk/models/shared/pipelinesecret.go
-  - internal/sdk/models/shared/platformmetainfo.go
-  - internal/sdk/models/shared/podcleanuppolicy.go
-  - internal/sdk/models/shared/processload.go
-  - internal/sdk/models/shared/progressdata.go
-  - internal/sdk/models/shared/providertype.go
-  - internal/sdk/models/shared/randomworkflownameresponse.go
-  - internal/sdk/models/shared/resourcedata.go
-  - internal/sdk/models/shared/runid.go
-  - internal/sdk/models/shared/runlistresponse.go
-  - internal/sdk/models/shared/runlog.go
-  - internal/sdk/models/shared/runrequest.go
-  - internal/sdk/models/shared/runstatus.go
-  - internal/sdk/models/shared/security.go
-  - internal/sdk/models/shared/securitygroup.go
-  - internal/sdk/models/shared/securitykeys.go
-  - internal/sdk/models/shared/serviceinfo.go
-  - internal/sdk/models/shared/serviceinforesponse.go
-  - internal/sdk/models/shared/sshcredential.go
-  - internal/sdk/models/shared/state.go
-  - internal/sdk/models/shared/studiouser.go
-  - internal/sdk/models/shared/submitworkflowlaunchrequest.go
-  - internal/sdk/models/shared/submitworkflowlaunchresponse.go
-  - internal/sdk/models/shared/subnet.go
-  - internal/sdk/models/shared/task.go
-  - internal/sdk/models/shared/taskstatus.go
-  - internal/sdk/models/shared/team.go
-  - internal/sdk/models/shared/teamdbdto.go
-  - internal/sdk/models/shared/toweragentcredential.go
-  - internal/sdk/models/shared/tracebeginrequest.go
-  - internal/sdk/models/shared/tracebeginresponse.go
-  - internal/sdk/models/shared/tracecompleterequest.go
-  - internal/sdk/models/shared/tracecompleteresponse.go
-  - internal/sdk/models/shared/tracecreaterequest.go
-  - internal/sdk/models/shared/tracecreateresponse.go
-  - internal/sdk/models/shared/traceheartbeatrequest.go
-  - internal/sdk/models/shared/traceheartbeatresponse.go
-  - internal/sdk/models/shared/traceprocessingstatus.go
-  - internal/sdk/models/shared/traceprogressdata.go
-  - internal/sdk/models/shared/traceprogressdetail.go
-  - internal/sdk/models/shared/traceprogressrequest.go
-  - internal/sdk/models/shared/traceprogressresponse.go
-  - internal/sdk/models/shared/updateactionrequest.go
-  - internal/sdk/models/shared/updateawscredentialsrequest.go
-  - internal/sdk/models/shared/updateazurecredentialsrequest.go
-  - internal/sdk/models/shared/updatebitbucketcredentialsrequest.go
-  - internal/sdk/models/shared/updatecodecommitcredentialsrequest.go
-  - internal/sdk/models/shared/updatecomputeenvrequest.go
-  - internal/sdk/models/shared/updatecontainerregistrycredentialsrequest.go
-  - internal/sdk/models/shared/updatecredentialsrequest.go
-  - internal/sdk/models/shared/updatedatasetrequest.go
-  - internal/sdk/models/shared/updategiteacredentialsrequest.go
-  - internal/sdk/models/shared/updategithubcredentialsrequest.go
-  - internal/sdk/models/shared/updategitlabcredentialsrequest.go
-  - internal/sdk/models/shared/updategooglecredentialsrequest.go
-  - internal/sdk/models/shared/updatekubernetescredentialsrequest.go
-  - internal/sdk/models/shared/updatelabelrequest.go
-  - internal/sdk/models/shared/updatelabelresponse.go
-  - internal/sdk/models/shared/updatememberrolerequest.go
-  - internal/sdk/models/shared/updateorganizationrequest.go
-  - internal/sdk/models/shared/updateparticipantrolerequest.go
-  - internal/sdk/models/shared/updatepipelinerequest.go
-  - internal/sdk/models/shared/updatepipelineresponse.go
-  - internal/sdk/models/shared/updatepipelinesecretrequest.go
-  - internal/sdk/models/shared/updatesshcredentialsrequest.go
-  - internal/sdk/models/shared/updateteamrequest.go
-  - internal/sdk/models/shared/updatetoweragentcredentialsrequest.go
-  - internal/sdk/models/shared/updateworkspacerequest.go
-  - internal/sdk/models/shared/uploaddatasetversionresponse.go
-  - internal/sdk/models/shared/uploadetag.go
-  - internal/sdk/models/shared/userdbdto.go
-  - internal/sdk/models/shared/visibility.go
-  - internal/sdk/models/shared/vpc.go
-  - internal/sdk/models/shared/weserrorresponse.go
-  - internal/sdk/models/shared/wfmanifest.go
-  - internal/sdk/models/shared/wfnextflow.go
-  - internal/sdk/models/shared/wfstats.go
-  - internal/sdk/models/shared/workflow.go
-  - internal/sdk/models/shared/workflowdbdto.go
-  - internal/sdk/models/shared/workflowinput.go
-  - internal/sdk/models/shared/workflowlaunchrequest.go
-  - internal/sdk/models/shared/workflowlaunchresponse.go
-  - internal/sdk/models/shared/workflowload.go
-  - internal/sdk/models/shared/workflowlogresponse.go
-  - internal/sdk/models/shared/workflowmetrics.go
-  - internal/sdk/models/shared/workflowqueryattribute.go
-  - internal/sdk/models/shared/workflowstatus.go
-  - internal/sdk/models/shared/workspace.go
-  - internal/sdk/models/shared/workspacedbdto.go
-  - internal/sdk/models/shared/wsprole.go
-  - internal/sdk/optionalnullable/optionalnullable.go
-  - internal/sdk/optionalnullable/optionalnullable_test.go
-  - internal/sdk/orgs.go
-  - internal/sdk/pipelines.go
-  - internal/sdk/pipelinesecrets.go
-  - internal/sdk/platforms.go
-  - internal/sdk/retry/config.go
-  - internal/sdk/seqera.go
-  - internal/sdk/serviceinfo.go
-  - internal/sdk/studios.go
-  - internal/sdk/teams.go
-  - internal/sdk/tokens.go
-  - internal/sdk/trace.go
-  - internal/sdk/types/bigint.go
-  - internal/sdk/types/date.go
-  - internal/sdk/types/datetime.go
-  - internal/sdk/types/pointers.go
-  - internal/sdk/users.go
-  - internal/sdk/workflows.go
-  - internal/sdk/workflowstar.go
-  - internal/sdk/workspaces.go
-  - internal/validators/DateValidator.go
-  - internal/validators/ExactlyOneChild.go
-  - internal/validators/JSONParseValidator.go
-  - internal/validators/RFC3339Validator.go
-  - internal/validators/boolvalidators/not_null.go
-  - internal/validators/float32validators/not_null.go
-  - internal/validators/float64validators/not_null.go
-  - internal/validators/int32validators/not_null.go
-  - internal/validators/int64validators/not_null.go
-  - internal/validators/listvalidators/not_null.go
-  - internal/validators/mapvalidators/not_null.go
-  - internal/validators/numbervalidators/not_null.go
-  - internal/validators/objectvalidators/not_null.go
-  - internal/validators/setvalidators/not_null.go
-  - internal/validators/stringvalidators/not_null.go
-  - main.go
-  - terraform-registry-manifest.json
-  - tools/tools.go
