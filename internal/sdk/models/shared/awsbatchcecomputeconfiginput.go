@@ -40,7 +40,7 @@ type AWSBatchCEComputeConfigInput struct {
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
 	ID *string `json:"id,omitempty"`
-	// Display name for the compute environment
+	// A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`
@@ -162,7 +162,7 @@ type AWSBatchCEComputeConfig struct {
 	WorkspaceID *int64 `json:"workspaceId,omitempty"`
 	// Unique identifier for the compute environment
 	ID *string `json:"id,omitempty"`
-	// Display name for the compute environment
+	// A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
 	Name string `json:"name"`
 	// Optional description of the compute environment
 	Description *string `json:"description,omitempty"`

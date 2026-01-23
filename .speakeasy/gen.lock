@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: e06d17fa0fa1261d6f51f6be8d3e2ef2
+  docChecksum: 4abd56c9f698bfe42d54150f076440e1
   docVersion: 1.102.0
   speakeasyVersion: 1.697.4
   generationVersion: 2.799.0
@@ -390,7 +390,7 @@ trackedFiles:
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
-    last_write_checksum: sha1:5d439cae683d6db78d783772f5986fdd417bf2e2
+    last_write_checksum: sha1:60ad48132d2fc5aa96d7255037cad863dbd3dc83
     pristine_git_object: 136a1cfb3f23c1c396175224b78c790e8d4b9808
   internal/provider/awsbatchce_resource_sdk.go:
     id: acddb134f02d
@@ -542,7 +542,7 @@ trackedFiles:
     pristine_git_object: 287907880a7125e9ffa8b77e8bbaa57d776887c4
   internal/provider/managedcomputece_resource.go:
     id: 7e0eecddbc1e
-    last_write_checksum: sha1:37f42ad2e51b6301171a11d7ad2980cbb515bded
+    last_write_checksum: sha1:3f1bf1258a23371f5e8d0d1f9172ac5bb772bdd2
     pristine_git_object: adccfb0da743b49f39ee880f81d9b6a12b4a2e27
   internal/provider/managedcomputece_resource_sdk.go:
     id: 834a6a05996d
@@ -2178,7 +2178,7 @@ trackedFiles:
     pristine_git_object: eef8d70634addb13e9644d304a3f0b81bca78049
   internal/sdk/models/shared/awsbatchcecomputeconfiginput.go:
     id: 1c8b4e56d2b4
-    last_write_checksum: sha1:381f48f6b04529bdac7c0f1afd207f48a6c8acf8
+    last_write_checksum: sha1:f6683e926ee620d5521ca580591b2b3a31ffd69a
     pristine_git_object: 18e30f40d1932fcb8ee01325e79f17ee3d77c716
   internal/sdk/models/shared/awsbatchconfig.go:
     id: aa4705d45858
@@ -3098,7 +3098,7 @@ trackedFiles:
     pristine_git_object: 26b3bbf325408f55485076ebeb3735ff106e85b9
   internal/sdk/models/shared/managedcomputececomputeconfiginput.go:
     id: b61b6426185b
-    last_write_checksum: sha1:56484208a38529e7b1bd97cafd40fed29558c802
+    last_write_checksum: sha1:84990c7b087925fcbda36cc9a823f7fe260c8a6e
     pristine_git_object: c42c622e89e5569eeae7f55d32b4b51e9d21655c
   internal/sdk/models/shared/managedcredentialsdbdto.go:
     id: 1c90d0daeff5

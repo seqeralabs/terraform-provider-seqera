@@ -118,7 +118,7 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
 
 - `config` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config))
 - `credentials_id` (String) AWS credentials identifier. Requires replacement if changed.
-- `name` (String) Display name for the compute environment. Requires replacement if changed.
+- `name` (String) A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters. Requires replacement if changed.
 - `platform` (String) AWS platform type. must be "aws-batch"; Requires replacement if changed.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
