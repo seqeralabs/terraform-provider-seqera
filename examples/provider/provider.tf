@@ -2,7 +2,7 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.30.0"
+      version = "0.27.0"
     }
   }
 }
