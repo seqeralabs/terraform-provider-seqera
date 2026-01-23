@@ -23,7 +23,8 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: ""
-  persistentEdits: {}
+  persistentEdits:
+    enabled: never
   tests:
     generateTests: true
     generateNewTests: false
