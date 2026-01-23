@@ -28,8 +28,11 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.26.5
+  version: 0.30.0
   additionalDataSources:
+    - datasource: organization_data.NewDataSource
+      importAlias: organization_data
+      importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_data
     - datasource: organization_member_data.NewDataSource
       importAlias: organization_member_data
       importLocation: github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member_data

@@ -12,6 +12,8 @@ FEATURES:
 - **New Data Source:** `seqera_workspace_participant` - Look up workspace participant by email. Returns participant details including participant_id, member_id, username, name, and role.
 - **New Data Source:** `seqera_pipeline` - Look up pipeline by name. Returns pipeline details including pipeline_id, description, repository, and creator information.
 - **New Data Source:** `seqera_pipeline_secret` - Look up pipeline secret by name. Returns secret details including secret_id and timestamps.
+- **New Data Source:** `seqera_organization` - Look up Organization by name. Returns Organization details including org_id, full_name, description
+
 
 ENHANCEMENTS:
 
