@@ -59,3 +59,4 @@ internal/seqera/
 
 # Custom workspace_participant examples
 examples/resources/seqera_workspace_participant/resource.tf
+examples/resources/seqera_workspace_participant/import.sh

@@ -74,7 +74,10 @@ Available roles:
 - launch: Can launch pipelines
 - view: Read-only access (default)
 
-Import format: org_id/workspace_id/email (e.g., "12345/67890/user@example.com")
+Import formats:
+- org_id/workspace_id/email (e.g., "12345/67890/user@example.com")
+- org_id/workspace_id/team:team_id (e.g., "12345/67890/team:7405043533023")
+- org_id/workspace_id/member:member_id (e.g., "12345/67890/member:98765")
 `,
 		Attributes: map[string]schema.Attribute{
 			"org_id": schema.Int64Attribute{
@@ -221,7 +224,42 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 		return
 	}
 	if createRes.StatusCode == 409 {
-		resp.Diagnostics.AddError("Resource Already Exists", "The user is already a participant in this workspace.")
+		// Build helpful import message based on what was provided
+		var importMsg string
+		if !data.Email.IsNull() && !data.Email.IsUnknown() {
+			email := data.Email.ValueString()
+			importMsg = fmt.Sprintf(
+				"This participant already exists in the workspace. Import it into Terraform state:\n\n"+
+					"  terraform import seqera_workspace_participant.<name> '%d/%d/%s'\n\n"+
+					"Or remove it from the workspace before managing it with Terraform.",
+				data.OrgID.ValueInt64(),
+				data.WorkspaceID.ValueInt64(),
+				email,
+			)
+		} else if !data.TeamID.IsNull() && !data.TeamID.IsUnknown() {
+			teamID := data.TeamID.ValueInt64()
+			importMsg = fmt.Sprintf(
+				"This team is already a participant in the workspace. Import it into Terraform state:\n\n"+
+					"  terraform import seqera_workspace_participant.<name> '%d/%d/team:%d'\n\n"+
+					"Or remove the team from the workspace before managing it with Terraform.",
+				data.OrgID.ValueInt64(),
+				data.WorkspaceID.ValueInt64(),
+				teamID,
+			)
+		} else {
+			// member_id case
+			memberID := data.MemberID.ValueInt64()
+			importMsg = fmt.Sprintf(
+				"This participant already exists in the workspace. Import it into Terraform state:\n\n"+
+					"  terraform import seqera_workspace_participant.<name> '%d/%d/member:%d'\n\n"+
+					"Or remove it from the workspace before managing it with Terraform.",
+				data.OrgID.ValueInt64(),
+				data.WorkspaceID.ValueInt64(),
+				memberID,
+			)
+		}
+
+		resp.Diagnostics.AddError("Resource Already Exists", importMsg)
 		return
 	}
 	if createRes.StatusCode != 200 || createRes.AddParticipantResponse == nil || createRes.AddParticipantResponse.Participant == nil {
@@ -232,9 +270,18 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 	participant := createRes.AddParticipantResponse.Participant
 	data.ParticipantID = types.Int64PointerValue(participant.ParticipantID)
 
-	// For team participants, we won't have member_id/email populated the same way
+	// For team participants, explicitly set user-specific fields to null
+	// For user participants, populate from API response
 	isTeamParticipant := !data.TeamID.IsNull() && !data.TeamID.IsUnknown()
-	if !isTeamParticipant {
+	if isTeamParticipant {
+		// Team participants don't have individual user data
+		data.MemberID = types.Int64Null()
+		data.Email = types.StringNull()
+		data.UserName = types.StringNull()
+		data.FirstName = types.StringNull()
+		data.LastName = types.StringNull()
+	} else {
+		// User participants have individual user data
 		data.MemberID = types.Int64PointerValue(participant.MemberID)
 		data.Email = types.StringPointerValue(participant.Email)
 	}
@@ -300,7 +347,14 @@ func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *res
 
 	// Only refresh member details for user participants (not team participants)
 	isTeamParticipant := !data.TeamID.IsNull() && !data.TeamID.IsUnknown()
-	if !isTeamParticipant {
+	if isTeamParticipant {
+		// Team participants don't have individual user data
+		data.MemberID = types.Int64Null()
+		data.Email = types.StringNull()
+		data.UserName = types.StringNull()
+		data.FirstName = types.StringNull()
+		data.LastName = types.StringNull()
+	} else {
 		r.refreshFromParticipant(&data, participant)
 	}
 
@@ -337,18 +391,28 @@ func (r *Resource) Update(ctx context.Context, req resource.UpdateRequest, resp 
 	}
 
 	// Refresh from API
-	emailSearch := ""
-	if !data.Email.IsNull() && !data.Email.IsUnknown() {
-		emailSearch = data.Email.ValueString()
-	}
+	isTeamParticipant := !data.TeamID.IsNull() && !data.TeamID.IsUnknown()
+	if isTeamParticipant {
+		// Team participants don't have individual user data
+		data.MemberID = types.Int64Null()
+		data.Email = types.StringNull()
+		data.UserName = types.StringNull()
+		data.FirstName = types.StringNull()
+		data.LastName = types.StringNull()
+	} else {
+		emailSearch := ""
+		if !data.Email.IsNull() && !data.Email.IsUnknown() {
+			emailSearch = data.Email.ValueString()
+		}
 
-	participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), emailSearch, data.ParticipantID.ValueInt64())
-	if err != nil {
-		resp.Diagnostics.AddError("Failed to refresh participant", err.Error())
-		return
-	}
-	if participant != nil {
-		r.refreshFromParticipant(&data, participant)
+		participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), emailSearch, data.ParticipantID.ValueInt64())
+		if err != nil {
+			resp.Diagnostics.AddError("Failed to refresh participant", err.Error())
+			return
+		}
+		if participant != nil {
+			r.refreshFromParticipant(&data, participant)
+		}
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -376,12 +440,15 @@ func (r *Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp 
 }
 
 func (r *Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	// Import format: org_id/workspace_id/email
+	// Import formats:
+	// - org_id/workspace_id/email (e.g., "12345/67890/user@example.com")
+	// - org_id/workspace_id/team:team_id (e.g., "12345/67890/team:7405043533023")
+	// - org_id/workspace_id/member:member_id (e.g., "12345/67890/member:98765")
 	parts := strings.Split(req.ID, "/")
 	if len(parts) != 3 {
 		resp.Diagnostics.AddError(
 			"Invalid Import ID",
-			fmt.Sprintf("Expected format: org_id/workspace_id/email, got: %s", req.ID),
+			fmt.Sprintf("Expected format: org_id/workspace_id/email or org_id/workspace_id/team:team_id or org_id/workspace_id/member:member_id, got: %s", req.ID),
 		)
 		return
 	}
@@ -406,7 +473,38 @@ func (r *Resource) ImportState(ctx context.Context, req resource.ImportStateRequ
 
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("org_id"), orgID)...)
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("workspace_id"), workspaceID)...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("email"), parts[2])...)
+
+	// Determine import type based on third part
+	identifier := parts[2]
+
+	if strings.HasPrefix(identifier, "team:") {
+		// Import by team_id
+		teamIDStr := strings.TrimPrefix(identifier, "team:")
+		teamID, err := strconv.ParseInt(teamIDStr, 10, 64)
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Invalid team_id",
+				fmt.Sprintf("team_id must be a number, got: %s", teamIDStr),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("team_id"), teamID)...)
+	} else if strings.HasPrefix(identifier, "member:") {
+		// Import by member_id
+		memberIDStr := strings.TrimPrefix(identifier, "member:")
+		memberID, err := strconv.ParseInt(memberIDStr, 10, 64)
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Invalid member_id",
+				fmt.Sprintf("member_id must be a number, got: %s", memberIDStr),
+			)
+			return
+		}
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("member_id"), memberID)...)
+	} else {
+		// Import by email (default)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("email"), identifier)...)
+	}
 }
 
 // findParticipant searches for a participant by email or participant_id.
