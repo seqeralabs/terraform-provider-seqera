@@ -13,6 +13,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
+	dataset_version "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/dataset_version"
+	organization_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member"
+	organization_member_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/organization_member_data"
+	pipeline_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_data"
+	pipeline_secret_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/pipeline_secret_data"
+	team_member "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/team_member"
+	workspace_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_data"
+	workspace_participant "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant"
+	workspace_participant_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant_data"
 	"net/http"
 )
 
@@ -134,6 +143,10 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewTowerAgentCredentialResource,
 		NewWorkflowsResource,
 		NewWorkspaceResource,
+		workspace_participant.NewResource,
+		organization_member.NewResource,
+		team_member.NewResource,
+		dataset_version.NewResource,
 	}
 }
 
@@ -141,6 +154,11 @@ func (p *SeqeraProvider) DataSources(ctx context.Context) []func() datasource.Da
 	return []func() datasource.DataSource{
 		NewCredentialsDataSource,
 		NewDataLinksDataSource,
+		organization_member_data.NewDataSource,
+		workspace_data.NewDataSource,
+		workspace_participant_data.NewDataSource,
+		pipeline_data.NewDataSource,
+		pipeline_secret_data.NewDataSource,
 	}
 }
 

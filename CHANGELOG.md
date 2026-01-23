@@ -1,3 +1,32 @@
+# v0.27.0
+
+FEATURES:
+
+- **New Resource:** `seqera_workspace_participant` - Manage workspace participants with role assignment. Supports adding organization members to workspaces with roles: owner, admin, maintain, launch, or view.
+- **New Resource:** `seqera_organization_member` - Manage organization members with role assignment. Supports adding users to organizations with roles: owner, member, or collaborator.
+- **New Resource:** `seqera_team_member` - Manage team members. Supports adding organization members to teams for collective workspace access management.
+- **New Resource:** `seqera_dataset_version` - Upload and manage dataset versions. Supports file uploads with header detection and SHA256 hash tracking for change detection.
+
+- **New Data Source:** `seqera_organization_member` - Look up organization member by email. Returns member details including member_id, user_id, username, name, role, and avatar.
+- **New Data Source:** `seqera_workspace` - Look up workspace by name. Returns workspace details including workspace_id, full_name, description, and visibility.
+- **New Data Source:** `seqera_workspace_participant` - Look up workspace participant by email. Returns participant details including participant_id, member_id, username, name, and role.
+- **New Data Source:** `seqera_pipeline` - Look up pipeline by name. Returns pipeline details including pipeline_id, description, repository, and creator information.
+- **New Data Source:** `seqera_pipeline_secret` - Look up pipeline secret by name. Returns secret details including secret_id and timestamps.
+
+ENHANCEMENTS:
+
+- **Resource Import Support**: All new resources support import via composite IDs:
+  - `seqera_organization_member`: `org_id/email`
+  - `seqera_workspace_participant`: `org_id/workspace_id/email`
+  - `seqera_team_member`: `org_id/team_id/email`
+  - `seqera_dataset_version`: `workspace_id/dataset_id/version`
+
+- **Flexible User Identification**: `seqera_workspace_participant` and `seqera_team_member` resources accept either `member_id` or `email` for identifying users, with proper validation ensuring exactly one is specified.
+
+- **File Change Detection**: `seqera_dataset_version` includes a computed `file_hash` attribute (SHA256) that triggers resource replacement when file content changes.
+
+---
+
 # v0.26.5
 
 FIX:
