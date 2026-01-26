@@ -24,8 +24,8 @@ For Compute Environment Creation:
   - The API responds with a 200 status code containing the computeEnvId
   - We poll the describe endpoint until the status field becomes "AVAILABLE"
   - If status becomes "ERRORED" or "INVALID", the operation fails
-  - Polling configuration: up to 60 attempts with exponential backoff (1s for first 3 attempts, then 5s)
-  - Total timeout: approximately 5 minutes
+  - Polling configuration: 10-second intervals with 5-minute overall timeout (1s retry for transient errors)
+  - Total timeout: 5 minutes
 
 For Compute Environment Deletion:
   - The API responds with a 204 status code acknowledging the deletion request
