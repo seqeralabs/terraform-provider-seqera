@@ -78,6 +78,7 @@ jobs:
         TF_VAR_secret_key: ${{ secrets.AWS_SECRET_KEY }}
         TF_VAR_azure_batch_key: ${{ secrets.AZURE_BATCH_KEY }}
         TF_VAR_azure_storage_key: ${{ secrets.AZURE_STORAGE_KEY }}
+        TF_VAR_gcp_service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
     - name: Generate Terraform Plan for PR Comment
       if: github.event_name == 'pull_request'
