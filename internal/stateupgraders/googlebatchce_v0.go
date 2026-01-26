@@ -2,6 +2,7 @@ package stateupgraders
 
 import (
 	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 )
 
