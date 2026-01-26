@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
-	"slices"
 	"strings"
 	"time"
 
@@ -41,26 +41,16 @@ caused by the API's asynchronous behavior.
 */
 
 const (
-	// Operation IDs for compute environment create operations
-	opCreateAWSBatchCE        = "CreateAWSBatchCE"
-	opCreateAWSComputeEnv     = "CreateAWSComputeEnv"
-	opCreateManagedComputeCE  = "CreateManagedComputeCE"
-	opCreateGenericComputeEnv = "CreateComputeEnv"
-
-	// Operation IDs for compute environment delete operations
-	opDeleteAWSBatchCE        = "DeleteAWSBatchCE"
-	opDeleteAWSComputeEnv     = "DeleteAWSComputeEnv"
-	opDeleteManagedComputeCE  = "DeleteManagedComputeCE"
-	opDeleteGenericComputeEnv = "DeleteComputeEnv"
-
-	// ComputeEnvMaxPollAttempts defines maximum polling attempts (5 minutes total with default interval)
-	ComputeEnvMaxPollAttempts = 60
-	// ComputeEnvPollInterval defines time between polling attempts
-	ComputeEnvPollInterval = 5 * time.Second
 	// ComputeEnvInitialWait defines initial wait before first poll (gives API time to initialize)
 	ComputeEnvInitialWait = 2 * time.Second
+	// ComputeEnvPollInterval defines time between normal polling attempts
+	ComputeEnvPollInterval = 10 * time.Second
+	// ComputeEnvRetryInterval defines time between retries after transient errors
+	ComputeEnvRetryInterval = 1 * time.Second
 	// ComputeEnvHTTPTimeout defines timeout for individual HTTP requests
 	ComputeEnvHTTPTimeout = 30 * time.Second
+	// ComputeEnvOverallTimeout defines maximum total time for polling operations
+	ComputeEnvOverallTimeout = 5 * time.Minute
 )
 
 // ComputeEnvStatusHook polls compute environment status:
@@ -82,11 +72,12 @@ func (h *ComputeEnvStatusHook) AfterSuccess(hookCtx AfterSuccessContext, res *ht
 	}
 
 	// Check if this is a compute environment create or delete operation
-	createOps := []string{opCreateAWSBatchCE, opCreateAWSComputeEnv, opCreateManagedComputeCE, opCreateGenericComputeEnv}
-	deleteOps := []string{opDeleteAWSBatchCE, opDeleteAWSComputeEnv, opDeleteManagedComputeCE, opDeleteGenericComputeEnv}
-
-	isCreateOperation := slices.Contains(createOps, hookCtx.OperationID)
-	isDeleteOperation := slices.Contains(deleteOps, hookCtx.OperationID)
+	// All compute env operations follow pattern: Create*/Delete* + *ComputeEnv/*CE
+	opID := hookCtx.OperationID
+	isCreateOperation := strings.HasPrefix(opID, "Create") &&
+		(strings.Contains(opID, "ComputeEnv") || strings.HasSuffix(opID, "CE"))
+	isDeleteOperation := strings.HasPrefix(opID, "Delete") &&
+		(strings.Contains(opID, "ComputeEnv") || strings.HasSuffix(opID, "CE"))
 
 	if !isCreateOperation && !isDeleteOperation {
 		return res, nil
@@ -216,8 +207,20 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 	authHeader string,
 	isDeleteOperation bool,
 ) (string, error) {
+	if authHeader == "" {
+		return "", fmt.Errorf("authorization header is empty")
+	}
+
+	// Enforce overall timeout
+	ctx, cancel := context.WithTimeout(ctx, ComputeEnvOverallTimeout)
+	defer cancel()
+
 	// Wait a bit before starting to poll - gives the API time to initialize
-	time.Sleep(ComputeEnvInitialWait)
+	select {
+	case <-time.After(ComputeEnvInitialWait):
+	case <-ctx.Done():
+		return "", fmt.Errorf("polling cancelled during initial wait: %w", ctx.Err())
+	}
 
 	// Create HTTP client once for all polling attempts
 	client := &http.Client{
@@ -230,11 +233,13 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 		workspaceID,
 	)
 
-	for attempt := 1; attempt <= ComputeEnvMaxPollAttempts; attempt++ {
-		// Check if context is cancelled
+	var lastStatus string
+
+	// Poll until success or timeout
+	for {
 		select {
 		case <-ctx.Done():
-			return "", fmt.Errorf("polling cancelled: %w", ctx.Err())
+			return "", fmt.Errorf("timeout waiting for compute environment (last status: %s): %w", lastStatus, ctx.Err())
 		default:
 		}
 
@@ -248,21 +253,42 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 
 		resp, err := client.Do(req)
 		if err != nil {
-			return "", fmt.Errorf("failed to describe compute environment: %w", err)
+			// Retry all network errors except context cancellation
+			if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+				return "", fmt.Errorf("request cancelled: %w", err)
+			}
+			// Network error - retry quickly
+			lastStatus = fmt.Sprintf("error: %v", err)
+			select {
+			case <-time.After(ComputeEnvRetryInterval):
+				continue
+			case <-ctx.Done():
+				return "", fmt.Errorf("timeout during retry: %w", ctx.Err())
+			}
 		}
 
-		bodyBytes, err := io.ReadAll(resp.Body)
+		bodyBytes, readErr := io.ReadAll(resp.Body)
 		closeErr := resp.Body.Close()
-		if err != nil {
-			return "", fmt.Errorf("failed to read describe response: %w", err)
+		if readErr != nil {
+			return "", fmt.Errorf("failed to read describe response: %w", readErr)
 		}
-		if closeErr != nil {
-			return "", fmt.Errorf("failed to close response body: %w", closeErr)
-		}
+		// Ignore close errors if we got the data
+		_ = closeErr
 
 		// For delete operations, a 404 means the resource is deleted (success)
 		if isDeleteOperation && resp.StatusCode == 404 {
 			return "", nil
+		}
+
+		// Retry rate limiting and 5xx errors quickly
+		if resp.StatusCode == 429 || resp.StatusCode >= 500 {
+			lastStatus = fmt.Sprintf("status %d", resp.StatusCode)
+			select {
+			case <-time.After(ComputeEnvRetryInterval):
+				continue
+			case <-ctx.Done():
+				return "", fmt.Errorf("timeout during retry: %w", ctx.Err())
+			}
 		}
 
 		if resp.StatusCode != 200 {
@@ -283,14 +309,14 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 
 		status := describeResponse.ComputeEnv.Status
 		deleted := describeResponse.ComputeEnv.Deleted
+		lastStatus = status
 
 		// Handle delete operations
 		if isDeleteOperation {
 			if deleted {
 				return "", nil // Successfully deleted
 			}
-			// Continue polling until 404 or deleted flag is true
-			// Note: Earlier Seqera versions have no DELETING phase
+			// Continue polling
 		} else {
 			// Handle create operations
 			if status == string(shared.ComputeEnvStatusAvailable) {
@@ -302,19 +328,11 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 			}
 		}
 
-		// Wait before next attempt with exponential backoff for initial polls
-		if attempt < ComputeEnvMaxPollAttempts {
-			interval := ComputeEnvPollInterval
-			// Poll more frequently in the first few attempts
-			if attempt <= 3 {
-				interval = time.Second
-			}
-			time.Sleep(interval)
+		// Wait before next poll
+		select {
+		case <-time.After(ComputeEnvPollInterval):
+		case <-ctx.Done():
+			return "", fmt.Errorf("timeout waiting for compute environment (last status: %s): %w", lastStatus, ctx.Err())
 		}
 	}
-
-	if isDeleteOperation {
-		return "", fmt.Errorf("timeout waiting for compute environment to be deleted after %d attempts", ComputeEnvMaxPollAttempts)
-	}
-	return "", fmt.Errorf("timeout waiting for compute environment to become available after %d attempts", ComputeEnvMaxPollAttempts)
 }
