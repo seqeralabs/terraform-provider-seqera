@@ -320,9 +320,6 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.GoogleBatch = &tfTypes.GoogleBatchServiceConfiguration{}
 					r.ComputeEnv.Config.GoogleBatch.BootDiskSizeGb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.BootDiskSizeGb))
 					r.ComputeEnv.Config.GoogleBatch.ComputeJobsInstanceTemplate = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ComputeJobsInstanceTemplate)
-					r.ComputeEnv.Config.GoogleBatch.CopyImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CopyImage)
-					r.ComputeEnv.Config.GoogleBatch.CPUPlatform = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.CPUPlatform)
-					r.ComputeEnv.Config.GoogleBatch.DebugMode = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.DebugMode))
 					r.ComputeEnv.Config.GoogleBatch.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.EnableFusion)
 					r.ComputeEnv.Config.GoogleBatch.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.EnableWave)
 					r.ComputeEnv.Config.GoogleBatch.Environment = []tfTypes.ConfigEnvVariable{}
@@ -347,18 +344,12 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 						}
 					}
 					r.ComputeEnv.Config.GoogleBatch.Location = types.StringValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Location)
-					r.ComputeEnv.Config.GoogleBatch.MachineType = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.MachineType)
 					r.ComputeEnv.Config.GoogleBatch.Network = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Network)
 					r.ComputeEnv.Config.GoogleBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.GoogleBatch.NfsMount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsMount)
-					r.ComputeEnv.Config.GoogleBatch.NfsTarget = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.NfsTarget)
 					r.ComputeEnv.Config.GoogleBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PostRunScript)
 					r.ComputeEnv.Config.GoogleBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.PreRunScript)
-					r.ComputeEnv.Config.GoogleBatch.ProjectID = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ProjectID)
 					r.ComputeEnv.Config.GoogleBatch.ServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.ServiceAccount)
 					r.ComputeEnv.Config.GoogleBatch.Spot = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Spot)
-					r.ComputeEnv.Config.GoogleBatch.SSHDaemon = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHDaemon)
-					r.ComputeEnv.Config.GoogleBatch.SSHImage = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.SSHImage)
 					r.ComputeEnv.Config.GoogleBatch.Subnetwork = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.Subnetwork)
 					r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress = types.BoolPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.UsePrivateAddress)
 					r.ComputeEnv.Config.GoogleBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.GoogleBatchServiceConfiguration.WorkDir)
@@ -1741,48 +1732,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			bootDiskSizeGb1 = nil
 		}
-		cpuPlatform := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.CPUPlatform.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CPUPlatform.IsNull() {
-			*cpuPlatform = r.ComputeEnv.Config.GoogleBatch.CPUPlatform.ValueString()
-		} else {
-			cpuPlatform = nil
-		}
-		machineType := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.MachineType.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.MachineType.IsNull() {
-			*machineType = r.ComputeEnv.Config.GoogleBatch.MachineType.ValueString()
-		} else {
-			machineType = nil
-		}
-		projectId1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.ProjectID.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.ProjectID.IsNull() {
-			*projectId1 = r.ComputeEnv.Config.GoogleBatch.ProjectID.ValueString()
-		} else {
-			projectId1 = nil
-		}
-		sshDaemon1 := new(bool)
-		if !r.ComputeEnv.Config.GoogleBatch.SSHDaemon.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.SSHDaemon.IsNull() {
-			*sshDaemon1 = r.ComputeEnv.Config.GoogleBatch.SSHDaemon.ValueBool()
-		} else {
-			sshDaemon1 = nil
-		}
-		sshImage1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.SSHImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.SSHImage.IsNull() {
-			*sshImage1 = r.ComputeEnv.Config.GoogleBatch.SSHImage.ValueString()
-		} else {
-			sshImage1 = nil
-		}
-		debugMode1 := new(int)
-		if !r.ComputeEnv.Config.GoogleBatch.DebugMode.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.DebugMode.IsNull() {
-			*debugMode1 = int(r.ComputeEnv.Config.GoogleBatch.DebugMode.ValueInt32())
-		} else {
-			debugMode1 = nil
-		}
-		copyImage1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.CopyImage.IsNull() {
-			*copyImage1 = r.ComputeEnv.Config.GoogleBatch.CopyImage.ValueString()
-		} else {
-			copyImage1 = nil
-		}
 		usePrivateAddress1 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.IsNull() {
 			*usePrivateAddress1 = r.ComputeEnv.Config.GoogleBatch.UsePrivateAddress.ValueBool()
@@ -1807,18 +1756,6 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			*headJobMemoryMb2 = int(r.ComputeEnv.Config.GoogleBatch.HeadJobMemoryMb.ValueInt32())
 		} else {
 			headJobMemoryMb2 = nil
-		}
-		nfsTarget1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NfsTarget.IsNull() {
-			*nfsTarget1 = r.ComputeEnv.Config.GoogleBatch.NfsTarget.ValueString()
-		} else {
-			nfsTarget1 = nil
-		}
-		nfsMount1 := new(string)
-		if !r.ComputeEnv.Config.GoogleBatch.NfsMount.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.NfsMount.IsNull() {
-			*nfsMount1 = r.ComputeEnv.Config.GoogleBatch.NfsMount.ValueString()
-		} else {
-			nfsMount1 = nil
 		}
 		enableWave2 := new(bool)
 		if !r.ComputeEnv.Config.GoogleBatch.EnableWave.IsUnknown() && !r.ComputeEnv.Config.GoogleBatch.EnableWave.IsNull() {
@@ -1871,19 +1808,10 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			Location:                    location1,
 			Spot:                        spot,
 			BootDiskSizeGb:              bootDiskSizeGb1,
-			CPUPlatform:                 cpuPlatform,
-			MachineType:                 machineType,
-			ProjectID:                   projectId1,
-			SSHDaemon:                   sshDaemon1,
-			SSHImage:                    sshImage1,
-			DebugMode:                   debugMode1,
-			CopyImage:                   copyImage1,
 			UsePrivateAddress:           usePrivateAddress1,
 			Labels:                      labels1,
 			HeadJobCpus:                 headJobCpus2,
 			HeadJobMemoryMb:             headJobMemoryMb2,
-			NfsTarget:                   nfsTarget1,
-			NfsMount:                    nfsMount1,
 			EnableWave:                  enableWave2,
 			EnableFusion:                enableFusion2,
 			ServiceAccount:              serviceAccount,
@@ -1969,11 +1897,11 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 		} else {
 			fusion2Enabled = nil
 		}
-		projectId2 := new(string)
+		projectId1 := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.ProjectID.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.ProjectID.IsNull() {
-			*projectId2 = r.ComputeEnv.Config.GoogleCloud.ProjectID.ValueString()
+			*projectId1 = r.ComputeEnv.Config.GoogleCloud.ProjectID.ValueString()
 		} else {
-			projectId2 = nil
+			projectId1 = nil
 		}
 		region4 := new(string)
 		if !r.ComputeEnv.Config.GoogleCloud.Region.IsUnknown() && !r.ComputeEnv.Config.GoogleCloud.Region.IsNull() {
@@ -2041,7 +1969,7 @@ func (r *ComputeEnvResourceModel) ToSharedCreateComputeEnvRequest(ctx context.Co
 			NextflowConfig:      nextflowConfig5,
 			WaveEnabled:         waveEnabled,
 			Fusion2Enabled:      fusion2Enabled,
-			ProjectID:           projectId2,
+			ProjectID:           projectId1,
 			Region:              region4,
 			Zone:                zone,
 			ServiceAccountEmail: serviceAccountEmail,

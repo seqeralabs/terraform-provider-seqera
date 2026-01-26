@@ -10,6 +10,7 @@ sources:
             - location: overlays/api-description.yaml
             - location: overlays/aws-compute-env.yaml
             - location: overlays/compute-env-aws-batch.yaml
+            - location: overlays/compute-env-google-batch.yaml
             - location: overlays/compute-env-seqera-compute.yaml
             - location: overlays/compute-env.yaml
             - location: overlays/credentials-aws.yaml

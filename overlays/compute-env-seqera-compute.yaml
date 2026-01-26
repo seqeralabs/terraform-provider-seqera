@@ -253,6 +253,7 @@ actions:
             pattern: '^[a-zA-Z0-9_-]+$'
             description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
             x-speakeasy-param-force-new: true
+            x-speakeasy-plan-validators: ComputeEnvNameValidator
           description:
             type: string
             description: Optional description of the compute environment

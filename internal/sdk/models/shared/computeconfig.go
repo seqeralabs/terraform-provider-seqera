@@ -1900,35 +1900,64 @@ type GoogleBatchServiceConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator     *string           `json:"discriminator,omitempty"`
-	Location          string            `json:"location"`
-	Spot              *bool             `json:"spot,omitempty"`
-	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
-	CPUPlatform       *string           `json:"cpuPlatform,omitempty"`
-	MachineType       *string           `json:"machineType,omitempty"`
-	ProjectID         *string           `json:"projectId,omitempty"`
-	SSHDaemon         *bool             `json:"sshDaemon,omitempty"`
-	SSHImage          *string           `json:"sshImage,omitempty"`
-	DebugMode         *int              `json:"debugMode,omitempty"`
-	CopyImage         *string           `json:"copyImage,omitempty"`
-	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
-	Labels            map[string]string `json:"labels,omitempty"`
-	HeadJobCpus       *int              `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb   *int              `json:"headJobMemoryMb,omitempty"`
-	NfsTarget         *string           `json:"nfsTarget,omitempty"`
-	NfsMount          *string           `json:"nfsMount,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Google Cloud region where the Batch compute environment will be created.
+	// Examples: us-central1, us-east1, europe-west1, asia-southeast1
+	//
+	Location string `json:"location"`
+	// Enable Spot (preemptible) VM instances for compute jobs.
+	// Spot instances are cost-effective but can be interrupted by Google Cloud.
+	// Set to true to use Spot instances, false for standard instances.
+	//
+	Spot *bool `json:"spot,omitempty"`
+	// Size of the boot disk in GB for compute instances.
+	// Minimum size depends on the base image used.
+	//
+	BootDiskSizeGb *int `json:"bootDiskSizeGb,omitempty"`
+	// Use only internal IP addresses for compute instances (no external IP).
+	// Requires Cloud NAT or Private Google Access to be configured.
+	// Set to true for enhanced security and to avoid external IP quotas.
+	//
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
+	// Key-value labels to apply to compute resources.
+	// Use for resource organization, cost tracking, and filtering.
+	//
+	Labels map[string]string `json:"labels,omitempty"`
+	// Number of CPUs allocated for the head job (default: 1)
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the head job in MB (default: 1024)
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 	// Enable Wave containers for this compute environment. Wave provides container provisioning
 	// and augmentation capabilities for Nextflow workflows.
 	//
 	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 	// Note: If Fusion2 is enabled, Wave must also be enabled.
 	//
-	EnableWave                  *bool   `json:"waveEnabled,omitempty"`
-	EnableFusion                *bool   `json:"fusion2Enabled,omitempty"`
-	ServiceAccount              *string `json:"serviceAccount,omitempty"`
-	Network                     *string `json:"network,omitempty"`
-	Subnetwork                  *string `json:"subnetwork,omitempty"`
-	HeadJobInstanceTemplate     *string `json:"headJobInstanceTemplate,omitempty"`
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Service account email to use for compute jobs.
+	// This service account needs appropriate IAM permissions for GCS, logging, etc.
+	// Format: service-account-name@project-id.iam.gserviceaccount.com
+	//
+	ServiceAccount *string `json:"serviceAccount,omitempty"`
+	// VPC network name or URL for compute instances.
+	// Format: projects/PROJECT_ID/global/networks/NETWORK_NAME
+	// Or simply: NETWORK_NAME (for networks in the same project)
+	//
+	Network *string `json:"network,omitempty"`
+	// VPC subnetwork name or URL for compute instances.
+	// Must be in the same region as the compute environment.
+	// Format: projects/PROJECT_ID/regions/REGION/subnetworks/SUBNETWORK_NAME
+	// Or simply: SUBNETWORK_NAME
+	//
+	Subnetwork *string `json:"subnetwork,omitempty"`
+	// Custom instance template name for head job.
+	// Allows advanced configuration of head job compute resources.
+	//
+	HeadJobInstanceTemplate *string `json:"headJobInstanceTemplate,omitempty"`
+	// Custom instance template name for compute jobs.
+	// Allows advanced configuration of worker compute resources.
+	//
 	ComputeJobsInstanceTemplate *string `json:"computeJobsInstanceTemplate,omitempty"`
 }
 
@@ -2006,55 +2035,6 @@ func (g *GoogleBatchServiceConfiguration) GetBootDiskSizeGb() *int {
 	return g.BootDiskSizeGb
 }
 
-func (g *GoogleBatchServiceConfiguration) GetCPUPlatform() *string {
-	if g == nil {
-		return nil
-	}
-	return g.CPUPlatform
-}
-
-func (g *GoogleBatchServiceConfiguration) GetMachineType() *string {
-	if g == nil {
-		return nil
-	}
-	return g.MachineType
-}
-
-func (g *GoogleBatchServiceConfiguration) GetProjectID() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ProjectID
-}
-
-func (g *GoogleBatchServiceConfiguration) GetSSHDaemon() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.SSHDaemon
-}
-
-func (g *GoogleBatchServiceConfiguration) GetSSHImage() *string {
-	if g == nil {
-		return nil
-	}
-	return g.SSHImage
-}
-
-func (g *GoogleBatchServiceConfiguration) GetDebugMode() *int {
-	if g == nil {
-		return nil
-	}
-	return g.DebugMode
-}
-
-func (g *GoogleBatchServiceConfiguration) GetCopyImage() *string {
-	if g == nil {
-		return nil
-	}
-	return g.CopyImage
-}
-
 func (g *GoogleBatchServiceConfiguration) GetUsePrivateAddress() *bool {
 	if g == nil {
 		return nil
@@ -2081,20 +2061,6 @@ func (g *GoogleBatchServiceConfiguration) GetHeadJobMemoryMb() *int {
 		return nil
 	}
 	return g.HeadJobMemoryMb
-}
-
-func (g *GoogleBatchServiceConfiguration) GetNfsTarget() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NfsTarget
-}
-
-func (g *GoogleBatchServiceConfiguration) GetNfsMount() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NfsMount
 }
 
 func (g *GoogleBatchServiceConfiguration) GetEnableWave() *bool {

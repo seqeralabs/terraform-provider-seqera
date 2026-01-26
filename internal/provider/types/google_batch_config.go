@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type GoogleBatchServiceConfiguration struct {
+type GoogleBatchConfig struct {
 	BootDiskSizeGb              types.Int32             `tfsdk:"boot_disk_size_gb"`
 	ComputeJobsInstanceTemplate types.String            `tfsdk:"compute_jobs_instance_template"`
 	EnableFusion                types.Bool              `tfsdk:"enable_fusion"`

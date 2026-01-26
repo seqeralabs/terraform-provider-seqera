@@ -1,9 +1,9 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 4abd56c9f698bfe42d54150f076440e1
+  docChecksum: 8d573d5a71e9abfe6bad9c6624e62af5
   docVersion: 1.102.0
-  speakeasyVersion: 1.697.4
+  speakeasyVersion: 1.697.5
   generationVersion: 2.799.0
   releaseVersion: 0.27.0
   configChecksum: 6111f55ca1741d246942fe74112a3e0e
@@ -176,6 +176,8 @@ trackedFiles:
     id: 1f454dbdee03
     last_write_checksum: sha1:1dd66315d501dd2762569a3cb198cbe0991424de
     pristine_git_object: b4d7dfacb838d9a2fcd47d30f9214606a274aa55
+  examples/resources/seqera_google_batch_ce/import.sh:
+    last_write_checksum: sha1:bb4d8862a122a04a09efcfa9461cf54feb72912a
   examples/resources/seqera_kubernetes_credential/import-by-string-id.tf:
     id: 351dcc957fb0
     last_write_checksum: sha1:0d6c88f4893c8ce6a4c5ed9551cc1c164a5ff4b9
@@ -390,7 +392,7 @@ trackedFiles:
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
-    last_write_checksum: sha1:60ad48132d2fc5aa96d7255037cad863dbd3dc83
+    last_write_checksum: sha1:88397d9a89134bba44fd00271d420b332e28237f
     pristine_git_object: 136a1cfb3f23c1c396175224b78c790e8d4b9808
   internal/provider/awsbatchce_resource_sdk.go:
     id: acddb134f02d
@@ -438,11 +440,11 @@ trackedFiles:
     pristine_git_object: 0c1b43d5db49b023cf3c7408c198a4d66c795d8a
   internal/provider/computeenv_resource.go:
     id: f4162f219efd
-    last_write_checksum: sha1:c0916f9655be30883a2015b1c879c08d85edfadb
+    last_write_checksum: sha1:aff1da060dc5b55917ad4af37835deaed7ca73eb
     pristine_git_object: d5550a0a3bc980d281c55531d71458e7e4968b48
   internal/provider/computeenv_resource_sdk.go:
     id: 1e29eea44332
-    last_write_checksum: sha1:d9fb1a97f94be7f009e46ecca21c6f8f004457c0
+    last_write_checksum: sha1:d2fe0533c7e1d96c802f80ee8570b4d8964a56f2
     pristine_git_object: 2e933070714e8aa8d9ab83f2e1b81abd6f262ade
   internal/provider/containerregistrycredential_resource.go:
     id: f0a18857f2ea
@@ -516,6 +518,10 @@ trackedFiles:
     id: a6c217015659
     last_write_checksum: sha1:2962556b81840786fd533f3ba60bfa2b2a01c8f5
     pristine_git_object: 0f3d5604b62f838d2b0b79919f08bc65e5c9cf5b
+  internal/provider/googlebatchce_resource.go:
+    last_write_checksum: sha1:118c2302ac7d7aea3ee3c71f902421d6072fdef2
+  internal/provider/googlebatchce_resource_sdk.go:
+    last_write_checksum: sha1:c244e1a4837d989d6f03a08240e5fbd01ee45f49
   internal/provider/googlecredential_resource.go:
     id: 8822521a4af3
     last_write_checksum: sha1:5806fa7d0a572c0ade898638c387c4716bfc5cf2
@@ -542,7 +548,7 @@ trackedFiles:
     pristine_git_object: 287907880a7125e9ffa8b77e8bbaa57d776887c4
   internal/provider/managedcomputece_resource.go:
     id: 7e0eecddbc1e
-    last_write_checksum: sha1:3f1bf1258a23371f5e8d0d1f9172ac5bb772bdd2
+    last_write_checksum: sha1:30057878e194dd56cf74430f0151ff56369144be
     pristine_git_object: adccfb0da743b49f39ee880f81d9b6a12b4a2e27
   internal/provider/managedcomputece_resource_sdk.go:
     id: 834a6a05996d
@@ -582,7 +588,7 @@ trackedFiles:
     pristine_git_object: 8271b7fae7ec72fa236df95b6cb1c021ff466b99
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:885e9e34b1203adee3bf1f17096cec2cc96df27a
+    last_write_checksum: sha1:720e1bbbf019abddd91b013d40dca48682daed23
     pristine_git_object: 6c768261d1bb7b8f84d2db80197389871642d002
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -812,9 +818,11 @@ trackedFiles:
     id: f49ee3b89983
     last_write_checksum: sha1:ff6b49342a436ca0e535a9fe804eaa7aefb4d522
     pristine_git_object: fee4f8219d9a79b52671130f3318f6aabdf28f25
+  internal/provider/types/google_batch_config.go:
+    last_write_checksum: sha1:a65e38e9844c774368d062980b7442ec432b91fb
   internal/provider/types/google_batch_service_configuration.go:
     id: 5a581f1c4635
-    last_write_checksum: sha1:2693515eb8a76e5c78bd09f0ab4e0a375f61d4ad
+    last_write_checksum: sha1:8dec4614898bf1cd342176af8f8dee8c51edd7fc
     pristine_git_object: 3b1d18b5efc8fd5120b4d3f2f7a9a56feafa342c
   internal/provider/types/google_cloud_configuration.go:
     id: 4eb43152509e
@@ -954,7 +962,7 @@ trackedFiles:
     pristine_git_object: eeb2138186ead7a043a4156ca999876ae1ef98ad
   internal/sdk/computeenvs.go:
     id: 966f951685a1
-    last_write_checksum: sha1:558210d8fcfd53dd35ff7eaf0db94caeaad38eec
+    last_write_checksum: sha1:d1916083a2b13885c7ac27153e69349b63ee4993
     pristine_git_object: 2088635cf294256f64e87885c0426517fb230861
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
@@ -1160,6 +1168,8 @@ trackedFiles:
     id: 8d75213feee2
     last_write_checksum: sha1:ebe9d8daca71d0d70a408a356c65dd4055b99912
     pristine_git_object: d32ed699ef803226c8790d1a98e7a57fa182888e
+  internal/sdk/models/operations/creategooglebatchce.go:
+    last_write_checksum: sha1:47abcb42c424a7c35d557e615a8dd9c1e45dd670
   internal/sdk/models/operations/creategooglecredentials.go:
     id: f89e2e92500f
     last_write_checksum: sha1:2bbabd0f07b1fc340f5b6743d60d8bf0d93f2429
@@ -1320,6 +1330,8 @@ trackedFiles:
     id: f86b9735ebe3
     last_write_checksum: sha1:35b2716aadb2a7c2a16fca8ff59678f420b4f47f
     pristine_git_object: b7a101a2168b70a445e55ee8c4063529be28020f
+  internal/sdk/models/operations/deletegooglebatchce.go:
+    last_write_checksum: sha1:2b57e63983e0df28ab633d217b99788946aed150
   internal/sdk/models/operations/deletegooglecredentials.go:
     id: c0892504d7df
     last_write_checksum: sha1:925deeb572a383857c1d37019faffe5a6184a316
@@ -1472,6 +1484,8 @@ trackedFiles:
     id: ddc3638df429
     last_write_checksum: sha1:1757e813f4afd2a179f76629dc865e06345338d5
     pristine_git_object: 8c65a74b0190d5fd7778dd7623836de5a5bb9548
+  internal/sdk/models/operations/describegooglebatchce.go:
+    last_write_checksum: sha1:e5ed6c8740737f625af9cec9d1a6c66ed320714f
   internal/sdk/models/operations/describegooglecredentials.go:
     id: 6431e37b27c2
     last_write_checksum: sha1:ca41847f83f87ad7414fd6a61e03c417dfdfd9fd
@@ -2234,7 +2248,7 @@ trackedFiles:
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
     id: 21b317c8a966
-    last_write_checksum: sha1:9d919797b79a75b6cf9963baa7447e0569ed8f97
+    last_write_checksum: sha1:6caf1dc2f2ceb7ea1850f12cfc1f5f2027b0cfa1
     pristine_git_object: 42560fcd114408129519a9f9092b24fab369ef65
   internal/sdk/models/shared/computeenvcomputeconfiginput.go:
     id: 6ad5da9244fb
@@ -2396,6 +2410,10 @@ trackedFiles:
     id: 25f5b88ece0d
     last_write_checksum: sha1:efa83b89c28944330e063d65e4fdfcf542928529
     pristine_git_object: a49c4df63dc929337b848174d763cfe0ae4aef2a
+  internal/sdk/models/shared/creategooglebatchcerequest.go:
+    last_write_checksum: sha1:56fef72fb0fe65e13e491976c1930adaa2a9a95d
+  internal/sdk/models/shared/creategooglebatchceresponse.go:
+    last_write_checksum: sha1:655b61d5cfcaa34f53835f521f5b6e23213b22fa
   internal/sdk/models/shared/creategooglecredentialsrequest.go:
     id: 1ae1c3d0cf5d
     last_write_checksum: sha1:1a8ef237442bbae545bb7f39ddbe96d7fe6a648f
@@ -2768,6 +2786,8 @@ trackedFiles:
     id: a3ee86f0f903
     last_write_checksum: sha1:faaed229543b414e8f1ddcc3fae6562051067cd3
     pristine_git_object: d108d8512c6989e38c7f0cd35492943397f15f6c
+  internal/sdk/models/shared/describegooglebatchceresponse.go:
+    last_write_checksum: sha1:8d55b541848d71d4dcde4a346a1d3786ea771d0e
   internal/sdk/models/shared/describegooglecredentialsresponse.go:
     id: c6ac895dcc3c
     last_write_checksum: sha1:b6939c35ff95406208e678426c84bedb63f9e955
@@ -2900,6 +2920,10 @@ trackedFiles:
     id: e8e0a0401118
     last_write_checksum: sha1:337f56cfc80f35ec0a30f61feee56467d837ded7
     pristine_git_object: d93e4f9224bfcf068b716b3e11f95edf7cf26158
+  internal/sdk/models/shared/googlebatchcecomputeconfiginput.go:
+    last_write_checksum: sha1:f7edd08580618e7cc9cd0adfb8ed81d24ee66042
+  internal/sdk/models/shared/googlebatchconfig.go:
+    last_write_checksum: sha1:ebc56bf5fbd8410b025c38d1b3afd9435a348da5
   internal/sdk/models/shared/googlecredential.go:
     id: a084779f2e36
     last_write_checksum: sha1:a2031a6036589cf2c51a212dc1bf53213eaafec2
@@ -6125,5 +6149,37 @@ examples:
         "200":
           application/json: {}
         "404":
+          application/json: {"message": "<value>"}
+  CreateGoogleBatchCE:
+    speakeasy-default-create-google-batch-CE:
+      parameters:
+        query:
+          workspaceId: 621306
+      requestBody:
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-batch", "config": {"workDir": "gs://my-nextflow-bucket/work", "location": "us-central1", "spot": true, "bootDiskSizeGb": 50, "usePrivateAddress": false, "labels": {"environment": "production", "team": "data-science"}, "headJobCpus": 4, "headJobMemoryMb": 8192, "serviceAccount": "nextflow-sa@my-project.iam.gserviceaccount.com", "network": "projects/my-project/global/networks/default", "subnetwork": "projects/my-project/regions/us-central1/subnetworks/default"}}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeGoogleBatchCE:
+    speakeasy-default-describe-google-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+        query:
+          workspaceId: 23941
+      responses:
+        "200":
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "google-batch", "config": {"workDir": "gs://my-nextflow-bucket/work", "location": "us-central1", "spot": true, "bootDiskSizeGb": 50, "usePrivateAddress": false, "labels": {"environment": "production", "team": "data-science"}, "headJobCpus": 4, "headJobMemoryMb": 8192, "serviceAccount": "nextflow-sa@my-project.iam.gserviceaccount.com", "network": "projects/my-project/global/networks/default", "subnetwork": "projects/my-project/regions/us-central1/subnetworks/default"}}}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteGoogleBatchCE:
+    speakeasy-default-delete-google-batch-CE:
+      parameters:
+        path:
+          computeEnvId: "<id>"
+      responses:
+        "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

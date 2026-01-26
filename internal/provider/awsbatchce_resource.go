@@ -36,6 +36,7 @@ import (
 	speakeasy_int32validators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/int32validators"
 	custom_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
+	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	speakeasy_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
@@ -828,6 +829,7 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+					custom_stringvalidators.ComputeEnvNameValidator(),
 				},
 			},
 			"org_id": schema.Int64Attribute{
