@@ -240,6 +240,7 @@ func (r *ManagedComputeCEResource) Schema(ctx context.Context, req resource.Sche
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(100),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9_-]+$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).String()),
+					custom_stringvalidators.ComputeEnvNameValidator(),
 				},
 			},
 			"nextflow_config": schema.StringAttribute{

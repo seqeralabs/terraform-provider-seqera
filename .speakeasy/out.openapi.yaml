@@ -9030,6 +9030,159 @@ paths:
           description: Operation not allowed
       security:
         - BearerAuth: []
+  "/compute-envs#google-batch":
+    post:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleBatchCE#create
+      x-speakeasy-name-override: CreateGoogleBatchCE
+      summary: Create Google Batch compute environment
+      description: Creates a new Google Batch compute environment. Append `?workspaceId` to create the environment in a workspace context.
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 5000
+          maxInterval: 5000
+          maxElapsedTime: 30000
+          exponent: 1.0
+        statusCodes:
+          - 429
+          - 500
+          - 502
+          - 503
+          - 504
+      tags:
+        - compute-envs
+      operationId: CreateGoogleBatchCE
+      parameters:
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        description: Google Batch compute environment create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGoogleBatchCERequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateGoogleBatchCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Conflict - resource already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+  "/compute-envs/{computeEnvId}#google-batch":
+    get:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleBatchCE#read
+      x-speakeasy-name-override: DescribeGoogleBatchCE
+      summary: Describe Google Batch compute environment
+      description: Retrieves the details of the Google Batch compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DescribeGoogleBatchCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - name: attributes
+          in: query
+          description: "Additional attribute values to include in the response (`labels`). Returns an empty value (`labels: null`) if omitted."
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ComputeEnvQueryAttribute"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeGoogleBatchCEResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "404":
+          description: Compute environment not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - BearerAuth: []
+    delete:
+      x-speakeasy-entity-operation:
+        terraform-datasource: null
+        terraform-resource: GoogleBatchCE#delete
+      x-speakeasy-name-override: DeleteGoogleBatchCE
+      summary: Delete Google Batch compute environment
+      description: Deletes the Google Batch compute environment identified by the given `computeEnvId`.
+      tags:
+        - compute-envs
+      operationId: DeleteGoogleBatchCE
+      parameters:
+        - name: computeEnvId
+          in: path
+          description: Compute environment string identifier
+          required: true
+          schema:
+            type: string
+        - name: workspaceId
+          in: query
+          description: Workspace numeric identifier
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+        - BearerAuth: []
   "/compute-envs#seqeracompute":
     post:
       x-speakeasy-entity-operation:
@@ -14603,13 +14756,21 @@ components:
       properties:
         workDir:
           type: string
-          description: Compute environment working directory
+          description: |
+            Google Cloud Storage bucket path for Nextflow work directory where intermediate files will be stored.
+            Format: gs://bucket-name/path
+          example: "gs://my-nextflow-bucket/work"
+          pattern: "^gs://.+"
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: false
         preRunScript:
           type: string
-          description: "Add a script that executes in the nf-launch script prior to invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          description: "Bash script to run before workflow execution begins.\nUse for environment setup, loading modules, downloading reference data, etc.\n"
+          x-speakeasy-param-force-new: true
         postRunScript:
           type: string
-          description: "Add a script that executes after all Nextflow processes have completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
+          description: "Bash script to run after workflow execution completes.\nUse for cleanup, archiving results, sending notifications, etc.\n"
+          x-speakeasy-param-force-new: true
         environment:
           type: array
           items:
@@ -14622,42 +14783,59 @@ components:
           x-speakeasy-terraform-ignore: true
         location:
           type: string
+          description: |
+            Google Cloud region where the Batch compute environment will be created.
+            Examples: us-central1, us-east1, europe-west1, asia-southeast1
+          example: "us-central1"
+          x-speakeasy-param-force-new: true
+          x-speakeasy-param-optional: false
         spot:
           type: boolean
+          description: |
+            Enable Spot (preemptible) VM instances for compute jobs.
+            Spot instances are cost-effective but can be interrupted by Google Cloud.
+            Set to true to use Spot instances, false for standard instances.
+          example: true
+          x-speakeasy-param-force-new: true
         bootDiskSizeGb:
           type: integer
           format: int32
-        cpuPlatform:
-          type: string
-        machineType:
-          type: string
-        projectId:
-          type: string
-        sshDaemon:
-          type: boolean
-        sshImage:
-          type: string
-        debugMode:
-          type: integer
-          format: int32
-        copyImage:
-          type: string
+          description: |
+            Size of the boot disk in GB for compute instances.
+            Minimum size depends on the base image used.
+          example: 50
+          x-speakeasy-param-force-new: true
         usePrivateAddress:
           type: boolean
+          description: |
+            Use only internal IP addresses for compute instances (no external IP).
+            Requires Cloud NAT or Private Google Access to be configured.
+            Set to true for enhanced security and to avoid external IP quotas.
+          example: false
+          x-speakeasy-param-force-new: true
         labels:
           type: object
           additionalProperties:
             type: string
+          description: |
+            Key-value labels to apply to compute resources.
+            Use for resource organization, cost tracking, and filtering.
+          example:
+            environment: production
+            team: data-science
+          x-speakeasy-param-force-new: true
         headJobCpus:
           type: integer
           format: int32
+          description: "Number of CPUs allocated for the head job (default: 1)"
+          example: 4
+          x-speakeasy-param-force-new: true
         headJobMemoryMb:
           type: integer
           format: int32
-        nfsTarget:
-          type: string
-        nfsMount:
-          type: string
+          description: "Memory allocation for the head job in MB (default: 1024)"
+          example: 8192
+          x-speakeasy-param-force-new: true
         waveEnabled:
           type: boolean
           title: "Wave Enabled"
@@ -14674,14 +14852,41 @@ components:
           x-speakeasy-name-override: enable_fusion
         serviceAccount:
           type: string
+          description: |
+            Service account email to use for compute jobs.
+            This service account needs appropriate IAM permissions for GCS, logging, etc.
+            Format: service-account-name@project-id.iam.gserviceaccount.com
+          example: "nextflow-sa@my-project.iam.gserviceaccount.com"
+          x-speakeasy-param-force-new: true
         network:
           type: string
+          description: |
+            VPC network name or URL for compute instances.
+            Format: projects/PROJECT_ID/global/networks/NETWORK_NAME
+            Or simply: NETWORK_NAME (for networks in the same project)
+          example: "projects/my-project/global/networks/default"
+          x-speakeasy-param-force-new: true
         subnetwork:
           type: string
+          description: |
+            VPC subnetwork name or URL for compute instances.
+            Must be in the same region as the compute environment.
+            Format: projects/PROJECT_ID/regions/REGION/subnetworks/SUBNETWORK_NAME
+            Or simply: SUBNETWORK_NAME
+          example: "projects/my-project/regions/us-central1/subnetworks/default"
+          x-speakeasy-param-force-new: true
         headJobInstanceTemplate:
           type: string
+          description: |
+            Custom instance template name for head job.
+            Allows advanced configuration of head job compute resources.
+          x-speakeasy-param-force-new: true
         computeJobsInstanceTemplate:
           type: string
+          description: |
+            Custom instance template name for compute jobs.
+            Allows advanced configuration of worker compute resources.
+          x-speakeasy-param-force-new: true
       required:
         - location
     GoogleBucket:
@@ -18678,6 +18883,7 @@ components:
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
           x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: ComputeEnvNameValidator
         description:
           type: string
           description: Optional description of the compute environment
@@ -18753,6 +18959,122 @@ components:
         totalSize:
           type: integer
           format: int64
+    # Google Batch-specific compute environment schema
+    GoogleBatchCE_ComputeConfig:
+      x-speakeasy-entity: GoogleBatchCE
+      x-speakeasy-entity-version: 1
+      x-speakeasy-entity-description: |
+        Manage Google Batch compute environments in Seqera platform using this resource.
+
+        Google Batch compute environments define the execution platform where a pipeline will run
+        on Google Cloud infrastructure using the Google Batch service.
+      required:
+        - config
+        - name
+        - platform
+        - credentialsId
+      type: object
+      properties:
+        credentialsId:
+          type: string
+          description: Google Cloud credentials identifier
+          x-speakeasy-param-force-new: true
+        orgId:
+          type: integer
+          format: int64
+          readOnly: true
+          x-speakeasy-param-readonly: true
+        workspaceId:
+          type: integer
+          format: int64
+          description: Workspace numeric identifier
+          x-speakeasy-param-force-new: true
+        id:
+          type: string
+          description: Unique identifier for the compute environment
+          x-speakeasy-param-readonly: true
+        name:
+          maxLength: 100
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
+          x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: ComputeEnvNameValidator
+        description:
+          type: string
+          description: Optional description of the compute environment
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-force-new: true
+        platform:
+          type: string
+          enum:
+            - google-batch
+          default: google-batch
+          description: Google Cloud platform type (defaults to google-batch)
+          x-speakeasy-param-force-new: true
+        status:
+          type: string
+          description: Compute environment status
+          x-speakeasy-param-readonly: true
+        dateCreated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was created
+          x-speakeasy-param-readonly: true
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last updated
+          x-speakeasy-param-readonly: true
+        lastUsed:
+          type: string
+          format: date-time
+          description: Timestamp when the compute environment was last used
+          x-speakeasy-param-readonly: true
+        deleted:
+          type: boolean
+          description: Flag indicating if the compute environment has been deleted
+          x-speakeasy-param-readonly: true
+        config:
+          description: Google Batch-specific compute environment configuration
+          $ref: '#/components/schemas/GoogleBatchConfig'
+          x-speakeasy-param-force-new: true
+    # Google Batch-specific request/response schemas
+    CreateGoogleBatchCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/GoogleBatchCE_ComputeConfig'
+        labelIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CreateGoogleBatchCEResponse:
+      type: object
+      properties:
+        computeEnvId:
+          type: string
+    UpdateGoogleBatchCERequest:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/GoogleBatchCE_ComputeConfig'
+    DescribeGoogleBatchCEResponse:
+      type: object
+      properties:
+        computeEnv:
+          $ref: '#/components/schemas/GoogleBatchCE_ComputeConfig'
+    ListGoogleBatchCEsResponse:
+      type: object
+      properties:
+        computeEnvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoogleBatchCE_ComputeConfig'
+        totalSize:
+          type: integer
+          format: int64
     # Seqera Managed Compute environment schema
     # Uses hoisting pattern: x-speakeasy-entity on 'config' property hoists fields to root level
     ManagedComputeCE_ComputeConfig:
@@ -18781,6 +19103,7 @@ components:
           pattern: '^[a-zA-Z0-9_-]+$'
           description: A unique name for this compute environment. Use only alphanumeric, dash, and underscore characters.
           x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: ComputeEnvNameValidator
         description:
           type: string
           description: Optional description of the compute environment

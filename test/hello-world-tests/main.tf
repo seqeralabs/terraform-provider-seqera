@@ -33,14 +33,14 @@ module "aws_batch" {
   seqera_server_url  = var.seqera_server_url
 }
 
-# module "gcp_batch" {
-#   source              = "./modules/gcp"
-#   work_dir            = local.gcp_work_dir
-#   workspace_id        = resource.seqera_workspace.my_workspace.id
-#   service_account_key = local.service_account_key
-#   seqera_bearer_auth  = var.seqera_bearer_auth
-#   seqera_server_url   = var.seqera_server_url
-# }
+module "gcp_batch" {
+  source              = "./modules/gcp"
+  work_dir            = local.gcp_work_dir
+  workspace_id        = resource.seqera_workspace.my_workspace.id
+  service_account_key = var.gcp_service_account_key
+  seqera_bearer_auth  = var.seqera_bearer_auth
+  seqera_server_url   = var.seqera_server_url
+}
 
 module "azure_batch" {
   source             = "./modules/azure"

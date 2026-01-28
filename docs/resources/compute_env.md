@@ -577,11 +577,12 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `boot_disk_size_gb` (Number) Requires replacement if changed.
-- `compute_jobs_instance_template` (String) Requires replacement if changed.
-- `copy_image` (String) Requires replacement if changed.
-- `cpu_platform` (String) Requires replacement if changed.
-- `debug_mode` (Number) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Size of the boot disk in GB for compute instances.
+Minimum size depends on the base image used.
+Requires replacement if changed.
+- `compute_jobs_instance_template` (String) Custom instance template name for compute jobs.
+Allows advanced configuration of worker compute resources.
+Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
 and augmentation capabilities for Nextflow workflows.
@@ -590,25 +591,41 @@ When enable_wave is true, enable_fusion must be explicitly set to either true or
 Note: If Fusion2 is enabled, Wave must also be enabled.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch--environment))
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_instance_template` (String) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
-- `labels` (Map of String) Requires replacement if changed.
-- `location` (String) Not Null; Requires replacement if changed.
-- `machine_type` (String) Requires replacement if changed.
-- `network` (String) Requires replacement if changed.
+- `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
+- `head_job_instance_template` (String) Custom instance template name for head job.
+Allows advanced configuration of head job compute resources.
+Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
+- `labels` (Map of String) Key-value labels to apply to compute resources.
+Use for resource organization, cost tracking, and filtering.
+Requires replacement if changed.
+- `location` (String) Google Cloud region where the Batch compute environment will be created.
+Examples: us-central1, us-east1, europe-west1, asia-southeast1
+Not Null; Requires replacement if changed.
+- `network` (String) VPC network name or URL for compute instances.
+Format: projects/PROJECT_ID/global/networks/NETWORK_NAME
+Or simply: NETWORK_NAME (for networks in the same project)
+Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nfs_mount` (String) Requires replacement if changed.
-- `nfs_target` (String) Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `project_id` (String) Requires replacement if changed.
-- `service_account` (String) Requires replacement if changed.
-- `spot` (Boolean) Requires replacement if changed.
-- `ssh_daemon` (Boolean) Requires replacement if changed.
-- `ssh_image` (String) Requires replacement if changed.
-- `subnetwork` (String) Requires replacement if changed.
-- `use_private_address` (Boolean) Requires replacement if changed.
+- `service_account` (String) Service account email to use for compute jobs.
+This service account needs appropriate IAM permissions for GCS, logging, etc.
+Format: service-account-name@project-id.iam.gserviceaccount.com
+Requires replacement if changed.
+- `spot` (Boolean) Enable Spot (preemptible) VM instances for compute jobs.
+Spot instances are cost-effective but can be interrupted by Google Cloud.
+Set to true to use Spot instances, false for standard instances.
+Requires replacement if changed.
+- `subnetwork` (String) VPC subnetwork name or URL for compute instances.
+Must be in the same region as the compute environment.
+Format: projects/PROJECT_ID/regions/REGION/subnetworks/SUBNETWORK_NAME
+Or simply: SUBNETWORK_NAME
+Requires replacement if changed.
+- `use_private_address` (Boolean) Use only internal IP addresses for compute instances (no external IP).
+Requires Cloud NAT or Private Google Access to be configured.
+Set to true for enhanced security and to avoid external IP quotas.
+Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_batch--environment"></a>

@@ -93,6 +93,7 @@ Available configuration:
 * [seqera_gitea_credential](docs/resources/gitea_credential.md)
 * [seqera_github_credential](docs/resources/github_credential.md)
 * [seqera_gitlab_credential](docs/resources/gitlab_credential.md)
+* [seqera_google_batch_ce](docs/resources/google_batch_ce.md)
 * [seqera_google_credential](docs/resources/google_credential.md)
 * [seqera_kubernetes_credential](docs/resources/kubernetes_credential.md)
 * [seqera_labels](docs/resources/labels.md)

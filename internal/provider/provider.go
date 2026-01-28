@@ -130,6 +130,7 @@ func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resour
 		NewGiteaCredentialResource,
 		NewGithubCredentialResource,
 		NewGitlabCredentialResource,
+		NewGoogleBatchCEResource,
 		NewGoogleCredentialResource,
 		NewKubernetesCredentialResource,
 		NewLabelsResource,

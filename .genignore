@@ -17,6 +17,7 @@ internal/provider/tokens_resource.go
 internal/validators/mapvalidators/studio_environment_variable_validator.go
 internal/validators/objectvalidators/config_env_variable_validator.go
 internal/validators/stringvalidators/aws_credential_keys_validator.go
+internal/validators/stringvalidators/compute_env_name_validator.go
 internal/validators/stringvalidators/instance_type_size_validator.go
 internal/validators/stringvalidators/seqera_compute_region_validator.go
 
@@ -60,3 +61,8 @@ internal/seqera/
 # Custom workspace_participant examples
 examples/resources/seqera_workspace_participant/resource.tf
 examples/resources/seqera_workspace_participant/import.sh
+
+# Custom Google Batch compute environment examples
+examples/resources/seqera_google_batch_ce/resource.tf
+examples/resources/seqera_google_batch_ce/import-by-string-id.tf
+examples/resources/seqera_google_batch_ce/MIGRATION.md

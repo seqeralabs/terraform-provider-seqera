@@ -1,6 +1,5 @@
 locals {
-  # service_account_key = file("${path.module}/service-account-key.json")
-  # gcp_work_dir        = "gs://terraform-provider-testing"
+  gcp_work_dir       = "gs://terraform-provider-testing"
   azure_batch_name   = "seqeralabs"
   azure_storage_name = "seqeralabs"
   azure_work_dir     = "az://terraform-provider"
@@ -30,5 +29,11 @@ variable "azure_batch_key" {
 variable "azure_storage_key" {
   type        = string
   description = "Azure storage access key"
+  sensitive   = true
+}
+
+variable "gcp_service_account_key" {
+  type        = string
+  description = "GCP service account key JSON"
   sensitive   = true
 }
