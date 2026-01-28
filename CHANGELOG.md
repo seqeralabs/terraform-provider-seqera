@@ -1,4 +1,13 @@
-# v0.27.0
+# v0.30.1
+
+FIX:
+
+- **Compute Environment Lifecycle** - Improve the lifecycle management from Creating -> Created & Deleting -> Deleted for compatibility accross all Seqera Versions and handle both api.XXX & XXX/api endpoints.
+
+
+# v0.30.0
+
+
 
 FEATURES:
 

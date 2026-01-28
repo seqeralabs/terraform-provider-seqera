@@ -4,14 +4,58 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
-// ComputeEnvStatusHook polls compute environment status until AVAILABLE after creation operations
+/*
+Compute Environment Status Hook
+
+This is a global SDK hook injected into the Terraform provider, filtered by operation ID.
+It handles asynchronous compute environment operations by polling for completion status.
+
+For Compute Environment Creation:
+  - The API responds with a 200 status code containing the computeEnvId
+  - We poll the describe endpoint until the status field becomes "AVAILABLE"
+  - If status becomes "ERRORED" or "INVALID", the operation fails
+  - Polling configuration: 10-second intervals with 5-minute overall timeout (1s retry for transient errors)
+  - Total timeout: 5 minutes
+
+For Compute Environment Deletion:
+  - The API responds with a 204 status code acknowledging the deletion request
+  - We poll the describe endpoint until either:
+    * The resource returns 404 (not found), or
+    * The deleted field in the response is true
+  - Note: Earlier versions of Seqera have no DELETING status phase - the resource goes
+    directly from existing to 404/deleted
+  - Same polling configuration as creation operations
+
+This hook ensures Terraform operations are synchronous, preventing state inconsistencies
+caused by the API's asynchronous behavior.
+*/
+
+const (
+	// ComputeEnvInitialWait defines initial wait before first poll (gives API time to initialize)
+	ComputeEnvInitialWait = 2 * time.Second
+	// ComputeEnvPollInterval defines time between normal polling attempts
+	ComputeEnvPollInterval = 10 * time.Second
+	// ComputeEnvRetryInterval defines time between retries after transient errors
+	ComputeEnvRetryInterval = 1 * time.Second
+	// ComputeEnvHTTPTimeout defines timeout for individual HTTP requests
+	ComputeEnvHTTPTimeout = 30 * time.Second
+	// ComputeEnvOverallTimeout defines maximum total time for polling operations
+	ComputeEnvOverallTimeout = 5 * time.Minute
+)
+
+// ComputeEnvStatusHook polls compute environment status:
+// - For create operations: polls until AVAILABLE
+// - For delete operations: polls until resource is deleted (deleted: true in API response)
 type ComputeEnvStatusHook struct{}
 
 // AfterSuccess implements the afterSuccessHook interface
@@ -21,39 +65,58 @@ func (h *ComputeEnvStatusHook) AfterSuccess(hookCtx AfterSuccessContext, res *ht
 		return res, nil
 	}
 
-	// Only process successful creation responses for polling
-	if res.StatusCode != 200 {
+	// Only process successful responses for polling
+	// 200 for create operations, 204 for delete operations
+	if res.StatusCode != 200 && res.StatusCode != 204 {
 		return res, nil
 	}
 
-	// Check if this is a compute environment create operation
-	isAWSBatchCECreate := hookCtx.OperationID == "CreateAWSBatchCE"
-	isAWSComputeEnvCreate := hookCtx.OperationID == "CreateAWSComputeEnv"
+	// Check if this is a compute environment create or delete operation
+	// All compute env operations follow pattern: Create*/Delete* + *ComputeEnv/*CE
+	opID := hookCtx.OperationID
+	isCreateOperation := strings.HasPrefix(opID, "Create") &&
+		(strings.Contains(opID, "ComputeEnv") || strings.HasSuffix(opID, "CE"))
+	isDeleteOperation := strings.HasPrefix(opID, "Delete") &&
+		(strings.Contains(opID, "ComputeEnv") || strings.HasSuffix(opID, "CE"))
 
-	if !isAWSBatchCECreate && !isAWSComputeEnvCreate {
+	if !isCreateOperation && !isDeleteOperation {
 		return res, nil
 	}
 
-	// Read the response body to extract the compute environment ID
-	bodyBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		return res, fmt.Errorf("failed to read response body: %w", err)
-	}
+	var computeEnvID string
+	var bodyBytes []byte
+	var err error
 
-	// Restore the body for the SDK to read
-	res.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+	// For delete operations, extract compute env ID from request path
+	if isDeleteOperation {
+		computeEnvID, err = extractComputeEnvIDFromPath(res.Request)
+		if err != nil {
+			return res, fmt.Errorf("failed to extract computeEnvId from path: %w", err)
+		}
+	} else {
+		// For create operations, extract from response body
+		bodyBytes, err = io.ReadAll(res.Body)
+		if err != nil {
+			return res, fmt.Errorf("failed to read response body: %w", err)
+		}
 
-	// Parse the response to get the computeEnvId
-	var createResponse struct {
-		ComputeEnvID string `json:"computeEnvId"`
-	}
+		// Restore the body for the SDK to read
+		res.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-	if err := json.Unmarshal(bodyBytes, &createResponse); err != nil {
-		return res, fmt.Errorf("failed to parse create response: %w", err)
-	}
+		// Parse the response to get the computeEnvId
+		var createResponse struct {
+			ComputeEnvID string `json:"computeEnvId"`
+		}
 
-	if createResponse.ComputeEnvID == "" {
-		return res, fmt.Errorf("computeEnvId not found in create response")
+		if err := json.Unmarshal(bodyBytes, &createResponse); err != nil {
+			return res, fmt.Errorf("failed to parse create response: %w", err)
+		}
+
+		if createResponse.ComputeEnvID == "" {
+			return res, fmt.Errorf("computeEnvId not found in create response")
+		}
+
+		computeEnvID = createResponse.ComputeEnvID
 	}
 
 	// Extract workspaceId from the request URL query parameters
@@ -66,20 +129,21 @@ func (h *ComputeEnvStatusHook) AfterSuccess(hookCtx AfterSuccessContext, res *ht
 	finalStatus, err := h.pollComputeEnvStatus(
 		hookCtx.Context,
 		hookCtx.BaseURL,
-		createResponse.ComputeEnvID,
+		computeEnvID,
 		workspaceID,
 		res.Request.Header.Get("Authorization"),
+		isDeleteOperation,
 	)
 	if err != nil {
 		return res, fmt.Errorf("failed to poll compute environment status: %w", err)
 	}
 
-	// If status is not AVAILABLE, return an error
-	if finalStatus != "AVAILABLE" {
+	// For create operations, verify status is AVAILABLE
+	if isCreateOperation && finalStatus != string(shared.ComputeEnvStatusAvailable) {
 		return res, fmt.Errorf("compute environment creation failed, final status: %s", finalStatus)
 	}
 
-	// Return the original create response - status will be fetched on first read
+	// For delete operations, finalStatus will be empty (resource deleted)
 	return res, nil
 }
 
@@ -97,25 +161,70 @@ func extractWorkspaceID(req *http.Request) (string, error) {
 	return workspaceID, nil
 }
 
-// pollComputeEnvStatus polls the compute environment status until it's AVAILABLE
+// extractComputeEnvIDFromPath extracts the computeEnvId from the request path
+// Path format: /api/compute-envs/{computeEnvId} or /compute-envs/{computeEnvId}
+func extractComputeEnvIDFromPath(req *http.Request) (string, error) {
+	if req == nil || req.URL == nil {
+		return "", fmt.Errorf("request or URL is nil")
+	}
+
+	path := req.URL.Path
+	// Expected format: /api/compute-envs/{computeEnvId} or /compute-envs/{computeEnvId}
+	parts := strings.Split(strings.Trim(path, "/"), "/")
+
+	// Find the index of "compute-envs" in the path parts
+	computeEnvsIndex := -1
+	for i, part := range parts {
+		if part == "compute-envs" {
+			computeEnvsIndex = i
+			break
+		}
+	}
+
+	if computeEnvsIndex == -1 || computeEnvsIndex+1 >= len(parts) {
+		return "", fmt.Errorf("invalid path format: %s", path)
+	}
+
+	computeEnvID := parts[computeEnvsIndex+1]
+	if computeEnvID == "" {
+		return "", fmt.Errorf("computeEnvId not found in path: %s", path)
+	}
+
+	// Validate computeEnvID doesn't contain invalid characters
+	if strings.Contains(computeEnvID, "?") || strings.Contains(computeEnvID, "/") {
+		return "", fmt.Errorf("invalid computeEnvId extracted: %s", computeEnvID)
+	}
+
+	return computeEnvID, nil
+}
+
+// pollComputeEnvStatus polls the compute environment status until it's AVAILABLE (for create) or deleted flag is true (for delete)
 func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 	ctx context.Context,
 	baseURL string,
 	computeEnvID string,
 	workspaceID string,
 	authHeader string,
+	isDeleteOperation bool,
 ) (string, error) {
-	const (
-		maxAttempts  = 60              // Maximum number of polling attempts
-		pollInterval = 5 * time.Second // Time between polling attempts
-		initialWait  = 2 * time.Second // Initial wait before first poll
-	)
+	if authHeader == "" {
+		return "", fmt.Errorf("authorization header is empty")
+	}
+
+	// Enforce overall timeout
+	ctx, cancel := context.WithTimeout(ctx, ComputeEnvOverallTimeout)
+	defer cancel()
 
 	// Wait a bit before starting to poll - gives the API time to initialize
-	time.Sleep(initialWait)
+	select {
+	case <-time.After(ComputeEnvInitialWait):
+	case <-ctx.Done():
+		return "", fmt.Errorf("polling cancelled during initial wait: %w", ctx.Err())
+	}
 
+	// Create HTTP client once for all polling attempts
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: ComputeEnvHTTPTimeout,
 	}
 
 	describeURL := fmt.Sprintf("%s/compute-envs/%s?workspaceId=%s",
@@ -124,11 +233,13 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 		workspaceID,
 	)
 
-	for attempt := 1; attempt <= maxAttempts; attempt++ {
-		// Check if context is cancelled
+	var lastStatus string
+
+	// Poll until success or timeout
+	for {
 		select {
 		case <-ctx.Done():
-			return "", fmt.Errorf("polling cancelled: %w", ctx.Err())
+			return "", fmt.Errorf("timeout waiting for compute environment (last status: %s): %w", lastStatus, ctx.Err())
 		default:
 		}
 
@@ -142,26 +253,53 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 
 		resp, err := client.Do(req)
 		if err != nil {
-			return "", fmt.Errorf("failed to describe compute environment: %w", err)
+			// Retry all network errors except context cancellation
+			if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+				return "", fmt.Errorf("request cancelled: %w", err)
+			}
+			// Network error - retry quickly
+			lastStatus = fmt.Sprintf("error: %v", err)
+			select {
+			case <-time.After(ComputeEnvRetryInterval):
+				continue
+			case <-ctx.Done():
+				return "", fmt.Errorf("timeout during retry: %w", ctx.Err())
+			}
 		}
 
-		bodyBytes, err := io.ReadAll(resp.Body)
+		bodyBytes, readErr := io.ReadAll(resp.Body)
 		closeErr := resp.Body.Close()
-		if err != nil {
-			return "", fmt.Errorf("failed to read describe response: %w", err)
+		if readErr != nil {
+			return "", fmt.Errorf("failed to read describe response: %w", readErr)
 		}
-		if closeErr != nil {
-			return "", fmt.Errorf("failed to close response body: %w", closeErr)
+		// Ignore close errors if we got the data
+		_ = closeErr
+
+		// For delete operations, a 404 means the resource is deleted (success)
+		if isDeleteOperation && resp.StatusCode == 404 {
+			return "", nil
+		}
+
+		// Retry rate limiting and 5xx errors quickly
+		if resp.StatusCode == 429 || resp.StatusCode >= 500 {
+			lastStatus = fmt.Sprintf("status %d", resp.StatusCode)
+			select {
+			case <-time.After(ComputeEnvRetryInterval):
+				continue
+			case <-ctx.Done():
+				return "", fmt.Errorf("timeout during retry: %w", ctx.Err())
+			}
 		}
 
 		if resp.StatusCode != 200 {
 			return "", fmt.Errorf("describe returned status %d: %s", resp.StatusCode, string(bodyBytes))
 		}
 
-		// Parse the response to get status
+		// Parse the response to get status and deleted flag
 		var describeResponse struct {
 			ComputeEnv struct {
-				Status string `json:"status"`
+				Status  string `json:"status"`
+				Deleted bool   `json:"deleted"`
 			} `json:"computeEnv"`
 		}
 
@@ -170,22 +308,31 @@ func (h *ComputeEnvStatusHook) pollComputeEnvStatus(
 		}
 
 		status := describeResponse.ComputeEnv.Status
+		deleted := describeResponse.ComputeEnv.Deleted
+		lastStatus = status
 
-		// Check if we've reached AVAILABLE status
-		if status == "AVAILABLE" {
-			return status, nil
+		// Handle delete operations
+		if isDeleteOperation {
+			if deleted {
+				return "", nil // Successfully deleted
+			}
+			// Continue polling
+		} else {
+			// Handle create operations
+			if status == string(shared.ComputeEnvStatusAvailable) {
+				return status, nil
+			}
+			// Check for error states
+			if status == string(shared.ComputeEnvStatusErrored) || status == string(shared.ComputeEnvStatusInvalid) {
+				return status, fmt.Errorf("compute environment entered error state: %s. The errored compute environment must be manually deleted from the Seqera Platform before Terraform can recreate it", status)
+			}
 		}
 
-		// Check for error states
-		if status == "ERRORED" || status == "INVALID" {
-			return status, fmt.Errorf("compute environment entered error state: %s. The errored compute environment must be manually deleted from the Seqera Platform before Terraform can recreate it", status)
-		}
-
-		// Wait before next attempt
-		if attempt < maxAttempts {
-			time.Sleep(pollInterval)
+		// Wait before next poll
+		select {
+		case <-time.After(ComputeEnvPollInterval):
+		case <-ctx.Done():
+			return "", fmt.Errorf("timeout waiting for compute environment (last status: %s): %w", lastStatus, ctx.Err())
 		}
 	}
-
-	return "", fmt.Errorf("timeout waiting for compute environment to become available after %d attempts", maxAttempts)
 }
