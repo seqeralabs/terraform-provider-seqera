@@ -52,8 +52,8 @@ locals {
 
 # Use filtered credentials in resources
 resource "seqera_aws_batch_ce" "example" {
-  name         = "my-compute-env"
-  workspace_id = seqera_workspace.my_workspace.id
+  name           = "my-compute-env"
+  workspace_id   = seqera_workspace.my_workspace.id
   credentials_id = local.credentials["production-aws-account"].id
   # ... other configuration
 }

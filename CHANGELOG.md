@@ -4,6 +4,18 @@ FIX:
 
 - **Compute Environment Lifecycle** - Improve the lifecycle management from Creating -> Created & Deleting -> Deleted for compatibility accross all Seqera Versions and handle both api.XXX & XXX/api endpoints.
 
+- **Organization Member Role Management** - Fixed "Provider produced inconsistent result after apply" error when creating or updating members with non-default roles. The issue had two causes: (1) during creation, the desired role from the plan was being overwritten before the role update logic executed, and (2) during updates, eventual consistency in the API meant the list endpoint returned stale role data. The provider now saves the desired role before any API operations and preserves it after updates.
+
+- **Workspace Participant Role Management** - Fixed "Provider produced inconsistent result after apply" error when creating or updating participants with non-default roles. Applied the same fixes as organization members: saving desired role before API operations and preserving it after updates to avoid eventual consistency issues.
+
+- **Team Member Unnecessary Replacements** - Fixed issue where `seqera_team_member` resources were forcing unnecessary replacements when computed fields (role, avatar, name, etc.) changed externally. Added `UseStateForUnknown()` plan modifiers to all computed fields to prevent drift in read-only attributes from triggering resource recreation.
+
+- **Computed Field Plan Modifiers** - Added `UseStateForUnknown()` plan modifiers to all computed fields in `seqera_organization_member`, `seqera_team_member`, and `seqera_workspace_participant` resources to prevent Terraform from forcing replacements when only read-only fields change.
+
+- **Member Lookup Optimization** - Optimized all operations (Create, Read, Update) for `seqera_organization_member`, `seqera_team_member`, and `seqera_workspace_participant` resources to use ID-based filtering instead of email search when the ID is available. This eliminates unnecessary email lookup latency on every API call after initial creation, significantly improving performance and reducing API load. Email search is now only used during import operations when the ID is not yet known.
+
+- **Organization Member Role Validation** - Fixed role validation for `seqera_organization_member` resource. The valid roles are now correctly set to: owner, member, view. Previously incorrectly allowed "collaborator" which is not a valid organization role.
+
 
 # v0.30.0
 

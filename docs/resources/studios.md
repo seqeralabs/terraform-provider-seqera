@@ -56,9 +56,9 @@ resource "seqera_studios" "jupyter_with_conda_heredoc" {
           - matplotlib==3.10.*
           - seaborn>=0.13
     EOT
-    cpu            = 2
-    memory         = 4096
-    lifespan_hours = 8
+    cpu               = 2
+    memory            = 4096
+    lifespan_hours    = 8
     # gpu defaults to 0 (disabled)
   }
   data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
@@ -111,9 +111,9 @@ resource "seqera_studios" "jupyter_with_conda_labels" {
     lifespan_hours = 8
     # gpu defaults to 0 (disabled)
   }
-  data_studio_tool_url  = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
-  description           = "Jupyter studio for data analysis and visualization"
-  is_private            = true
+  data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
+  description          = "Jupyter studio for data analysis and visualization"
+  is_private           = true
   # Reference label IDs from seqera_labels resources
   label_ids = [
     seqera_labels.environment_prod.id,
