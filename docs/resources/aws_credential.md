@@ -73,9 +73,11 @@ resource "seqera_aws_credential" "with_keys_and_role" {
 
 ### Optional
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `access_key` (String) AWS access key ID. Must start with AKIA (standard) or ASIA (temporary). Required unless assume_role_arn is provided.
 - `assume_role_arn` (String) IAM role ARN to assume. Format: arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME. Either this or both access_key and secret_key must be provided.
-- `secret_key` (String, Sensitive) AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
+- `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only

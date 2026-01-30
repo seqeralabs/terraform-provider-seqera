@@ -63,6 +63,7 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 			"batch_key": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Azure Batch account key (for shared key authentication)`,
 				Validators: []validator.String{
 					custom_stringvalidators.AzureCredentialSharedKeyValidator(),
@@ -82,6 +83,7 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 			"client_secret": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Azure service principal client secret (for Entra/Cloud authentication)`,
 				Validators: []validator.String{
 					custom_stringvalidators.AzureCredentialEntraValidator(),
@@ -118,6 +120,7 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 			"storage_key": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Azure Storage account key (for shared key authentication)`,
 				Validators: []validator.String{
 					custom_stringvalidators.AzureCredentialSharedKeyValidator(),
@@ -166,8 +169,21 @@ func (r *AzureCredentialResource) Configure(ctx context.Context, req resource.Co
 }
 
 func (r *AzureCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *AzureCredentialResourceModel
-	var plan types.Object
+	var (
+		configData AzureCredentialResourceModel
+		data       AzureCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &AzureCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -183,7 +199,7 @@ func (r *AzureCredentialResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateAzureCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateAzureCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -250,7 +266,7 @@ func (r *AzureCredentialResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeAzureCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeAzureCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -291,8 +307,29 @@ func (r *AzureCredentialResource) Read(ctx context.Context, req resource.ReadReq
 }
 
 func (r *AzureCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *AzureCredentialResourceModel
-	var plan types.Object
+	var (
+		configData AzureCredentialResourceModel
+		data       AzureCredentialResourceModel
+		plan       types.Object
+		stateData  AzureCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &AzureCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -304,7 +341,7 @@ func (r *AzureCredentialResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateAzureCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateAzureCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -355,7 +392,7 @@ func (r *AzureCredentialResource) Delete(ctx context.Context, req resource.Delet
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteAzureCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteAzureCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

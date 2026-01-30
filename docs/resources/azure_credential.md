@@ -60,10 +60,12 @@ resource "seqera_azure_credential" "example" {
 
 ### Optional
 
-- `batch_key` (String, Sensitive) Azure Batch account key (for shared key authentication)
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
+- `batch_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Azure Batch account key (for shared key authentication)
 - `client_id` (String) Azure service principal client ID (for Entra/Cloud authentication)
-- `client_secret` (String, Sensitive) Azure service principal client secret (for Entra/Cloud authentication)
-- `storage_key` (String, Sensitive) Azure Storage account key (for shared key authentication)
+- `client_secret` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Azure service principal client secret (for Entra/Cloud authentication)
+- `storage_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Azure Storage account key (for shared key authentication)
 - `tenant_id` (String) Azure tenant ID (for Entra/Cloud authentication)
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 

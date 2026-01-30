@@ -60,6 +60,7 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 			"data": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Google Cloud service account key JSON (required, sensitive).`,
 			},
 			"id": schema.StringAttribute{
@@ -118,8 +119,21 @@ func (r *GoogleCredentialResource) Configure(ctx context.Context, req resource.C
 }
 
 func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *GoogleCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GoogleCredentialResourceModel
+		data       GoogleCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GoogleCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -135,7 +149,7 @@ func (r *GoogleCredentialResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateGoogleCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateGoogleCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -202,7 +216,7 @@ func (r *GoogleCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGoogleCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGoogleCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -243,8 +257,29 @@ func (r *GoogleCredentialResource) Read(ctx context.Context, req resource.ReadRe
 }
 
 func (r *GoogleCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *GoogleCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GoogleCredentialResourceModel
+		data       GoogleCredentialResourceModel
+		plan       types.Object
+		stateData  GoogleCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GoogleCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -256,7 +291,7 @@ func (r *GoogleCredentialResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateGoogleCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateGoogleCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -307,7 +342,7 @@ func (r *GoogleCredentialResource) Delete(ctx context.Context, req resource.Dele
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteGoogleCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteGoogleCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

@@ -41,8 +41,10 @@ resource "seqera_bitbucket_credential" "example" {
 
 ### Required
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
-- `token` (String, Sensitive) Bitbucket API token (required, sensitive). App passwords are deprecated.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Bitbucket API token (required, sensitive). App passwords are deprecated.
 - `username` (String) Bitbucket account username (for app passwords) or email (for API tokens). Required.
 
 ### Optional
