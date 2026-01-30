@@ -15956,6 +15956,22 @@ components:
         You can create multiple organizations, each of which can contain multiple workspaces
         with shared users and resources. This means you can customize and organize the use of
         resources while maintaining an access control layer for users associated with a workspace.
+
+        ~> **Warning:** Destroying an organization resource will permanently delete the organization
+        and all its associated resources including workspaces, members, teams, compute environments,
+        pipelines, and credentials. This action cannot be undone. Use Terraform lifecycle rules to
+        protect critical organizations from accidental deletion:
+
+        ```terraform
+        resource "seqera_orgs" "production" {
+          name      = "production-org"
+          full_name = "Production Organization"
+
+          lifecycle {
+            prevent_destroy = true
+          }
+        }
+        ```
     OrganizationDbDto:
       type: object
       properties:

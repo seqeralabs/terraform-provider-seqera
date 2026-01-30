@@ -86,6 +86,7 @@ Import format: org_id/team_id/email (e.g., "12345/67890/user@example.com")
 				Computed: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
+					int64planmodifier.UseStateForUnknown(),
 				},
 				MarkdownDescription: `Organization member ID to add to the team. Specify either member_id or email but not both.`,
 				Validators: []validator.Int64{
@@ -102,6 +103,7 @@ Import format: org_id/team_id/email (e.g., "12345/67890/user@example.com")
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 				MarkdownDescription: `Email address or username of the user to add to the team. Specify either member_id or email but not both.`,
 				Validators: []validator.String{
@@ -116,26 +118,44 @@ Import format: org_id/team_id/email (e.g., "12345/67890/user@example.com")
 			"user_id": schema.Int64Attribute{
 				Computed:    true,
 				Description: `User numeric identifier.`,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
+				},
 			},
 			"user_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Username of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"first_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `First name of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"last_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Last name of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"avatar": schema.StringAttribute{
 				Computed:    true,
 				Description: `Avatar URL of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"role": schema.StringAttribute{
 				Computed:    true,
 				Description: `Organization role of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 		},
 	}
@@ -220,7 +240,8 @@ func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *res
 		return
 	}
 
-	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), data.TeamID.ValueInt64(), data.Email.ValueString(), data.MemberID.ValueInt64())
+	// Use empty email since we have member_id from state - triggers ID-based lookup optimization
+	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), data.TeamID.ValueInt64(), "", data.MemberID.ValueInt64())
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to read team member", err.Error())
 		return
@@ -320,12 +341,25 @@ func (r *Resource) findOrgMember(ctx context.Context, orgID, memberID int64) (*s
 }
 
 // findMember searches for a team member by email or member_id.
+// When member_id is provided (non-zero), it searches without email filter for better performance.
 // Note: The API does not support pagination. Large teams may not return all members.
 func (r *Resource) findMember(ctx context.Context, orgID, teamID int64, email string, memberID int64) (*shared.MemberDbDto, error) {
+	// If we have a member_id, don't use email search - just get all members and filter by ID
+	// This avoids email lookup latency and is more efficient
+	var searchParam *string
+	if memberID > 0 {
+		// Use empty search when we have member_id - we'll filter by ID in the loop
+		emptySearch := ""
+		searchParam = &emptySearch
+	} else {
+		// Only use email search if we don't have member_id (e.g., during import)
+		searchParam = &email
+	}
+
 	listRes, err := r.client.Teams.ListOrganizationTeamMembers(ctx, operations.ListOrganizationTeamMembersRequest{
 		OrgID:  orgID,
 		TeamID: teamID,
-		Search: &email,
+		Search: searchParam,
 	})
 	if err != nil {
 		return nil, err
@@ -339,7 +373,11 @@ func (r *Resource) findMember(ctx context.Context, orgID, teamID int64, email st
 
 	for i := range listRes.ListMembersResponse.Members {
 		m := &listRes.ListMembersResponse.Members[i]
-		if (m.Email != nil && *m.Email == email) || (m.MemberID != nil && *m.MemberID == memberID) {
+		// Prefer matching by member_id if available, fallback to email
+		if memberID > 0 && m.MemberID != nil && *m.MemberID == memberID {
+			return m, nil
+		}
+		if memberID == 0 && m.Email != nil && *m.Email == email {
 			return m, nil
 		}
 	}

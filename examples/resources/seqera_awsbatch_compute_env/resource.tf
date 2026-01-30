@@ -94,13 +94,13 @@ resource "seqera_awsbatch_compute_env" "gpu" {
   region         = "us-east-1"
   work_directory = "s3://gpu-bucket/work"
 
-  forge_type      = "EC2"
-  gpu_enabled     = true
-  instance_types  = ["p3.2xlarge", "p3.8xlarge"]
-  max_cpus        = 256
-  ebs_block_size  = 200
-  enable_fusion   = true
-  enable_wave     = true
+  forge_type     = "EC2"
+  gpu_enabled    = true
+  instance_types = ["p3.2xlarge", "p3.8xlarge"]
+  max_cpus       = 256
+  ebs_block_size = 200
+  enable_fusion  = true
+  enable_wave    = true
 }
 
 # Example 5: Fargate head job configuration

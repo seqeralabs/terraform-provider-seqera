@@ -10,6 +10,10 @@
 resource "seqera_orgs" "basic" {
   name      = "my-org"
   full_name = "My Organization"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # Example 2: Organization with optional metadata
@@ -21,4 +25,8 @@ resource "seqera_orgs" "research" {
   description = "Organization for computational research"
   location    = "San Francisco, CA"
   website     = "https://www.research-lab.org"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

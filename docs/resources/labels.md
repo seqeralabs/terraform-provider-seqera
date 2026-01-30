@@ -76,11 +76,11 @@ resource "seqera_labels" "experimental" {
 # Use workspace resource references for dynamic workspace IDs.
 
 resource "seqera_workspace" "my_workspace" {
-  name          = "my-workspace"
-  org_id        = 123456
-  full_name     = "my-org/my-workspace"
-  visibility    = "PRIVATE"
-  description   = "Example workspace"
+  name        = "my-workspace"
+  org_id      = 123456
+  full_name   = "my-org/my-workspace"
+  visibility  = "PRIVATE"
+  description = "Example workspace"
 }
 
 resource "seqera_labels" "workspace_label" {

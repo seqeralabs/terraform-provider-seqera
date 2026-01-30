@@ -127,7 +127,7 @@ resource "seqera_pipeline" "from_bitbucket" {
   workspace_id = seqera_workspace.main.id
 
   # Reference the BitBucket repository
-  repository   = "https://bitbucket.org/myorg/my-repo"
+  repository = "https://bitbucket.org/myorg/my-repo"
 
   # Use the BitBucket credentials
   credentials_id = seqera_bitbucket_credential.pipeline_creds.credentials_id

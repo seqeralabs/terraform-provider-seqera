@@ -7,7 +7,7 @@ description: |-
   Organization members are users who have access to an organization. Each member
   has a role that determines their permissions within the organization.
   Available roles:
-  owner: Full control over the organizationmember: Standard member access (default)collaborator: Limited collaboration access
+  owner: Full control over the organizationmember: Standard member access (default)
   Import format: org_id/email (e.g., "12345/user@example.com")
 ---
 
@@ -21,7 +21,6 @@ has a role that determines their permissions within the organization.
 Available roles:
 - owner: Full control over the organization
 - member: Standard member access (default)
-- collaborator: Limited collaboration access
 
 Import format: org_id/email (e.g., "12345/user@example.com")
 
@@ -37,7 +36,7 @@ Import format: org_id/email (e.g., "12345/user@example.com")
 
 ### Optional
 
-- `role` (String) Role of the member. Valid values: owner, member, collaborator. Defaults to "member".
+- `role` (String) Role of the member. Valid values: owner, member. Defaults to "member".
 
 ### Read-Only
 

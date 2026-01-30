@@ -99,6 +99,7 @@ Import formats:
 				Computed: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
+					int64planmodifier.UseStateForUnknown(),
 				},
 				MarkdownDescription: `Organization member ID to add as a workspace participant. Specify either member_id, team_id, or email but not multiple.`,
 				Validators: []validator.Int64{
@@ -116,6 +117,7 @@ Import formats:
 				Optional: true,
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplaceIfConfigured(),
+					int64planmodifier.UseStateForUnknown(),
 				},
 				MarkdownDescription: `Team ID to add as workspace participants. All team members will be granted access. Specify either member_id, team_id, or email but not multiple.`,
 				Validators: []validator.Int64{
@@ -134,6 +136,7 @@ Import formats:
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					stringplanmodifier.UseStateForUnknown(),
 				},
 				MarkdownDescription: `Email address of the user to add as a workspace participant. Specify either member_id, team_id, or email but not multiple. Email lookup happens once during creation.`,
 				Validators: []validator.String{
@@ -155,22 +158,37 @@ Import formats:
 				Validators: []validator.String{
 					stringvalidator.OneOf("owner", "admin", "maintain", "launch", "view"),
 				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"participant_id": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Participant numeric identifier.`,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
+				},
 			},
 			"user_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Username of the participant.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"first_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `First name of the participant.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"last_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Last name of the participant.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 		},
 	}
@@ -307,15 +325,20 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 	}
 
 	// Refresh from list to get all computed fields (skip for team participants)
+	// Preserve the role we just set to avoid race conditions with eventual consistency
 	if !isTeamParticipant {
-		emailSearch := data.Email.ValueString()
-		p, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), emailSearch, data.ParticipantID.ValueInt64())
+		// Use empty email since we have participant_id - triggers ID-based lookup optimization
+		p, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64())
 		if err != nil {
 			resp.Diagnostics.AddError("Failed to refresh participant", err.Error())
 			return
 		}
 		if p != nil {
 			r.refreshFromParticipant(&data, p)
+			// Restore the role we set, since the API may not have propagated the change yet
+			if desiredRole != "" && desiredRole != "view" {
+				data.Role = types.StringValue(desiredRole)
+			}
 		}
 	}
 
@@ -329,13 +352,9 @@ func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *res
 		return
 	}
 
-	// Search by participant_id (works for both user and team participants)
-	emailSearch := ""
-	if !data.Email.IsNull() && !data.Email.IsUnknown() {
-		emailSearch = data.Email.ValueString()
-	}
-
-	participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), emailSearch, data.ParticipantID.ValueInt64())
+	// Use empty email since we have participant_id from state - triggers ID-based lookup optimization
+	// (works for both user and team participants)
+	participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64())
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to read workspace participant", err.Error())
 		return
@@ -373,13 +392,13 @@ func (r *Resource) Update(ctx context.Context, req resource.UpdateRequest, resp 
 	// Preserve participant_id from state
 	data.ParticipantID = state.ParticipantID
 
-	// Update role
-	role := data.Role.ValueString()
+	// Update role - save desired role before any API operations
+	desiredRole := data.Role.ValueString()
 	updateRes, err := r.client.Workspaces.UpdateWorkspaceParticipantRole(ctx, operations.UpdateWorkspaceParticipantRoleRequest{
 		OrgID:                        data.OrgID.ValueInt64(),
 		WorkspaceID:                  data.WorkspaceID.ValueInt64(),
 		ParticipantID:                data.ParticipantID.ValueInt64(),
-		UpdateParticipantRoleRequest: shared.UpdateParticipantRoleRequest{Role: &role},
+		UpdateParticipantRoleRequest: shared.UpdateParticipantRoleRequest{Role: &desiredRole},
 	})
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to update participant role", err.Error())
@@ -390,7 +409,8 @@ func (r *Resource) Update(ctx context.Context, req resource.UpdateRequest, resp 
 		return
 	}
 
-	// Refresh from API
+	// Refresh other computed fields from API, but preserve the role we just set
+	// to avoid race conditions with eventual consistency
 	isTeamParticipant := !data.TeamID.IsNull() && !data.TeamID.IsUnknown()
 	if isTeamParticipant {
 		// Team participants don't have individual user data
@@ -400,18 +420,16 @@ func (r *Resource) Update(ctx context.Context, req resource.UpdateRequest, resp 
 		data.FirstName = types.StringNull()
 		data.LastName = types.StringNull()
 	} else {
-		emailSearch := ""
-		if !data.Email.IsNull() && !data.Email.IsUnknown() {
-			emailSearch = data.Email.ValueString()
-		}
-
-		participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), emailSearch, data.ParticipantID.ValueInt64())
+		// Use empty email since we have participant_id from state - triggers ID-based lookup optimization
+		participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64())
 		if err != nil {
 			resp.Diagnostics.AddError("Failed to refresh participant", err.Error())
 			return
 		}
 		if participant != nil {
 			r.refreshFromParticipant(&data, participant)
+			// Restore the role we just set, since the API may not have propagated the change yet
+			data.Role = types.StringValue(desiredRole)
 		}
 	}
 
@@ -508,12 +526,25 @@ func (r *Resource) ImportState(ctx context.Context, req resource.ImportStateRequ
 }
 
 // findParticipant searches for a participant by email or participant_id.
+// When participant_id is provided (non-zero), it searches without email filter for better performance.
 // Note: The API does not support pagination. Large workspaces may not return all participants.
 func (r *Resource) findParticipant(ctx context.Context, orgID, workspaceID int64, email string, participantID int64) (*shared.ParticipantResponseDto, error) {
+	// If we have a participant_id, don't use email search - just get all participants and filter by ID
+	// This avoids email lookup latency and is more efficient
+	var searchParam *string
+	if participantID > 0 {
+		// Use empty search when we have participant_id - we'll filter by ID in the loop
+		emptySearch := ""
+		searchParam = &emptySearch
+	} else {
+		// Only use email search if we don't have participant_id (e.g., during import)
+		searchParam = &email
+	}
+
 	listRes, err := r.client.Workspaces.ListWorkspaceParticipants(ctx, operations.ListWorkspaceParticipantsRequest{
 		OrgID:       orgID,
 		WorkspaceID: workspaceID,
-		Search:      &email,
+		Search:      searchParam,
 	})
 	if err != nil {
 		return nil, err
@@ -527,7 +558,11 @@ func (r *Resource) findParticipant(ctx context.Context, orgID, workspaceID int64
 
 	for i := range listRes.ListParticipantsResponse.Participants {
 		p := &listRes.ListParticipantsResponse.Participants[i]
-		if (p.Email != nil && *p.Email == email) || (p.ParticipantID != nil && *p.ParticipantID == participantID) {
+		// Prefer matching by participant_id if available, fallback to email
+		if participantID > 0 && p.ParticipantID != nil && *p.ParticipantID == participantID {
+			return p, nil
+		}
+		if participantID == 0 && p.Email != nil && *p.Email == email {
 			return p, nil
 		}
 	}

@@ -63,7 +63,6 @@ has a role that determines their permissions within the organization.
 Available roles:
 - owner: Full control over the organization
 - member: Standard member access (default)
-- collaborator: Limited collaboration access
 
 Import format: org_id/email (e.g., "12345/user@example.com")
 `,
@@ -86,34 +85,55 @@ Import format: org_id/email (e.g., "12345/user@example.com")
 				Optional:            true,
 				Computed:            true,
 				Default:             stringdefault.StaticString("member"),
-				MarkdownDescription: `Role of the member. Valid values: owner, member, collaborator. Defaults to "member".`,
+				MarkdownDescription: `Role of the member. Valid values: owner, member. Defaults to "member".`,
 				Validators: []validator.String{
-					stringvalidator.OneOf("owner", "member", "collaborator"),
+					stringvalidator.OneOf("owner", "member"),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"member_id": schema.Int64Attribute{
 				Computed:    true,
 				Description: `Organization member numeric identifier.`,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
+				},
 			},
 			"user_id": schema.Int64Attribute{
 				Computed:    true,
 				Description: `User numeric identifier.`,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.UseStateForUnknown(),
+				},
 			},
 			"user_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Username of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"first_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `First name of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"last_name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Last name of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 			"avatar": schema.StringAttribute{
 				Computed:    true,
 				Description: `Avatar URL of the member.`,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 		},
 	}
@@ -162,10 +182,14 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 
 	// Store member details
 	member := createRes.AddMemberResponse.Member
+
+	// Save desired role from plan BEFORE refreshing from API
+	// (refreshFromMember will overwrite with API response which defaults to "member")
+	desiredRole := data.Role.ValueString()
+
 	r.refreshFromMember(&data, member)
 
 	// Update role if not default
-	desiredRole := data.Role.ValueString()
 	if desiredRole != "" && desiredRole != "member" {
 		role := shared.OrgRole(desiredRole)
 		updateRes, err := r.client.Orgs.UpdateOrganizationMemberRole(ctx, operations.UpdateOrganizationMemberRoleRequest{
@@ -194,7 +218,8 @@ func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *res
 		return
 	}
 
-	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), data.Email.ValueString(), data.MemberID.ValueInt64())
+	// Use empty email since we have member_id from state - triggers ID-based lookup optimization
+	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), "", data.MemberID.ValueInt64())
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to read organization member", err.Error())
 		return
@@ -221,7 +246,8 @@ func (r *Resource) Update(ctx context.Context, req resource.UpdateRequest, resp 
 	data.MemberID = state.MemberID
 
 	// Update role
-	role := shared.OrgRole(data.Role.ValueString())
+	desiredRole := data.Role.ValueString()
+	role := shared.OrgRole(desiredRole)
 	updateRes, err := r.client.Orgs.UpdateOrganizationMemberRole(ctx, operations.UpdateOrganizationMemberRoleRequest{
 		OrgID:                   data.OrgID.ValueInt64(),
 		MemberID:                data.MemberID.ValueInt64(),
@@ -236,14 +262,18 @@ func (r *Resource) Update(ctx context.Context, req resource.UpdateRequest, resp 
 		return
 	}
 
-	// Refresh from API
-	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), data.Email.ValueString(), data.MemberID.ValueInt64())
+	// Refresh other computed fields from API, but preserve the role we just set
+	// to avoid race conditions with eventual consistency
+	// Use empty email since we have member_id from state - triggers ID-based lookup optimization
+	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), "", data.MemberID.ValueInt64())
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to refresh member", err.Error())
 		return
 	}
 	if member != nil {
 		r.refreshFromMember(&data, member)
+		// Restore the role we just set, since the API may not have propagated the change yet
+		data.Role = types.StringValue(desiredRole)
 	}
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -294,11 +324,24 @@ func (r *Resource) ImportState(ctx context.Context, req resource.ImportStateRequ
 }
 
 // findMember searches for a member by email or member_id.
+// When member_id is provided (non-zero), it searches without email filter for better performance.
 // Note: The API does not support pagination. Large organizations may not return all members.
 func (r *Resource) findMember(ctx context.Context, orgID int64, email string, memberID int64) (*shared.MemberDbDto, error) {
+	// If we have a member_id, don't use email search - just get all members and filter by ID
+	// This avoids email lookup latency and is more efficient
+	var searchParam *string
+	if memberID > 0 {
+		// Use empty search when we have member_id - we'll filter by ID in the loop
+		emptySearch := ""
+		searchParam = &emptySearch
+	} else {
+		// Only use email search if we don't have member_id (e.g., during import)
+		searchParam = &email
+	}
+
 	listRes, err := r.client.Orgs.ListOrganizationMembers(ctx, operations.ListOrganizationMembersRequest{
 		OrgID:  orgID,
-		Search: &email,
+		Search: searchParam,
 	})
 	if err != nil {
 		return nil, err
@@ -312,7 +355,11 @@ func (r *Resource) findMember(ctx context.Context, orgID int64, email string, me
 
 	for i := range listRes.ListMembersResponse.Members {
 		m := &listRes.ListMembersResponse.Members[i]
-		if (m.Email != nil && *m.Email == email) || (m.MemberID != nil && *m.MemberID == memberID) {
+		// Prefer matching by member_id if available, fallback to email
+		if memberID > 0 && m.MemberID != nil && *m.MemberID == memberID {
+			return m, nil
+		}
+		if memberID == 0 && m.Email != nil && *m.Email == email {
 			return m, nil
 		}
 	}

@@ -8,6 +8,19 @@ description: |-
   You can create multiple organizations, each of which can contain multiple workspaces
   with shared users and resources. This means you can customize and organize the use of
   resources while maintaining an access control layer for users associated with a workspace.
+  ~> Warning: Destroying an organization resource will permanently delete the organization
+  and all its associated resources including workspaces, members, teams, compute environments,
+  pipelines, and credentials. This action cannot be undone. Use Terraform lifecycle rules to
+  protect critical organizations from accidental deletion:
+  
+  resource "seqera_orgs" "production" {
+    name      = "production-org"
+    full_name = "Production Organization"
+  
+    lifecycle {
+      prevent_destroy = true
+    }
+  }
 ---
 
 # seqera_orgs (Resource)
@@ -18,6 +31,22 @@ Organizations are the top-level structure and contain workspaces, members, and t
 You can create multiple organizations, each of which can contain multiple workspaces
 with shared users and resources. This means you can customize and organize the use of
 resources while maintaining an access control layer for users associated with a workspace.
+
+~> **Warning:** Destroying an organization resource will permanently delete the organization
+and all its associated resources including workspaces, members, teams, compute environments,
+pipelines, and credentials. This action cannot be undone. Use Terraform lifecycle rules to
+protect critical organizations from accidental deletion:
+
+```terraform
+resource "seqera_orgs" "production" {
+  name      = "production-org"
+  full_name = "Production Organization"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+```
 
 ## Example Usage
 
@@ -34,6 +63,10 @@ resources while maintaining an access control layer for users associated with a 
 resource "seqera_orgs" "basic" {
   name      = "my-org"
   full_name = "My Organization"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # Example 2: Organization with optional metadata
@@ -45,6 +78,10 @@ resource "seqera_orgs" "research" {
   description = "Organization for computational research"
   location    = "San Francisco, CA"
   website     = "https://www.research-lab.org"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 ```
 
