@@ -328,7 +328,7 @@ func (r *Resource) Create(ctx context.Context, req resource.CreateRequest, resp 
 	// Preserve the role we just set to avoid race conditions with eventual consistency
 	if !isTeamParticipant {
 		// Use empty email since we have participant_id - triggers ID-based lookup optimization
-		p, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64())
+		p, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64(), 0, 0)
 		if err != nil {
 			resp.Diagnostics.AddError("Failed to refresh participant", err.Error())
 			return
@@ -352,9 +352,17 @@ func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *res
 		return
 	}
 
-	// Use empty email since we have participant_id from state - triggers ID-based lookup optimization
+	// Pass email from state for import case (when participant_id is not yet known)
+	// Once we have participant_id, pass empty string to optimize the API call
 	// (works for both user and team participants)
-	participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64())
+	email := ""
+	if data.ParticipantID.IsNull() || data.ParticipantID.IsUnknown() {
+		// During import, email might be set (for user participants)
+		// For team participants or member_id imports, email will be empty but we'll match by other fields
+		email = data.Email.ValueString()
+	}
+
+	participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), email, data.ParticipantID.ValueInt64(), data.MemberID.ValueInt64(), data.TeamID.ValueInt64())
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to read workspace participant", err.Error())
 		return
@@ -421,7 +429,7 @@ func (r *Resource) Update(ctx context.Context, req resource.UpdateRequest, resp 
 		data.LastName = types.StringNull()
 	} else {
 		// Use empty email since we have participant_id from state - triggers ID-based lookup optimization
-		participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64())
+		participant, err := r.findParticipant(ctx, data.OrgID.ValueInt64(), data.WorkspaceID.ValueInt64(), "", data.ParticipantID.ValueInt64(), 0, 0)
 		if err != nil {
 			resp.Diagnostics.AddError("Failed to refresh participant", err.Error())
 			return
@@ -525,10 +533,11 @@ func (r *Resource) ImportState(ctx context.Context, req resource.ImportStateRequ
 	}
 }
 
-// findParticipant searches for a participant by email or participant_id.
+// findParticipant searches for a participant by various identifiers.
 // When participant_id is provided (non-zero), it searches without email filter for better performance.
-// Note: The API does not support pagination. Large workspaces may not return all participants.
-func (r *Resource) findParticipant(ctx context.Context, orgID, workspaceID int64, email string, participantID int64) (*shared.ParticipantResponseDto, error) {
+// Supports matching by participant_id, email, member_id, or team_id for different import scenarios.
+// This function handles pagination to ensure all participants are searched, even in large workspaces.
+func (r *Resource) findParticipant(ctx context.Context, orgID, workspaceID int64, email string, participantID, memberID, teamID int64) (*shared.ParticipantResponseDto, error) {
 	// If we have a participant_id, don't use email search - just get all participants and filter by ID
 	// This avoids email lookup latency and is more efficient
 	var searchParam *string
@@ -541,32 +550,54 @@ func (r *Resource) findParticipant(ctx context.Context, orgID, workspaceID int64
 		searchParam = &email
 	}
 
-	listRes, err := r.client.Workspaces.ListWorkspaceParticipants(ctx, operations.ListWorkspaceParticipantsRequest{
-		OrgID:       orgID,
-		WorkspaceID: workspaceID,
-		Search:      searchParam,
-	})
-	if err != nil {
-		return nil, err
-	}
-	if listRes.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected status code %d listing workspace participants", listRes.StatusCode)
-	}
-	if listRes.ListParticipantsResponse == nil {
-		return nil, fmt.Errorf("empty response listing workspace participants")
-	}
+	// Use common pagination helper
+	return common.PaginatedSearch(ctx,
+		// Fetch page function
+		func(ctx context.Context, max, offset int) ([]shared.ParticipantResponseDto, int64, error) {
+			listRes, err := r.client.Workspaces.ListWorkspaceParticipants(ctx, operations.ListWorkspaceParticipantsRequest{
+				OrgID:       orgID,
+				WorkspaceID: workspaceID,
+				Search:      searchParam,
+				Max:         &max,
+				Offset:      &offset,
+			})
+			if err != nil {
+				return nil, 0, err
+			}
+			if listRes.StatusCode != 200 {
+				return nil, 0, fmt.Errorf("unexpected status code %d listing workspace participants", listRes.StatusCode)
+			}
+			if listRes.ListParticipantsResponse == nil {
+				return nil, 0, fmt.Errorf("empty response listing workspace participants")
+			}
 
-	for i := range listRes.ListParticipantsResponse.Participants {
-		p := &listRes.ListParticipantsResponse.Participants[i]
-		// Prefer matching by participant_id if available, fallback to email
-		if participantID > 0 && p.ParticipantID != nil && *p.ParticipantID == participantID {
-			return p, nil
-		}
-		if participantID == 0 && p.Email != nil && *p.Email == email {
-			return p, nil
-		}
-	}
-	return nil, nil
+			totalSize := int64(0)
+			if listRes.ListParticipantsResponse.TotalSize != nil {
+				totalSize = *listRes.ListParticipantsResponse.TotalSize
+			}
+			return listRes.ListParticipantsResponse.Participants, totalSize, nil
+		},
+		// Match function
+		func(p *shared.ParticipantResponseDto) bool {
+			// Match by participant_id if available (highest priority)
+			if participantID > 0 && p.ParticipantID != nil && *p.ParticipantID == participantID {
+				return true
+			}
+			// Match by member_id for member:xxx imports
+			if memberID > 0 && p.MemberID != nil && *p.MemberID == memberID {
+				return true
+			}
+			// Match by team_id for team:xxx imports
+			if teamID > 0 && p.TeamID != nil && *p.TeamID == teamID {
+				return true
+			}
+			// Match by email for email-based imports
+			if participantID == 0 && memberID == 0 && teamID == 0 && email != "" && p.Email != nil && *p.Email == email {
+				return true
+			}
+			return false
+		},
+	)
 }
 
 // refreshFromParticipant updates the ResourceModel from API response.
