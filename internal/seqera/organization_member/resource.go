@@ -218,8 +218,14 @@ func (r *Resource) Read(ctx context.Context, req resource.ReadRequest, resp *res
 		return
 	}
 
-	// Use empty email since we have member_id from state - triggers ID-based lookup optimization
-	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), "", data.MemberID.ValueInt64())
+	// Pass email from state for import case (when member_id is not yet known)
+	// Once we have member_id, pass empty string to optimize the API call
+	email := ""
+	if data.MemberID.IsNull() || data.MemberID.IsUnknown() {
+		email = data.Email.ValueString()
+	}
+
+	member, err := r.findMember(ctx, data.OrgID.ValueInt64(), email, data.MemberID.ValueInt64())
 	if err != nil {
 		resp.Diagnostics.AddError("Failed to read organization member", err.Error())
 		return
@@ -325,7 +331,7 @@ func (r *Resource) ImportState(ctx context.Context, req resource.ImportStateRequ
 
 // findMember searches for a member by email or member_id.
 // When member_id is provided (non-zero), it searches without email filter for better performance.
-// Note: The API does not support pagination. Large organizations may not return all members.
+// This function handles pagination to ensure all members are searched, even in large organizations.
 func (r *Resource) findMember(ctx context.Context, orgID int64, email string, memberID int64) (*shared.MemberDbDto, error) {
 	// If we have a member_id, don't use email search - just get all members and filter by ID
 	// This avoids email lookup latency and is more efficient
@@ -339,31 +345,44 @@ func (r *Resource) findMember(ctx context.Context, orgID int64, email string, me
 		searchParam = &email
 	}
 
-	listRes, err := r.client.Orgs.ListOrganizationMembers(ctx, operations.ListOrganizationMembersRequest{
-		OrgID:  orgID,
-		Search: searchParam,
-	})
-	if err != nil {
-		return nil, err
-	}
-	if listRes.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected status code %d listing organization members", listRes.StatusCode)
-	}
-	if listRes.ListMembersResponse == nil {
-		return nil, fmt.Errorf("empty response listing organization members")
-	}
+	// Use common pagination helper
+	return common.PaginatedSearch(ctx,
+		// Fetch page function
+		func(ctx context.Context, max, offset int) ([]shared.MemberDbDto, int64, error) {
+			listRes, err := r.client.Orgs.ListOrganizationMembers(ctx, operations.ListOrganizationMembersRequest{
+				OrgID:  orgID,
+				Search: searchParam,
+				Max:    &max,
+				Offset: &offset,
+			})
+			if err != nil {
+				return nil, 0, err
+			}
+			if listRes.StatusCode != 200 {
+				return nil, 0, fmt.Errorf("unexpected status code %d listing organization members", listRes.StatusCode)
+			}
+			if listRes.ListMembersResponse == nil {
+				return nil, 0, fmt.Errorf("empty response listing organization members")
+			}
 
-	for i := range listRes.ListMembersResponse.Members {
-		m := &listRes.ListMembersResponse.Members[i]
-		// Prefer matching by member_id if available, fallback to email
-		if memberID > 0 && m.MemberID != nil && *m.MemberID == memberID {
-			return m, nil
-		}
-		if memberID == 0 && m.Email != nil && *m.Email == email {
-			return m, nil
-		}
-	}
-	return nil, nil
+			totalSize := int64(0)
+			if listRes.ListMembersResponse.TotalSize != nil {
+				totalSize = *listRes.ListMembersResponse.TotalSize
+			}
+			return listRes.ListMembersResponse.Members, totalSize, nil
+		},
+		// Match function
+		func(m *shared.MemberDbDto) bool {
+			// Prefer matching by member_id if available, fallback to email
+			if memberID > 0 && m.MemberID != nil && *m.MemberID == memberID {
+				return true
+			}
+			if memberID == 0 && m.Email != nil && *m.Email == email {
+				return true
+			}
+			return false
+		},
+	)
 }
 
 // refreshFromMember updates the ResourceModel from API response.

@@ -1,3 +1,10 @@
+# v0.30.2
+
+ENHANCEMENTS:
+
+- **Refactored Member and Participant Resources** - Updated `seqera_organization_member`, `seqera_team_member`, and `seqera_workspace_participant` resources to use the new `PaginatedSearch` helper. This refactoring ensures consistent pagination behavior across all membership resources ensuring that in large organizations all resources work as intended.
+
+
 # v0.30.1
 
 FIX:
