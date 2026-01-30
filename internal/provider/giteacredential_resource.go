@@ -86,6 +86,7 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 			"password": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Gitea account password (required, sensitive)`,
 			},
 			"provider_type": schema.StringAttribute{
@@ -129,8 +130,21 @@ func (r *GiteaCredentialResource) Configure(ctx context.Context, req resource.Co
 }
 
 func (r *GiteaCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *GiteaCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GiteaCredentialResourceModel
+		data       GiteaCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GiteaCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -146,7 +160,7 @@ func (r *GiteaCredentialResource) Create(ctx context.Context, req resource.Creat
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateGiteaCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateGiteaCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -213,7 +227,7 @@ func (r *GiteaCredentialResource) Read(ctx context.Context, req resource.ReadReq
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGiteaCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGiteaCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -254,8 +268,29 @@ func (r *GiteaCredentialResource) Read(ctx context.Context, req resource.ReadReq
 }
 
 func (r *GiteaCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *GiteaCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GiteaCredentialResourceModel
+		data       GiteaCredentialResourceModel
+		plan       types.Object
+		stateData  GiteaCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GiteaCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -267,7 +302,7 @@ func (r *GiteaCredentialResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateGiteaCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateGiteaCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -318,7 +353,7 @@ func (r *GiteaCredentialResource) Delete(ctx context.Context, req resource.Delet
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteGiteaCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteGiteaCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

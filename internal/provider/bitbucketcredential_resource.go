@@ -91,6 +91,7 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 			"token": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Bitbucket API token (required, sensitive). App passwords are deprecated.`,
 			},
 			"username": schema.StringAttribute{
@@ -129,8 +130,21 @@ func (r *BitbucketCredentialResource) Configure(ctx context.Context, req resourc
 }
 
 func (r *BitbucketCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *BitbucketCredentialResourceModel
-	var plan types.Object
+	var (
+		configData BitbucketCredentialResourceModel
+		data       BitbucketCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &BitbucketCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -146,7 +160,7 @@ func (r *BitbucketCredentialResource) Create(ctx context.Context, req resource.C
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateBitbucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateBitbucketCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -213,7 +227,7 @@ func (r *BitbucketCredentialResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeBitbucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeBitbucketCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -254,8 +268,29 @@ func (r *BitbucketCredentialResource) Read(ctx context.Context, req resource.Rea
 }
 
 func (r *BitbucketCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *BitbucketCredentialResourceModel
-	var plan types.Object
+	var (
+		configData BitbucketCredentialResourceModel
+		data       BitbucketCredentialResourceModel
+		plan       types.Object
+		stateData  BitbucketCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &BitbucketCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -267,7 +302,7 @@ func (r *BitbucketCredentialResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateBitbucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateBitbucketCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -318,7 +353,7 @@ func (r *BitbucketCredentialResource) Delete(ctx context.Context, req resource.D
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteBitbucketCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteBitbucketCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

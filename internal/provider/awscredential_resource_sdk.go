@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// AWSCredentialResourceModelOptions enables patch sdk method construction.
+type AWSCredentialResourceModelOptions struct {
+	Config *AWSCredentialResourceModel
+	State  *AWSCredentialResourceModel
+}
+
 func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialKeysOutput(ctx context.Context, resp *shared.AWSCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -65,7 +71,7 @@ func (r *AWSCredentialResourceModel) RefreshFromSharedDescribeAWSCredentialsResp
 	return diags
 }
 
-func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx context.Context) (*operations.CreateAWSCredentialsRequest, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*operations.CreateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -74,7 +80,7 @@ func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx
 	} else {
 		workspaceID = nil
 	}
-	createAWSCredentialsRequest, createAWSCredentialsRequestDiags := r.ToSharedCreateAWSCredentialsRequest(ctx)
+	createAWSCredentialsRequest, createAWSCredentialsRequestDiags := r.ToSharedCreateAWSCredentialsRequest(ctx, opts)
 	diags.Append(createAWSCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -89,7 +95,7 @@ func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *AWSCredentialResourceModel) ToOperationsDeleteAWSCredentialsRequest(ctx context.Context) (*operations.DeleteAWSCredentialsRequest, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToOperationsDeleteAWSCredentialsRequest(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*operations.DeleteAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -109,7 +115,7 @@ func (r *AWSCredentialResourceModel) ToOperationsDeleteAWSCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *AWSCredentialResourceModel) ToOperationsDescribeAWSCredentialsRequest(ctx context.Context) (*operations.DescribeAWSCredentialsRequest, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToOperationsDescribeAWSCredentialsRequest(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*operations.DescribeAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -129,7 +135,7 @@ func (r *AWSCredentialResourceModel) ToOperationsDescribeAWSCredentialsRequest(c
 	return &out, diags
 }
 
-func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx context.Context) (*operations.UpdateAWSCredentialsRequest, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*operations.UpdateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -141,7 +147,7 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 	} else {
 		workspaceID = nil
 	}
-	updateAWSCredentialsRequest, updateAWSCredentialsRequestDiags := r.ToSharedUpdateAWSCredentialsRequest(ctx)
+	updateAWSCredentialsRequest, updateAWSCredentialsRequestDiags := r.ToSharedUpdateAWSCredentialsRequest(ctx, opts)
 	diags.Append(updateAWSCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -157,7 +163,7 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context) (*shared.AWSCredential, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*shared.AWSCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	id := new(string)
@@ -175,7 +181,7 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context) 
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedAWSCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedAWSCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -192,7 +198,7 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context) 
 	return &out, diags
 }
 
-func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Context) (*shared.AWSCredentialKeys, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*shared.AWSCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	accessKey := new(string)
@@ -202,8 +208,8 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Conte
 		accessKey = nil
 	}
 	secretKey := new(string)
-	if !r.SecretKey.IsUnknown() && !r.SecretKey.IsNull() {
-		*secretKey = r.SecretKey.ValueString()
+	if !opts.Config.SecretKey.IsUnknown() && !opts.Config.SecretKey.IsNull() {
+		*secretKey = opts.Config.SecretKey.ValueString()
 	} else {
 		secretKey = nil
 	}
@@ -222,10 +228,10 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Conte
 	return &out, diags
 }
 
-func (r *AWSCredentialResourceModel) ToSharedCreateAWSCredentialsRequest(ctx context.Context) (*shared.CreateAWSCredentialsRequest, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToSharedCreateAWSCredentialsRequest(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*shared.CreateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedAWSCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedAWSCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -239,10 +245,10 @@ func (r *AWSCredentialResourceModel) ToSharedCreateAWSCredentialsRequest(ctx con
 	return &out, diags
 }
 
-func (r *AWSCredentialResourceModel) ToSharedUpdateAWSCredentialsRequest(ctx context.Context) (*shared.UpdateAWSCredentialsRequest, diag.Diagnostics) {
+func (r *AWSCredentialResourceModel) ToSharedUpdateAWSCredentialsRequest(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*shared.UpdateAWSCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedAWSCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedAWSCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

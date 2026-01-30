@@ -41,9 +41,11 @@ resource "seqera_codecommit_credential" "example" {
 
 ### Required
 
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
 - `access_key` (String) AWS Access Key ID for CodeCommit (required)
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
-- `secret_key` (String, Sensitive) AWS Secret Access Key for CodeCommit (required, sensitive)
+- `secret_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) AWS Secret Access Key for CodeCommit (required, sensitive)
 
 ### Optional
 

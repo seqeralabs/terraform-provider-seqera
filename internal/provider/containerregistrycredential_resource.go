@@ -81,6 +81,7 @@ func (r *ContainerRegistryCredentialResource) Schema(ctx context.Context, req re
 			"password": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Password or access token for container registry authentication (required, sensitive)`,
 			},
 			"provider_type": schema.StringAttribute{
@@ -128,8 +129,21 @@ func (r *ContainerRegistryCredentialResource) Configure(ctx context.Context, req
 }
 
 func (r *ContainerRegistryCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *ContainerRegistryCredentialResourceModel
-	var plan types.Object
+	var (
+		configData ContainerRegistryCredentialResourceModel
+		data       ContainerRegistryCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &ContainerRegistryCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -145,7 +159,7 @@ func (r *ContainerRegistryCredentialResource) Create(ctx context.Context, req re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateContainerRegistryCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateContainerRegistryCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -212,7 +226,7 @@ func (r *ContainerRegistryCredentialResource) Read(ctx context.Context, req reso
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeContainerRegistryCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeContainerRegistryCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -253,8 +267,29 @@ func (r *ContainerRegistryCredentialResource) Read(ctx context.Context, req reso
 }
 
 func (r *ContainerRegistryCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *ContainerRegistryCredentialResourceModel
-	var plan types.Object
+	var (
+		configData ContainerRegistryCredentialResourceModel
+		data       ContainerRegistryCredentialResourceModel
+		plan       types.Object
+		stateData  ContainerRegistryCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &ContainerRegistryCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -266,7 +301,7 @@ func (r *ContainerRegistryCredentialResource) Update(ctx context.Context, req re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateContainerRegistryCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateContainerRegistryCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -317,7 +352,7 @@ func (r *ContainerRegistryCredentialResource) Delete(ctx context.Context, req re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteContainerRegistryCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteContainerRegistryCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

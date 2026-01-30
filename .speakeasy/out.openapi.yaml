@@ -19051,7 +19051,7 @@ components:
               minLength: 40
               description: AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-param-optional: true
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               x-speakeasy-name-override: secret_key
@@ -19181,7 +19181,7 @@ components:
               type: string
               description: Azure Batch account key (for shared key authentication)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: YourAzureBatchAccountKeyHere==
               x-speakeasy-name-override: batch_key
               x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
@@ -19190,7 +19190,7 @@ components:
               type: string
               description: Azure Storage account key (for shared key authentication)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: YourAzureStorageAccountKeyHere==
               x-speakeasy-name-override: storage_key
               x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
@@ -19215,7 +19215,7 @@ components:
               type: string
               description: Azure service principal client secret (for Entra/Cloud authentication)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: YourAzureClientSecretHere
               x-speakeasy-name-override: client_secret
               x-speakeasy-plan-validators: AzureCredentialEntraValidator
@@ -19324,7 +19324,7 @@ components:
               type: string
               description: Bitbucket API token (required, sensitive). App passwords are deprecated.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: ATBB...
               writeOnly: true
     CreateBitbucketCredentialsRequest:
@@ -19428,7 +19428,7 @@ components:
               type: string
               description: AWS Secret Access Key for CodeCommit (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               x-speakeasy-name-override: secret_key
               writeOnly: true
@@ -19526,7 +19526,7 @@ components:
               type: string
               description: Password or access token for container registry authentication (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: mypassword
               writeOnly: true
             registry:
@@ -19621,6 +19621,7 @@ components:
               type: string
               description: Google Cloud service account key JSON (required, sensitive).
               x-speakeasy-param-sensitive: true
+              x-speakeasy-terraform-write-only: true
               example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
               writeOnly: true
             keyType:
@@ -19733,7 +19734,7 @@ components:
               type: string
               description: Gitea account password (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: mypassword
               writeOnly: true
     CreateGiteaCredentialsRequest:
@@ -19835,7 +19836,7 @@ components:
               type: string
               description: GitHub Personal Access Token (PAT) for authentication (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: ghp_1234567890abcdefghijklmnopqrstuvwxyz
               x-speakeasy-name-override: access_token
               writeOnly: true
@@ -19938,7 +19939,7 @@ components:
               type: string
               description: GitLab Personal Access Token or Project Access Token (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: glpat-xxxxxxxxxxxxxxxxxxxx
               writeOnly: true
     CreateGitlabCredentialsRequest:
@@ -20024,20 +20025,20 @@ components:
               type: string
               description: Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               writeOnly: true
             certificate:
               type: string
               description: X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-name-override: client_certificate
               writeOnly: true
             privateKey:
               type: string
               description: Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-name-override: private_key
               writeOnly: true
             keyType:
@@ -20126,13 +20127,14 @@ components:
               type: string
               description: 'SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen'
               x-speakeasy-param-sensitive: true
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-name-override: private_key
               writeOnly: true
             passphrase:
               type: string
               description: Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-force-new: true
+              x-speakeasy-terraform-write-only: true
               writeOnly: true
             keyType:
               type: string

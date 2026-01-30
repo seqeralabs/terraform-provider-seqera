@@ -58,6 +58,7 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 			"client_certificate": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.`,
 			},
 			"credentials_id": schema.StringAttribute{
@@ -86,6 +87,7 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 			"private_key": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Private key for X.509 client certificate (optional). Required if using certificate-based authentication.`,
 			},
 			"provider_type": schema.StringAttribute{
@@ -96,6 +98,7 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 			"token": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.`,
 			},
 			"workspace_id": schema.Int64Attribute{
@@ -130,8 +133,21 @@ func (r *KubernetesCredentialResource) Configure(ctx context.Context, req resour
 }
 
 func (r *KubernetesCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *KubernetesCredentialResourceModel
-	var plan types.Object
+	var (
+		configData KubernetesCredentialResourceModel
+		data       KubernetesCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &KubernetesCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -147,7 +163,7 @@ func (r *KubernetesCredentialResource) Create(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateKubernetesCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateKubernetesCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -214,7 +230,7 @@ func (r *KubernetesCredentialResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeKubernetesCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeKubernetesCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -255,8 +271,29 @@ func (r *KubernetesCredentialResource) Read(ctx context.Context, req resource.Re
 }
 
 func (r *KubernetesCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *KubernetesCredentialResourceModel
-	var plan types.Object
+	var (
+		configData KubernetesCredentialResourceModel
+		data       KubernetesCredentialResourceModel
+		plan       types.Object
+		stateData  KubernetesCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &KubernetesCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -268,7 +305,7 @@ func (r *KubernetesCredentialResource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateKubernetesCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateKubernetesCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -319,7 +356,7 @@ func (r *KubernetesCredentialResource) Delete(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteKubernetesCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteKubernetesCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

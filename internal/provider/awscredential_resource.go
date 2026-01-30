@@ -104,6 +104,7 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 			"secret_key": schema.StringAttribute{
 				Optional:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtLeast(40),
@@ -142,8 +143,21 @@ func (r *AWSCredentialResource) Configure(ctx context.Context, req resource.Conf
 }
 
 func (r *AWSCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *AWSCredentialResourceModel
-	var plan types.Object
+	var (
+		configData AWSCredentialResourceModel
+		data       AWSCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &AWSCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -159,7 +173,7 @@ func (r *AWSCredentialResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateAWSCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateAWSCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -226,7 +240,7 @@ func (r *AWSCredentialResource) Read(ctx context.Context, req resource.ReadReque
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeAWSCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeAWSCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -267,8 +281,29 @@ func (r *AWSCredentialResource) Read(ctx context.Context, req resource.ReadReque
 }
 
 func (r *AWSCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *AWSCredentialResourceModel
-	var plan types.Object
+	var (
+		configData AWSCredentialResourceModel
+		data       AWSCredentialResourceModel
+		plan       types.Object
+		stateData  AWSCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &AWSCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -280,7 +315,7 @@ func (r *AWSCredentialResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateAWSCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateAWSCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -331,7 +366,7 @@ func (r *AWSCredentialResource) Delete(ctx context.Context, req resource.DeleteR
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteAWSCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteAWSCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
