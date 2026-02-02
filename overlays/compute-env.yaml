@@ -3,6 +3,79 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Compute Environment Overlay
   version: 0.0.0
+
+# ==============================================================================
+# COMPUTE ENVIRONMENT RESOURCE OVERLAY
+# ==============================================================================
+#
+# Compute environments define the infrastructure and execution settings for
+# running workflows in Seqera Platform. They specify cloud provider resources,
+# instance types, networking, and configuration for workflow execution.
+#
+# KEY CONCEPTS:
+# -------------
+# - Platform Support: AWS Batch, Google Life Sciences, Azure Batch, K8s, Seqera Compute
+# - Credentials: Require cloud provider credentials for resource provisioning
+# - Configuration: Instance types, scaling policies, networking, storage
+# - Environment Variables: Can target head nodes, compute nodes, or both
+# - Primary Compute Env: One workspace can set a default compute environment
+#
+# VALIDATION RULES:
+# -----------------
+# - platform: Required field specifying compute platform (validated by ComputeConfigValidator)
+# - environment variables: At least one of 'head' or 'compute' must be true (ConfigEnvVariableValidator)
+# - name: Updates supported in-place without replacement
+# - Other configuration fields: Most require replacement on modification
+#
+# LIFECYCLE BEHAVIOR:
+# -------------------
+# - Creation: Uses retry mechanism with backoff (30s max) for 429, 500, 502 errors
+# - Updates: Name changes supported in-place; most config changes require replacement
+# - Deletion: Ensures compute environment is removed from workspace before deletion
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Basic compute environment (refer to platform-specific resources)
+# resource "seqera_compute_env" "basic" {
+#   workspace_id = seqera_workspace.main.id
+#   compute_env = {
+#     name           = "my-compute-env"
+#     platform       = "aws-batch"
+#     credentials_id = seqera_aws_credential.main.id
+#     config = {
+#       # Platform-specific configuration
+#     }
+#   }
+# }
+#
+# Example 2: Compute environment with environment variables
+# resource "seqera_compute_env" "with_env" {
+#   workspace_id = seqera_workspace.main.id
+#   compute_env = {
+#     name           = "compute-with-env"
+#     platform       = "aws-batch"
+#     credentials_id = seqera_aws_credential.main.id
+#     config = {
+#       environment = [
+#         {
+#           name    = "MY_VAR"
+#           value   = "my-value"
+#           head    = true
+#           compute = true
+#         }
+#       ]
+#     }
+#   }
+# }
+#
+# NOTE: For platform-specific configurations, see:
+# - seqera_aws_compute_env / seqera_awsbatch_compute_env
+# - seqera_seqera_compute_ce (Seqera Compute)
+# - seqera_managed_compute_ce (Managed compute)
+#
+# ==============================================================================
+
 actions:
   # DataStudioComputeEnvDto entity annotation
   - target: $["components"]["schemas"]["DataStudioComputeEnvDto"]
