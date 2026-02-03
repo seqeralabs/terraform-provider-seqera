@@ -44,7 +44,7 @@ func (r *AWSCredentialResourceModel) RefreshFromSharedCreateAWSCredentialsRespon
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags
@@ -93,7 +93,7 @@ func (r *AWSCredentialResourceModel) ToOperationsDeleteAWSCredentialsRequest(ctx
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -113,7 +113,7 @@ func (r *AWSCredentialResourceModel) ToOperationsDescribeAWSCredentialsRequest(c
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -133,7 +133,7 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {

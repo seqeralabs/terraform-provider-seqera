@@ -40,7 +40,6 @@ type AWSCredentialResource struct {
 type AWSCredentialResourceModel struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	AssumeRoleArn types.String `tfsdk:"assume_role_arn"`
-	CredentialsID types.String `tfsdk:"credentials_id"`
 	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
@@ -72,10 +71,6 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 					stringvalidator.RegexMatches(regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`), "must match pattern "+regexp.MustCompile(`^arn:aws:iam::[0-9]{12}:role/.+$`).String()),
 					custom_stringvalidators.AWSCredentialKeysValidator(),
 				},
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -360,5 +355,5 @@ func (r *AWSCredentialResource) Delete(ctx context.Context, req resource.DeleteR
 }
 
 func (r *AWSCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

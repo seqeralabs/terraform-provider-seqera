@@ -37,13 +37,12 @@ type SSHCredentialResource struct {
 
 // SSHCredentialResourceModel describes the resource data model.
 type SSHCredentialResourceModel struct {
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	Passphrase    types.String `tfsdk:"passphrase"`
-	PrivateKey    types.String `tfsdk:"private_key"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	Passphrase   types.String `tfsdk:"passphrase"`
+	PrivateKey   types.String `tfsdk:"private_key"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *SSHCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -54,10 +53,6 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. ",
 		Attributes: map[string]schema.Attribute{
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
@@ -342,5 +337,5 @@ func (r *SSHCredentialResource) Delete(ctx context.Context, req resource.DeleteR
 }
 
 func (r *SSHCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

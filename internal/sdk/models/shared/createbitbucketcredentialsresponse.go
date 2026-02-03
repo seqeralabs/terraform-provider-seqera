@@ -3,12 +3,12 @@
 package shared
 
 type CreateBitbucketCredentialsResponse struct {
-	CredentialsID *string `json:"credentialsId,omitempty"`
+	ID *string `json:"credentialsId,omitempty"`
 }
 
-func (c *CreateBitbucketCredentialsResponse) GetCredentialsID() *string {
+func (c *CreateBitbucketCredentialsResponse) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }

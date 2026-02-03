@@ -14,7 +14,7 @@ func (r *GitlabCredentialResourceModel) RefreshFromSharedCreateGitlabCredentials
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags
@@ -94,7 +94,7 @@ func (r *GitlabCredentialResourceModel) ToOperationsDeleteGitlabCredentialsReque
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -114,7 +114,7 @@ func (r *GitlabCredentialResourceModel) ToOperationsDescribeGitlabCredentialsReq
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -134,7 +134,7 @@ func (r *GitlabCredentialResourceModel) ToOperationsUpdateGitlabCredentialsReque
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {

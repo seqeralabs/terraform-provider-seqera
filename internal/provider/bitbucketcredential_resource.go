@@ -37,14 +37,13 @@ type BitbucketCredentialResource struct {
 
 // BitbucketCredentialResourceModel describes the resource data model.
 type BitbucketCredentialResourceModel struct {
-	BaseURL       types.String `tfsdk:"base_url"`
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	Token         types.String `tfsdk:"token"`
-	Username      types.String `tfsdk:"username"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL      types.String `tfsdk:"base_url"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	Token        types.String `tfsdk:"token"`
+	Username     types.String `tfsdk:"username"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *BitbucketCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -56,13 +55,8 @@ func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.S
 		MarkdownDescription: "Manage Bitbucket credentials in Seqera platform using this resource.\n\nBitbucket credentials store authentication information for accessing Bitbucket\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs`,
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -347,5 +341,5 @@ func (r *BitbucketCredentialResource) Delete(ctx context.Context, req resource.D
 }
 
 func (r *BitbucketCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

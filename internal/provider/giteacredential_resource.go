@@ -37,14 +37,13 @@ type GiteaCredentialResource struct {
 
 // GiteaCredentialResourceModel describes the resource data model.
 type GiteaCredentialResourceModel struct {
-	BaseURL       types.String `tfsdk:"base_url"`
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	Password      types.String `tfsdk:"password"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	Username      types.String `tfsdk:"username"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BaseURL      types.String `tfsdk:"base_url"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	Password     types.String `tfsdk:"password"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	Username     types.String `tfsdk:"username"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GiteaCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -56,13 +55,8 @@ func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.Schem
 		MarkdownDescription: "Manage Gitea credentials in Seqera platform using this resource.\n\nGitea credentials store authentication information for accessing Gitea\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com`,
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -347,5 +341,5 @@ func (r *GiteaCredentialResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *GiteaCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

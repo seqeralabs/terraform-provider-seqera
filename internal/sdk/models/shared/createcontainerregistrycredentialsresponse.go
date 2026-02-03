@@ -3,12 +3,12 @@
 package shared
 
 type CreateContainerRegistryCredentialsResponse struct {
-	CredentialsID *string `json:"credentialsId,omitempty"`
+	ID *string `json:"credentialsId,omitempty"`
 }
 
-func (c *CreateContainerRegistryCredentialsResponse) GetCredentialsID() *string {
+func (c *CreateContainerRegistryCredentialsResponse) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }

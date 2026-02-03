@@ -38,18 +38,17 @@ type AzureCredentialResource struct {
 
 // AzureCredentialResourceModel describes the resource data model.
 type AzureCredentialResourceModel struct {
-	BatchKey      types.String `tfsdk:"batch_key"`
-	BatchName     types.String `tfsdk:"batch_name"`
-	ClientID      types.String `tfsdk:"client_id"`
-	ClientSecret  types.String `tfsdk:"client_secret"`
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	StorageKey    types.String `tfsdk:"storage_key"`
-	StorageName   types.String `tfsdk:"storage_name"`
-	TenantID      types.String `tfsdk:"tenant_id"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	BatchKey     types.String `tfsdk:"batch_key"`
+	BatchName    types.String `tfsdk:"batch_name"`
+	ClientID     types.String `tfsdk:"client_id"`
+	ClientSecret types.String `tfsdk:"client_secret"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	StorageKey   types.String `tfsdk:"storage_key"`
+	StorageName  types.String `tfsdk:"storage_name"`
+	TenantID     types.String `tfsdk:"tenant_id"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AzureCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -86,10 +85,6 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 				Validators: []validator.String{
 					custom_stringvalidators.AzureCredentialEntraValidator(),
 				},
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -384,5 +379,5 @@ func (r *AzureCredentialResource) Delete(ctx context.Context, req resource.Delet
 }
 
 func (r *AzureCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

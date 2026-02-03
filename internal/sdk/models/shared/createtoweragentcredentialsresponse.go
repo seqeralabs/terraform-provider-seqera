@@ -3,12 +3,12 @@
 package shared
 
 type CreateTowerAgentCredentialsResponse struct {
-	CredentialsID *string `json:"credentialsId,omitempty"`
+	ID *string `json:"credentialsId,omitempty"`
 }
 
-func (c *CreateTowerAgentCredentialsResponse) GetCredentialsID() *string {
+func (c *CreateTowerAgentCredentialsResponse) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }

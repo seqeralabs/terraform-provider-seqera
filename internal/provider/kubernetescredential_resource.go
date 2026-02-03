@@ -38,7 +38,6 @@ type KubernetesCredentialResource struct {
 // KubernetesCredentialResourceModel describes the resource data model.
 type KubernetesCredentialResourceModel struct {
 	ClientCertificate types.String `tfsdk:"client_certificate"`
-	CredentialsID     types.String `tfsdk:"credentials_id"`
 	ID                types.String `tfsdk:"id"`
 	Name              types.String `tfsdk:"name"`
 	PrivateKey        types.String `tfsdk:"private_key"`
@@ -59,10 +58,6 @@ func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.
 				Optional:    true,
 				Sensitive:   true,
 				Description: `X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.`,
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -348,5 +343,5 @@ func (r *KubernetesCredentialResource) Delete(ctx context.Context, req resource.
 }
 
 func (r *KubernetesCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

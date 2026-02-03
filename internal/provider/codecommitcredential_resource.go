@@ -37,14 +37,13 @@ type CodecommitCredentialResource struct {
 
 // CodecommitCredentialResourceModel describes the resource data model.
 type CodecommitCredentialResourceModel struct {
-	AccessKey     types.String `tfsdk:"access_key"`
-	BaseURL       types.String `tfsdk:"base_url"`
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	SecretKey     types.String `tfsdk:"secret_key"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AccessKey    types.String `tfsdk:"access_key"`
+	BaseURL      types.String `tfsdk:"base_url"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	SecretKey    types.String `tfsdk:"secret_key"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *CodecommitCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -63,10 +62,6 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com`,
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -347,5 +342,5 @@ func (r *CodecommitCredentialResource) Delete(ctx context.Context, req resource.
 }
 
 func (r *CodecommitCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

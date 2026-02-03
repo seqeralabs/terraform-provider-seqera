@@ -37,14 +37,13 @@ type GithubCredentialResource struct {
 
 // GithubCredentialResourceModel describes the resource data model.
 type GithubCredentialResourceModel struct {
-	AccessToken   types.String `tfsdk:"access_token"`
-	BaseURL       types.String `tfsdk:"base_url"`
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	Username      types.String `tfsdk:"username"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AccessToken  types.String `tfsdk:"access_token"`
+	BaseURL      types.String `tfsdk:"base_url"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	Username     types.String `tfsdk:"username"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GithubCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -61,13 +60,8 @@ func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Description: `GitHub Personal Access Token (PAT) for authentication (required, sensitive)`,
 			},
 			"base_url": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com`,
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -347,5 +341,5 @@ func (r *GithubCredentialResource) Delete(ctx context.Context, req resource.Dele
 }
 
 func (r *GithubCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

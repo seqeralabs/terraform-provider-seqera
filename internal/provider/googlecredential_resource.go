@@ -37,12 +37,11 @@ type GoogleCredentialResource struct {
 
 // GoogleCredentialResourceModel describes the resource data model.
 type GoogleCredentialResourceModel struct {
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	Data          types.String `tfsdk:"data"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Data         types.String `tfsdk:"data"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *GoogleCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -53,10 +52,6 @@ func (r *GoogleCredentialResource) Schema(ctx context.Context, req resource.Sche
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Google credentials in Seqera platform using this resource.\n\nGoogle credentials store authentication information for accessing Google Cloud services\nwithin the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
 			"data": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
@@ -336,5 +331,5 @@ func (r *GoogleCredentialResource) Delete(ctx context.Context, req resource.Dele
 }
 
 func (r *GoogleCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

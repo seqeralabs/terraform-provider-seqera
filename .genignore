@@ -9,9 +9,6 @@ internal/sdk/internal/hooks/generic_resource_error_hook.go
 internal/sdk/internal/hooks/conflict_error_hook.go
 internal/sdk/internal/hooks/token_list_error_hook.go
 
-# Custom resource SDK files with manual token filtering
-internal/provider/tokens_resource_sdk.go
-internal/provider/tokens_resource.go
 
 # Custom validators
 internal/validators/mapvalidators/studio_environment_variable_validator.go

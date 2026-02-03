@@ -3,12 +3,12 @@
 package shared
 
 type CreateSSHCredentialsResponse struct {
-	CredentialsID *string `json:"credentialsId,omitempty"`
+	ID *string `json:"credentialsId,omitempty"`
 }
 
-func (c *CreateSSHCredentialsResponse) GetCredentialsID() *string {
+func (c *CreateSSHCredentialsResponse) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }

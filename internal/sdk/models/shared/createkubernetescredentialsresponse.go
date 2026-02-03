@@ -3,12 +3,12 @@
 package shared
 
 type CreateKubernetesCredentialsResponse struct {
-	CredentialsID *string `json:"credentialsId,omitempty"`
+	ID *string `json:"credentialsId,omitempty"`
 }
 
-func (c *CreateKubernetesCredentialsResponse) GetCredentialsID() *string {
+func (c *CreateKubernetesCredentialsResponse) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }

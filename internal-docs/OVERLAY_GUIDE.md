@@ -182,6 +182,203 @@ description: Organization name field  # Redundant
 description: Name of the organization in the system  # Vague
 ```
 
+## Response Field Mapping
+
+### Mapping API Response Fields to Terraform IDs
+
+Terraform resources require an `id` field in the state, but many APIs return different field names in their Create responses (e.g., `credentialsId`, `pipelineId`, `workspaceId`). Use `x-speakeasy-name-override` and `x-speakeasy-match` to properly map these fields.
+
+#### The ID Mapping Pattern
+
+When an API returns a different field name than `id` in the Create response:
+
+```yaml
+# Step 1: Map the response field to 'id' in the Go struct
+- target: $.components.schemas.CreateResourceResponse.properties.credentialsId
+  update:
+    x-speakeasy-name-override: id
+
+# Step 2: Link path parameters to the mapped 'id' field for Read, Update, Delete operations
+- target: $["paths"]["/resource/{credentialsId}"]["get"]["parameters"][?(@.name == "credentialsId")]
+  update:
+    x-speakeasy-match: id
+
+- target: $["paths"]["/resource/{credentialsId}"]["put"]["parameters"][?(@.name == "credentialsId")]
+  update:
+    x-speakeasy-match: id
+
+- target: $["paths"]["/resource/{credentialsId}"]["delete"]["parameters"][?(@.name == "credentialsId")]
+  update:
+    x-speakeasy-match: id
+```
+
+**What This Does:**
+- `x-speakeasy-name-override: id` maps the API's `credentialsId` field to the Go struct's `ID` field
+- `x-speakeasy-match: id` tells Speakeasy that path parameters should use the `ID` field value
+- This ensures Terraform's required `id` field gets populated from the Create response
+- The Read, Update, and Delete operations correctly use the `id` value in their requests
+
+**Generated Go Code:**
+```go
+// Before mapping - causes "unknown value for id" error
+type CreateResourceResponse struct {
+    CredentialsID *string `json:"credentialsId,omitempty"`
+}
+
+func (r *ResourceModel) RefreshFromSharedCreateResourceResponse(ctx context.Context, resp *shared.CreateResourceResponse) diag.Diagnostics {
+    var diags diag.Diagnostics
+    if resp != nil {
+        r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+        // r.ID is not set - Terraform error!
+    }
+    return diags
+}
+
+// After mapping - works correctly
+type CreateResourceResponse struct {
+    ID *string `json:"credentialsId,omitempty"`  // Go field: ID, JSON field: credentialsId
+}
+
+func (r *ResourceModel) RefreshFromSharedCreateResourceResponse(ctx context.Context, resp *shared.CreateResourceResponse) diag.Diagnostics {
+    var diags diag.Diagnostics
+    if resp != nil {
+        r.ID = types.StringPointerValue(resp.ID)  // Terraform id field properly set
+    }
+    return diags
+}
+```
+
+#### Path Anchor Considerations
+
+Ensure the path anchor in your overlay target matches the actual API path:
+
+```yaml
+# WRONG - Will fail if API uses different anchor
+- target: $["paths"]["/credentials/{credentialsId}#gcp"]["get"]...
+
+# RIGHT - Use the actual path anchor from the OpenAPI spec
+- target: $["paths"]["/credentials/{credentialsId}#google"]["get"]...
+```
+
+**Common Path Anchors:**
+- Google credentials: `#google` (not `#gcp`)
+- Kubernetes credentials: `#k8s` (not `#kubernetes`)
+- Tower Agent credentials: `#agent` (not `#tower-agent`)
+
+### User-Provided Optional Fields
+
+When a field is user-provided and optional (not computed by the API), use `x-speakeasy-param-computed: false`:
+
+```yaml
+- target: $.components.schemas.ResourceSchema.properties.baseUrl
+  update:
+    type: string
+    description: 'Optional base URL for self-hosted server'
+    example: https://gitlab.mycompany.com
+    x-speakeasy-name-override: base_url
+    x-speakeasy-param-computed: false  # User provides this, API doesn't compute it
+```
+
+**Why This Matters:**
+- `x-speakeasy-param-computed: true` tells Terraform to expect the API to return/compute the value
+- If the API doesn't return it in the Create response, Terraform shows "unknown value" error
+- `x-speakeasy-param-computed: false` makes it a simple optional field that stores user input
+
+**When to Use:**
+- Optional configuration fields (URLs, paths, flags)
+- Fields where user input should be preserved as-is
+- Fields not returned in Create responses
+
+**When NOT to Use:**
+- Fields that are actually computed by the API (timestamps, IDs, status)
+- Fields marked as `x-speakeasy-param-readonly: true`
+
+#### Complete Credential Resource Example
+
+Here's a complete example showing all patterns together (from `overlays/credentials-github.yaml`):
+
+```yaml
+# Create operation with workspace parameter
+- target: $.paths
+  update:
+    /credentials#github:
+      post:
+        x-speakeasy-entity-operation:
+          terraform-resource: GithubCredential#create
+        parameters:
+        - name: workspaceId
+          in: query
+          schema:
+            type: integer
+            format: int64
+
+# Schema definition
+- target: $.components.schemas
+  update:
+    GithubCredential:
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-param-readonly: true
+        baseUrl:
+          type: string
+          description: 'Repository base URL for GitHub Enterprise (optional)'
+          x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false  # User-provided optional field
+        keys:
+          type: object
+          required:
+          - username
+          - accessToken
+          properties:
+            username:
+              type: string
+              description: GitHub username
+            accessToken:
+              type: string
+              description: GitHub Personal Access Token
+              x-speakeasy-param-sensitive: true
+
+# Response schemas
+- target: $.components.schemas
+  update:
+    CreateGithubCredentialsResponse:
+      type: object
+      properties:
+        credentialsId:
+          type: string
+
+# Map response ID to Terraform id field
+- target: $.components.schemas.CreateGithubCredentialsResponse.properties.credentialsId
+  update:
+    x-speakeasy-name-override: id
+
+# Link path parameters to id field
+- target: $["paths"]["/credentials/{credentialsId}#github"]["get"]["parameters"][?(@.name == "credentialsId")]
+  update:
+    x-speakeasy-match: id
+
+- target: $["paths"]["/credentials/{credentialsId}#github"]["put"]["parameters"][?(@.name == "credentialsId")]
+  update:
+    x-speakeasy-match: id
+
+- target: $["paths"]["/credentials/{credentialsId}#github"]["delete"]["parameters"][?(@.name == "credentialsId")]
+  update:
+    x-speakeasy-match: id
+
+# Mark workspace parameter as force-new (requires replacement)
+- target: $["paths"]["/credentials#github"]["post"]["parameters"][?(@.name == "workspaceId")]
+  update:
+    x-speakeasy-param-force-new: true
+```
+
+**Result:**
+- Create returns `credentialsId`, properly mapped to Terraform's `id` field
+- Read, Update, Delete operations use the `id` value for the path parameter
+- `baseUrl` is an optional user-provided field, not computed by API
+- Workspace changes require resource replacement
+
 ## Resource Examples
 
 ### File Location

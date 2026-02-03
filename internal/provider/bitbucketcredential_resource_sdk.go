@@ -45,7 +45,7 @@ func (r *BitbucketCredentialResourceModel) RefreshFromSharedCreateBitbucketCrede
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags
@@ -94,7 +94,7 @@ func (r *BitbucketCredentialResourceModel) ToOperationsDeleteBitbucketCredential
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -114,7 +114,7 @@ func (r *BitbucketCredentialResourceModel) ToOperationsDescribeBitbucketCredenti
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -134,7 +134,7 @@ func (r *BitbucketCredentialResourceModel) ToOperationsUpdateBitbucketCredential
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {

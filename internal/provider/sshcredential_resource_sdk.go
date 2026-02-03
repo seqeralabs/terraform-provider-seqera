@@ -14,7 +14,7 @@ func (r *SSHCredentialResourceModel) RefreshFromSharedCreateSSHCredentialsRespon
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
+		r.ID = types.StringPointerValue(resp.ID)
 	}
 
 	return diags
@@ -79,7 +79,7 @@ func (r *SSHCredentialResourceModel) ToOperationsDeleteSSHCredentialsRequest(ctx
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -99,7 +99,7 @@ func (r *SSHCredentialResourceModel) ToOperationsDescribeSSHCredentialsRequest(c
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {
@@ -119,7 +119,7 @@ func (r *SSHCredentialResourceModel) ToOperationsUpdateSSHCredentialsRequest(ctx
 	var diags diag.Diagnostics
 
 	var credentialsID string
-	credentialsID = r.CredentialsID.ValueString()
+	credentialsID = r.ID.ValueString()
 
 	workspaceID := new(int64)
 	if !r.WorkspaceID.IsUnknown() && !r.WorkspaceID.IsNull() {

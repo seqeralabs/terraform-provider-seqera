@@ -38,13 +38,12 @@ type TowerAgentCredentialResource struct {
 
 // TowerAgentCredentialResourceModel describes the resource data model.
 type TowerAgentCredentialResourceModel struct {
-	ConnectionID  types.String `tfsdk:"connection_id"`
-	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
-	Name          types.String `tfsdk:"name"`
-	ProviderType  types.String `tfsdk:"provider_type"`
-	Shared        types.Bool   `tfsdk:"shared"`
-	WorkspaceID   types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ConnectionID types.String `tfsdk:"connection_id"`
+	ID           types.String `tfsdk:"id"`
+	Name         types.String `tfsdk:"name"`
+	ProviderType types.String `tfsdk:"provider_type"`
+	Shared       types.Bool   `tfsdk:"shared"`
+	WorkspaceID  types.Int64  `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *TowerAgentCredentialResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -58,10 +57,6 @@ func (r *TowerAgentCredentialResource) Schema(ctx context.Context, req resource.
 			"connection_id": schema.StringAttribute{
 				Required:    true,
 				Description: `Tower Agent connection ID (required). A unique UUID string used to identify the Tower Agent instance. Generate using random_uuid resource.`,
-			},
-			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
@@ -343,5 +338,5 @@ func (r *TowerAgentCredentialResource) Delete(ctx context.Context, req resource.
 }
 
 func (r *TowerAgentCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 }

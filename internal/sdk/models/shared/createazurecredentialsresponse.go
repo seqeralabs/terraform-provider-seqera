@@ -3,12 +3,12 @@
 package shared
 
 type CreateAzureCredentialsResponse struct {
-	CredentialsID *string `json:"credentialsId,omitempty"`
+	ID *string `json:"credentialsId,omitempty"`
 }
 
-func (c *CreateAzureCredentialsResponse) GetCredentialsID() *string {
+func (c *CreateAzureCredentialsResponse) GetID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.CredentialsID
+	return c.ID
 }
