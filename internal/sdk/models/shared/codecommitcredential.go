@@ -56,7 +56,7 @@ func (c *CodecommitCredentialKeys) GetSecretKey() string {
 
 type CodecommitCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "codecommit")
@@ -85,11 +85,11 @@ func (c *CodecommitCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CodecommitCredential) GetID() *string {
+func (c *CodecommitCredential) GetCredentialsID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.ID
+	return c.CredentialsID
 }
 
 func (c *CodecommitCredential) GetName() string {
@@ -162,7 +162,7 @@ func (c *CodecommitCredentialKeysOutput) GetAccessKey() string {
 
 type CodecommitCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "codecommit")
@@ -191,11 +191,11 @@ func (c *CodecommitCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (c *CodecommitCredentialOutput) GetID() *string {
+func (c *CodecommitCredentialOutput) GetCredentialsID() *string {
 	if c == nil {
 		return nil
 	}
-	return c.ID
+	return c.CredentialsID
 }
 
 func (c *CodecommitCredentialOutput) GetName() string {

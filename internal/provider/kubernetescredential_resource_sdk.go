@@ -45,7 +45,7 @@ func (r *KubernetesCredentialResourceModel) RefreshFromSharedKubernetesCredentia
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -169,11 +169,11 @@ func (r *KubernetesCredentialResourceModel) ToSharedCreateKubernetesCredentialsR
 func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*shared.KubernetesCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -192,10 +192,10 @@ func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx con
 	}
 
 	out := shared.KubernetesCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags

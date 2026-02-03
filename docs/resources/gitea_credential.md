@@ -55,8 +55,7 @@ resource "seqera_gitea_credential" "example" {
 
 ### Read-Only
 
-- `credentials_id` (String) Credentials string identifier
-- `id` (String) Unique identifier for the credential (max 22 characters)
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `provider_type` (String) Cloud provider type (automatically set to "gitea"). Default: "gitea"
 
 ## Import

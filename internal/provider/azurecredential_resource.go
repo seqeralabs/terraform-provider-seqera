@@ -43,7 +43,6 @@ type AzureCredentialResourceModel struct {
 	ClientID      types.String `tfsdk:"client_id"`
 	ClientSecret  types.String `tfsdk:"client_secret"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	StorageKey    types.String `tfsdk:"storage_key"`
@@ -90,10 +89,6 @@ func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.Schem
 				},
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
-			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

@@ -56,7 +56,7 @@ func (b *BitbucketCredentialKeys) GetToken() string {
 
 type BitbucketCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")
@@ -85,11 +85,11 @@ func (b *BitbucketCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BitbucketCredential) GetID() *string {
+func (b *BitbucketCredential) GetCredentialsID() *string {
 	if b == nil {
 		return nil
 	}
-	return b.ID
+	return b.CredentialsID
 }
 
 func (b *BitbucketCredential) GetName() string {
@@ -162,7 +162,7 @@ func (b *BitbucketCredentialKeysOutput) GetUsername() string {
 
 type BitbucketCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")
@@ -191,11 +191,11 @@ func (b *BitbucketCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (b *BitbucketCredentialOutput) GetID() *string {
+func (b *BitbucketCredentialOutput) GetCredentialsID() *string {
 	if b == nil {
 		return nil
 	}
-	return b.ID
+	return b.CredentialsID
 }
 
 func (b *BitbucketCredentialOutput) GetName() string {

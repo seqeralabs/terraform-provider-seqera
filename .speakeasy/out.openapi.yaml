@@ -11154,29 +11154,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTowerAgentCredentialsRequest'
+              $ref: "#/components/schemas/CreateTowerAgentCredentialsRequest"
         required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTowerAgentCredentialsResponse'
-        '400':
+                $ref: "#/components/schemas/CreateTowerAgentCredentialsResponse"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
-        '409':
+        "409":
           description: Conflict - resource already exists
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
   /credentials/{credentialsId}#agent:
@@ -11204,26 +11204,26 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DescribeTowerAgentCredentialsResponse'
-        '400':
+                $ref: "#/components/schemas/DescribeTowerAgentCredentialsResponse"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
-        '404':
+        "404":
           description: Not Found - Credential does not exist or has been deleted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -11254,18 +11254,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTowerAgentCredentialsRequest'
+              $ref: "#/components/schemas/UpdateTowerAgentCredentialsRequest"
         required: true
       responses:
-        '204':
+        "204":
           description: OK - No content
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
       security:
         - BearerAuth: []
@@ -11293,15 +11293,15 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: OK - No content
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
       security:
         - BearerAuth: []
@@ -18980,7 +18980,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19025,14 +19025,11 @@ components:
           x-speakeasy-terraform-ignore: true
         keys:
           x-speakeasy-entity: AWSCredential
-          x-speakeasy-entity-description: 'Manage AWS credentials in Seqera platform using this resource.
-
+          x-speakeasy-entity-description: |
+            Manage AWS credentials in Seqera platform using this resource.
 
             AWS credentials store authentication information for accessing AWS services
-
             within the Seqera Platform workflows.
-
-'
           type: object
           properties:
             accessKey:
@@ -19093,7 +19090,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19250,7 +19247,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19297,8 +19294,8 @@ components:
           type: string
           description: 'Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs'
           example: https://bitbucket.org/myorg
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: BitbucketCredential
           x-speakeasy-terraform-resource-name: bitbucket_credential
@@ -19353,7 +19350,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19458,7 +19455,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19560,7 +19557,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19661,7 +19658,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19708,8 +19705,8 @@ components:
           type: string
           description: 'Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com'
           example: https://gitea.mycompany.com
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: GiteaCredential
           x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource.
@@ -19763,7 +19760,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19810,8 +19807,8 @@ components:
           type: string
           description: 'Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com'
           example: https://github.mycompany.com
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: GithubCredential
           x-speakeasy-terraform-resource-name: github_credential
@@ -19866,7 +19863,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19913,8 +19910,8 @@ components:
           type: string
           description: 'Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com'
           example: https://gitlab.mycompany.com
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: GitlabCredential
           x-speakeasy-terraform-resource-name: gitlab_credential
@@ -19968,7 +19965,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -20074,7 +20071,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -20169,7 +20166,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -20178,7 +20175,7 @@ components:
           minLength: 2
           maxLength: 99
           type: string
-          pattern: '^[a-zA-Z0-9_-]+$'
+          pattern: "^[a-zA-Z0-9_-]+$"
           description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
@@ -20249,7 +20246,7 @@ components:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/TowerAgentCredential'
+          $ref: "#/components/schemas/TowerAgentCredential"
     CreateTowerAgentCredentialsResponse:
       type: object
       properties:
@@ -20259,12 +20256,12 @@ components:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/TowerAgentCredential'
+          $ref: "#/components/schemas/TowerAgentCredential"
     DescribeTowerAgentCredentialsResponse:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/TowerAgentCredential'
+          $ref: "#/components/schemas/TowerAgentCredential"
     ListCredentialsDataSourceResponse:
       type: object
       required:

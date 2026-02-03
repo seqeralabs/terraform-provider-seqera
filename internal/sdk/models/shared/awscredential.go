@@ -65,7 +65,7 @@ func (a *AWSCredentialKeys) GetAssumeRoleArn() *string {
 
 type AWSCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "aws")
@@ -92,11 +92,11 @@ func (a *AWSCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AWSCredential) GetID() *string {
+func (a *AWSCredential) GetCredentialsID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ID
+	return a.CredentialsID
 }
 
 func (a *AWSCredential) GetName() string {
@@ -162,7 +162,7 @@ func (a *AWSCredentialKeysOutput) GetAccessKey() *string {
 
 type AWSCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "aws")
@@ -189,11 +189,11 @@ func (a *AWSCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *AWSCredentialOutput) GetID() *string {
+func (a *AWSCredentialOutput) GetCredentialsID() *string {
 	if a == nil {
 		return nil
 	}
-	return a.ID
+	return a.CredentialsID
 }
 
 func (a *AWSCredentialOutput) GetName() string {

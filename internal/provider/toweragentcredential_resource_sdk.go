@@ -47,7 +47,7 @@ func (r *TowerAgentCredentialResourceModel) RefreshFromSharedTowerAgentCredentia
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		diags.Append(r.RefreshFromSharedTowerAgentCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
@@ -177,11 +177,11 @@ func (r *TowerAgentCredentialResourceModel) ToSharedCreateTowerAgentCredentialsR
 func (r *TowerAgentCredentialResourceModel) ToSharedTowerAgentCredential(ctx context.Context) (*shared.TowerAgentCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -200,10 +200,10 @@ func (r *TowerAgentCredentialResourceModel) ToSharedTowerAgentCredential(ctx con
 	}
 
 	out := shared.TowerAgentCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags

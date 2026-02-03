@@ -28,7 +28,7 @@ func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialOutput(ctx co
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		diags.Append(r.RefreshFromSharedAWSCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
@@ -166,11 +166,11 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context, opts *AWSCredentialResourceModelOptions) (*shared.AWSCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -189,10 +189,10 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredential(ctx context.Context, 
 	}
 
 	out := shared.AWSCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags

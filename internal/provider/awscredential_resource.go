@@ -41,7 +41,6 @@ type AWSCredentialResourceModel struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	AssumeRoleArn types.String `tfsdk:"assume_role_arn"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	SecretKey     types.String `tfsdk:"secret_key"`
@@ -74,10 +73,6 @@ func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
-			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),

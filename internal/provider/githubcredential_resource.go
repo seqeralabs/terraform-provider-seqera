@@ -40,7 +40,6 @@ type GithubCredentialResourceModel struct {
 	AccessToken   types.String `tfsdk:"access_token"`
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	Username      types.String `tfsdk:"username"`
@@ -62,15 +61,10 @@ func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.Sche
 				Description: `GitHub Personal Access Token (PAT) for authentication (required, sensitive)`,
 			},
 			"base_url": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
-			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
