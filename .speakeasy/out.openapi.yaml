@@ -11154,29 +11154,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTowerAgentCredentialsRequest'
+              $ref: "#/components/schemas/CreateTowerAgentCredentialsRequest"
         required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTowerAgentCredentialsResponse'
-        '400':
+                $ref: "#/components/schemas/CreateTowerAgentCredentialsResponse"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
-        '409':
+        "409":
           description: Conflict - resource already exists
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
   /credentials/{credentialsId}#agent:
@@ -11204,26 +11204,26 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DescribeTowerAgentCredentialsResponse'
-        '400':
+                $ref: "#/components/schemas/DescribeTowerAgentCredentialsResponse"
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
-        '404':
+        "404":
           description: Not Found - Credential does not exist or has been deleted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
       security:
         - BearerAuth: []
     put:
@@ -11254,18 +11254,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTowerAgentCredentialsRequest'
+              $ref: "#/components/schemas/UpdateTowerAgentCredentialsRequest"
         required: true
       responses:
-        '204':
+        "204":
           description: OK - No content
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
       security:
         - BearerAuth: []
@@ -11293,15 +11293,15 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
+        "204":
           description: OK - No content
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
           description: Operation not allowed
       security:
         - BearerAuth: []
@@ -18980,7 +18980,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19025,14 +19025,11 @@ components:
           x-speakeasy-terraform-ignore: true
         keys:
           x-speakeasy-entity: AWSCredential
-          x-speakeasy-entity-description: 'Manage AWS credentials in Seqera platform using this resource.
-
+          x-speakeasy-entity-description: |
+            Manage AWS credentials in Seqera platform using this resource.
 
             AWS credentials store authentication information for accessing AWS services
-
             within the Seqera Platform workflows.
-
-'
           type: object
           properties:
             accessKey:
@@ -19051,7 +19048,7 @@ components:
               minLength: 40
               description: AWS secret access key (sensitive). Must be at least 40 characters. Required unless assume_role_arn is provided.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-param-optional: true
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               x-speakeasy-name-override: secret_key
@@ -19093,7 +19090,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19181,7 +19178,7 @@ components:
               type: string
               description: Azure Batch account key (for shared key authentication)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: YourAzureBatchAccountKeyHere==
               x-speakeasy-name-override: batch_key
               x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
@@ -19190,7 +19187,7 @@ components:
               type: string
               description: Azure Storage account key (for shared key authentication)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: YourAzureStorageAccountKeyHere==
               x-speakeasy-name-override: storage_key
               x-speakeasy-plan-validators: AzureCredentialSharedKeyValidator
@@ -19215,7 +19212,7 @@ components:
               type: string
               description: Azure service principal client secret (for Entra/Cloud authentication)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: YourAzureClientSecretHere
               x-speakeasy-name-override: client_secret
               x-speakeasy-plan-validators: AzureCredentialEntraValidator
@@ -19250,7 +19247,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19297,8 +19294,8 @@ components:
           type: string
           description: 'Repository base URL for on-premises Bitbucket server (optional). Example: https://bitbucket.org/seqeralabs'
           example: https://bitbucket.org/myorg
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: BitbucketCredential
           x-speakeasy-terraform-resource-name: bitbucket_credential
@@ -19324,7 +19321,7 @@ components:
               type: string
               description: Bitbucket API token (required, sensitive). App passwords are deprecated.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: ATBB...
               writeOnly: true
     CreateBitbucketCredentialsRequest:
@@ -19353,7 +19350,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19428,7 +19425,7 @@ components:
               type: string
               description: AWS Secret Access Key for CodeCommit (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
               x-speakeasy-name-override: secret_key
               writeOnly: true
@@ -19458,7 +19455,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19526,7 +19523,7 @@ components:
               type: string
               description: Password or access token for container registry authentication (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: mypassword
               writeOnly: true
             registry:
@@ -19560,7 +19557,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19621,6 +19618,7 @@ components:
               type: string
               description: Google Cloud service account key JSON (required, sensitive).
               x-speakeasy-param-sensitive: true
+              x-speakeasy-terraform-write-only: true
               example: "{\n  \"type\": \"service_account\",\n  \"project_id\": \"my-project\",\n  \"private_key_id\": \"key-id\",\n  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\n...\\n-----END PRIVATE KEY-----\\n\",\n  \"client_email\": \"service-account@my-project.iam.gserviceaccount.com\",\n  \"client_id\": \"123456789\",\n  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n  \"token_uri\": \"https://oauth2.googleapis.com/token\"\n}\n"
               writeOnly: true
             keyType:
@@ -19660,7 +19658,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19707,8 +19705,8 @@ components:
           type: string
           description: 'Repository base URL for Gitea server (optional). Example: https://gitea.mycompany.com'
           example: https://gitea.mycompany.com
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: GiteaCredential
           x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource.
@@ -19733,7 +19731,7 @@ components:
               type: string
               description: Gitea account password (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: mypassword
               writeOnly: true
     CreateGiteaCredentialsRequest:
@@ -19762,7 +19760,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19809,8 +19807,8 @@ components:
           type: string
           description: 'Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com'
           example: https://github.mycompany.com
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: GithubCredential
           x-speakeasy-terraform-resource-name: github_credential
@@ -19835,7 +19833,7 @@ components:
               type: string
               description: GitHub Personal Access Token (PAT) for authentication (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: ghp_1234567890abcdefghijklmnopqrstuvwxyz
               x-speakeasy-name-override: access_token
               writeOnly: true
@@ -19865,7 +19863,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19912,8 +19910,8 @@ components:
           type: string
           description: 'Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com'
           example: https://gitlab.mycompany.com
-          x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
+          x-speakeasy-param-computed: false
         keys:
           x-speakeasy-entity: GitlabCredential
           x-speakeasy-terraform-resource-name: gitlab_credential
@@ -19938,7 +19936,7 @@ components:
               type: string
               description: GitLab Personal Access Token or Project Access Token (required, sensitive)
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               example: glpat-xxxxxxxxxxxxxxxxxxxx
               writeOnly: true
     CreateGitlabCredentialsRequest:
@@ -19967,7 +19965,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -20024,20 +20022,20 @@ components:
               type: string
               description: Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               writeOnly: true
             certificate:
               type: string
               description: X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-name-override: client_certificate
               writeOnly: true
             privateKey:
               type: string
               description: Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-computed: false
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-name-override: private_key
               writeOnly: true
             keyType:
@@ -20073,7 +20071,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -20126,13 +20124,14 @@ components:
               type: string
               description: 'SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen'
               x-speakeasy-param-sensitive: true
+              x-speakeasy-terraform-write-only: true
               x-speakeasy-name-override: private_key
               writeOnly: true
             passphrase:
               type: string
               description: Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.
               x-speakeasy-param-sensitive: true
-              x-speakeasy-param-force-new: true
+              x-speakeasy-terraform-write-only: true
               writeOnly: true
             keyType:
               type: string
@@ -20167,7 +20166,7 @@ components:
         - keys
       type: object
       properties:
-        id:
+        credentials_id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -20176,7 +20175,7 @@ components:
           minLength: 2
           maxLength: 99
           type: string
-          pattern: '^[a-zA-Z0-9_-]+$'
+          pattern: "^[a-zA-Z0-9_-]+$"
           description: Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
           x-speakeasy-param-force-new: true
         provider:
@@ -20247,7 +20246,7 @@ components:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/TowerAgentCredential'
+          $ref: "#/components/schemas/TowerAgentCredential"
     CreateTowerAgentCredentialsResponse:
       type: object
       properties:
@@ -20257,12 +20256,12 @@ components:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/TowerAgentCredential'
+          $ref: "#/components/schemas/TowerAgentCredential"
     DescribeTowerAgentCredentialsResponse:
       type: object
       properties:
         credentials:
-          $ref: '#/components/schemas/TowerAgentCredential'
+          $ref: "#/components/schemas/TowerAgentCredential"
     ListCredentialsDataSourceResponse:
       type: object
       required:

@@ -85,7 +85,7 @@ func (k *KubernetesCredentialKeys) GetKeyType() *string {
 
 type KubernetesCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "k8s")
@@ -112,11 +112,11 @@ func (k *KubernetesCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (k *KubernetesCredential) GetID() *string {
+func (k *KubernetesCredential) GetCredentialsID() *string {
 	if k == nil {
 		return nil
 	}
-	return k.ID
+	return k.CredentialsID
 }
 
 func (k *KubernetesCredential) GetName() string {
@@ -193,7 +193,7 @@ func (k *KubernetesCredentialKeysOutput) GetKeyType() *string {
 
 type KubernetesCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "k8s")
@@ -220,11 +220,11 @@ func (k *KubernetesCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (k *KubernetesCredentialOutput) GetID() *string {
+func (k *KubernetesCredentialOutput) GetCredentialsID() *string {
 	if k == nil {
 		return nil
 	}
-	return k.ID
+	return k.CredentialsID
 }
 
 func (k *KubernetesCredentialOutput) GetName() string {

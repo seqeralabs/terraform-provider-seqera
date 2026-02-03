@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// GoogleCredentialResourceModelOptions enables patch sdk method construction.
+type GoogleCredentialResourceModelOptions struct {
+	Config *GoogleCredentialResourceModel
+	State  *GoogleCredentialResourceModel
+}
+
 func (r *GoogleCredentialResourceModel) RefreshFromSharedCreateGoogleCredentialsResponse(ctx context.Context, resp *shared.CreateGoogleCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -39,7 +45,7 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -51,7 +57,7 @@ func (r *GoogleCredentialResourceModel) RefreshFromSharedGoogleCredentialOutput(
 	return diags
 }
 
-func (r *GoogleCredentialResourceModel) ToOperationsCreateGoogleCredentialsRequest(ctx context.Context) (*operations.CreateGoogleCredentialsRequest, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToOperationsCreateGoogleCredentialsRequest(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*operations.CreateGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -60,7 +66,7 @@ func (r *GoogleCredentialResourceModel) ToOperationsCreateGoogleCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	createGoogleCredentialsRequest, createGoogleCredentialsRequestDiags := r.ToSharedCreateGoogleCredentialsRequest(ctx)
+	createGoogleCredentialsRequest, createGoogleCredentialsRequestDiags := r.ToSharedCreateGoogleCredentialsRequest(ctx, opts)
 	diags.Append(createGoogleCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -75,7 +81,7 @@ func (r *GoogleCredentialResourceModel) ToOperationsCreateGoogleCredentialsReque
 	return &out, diags
 }
 
-func (r *GoogleCredentialResourceModel) ToOperationsDeleteGoogleCredentialsRequest(ctx context.Context) (*operations.DeleteGoogleCredentialsRequest, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToOperationsDeleteGoogleCredentialsRequest(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*operations.DeleteGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -95,7 +101,7 @@ func (r *GoogleCredentialResourceModel) ToOperationsDeleteGoogleCredentialsReque
 	return &out, diags
 }
 
-func (r *GoogleCredentialResourceModel) ToOperationsDescribeGoogleCredentialsRequest(ctx context.Context) (*operations.DescribeGoogleCredentialsRequest, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToOperationsDescribeGoogleCredentialsRequest(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*operations.DescribeGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -115,7 +121,7 @@ func (r *GoogleCredentialResourceModel) ToOperationsDescribeGoogleCredentialsReq
 	return &out, diags
 }
 
-func (r *GoogleCredentialResourceModel) ToOperationsUpdateGoogleCredentialsRequest(ctx context.Context) (*operations.UpdateGoogleCredentialsRequest, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToOperationsUpdateGoogleCredentialsRequest(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*operations.UpdateGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -127,7 +133,7 @@ func (r *GoogleCredentialResourceModel) ToOperationsUpdateGoogleCredentialsReque
 	} else {
 		workspaceID = nil
 	}
-	updateGoogleCredentialsRequest, updateGoogleCredentialsRequestDiags := r.ToSharedUpdateGoogleCredentialsRequest(ctx)
+	updateGoogleCredentialsRequest, updateGoogleCredentialsRequestDiags := r.ToSharedUpdateGoogleCredentialsRequest(ctx, opts)
 	diags.Append(updateGoogleCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -143,10 +149,10 @@ func (r *GoogleCredentialResourceModel) ToOperationsUpdateGoogleCredentialsReque
 	return &out, diags
 }
 
-func (r *GoogleCredentialResourceModel) ToSharedCreateGoogleCredentialsRequest(ctx context.Context) (*shared.CreateGoogleCredentialsRequest, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToSharedCreateGoogleCredentialsRequest(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*shared.CreateGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGoogleCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGoogleCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -160,14 +166,14 @@ func (r *GoogleCredentialResourceModel) ToSharedCreateGoogleCredentialsRequest(c
 	return &out, diags
 }
 
-func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Context) (*shared.GoogleCredential, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*shared.GoogleCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -178,7 +184,7 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedGoogleCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedGoogleCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -186,20 +192,20 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredential(ctx context.Con
 	}
 
 	out := shared.GoogleCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags
 }
 
-func (r *GoogleCredentialResourceModel) ToSharedGoogleCredentialKeys(ctx context.Context) (*shared.GoogleCredentialKeys, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToSharedGoogleCredentialKeys(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*shared.GoogleCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var data string
-	data = r.Data.ValueString()
+	data = opts.Config.Data.ValueString()
 
 	out := shared.GoogleCredentialKeys{
 		Data: data,
@@ -208,10 +214,10 @@ func (r *GoogleCredentialResourceModel) ToSharedGoogleCredentialKeys(ctx context
 	return &out, diags
 }
 
-func (r *GoogleCredentialResourceModel) ToSharedUpdateGoogleCredentialsRequest(ctx context.Context) (*shared.UpdateGoogleCredentialsRequest, diag.Diagnostics) {
+func (r *GoogleCredentialResourceModel) ToSharedUpdateGoogleCredentialsRequest(ctx context.Context, opts *GoogleCredentialResourceModelOptions) (*shared.UpdateGoogleCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGoogleCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGoogleCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

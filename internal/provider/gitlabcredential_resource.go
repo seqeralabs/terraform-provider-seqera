@@ -39,7 +39,6 @@ type GitlabCredentialResource struct {
 type GitlabCredentialResourceModel struct {
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	Token         types.String `tfsdk:"token"`
@@ -56,15 +55,10 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 		MarkdownDescription: "Manage GitLab credentials in Seqera platform using this resource.\n\nGitLab credentials store authentication information for accessing GitLab\nrepositories within the Seqera Platform workflows.\n",
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for self-hosted GitLab server (optional). Leave empty for GitLab.com. Example: https://gitlab.mycompany.com`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
-			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -91,6 +85,7 @@ func (r *GitlabCredentialResource) Schema(ctx context.Context, req resource.Sche
 			"token": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `GitLab Personal Access Token or Project Access Token (required, sensitive)`,
 			},
 			"username": schema.StringAttribute{
@@ -129,8 +124,21 @@ func (r *GitlabCredentialResource) Configure(ctx context.Context, req resource.C
 }
 
 func (r *GitlabCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *GitlabCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GitlabCredentialResourceModel
+		data       GitlabCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GitlabCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -146,7 +154,7 @@ func (r *GitlabCredentialResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateGitlabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateGitlabCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -213,7 +221,7 @@ func (r *GitlabCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGitlabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGitlabCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -254,8 +262,29 @@ func (r *GitlabCredentialResource) Read(ctx context.Context, req resource.ReadRe
 }
 
 func (r *GitlabCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *GitlabCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GitlabCredentialResourceModel
+		data       GitlabCredentialResourceModel
+		plan       types.Object
+		stateData  GitlabCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GitlabCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -267,7 +296,7 @@ func (r *GitlabCredentialResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateGitlabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateGitlabCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -318,7 +347,7 @@ func (r *GitlabCredentialResource) Delete(ctx context.Context, req resource.Dele
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteGitlabCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteGitlabCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

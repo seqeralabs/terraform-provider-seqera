@@ -40,7 +40,6 @@ type GithubCredentialResourceModel struct {
 	AccessToken   types.String `tfsdk:"access_token"`
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	Username      types.String `tfsdk:"username"`
@@ -58,18 +57,14 @@ func (r *GithubCredentialResource) Schema(ctx context.Context, req resource.Sche
 			"access_token": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `GitHub Personal Access Token (PAT) for authentication (required, sensitive)`,
 			},
 			"base_url": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Repository base URL for GitHub Enterprise Server (optional). Leave empty for GitHub.com. Example: https://github.mycompany.com`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
-			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -129,8 +124,21 @@ func (r *GithubCredentialResource) Configure(ctx context.Context, req resource.C
 }
 
 func (r *GithubCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *GithubCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GithubCredentialResourceModel
+		data       GithubCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GithubCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -146,7 +154,7 @@ func (r *GithubCredentialResource) Create(ctx context.Context, req resource.Crea
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateGithubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateGithubCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -213,7 +221,7 @@ func (r *GithubCredentialResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeGithubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeGithubCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -254,8 +262,29 @@ func (r *GithubCredentialResource) Read(ctx context.Context, req resource.ReadRe
 }
 
 func (r *GithubCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *GithubCredentialResourceModel
-	var plan types.Object
+	var (
+		configData GithubCredentialResourceModel
+		data       GithubCredentialResourceModel
+		plan       types.Object
+		stateData  GithubCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &GithubCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -267,7 +296,7 @@ func (r *GithubCredentialResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateGithubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateGithubCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -318,7 +347,7 @@ func (r *GithubCredentialResource) Delete(ctx context.Context, req resource.Dele
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteGithubCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteGithubCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

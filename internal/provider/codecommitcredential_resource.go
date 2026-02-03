@@ -40,7 +40,6 @@ type CodecommitCredentialResourceModel struct {
 	AccessKey     types.String `tfsdk:"access_key"`
 	BaseURL       types.String `tfsdk:"base_url"`
 	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	ProviderType  types.String `tfsdk:"provider_type"`
 	SecretKey     types.String `tfsdk:"secret_key"`
@@ -65,10 +64,6 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 				Description: `Repository base URL for AWS CodeCommit (optional). Example: https://git-codecommit.us-east-1.amazonaws.com`,
 			},
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
-			"id": schema.StringAttribute{
 				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
@@ -95,6 +90,7 @@ func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.
 			"secret_key": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `AWS Secret Access Key for CodeCommit (required, sensitive)`,
 			},
 			"workspace_id": schema.Int64Attribute{
@@ -129,8 +125,21 @@ func (r *CodecommitCredentialResource) Configure(ctx context.Context, req resour
 }
 
 func (r *CodecommitCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *CodecommitCredentialResourceModel
-	var plan types.Object
+	var (
+		configData CodecommitCredentialResourceModel
+		data       CodecommitCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &CodecommitCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -146,7 +155,7 @@ func (r *CodecommitCredentialResource) Create(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateCodecommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateCodecommitCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -213,7 +222,7 @@ func (r *CodecommitCredentialResource) Read(ctx context.Context, req resource.Re
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeCodecommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeCodecommitCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -254,8 +263,29 @@ func (r *CodecommitCredentialResource) Read(ctx context.Context, req resource.Re
 }
 
 func (r *CodecommitCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *CodecommitCredentialResourceModel
-	var plan types.Object
+	var (
+		configData CodecommitCredentialResourceModel
+		data       CodecommitCredentialResourceModel
+		plan       types.Object
+		stateData  CodecommitCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &CodecommitCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -267,7 +297,7 @@ func (r *CodecommitCredentialResource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateCodecommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateCodecommitCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -318,7 +348,7 @@ func (r *CodecommitCredentialResource) Delete(ctx context.Context, req resource.
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteCodecommitCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteCodecommitCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

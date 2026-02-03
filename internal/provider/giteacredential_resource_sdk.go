@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// GiteaCredentialResourceModelOptions enables patch sdk method construction.
+type GiteaCredentialResourceModelOptions struct {
+	Config *GiteaCredentialResourceModel
+	State  *GiteaCredentialResourceModel
+}
+
 func (r *GiteaCredentialResourceModel) RefreshFromSharedCreateGiteaCredentialsResponse(ctx context.Context, resp *shared.CreateGiteaCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -48,7 +54,7 @@ func (r *GiteaCredentialResourceModel) RefreshFromSharedGiteaCredentialOutput(ct
 
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		diags.Append(r.RefreshFromSharedGiteaCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
@@ -66,7 +72,7 @@ func (r *GiteaCredentialResourceModel) RefreshFromSharedGiteaCredentialOutput(ct
 	return diags
 }
 
-func (r *GiteaCredentialResourceModel) ToOperationsCreateGiteaCredentialsRequest(ctx context.Context) (*operations.CreateGiteaCredentialsRequest, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToOperationsCreateGiteaCredentialsRequest(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*operations.CreateGiteaCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -75,7 +81,7 @@ func (r *GiteaCredentialResourceModel) ToOperationsCreateGiteaCredentialsRequest
 	} else {
 		workspaceID = nil
 	}
-	createGiteaCredentialsRequest, createGiteaCredentialsRequestDiags := r.ToSharedCreateGiteaCredentialsRequest(ctx)
+	createGiteaCredentialsRequest, createGiteaCredentialsRequestDiags := r.ToSharedCreateGiteaCredentialsRequest(ctx, opts)
 	diags.Append(createGiteaCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -90,7 +96,7 @@ func (r *GiteaCredentialResourceModel) ToOperationsCreateGiteaCredentialsRequest
 	return &out, diags
 }
 
-func (r *GiteaCredentialResourceModel) ToOperationsDeleteGiteaCredentialsRequest(ctx context.Context) (*operations.DeleteGiteaCredentialsRequest, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToOperationsDeleteGiteaCredentialsRequest(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*operations.DeleteGiteaCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -110,7 +116,7 @@ func (r *GiteaCredentialResourceModel) ToOperationsDeleteGiteaCredentialsRequest
 	return &out, diags
 }
 
-func (r *GiteaCredentialResourceModel) ToOperationsDescribeGiteaCredentialsRequest(ctx context.Context) (*operations.DescribeGiteaCredentialsRequest, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToOperationsDescribeGiteaCredentialsRequest(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*operations.DescribeGiteaCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -130,7 +136,7 @@ func (r *GiteaCredentialResourceModel) ToOperationsDescribeGiteaCredentialsReque
 	return &out, diags
 }
 
-func (r *GiteaCredentialResourceModel) ToOperationsUpdateGiteaCredentialsRequest(ctx context.Context) (*operations.UpdateGiteaCredentialsRequest, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToOperationsUpdateGiteaCredentialsRequest(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*operations.UpdateGiteaCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -142,7 +148,7 @@ func (r *GiteaCredentialResourceModel) ToOperationsUpdateGiteaCredentialsRequest
 	} else {
 		workspaceID = nil
 	}
-	updateGiteaCredentialsRequest, updateGiteaCredentialsRequestDiags := r.ToSharedUpdateGiteaCredentialsRequest(ctx)
+	updateGiteaCredentialsRequest, updateGiteaCredentialsRequestDiags := r.ToSharedUpdateGiteaCredentialsRequest(ctx, opts)
 	diags.Append(updateGiteaCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -158,10 +164,10 @@ func (r *GiteaCredentialResourceModel) ToOperationsUpdateGiteaCredentialsRequest
 	return &out, diags
 }
 
-func (r *GiteaCredentialResourceModel) ToSharedCreateGiteaCredentialsRequest(ctx context.Context) (*shared.CreateGiteaCredentialsRequest, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToSharedCreateGiteaCredentialsRequest(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*shared.CreateGiteaCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGiteaCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGiteaCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -175,14 +181,14 @@ func (r *GiteaCredentialResourceModel) ToSharedCreateGiteaCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Context) (*shared.GiteaCredential, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*shared.GiteaCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -199,7 +205,7 @@ func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Conte
 	} else {
 		baseURL = nil
 	}
-	keys, keysDiags := r.ToSharedGiteaCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedGiteaCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -207,24 +213,24 @@ func (r *GiteaCredentialResourceModel) ToSharedGiteaCredential(ctx context.Conte
 	}
 
 	out := shared.GiteaCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		BaseURL:      baseURL,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BaseURL:       baseURL,
+		Keys:          *keys,
 	}
 
 	return &out, diags
 }
 
-func (r *GiteaCredentialResourceModel) ToSharedGiteaCredentialKeys(ctx context.Context) (*shared.GiteaCredentialKeys, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToSharedGiteaCredentialKeys(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*shared.GiteaCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var username string
 	username = r.Username.ValueString()
 
 	var password string
-	password = r.Password.ValueString()
+	password = opts.Config.Password.ValueString()
 
 	out := shared.GiteaCredentialKeys{
 		Username: username,
@@ -234,10 +240,10 @@ func (r *GiteaCredentialResourceModel) ToSharedGiteaCredentialKeys(ctx context.C
 	return &out, diags
 }
 
-func (r *GiteaCredentialResourceModel) ToSharedUpdateGiteaCredentialsRequest(ctx context.Context) (*shared.UpdateGiteaCredentialsRequest, diag.Diagnostics) {
+func (r *GiteaCredentialResourceModel) ToSharedUpdateGiteaCredentialsRequest(ctx context.Context, opts *GiteaCredentialResourceModelOptions) (*shared.UpdateGiteaCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedGiteaCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedGiteaCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

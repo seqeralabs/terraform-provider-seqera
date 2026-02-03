@@ -76,7 +76,7 @@ func (s *SSHCredentialKeys) GetKeyType() *string {
 
 type SSHCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "ssh")
@@ -103,11 +103,11 @@ func (s *SSHCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SSHCredential) GetID() *string {
+func (s *SSHCredential) GetCredentialsID() *string {
 	if s == nil {
 		return nil
 	}
-	return s.ID
+	return s.CredentialsID
 }
 
 func (s *SSHCredential) GetName() string {
@@ -184,7 +184,7 @@ func (s *SSHCredentialKeysOutput) GetKeyType() *string {
 
 type SSHCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "ssh")
@@ -211,11 +211,11 @@ func (s *SSHCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SSHCredentialOutput) GetID() *string {
+func (s *SSHCredentialOutput) GetCredentialsID() *string {
 	if s == nil {
 		return nil
 	}
-	return s.ID
+	return s.CredentialsID
 }
 
 func (s *SSHCredentialOutput) GetName() string {

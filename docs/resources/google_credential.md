@@ -36,7 +36,9 @@ resource "seqera_google_credential" "example" {
 
 ### Required
 
-- `data` (String, Sensitive) Google Cloud service account key JSON (required, sensitive).
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
+- `data` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Google Cloud service account key JSON (required, sensitive).
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 
 ### Optional
@@ -45,8 +47,7 @@ resource "seqera_google_credential" "example" {
 
 ### Read-Only
 
-- `credentials_id` (String) Credentials string identifier
-- `id` (String) Unique identifier for the credential (max 22 characters)
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `provider_type` (String) Cloud provider type (automatically set to "google"). Default: "google"
 
 ## Import

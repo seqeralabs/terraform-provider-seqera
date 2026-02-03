@@ -56,7 +56,7 @@ func (g *GithubCredentialKeys) GetAccessToken() string {
 
 type GithubCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "github")
@@ -85,11 +85,11 @@ func (g *GithubCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GithubCredential) GetID() *string {
+func (g *GithubCredential) GetCredentialsID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.ID
+	return g.CredentialsID
 }
 
 func (g *GithubCredential) GetName() string {
@@ -162,7 +162,7 @@ func (g *GithubCredentialKeysOutput) GetUsername() string {
 
 type GithubCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "github")
@@ -191,11 +191,11 @@ func (g *GithubCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GithubCredentialOutput) GetID() *string {
+func (g *GithubCredentialOutput) GetCredentialsID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.ID
+	return g.CredentialsID
 }
 
 func (g *GithubCredentialOutput) GetName() string {

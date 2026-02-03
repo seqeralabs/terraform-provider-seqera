@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// SSHCredentialResourceModelOptions enables patch sdk method construction.
+type SSHCredentialResourceModelOptions struct {
+	Config *SSHCredentialResourceModel
+	State  *SSHCredentialResourceModel
+}
+
 func (r *SSHCredentialResourceModel) RefreshFromSharedCreateSSHCredentialsResponse(ctx context.Context, resp *shared.CreateSSHCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -39,7 +45,7 @@ func (r *SSHCredentialResourceModel) RefreshFromSharedSSHCredentialOutput(ctx co
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -51,7 +57,7 @@ func (r *SSHCredentialResourceModel) RefreshFromSharedSSHCredentialOutput(ctx co
 	return diags
 }
 
-func (r *SSHCredentialResourceModel) ToOperationsCreateSSHCredentialsRequest(ctx context.Context) (*operations.CreateSSHCredentialsRequest, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToOperationsCreateSSHCredentialsRequest(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*operations.CreateSSHCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -60,7 +66,7 @@ func (r *SSHCredentialResourceModel) ToOperationsCreateSSHCredentialsRequest(ctx
 	} else {
 		workspaceID = nil
 	}
-	createSSHCredentialsRequest, createSSHCredentialsRequestDiags := r.ToSharedCreateSSHCredentialsRequest(ctx)
+	createSSHCredentialsRequest, createSSHCredentialsRequestDiags := r.ToSharedCreateSSHCredentialsRequest(ctx, opts)
 	diags.Append(createSSHCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -75,7 +81,7 @@ func (r *SSHCredentialResourceModel) ToOperationsCreateSSHCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *SSHCredentialResourceModel) ToOperationsDeleteSSHCredentialsRequest(ctx context.Context) (*operations.DeleteSSHCredentialsRequest, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToOperationsDeleteSSHCredentialsRequest(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*operations.DeleteSSHCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -95,7 +101,7 @@ func (r *SSHCredentialResourceModel) ToOperationsDeleteSSHCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *SSHCredentialResourceModel) ToOperationsDescribeSSHCredentialsRequest(ctx context.Context) (*operations.DescribeSSHCredentialsRequest, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToOperationsDescribeSSHCredentialsRequest(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*operations.DescribeSSHCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -115,7 +121,7 @@ func (r *SSHCredentialResourceModel) ToOperationsDescribeSSHCredentialsRequest(c
 	return &out, diags
 }
 
-func (r *SSHCredentialResourceModel) ToOperationsUpdateSSHCredentialsRequest(ctx context.Context) (*operations.UpdateSSHCredentialsRequest, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToOperationsUpdateSSHCredentialsRequest(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*operations.UpdateSSHCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -127,7 +133,7 @@ func (r *SSHCredentialResourceModel) ToOperationsUpdateSSHCredentialsRequest(ctx
 	} else {
 		workspaceID = nil
 	}
-	updateSSHCredentialsRequest, updateSSHCredentialsRequestDiags := r.ToSharedUpdateSSHCredentialsRequest(ctx)
+	updateSSHCredentialsRequest, updateSSHCredentialsRequestDiags := r.ToSharedUpdateSSHCredentialsRequest(ctx, opts)
 	diags.Append(updateSSHCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -143,10 +149,10 @@ func (r *SSHCredentialResourceModel) ToOperationsUpdateSSHCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *SSHCredentialResourceModel) ToSharedCreateSSHCredentialsRequest(ctx context.Context) (*shared.CreateSSHCredentialsRequest, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToSharedCreateSSHCredentialsRequest(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*shared.CreateSSHCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedSSHCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedSSHCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -160,14 +166,14 @@ func (r *SSHCredentialResourceModel) ToSharedCreateSSHCredentialsRequest(ctx con
 	return &out, diags
 }
 
-func (r *SSHCredentialResourceModel) ToSharedSSHCredential(ctx context.Context) (*shared.SSHCredential, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToSharedSSHCredential(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*shared.SSHCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -178,7 +184,7 @@ func (r *SSHCredentialResourceModel) ToSharedSSHCredential(ctx context.Context) 
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedSSHCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedSSHCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -186,24 +192,24 @@ func (r *SSHCredentialResourceModel) ToSharedSSHCredential(ctx context.Context) 
 	}
 
 	out := shared.SSHCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags
 }
 
-func (r *SSHCredentialResourceModel) ToSharedSSHCredentialKeys(ctx context.Context) (*shared.SSHCredentialKeys, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToSharedSSHCredentialKeys(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*shared.SSHCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var privateKey string
-	privateKey = r.PrivateKey.ValueString()
+	privateKey = opts.Config.PrivateKey.ValueString()
 
 	passphrase := new(string)
-	if !r.Passphrase.IsUnknown() && !r.Passphrase.IsNull() {
-		*passphrase = r.Passphrase.ValueString()
+	if !opts.Config.Passphrase.IsUnknown() && !opts.Config.Passphrase.IsNull() {
+		*passphrase = opts.Config.Passphrase.ValueString()
 	} else {
 		passphrase = nil
 	}
@@ -215,10 +221,10 @@ func (r *SSHCredentialResourceModel) ToSharedSSHCredentialKeys(ctx context.Conte
 	return &out, diags
 }
 
-func (r *SSHCredentialResourceModel) ToSharedUpdateSSHCredentialsRequest(ctx context.Context) (*shared.UpdateSSHCredentialsRequest, diag.Diagnostics) {
+func (r *SSHCredentialResourceModel) ToSharedUpdateSSHCredentialsRequest(ctx context.Context, opts *SSHCredentialResourceModelOptions) (*shared.UpdateSSHCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedSSHCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedSSHCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

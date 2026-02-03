@@ -46,15 +46,16 @@ resource "seqera_kubernetes_credential" "example" {
 
 ### Optional
 
-- `client_certificate` (String, Sensitive) X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
-- `private_key` (String, Sensitive) Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
-- `token` (String, Sensitive) Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
+- `client_certificate` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) X.509 client certificate for Kubernetes authentication (optional). Required if using certificate-based authentication.
+- `private_key` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Private key for X.509 client certificate (optional). Required if using certificate-based authentication.
+- `token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) Service Account token for Kubernetes authentication (optional). Required if using token-based authentication.
 - `workspace_id` (Number) Workspace numeric identifier. Requires replacement if changed.
 
 ### Read-Only
 
-- `credentials_id` (String) Credentials string identifier
-- `id` (String) Unique identifier for the credential (max 22 characters)
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `provider_type` (String) Cloud provider type (automatically set to "k8s"). Default: "k8s"
 
 ## Import

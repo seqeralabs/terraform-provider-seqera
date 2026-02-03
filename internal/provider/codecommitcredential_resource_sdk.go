@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// CodecommitCredentialResourceModelOptions enables patch sdk method construction.
+type CodecommitCredentialResourceModelOptions struct {
+	Config *CodecommitCredentialResourceModel
+	State  *CodecommitCredentialResourceModel
+}
+
 func (r *CodecommitCredentialResourceModel) RefreshFromSharedCodecommitCredentialKeysOutput(ctx context.Context, resp *shared.CodecommitCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -23,7 +29,7 @@ func (r *CodecommitCredentialResourceModel) RefreshFromSharedCodecommitCredentia
 
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		diags.Append(r.RefreshFromSharedCodecommitCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
@@ -66,7 +72,7 @@ func (r *CodecommitCredentialResourceModel) RefreshFromSharedDescribeCodecommitC
 	return diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToOperationsCreateCodecommitCredentialsRequest(ctx context.Context) (*operations.CreateCodecommitCredentialsRequest, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToOperationsCreateCodecommitCredentialsRequest(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*operations.CreateCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -75,7 +81,7 @@ func (r *CodecommitCredentialResourceModel) ToOperationsCreateCodecommitCredenti
 	} else {
 		workspaceID = nil
 	}
-	createCodecommitCredentialsRequest, createCodecommitCredentialsRequestDiags := r.ToSharedCreateCodecommitCredentialsRequest(ctx)
+	createCodecommitCredentialsRequest, createCodecommitCredentialsRequestDiags := r.ToSharedCreateCodecommitCredentialsRequest(ctx, opts)
 	diags.Append(createCodecommitCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -90,7 +96,7 @@ func (r *CodecommitCredentialResourceModel) ToOperationsCreateCodecommitCredenti
 	return &out, diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToOperationsDeleteCodecommitCredentialsRequest(ctx context.Context) (*operations.DeleteCodecommitCredentialsRequest, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToOperationsDeleteCodecommitCredentialsRequest(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*operations.DeleteCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -110,7 +116,7 @@ func (r *CodecommitCredentialResourceModel) ToOperationsDeleteCodecommitCredenti
 	return &out, diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToOperationsDescribeCodecommitCredentialsRequest(ctx context.Context) (*operations.DescribeCodecommitCredentialsRequest, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToOperationsDescribeCodecommitCredentialsRequest(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*operations.DescribeCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -130,7 +136,7 @@ func (r *CodecommitCredentialResourceModel) ToOperationsDescribeCodecommitCreden
 	return &out, diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToOperationsUpdateCodecommitCredentialsRequest(ctx context.Context) (*operations.UpdateCodecommitCredentialsRequest, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToOperationsUpdateCodecommitCredentialsRequest(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*operations.UpdateCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -142,7 +148,7 @@ func (r *CodecommitCredentialResourceModel) ToOperationsUpdateCodecommitCredenti
 	} else {
 		workspaceID = nil
 	}
-	updateCodecommitCredentialsRequest, updateCodecommitCredentialsRequestDiags := r.ToSharedUpdateCodecommitCredentialsRequest(ctx)
+	updateCodecommitCredentialsRequest, updateCodecommitCredentialsRequestDiags := r.ToSharedUpdateCodecommitCredentialsRequest(ctx, opts)
 	diags.Append(updateCodecommitCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -158,14 +164,14 @@ func (r *CodecommitCredentialResourceModel) ToOperationsUpdateCodecommitCredenti
 	return &out, diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx context.Context) (*shared.CodecommitCredential, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*shared.CodecommitCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -182,7 +188,7 @@ func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx con
 	} else {
 		baseURL = nil
 	}
-	keys, keysDiags := r.ToSharedCodecommitCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedCodecommitCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -190,24 +196,24 @@ func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredential(ctx con
 	}
 
 	out := shared.CodecommitCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		BaseURL:      baseURL,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		BaseURL:       baseURL,
+		Keys:          *keys,
 	}
 
 	return &out, diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredentialKeys(ctx context.Context) (*shared.CodecommitCredentialKeys, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredentialKeys(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*shared.CodecommitCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var accessKey string
 	accessKey = r.AccessKey.ValueString()
 
 	var secretKey string
-	secretKey = r.SecretKey.ValueString()
+	secretKey = opts.Config.SecretKey.ValueString()
 
 	out := shared.CodecommitCredentialKeys{
 		AccessKey: accessKey,
@@ -217,10 +223,10 @@ func (r *CodecommitCredentialResourceModel) ToSharedCodecommitCredentialKeys(ctx
 	return &out, diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToSharedCreateCodecommitCredentialsRequest(ctx context.Context) (*shared.CreateCodecommitCredentialsRequest, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToSharedCreateCodecommitCredentialsRequest(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*shared.CreateCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedCodecommitCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedCodecommitCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -234,10 +240,10 @@ func (r *CodecommitCredentialResourceModel) ToSharedCreateCodecommitCredentialsR
 	return &out, diags
 }
 
-func (r *CodecommitCredentialResourceModel) ToSharedUpdateCodecommitCredentialsRequest(ctx context.Context) (*shared.UpdateCodecommitCredentialsRequest, diag.Diagnostics) {
+func (r *CodecommitCredentialResourceModel) ToSharedUpdateCodecommitCredentialsRequest(ctx context.Context, opts *CodecommitCredentialResourceModelOptions) (*shared.UpdateCodecommitCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedCodecommitCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedCodecommitCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

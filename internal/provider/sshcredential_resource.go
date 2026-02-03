@@ -38,7 +38,6 @@ type SSHCredentialResource struct {
 // SSHCredentialResourceModel describes the resource data model.
 type SSHCredentialResourceModel struct {
 	CredentialsID types.String `tfsdk:"credentials_id"`
-	ID            types.String `tfsdk:"id"`
 	Name          types.String `tfsdk:"name"`
 	Passphrase    types.String `tfsdk:"passphrase"`
 	PrivateKey    types.String `tfsdk:"private_key"`
@@ -56,10 +55,6 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Credentials string identifier`,
-			},
-			"id": schema.StringAttribute{
-				Computed:    true,
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
@@ -75,16 +70,15 @@ func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"passphrase": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplaceIfConfigured(),
-				},
-				Description: `Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed. Requires replacement if changed.`,
+				Optional:    true,
+				Sensitive:   true,
+				WriteOnly:   true,
+				Description: `Passphrase associated with the SSH private key (optional, sensitive). Leave empty if no passphrase is needed.`,
 			},
 			"private_key": schema.StringAttribute{
 				Required:    true,
 				Sensitive:   true,
+				WriteOnly:   true,
 				Description: `SSH private key content (required, sensitive). The content of the private key file from the SSH asymmetrical key pair. Generate with: ssh-keygen`,
 			},
 			"provider_type": schema.StringAttribute{
@@ -124,8 +118,21 @@ func (r *SSHCredentialResource) Configure(ctx context.Context, req resource.Conf
 }
 
 func (r *SSHCredentialResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *SSHCredentialResourceModel
-	var plan types.Object
+	var (
+		configData SSHCredentialResourceModel
+		data       SSHCredentialResourceModel
+		plan       types.Object
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &SSHCredentialResourceModelOptions{
+		Config: &configData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -141,7 +148,7 @@ func (r *SSHCredentialResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
-	request, requestDiags := data.ToOperationsCreateSSHCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateSSHCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -208,7 +215,7 @@ func (r *SSHCredentialResource) Read(ctx context.Context, req resource.ReadReque
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDescribeSSHCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDescribeSSHCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -249,8 +256,29 @@ func (r *SSHCredentialResource) Read(ctx context.Context, req resource.ReadReque
 }
 
 func (r *SSHCredentialResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *SSHCredentialResourceModel
-	var plan types.Object
+	var (
+		configData SSHCredentialResourceModel
+		data       SSHCredentialResourceModel
+		plan       types.Object
+		stateData  SSHCredentialResourceModel
+	)
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resp.Diagnostics.Append(req.State.Get(ctx, &stateData)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	opts := &SSHCredentialResourceModelOptions{
+		Config: &configData,
+		State:  &stateData,
+	}
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
 	if resp.Diagnostics.HasError() {
@@ -262,7 +290,7 @@ func (r *SSHCredentialResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	request, requestDiags := data.ToOperationsUpdateSSHCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsUpdateSSHCredentialsRequest(ctx, opts)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -313,7 +341,7 @@ func (r *SSHCredentialResource) Delete(ctx context.Context, req resource.DeleteR
 		return
 	}
 
-	request, requestDiags := data.ToOperationsDeleteSSHCredentialsRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteSSHCredentialsRequest(ctx, nil)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// KubernetesCredentialResourceModelOptions enables patch sdk method construction.
+type KubernetesCredentialResourceModelOptions struct {
+	Config *KubernetesCredentialResourceModel
+	State  *KubernetesCredentialResourceModel
+}
+
 func (r *KubernetesCredentialResourceModel) RefreshFromSharedCreateKubernetesCredentialsResponse(ctx context.Context, resp *shared.CreateKubernetesCredentialsResponse) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -39,7 +45,7 @@ func (r *KubernetesCredentialResourceModel) RefreshFromSharedKubernetesCredentia
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		r.Name = types.StringValue(resp.Name)
 		if resp.ProviderType != nil {
 			r.ProviderType = types.StringValue(string(*resp.ProviderType))
@@ -51,7 +57,7 @@ func (r *KubernetesCredentialResourceModel) RefreshFromSharedKubernetesCredentia
 	return diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToOperationsCreateKubernetesCredentialsRequest(ctx context.Context) (*operations.CreateKubernetesCredentialsRequest, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToOperationsCreateKubernetesCredentialsRequest(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*operations.CreateKubernetesCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -60,7 +66,7 @@ func (r *KubernetesCredentialResourceModel) ToOperationsCreateKubernetesCredenti
 	} else {
 		workspaceID = nil
 	}
-	createKubernetesCredentialsRequest, createKubernetesCredentialsRequestDiags := r.ToSharedCreateKubernetesCredentialsRequest(ctx)
+	createKubernetesCredentialsRequest, createKubernetesCredentialsRequestDiags := r.ToSharedCreateKubernetesCredentialsRequest(ctx, opts)
 	diags.Append(createKubernetesCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -75,7 +81,7 @@ func (r *KubernetesCredentialResourceModel) ToOperationsCreateKubernetesCredenti
 	return &out, diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToOperationsDeleteKubernetesCredentialsRequest(ctx context.Context) (*operations.DeleteKubernetesCredentialsRequest, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToOperationsDeleteKubernetesCredentialsRequest(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*operations.DeleteKubernetesCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -95,7 +101,7 @@ func (r *KubernetesCredentialResourceModel) ToOperationsDeleteKubernetesCredenti
 	return &out, diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToOperationsDescribeKubernetesCredentialsRequest(ctx context.Context) (*operations.DescribeKubernetesCredentialsRequest, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToOperationsDescribeKubernetesCredentialsRequest(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*operations.DescribeKubernetesCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -115,7 +121,7 @@ func (r *KubernetesCredentialResourceModel) ToOperationsDescribeKubernetesCreden
 	return &out, diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToOperationsUpdateKubernetesCredentialsRequest(ctx context.Context) (*operations.UpdateKubernetesCredentialsRequest, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToOperationsUpdateKubernetesCredentialsRequest(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*operations.UpdateKubernetesCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -127,7 +133,7 @@ func (r *KubernetesCredentialResourceModel) ToOperationsUpdateKubernetesCredenti
 	} else {
 		workspaceID = nil
 	}
-	updateKubernetesCredentialsRequest, updateKubernetesCredentialsRequestDiags := r.ToSharedUpdateKubernetesCredentialsRequest(ctx)
+	updateKubernetesCredentialsRequest, updateKubernetesCredentialsRequestDiags := r.ToSharedUpdateKubernetesCredentialsRequest(ctx, opts)
 	diags.Append(updateKubernetesCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -143,10 +149,10 @@ func (r *KubernetesCredentialResourceModel) ToOperationsUpdateKubernetesCredenti
 	return &out, diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToSharedCreateKubernetesCredentialsRequest(ctx context.Context) (*shared.CreateKubernetesCredentialsRequest, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToSharedCreateKubernetesCredentialsRequest(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*shared.CreateKubernetesCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedKubernetesCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedKubernetesCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -160,14 +166,14 @@ func (r *KubernetesCredentialResourceModel) ToSharedCreateKubernetesCredentialsR
 	return &out, diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx context.Context) (*shared.KubernetesCredential, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*shared.KubernetesCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -178,7 +184,7 @@ func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx con
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedKubernetesCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedKubernetesCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -186,33 +192,33 @@ func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredential(ctx con
 	}
 
 	out := shared.KubernetesCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredentialKeys(ctx context.Context) (*shared.KubernetesCredentialKeys, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredentialKeys(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*shared.KubernetesCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	token := new(string)
-	if !r.Token.IsUnknown() && !r.Token.IsNull() {
-		*token = r.Token.ValueString()
+	if !opts.Config.Token.IsUnknown() && !opts.Config.Token.IsNull() {
+		*token = opts.Config.Token.ValueString()
 	} else {
 		token = nil
 	}
 	clientCertificate := new(string)
-	if !r.ClientCertificate.IsUnknown() && !r.ClientCertificate.IsNull() {
-		*clientCertificate = r.ClientCertificate.ValueString()
+	if !opts.Config.ClientCertificate.IsUnknown() && !opts.Config.ClientCertificate.IsNull() {
+		*clientCertificate = opts.Config.ClientCertificate.ValueString()
 	} else {
 		clientCertificate = nil
 	}
 	privateKey := new(string)
-	if !r.PrivateKey.IsUnknown() && !r.PrivateKey.IsNull() {
-		*privateKey = r.PrivateKey.ValueString()
+	if !opts.Config.PrivateKey.IsUnknown() && !opts.Config.PrivateKey.IsNull() {
+		*privateKey = opts.Config.PrivateKey.ValueString()
 	} else {
 		privateKey = nil
 	}
@@ -225,10 +231,10 @@ func (r *KubernetesCredentialResourceModel) ToSharedKubernetesCredentialKeys(ctx
 	return &out, diags
 }
 
-func (r *KubernetesCredentialResourceModel) ToSharedUpdateKubernetesCredentialsRequest(ctx context.Context) (*shared.UpdateKubernetesCredentialsRequest, diag.Diagnostics) {
+func (r *KubernetesCredentialResourceModel) ToSharedUpdateKubernetesCredentialsRequest(ctx context.Context, opts *KubernetesCredentialResourceModelOptions) (*shared.UpdateKubernetesCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedKubernetesCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedKubernetesCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

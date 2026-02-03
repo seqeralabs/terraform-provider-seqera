@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// AzureCredentialResourceModelOptions enables patch sdk method construction.
+type AzureCredentialResourceModelOptions struct {
+	Config *AzureCredentialResourceModel
+	State  *AzureCredentialResourceModel
+}
+
 func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialKeysOutput(ctx context.Context, resp *shared.AzureCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -23,7 +29,7 @@ func (r *AzureCredentialResourceModel) RefreshFromSharedAzureCredentialOutput(ct
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		diags.Append(r.RefreshFromSharedAzureCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
@@ -66,7 +72,7 @@ func (r *AzureCredentialResourceModel) RefreshFromSharedDescribeAzureCredentials
 	return diags
 }
 
-func (r *AzureCredentialResourceModel) ToOperationsCreateAzureCredentialsRequest(ctx context.Context) (*operations.CreateAzureCredentialsRequest, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToOperationsCreateAzureCredentialsRequest(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*operations.CreateAzureCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -75,7 +81,7 @@ func (r *AzureCredentialResourceModel) ToOperationsCreateAzureCredentialsRequest
 	} else {
 		workspaceID = nil
 	}
-	createAzureCredentialsRequest, createAzureCredentialsRequestDiags := r.ToSharedCreateAzureCredentialsRequest(ctx)
+	createAzureCredentialsRequest, createAzureCredentialsRequestDiags := r.ToSharedCreateAzureCredentialsRequest(ctx, opts)
 	diags.Append(createAzureCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -90,7 +96,7 @@ func (r *AzureCredentialResourceModel) ToOperationsCreateAzureCredentialsRequest
 	return &out, diags
 }
 
-func (r *AzureCredentialResourceModel) ToOperationsDeleteAzureCredentialsRequest(ctx context.Context) (*operations.DeleteAzureCredentialsRequest, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToOperationsDeleteAzureCredentialsRequest(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*operations.DeleteAzureCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -110,7 +116,7 @@ func (r *AzureCredentialResourceModel) ToOperationsDeleteAzureCredentialsRequest
 	return &out, diags
 }
 
-func (r *AzureCredentialResourceModel) ToOperationsDescribeAzureCredentialsRequest(ctx context.Context) (*operations.DescribeAzureCredentialsRequest, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToOperationsDescribeAzureCredentialsRequest(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*operations.DescribeAzureCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -130,7 +136,7 @@ func (r *AzureCredentialResourceModel) ToOperationsDescribeAzureCredentialsReque
 	return &out, diags
 }
 
-func (r *AzureCredentialResourceModel) ToOperationsUpdateAzureCredentialsRequest(ctx context.Context) (*operations.UpdateAzureCredentialsRequest, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToOperationsUpdateAzureCredentialsRequest(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*operations.UpdateAzureCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -142,7 +148,7 @@ func (r *AzureCredentialResourceModel) ToOperationsUpdateAzureCredentialsRequest
 	} else {
 		workspaceID = nil
 	}
-	updateAzureCredentialsRequest, updateAzureCredentialsRequestDiags := r.ToSharedUpdateAzureCredentialsRequest(ctx)
+	updateAzureCredentialsRequest, updateAzureCredentialsRequestDiags := r.ToSharedUpdateAzureCredentialsRequest(ctx, opts)
 	diags.Append(updateAzureCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -158,14 +164,14 @@ func (r *AzureCredentialResourceModel) ToOperationsUpdateAzureCredentialsRequest
 	return &out, diags
 }
 
-func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Context) (*shared.AzureCredential, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*shared.AzureCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -176,7 +182,7 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Conte
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedAzureCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedAzureCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -184,16 +190,16 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredential(ctx context.Conte
 	}
 
 	out := shared.AzureCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags
 }
 
-func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.Context) (*shared.AzureCredentialKeys, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*shared.AzureCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var batchName string
@@ -203,14 +209,14 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.C
 	storageName = r.StorageName.ValueString()
 
 	batchKey := new(string)
-	if !r.BatchKey.IsUnknown() && !r.BatchKey.IsNull() {
-		*batchKey = r.BatchKey.ValueString()
+	if !opts.Config.BatchKey.IsUnknown() && !opts.Config.BatchKey.IsNull() {
+		*batchKey = opts.Config.BatchKey.ValueString()
 	} else {
 		batchKey = nil
 	}
 	storageKey := new(string)
-	if !r.StorageKey.IsUnknown() && !r.StorageKey.IsNull() {
-		*storageKey = r.StorageKey.ValueString()
+	if !opts.Config.StorageKey.IsUnknown() && !opts.Config.StorageKey.IsNull() {
+		*storageKey = opts.Config.StorageKey.ValueString()
 	} else {
 		storageKey = nil
 	}
@@ -227,8 +233,8 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.C
 		clientID = nil
 	}
 	clientSecret := new(string)
-	if !r.ClientSecret.IsUnknown() && !r.ClientSecret.IsNull() {
-		*clientSecret = r.ClientSecret.ValueString()
+	if !opts.Config.ClientSecret.IsUnknown() && !opts.Config.ClientSecret.IsNull() {
+		*clientSecret = opts.Config.ClientSecret.ValueString()
 	} else {
 		clientSecret = nil
 	}
@@ -245,10 +251,10 @@ func (r *AzureCredentialResourceModel) ToSharedAzureCredentialKeys(ctx context.C
 	return &out, diags
 }
 
-func (r *AzureCredentialResourceModel) ToSharedCreateAzureCredentialsRequest(ctx context.Context) (*shared.CreateAzureCredentialsRequest, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToSharedCreateAzureCredentialsRequest(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*shared.CreateAzureCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedAzureCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedAzureCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -262,10 +268,10 @@ func (r *AzureCredentialResourceModel) ToSharedCreateAzureCredentialsRequest(ctx
 	return &out, diags
 }
 
-func (r *AzureCredentialResourceModel) ToSharedUpdateAzureCredentialsRequest(ctx context.Context) (*shared.UpdateAzureCredentialsRequest, diag.Diagnostics) {
+func (r *AzureCredentialResourceModel) ToSharedUpdateAzureCredentialsRequest(ctx context.Context, opts *AzureCredentialResourceModelOptions) (*shared.UpdateAzureCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedAzureCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedAzureCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

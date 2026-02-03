@@ -50,7 +50,9 @@ resource "seqera_github_credential" "enterprise" {
 
 ### Required
 
-- `access_token` (String, Sensitive) GitHub Personal Access Token (PAT) for authentication (required, sensitive)
+> **NOTE**: [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) are supported in Terraform 1.11 and later.
+
+- `access_token` (String, Sensitive, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) GitHub Personal Access Token (PAT) for authentication (required, sensitive)
 - `name` (String) Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed. Requires replacement if changed.
 - `username` (String) GitHub username associated with the Personal Access Token (required)
 
@@ -61,8 +63,7 @@ resource "seqera_github_credential" "enterprise" {
 
 ### Read-Only
 
-- `credentials_id` (String) Credentials string identifier
-- `id` (String) Unique identifier for the credential (max 22 characters)
+- `credentials_id` (String) Unique identifier for the credential (max 22 characters)
 - `provider_type` (String) Cloud provider type (automatically set to "github"). Default: "github"
 
 ## Import

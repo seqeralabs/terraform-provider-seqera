@@ -10,6 +10,12 @@ import (
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
 
+// ContainerRegistryCredentialResourceModelOptions enables patch sdk method construction.
+type ContainerRegistryCredentialResourceModelOptions struct {
+	Config *ContainerRegistryCredentialResourceModel
+	State  *ContainerRegistryCredentialResourceModel
+}
+
 func (r *ContainerRegistryCredentialResourceModel) RefreshFromSharedContainerRegistryCredentialKeysOutput(ctx context.Context, resp *shared.ContainerRegistryCredentialKeysOutput) diag.Diagnostics {
 	var diags diag.Diagnostics
 
@@ -23,7 +29,7 @@ func (r *ContainerRegistryCredentialResourceModel) RefreshFromSharedContainerReg
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.ID = types.StringPointerValue(resp.ID)
+		r.CredentialsID = types.StringPointerValue(resp.CredentialsID)
 		diags.Append(r.RefreshFromSharedContainerRegistryCredentialKeysOutput(ctx, &resp.Keys)...)
 
 		if diags.HasError() {
@@ -66,7 +72,7 @@ func (r *ContainerRegistryCredentialResourceModel) RefreshFromSharedDescribeCont
 	return diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToOperationsCreateContainerRegistryCredentialsRequest(ctx context.Context) (*operations.CreateContainerRegistryCredentialsRequest, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToOperationsCreateContainerRegistryCredentialsRequest(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*operations.CreateContainerRegistryCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	workspaceID := new(int64)
@@ -75,7 +81,7 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsCreateContainerRe
 	} else {
 		workspaceID = nil
 	}
-	createContainerRegistryCredentialsRequest, createContainerRegistryCredentialsRequestDiags := r.ToSharedCreateContainerRegistryCredentialsRequest(ctx)
+	createContainerRegistryCredentialsRequest, createContainerRegistryCredentialsRequestDiags := r.ToSharedCreateContainerRegistryCredentialsRequest(ctx, opts)
 	diags.Append(createContainerRegistryCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -90,7 +96,7 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsCreateContainerRe
 	return &out, diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToOperationsDeleteContainerRegistryCredentialsRequest(ctx context.Context) (*operations.DeleteContainerRegistryCredentialsRequest, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToOperationsDeleteContainerRegistryCredentialsRequest(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*operations.DeleteContainerRegistryCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -110,7 +116,7 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsDeleteContainerRe
 	return &out, diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToOperationsDescribeContainerRegistryCredentialsRequest(ctx context.Context) (*operations.DescribeContainerRegistryCredentialsRequest, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToOperationsDescribeContainerRegistryCredentialsRequest(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*operations.DescribeContainerRegistryCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -130,7 +136,7 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsDescribeContainer
 	return &out, diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToOperationsUpdateContainerRegistryCredentialsRequest(ctx context.Context) (*operations.UpdateContainerRegistryCredentialsRequest, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToOperationsUpdateContainerRegistryCredentialsRequest(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*operations.UpdateContainerRegistryCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var credentialsID string
@@ -142,7 +148,7 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsUpdateContainerRe
 	} else {
 		workspaceID = nil
 	}
-	updateContainerRegistryCredentialsRequest, updateContainerRegistryCredentialsRequestDiags := r.ToSharedUpdateContainerRegistryCredentialsRequest(ctx)
+	updateContainerRegistryCredentialsRequest, updateContainerRegistryCredentialsRequestDiags := r.ToSharedUpdateContainerRegistryCredentialsRequest(ctx, opts)
 	diags.Append(updateContainerRegistryCredentialsRequestDiags...)
 
 	if diags.HasError() {
@@ -158,14 +164,14 @@ func (r *ContainerRegistryCredentialResourceModel) ToOperationsUpdateContainerRe
 	return &out, diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCredential(ctx context.Context) (*shared.ContainerRegistryCredential, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCredential(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*shared.ContainerRegistryCredential, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	id := new(string)
-	if !r.ID.IsUnknown() && !r.ID.IsNull() {
-		*id = r.ID.ValueString()
+	credentialsID := new(string)
+	if !r.CredentialsID.IsUnknown() && !r.CredentialsID.IsNull() {
+		*credentialsID = r.CredentialsID.ValueString()
 	} else {
-		id = nil
+		credentialsID = nil
 	}
 	var name string
 	name = r.Name.ValueString()
@@ -176,7 +182,7 @@ func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCred
 	} else {
 		providerType = nil
 	}
-	keys, keysDiags := r.ToSharedContainerRegistryCredentialKeys(ctx)
+	keys, keysDiags := r.ToSharedContainerRegistryCredentialKeys(ctx, opts)
 	diags.Append(keysDiags...)
 
 	if diags.HasError() {
@@ -184,23 +190,23 @@ func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCred
 	}
 
 	out := shared.ContainerRegistryCredential{
-		ID:           id,
-		Name:         name,
-		ProviderType: providerType,
-		Keys:         *keys,
+		CredentialsID: credentialsID,
+		Name:          name,
+		ProviderType:  providerType,
+		Keys:          *keys,
 	}
 
 	return &out, diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCredentialKeys(ctx context.Context) (*shared.ContainerRegistryCredentialKeys, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCredentialKeys(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*shared.ContainerRegistryCredentialKeys, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var userName string
 	userName = r.UserName.ValueString()
 
 	var password string
-	password = r.Password.ValueString()
+	password = opts.Config.Password.ValueString()
 
 	registry := new(string)
 	if !r.Registry.IsUnknown() && !r.Registry.IsNull() {
@@ -217,10 +223,10 @@ func (r *ContainerRegistryCredentialResourceModel) ToSharedContainerRegistryCred
 	return &out, diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToSharedCreateContainerRegistryCredentialsRequest(ctx context.Context) (*shared.CreateContainerRegistryCredentialsRequest, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToSharedCreateContainerRegistryCredentialsRequest(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*shared.CreateContainerRegistryCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedContainerRegistryCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedContainerRegistryCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {
@@ -234,10 +240,10 @@ func (r *ContainerRegistryCredentialResourceModel) ToSharedCreateContainerRegist
 	return &out, diags
 }
 
-func (r *ContainerRegistryCredentialResourceModel) ToSharedUpdateContainerRegistryCredentialsRequest(ctx context.Context) (*shared.UpdateContainerRegistryCredentialsRequest, diag.Diagnostics) {
+func (r *ContainerRegistryCredentialResourceModel) ToSharedUpdateContainerRegistryCredentialsRequest(ctx context.Context, opts *ContainerRegistryCredentialResourceModelOptions) (*shared.UpdateContainerRegistryCredentialsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	credentials, credentialsDiags := r.ToSharedContainerRegistryCredential(ctx)
+	credentials, credentialsDiags := r.ToSharedContainerRegistryCredential(ctx, opts)
 	diags.Append(credentialsDiags...)
 
 	if diags.HasError() {

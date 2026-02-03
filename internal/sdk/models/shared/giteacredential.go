@@ -56,7 +56,7 @@ func (g *GiteaCredentialKeys) GetPassword() string {
 
 type GiteaCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitea")
@@ -85,11 +85,11 @@ func (g *GiteaCredential) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GiteaCredential) GetID() *string {
+func (g *GiteaCredential) GetCredentialsID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.ID
+	return g.CredentialsID
 }
 
 func (g *GiteaCredential) GetName() string {
@@ -162,7 +162,7 @@ func (g *GiteaCredentialKeysOutput) GetUsername() string {
 
 type GiteaCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	ID *string `json:"id,omitempty"`
+	CredentialsID *string `json:"credentials_id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "gitea")
@@ -191,11 +191,11 @@ func (g *GiteaCredentialOutput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (g *GiteaCredentialOutput) GetID() *string {
+func (g *GiteaCredentialOutput) GetCredentialsID() *string {
 	if g == nil {
 		return nil
 	}
-	return g.ID
+	return g.CredentialsID
 }
 
 func (g *GiteaCredentialOutput) GetName() string {
