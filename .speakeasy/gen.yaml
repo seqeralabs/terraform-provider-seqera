@@ -30,7 +30,7 @@ generation:
     generateNewTests: false
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.30.2
+  version: 0.30.3
   additionalDataSources:
     - datasource: organization_data.NewDataSource
       importAlias: organization_data
