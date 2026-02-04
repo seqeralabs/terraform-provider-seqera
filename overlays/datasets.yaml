@@ -3,6 +3,49 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Datasets Overlay
   version: 0.0.0
+
+# ==============================================================================
+# DATASETS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Datasets in Seqera are CSV (comma-separated values) and TSV (tab-separated
+# values) files stored in a workspace. They are used as inputs to pipelines to
+# simplify data management, minimize user data-input errors, and facilitate
+# reproducible workflows.
+#
+# KEY CONCEPTS:
+# -------------
+# - Datasets belong to workspaces and must reference a workspace_id
+# - Datasets store structured tabular data in CSV or TSV format
+# - Used as pipeline inputs to ensure consistent, validated data
+# - Support versioning for tracking data changes over time
+# - Can include metadata like descriptions and media types
+#
+# VALIDATION RULES:
+# -----------------
+# - name: 1-100 characters following dataset naming conventions
+# - description: Maximum 1000 characters
+# - id: Maximum 22 characters
+# - mediaType: Maximum 80 characters (MIME type)
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Basic dataset
+# resource "seqera_datasets" "sample_data" {
+#   workspace_id = seqera_workspace.my_workspace.id
+#   name         = "my-dataset"
+# }
+#
+# Example 2: Dataset with description
+# resource "seqera_datasets" "genomics_samples" {
+#   workspace_id = seqera_workspace.my_workspace.id
+#   name         = "my-dataset"
+#   description  = "Dataset containing sample genomic data"
+# }
+#
+# ==============================================================================
+
 actions:
   # Remove existing entity operation
   - target: $["paths"]["/datasets"]["get"]["x-speakeasy-entity-operation"]

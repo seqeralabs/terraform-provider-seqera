@@ -3,6 +3,52 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Workspaces Overlay
   version: 0.0.0
+
+# ==============================================================================
+# WORKSPACES RESOURCE OVERLAY
+# ==============================================================================
+#
+# Workspaces provide isolated environments for organizing pipelines, compute
+# environments, credentials, and data. Each user has a personal workspace, and
+# organizations can create multiple shared workspaces with fine-grained access
+# control for collaborative research projects.
+#
+# KEY CONCEPTS:
+# -------------
+# - Workspaces belong to organizations and must reference an org_id
+# - User workspaces: Personal workspaces for individual users
+# - Organization workspaces: Shared workspaces with team-based access control
+# - Participants: Members or teams with specific roles in a workspace
+# - Visibility: Controls whether workspace is private, shared, or public
+#
+# WORKSPACE RELATIONSHIPS:
+# ------------------------
+# Organizations consist of members, while workspaces consist of participants.
+# Organization workspaces extend user workspace functionality by adding the
+# ability to fine-tune access levels for specific members, collaborators, or
+# teams through participant management.
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Basic workspace
+# resource "seqera_workspace" "basic" {
+#   org_id    = seqera_orgs.my_org.id
+#   name      = "genomics-research"
+#   full_name = "Genomics Research Workspace"
+# }
+#
+# Example 2: Workspace with visibility and description
+# resource "seqera_workspace" "research" {
+#   org_id      = seqera_orgs.my_org.id
+#   name        = "genomics-research"
+#   full_name   = "Genomics Research Workspace"
+#   description = "Workspace for genomics research projects and computational biology workflows"
+#   visibility  = "SHARED"
+# }
+#
+# ==============================================================================
+
 actions:
   # Workspace schema annotations
   - target: $["components"]["schemas"]["Workspace"]["properties"]["id"]

@@ -3,6 +3,42 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Teams Overlay
   version: 0.0.0
+
+# ==============================================================================
+# TEAMS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Teams are organizational units within organizations that group users together,
+# enabling organization owners to manage team members and access permissions
+# collectively. Teams provide fine-grained access control for workspaces and
+# resources within an organization.
+#
+# KEY CONCEPTS:
+# -------------
+# - Teams belong to organizations and must reference an org_id
+# - Teams can have multiple members with shared permissions
+# - Teams can be granted access to workspaces with specific roles
+# - Team avatars are optional and provide visual identification
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Basic team
+# resource "seqera_teams" "basic" {
+#   org_id = seqera_orgs.my_org.id
+#   name   = "bioinformatics-team"
+# }
+#
+# Example 2: Team with description and avatar
+# resource "seqera_teams" "research" {
+#   org_id      = seqera_orgs.my_org.id
+#   name        = "bioinformatics-team"
+#   description = "Team responsible for bioinformatics analysis and pipeline development"
+#   avatar_id   = "avatar-123456"
+# }
+#
+# ==============================================================================
+
 actions:
   # Team schema annotations
   - target: $["components"]["schemas"]["Team"]["properties"]["id"]

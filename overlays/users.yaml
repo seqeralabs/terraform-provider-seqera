@@ -3,6 +3,57 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: Users Overlay
   version: 0.0.0
+
+# ==============================================================================
+# USERS DATA SOURCE OVERLAY
+# ==============================================================================
+#
+# Users are read-only resources in the Seqera Platform provider. User accounts
+# are managed through the Seqera Platform web interface or authentication system,
+# not through Terraform. This overlay provides data source access to query user
+# information for use in other resources.
+#
+# KEY CONCEPTS:
+# -------------
+# - Users cannot be created or modified via Terraform (read-only data sources)
+# - User management is handled by Seqera Platform authentication
+# - CurrentUser: Retrieves information about the authenticated user
+# - User: Retrieves information about a specific user by ID
+# - UserWorkspaces: Lists workspaces accessible to a specific user
+#
+# DATA SOURCES:
+# -------------
+# 1. Current User: Information about the authenticated API user
+# 2. User by ID: Look up user details by numeric user ID
+# 3. User Workspaces: List all workspaces a user has access to
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Get current authenticated user
+# data "seqera_current_user" "me" {
+# }
+#
+# output "my_user_id" {
+#   value = data.seqera_current_user.me.id
+# }
+#
+# Example 2: Get specific user by ID
+# data "seqera_user" "team_member" {
+#   user_id = 12345
+# }
+#
+# output "user_email" {
+#   value = data.seqera_user.team_member.email
+# }
+#
+# Example 3: List user's workspaces
+# data "seqera_user_workspaces" "my_workspaces" {
+#   user_id = data.seqera_current_user.me.id
+# }
+#
+# ==============================================================================
+
 actions:
   # User operations
   - target: $.paths["/user"].get

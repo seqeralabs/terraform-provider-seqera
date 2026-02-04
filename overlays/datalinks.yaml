@@ -3,6 +3,61 @@ x-speakeasy-jsonpath: rfc9535
 info:
   title: DataLinks Overlay
   version: 0.0.0
+
+# ==============================================================================
+# DATA LINKS RESOURCE OVERLAY
+# ==============================================================================
+#
+# Data links provide connections to external storage systems and data repositories,
+# enabling seamless access to cloud storage for pipeline input/output operations.
+# Data links integrate with cloud provider credentials to access S3, Azure Blob,
+# Google Cloud Storage, and other storage systems.
+#
+# KEY CONCEPTS:
+# -------------
+# - Data links belong to workspaces and must reference a workspace_id
+# - Requires credentials_id for authentication to cloud storage
+# - Supports multiple providers: AWS (aws), Google Cloud (google), Azure (azure/azure_entra)
+# - Resource reference (resource_ref) specifies the storage location (e.g., s3://bucket-name)
+# - Can be public or private (public_accessible flag)
+#
+# SUPPORTED PROVIDERS:
+# --------------------
+# - aws: Amazon S3 storage
+# - google: Google Cloud Storage
+# - azure: Azure Blob Storage (managed identity)
+# - azure_entra: Azure Blob Storage (Entra ID/Azure AD)
+# - seqeracompute: Seqera-managed compute storage
+#
+# TERRAFORM EXAMPLES:
+# -------------------
+#
+# Example 1: Basic S3 data link
+# resource "seqera_data_link" "s3_bucket" {
+#   workspace_id      = seqera_workspace.my_workspace.id
+#   name              = "my-s3-datalink"
+#   description       = "S3 bucket for production data storage"
+#   credentials_id    = seqera_aws_credential.my_creds.id
+#   provider_type     = "aws"
+#   resource_ref      = "s3://my-bucket"
+#   type              = "bucket"
+#   public_accessible = false
+# }
+#
+# Example 2: Azure data link with Entra authentication
+# resource "seqera_data_link" "azure_blob" {
+#   workspace_id      = seqera_workspace.my_workspace.id
+#   name              = "azure-storage"
+#   description       = "Azure blob storage for genomics data"
+#   credentials_id    = seqera_azure_credential.my_creds.id
+#   provider_type     = "azure_entra"
+#   resource_ref      = "az://my-container"
+#   type              = "bucket"
+#   public_accessible = false
+# }
+#
+# ==============================================================================
+
 actions:
   # DataLink entity operations
   - target: $["paths"]["/data-links"]["post"]
