@@ -1,9 +1,18 @@
+# v0.30.3
+
+ENHANCEMENTS:
+
+- **Credentials** Updated credentials to support [Write-only arguments](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments) please note these are only supported in Terraform 1.11 and later.
+
+FIX:
+
+- **Credentials** Removed inconsistent value of ID from credential resources resulting in an invalid result object after apply.
+
 # v0.30.2
 
 ENHANCEMENTS:
 
 - **Refactored Member and Participant Resources** - Updated `seqera_organization_member`, `seqera_team_member`, and `seqera_workspace_participant` resources to use the new `PaginatedSearch` helper. This refactoring ensures consistent pagination behavior across all membership resources ensuring that in large organizations all resources work as intended.
-
 
 # v0.30.1
 
@@ -23,10 +32,7 @@ FIX:
 
 - **Organization Member Role Validation** - Fixed role validation for `seqera_organization_member` resource. The valid roles are now correctly set to: owner, member, view. Previously incorrectly allowed "collaborator" which is not a valid organization role.
 
-
 # v0.30.0
-
-
 
 FEATURES:
 
@@ -42,10 +48,10 @@ FEATURES:
 - **New Data Source:** `seqera_pipeline_secret` - Look up pipeline secret by name. Returns secret details including secret_id and timestamps.
 - **New Data Source:** `seqera_organization` - Look up Organization by name. Returns Organization details including org_id, full_name, description
 
-
 ENHANCEMENTS:
 
 - **Resource Import Support**: All new resources support import via composite IDs:
+
   - `seqera_organization_member`: `org_id/email`
   - `seqera_workspace_participant`: `org_id/workspace_id/email`
   - `seqera_team_member`: `org_id/team_id/email`
@@ -68,7 +74,6 @@ FIX:
 - **Google Cloud Credentials** - Fixed critical issue where the service account JSON (`data` field) was not being sent in API requests, causing credential creation to fail. Added internal `keyType` field to SDK models to enable proper code generation while keeping it hidden from Terraform schema and documentation.
 - **Kubernetes Credentials** - Fixed critical issue where authentication fields (`token`, `certificate`, `private_key`) were not being sent in API requests, causing credential creation to fail. Added internal `keyType` field to SDK models to enable proper code generation while keeping it hidden from Terraform schema and documentation.
 - **SSH Credentials** - Improved implementation by hiding internal `key_type` field from Terraform schema and documentation while maintaining correct API request generation. This field is now only present in SDK models for code generation purposes.
-
 
 # v0.26.4
 
