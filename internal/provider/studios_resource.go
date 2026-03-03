@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -49,18 +50,18 @@ type StudiosResource struct {
 
 // StudiosResourceModel describes the resource data model.
 type StudiosResourceModel struct {
-	AutoStart           types.Bool                      `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
-	ComputeEnvID        types.String                    `tfsdk:"compute_env_id"`
-	Configuration       tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
-	DataStudioToolURL   types.String                    `tfsdk:"data_studio_tool_url"`
-	Description         types.String                    `tfsdk:"description"`
-	InitialCheckpointID types.Int64                     `tfsdk:"initial_checkpoint_id"`
-	IsPrivate           types.Bool                      `tfsdk:"is_private"`
-	LabelIds            []types.Int64                   `tfsdk:"label_ids"`
-	Name                types.String                    `tfsdk:"name"`
-	SessionID           types.String                    `tfsdk:"session_id"`
-	Spot                types.Bool                      `tfsdk:"spot"`
-	WorkspaceID         types.Int64                     `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	AutoStart           types.Bool                       `queryParam:"style=form,explode=true,name=autoStart" tfsdk:"auto_start"`
+	ComputeEnvID        types.String                     `tfsdk:"compute_env_id"`
+	Configuration       *tfTypes.DataStudioConfiguration `tfsdk:"configuration"`
+	DataStudioToolURL   types.String                     `tfsdk:"data_studio_tool_url"`
+	Description         types.String                     `tfsdk:"description"`
+	InitialCheckpointID types.Int64                      `tfsdk:"initial_checkpoint_id"`
+	IsPrivate           types.Bool                       `tfsdk:"is_private"`
+	LabelIds            []types.Int64                    `tfsdk:"label_ids"`
+	Name                types.String                     `tfsdk:"name"`
+	SessionID           types.String                     `tfsdk:"session_id"`
+	Spot                types.Bool                       `tfsdk:"spot"`
+	WorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *StudiosResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -116,6 +117,9 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
 						Description: `Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults. Default: 2; Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(0),
+						},
 					},
 					"environment": schema.MapAttribute{
 						Computed: true,
@@ -139,6 +143,9 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
 						Description: `Set to 0 to disable GPU or 1 to enable GPU. Default: 0; Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(0),
+						},
 					},
 					"lifespan_hours": schema.Int32Attribute{
 						Computed: true,
@@ -148,6 +155,9 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
 						Description: `Maximum lifespan of the Studio session in hours. Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(0),
+						},
 					},
 					"memory": schema.Int32Attribute{
 						Computed: true,
@@ -158,6 +168,9 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 						},
 						Description: `Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. Default: 8192; Requires replacement if changed.`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(0),
+						},
 					},
 					"mount_data": schema.ListAttribute{
 						Computed: true,

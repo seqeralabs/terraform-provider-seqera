@@ -32,6 +32,7 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 		r.ID = types.StringPointerValue(resp.ID)
 		if resp.Launch != nil {
 			launchPriorData := r.Launch
+			r.Launch = &tfTypes.WorkflowLaunchRequest{}
 			r.Launch.ConfigProfiles = make([]types.String, 0, len(resp.Launch.ConfigProfiles))
 			for _, v := range resp.Launch.ConfigProfiles {
 				r.Launch.ConfigProfiles = append(r.Launch.ConfigProfiles, types.StringValue(v))
@@ -68,8 +69,10 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			for _, v := range resp.Launch.WorkspaceSecrets {
 				r.Launch.WorkspaceSecrets = append(r.Launch.WorkspaceSecrets, types.StringValue(v))
 			}
-			r.Launch.ComputeEnvID = launchPriorData.ComputeEnvID
-			r.Launch.LabelIds = launchPriorData.LabelIds
+			if launchPriorData != nil {
+				r.Launch.ComputeEnvID = launchPriorData.ComputeEnvID
+				r.Launch.LabelIds = launchPriorData.LabelIds
+			}
 		}
 		r.Message = types.StringPointerValue(resp.Message)
 		r.Name = types.StringPointerValue(resp.Name)

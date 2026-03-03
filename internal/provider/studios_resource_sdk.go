@@ -47,6 +47,8 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 				for _, v := range resp.Configuration.MountData {
 					r.Configuration.MountData = append(r.Configuration.MountData, types.StringValue(v))
 				}
+			} else {
+				r.Configuration.MountData = nil
 			}
 		}
 		r.Description = types.StringPointerValue(resp.Description)

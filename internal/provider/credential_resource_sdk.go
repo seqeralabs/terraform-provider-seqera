@@ -32,129 +32,218 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.StringPointerValue(resp.ID)
+		keysPriorData := r.Keys
+		if r.Keys == nil {
+			r.Keys = &tfTypes.SecurityKeys{}
+		}
 		if resp.Keys.AWSCodeCommitCredentialsOutput != nil {
+			var codecommitPriorData *tfTypes.AWSCodeCommitCredentials
+			if keysPriorData != nil {
+				codecommitPriorData = keysPriorData.Codecommit
+			}
 			r.Keys.Codecommit = &tfTypes.AWSCodeCommitCredentials{}
-			codecommitPriorData := r.Keys.Codecommit
 			r.Keys.Codecommit.Token = types.StringPointerValue(resp.Keys.AWSCodeCommitCredentialsOutput.Token)
 			r.Keys.Codecommit.Username = types.StringPointerValue(resp.Keys.AWSCodeCommitCredentialsOutput.Username)
-			r.Keys.Codecommit.Password = codecommitPriorData.Password
+			if codecommitPriorData != nil {
+				r.Keys.Codecommit.Password = codecommitPriorData.Password
+			}
 		}
 		if resp.Keys.AWSCredentialsOutput != nil {
+			var awsPriorData *tfTypes.AWSCredentials
+			if keysPriorData != nil {
+				awsPriorData = keysPriorData.Aws
+			}
 			r.Keys.Aws = &tfTypes.AWSCredentials{}
-			awsPriorData := r.Keys.Aws
 			r.Keys.Aws.AccessKey = types.StringPointerValue(resp.Keys.AWSCredentialsOutput.AccessKey)
 			r.Keys.Aws.AssumeRoleArn = types.StringPointerValue(resp.Keys.AWSCredentialsOutput.AssumeRoleArn)
-			r.Keys.Aws.SecretKey = awsPriorData.SecretKey
+			if awsPriorData != nil {
+				r.Keys.Aws.SecretKey = awsPriorData.SecretKey
+			}
 		}
 		if resp.Keys.AzureCloudCredentialsOutput != nil {
+			var azureCloudPriorData *tfTypes.AzureCloudCredentials
+			if keysPriorData != nil {
+				azureCloudPriorData = keysPriorData.AzureCloud
+			}
 			r.Keys.AzureCloud = &tfTypes.AzureCloudCredentials{}
-			azureCloudPriorData := r.Keys.AzureCloud
 			r.Keys.AzureCloud.BatchName = types.StringPointerValue(resp.Keys.AzureCloudCredentialsOutput.BatchName)
 			r.Keys.AzureCloud.ClientID = types.StringPointerValue(resp.Keys.AzureCloudCredentialsOutput.ClientID)
 			r.Keys.AzureCloud.StorageName = types.StringPointerValue(resp.Keys.AzureCloudCredentialsOutput.StorageName)
 			r.Keys.AzureCloud.SubscriptionID = types.StringPointerValue(resp.Keys.AzureCloudCredentialsOutput.SubscriptionID)
 			r.Keys.AzureCloud.TenantID = types.StringPointerValue(resp.Keys.AzureCloudCredentialsOutput.TenantID)
-			r.Keys.AzureCloud.BatchKey = azureCloudPriorData.BatchKey
-			r.Keys.AzureCloud.ClientSecret = azureCloudPriorData.ClientSecret
-			r.Keys.AzureCloud.StorageKey = azureCloudPriorData.StorageKey
-		}
-		if resp.Keys.AzureCredentialsOutput != nil {
-			r.Keys.Azure = &tfTypes.AzureCredentials{}
-			azurePriorData := r.Keys.Azure
-			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.AzureCredentialsOutput.BatchName)
-			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.AzureCredentialsOutput.StorageName)
-			r.Keys.Azure.BatchKey = azurePriorData.BatchKey
-			r.Keys.Azure.StorageKey = azurePriorData.StorageKey
+			if azureCloudPriorData != nil {
+				r.Keys.AzureCloud.BatchKey = azureCloudPriorData.BatchKey
+				r.Keys.AzureCloud.ClientSecret = azureCloudPriorData.ClientSecret
+				r.Keys.AzureCloud.StorageKey = azureCloudPriorData.StorageKey
+			}
 		}
 		if resp.Keys.AzureEntraCredentialsOutput != nil {
+			var azureEntraPriorData *tfTypes.AzureEntraCredentials
+			if keysPriorData != nil {
+				azureEntraPriorData = keysPriorData.AzureEntra
+			}
 			r.Keys.AzureEntra = &tfTypes.AzureEntraCredentials{}
-			azureEntraPriorData := r.Keys.AzureEntra
 			r.Keys.AzureEntra.BatchName = types.StringPointerValue(resp.Keys.AzureEntraCredentialsOutput.BatchName)
 			r.Keys.AzureEntra.ClientID = types.StringPointerValue(resp.Keys.AzureEntraCredentialsOutput.ClientID)
 			r.Keys.AzureEntra.StorageName = types.StringPointerValue(resp.Keys.AzureEntraCredentialsOutput.StorageName)
 			r.Keys.AzureEntra.TenantID = types.StringPointerValue(resp.Keys.AzureEntraCredentialsOutput.TenantID)
-			r.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
-			r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
-			r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
+			if azureEntraPriorData != nil {
+				r.Keys.AzureEntra.BatchKey = azureEntraPriorData.BatchKey
+				r.Keys.AzureEntra.ClientSecret = azureEntraPriorData.ClientSecret
+				r.Keys.AzureEntra.StorageKey = azureEntraPriorData.StorageKey
+			}
 		}
 		if resp.Keys.AzureReposCredentialsOutput != nil {
+			var azurereposPriorData *tfTypes.AzureReposCredentials
+			if keysPriorData != nil {
+				azurereposPriorData = keysPriorData.Azurerepos
+			}
 			r.Keys.Azurerepos = &tfTypes.AzureReposCredentials{}
-			azurereposPriorData := r.Keys.Azurerepos
 			r.Keys.Azurerepos.Username = types.StringPointerValue(resp.Keys.AzureReposCredentialsOutput.Username)
-			r.Keys.Azurerepos.Password = azurereposPriorData.Password
-			r.Keys.Azurerepos.Token = azurereposPriorData.Token
+			if azurereposPriorData != nil {
+				r.Keys.Azurerepos.Password = azurereposPriorData.Password
+				r.Keys.Azurerepos.Token = azurereposPriorData.Token
+			}
+		}
+		if resp.Keys.AzureCredentialsOutput != nil {
+			var azurePriorData *tfTypes.AzureCredentials
+			if keysPriorData != nil {
+				azurePriorData = keysPriorData.Azure
+			}
+			r.Keys.Azure = &tfTypes.AzureCredentials{}
+			r.Keys.Azure.BatchName = types.StringPointerValue(resp.Keys.AzureCredentialsOutput.BatchName)
+			r.Keys.Azure.StorageName = types.StringPointerValue(resp.Keys.AzureCredentialsOutput.StorageName)
+			if azurePriorData != nil {
+				r.Keys.Azure.BatchKey = azurePriorData.BatchKey
+				r.Keys.Azure.StorageKey = azurePriorData.StorageKey
+			}
 		}
 		if resp.Keys.BitBucketCredentialsOutput != nil {
+			var bitbucketPriorData *tfTypes.BitBucketCredentials
+			if keysPriorData != nil {
+				bitbucketPriorData = keysPriorData.Bitbucket
+			}
 			r.Keys.Bitbucket = &tfTypes.BitBucketCredentials{}
-			bitbucketPriorData := r.Keys.Bitbucket
 			r.Keys.Bitbucket.Username = types.StringPointerValue(resp.Keys.BitBucketCredentialsOutput.Username)
-			r.Keys.Bitbucket.Password = bitbucketPriorData.Password
-			r.Keys.Bitbucket.Token = bitbucketPriorData.Token
+			if bitbucketPriorData != nil {
+				r.Keys.Bitbucket.Password = bitbucketPriorData.Password
+				r.Keys.Bitbucket.Token = bitbucketPriorData.Token
+			}
 		}
 		if resp.Keys.ContainerRegistryCredentialsOutput != nil {
+			var containerRegPriorData *tfTypes.ContainerRegistryCredentials
+			if keysPriorData != nil {
+				containerRegPriorData = keysPriorData.ContainerReg
+			}
 			r.Keys.ContainerReg = &tfTypes.ContainerRegistryCredentials{}
-			containerRegPriorData := r.Keys.ContainerReg
 			r.Keys.ContainerReg.Registry = types.StringPointerValue(resp.Keys.ContainerRegistryCredentialsOutput.Registry)
 			r.Keys.ContainerReg.UserName = types.StringPointerValue(resp.Keys.ContainerRegistryCredentialsOutput.UserName)
-			r.Keys.ContainerReg.Password = containerRegPriorData.Password
-		}
-		if resp.Keys.GiteaCredentialsOutput != nil {
-			r.Keys.Gitea = &tfTypes.GiteaCredentials{}
-			giteaPriorData := r.Keys.Gitea
-			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaCredentialsOutput.Username)
-			r.Keys.Gitea.Password = giteaPriorData.Password
-			r.Keys.Gitea.Token = giteaPriorData.Token
+			if containerRegPriorData != nil {
+				r.Keys.ContainerReg.Password = containerRegPriorData.Password
+			}
 		}
 		if resp.Keys.GitHubCredentialsOutput != nil {
+			var githubPriorData *tfTypes.GitHubCredentials
+			if keysPriorData != nil {
+				githubPriorData = keysPriorData.Github
+			}
 			r.Keys.Github = &tfTypes.GitHubCredentials{}
-			githubPriorData := r.Keys.Github
 			r.Keys.Github.Username = types.StringPointerValue(resp.Keys.GitHubCredentialsOutput.Username)
-			r.Keys.Github.Password = githubPriorData.Password
-			r.Keys.Github.Token = githubPriorData.Token
+			if githubPriorData != nil {
+				r.Keys.Github.Password = githubPriorData.Password
+				r.Keys.Github.Token = githubPriorData.Token
+			}
 		}
 		if resp.Keys.GitLabCredentialsOutput != nil {
+			var gitlabPriorData *tfTypes.GitLabCredentials
+			if keysPriorData != nil {
+				gitlabPriorData = keysPriorData.Gitlab
+			}
 			r.Keys.Gitlab = &tfTypes.GitLabCredentials{}
-			gitlabPriorData := r.Keys.Gitlab
 			r.Keys.Gitlab.Username = types.StringPointerValue(resp.Keys.GitLabCredentialsOutput.Username)
-			r.Keys.Gitlab.Password = gitlabPriorData.Password
-			r.Keys.Gitlab.Token = gitlabPriorData.Token
+			if gitlabPriorData != nil {
+				r.Keys.Gitlab.Password = gitlabPriorData.Password
+				r.Keys.Gitlab.Token = gitlabPriorData.Token
+			}
+		}
+		if resp.Keys.GiteaCredentialsOutput != nil {
+			var giteaPriorData *tfTypes.GiteaCredentials
+			if keysPriorData != nil {
+				giteaPriorData = keysPriorData.Gitea
+			}
+			r.Keys.Gitea = &tfTypes.GiteaCredentials{}
+			r.Keys.Gitea.Username = types.StringPointerValue(resp.Keys.GiteaCredentialsOutput.Username)
+			if giteaPriorData != nil {
+				r.Keys.Gitea.Password = giteaPriorData.Password
+				r.Keys.Gitea.Token = giteaPriorData.Token
+			}
 		}
 		if resp.Keys.GoogleCredentialsOutput != nil {
+			var googlePriorData *tfTypes.GoogleCredentials
+			if keysPriorData != nil {
+				googlePriorData = keysPriorData.Google
+			}
 			r.Keys.Google = &tfTypes.GoogleCredentials{}
-			googlePriorData := r.Keys.Google
-			r.Keys.Google.Data = googlePriorData.Data
+			if googlePriorData != nil {
+				r.Keys.Google.Data = googlePriorData.Data
+			}
 		}
 		if resp.Keys.KubernetesCredentialsOutput != nil {
+			var k8sPriorData *tfTypes.KubernetesCredentials
+			if keysPriorData != nil {
+				k8sPriorData = keysPriorData.K8s
+			}
 			r.Keys.K8s = &tfTypes.KubernetesCredentials{}
-			k8sPriorData := r.Keys.K8s
-			r.Keys.K8s.Certificate = k8sPriorData.Certificate
-			r.Keys.K8s.PrivateKey = k8sPriorData.PrivateKey
-			r.Keys.K8s.Token = k8sPriorData.Token
+			if k8sPriorData != nil {
+				r.Keys.K8s.Certificate = k8sPriorData.Certificate
+				r.Keys.K8s.PrivateKey = k8sPriorData.PrivateKey
+				r.Keys.K8s.Token = k8sPriorData.Token
+			}
 		}
 		if resp.Keys.LocalSecurityKeysOutput != nil {
+			var localPriorData *tfTypes.LocalSecurityKeys
+			if keysPriorData != nil {
+				localPriorData = keysPriorData.Local
+			}
 			r.Keys.Local = &tfTypes.LocalSecurityKeys{}
-			localPriorData := r.Keys.Local
-			r.Keys.Local.Password = localPriorData.Password
+			if localPriorData != nil {
+				r.Keys.Local.Password = localPriorData.Password
+			}
 		}
 		if resp.Keys.S3CompatibleCredentialsOutput != nil {
+			var s3PriorData *tfTypes.S3CompatibleCredentials
+			if keysPriorData != nil {
+				s3PriorData = keysPriorData.S3
+			}
 			r.Keys.S3 = &tfTypes.S3CompatibleCredentials{}
-			s3PriorData := r.Keys.S3
 			r.Keys.S3.AccessKey = types.StringPointerValue(resp.Keys.S3CompatibleCredentialsOutput.AccessKey)
 			r.Keys.S3.PathStyleAccessEnabled = types.BoolPointerValue(resp.Keys.S3CompatibleCredentialsOutput.PathStyleAccessEnabled)
-			r.Keys.S3.SecretKey = s3PriorData.SecretKey
-		}
-		if resp.Keys.SeqeraComputeCredentialsOutput != nil {
-			r.Keys.Seqeracompute = &tfTypes.SeqeraComputeCredentials{}
-			seqeracomputePriorData := r.Keys.Seqeracompute
-			r.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Keys.SeqeraComputeCredentialsOutput.AccessKey)
-			r.Keys.Seqeracompute.AssumeRoleArn = types.StringPointerValue(resp.Keys.SeqeraComputeCredentialsOutput.AssumeRoleArn)
-			r.Keys.Seqeracompute.SecretKey = seqeracomputePriorData.SecretKey
+			if s3PriorData != nil {
+				r.Keys.S3.SecretKey = s3PriorData.SecretKey
+			}
 		}
 		if resp.Keys.SSHCredentialsOutput != nil {
+			var sshPriorData *tfTypes.SSHCredentials
+			if keysPriorData != nil {
+				sshPriorData = keysPriorData.SSH
+			}
 			r.Keys.SSH = &tfTypes.SSHCredentials{}
-			sshPriorData := r.Keys.SSH
-			r.Keys.SSH.Passphrase = sshPriorData.Passphrase
-			r.Keys.SSH.PrivateKey = sshPriorData.PrivateKey
+			if sshPriorData != nil {
+				r.Keys.SSH.Passphrase = sshPriorData.Passphrase
+				r.Keys.SSH.PrivateKey = sshPriorData.PrivateKey
+			}
+		}
+		if resp.Keys.SeqeraComputeCredentialsOutput != nil {
+			var seqeracomputePriorData *tfTypes.SeqeraComputeCredentials
+			if keysPriorData != nil {
+				seqeracomputePriorData = keysPriorData.Seqeracompute
+			}
+			r.Keys.Seqeracompute = &tfTypes.SeqeraComputeCredentials{}
+			r.Keys.Seqeracompute.AccessKey = types.StringPointerValue(resp.Keys.SeqeraComputeCredentialsOutput.AccessKey)
+			r.Keys.Seqeracompute.AssumeRoleArn = types.StringPointerValue(resp.Keys.SeqeraComputeCredentialsOutput.AssumeRoleArn)
+			if seqeracomputePriorData != nil {
+				r.Keys.Seqeracompute.SecretKey = seqeracomputePriorData.SecretKey
+			}
 		}
 		if resp.Keys.TowerAgentCredentials != nil {
 			r.Keys.TwAgent = &tfTypes.TowerAgentCredentials{}

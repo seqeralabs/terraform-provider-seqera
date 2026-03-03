@@ -59,10 +59,10 @@ type ComputeEnvResource struct {
 
 // ComputeEnvResourceModel describes the resource data model.
 type ComputeEnvResourceModel struct {
-	ComputeEnv   tfTypes.ComputeEnvComputeConfig `tfsdk:"compute_env"`
-	ComputeEnvID types.String                    `tfsdk:"compute_env_id"`
-	LabelIds     []types.Int64                   `tfsdk:"label_ids"`
-	WorkspaceID  types.Int64                     `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnv   *tfTypes.ComputeEnvComputeConfig `tfsdk:"compute_env"`
+	ComputeEnvID types.String                     `tfsdk:"compute_env_id"`
+	LabelIds     []types.Int64                    `tfsdk:"label_ids"`
+	WorkspaceID  types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ComputeEnvResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -270,11 +270,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -494,7 +494,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													`Must be a whole number between 0 and 100 (inclusive).` + "\n" +
 													`Requires replacement if changed.`,
 												Validators: []validator.Int32{
-													int32validator.AtMost(100),
+													int32validator.Between(0, 100),
 												},
 											},
 											"dispose_on_deletion": schema.BoolAttribute{
@@ -900,11 +900,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("aws_cloud"),
 										path.MatchRelative().AtParent().AtName("altair_platform"),
 										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -1149,11 +1149,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("altair_platform"),
 										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -1417,10 +1417,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
@@ -1678,10 +1678,10 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
@@ -1950,11 +1950,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -2222,12 +2222,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
@@ -2541,12 +2541,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
@@ -2763,12 +2763,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
 										path.MatchRelative().AtParent().AtName("google_lifesciences"),
@@ -3016,12 +3016,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -3257,12 +3257,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -3396,12 +3396,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -3615,12 +3615,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -3810,12 +3810,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -3967,12 +3967,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -4162,12 +4162,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),
@@ -4357,12 +4357,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("aws_batch"),
 										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
+										path.MatchRelative().AtParent().AtName("altair_platform"),
+										path.MatchRelative().AtParent().AtName("eks_platform"),
 										path.MatchRelative().AtParent().AtName("azure_cloud"),
+										path.MatchRelative().AtParent().AtName("azure_batch"),
 										path.MatchRelative().AtParent().AtName("google_batch"),
 										path.MatchRelative().AtParent().AtName("google_cloud"),
 										path.MatchRelative().AtParent().AtName("gke_platform"),

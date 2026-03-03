@@ -8,7 +8,7 @@ import (
 
 type ComputeEnvComputeConfig struct {
 	ComputeEnvID      types.String                    `tfsdk:"compute_env_id"`
-	Config            ComputeConfig                   `tfsdk:"config"`
+	Config            *ComputeConfig                  `tfsdk:"config"`
 	CredentialsID     types.String                    `tfsdk:"credentials_id"`
 	DateCreated       types.String                    `tfsdk:"date_created"`
 	Deleted           types.Bool                      `tfsdk:"deleted"`

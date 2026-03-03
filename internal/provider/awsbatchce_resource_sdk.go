@@ -17,6 +17,7 @@ func (r *AWSBatchCEResourceModel) RefreshFromSharedAWSBatchCEComputeConfig(ctx c
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Config = &tfTypes.AwsBatchConfig{}
 		r.Config.CliPath = types.StringPointerValue(resp.Config.CliPath)
 		r.Config.ComputeJobRole = types.StringPointerValue(resp.Config.ComputeJobRole)
 		r.Config.ComputeQueue = types.StringPointerValue(resp.Config.ComputeQueue)

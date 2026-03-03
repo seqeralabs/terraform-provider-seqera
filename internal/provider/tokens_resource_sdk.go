@@ -7,7 +7,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
-	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -31,7 +30,6 @@ func (r *TokensResourceModel) RefreshFromSharedCreateAccessTokenResponse(ctx con
 		if resp.Token == nil {
 			r.Token = nil
 		} else {
-			r.Token = &tfTypes.AccessToken{}
 			r.Token.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Token.DateCreated))
 			r.Token.ID = types.Int64PointerValue(resp.Token.ID)
 			r.Token.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Token.LastUsed))

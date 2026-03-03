@@ -1,3 +1,9 @@
+# v0.30.4
+
+ENHANCEMENTS:
+
+- **Credentials** Updated provider to support `TOWER_AUTH_TOKEN` Environment variable.
+
 # v0.30.3
 
 ENHANCEMENTS:

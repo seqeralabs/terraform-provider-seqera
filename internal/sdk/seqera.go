@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.102.0 and generator version 2.801.2
+// Generated from OpenAPI doc version 1.102.0 and generator version 2.846.1
 
 import (
 	"context"
@@ -101,7 +101,7 @@ type Seqera struct {
 
 type SDKOption func(*Seqera)
 
-// WithServerURL allows the overriding of the default server URL
+// WithServerURL allows providing an alternative server URL
 func WithServerURL(serverURL string) SDKOption {
 	return func(sdk *Seqera) {
 		sdk.sdkConfiguration.ServerURL = serverURL
@@ -169,9 +169,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
-		SDKVersion: "0.30.3",
+		SDKVersion: "0.30.4",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.30.3 2.801.2 1.102.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.30.4 2.846.1 1.102.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),

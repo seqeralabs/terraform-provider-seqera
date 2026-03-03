@@ -4,8 +4,10 @@ package provider
 
 import (
 	"context"
+	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
+	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -24,10 +26,13 @@ import (
 	workspace_participant "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant"
 	workspace_participant_data "github.com/seqeralabs/terraform-provider-seqera/internal/seqera/workspace_participant_data"
 	"net/http"
+	"os"
 )
 
 var _ provider.Provider = (*SeqeraProvider)(nil)
+var _ provider.ProviderWithActions = (*SeqeraProvider)(nil)
 var _ provider.ProviderWithEphemeralResources = (*SeqeraProvider)(nil)
+var _ provider.ProviderWithFunctions = (*SeqeraProvider)(nil)
 
 type SeqeraProvider struct {
 	// version is set to the provider version on release, "dev" when the
@@ -51,8 +56,8 @@ func (p *SeqeraProvider) Schema(ctx context.Context, req provider.SchemaRequest,
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
-				MarkdownDescription: `HTTP Bearer.`,
-				Required:            true,
+				MarkdownDescription: `HTTP Bearer. Configurable via environment variable ` + "`" + `TOWER_ACCESS_TOKEN` + "`" + `.`,
+				Optional:            true,
 				Sensitive:           true,
 			},
 			"server_url": schema.StringAttribute{
@@ -85,10 +90,14 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 		security.BearerAuth = data.BearerAuth.ValueString()
 	}
 
+	if bearerAuthEnvVar := os.Getenv("TOWER_ACCESS_TOKEN"); security.BearerAuth == "" && bearerAuthEnvVar != "" {
+		security.BearerAuth = bearerAuthEnvVar
+	}
+
 	if security.BearerAuth == "" {
 		resp.Diagnostics.AddError(
 			"Missing Provider Security Configuration",
-			"Provider configuration bearer_auth attribute must be configured.",
+			"Either the environment variable TOWER_ACCESS_TOKEN or provider configuration bearer_auth attribute must be configured.",
 		)
 	}
 
@@ -107,18 +116,27 @@ func (p *SeqeraProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	}
 
 	client := sdk.New(opts...)
+	resp.ActionData = client
 	resp.DataSourceData = client
 	resp.EphemeralResourceData = client
 	resp.ListResourceData = client
 	resp.ResourceData = client
 }
 
+func (p *SeqeraProvider) Functions(_ context.Context) []func() function.Function {
+	return []func() function.Function{}
+}
+
+func (p *SeqeraProvider) Actions(_ context.Context) []func() action.Action {
+	return []func() action.Action{}
+}
+
 func (p *SeqeraProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewActionResource,
 		NewAWSBatchCEResource,
 		NewAWSComputeEnvResource,
 		NewAWSCredentialResource,
+		NewActionResource,
 		NewAzureCredentialResource,
 		NewBitbucketCredentialResource,
 		NewCodecommitCredentialResource,

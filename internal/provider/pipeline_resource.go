@@ -34,17 +34,17 @@ type PipelineResource struct {
 
 // PipelineResourceModel describes the resource data model.
 type PipelineResourceModel struct {
-	Description   types.String                   `tfsdk:"description"`
-	Icon          types.String                   `tfsdk:"icon"`
-	LabelIds      []types.Int64                  `tfsdk:"label_ids"`
-	Launch        tfTypes.WorkflowLaunchRequest1 `tfsdk:"launch"`
-	Name          types.String                   `tfsdk:"name"`
-	PipelineID    types.Int64                    `tfsdk:"pipeline_id"`
-	Repository    types.String                   `tfsdk:"repository"`
-	UserFirstName types.String                   `tfsdk:"user_first_name"`
-	UserID        types.Int64                    `tfsdk:"user_id"`
-	UserName      types.String                   `tfsdk:"user_name"`
-	WorkspaceID   types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Description   types.String                    `tfsdk:"description"`
+	Icon          types.String                    `tfsdk:"icon"`
+	LabelIds      []types.Int64                   `tfsdk:"label_ids"`
+	Launch        *tfTypes.WorkflowLaunchRequest1 `tfsdk:"launch"`
+	Name          types.String                    `tfsdk:"name"`
+	PipelineID    types.Int64                     `tfsdk:"pipeline_id"`
+	Repository    types.String                    `tfsdk:"repository"`
+	UserFirstName types.String                    `tfsdk:"user_first_name"`
+	UserID        types.Int64                     `tfsdk:"user_id"`
+	UserName      types.String                    `tfsdk:"user_name"`
+	WorkspaceID   types.Int64                     `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {

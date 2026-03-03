@@ -3,12 +3,12 @@
 package types
 
 type ComputeConfig struct {
-	AltairPlatform        *AltairPBSConfiguration          `queryParam:"inline" tfsdk:"altair_platform"`
-	EksPlatform           *AmazonEKSClusterConfiguration   `queryParam:"inline" tfsdk:"eks_platform"`
 	AwsBatch              *AWSBatchConfiguration           `queryParam:"inline" tfsdk:"aws_batch"`
 	AwsCloud              *AWSCloudConfiguration           `queryParam:"inline" tfsdk:"aws_cloud"`
-	AzureBatch            *AzureBatchConfiguration         `queryParam:"inline" tfsdk:"azure_batch"`
+	AltairPlatform        *AltairPBSConfiguration          `queryParam:"inline" tfsdk:"altair_platform"`
+	EksPlatform           *AmazonEKSClusterConfiguration   `queryParam:"inline" tfsdk:"eks_platform"`
 	AzureCloud            *AzureCloudConfiguration         `queryParam:"inline" tfsdk:"azure_cloud"`
+	AzureBatch            *AzureBatchConfiguration         `queryParam:"inline" tfsdk:"azure_batch"`
 	GoogleBatch           *GoogleBatchServiceConfiguration `queryParam:"inline" tfsdk:"google_batch"`
 	GoogleCloud           *GoogleCloudConfiguration        `queryParam:"inline" tfsdk:"google_cloud"`
 	GkePlatform           *GoogleGKEClusterConfiguration   `queryParam:"inline" tfsdk:"gke_platform"`

@@ -29,6 +29,8 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				for _, v := range resp.Workflow.ConfigFiles {
 					r.Workflow.ConfigFiles = append(r.Workflow.ConfigFiles, types.StringValue(v))
 				}
+			} else {
+				r.Workflow.ConfigFiles = nil
 			}
 			r.Workflow.ConfigText = types.StringPointerValue(resp.Workflow.ConfigText)
 			r.Workflow.Container = types.StringPointerValue(resp.Workflow.Container)

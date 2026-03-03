@@ -56,21 +56,21 @@ type AWSBatchCEResource struct {
 
 // AWSBatchCEResourceModel describes the resource data model.
 type AWSBatchCEResourceModel struct {
-	ComputeEnvID  types.String           `tfsdk:"compute_env_id"`
-	Config        tfTypes.AwsBatchConfig `tfsdk:"config"`
-	CredentialsID types.String           `tfsdk:"credentials_id"`
-	DateCreated   types.String           `tfsdk:"date_created"`
-	Deleted       types.Bool             `tfsdk:"deleted"`
-	Description   types.String           `tfsdk:"description"`
-	ID            types.String           `tfsdk:"id"`
-	LabelIds      []types.Int64          `tfsdk:"label_ids"`
-	LastUpdated   types.String           `tfsdk:"last_updated"`
-	LastUsed      types.String           `tfsdk:"last_used"`
-	Name          types.String           `tfsdk:"name"`
-	OrgID         types.Int64            `tfsdk:"org_id"`
-	Platform      types.String           `tfsdk:"platform"`
-	Status        types.String           `tfsdk:"status"`
-	WorkspaceID   types.Int64            `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ComputeEnvID  types.String            `tfsdk:"compute_env_id"`
+	Config        *tfTypes.AwsBatchConfig `tfsdk:"config"`
+	CredentialsID types.String            `tfsdk:"credentials_id"`
+	DateCreated   types.String            `tfsdk:"date_created"`
+	Deleted       types.Bool              `tfsdk:"deleted"`
+	Description   types.String            `tfsdk:"description"`
+	ID            types.String            `tfsdk:"id"`
+	LabelIds      []types.Int64           `tfsdk:"label_ids"`
+	LastUpdated   types.String            `tfsdk:"last_updated"`
+	LastUsed      types.String            `tfsdk:"last_used"`
+	Name          types.String            `tfsdk:"name"`
+	OrgID         types.Int64             `tfsdk:"org_id"`
+	Platform      types.String            `tfsdk:"platform"`
+	Status        types.String            `tfsdk:"status"`
+	WorkspaceID   types.Int64             `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *AWSBatchCEResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -311,7 +311,7 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									`Must be a whole number between 0 and 100 (inclusive).` + "\n" +
 									`Requires replacement if changed.`,
 								Validators: []validator.Int32{
-									int32validator.AtMost(100),
+									int32validator.Between(0, 100),
 								},
 							},
 							"dispose_on_deletion": schema.BoolAttribute{

@@ -31,74 +31,7 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 		if resp.ComputeEnv != nil {
 			r.ComputeEnv.ComputeEnvID = types.StringPointerValue(resp.ComputeEnv.ComputeEnvID)
 			if resp.ComputeEnv.Config != nil {
-				r.ComputeEnv.Config = tfTypes.ComputeConfig{}
-				if resp.ComputeEnv.Config.AltairPBSConfiguration != nil {
-					r.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
-					r.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
-					r.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem := range resp.ComputeEnv.Config.AltairPBSConfiguration.Environment {
-						var environment tfTypes.ConfigEnvVariable
-
-						environment.Compute = types.BoolPointerValue(environmentItem.Compute)
-						environment.Head = types.BoolPointerValue(environmentItem.Head)
-						environment.Name = types.StringPointerValue(environmentItem.Name)
-						environment.Value = types.StringPointerValue(environmentItem.Value)
-
-						r.ComputeEnv.Config.AltairPlatform.Environment = append(r.ComputeEnv.Config.AltairPlatform.Environment, environment)
-					}
-					r.ComputeEnv.Config.AltairPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadJobOptions)
-					r.ComputeEnv.Config.AltairPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadQueue)
-					r.ComputeEnv.Config.AltairPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HostName)
-					r.ComputeEnv.Config.AltairPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.LaunchDir)
-					r.ComputeEnv.Config.AltairPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.MaxQueueSize))
-					r.ComputeEnv.Config.AltairPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.AltairPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.Port))
-					r.ComputeEnv.Config.AltairPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PostRunScript)
-					r.ComputeEnv.Config.AltairPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PreRunScript)
-					r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PropagateHeadJobOptions)
-					r.ComputeEnv.Config.AltairPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.UserName)
-					r.ComputeEnv.Config.AltairPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.AltairPBSConfiguration.WorkDir)
-				}
-				if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration != nil {
-					r.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
-					r.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
-					r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
-					r.ComputeEnv.Config.EksPlatform.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.EnableFusion)
-					r.ComputeEnv.Config.EksPlatform.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.EnableWave)
-					r.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem1 := range resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
-						var environment1 tfTypes.ConfigEnvVariable
-
-						environment1.Compute = types.BoolPointerValue(environmentItem1.Compute)
-						environment1.Head = types.BoolPointerValue(environmentItem1.Head)
-						environment1.Name = types.StringPointerValue(environmentItem1.Name)
-						environment1.Value = types.StringPointerValue(environmentItem1.Value)
-
-						r.ComputeEnv.Config.EksPlatform.Environment = append(r.ComputeEnv.Config.EksPlatform.Environment, environment1)
-					}
-					r.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
-					r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobMemoryMb))
-					r.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadPodSpec)
-					r.ComputeEnv.Config.EksPlatform.HeadServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadServiceAccount)
-					r.ComputeEnv.Config.EksPlatform.Namespace = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Namespace)
-					r.ComputeEnv.Config.EksPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.NextflowConfig)
-					if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup != nil {
-						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup))
-					} else {
-						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringNull()
-					}
-					r.ComputeEnv.Config.EksPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PostRunScript)
-					r.ComputeEnv.Config.EksPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PreRunScript)
-					r.ComputeEnv.Config.EksPlatform.Region = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Region)
-					r.ComputeEnv.Config.EksPlatform.Server = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Server)
-					r.ComputeEnv.Config.EksPlatform.ServicePodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ServicePodSpec)
-					r.ComputeEnv.Config.EksPlatform.SslCert = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.SslCert)
-					r.ComputeEnv.Config.EksPlatform.StorageClaimName = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageClaimName)
-					r.ComputeEnv.Config.EksPlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageMountPath)
-					r.ComputeEnv.Config.EksPlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.WorkDir)
-				}
+				r.ComputeEnv.Config = &tfTypes.ComputeConfig{}
 				if resp.ComputeEnv.Config.AWSBatchConfiguration != nil {
 					r.ComputeEnv.Config.AwsBatch = &tfTypes.AWSBatchConfiguration{}
 					r.ComputeEnv.Config.AwsBatch.CliPath = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.CliPath)
@@ -110,15 +43,15 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsBatch.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.EnableWave)
 					r.ComputeEnv.Config.AwsBatch.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem2 := range resp.ComputeEnv.Config.AWSBatchConfiguration.Environment {
-						var environment2 tfTypes.ConfigEnvVariable
+					for _, environmentItem := range resp.ComputeEnv.Config.AWSBatchConfiguration.Environment {
+						var environment tfTypes.ConfigEnvVariable
 
-						environment2.Compute = types.BoolPointerValue(environmentItem2.Compute)
-						environment2.Head = types.BoolPointerValue(environmentItem2.Head)
-						environment2.Name = types.StringPointerValue(environmentItem2.Name)
-						environment2.Value = types.StringPointerValue(environmentItem2.Value)
+						environment.Compute = types.BoolPointerValue(environmentItem.Compute)
+						environment.Head = types.BoolPointerValue(environmentItem.Head)
+						environment.Name = types.StringPointerValue(environmentItem.Name)
+						environment.Value = types.StringPointerValue(environmentItem.Value)
 
-						r.ComputeEnv.Config.AwsBatch.Environment = append(r.ComputeEnv.Config.AwsBatch.Environment, environment2)
+						r.ComputeEnv.Config.AwsBatch.Environment = append(r.ComputeEnv.Config.AwsBatch.Environment, environment)
 					}
 					r.ComputeEnv.Config.AwsBatch.ExecutionRole = types.StringPointerValue(resp.ComputeEnv.Config.AWSBatchConfiguration.ExecutionRole)
 					if resp.ComputeEnv.Config.AWSBatchConfiguration.Forge == nil {
@@ -203,15 +136,15 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.EnableWave)
 					r.ComputeEnv.Config.AwsCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem3 := range resp.ComputeEnv.Config.AWSCloudConfiguration.Environment {
-						var environment3 tfTypes.ConfigEnvVariable
+					for _, environmentItem1 := range resp.ComputeEnv.Config.AWSCloudConfiguration.Environment {
+						var environment1 tfTypes.ConfigEnvVariable
 
-						environment3.Compute = types.BoolPointerValue(environmentItem3.Compute)
-						environment3.Head = types.BoolPointerValue(environmentItem3.Head)
-						environment3.Name = types.StringPointerValue(environmentItem3.Name)
-						environment3.Value = types.StringPointerValue(environmentItem3.Value)
+						environment1.Compute = types.BoolPointerValue(environmentItem1.Compute)
+						environment1.Head = types.BoolPointerValue(environmentItem1.Head)
+						environment1.Name = types.StringPointerValue(environmentItem1.Name)
+						environment1.Value = types.StringPointerValue(environmentItem1.Value)
 
-						r.ComputeEnv.Config.AwsCloud.Environment = append(r.ComputeEnv.Config.AwsCloud.Environment, environment3)
+						r.ComputeEnv.Config.AwsCloud.Environment = append(r.ComputeEnv.Config.AwsCloud.Environment, environment1)
 					}
 					r.ComputeEnv.Config.AwsCloud.GpuEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.GpuEnabled)
 					r.ComputeEnv.Config.AwsCloud.ImageID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.ImageID)
@@ -229,50 +162,72 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AwsCloud.SubnetID = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.SubnetID)
 					r.ComputeEnv.Config.AwsCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AWSCloudConfiguration.WorkDir)
 				}
-				if resp.ComputeEnv.Config.AzureBatchConfiguration != nil {
-					r.ComputeEnv.Config.AzureBatch = &tfTypes.AzureBatchConfiguration{}
-					r.ComputeEnv.Config.AzureBatch.AutoPoolMode = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.AutoPoolMode)
-					if resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion != nil {
-						r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringValue(string(*resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion))
+				if resp.ComputeEnv.Config.AltairPBSConfiguration != nil {
+					r.ComputeEnv.Config.AltairPlatform = &tfTypes.AltairPBSConfiguration{}
+					r.ComputeEnv.Config.AltairPlatform.ComputeQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.ComputeQueue)
+					r.ComputeEnv.Config.AltairPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem2 := range resp.ComputeEnv.Config.AltairPBSConfiguration.Environment {
+						var environment2 tfTypes.ConfigEnvVariable
+
+						environment2.Compute = types.BoolPointerValue(environmentItem2.Compute)
+						environment2.Head = types.BoolPointerValue(environmentItem2.Head)
+						environment2.Name = types.StringPointerValue(environmentItem2.Name)
+						environment2.Value = types.StringPointerValue(environmentItem2.Value)
+
+						r.ComputeEnv.Config.AltairPlatform.Environment = append(r.ComputeEnv.Config.AltairPlatform.Environment, environment2)
+					}
+					r.ComputeEnv.Config.AltairPlatform.HeadJobOptions = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadJobOptions)
+					r.ComputeEnv.Config.AltairPlatform.HeadQueue = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HeadQueue)
+					r.ComputeEnv.Config.AltairPlatform.HostName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.HostName)
+					r.ComputeEnv.Config.AltairPlatform.LaunchDir = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.LaunchDir)
+					r.ComputeEnv.Config.AltairPlatform.MaxQueueSize = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.MaxQueueSize))
+					r.ComputeEnv.Config.AltairPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AltairPlatform.Port = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AltairPBSConfiguration.Port))
+					r.ComputeEnv.Config.AltairPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PostRunScript)
+					r.ComputeEnv.Config.AltairPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PreRunScript)
+					r.ComputeEnv.Config.AltairPlatform.PropagateHeadJobOptions = types.BoolPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.PropagateHeadJobOptions)
+					r.ComputeEnv.Config.AltairPlatform.UserName = types.StringPointerValue(resp.ComputeEnv.Config.AltairPBSConfiguration.UserName)
+					r.ComputeEnv.Config.AltairPlatform.WorkDir = types.StringValue(resp.ComputeEnv.Config.AltairPBSConfiguration.WorkDir)
+				}
+				if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration != nil {
+					r.ComputeEnv.Config.EksPlatform = &tfTypes.AmazonEKSClusterConfiguration{}
+					r.ComputeEnv.Config.EksPlatform.ClusterName = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ClusterName)
+					r.ComputeEnv.Config.EksPlatform.ComputeServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ComputeServiceAccount)
+					r.ComputeEnv.Config.EksPlatform.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.EnableFusion)
+					r.ComputeEnv.Config.EksPlatform.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.EnableWave)
+					r.ComputeEnv.Config.EksPlatform.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem3 := range resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Environment {
+						var environment3 tfTypes.ConfigEnvVariable
+
+						environment3.Compute = types.BoolPointerValue(environmentItem3.Compute)
+						environment3.Head = types.BoolPointerValue(environmentItem3.Head)
+						environment3.Name = types.StringPointerValue(environmentItem3.Name)
+						environment3.Value = types.StringPointerValue(environmentItem3.Value)
+
+						r.ComputeEnv.Config.EksPlatform.Environment = append(r.ComputeEnv.Config.EksPlatform.Environment, environment3)
+					}
+					r.ComputeEnv.Config.EksPlatform.HeadJobCpus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobCpus))
+					r.ComputeEnv.Config.EksPlatform.HeadJobMemoryMb = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadJobMemoryMb))
+					r.ComputeEnv.Config.EksPlatform.HeadPodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadPodSpec)
+					r.ComputeEnv.Config.EksPlatform.HeadServiceAccount = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.HeadServiceAccount)
+					r.ComputeEnv.Config.EksPlatform.Namespace = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Namespace)
+					r.ComputeEnv.Config.EksPlatform.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.NextflowConfig)
+					if resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup != nil {
+						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringValue(string(*resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PodCleanup))
 					} else {
-						r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringNull()
+						r.ComputeEnv.Config.EksPlatform.PodCleanup = types.StringNull()
 					}
-					r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
-					r.ComputeEnv.Config.AzureBatch.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.EnableFusion)
-					r.ComputeEnv.Config.AzureBatch.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.EnableWave)
-					r.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
-
-					for _, environmentItem4 := range resp.ComputeEnv.Config.AzureBatchConfiguration.Environment {
-						var environment4 tfTypes.ConfigEnvVariable
-
-						environment4.Compute = types.BoolPointerValue(environmentItem4.Compute)
-						environment4.Head = types.BoolPointerValue(environmentItem4.Head)
-						environment4.Name = types.StringPointerValue(environmentItem4.Name)
-						environment4.Value = types.StringPointerValue(environmentItem4.Value)
-
-						r.ComputeEnv.Config.AzureBatch.Environment = append(r.ComputeEnv.Config.AzureBatch.Environment, environment4)
-					}
-					if resp.ComputeEnv.Config.AzureBatchConfiguration.Forge == nil {
-						r.ComputeEnv.Config.AzureBatch.Forge = nil
-					} else {
-						r.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
-						r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
-						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
-						for _, v := range resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
-							r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
-						}
-						r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
-						r.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
-						r.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
-					}
-					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
-					r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
-					r.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
-					r.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PostRunScript)
-					r.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
-					r.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Region)
-					r.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
-					r.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
+					r.ComputeEnv.Config.EksPlatform.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PostRunScript)
+					r.ComputeEnv.Config.EksPlatform.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.PreRunScript)
+					r.ComputeEnv.Config.EksPlatform.Region = types.StringValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Region)
+					r.ComputeEnv.Config.EksPlatform.Server = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.Server)
+					r.ComputeEnv.Config.EksPlatform.ServicePodSpec = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.ServicePodSpec)
+					r.ComputeEnv.Config.EksPlatform.SslCert = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.SslCert)
+					r.ComputeEnv.Config.EksPlatform.StorageClaimName = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageClaimName)
+					r.ComputeEnv.Config.EksPlatform.StorageMountPath = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.StorageMountPath)
+					r.ComputeEnv.Config.EksPlatform.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AmazonEKSClusterConfiguration.WorkDir)
 				}
 				if resp.ComputeEnv.Config.AzureCloudConfiguration != nil {
 					r.ComputeEnv.Config.AzureCloud = &tfTypes.AzureCloudConfiguration{}
@@ -280,15 +235,15 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureCloud.DataCollectionRuleID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.DataCollectionRuleID)
 					r.ComputeEnv.Config.AzureCloud.Environment = []tfTypes.ConfigEnvVariable{}
 
-					for _, environmentItem5 := range resp.ComputeEnv.Config.AzureCloudConfiguration.Environment {
-						var environment5 tfTypes.ConfigEnvVariable
+					for _, environmentItem4 := range resp.ComputeEnv.Config.AzureCloudConfiguration.Environment {
+						var environment4 tfTypes.ConfigEnvVariable
 
-						environment5.Compute = types.BoolPointerValue(environmentItem5.Compute)
-						environment5.Head = types.BoolPointerValue(environmentItem5.Head)
-						environment5.Name = types.StringPointerValue(environmentItem5.Name)
-						environment5.Value = types.StringPointerValue(environmentItem5.Value)
+						environment4.Compute = types.BoolPointerValue(environmentItem4.Compute)
+						environment4.Head = types.BoolPointerValue(environmentItem4.Head)
+						environment4.Name = types.StringPointerValue(environmentItem4.Name)
+						environment4.Value = types.StringPointerValue(environmentItem4.Value)
 
-						r.ComputeEnv.Config.AzureCloud.Environment = append(r.ComputeEnv.Config.AzureCloud.Environment, environment5)
+						r.ComputeEnv.Config.AzureCloud.Environment = append(r.ComputeEnv.Config.AzureCloud.Environment, environment4)
 					}
 					r.ComputeEnv.Config.AzureCloud.ForgedResources = []tfTypes.MapEntryStringString{}
 
@@ -315,6 +270,51 @@ func (r *ComputeEnvResourceModel) RefreshFromSharedDescribeComputeEnvResponse(ct
 					r.ComputeEnv.Config.AzureCloud.SubscriptionID = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.SubscriptionID)
 					r.ComputeEnv.Config.AzureCloud.WaveEnabled = types.BoolPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.WaveEnabled)
 					r.ComputeEnv.Config.AzureCloud.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureCloudConfiguration.WorkDir)
+				}
+				if resp.ComputeEnv.Config.AzureBatchConfiguration != nil {
+					r.ComputeEnv.Config.AzureBatch = &tfTypes.AzureBatchConfiguration{}
+					r.ComputeEnv.Config.AzureBatch.AutoPoolMode = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.AutoPoolMode)
+					if resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion != nil {
+						r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringValue(string(*resp.ComputeEnv.Config.AzureBatchConfiguration.DeleteJobsOnCompletion))
+					} else {
+						r.ComputeEnv.Config.AzureBatch.DeleteJobsOnCompletion = types.StringNull()
+					}
+					r.ComputeEnv.Config.AzureBatch.DeletePoolsOnCompletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.DeletePoolsOnCompletion)
+					r.ComputeEnv.Config.AzureBatch.EnableFusion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.EnableFusion)
+					r.ComputeEnv.Config.AzureBatch.EnableWave = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.EnableWave)
+					r.ComputeEnv.Config.AzureBatch.Environment = []tfTypes.ConfigEnvVariable{}
+
+					for _, environmentItem5 := range resp.ComputeEnv.Config.AzureBatchConfiguration.Environment {
+						var environment5 tfTypes.ConfigEnvVariable
+
+						environment5.Compute = types.BoolPointerValue(environmentItem5.Compute)
+						environment5.Head = types.BoolPointerValue(environmentItem5.Head)
+						environment5.Name = types.StringPointerValue(environmentItem5.Name)
+						environment5.Value = types.StringPointerValue(environmentItem5.Value)
+
+						r.ComputeEnv.Config.AzureBatch.Environment = append(r.ComputeEnv.Config.AzureBatch.Environment, environment5)
+					}
+					if resp.ComputeEnv.Config.AzureBatchConfiguration.Forge == nil {
+						r.ComputeEnv.Config.AzureBatch.Forge = nil
+					} else {
+						r.ComputeEnv.Config.AzureBatch.Forge = &tfTypes.AzBatchForgeConfig{}
+						r.ComputeEnv.Config.AzureBatch.Forge.AutoScale = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.AutoScale)
+						r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = make([]types.String, 0, len(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds))
+						for _, v := range resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.ContainerRegIds {
+							r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds = append(r.ComputeEnv.Config.AzureBatch.Forge.ContainerRegIds, types.StringValue(v))
+						}
+						r.ComputeEnv.Config.AzureBatch.Forge.DisposeOnDeletion = types.BoolPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.DisposeOnDeletion)
+						r.ComputeEnv.Config.AzureBatch.Forge.VMCount = types.Int32Value(int32(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMCount))
+						r.ComputeEnv.Config.AzureBatch.Forge.VMType = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Forge.VMType)
+					}
+					r.ComputeEnv.Config.AzureBatch.HeadPool = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.HeadPool)
+					r.ComputeEnv.Config.AzureBatch.ManagedIdentityClientID = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.ManagedIdentityClientID)
+					r.ComputeEnv.Config.AzureBatch.NextflowConfig = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.NextflowConfig)
+					r.ComputeEnv.Config.AzureBatch.PostRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PostRunScript)
+					r.ComputeEnv.Config.AzureBatch.PreRunScript = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.PreRunScript)
+					r.ComputeEnv.Config.AzureBatch.Region = types.StringValue(resp.ComputeEnv.Config.AzureBatchConfiguration.Region)
+					r.ComputeEnv.Config.AzureBatch.TokenDuration = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.TokenDuration)
+					r.ComputeEnv.Config.AzureBatch.WorkDir = types.StringPointerValue(resp.ComputeEnv.Config.AzureBatchConfiguration.WorkDir)
 				}
 				if resp.ComputeEnv.Config.GoogleBatchServiceConfiguration != nil {
 					r.ComputeEnv.Config.GoogleBatch = &tfTypes.GoogleBatchServiceConfiguration{}

@@ -19,8 +19,8 @@ type GoogleLifeSciencesConfiguration struct {
 	NfsMount          types.String            `tfsdk:"nfs_mount"`
 	NfsTarget         types.String            `tfsdk:"nfs_target"`
 	PostRunScript     types.String            `tfsdk:"post_run_script"`
-	Preemptible       types.Bool              `tfsdk:"preemptible"`
 	PreRunScript      types.String            `tfsdk:"pre_run_script"`
+	Preemptible       types.Bool              `tfsdk:"preemptible"`
 	ProjectID         types.String            `tfsdk:"project_id"`
 	Region            types.String            `tfsdk:"region"`
 	SSHDaemon         types.Bool              `tfsdk:"ssh_daemon"`

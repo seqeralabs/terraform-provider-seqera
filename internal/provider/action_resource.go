@@ -37,17 +37,17 @@ type ActionResource struct {
 
 // ActionResourceModel describes the resource data model.
 type ActionResourceModel struct {
-	ActionID    types.String                  `tfsdk:"action_id"`
-	Config      *tfTypes.ActionConfigType     `tfsdk:"config"`
-	HookID      types.String                  `tfsdk:"hook_id"`
-	HookURL     types.String                  `tfsdk:"hook_url"`
-	ID          types.String                  `tfsdk:"id"`
-	Launch      tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
-	Message     types.String                  `tfsdk:"message"`
-	Name        types.String                  `tfsdk:"name"`
-	Source      types.String                  `tfsdk:"source"`
-	Status      types.String                  `tfsdk:"status"`
-	WorkspaceID types.Int64                   `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	ActionID    types.String                   `tfsdk:"action_id"`
+	Config      *tfTypes.ActionConfigType      `tfsdk:"config"`
+	HookID      types.String                   `tfsdk:"hook_id"`
+	HookURL     types.String                   `tfsdk:"hook_url"`
+	ID          types.String                   `tfsdk:"id"`
+	Launch      *tfTypes.WorkflowLaunchRequest `tfsdk:"launch"`
+	Message     types.String                   `tfsdk:"message"`
+	Name        types.String                   `tfsdk:"name"`
+	Source      types.String                   `tfsdk:"source"`
+	Status      types.String                   `tfsdk:"status"`
+	WorkspaceID types.Int64                    `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *ActionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {

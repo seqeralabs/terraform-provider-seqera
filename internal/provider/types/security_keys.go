@@ -6,19 +6,19 @@ type SecurityKeys struct {
 	Codecommit    *AWSCodeCommitCredentials     `queryParam:"inline" tfsdk:"codecommit"`
 	Aws           *AWSCredentials               `queryParam:"inline" tfsdk:"aws"`
 	AzureCloud    *AzureCloudCredentials        `queryParam:"inline" tfsdk:"azure_cloud"`
-	Azure         *AzureCredentials             `queryParam:"inline" tfsdk:"azure"`
 	AzureEntra    *AzureEntraCredentials        `queryParam:"inline" tfsdk:"azure_entra"`
 	Azurerepos    *AzureReposCredentials        `queryParam:"inline" tfsdk:"azurerepos"`
+	Azure         *AzureCredentials             `queryParam:"inline" tfsdk:"azure"`
 	Bitbucket     *BitBucketCredentials         `queryParam:"inline" tfsdk:"bitbucket"`
 	ContainerReg  *ContainerRegistryCredentials `queryParam:"inline" tfsdk:"container_reg"`
-	Gitea         *GiteaCredentials             `queryParam:"inline" tfsdk:"gitea"`
 	Github        *GitHubCredentials            `queryParam:"inline" tfsdk:"github"`
 	Gitlab        *GitLabCredentials            `queryParam:"inline" tfsdk:"gitlab"`
+	Gitea         *GiteaCredentials             `queryParam:"inline" tfsdk:"gitea"`
 	Google        *GoogleCredentials            `queryParam:"inline" tfsdk:"google"`
 	K8s           *KubernetesCredentials        `queryParam:"inline" tfsdk:"k8s"`
 	Local         *LocalSecurityKeys            `queryParam:"inline" tfsdk:"local"`
 	S3            *S3CompatibleCredentials      `queryParam:"inline" tfsdk:"s3"`
-	Seqeracompute *SeqeraComputeCredentials     `queryParam:"inline" tfsdk:"seqeracompute"`
 	SSH           *SSHCredentials               `queryParam:"inline" tfsdk:"ssh"`
+	Seqeracompute *SeqeraComputeCredentials     `queryParam:"inline" tfsdk:"seqeracompute"`
 	TwAgent       *TowerAgentCredentials        `queryParam:"inline" tfsdk:"tw_agent"`
 }

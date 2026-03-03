@@ -49,13 +49,12 @@ terraform {
   required_providers {
     seqera = {
       source  = "seqeralabs/seqera"
-      version = "0.30.3"
+      version = "0.30.4"
     }
   }
 }
 
 provider "seqera" {
-  bearer_auth = "<YOUR_BEARER_AUTH>" # Required
   server_url = "..." # Optional
 }
 ```
@@ -64,24 +63,29 @@ provider "seqera" {
 <!-- Start Authentication [security] -->
 ## Authentication
 
-This provider supports authentication configuration via provider configuration.
+This provider supports authentication configuration via environment variables and provider configuration.
+
+The configuration precedence is:
+
+- Provider configuration
+- Environment variables
 
 Available configuration:
 
 | Provider Attribute | Description |
 |---|---|
-| `bearer_auth` | HTTP Bearer. |
+| `bearer_auth` | HTTP Bearer. Configurable via environment variable `TOWER_ACCESS_TOKEN`. |
 <!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
 
-### Resources
+### Managed Resources
 
-* [seqera_action](docs/resources/action.md)
 * [seqera_aws_batch_ce](docs/resources/aws_batch_ce.md)
 * [seqera_aws_compute_env](docs/resources/aws_compute_env.md)
 * [seqera_aws_credential](docs/resources/aws_credential.md)
+* [seqera_action](docs/resources/action.md)
 * [seqera_azure_credential](docs/resources/azure_credential.md)
 * [seqera_bitbucket_credential](docs/resources/bitbucket_credential.md)
 * [seqera_codecommit_credential](docs/resources/codecommit_credential.md)
@@ -108,6 +112,7 @@ Available configuration:
 * [seqera_tower_agent_credential](docs/resources/tower_agent_credential.md)
 * [seqera_workflows](docs/resources/workflows.md)
 * [seqera_workspace](docs/resources/workspace.md)
+
 ### Data Sources
 
 * [seqera_credentials](docs/data-sources/credentials.md)
