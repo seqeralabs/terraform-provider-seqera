@@ -18,12 +18,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &SSHCredentialResource{}
-var _ resource.ResourceWithImportState = &SSHCredentialResource{}
+var _ resource.ResourceWithUpgradeState = &SSHCredentialResource{}
 
 func NewSSHCredentialResource() resource.Resource {
 	return &SSHCredentialResource{}
@@ -52,9 +53,13 @@ func (r *SSHCredentialResource) Metadata(ctx context.Context, req resource.Metad
 func (r *SSHCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. ",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"credentials_id": schema.StringAttribute{
-				Computed:    true,
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Unique identifier for the credential (max 22 characters)`,
 			},
 			"name": schema.StringAttribute{
@@ -371,4 +376,10 @@ func (r *SSHCredentialResource) Delete(ctx context.Context, req resource.DeleteR
 
 func (r *SSHCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+}
+
+func (r *SSHCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.SshcredentialStateUpgraderV0},
+	}
 }

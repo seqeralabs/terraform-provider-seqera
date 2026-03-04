@@ -6,7 +6,6 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
@@ -28,8 +27,6 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 	if resp != nil {
 		r.BaseURL = types.StringPointerValue(resp.BaseURL)
 		r.Category = types.StringPointerValue(resp.Category)
-		r.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.DateCreated))
-		r.Deleted = types.BoolPointerValue(resp.Deleted)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.ID = types.StringPointerValue(resp.ID)
 		keysPriorData := r.Keys
@@ -251,8 +248,6 @@ func (r *CredentialResourceModel) RefreshFromSharedCredentialsOutput(ctx context
 			r.Keys.TwAgent.Shared = types.BoolPointerValue(resp.Keys.TowerAgentCredentials.Shared)
 			r.Keys.TwAgent.WorkDir = types.StringPointerValue(resp.Keys.TowerAgentCredentials.WorkDir)
 		}
-		r.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUpdated))
-		r.LastUsed = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.LastUsed))
 		r.Name = types.StringValue(resp.Name)
 		r.ProviderType = types.StringValue(string(resp.ProviderType))
 	}

@@ -18,12 +18,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &GiteaCredentialResource{}
-var _ resource.ResourceWithImportState = &GiteaCredentialResource{}
+var _ resource.ResourceWithUpgradeState = &GiteaCredentialResource{}
 
 func NewGiteaCredentialResource() resource.Resource {
 	return &GiteaCredentialResource{}
@@ -53,6 +54,7 @@ func (r *GiteaCredentialResource) Metadata(ctx context.Context, req resource.Met
 func (r *GiteaCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Gitea credentials in Seqera platform using this resource.\n\nGitea credentials store authentication information for accessing Gitea\nrepositories within the Seqera Platform workflows.\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
@@ -377,4 +379,10 @@ func (r *GiteaCredentialResource) Delete(ctx context.Context, req resource.Delet
 
 func (r *GiteaCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+}
+
+func (r *GiteaCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.GiteacredentialStateUpgraderV0},
+	}
 }

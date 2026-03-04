@@ -18,13 +18,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &AWSCredentialResource{}
-var _ resource.ResourceWithImportState = &AWSCredentialResource{}
+var _ resource.ResourceWithUpgradeState = &AWSCredentialResource{}
 
 func NewAWSCredentialResource() resource.Resource {
 	return &AWSCredentialResource{}
@@ -54,6 +55,7 @@ func (r *AWSCredentialResource) Metadata(ctx context.Context, req resource.Metad
 func (r *AWSCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage AWS credentials in Seqera platform using this resource.\n\nAWS credentials store authentication information for accessing AWS services\nwithin the Seqera Platform workflows.\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
 				Optional:    true,
@@ -391,4 +393,10 @@ func (r *AWSCredentialResource) Delete(ctx context.Context, req resource.DeleteR
 
 func (r *AWSCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+}
+
+func (r *AWSCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.AwscredentialStateUpgraderV0},
+	}
 }

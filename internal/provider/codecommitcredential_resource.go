@@ -18,12 +18,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &CodecommitCredentialResource{}
-var _ resource.ResourceWithImportState = &CodecommitCredentialResource{}
+var _ resource.ResourceWithUpgradeState = &CodecommitCredentialResource{}
 
 func NewCodecommitCredentialResource() resource.Resource {
 	return &CodecommitCredentialResource{}
@@ -53,6 +54,7 @@ func (r *CodecommitCredentialResource) Metadata(ctx context.Context, req resourc
 func (r *CodecommitCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Codecommit credentials in Seqera platform using this resource.\n\nCodecommit credentials store AWS authentication information for accessing\nAWS Codecommit repositories within the Seqera Platform workflows.\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"access_key": schema.StringAttribute{
 				Required:    true,
@@ -378,4 +380,10 @@ func (r *CodecommitCredentialResource) Delete(ctx context.Context, req resource.
 
 func (r *CodecommitCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+}
+
+func (r *CodecommitCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.CodecommitcredentialStateUpgraderV0},
+	}
 }

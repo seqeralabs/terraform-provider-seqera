@@ -1,3 +1,9 @@
+# v0.30.5
+
+FIX:
+
+- **Credentials** Fixed credential ID field mapping to correctly deserialize the `id` field from API responses across all credential resources.
+
 # v0.30.4
 
 ENHANCEMENTS:

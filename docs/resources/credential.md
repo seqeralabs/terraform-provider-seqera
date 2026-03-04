@@ -60,10 +60,6 @@ resource "seqera_credential" "my_credential" {
 ### Read-Only
 
 - `credentials_id` (String) Credentials string identifier
-- `date_created` (String) Timestamp when the credential was created
-- `deleted` (Boolean) Flag indicating if the credential has been soft-deleted
-- `last_updated` (String)
-- `last_used` (String) Timestamp when the credential was last used
 
 <a id="nestedatt--keys"></a>
 ### Nested Schema for `keys`

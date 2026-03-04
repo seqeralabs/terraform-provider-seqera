@@ -18,12 +18,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &BitbucketCredentialResource{}
-var _ resource.ResourceWithImportState = &BitbucketCredentialResource{}
+var _ resource.ResourceWithUpgradeState = &BitbucketCredentialResource{}
 
 func NewBitbucketCredentialResource() resource.Resource {
 	return &BitbucketCredentialResource{}
@@ -53,6 +54,7 @@ func (r *BitbucketCredentialResource) Metadata(ctx context.Context, req resource
 func (r *BitbucketCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Bitbucket credentials in Seqera platform using this resource.\n\nBitbucket credentials store authentication information for accessing Bitbucket\nrepositories within the Seqera Platform workflows.\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"base_url": schema.StringAttribute{
 				Optional:    true,
@@ -377,4 +379,10 @@ func (r *BitbucketCredentialResource) Delete(ctx context.Context, req resource.D
 
 func (r *BitbucketCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+}
+
+func (r *BitbucketCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.BitbucketcredentialStateUpgraderV0},
+	}
 }

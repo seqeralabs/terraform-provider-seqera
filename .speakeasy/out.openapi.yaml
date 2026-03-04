@@ -13067,6 +13067,7 @@ components:
             - seqeracompute
           x-speakeasy-name-override: providerType
           x-speakeasy-plan-validators: CredentialsConfigValidator
+          x-speakeasy-param-computed: false
           example: "google"
           description: Cloud or service provider type (e.g., aws, azure, gcp)
         baseUrl:
@@ -13089,27 +13090,33 @@ components:
           readOnly: true
           nullable: true
           description: Flag indicating if the credential has been soft-deleted
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
           format: date-time
           readOnly: true
           nullable: true
           description: Timestamp when the credential was last used
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         dateCreated:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
           description: Timestamp when the credential was created
         lastUpdated:
           type: string
           format: date-time
           readOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-readonly: true
+          x-speakeasy-terraform-ignore: true
         keys:
           $ref: "#/components/schemas/SecurityKeys"
+          x-speakeasy-param-readonly: true
       x-speakeasy-entity: Credential
       x-speakeasy-entity-description: |
         Manage workspace credentials in Seqera platform using this resource.
@@ -18980,7 +18987,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19004,6 +19012,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19024,7 +19033,9 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: AWSCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: |
             Manage AWS credentials in Seqera platform using this resource.
 
@@ -19090,7 +19101,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19114,6 +19126,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19134,7 +19147,9 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: AzureCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: 'Manage Azure credentials in Seqera platform using this resource.
 
 
@@ -19247,7 +19262,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19271,6 +19287,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19297,7 +19314,9 @@ components:
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: BitbucketCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: bitbucket_credential
           x-speakeasy-entity-description: 'Manage Bitbucket credentials in Seqera platform using this resource.
 
@@ -19350,7 +19369,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19374,6 +19394,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19400,7 +19421,9 @@ components:
           x-speakeasy-param-computed: true
           x-speakeasy-name-override: base_url
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: CodecommitCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: codecommit_credential
           x-speakeasy-entity-description: 'Manage Codecommit credentials in Seqera platform using this resource.
 
@@ -19455,7 +19478,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19479,6 +19503,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19499,7 +19524,9 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: ContainerRegistryCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: 'Manage container registry credentials in Seqera platform using this resource.
 
 
@@ -19557,7 +19584,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19581,6 +19609,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19601,7 +19630,9 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: GoogleCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: 'Manage Google credentials in Seqera platform using this resource.
 
 
@@ -19658,7 +19689,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19682,6 +19714,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19708,7 +19741,9 @@ components:
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: GiteaCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: 'Manage Gitea credentials in Seqera platform using this resource.
 
 
@@ -19760,7 +19795,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19784,6 +19820,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19810,7 +19847,9 @@ components:
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: GithubCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: github_credential
           x-speakeasy-entity-description: 'Manage GitHub credentials in Seqera platform using this resource.
 
@@ -19863,7 +19902,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -19887,6 +19927,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -19913,7 +19954,9 @@ components:
           x-speakeasy-name-override: base_url
           x-speakeasy-param-computed: false
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: GitlabCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-terraform-resource-name: gitlab_credential
           x-speakeasy-entity-description: 'Manage GitLab credentials in Seqera platform using this resource.
 
@@ -19965,9 +20008,10 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
           type: string
           description: Unique identifier for the credential (max 22 characters)
+          x-speakeasy-name-override: credentials_id
           x-speakeasy-param-readonly: true
           x-speakeasy-param-suppress-computed-diff: true
         name:
@@ -19989,6 +20033,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -20009,7 +20054,9 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: KubernetesCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: 'Manage Kubernetes credentials in Seqera platform using this resource.
 
 
@@ -20071,10 +20118,12 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-suppress-computed-diff: true
         name:
           minLength: 2
           maxLength: 99
@@ -20094,6 +20143,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -20114,7 +20164,9 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: SSHCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: 'Manage SSH credentials in Seqera platform using this resource. SSH credentials store SSH private keys for secure access to remote compute environments and resources within the Seqera Platform workflows. '
           type: object
           required:
@@ -20166,7 +20218,8 @@ components:
         - keys
       type: object
       properties:
-        credentials_id:
+        id:
+          x-speakeasy-name-override: credentials_id
           type: string
           description: Unique identifier for the credential (max 22 characters)
           x-speakeasy-param-readonly: true
@@ -20190,6 +20243,7 @@ components:
           type: boolean
           description: Flag indicating if the credential has been soft-deleted
           x-speakeasy-param-readonly: true
+          x-speakeasy-param-computed: true
           x-speakeasy-terraform-ignore: true
         lastUsed:
           type: string
@@ -20210,7 +20264,9 @@ components:
           x-speakeasy-param-readonly: true
           x-speakeasy-terraform-ignore: true
         keys:
+          x-speakeasy-param-readonly: true
           x-speakeasy-entity: TowerAgentCredential
+          x-speakeasy-entity-version: 1
           x-speakeasy-entity-description: 'Manage Tower Agent credentials in Seqera platform using this resource.
 
 

@@ -56,7 +56,7 @@ func (b *BitbucketCredentialKeys) GetToken() string {
 
 type BitbucketCredential struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"credentials_id,omitempty"`
+	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")
@@ -162,7 +162,7 @@ func (b *BitbucketCredentialKeysOutput) GetUsername() string {
 
 type BitbucketCredentialOutput struct {
 	// Unique identifier for the credential (max 22 characters)
-	CredentialsID *string `json:"credentials_id,omitempty"`
+	CredentialsID *string `json:"id,omitempty"`
 	// Display name for the credential. Must be 2-99 characters using only letters, numbers, underscores, and hyphens. No spaces allowed.
 	Name string `json:"name"`
 	// Cloud provider type (automatically set to "bitbucket")

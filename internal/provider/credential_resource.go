@@ -14,7 +14,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
@@ -42,13 +41,9 @@ type CredentialResourceModel struct {
 	Category      types.String          `tfsdk:"category"`
 	Checked       types.Bool            `queryParam:"style=form,explode=true,name=checked" tfsdk:"checked"`
 	CredentialsID types.String          `tfsdk:"credentials_id"`
-	DateCreated   types.String          `tfsdk:"date_created"`
-	Deleted       types.Bool            `tfsdk:"deleted"`
 	Description   types.String          `tfsdk:"description"`
 	ID            types.String          `tfsdk:"id"`
 	Keys          *tfTypes.SecurityKeys `tfsdk:"keys"`
-	LastUpdated   types.String          `tfsdk:"last_updated"`
-	LastUsed      types.String          `tfsdk:"last_used"`
 	Name          types.String          `tfsdk:"name"`
 	ProviderType  types.String          `tfsdk:"provider_type"`
 	WorkspaceID   types.Int64           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
@@ -83,20 +78,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"credentials_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Credentials string identifier`,
-			},
-			"date_created": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was created`,
-			},
-			"deleted": schema.BoolAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.Bool{
-					speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-				},
-				Description: `Flag indicating if the credential has been soft-deleted`,
 			},
 			"description": schema.StringAttribute{
 				Optional:    true,
@@ -794,19 +775,6 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 					},
 				},
-			},
-			"last_updated": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-			},
-			"last_used": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Timestamp when the credential was last used`,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,

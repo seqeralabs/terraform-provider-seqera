@@ -18,13 +18,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
 	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &AzureCredentialResource{}
-var _ resource.ResourceWithImportState = &AzureCredentialResource{}
+var _ resource.ResourceWithUpgradeState = &AzureCredentialResource{}
 
 func NewAzureCredentialResource() resource.Resource {
 	return &AzureCredentialResource{}
@@ -58,6 +59,7 @@ func (r *AzureCredentialResource) Metadata(ctx context.Context, req resource.Met
 func (r *AzureCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Azure credentials in Seqera platform using this resource.\n\nAzure credentials support three authentication modes:\n- Shared key: Use batch_key and storage_key (discriminator='azure')\n- Entra: Use tenant_id, client_id, client_secret (discriminator='azure-entra')\n- Cloud: Use tenant_id, client_id, client_secret (discriminator='azure-cloud')\n",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"batch_key": schema.StringAttribute{
 				Optional:    true,
@@ -417,4 +419,10 @@ func (r *AzureCredentialResource) Delete(ctx context.Context, req resource.Delet
 
 func (r *AzureCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+}
+
+func (r *AzureCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.AzurecredentialStateUpgraderV0},
+	}
 }

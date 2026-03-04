@@ -18,12 +18,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
+	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
 	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
 var _ resource.Resource = &KubernetesCredentialResource{}
-var _ resource.ResourceWithImportState = &KubernetesCredentialResource{}
+var _ resource.ResourceWithUpgradeState = &KubernetesCredentialResource{}
 
 func NewKubernetesCredentialResource() resource.Resource {
 	return &KubernetesCredentialResource{}
@@ -53,6 +54,7 @@ func (r *KubernetesCredentialResource) Metadata(ctx context.Context, req resourc
 func (r *KubernetesCredentialResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Manage Kubernetes credentials in Seqera platform using this resource.\n\nKubernetes credentials enable secure connections to Kubernetes clusters for workflow\nexecution. Supports two authentication methods: Service Account Token and X.509 Client Certificates.",
+		Version:             1,
 		Attributes: map[string]schema.Attribute{
 			"client_certificate": schema.StringAttribute{
 				Optional:    true,
@@ -381,4 +383,10 @@ func (r *KubernetesCredentialResource) Delete(ctx context.Context, req resource.
 
 func (r *KubernetesCredentialResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("credentials_id"), req.ID)...)
+}
+
+func (r *KubernetesCredentialResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
+	return map[int64]resource.StateUpgrader{
+		0: {StateUpgrader: stateupgraders.KubernetescredentialStateUpgraderV0},
+	}
 }
