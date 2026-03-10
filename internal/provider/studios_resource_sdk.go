@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -50,11 +51,35 @@ func (r *StudiosResourceModel) RefreshFromSharedDataStudioDto(ctx context.Contex
 			} else {
 				r.Configuration.MountData = nil
 			}
+			if resp.Configuration.MountDataV2 != nil {
+				r.Configuration.MountDataV2 = []tfTypes.MountData{}
+
+				for _, mountDataV2Item := range resp.Configuration.MountDataV2 {
+					var mountDataV2 tfTypes.MountData
+
+					mountDataV2.DataLinkID = types.StringPointerValue(mountDataV2Item.DataLinkID)
+					mountDataV2.Path = types.StringPointerValue(mountDataV2Item.Path)
+
+					r.Configuration.MountDataV2 = append(r.Configuration.MountDataV2, mountDataV2)
+				}
+			} else {
+				r.Configuration.MountDataV2 = nil
+			}
+			r.Configuration.SSHEnabled = types.BoolPointerValue(resp.Configuration.SSHEnabled)
 		}
 		r.Description = types.StringPointerValue(resp.Description)
 		r.IsPrivate = types.BoolPointerValue(resp.IsPrivate)
 		r.Name = types.StringPointerValue(resp.Name)
 		r.SessionID = types.StringPointerValue(resp.SessionID)
+		if resp.SSHDetails == nil {
+			r.SSHDetails = nil
+		} else {
+			r.SSHDetails = &tfTypes.SSHDetails{}
+			r.SSHDetails.Command = types.StringValue(resp.SSHDetails.Command)
+			r.SSHDetails.Host = types.StringValue(resp.SSHDetails.Host)
+			r.SSHDetails.Port = types.Int32Value(int32(resp.SSHDetails.Port))
+			r.SSHDetails.User = types.StringValue(resp.SSHDetails.User)
+		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -181,6 +206,28 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 			mountData = append(mountData, r.Configuration.MountData[mountDataIndex].ValueString())
 		}
 	}
+	var mountDataV2 []shared.MountData
+	if r.Configuration.MountDataV2 != nil {
+		mountDataV2 = make([]shared.MountData, 0, len(r.Configuration.MountDataV2))
+		for mountDataV2Index := range r.Configuration.MountDataV2 {
+			dataLinkID := new(string)
+			if !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.IsNull() {
+				*dataLinkID = r.Configuration.MountDataV2[mountDataV2Index].DataLinkID.ValueString()
+			} else {
+				dataLinkID = nil
+			}
+			path := new(string)
+			if !r.Configuration.MountDataV2[mountDataV2Index].Path.IsUnknown() && !r.Configuration.MountDataV2[mountDataV2Index].Path.IsNull() {
+				*path = r.Configuration.MountDataV2[mountDataV2Index].Path.ValueString()
+			} else {
+				path = nil
+			}
+			mountDataV2 = append(mountDataV2, shared.MountData{
+				DataLinkID: dataLinkID,
+				Path:       path,
+			})
+		}
+	}
 	var environment map[string]string
 	if r.Configuration.Environment != nil {
 		environment = make(map[string]string)
@@ -203,14 +250,22 @@ func (r *StudiosResourceModel) ToSharedDataStudioCreateRequest(ctx context.Conte
 	} else {
 		lifespanHours = nil
 	}
+	sshEnabled := new(bool)
+	if !r.Configuration.SSHEnabled.IsUnknown() && !r.Configuration.SSHEnabled.IsNull() {
+		*sshEnabled = r.Configuration.SSHEnabled.ValueBool()
+	} else {
+		sshEnabled = nil
+	}
 	configuration := shared.DataStudioConfiguration{
 		Gpu:              gpu,
 		CPU:              cpu,
 		Memory:           memory,
 		MountData:        mountData,
+		MountDataV2:      mountDataV2,
 		Environment:      environment,
 		CondaEnvironment: condaEnvironment,
 		LifespanHours:    lifespanHours,
+		SSHEnabled:       sshEnabled,
 	}
 	isPrivate := new(bool)
 	if !r.IsPrivate.IsUnknown() && !r.IsPrivate.IsNull() {

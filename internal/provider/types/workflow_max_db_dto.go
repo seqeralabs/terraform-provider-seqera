@@ -7,12 +7,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Workflow struct {
-	RequiresAttention types.Bool                      `tfsdk:"requires_attention"`
-	Status            types.String                    `tfsdk:"status"`
-	OwnerID           types.Int64                     `tfsdk:"owner_id"`
-	Repository        types.String                    `tfsdk:"repository"`
+type WorkflowMaxDbDto struct {
 	ID                types.String                    `tfsdk:"id"`
+	OwnerID           types.Int64                     `tfsdk:"owner_id"`
 	Submit            types.String                    `tfsdk:"submit"`
 	Start             types.String                    `tfsdk:"start"`
 	Complete          types.String                    `tfsdk:"complete"`
@@ -22,32 +19,21 @@ type Workflow struct {
 	SessionID         types.String                    `tfsdk:"session_id"`
 	Profile           types.String                    `tfsdk:"profile"`
 	WorkDir           types.String                    `tfsdk:"work_dir"`
-	UserName          types.String                    `tfsdk:"user_name"`
-	ScriptID          types.String                    `tfsdk:"script_id"`
 	Revision          types.String                    `tfsdk:"revision"`
 	CommandLine       types.String                    `tfsdk:"command_line"`
 	ProjectName       types.String                    `tfsdk:"project_name"`
 	ScriptName        types.String                    `tfsdk:"script_name"`
 	LaunchID          types.String                    `tfsdk:"launch_id"`
+	Status            types.String                    `tfsdk:"status"`
+	RequiresAttention types.Bool                      `tfsdk:"requires_attention"`
 	ConfigFiles       []types.String                  `tfsdk:"config_files"`
 	Params            map[string]jsontypes.Normalized `tfsdk:"params"`
 	ConfigText        types.String                    `tfsdk:"config_text"`
-	Manifest          *WfManifest                     `tfsdk:"manifest"`
-	Nextflow          *WfNextflow                     `tfsdk:"nextflow"`
-	Stats             *WfStats                        `tfsdk:"stats"`
-	ErrorMessage      types.String                    `tfsdk:"error_message"`
-	ErrorReport       types.String                    `tfsdk:"error_report"`
 	Deleted           types.Bool                      `tfsdk:"deleted"`
-	ProjectDir        types.String                    `tfsdk:"project_dir"`
-	HomeDir           types.String                    `tfsdk:"home_dir"`
-	Container         types.String                    `tfsdk:"container"`
-	ContainerEngine   types.String                    `tfsdk:"container_engine"`
-	ScriptFile        types.String                    `tfsdk:"script_file"`
-	LaunchDir         types.String                    `tfsdk:"launch_dir"`
-	Duration          types.Int64                     `tfsdk:"duration"`
-	ExitStatus        types.Int32                     `tfsdk:"exit_status"`
+	Repository        types.String                    `tfsdk:"repository"`
 	Resume            types.Bool                      `tfsdk:"resume"`
-	Success           types.Bool                      `tfsdk:"success"`
+	Fusion            *WfFusionMeta                   `tfsdk:"fusion"`
+	Wave              *WfWaveMeta                     `tfsdk:"wave"`
 	LogFile           types.String                    `tfsdk:"log_file"`
 	OutFile           types.String                    `tfsdk:"out_file"`
 	OperationID       types.String                    `tfsdk:"operation_id"`

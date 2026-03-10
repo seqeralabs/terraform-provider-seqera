@@ -13,7 +13,7 @@ type UpdateDataStudiosWorkspaceSettingsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID int64 `pathParam:"style=simple,explode=false,name=workspaceId"`
 	// Workspace update request
-	UpdateWorkspaceRequest shared.UpdateWorkspaceRequest `request:"mediaType=application/json"`
+	DataStudioWorkspaceSettingsRequest shared.DataStudioWorkspaceSettingsRequest `request:"mediaType=application/json"`
 }
 
 func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetOrgID() int64 {
@@ -30,11 +30,11 @@ func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetWorkspaceID() int64 {
 	return u.WorkspaceID
 }
 
-func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetUpdateWorkspaceRequest() shared.UpdateWorkspaceRequest {
+func (u *UpdateDataStudiosWorkspaceSettingsRequest) GetDataStudioWorkspaceSettingsRequest() shared.DataStudioWorkspaceSettingsRequest {
 	if u == nil {
-		return shared.UpdateWorkspaceRequest{}
+		return shared.DataStudioWorkspaceSettingsRequest{}
 	}
-	return u.UpdateWorkspaceRequest
+	return u.DataStudioWorkspaceSettingsRequest
 }
 
 type UpdateDataStudiosWorkspaceSettingsResponse struct {

@@ -27,6 +27,7 @@ type WorkflowLaunchResponse struct {
 	MainScript          *string                  `json:"mainScript,omitempty"`
 	EntryName           *string                  `json:"entryName,omitempty"`
 	SchemaName          *string                  `json:"schemaName,omitempty"`
+	PipelineSchemaID    *int64                   `json:"pipelineSchemaId,omitempty"`
 	Resume              *bool                    `json:"resume,omitempty"`
 	PullLatest          *bool                    `json:"pullLatest,omitempty"`
 	StubRun             *bool                    `json:"stubRun,omitempty"`
@@ -181,6 +182,13 @@ func (w *WorkflowLaunchResponse) GetSchemaName() *string {
 		return nil
 	}
 	return w.SchemaName
+}
+
+func (w *WorkflowLaunchResponse) GetPipelineSchemaID() *int64 {
+	if w == nil {
+		return nil
+	}
+	return w.PipelineSchemaID
 }
 
 func (w *WorkflowLaunchResponse) GetResume() *bool {

@@ -4,10 +4,10 @@ package shared
 
 type TraceBeginRequest struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LaunchID     *string        `json:"launchId,omitempty"`
-	Workflow     *WorkflowInput `json:"workflow,omitempty"`
-	ProcessNames []string       `json:"processNames,omitempty"`
-	TowerLaunch  *bool          `json:"towerLaunch,omitempty"`
+	LaunchID     *string   `json:"launchId,omitempty"`
+	Workflow     *Workflow `json:"workflow,omitempty"`
+	ProcessNames []string  `json:"processNames,omitempty"`
+	TowerLaunch  *bool     `json:"towerLaunch,omitempty"`
 }
 
 func (t *TraceBeginRequest) GetLaunchID() *string {
@@ -17,7 +17,7 @@ func (t *TraceBeginRequest) GetLaunchID() *string {
 	return t.LaunchID
 }
 
-func (t *TraceBeginRequest) GetWorkflow() *WorkflowInput {
+func (t *TraceBeginRequest) GetWorkflow() *Workflow {
 	if t == nil {
 		return nil
 	}

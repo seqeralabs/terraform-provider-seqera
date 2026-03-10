@@ -967,7 +967,7 @@ func (s *Pipelines) DescribePipeline(ctx context.Context, request operations.Des
 
 }
 
-// UpdatePipeline - Update pipeline
+// UpdatePipeline - Update pipeline (default version)
 // Updates the details of the pipeline identified by the given `pipelineId`.
 //
 //	**Note**: If `labelIds` is `null`, empty, or omitted, existing pipeline labels are removed.

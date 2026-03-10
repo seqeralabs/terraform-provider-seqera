@@ -5,6 +5,7 @@ package shared
 type TraceCreateResponse struct {
 	Message    *string `json:"message,omitempty"`
 	WorkflowID *string `json:"workflowId,omitempty"`
+	WatchURL   *string `json:"watchUrl,omitempty"`
 }
 
 func (t *TraceCreateResponse) GetMessage() *string {
@@ -19,4 +20,11 @@ func (t *TraceCreateResponse) GetWorkflowID() *string {
 		return nil
 	}
 	return t.WorkflowID
+}
+
+func (t *TraceCreateResponse) GetWatchURL() *string {
+	if t == nil {
+		return nil
+	}
+	return t.WatchURL
 }

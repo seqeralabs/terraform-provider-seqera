@@ -1,3 +1,38 @@
+# v0.31.0
+
+BREAKING CHANGES:
+
+- **Compute Environments** - Configuration block names in `seqera_compute_env` have been renamed from `*_platform` to more descriptive names. Existing Terraform configurations must be updated:
+
+  | Old Name                 | New Name                           |
+  | ------------------------ | ---------------------------------- |
+  | `altair_platform`        | `altair_pbs_configuration`         |
+  | `eks_platform`           | `amazon_eks_cluster_configuration` |
+  | `gke_platform`           | `google_gke_cluster_configuration` |
+  | `k8s_platform`           | `kubernetes_compute_configuration` |
+  | `lsf_platform`           | `ibmlsf_configuration`             |
+  | `moab_platform`          | `moab_configuration`               |
+  | `seqeracompute_platform` | `seqera_compute_configuration`     |
+  | `slurm_platform`         | `slurm_configuration`              |
+  | `uge_platform`           | `univa_grid_engine_configuration`  |
+  | `local_platform`         | **Removed**                        |
+
+- **Compute Environments** - New platform configuration blocks added: `aws_batch_configuration`, `aws_cloud_configuration`, `azure_batch_configuration`, `azure_cloud_configuration`, `google_batch_service_configuration`, `google_cloud_configuration`, `google_life_sciences_configuration_retired`.
+
+- **Compute Environments** - Platform enum updated: removed `local-platform`, added `google-cloud` and `azure-cloud`.
+
+- **Workflows** - The read-only `workflow` block now includes `fusion` and `wave` attributes. The `messages` field has been removed. A new read-only `pipeline_info` block has been added with pipeline version metadata.
+
+ENHANCEMENTS:
+
+- **Pipelines** - Added `version` block for pipeline versioning support and `pipeline_schema_id` field in the launch configuration.
+
+- **Workflows** - Added `pipeline_schema_id` field for pipeline schema association.
+
+- **Studios** - Added `ssh_details` read-only block with SSH connection information (`host`, `port`, `user`, `command`). Added `mount_data_v2` structured block (deprecating the `mount_data` string list) and `ssh_enabled` option in configuration.
+
+- **Credentials** - AWS credential resource (`seqera_aws_credential`) now supports `mode` (`keys` or `role`), `external_id`, and `use_external_id` fields for IAM role-based authentication with cross-account external ID support.
+
 # v0.30.5
 
 FIX:

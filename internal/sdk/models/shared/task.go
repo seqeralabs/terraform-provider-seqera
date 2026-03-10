@@ -92,12 +92,13 @@ type Task struct {
 	InvCtxt              *int64 `json:"invCtxt,omitempty"`
 	NumSpotInterruptions *int   `json:"numSpotInterruptions,omitempty"`
 	// Task exit value (can be string)
-	Exit        *string    `json:"exit,omitempty"`
-	ID          *int64     `json:"id,omitempty"`
-	TaskID      int64      `json:"taskId"`
-	Status      TaskStatus `json:"status"`
-	DateCreated *time.Time `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time `json:"lastUpdated,omitempty"`
+	Exit         *string    `json:"exit,omitempty"`
+	ID           *int64     `json:"id,omitempty"`
+	TaskID       int64      `json:"taskId"`
+	Status       TaskStatus `json:"status"`
+	DateCreated  *time.Time `json:"dateCreated,omitempty"`
+	LastUpdated  *time.Time `json:"lastUpdated,omitempty"`
+	ErrorMessage *string    `json:"errorMessage,omitempty"`
 }
 
 func (t Task) MarshalJSON() ([]byte, error) {
@@ -459,4 +460,11 @@ func (t *Task) GetLastUpdated() *time.Time {
 		return nil
 	}
 	return t.LastUpdated
+}
+
+func (t *Task) GetErrorMessage() *string {
+	if t == nil {
+		return nil
+	}
+	return t.ErrorMessage
 }

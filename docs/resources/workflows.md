@@ -39,6 +39,7 @@ resource "seqera_workflows" "my_workflows" {
   main_script         = "main.nf"
   params_text         = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
   pipeline            = "https://github.com/nextflow-io/hello"
+  pipeline_schema_id  = 10
   post_run_script     = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
   pre_run_script      = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
   pull_latest         = true
@@ -82,6 +83,7 @@ resource "seqera_workflows" "my_workflows" {
 - `main_script` (String) Main script path. Requires replacement if changed.
 - `params_text` (String) Pipeline parameters text. Requires replacement if changed.
 - `pipeline` (String) Requires replacement if changed.
+- `pipeline_schema_id` (Number) Requires replacement if changed.
 - `post_run_script` (String) Script to run after pipeline execution. Requires replacement if changed.
 - `pre_run_script` (String) Script to run before pipeline execution. Requires replacement if changed.
 - `pull_latest` (Boolean) Requires replacement if changed.
@@ -98,106 +100,86 @@ resource "seqera_workflows" "my_workflows" {
 
 ### Read-Only
 
-- `workflow` (Attributes) (see [below for nested schema](#nestedatt--workflow))
+- `pipeline_info` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info))
+- `workflow` (Attributes) Represents a workflow execution record.
+Contains execution status, metadata, and results from pipeline
+runs including logs and performance metrics. (see [below for nested schema](#nestedatt--workflow))
 - `workflow_id` (String) Workflow string identifier
+
+<a id="nestedatt--pipeline_info"></a>
+### Nested Schema for `pipeline_info`
+
+Read-Only:
+
+- `id` (Number)
+- `version` (Attributes) (see [below for nested schema](#nestedatt--pipeline_info--version))
+- `workspace_id` (Number)
+
+<a id="nestedatt--pipeline_info--version"></a>
+### Nested Schema for `pipeline_info.version`
+
+Read-Only:
+
+- `date_created` (String)
+- `hash` (String)
+- `id` (String)
+- `is_default` (Boolean)
+- `is_draft_version` (Boolean)
+- `last_updated` (String)
+- `name` (String)
+
+
 
 <a id="nestedatt--workflow"></a>
 ### Nested Schema for `workflow`
 
 Read-Only:
 
-- `command_line` (String)
-- `complete` (String) Workflow completion time (null if not completed)
-- `config_files` (List of String)
-- `config_text` (String)
-- `container` (String)
-- `container_engine` (String)
+- `command_line` (String) Command line
+- `complete` (String) Timestamp when the workflow execution completed
+- `config_files` (List of String) Config files (can be null)
+- `config_text` (String) Config text
 - `date_created` (String)
-- `deleted` (Boolean)
-- `duration` (Number)
-- `error_message` (String) Error message (null if no error)
-- `error_report` (String) Error report (null if no error)
-- `exit_status` (Number)
-- `home_dir` (String)
-- `id` (String)
+- `deleted` (Boolean) Whether the workflow is deleted
+- `fusion` (Attributes) (see [below for nested schema](#nestedatt--workflow--fusion))
+- `id` (String) Unique identifier for the workflow execution
 - `last_updated` (String)
-- `launch_dir` (String)
-- `launch_id` (String)
+- `launch_id` (String) Launch ID
 - `log_file` (String)
-- `manifest` (Attributes) (see [below for nested schema](#nestedatt--workflow--manifest))
-- `nextflow` (Attributes) (see [below for nested schema](#nestedatt--workflow--nextflow))
 - `operation_id` (String)
 - `out_file` (String)
-- `owner_id` (Number)
-- `params` (Map of String)
-- `profile` (String)
-- `project_dir` (String)
-- `project_name` (String)
-- `repository` (String)
-- `requires_attention` (Boolean)
-- `resume` (Boolean)
-- `revision` (String)
-- `run_name` (String)
-- `script_file` (String)
-- `script_id` (String)
-- `script_name` (String)
-- `session_id` (String)
-- `start` (String) Workflow start time (null if not started)
-- `stats` (Attributes) (see [below for nested schema](#nestedatt--workflow--stats))
+- `owner_id` (Number) Numeric identifier of the user who owns this workflow
+- `params` (Map of String) Workflow parameters (can be null)
+- `profile` (String) Profile
+- `project_name` (String) Project name
+- `repository` (String) Repository
+- `requires_attention` (Boolean) Requires attention flag
+- `resume` (Boolean) Resume flag
+- `revision` (String) Revision
+- `run_name` (String) Run name
+- `script_name` (String) Script name
+- `session_id` (String) Session ID
+- `start` (String) Timestamp when the workflow execution actually started
 - `status` (String)
-- `submit` (String)
-- `success` (Boolean)
-- `user_name` (String)
-- `work_dir` (String)
+- `submit` (String) Timestamp when the workflow was submitted for execution
+- `wave` (Attributes) (see [below for nested schema](#nestedatt--workflow--wave))
+- `work_dir` (String) Work directory
 
-<a id="nestedatt--workflow--manifest"></a>
-### Nested Schema for `workflow.manifest`
+<a id="nestedatt--workflow--fusion"></a>
+### Nested Schema for `workflow.fusion`
 
 Read-Only:
 
-- `author` (String)
-- `default_branch` (String)
-- `description` (String)
-- `gitmodules` (String)
-- `home_page` (String)
-- `icon` (String)
-- `main_script` (String)
-- `name` (String)
-- `nextflow_version` (String)
+- `enabled` (Boolean)
 - `version` (String)
 
 
-<a id="nestedatt--workflow--nextflow"></a>
-### Nested Schema for `workflow.nextflow`
+<a id="nestedatt--workflow--wave"></a>
+### Nested Schema for `workflow.wave`
 
 Read-Only:
 
-- `build` (String)
-- `timestamp` (String)
-- `version` (String)
-
-
-<a id="nestedatt--workflow--stats"></a>
-### Nested Schema for `workflow.stats`
-
-Read-Only:
-
-- `cached_count` (Number)
-- `cached_count_fmt` (String)
-- `cached_duration` (Number)
-- `cached_pct` (Number)
-- `compute_time_fmt` (String)
-- `failed_count` (Number)
-- `failed_count_fmt` (String)
-- `failed_duration` (Number)
-- `failed_pct` (Number)
-- `ignored_count` (Number)
-- `ignored_count_fmt` (String)
-- `ignored_pct` (Number)
-- `succeed_count` (Number)
-- `succeed_count_fmt` (String)
-- `succeed_duration` (Number)
-- `succeed_pct` (Number)
+- `enabled` (Boolean)
 
 ## Import
 

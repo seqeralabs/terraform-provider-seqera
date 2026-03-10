@@ -32,6 +32,7 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_mapvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/mapvalidators"
+	speakeasy_objectvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/objectvalidators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -61,6 +62,7 @@ type StudiosResourceModel struct {
 	Name                types.String                     `tfsdk:"name"`
 	SessionID           types.String                     `tfsdk:"session_id"`
 	Spot                types.Bool                       `tfsdk:"spot"`
+	SSHDetails          *tfTypes.SSHDetails              `tfsdk:"ssh_details"`
 	WorkspaceID         types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
@@ -179,7 +181,55 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 							listplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 						},
-						ElementType: types.StringType,
+						ElementType:        types.StringType,
+						DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+						Description:        `Requires replacement if changed.`,
+					},
+					"mount_data_v2": schema.ListNestedAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							listplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
+							PlanModifiers: []planmodifier.Object{
+								objectplanmodifier.RequiresReplaceIfConfigured(),
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
+							Attributes: map[string]schema.Attribute{
+								"data_link_id": schema.StringAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										stringplanmodifier.RequiresReplaceIfConfigured(),
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
+									Description: `Requires replacement if changed.`,
+								},
+								"path": schema.StringAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										stringplanmodifier.RequiresReplaceIfConfigured(),
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
+									Description: `Requires replacement if changed.`,
+								},
+							},
+						},
+						Description: `Requires replacement if changed.`,
+					},
+					"ssh_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.Bool{
+							boolplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
 						Description: `Requires replacement if changed.`,
 					},
 				},
@@ -249,6 +299,28 @@ func (r *StudiosResource) Schema(ctx context.Context, req resource.SchemaRequest
 					boolplanmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Whether to use spot or on-demand instances. Studios using Spot instances are not compatible with batch compute environments. Requires replacement if changed.`,
+			},
+			"ssh_details": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"command": schema.StringAttribute{
+						Computed:    true,
+						Description: `The full SSH command to execute`,
+					},
+					"host": schema.StringAttribute{
+						Computed:    true,
+						Description: `The hostname to connect to`,
+					},
+					"port": schema.Int32Attribute{
+						Computed:    true,
+						Description: `The SSH port number`,
+					},
+					"user": schema.StringAttribute{
+						Computed:    true,
+						Description: `The user in the format 'username@sessionId'`,
+					},
+				},
+				Description: `SSH connection details for a Studio session`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Computed: true,

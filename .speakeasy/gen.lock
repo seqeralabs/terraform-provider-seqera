@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 6483bf93a43adc6f235f9fe01f06eab9
-  docVersion: 1.102.0
-  speakeasyVersion: 1.740.0
-  generationVersion: 2.846.4
+  docChecksum: 0432053270fe022267e4fe422f9fe093
+  docVersion: 1.116.0
+  speakeasyVersion: 1.750.0
+  generationVersion: 2.856.1
   releaseVersion: 0.30.5
   configChecksum: e0f34224901b5f046994212c107e84e5
 persistentEdits:
@@ -15,7 +15,7 @@ features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.46.49
+    core: 3.46.50
     deepObjectParams: 0.1.0
     deprecations: 2.82.0
     getRequestBodies: 2.81.1
@@ -114,7 +114,7 @@ trackedFiles:
     pristine_git_object: 95bff4e89a0544480c2d3ce43a6da516d7542125
   examples/resources/seqera_compute_env/resource.tf:
     id: 281fbb9dbe05
-    last_write_checksum: sha1:b5c17797da4d70d04e60f4412756c989f8b95cbc
+    last_write_checksum: sha1:0b69051d3971ce338b861bb682d0ce53b418f249
     pristine_git_object: eb351742350d6f70ed41a265a3c499868043286d
   examples/resources/seqera_container_registry_credential/import-by-string-id.tf:
     id: 64a1256ab555
@@ -214,7 +214,7 @@ trackedFiles:
     pristine_git_object: 12a7eb4925e4b351967b0515d9f2b509e905ec4d
   examples/resources/seqera_pipeline/resource.tf:
     id: b26016c20b8c
-    last_write_checksum: sha1:f1e530982a8c762bdbb991fc4962daf2585d75b3
+    last_write_checksum: sha1:0a443c5f8df953ce1cf4617b4c144d000f750a16
     pristine_git_object: 967785067a13174bb250560be1262a241549c047
   examples/resources/seqera_pipeline_secret/import-by-string-id.tf:
     id: 706fedb7e486
@@ -270,7 +270,7 @@ trackedFiles:
     pristine_git_object: ebe5c685294e2baca949dfdf846337e51207d59d
   examples/resources/seqera_workflows/resource.tf:
     id: c2c588ebe140
-    last_write_checksum: sha1:1e57b695d39f434981631c6eeca791ca7a960a1b
+    last_write_checksum: sha1:e63046630016c1fb47e2e7c5e82ebe3d99d9712a
     pristine_git_object: b1516351f7d8275a0a4bca3db3bd1a49dd05c3e7
   examples/resources/seqera_workspace/import-by-string-id.tf:
     id: c349aba83f4f
@@ -406,11 +406,11 @@ trackedFiles:
     pristine_git_object: 0ea64fbeb1fd7709d7241a8e06d34bfe9d0323d3
   internal/provider/action_resource.go:
     id: f7c19bf35b58
-    last_write_checksum: sha1:78d5478306a8b6cb5fe65c6e8c1ca9b706887ccc
+    last_write_checksum: sha1:d33f26dccce031ce422a62bfae0659a2359ba519
     pristine_git_object: fc35041e2f1cf6db01d04e9e9e861df96d042782
   internal/provider/action_resource_sdk.go:
     id: 28576317893d
-    last_write_checksum: sha1:39c38165aab34282b2669d061c5b24b5a5866cd1
+    last_write_checksum: sha1:fb21d93dbf453a92dc32116ea7f5b1205ecc3e83
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
@@ -430,11 +430,11 @@ trackedFiles:
     pristine_git_object: 4d4451329e274230a287210d496b8e03aea29724
   internal/provider/awscredential_resource.go:
     id: fd1fb9518f67
-    last_write_checksum: sha1:b9fdc09d2d6c146e4a6b212f408c765874d213ef
+    last_write_checksum: sha1:8464d3110e5ce9787417f800b5a5748b09eada9d
     pristine_git_object: 718916f70c62d6cdeb910a896ec32723c62f9346
   internal/provider/awscredential_resource_sdk.go:
     id: 6dd3171fbbcc
-    last_write_checksum: sha1:3537be78f59c4c25fa358f59dd42882ff604ae7e
+    last_write_checksum: sha1:bf4dcb70e6072016cc6fb69e63532f19a62021b1
     pristine_git_object: fb79abddd43fc8a362ddaff379637c1def78665a
   internal/provider/azurecredential_resource.go:
     id: 4e14a60d78ce
@@ -462,11 +462,11 @@ trackedFiles:
     pristine_git_object: 0c1b43d5db49b023cf3c7408c198a4d66c795d8a
   internal/provider/computeenv_resource.go:
     id: f4162f219efd
-    last_write_checksum: sha1:f1e302faf75c4adfd454dd6a3d09883e4f5e887f
+    last_write_checksum: sha1:1de2ba28adebddd83fd241e483e4dad543ef8100
     pristine_git_object: d5550a0a3bc980d281c55531d71458e7e4968b48
   internal/provider/computeenv_resource_sdk.go:
     id: 1e29eea44332
-    last_write_checksum: sha1:92e294423868dde4c5589b11a2f14827470184ac
+    last_write_checksum: sha1:ec28a2317bf09b9eaa3cd52f42c91823db63423f
     pristine_git_object: 2e933070714e8aa8d9ab83f2e1b81abd6f262ade
   internal/provider/containerregistrycredential_resource.go:
     id: f0a18857f2ea
@@ -582,11 +582,11 @@ trackedFiles:
     pristine_git_object: fe81d09c0d5656f2f24a007997800ddfa455d8b7
   internal/provider/pipeline_resource.go:
     id: 4ed6bd4f0039
-    last_write_checksum: sha1:390b0ac2346b7fb6f5a2539d7b111d73c0d63b4f
+    last_write_checksum: sha1:cd81fbb6a7a4a7930fc1295e7370119e4c2a21eb
     pristine_git_object: 775b794c8dc2b188c818f0bfc8e90364ef46737b
   internal/provider/pipeline_resource_sdk.go:
     id: c3bca9acd758
-    last_write_checksum: sha1:050d8971b54c66f401372a121a2030e41eccd294
+    last_write_checksum: sha1:384112bdc86df811e4d80414247cf12236005a2e
     pristine_git_object: eb186d4cf2287bf1eec7eb07d9b9c7e0386b7b26
   internal/provider/pipelinesecret_resource.go:
     id: 5319f8284106
@@ -674,11 +674,11 @@ trackedFiles:
     pristine_git_object: a633929e19d2c86fc43fdc96a586954c0992048c
   internal/provider/studios_resource.go:
     id: d5d4f38592d9
-    last_write_checksum: sha1:dbc6efe963699cd6129ff33d4547df9376a38aa7
+    last_write_checksum: sha1:10dbb5a896ba58505e254138a3fd23f3667838cb
     pristine_git_object: b69af57c1f895efdf781dd1ccf3aa900a68744e2
   internal/provider/studios_resource_sdk.go:
     id: 3f2ecca255e3
-    last_write_checksum: sha1:64d5fa6354a557af5305bb71c447724aecf43067
+    last_write_checksum: sha1:0ab5f44f8e4e88f1d94f80dbbb186ea9347400e6
     pristine_git_object: 5bfc8970d75b9bf9e6a0729b69f9a3cd9ad0eaeb
   internal/provider/teams_resource.go:
     id: 6e0e94a85c68
@@ -786,11 +786,11 @@ trackedFiles:
     pristine_git_object: c54b0bbc1db7eb7c002b3971a12a3065b0225719
   internal/provider/types/compute_config.go:
     id: 4d8a6c389309
-    last_write_checksum: sha1:e1a644fdcdf47bdc4081ee9b1042eebeb4df8375
+    last_write_checksum: sha1:5a5307fe60c751fe5d91fd9988774cd30f7a7c5b
     pristine_git_object: e30a3a295eb11a2e06224274ca50c6d570e935f3
   internal/provider/types/compute_env_compute_config.go:
     id: 6553ec9a03cb
-    last_write_checksum: sha1:b39d8be2f986714deb70006935c68d45aae9c720
+    last_write_checksum: sha1:41a68fe013706fe7f453a8b55d9fb22b31eaf47d
     pristine_git_object: 4e2b91d1eb0b29699d4a1d4e6603011abd8a7418
   internal/provider/types/compute_env_response_dto_resources.go:
     id: 3bca39bd37e3
@@ -804,6 +804,8 @@ trackedFiles:
     id: c687a79ae869
     last_write_checksum: sha1:0b7f0ebf8d0989bdb86aa7d52c8340346831cdbb
     pristine_git_object: 99203bf83ec24cc39d1ae20e7ec654bf899f016c
+  internal/provider/types/create_pipeline_version_request.go:
+    last_write_checksum: sha1:870b727f1c2dc238554a6bae532cd3ff2364210a
   internal/provider/types/credential.go:
     id: b7725d71bf9e
     last_write_checksum: sha1:71093b68ac0ba714032a31471ec6542ca4bb68aa
@@ -818,7 +820,7 @@ trackedFiles:
     pristine_git_object: 9e07cf4824e7bd929522b3c0d2eda2ebf76d3391
   internal/provider/types/data_studio_configuration.go:
     id: 25a48f67c4fb
-    last_write_checksum: sha1:26c11b0621e64ee508a2d8605f6cf1987eb3d446
+    last_write_checksum: sha1:4aa6c7d0c1dd711fb5de49dc4b8c39d409fad4a8
     pristine_git_object: 5d2f7ae2dd4a0505cb1dbb535e1e664771fcc9ed
   internal/provider/types/forge_config.go:
     id: 59cc8ac25831
@@ -856,10 +858,8 @@ trackedFiles:
     id: d670e605e603
     last_write_checksum: sha1:4e5ee0e22543aebebef80ac957f2141ed567bf59
     pristine_git_object: 1314ce36e4cb0dfd552031415264b763974c34cc
-  internal/provider/types/google_life_sciences_configuration.go:
-    id: 4d61bc36dedb
-    last_write_checksum: sha1:7394f7f489d00fcff6469d672496963f80641e9e
-    pristine_git_object: 9be1d1847a601daf34b5070dbe4ff8151053df2b
+  internal/provider/types/google_life_sciences_configuration_retired.go:
+    last_write_checksum: sha1:aa810f198e04fa3090d4d7017db9e95df5143650
   internal/provider/types/ibmlsf_configuration.go:
     id: 601a3c320ae8
     last_write_checksum: sha1:98c23e932b6aec2cd918743d45a09eb0d786e11f
@@ -876,10 +876,6 @@ trackedFiles:
     id: 7fe2f9d9c53c
     last_write_checksum: sha1:a1200055e3a705c94abbf2870dc971d600474750
     pristine_git_object: 57a30b21ca693cde4f2e4d6dd6d128505280451a
-  internal/provider/types/local_execution_configuration.go:
-    id: b5c03505341d
-    last_write_checksum: sha1:3b9de41f6be5012a9b38c799be0587b5464ce649
-    pristine_git_object: a94753adeeee5ddecdf2c7510641610ff6c2f3fb
   internal/provider/types/local_security_keys.go:
     id: 9d6f76c965ee
     last_write_checksum: sha1:74916914478277178628509bd7afb7bdaf23f5eb
@@ -892,6 +888,12 @@ trackedFiles:
     id: 339ce0dd7aca
     last_write_checksum: sha1:0e98c71261fd33017ccca620992cab590c9704f3
     pristine_git_object: eb84f2d23ae2970348690f068e599fb67cc3f359
+  internal/provider/types/mount_data.go:
+    last_write_checksum: sha1:6439db35cbcddc245d8e0a590878d02639f4f221
+  internal/provider/types/pipeline_min_info_response.go:
+    last_write_checksum: sha1:324c9d1aa82d5253f22680bb4dbaad186d20b143
+  internal/provider/types/pipeline_min_info_response_pipeline_version_min_info_response.go:
+    last_write_checksum: sha1:aff972a59519577337ba281cc2ac1803ddb03d38
   internal/provider/types/s3_compatible_credentials.go:
     id: 94157ae642fe
     last_write_checksum: sha1:c710f072890b547c4d361089ee8d9d6a598d4e12
@@ -916,6 +918,8 @@ trackedFiles:
     id: 1f4f9de1e711
     last_write_checksum: sha1:4ba667b2cc5144b2c19c3ed0e30db3592c0316e8
     pristine_git_object: e304e804365ad9c8c0de1fdf5e6247299eba8a2b
+  internal/provider/types/ssh_details.go:
+    last_write_checksum: sha1:674e551608c5d0a59f30f170b32565b57ebb6ff5
   internal/provider/types/tower_agent_credentials.go:
     id: 0e460efd9daf
     last_write_checksum: sha1:94f361b9318b35eaac17f027a696632a1beba299
@@ -924,41 +928,31 @@ trackedFiles:
     id: 1bff7795c6ea
     last_write_checksum: sha1:64d058d21c656d6f0fcc84c9551a5d09f4c1bc30
     pristine_git_object: 4103cca9f88b2e8e142ba6023efb0383d00b211a
-  internal/provider/types/wf_manifest.go:
-    id: db4e7a984f48
-    last_write_checksum: sha1:52bb6d3c98802f6ce73a991d983a46884e2609d5
-    pristine_git_object: bec6423681d076569c9a882e3ca76e7abd279d41
-  internal/provider/types/wf_nextflow.go:
-    id: ead388c64afb
-    last_write_checksum: sha1:1cd41e290dcef44a968131ba478e5ece6dc78f08
-    pristine_git_object: dc7b134f815ed91edcb2fb32e47666191cc9d386
-  internal/provider/types/wf_stats.go:
-    id: 45c3c9587b4a
-    last_write_checksum: sha1:ef83b99d84e1bdb728b04b1f1929c8d7574414b8
-    pristine_git_object: ae5f682123d141f83904dd0499b002eb2d9ba2b6
-  internal/provider/types/workflow.go:
-    id: f22317b56fc1
-    last_write_checksum: sha1:63d095682e5f8b7453398fbe8b6c3013b2cc3d7a
-    pristine_git_object: 4c795ca235b1d0f14868db2dd81f7d91dfcf475c
+  internal/provider/types/wf_fusion_meta.go:
+    last_write_checksum: sha1:b8466e2429b1f6cf552d01cb1f7d9eb4f170ac52
+  internal/provider/types/wf_wave_meta.go:
+    last_write_checksum: sha1:8c29831f2b0773a5637372ca12724590a7822cba
   internal/provider/types/workflow_launch_request.go:
     id: af36165a8643
-    last_write_checksum: sha1:a5672fabad30691c0277eb6ed02361b5cd6b279f
+    last_write_checksum: sha1:d9f2cb3681b277f5b20f37c369750fef3d8c8e26
     pristine_git_object: 11b31ac54b41f1ff6655e5775689da9baec929f7
   internal/provider/types/workflow_launch_request1.go:
     id: 2010d24856d6
-    last_write_checksum: sha1:8f4196f6d7f1cd8d87d4fee99237775049f6b260
+    last_write_checksum: sha1:5bc6f4232281b57b60e65657c401f5ede570204d
     pristine_git_object: 9b6d114ef0f566a0917af8c165799d1fea4bab0e
+  internal/provider/types/workflow_max_db_dto.go:
+    last_write_checksum: sha1:9fce06dd0a906bc77abc851abaf41d74d9b90c38
   internal/provider/utils.go:
     id: 312d50f148af
     last_write_checksum: sha1:ebb9748832af8f468cc80deac9ce582a4dddd690
     pristine_git_object: 9cc78dd1f7684941df14144df744dad2b23885f9
   internal/provider/workflows_resource.go:
     id: efcad015245a
-    last_write_checksum: sha1:6fce720a6083d2b4aa2117dceeebba20fbe21a3d
+    last_write_checksum: sha1:f3463a2553fd4b01aad8b3809c9910256bffe2a1
     pristine_git_object: 2ec8cdfba570a37c74c14055a3d9ffa12fe8881c
   internal/provider/workflows_resource_sdk.go:
     id: ee2d992725aa
-    last_write_checksum: sha1:c9ddeb12f0b6ece5cc5854812cf8a0a4f960f5e6
+    last_write_checksum: sha1:13f2e97902ce45d48f99da1e599b2c5defeb3d54
     pristine_git_object: 32dd5a54a21939c3cfa3c2ada55b841cb54032f9
   internal/provider/workspace_resource.go:
     id: 4255ab3c913f
@@ -986,7 +980,7 @@ trackedFiles:
     pristine_git_object: 2088635cf294256f64e87885c0426517fb230861
   internal/sdk/credentials.go:
     id: 67c2f2d273f9
-    last_write_checksum: sha1:3d5ca3e9d8e8e5d6e3cbb84cadee9a195ea22646
+    last_write_checksum: sha1:bb71379af77c891cff98cf18921dc53e0836176e
     pristine_git_object: 47bd93d33a5187778e37e15f28a86920d700bb6d
   internal/sdk/datalinks.go:
     id: ef6966e16293
@@ -994,15 +988,15 @@ trackedFiles:
     pristine_git_object: b1e44827a51863975f9f474fb86fdd9633d9f363
   internal/sdk/datasets.go:
     id: c03fc9a88bfc
-    last_write_checksum: sha1:f0cc4bbebe76f784d2fc23481355a7803f9c7e5e
+    last_write_checksum: sha1:2868694a0f3bf89c90e138ff3642cdc6797696ad
     pristine_git_object: 6d697a222027e0ff47a1c606cab4da12b0602bd5
   internal/sdk/docs/models/operations/option.md:
     id: a35737eb2e35
-    last_write_checksum: sha1:08cfee5d266c9d82987e448f6c98a143aa42c5f8
+    last_write_checksum: sha1:f45321582662c187a12e797364a9b5c9f187311d
     pristine_git_object: 35d8a1e2ad48a64702c6a654ac8880dabec053b0
   internal/sdk/ga4gh.go:
     id: 42dfc548ccdc
-    last_write_checksum: sha1:a8f82757cec42fdaf234e4e9ce302d6ae4f8d25a
+    last_write_checksum: sha1:100b74a03e86749b01e264ece11dc56418e620e3
     pristine_git_object: e8ffa8ceba5dcac2a4d3d4527451748343a17f85
   internal/sdk/identities.go:
     id: a724fedb400f
@@ -1134,7 +1128,7 @@ trackedFiles:
     pristine_git_object: e667041d614b37d4b3ea9a33a94b15ea030d712b
   internal/sdk/models/operations/createawscredentials.go:
     id: 85e477ba68bb
-    last_write_checksum: sha1:c4a4869d0ca191ea626525957ca7d0459877b433
+    last_write_checksum: sha1:3279c0628c0bff88ebab98324d4ae85a9cd3afac
     pristine_git_object: 4c0921a031743a7d4ece3b437638330c7d9a83c5
   internal/sdk/models/operations/createazurecredentials.go:
     id: b45aead99e48
@@ -1232,6 +1226,8 @@ trackedFiles:
     id: 5f5e9c21ee88
     last_write_checksum: sha1:6dd90896112971d91cf9d45731434abc75054e7c
     pristine_git_object: 21a5e651df02c095eef1f45bd94e5a79fe3b0107
+  internal/sdk/models/operations/createpipelineschema.go:
+    last_write_checksum: sha1:90beb3d898b4d148201fbd0d2ed3f9405fae7422
   internal/sdk/models/operations/createpipelinesecret.go:
     id: dc4aa186bbf0
     last_write_checksum: sha1:7dbedcc004c3240ab9817b88bb7e9f266b43c349
@@ -1240,6 +1236,8 @@ trackedFiles:
     id: bb07e307e98d
     last_write_checksum: sha1:a4839f8e17999bf37a106ab39ed58f6654addad9
     pristine_git_object: 6c563cdf9cdb0bb367bd75af33519abd3df2322b
+  internal/sdk/models/operations/createsshkey.go:
+    last_write_checksum: sha1:d70df7266880670ca42881258f80ecf791250496
   internal/sdk/models/operations/createtoken.go:
     id: 8141776c74e7
     last_write_checksum: sha1:16f9bd5780e1fd5503d1ba1e7106f0e05ce2e461
@@ -1400,6 +1398,8 @@ trackedFiles:
     id: 0e155693ad42
     last_write_checksum: sha1:99800bb47b61c9254fea92999a7eaa343012d79d
     pristine_git_object: 7204e26899e962331a230cdc9c8dcd4c2d383b21
+  internal/sdk/models/operations/deletesshkey.go:
+    last_write_checksum: sha1:7e82e9781edd9e27626e534c1cc117dee79cb021
   internal/sdk/models/operations/deletetoken.go:
     id: 545d4e57e89a
     last_write_checksum: sha1:fcc41997582b29d062a62323474041f021f5ac0d
@@ -1432,6 +1432,8 @@ trackedFiles:
     id: 8a369744c243
     last_write_checksum: sha1:af1ace4846973ca219e42748dd77f27da62b8177
     pristine_git_object: 7aea3817aa23df2000ef397f5d73835c943ba8a2
+  internal/sdk/models/operations/deleteworkspaceuser.go:
+    last_write_checksum: sha1:ff70b1986bd64a74e46d1c03c46806b54b86b3cf
   internal/sdk/models/operations/describeaction.go:
     id: "966976712e46"
     last_write_checksum: sha1:2aef8e465f64c513f9f73a4fa527b5588541240c
@@ -1538,7 +1540,7 @@ trackedFiles:
     pristine_git_object: cbaae92b2d2a259b1d8e8a0df3088f4c2c9526e5
   internal/sdk/models/operations/describepipelinelaunch.go:
     id: 1708099c377e
-    last_write_checksum: sha1:01ba1949f23aba2f1d271ddbb534ab4276805f3e
+    last_write_checksum: sha1:511d1069b070c18eee379d53898e82becb2ee635
     pristine_git_object: e670cb4d864ad3d0873a7d3f40f3e3c32e92aaa0
   internal/sdk/models/operations/describepipelinerepository.go:
     id: 8801e116f3ba
@@ -1546,7 +1548,7 @@ trackedFiles:
     pristine_git_object: 5bb2722ae06ec3bfe227e125ea7bc4f458c46e27
   internal/sdk/models/operations/describepipelineschema.go:
     id: 4b928f34d06a
-    last_write_checksum: sha1:f49685f0574adf04be2b26ead5038f3ceadf5ece
+    last_write_checksum: sha1:b17c1c64ff275fb36559c3411843f4ad28416d46
     pristine_git_object: d1b5806abfb010cde682c6cb0026941614659cf1
   internal/sdk/models/operations/describepipelinesecret.go:
     id: 3f99ed28bc48
@@ -1560,6 +1562,8 @@ trackedFiles:
     id: a85ddc2ebbb2
     last_write_checksum: sha1:ad8cc2869fb51557e2b6b19bbdf92b01f7b9d3d1
     pristine_git_object: 269951ab0f95723155436b936287eb6e117bd89b
+  internal/sdk/models/operations/describesshkey.go:
+    last_write_checksum: sha1:0dc11d3435677a4c9def6e24d3d160fefd538eb1
   internal/sdk/models/operations/describetoweragentcredentials.go:
     id: 3230404bb7bc
     last_write_checksum: sha1:e0e162fb6780fd29a3399506eba3a41063a2768e
@@ -1682,7 +1686,7 @@ trackedFiles:
     pristine_git_object: 87286afb4a14f25371ada7fa6f30585fb55bb9c5
   internal/sdk/models/operations/ga4ghserviceinfo.go:
     id: a18217dcdd73
-    last_write_checksum: sha1:eaafa767e6721327b608d80bdbdb38b5c9d44f7e
+    last_write_checksum: sha1:5775d63f26475d9fda37dce58064ef3569842ba8
     pristine_git_object: 9b2d7e9ba0ac7ab7a8322920863e3b168e087ecf
   internal/sdk/models/operations/generatedatalinkuploadurl.go:
     id: 2ce7b2c8acb2
@@ -1708,6 +1712,8 @@ trackedFiles:
     id: 8d308399adb7
     last_write_checksum: sha1:c03882ee43c9c90d4206f65103c5a5c57886dd24
     pristine_git_object: f40e51b30bd25fd566cc33a1297cc7acac6b66ef
+  internal/sdk/models/operations/getencryptedcredentials.go:
+    last_write_checksum: sha1:ef9ddd2f175d0f0286fa88a393cac3ee7b7af3cb
   internal/sdk/models/operations/getworkflowlog.go:
     id: a2007af19121
     last_write_checksum: sha1:acaba5d61683878e702ccea314e6e38197ab0699
@@ -1794,7 +1800,7 @@ trackedFiles:
     pristine_git_object: 568f09a7fb30fe250997fede35bfe20da038e694
   internal/sdk/models/operations/listlaunchdatasetversions.go:
     id: b6d7242b9e92
-    last_write_checksum: sha1:7a99d093a7d7cfe6525865ef872a4b8d81be5a4b
+    last_write_checksum: sha1:dffeb6abeac3efff1a48e72fbd63c894c887b463
     pristine_git_object: c682a71a3ab9dd241996d8cb4aca0d74aa718f88
   internal/sdk/models/operations/listmanagedcredentials.go:
     id: dec8bf663695
@@ -1840,6 +1846,8 @@ trackedFiles:
     id: fc7e7f9663f3
     last_write_checksum: sha1:c34f8f99f4eb2ab26e13264290d2a386b87824b2
     pristine_git_object: 5842659e9f6e19a6cc60688ea72b47933b3371e8
+  internal/sdk/models/operations/listpipelineversions.go:
+    last_write_checksum: sha1:c45d1ceb134a036acb262aa55b9192d6182bed1e
   internal/sdk/models/operations/listplatformregions.go:
     id: 37482440181a
     last_write_checksum: sha1:21b52e7b689453410a38dd043eece1548c52751a
@@ -1848,6 +1856,8 @@ trackedFiles:
     id: f0ad34b83c59
     last_write_checksum: sha1:af369f53cf5d39f1f58bf549c82e6cf8830195a1
     pristine_git_object: 57a00e8fcd754a368e7c0f7b7bf2104387af584e
+  internal/sdk/models/operations/listsshkeys.go:
+    last_write_checksum: sha1:00284e49fb924ad7106763fa64871ed1eda6ba6f
   internal/sdk/models/operations/listworkflows.go:
     id: 5ccab7404dd3
     last_write_checksum: sha1:bf32f7802a5fbf3c238bc49ecadca1bd26105172
@@ -1876,6 +1886,8 @@ trackedFiles:
     id: 9e7813d6986a
     last_write_checksum: sha1:9a79a1d79222411002596595a7584bf66a5f9e10
     pristine_git_object: f6f5b63c38d835976e6f785c0aade5a8eaf54001
+  internal/sdk/models/operations/managepipelineversion.go:
+    last_write_checksum: sha1:69034e7cc9008caadec96dfae19754d749f72922
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
     last_write_checksum: sha1:ca61f85e80bde8486c36ac7697a68086665d4062
@@ -1926,7 +1938,7 @@ trackedFiles:
     pristine_git_object: ccdb6e36db8c9db4a5ab14e083ea970b5ae7a07a
   internal/sdk/models/operations/updateawscredentials.go:
     id: e8911e4f76af
-    last_write_checksum: sha1:5eb53d07d949a87dd1f88ed261c3b481d8abf11b
+    last_write_checksum: sha1:a7cfbe6da94f8551725b7334a6fd5102aa94cc82
     pristine_git_object: 3e2391c515076b6d3c87c79685bf5d033d1b7833
   internal/sdk/models/operations/updateazurecredentials.go:
     id: 7fc8fe4e2314
@@ -1974,7 +1986,7 @@ trackedFiles:
     pristine_git_object: 4f9f1151c87215baecab33272bbb39a7d953c72f
   internal/sdk/models/operations/updatedatastudiosworkspacesettings.go:
     id: 4b4d6754cd64
-    last_write_checksum: sha1:c5b1370fda4a7ec755ddb2ee1d766f56d702fd93
+    last_write_checksum: sha1:291da8255dd5fc25ba2f4ebb56fc8890e87afbd4
     pristine_git_object: 8e81d37d107dc0cb14ed0ba599bbc9b3ddbcfb9e
   internal/sdk/models/operations/updategiteacredentials.go:
     id: e445df842b48
@@ -2028,6 +2040,8 @@ trackedFiles:
     id: 19b64d6519f2
     last_write_checksum: sha1:4d709508ce7fe04c16dc2643eea4d38534af453c
     pristine_git_object: 91005128b148d00961beba2df4584c7aae183ea2
+  internal/sdk/models/operations/updatepipelineversion.go:
+    last_write_checksum: sha1:827b2ed98820558f8f4191216e0a16dba3a1d178
   internal/sdk/models/operations/updatesshcredentials.go:
     id: c3e32df7fc4c
     last_write_checksum: sha1:50da99e195d2fdb4ee5a51f9ee630ec0ca808cbd
@@ -2104,6 +2118,12 @@ trackedFiles:
     id: b1304cc793ad
     last_write_checksum: sha1:9f41262c9731c80089c38e0ea83f2faeb61a9b05
     pristine_git_object: 933578121a05780760e63df5229bc917b3760522
+  internal/sdk/models/operations/validatepipelineversionname.go:
+    last_write_checksum: sha1:b25db8e5b5724413b9b0c1b85421ac71cc98ec9b
+  internal/sdk/models/operations/validatesshkey.go:
+    last_write_checksum: sha1:0ab4c67c95d14111fc6ec0666832b27ddf7037a5
+  internal/sdk/models/operations/validatesshkeyname.go:
+    last_write_checksum: sha1:1be9d3cf277584b3367defcf127845906ad39b4a
   internal/sdk/models/operations/validateteamname.go:
     id: c07ee6a5f2ff
     last_write_checksum: sha1:92176c376f035719e70eb505c3e1f27fe7764187
@@ -2142,7 +2162,7 @@ trackedFiles:
     pristine_git_object: 284ccea5cdb034b2a5287aefd3885b6d952ecb89
   internal/sdk/models/shared/actionresponsedto.go:
     id: 1bea6ad56102
-    last_write_checksum: sha1:d26d2660b92f4959ddf13935905d048717812755
+    last_write_checksum: sha1:d3890aee880687110f664bc76dc898f009f2593c
     pristine_git_object: e64d6142e13521b48f5618cfee6337872d23c0d5
   internal/sdk/models/shared/actionsource.go:
     id: 780ed5da5aef
@@ -2226,8 +2246,10 @@ trackedFiles:
     pristine_git_object: 41abb39480dcb63f5417d6dca691130fee15eb9b
   internal/sdk/models/shared/awscredential.go:
     id: 6a9e44208230
-    last_write_checksum: sha1:57f7848b029081bf4998fce453e6f40f94a5344d
+    last_write_checksum: sha1:7365bf19a0193afa70bb6b51f2c59c9fec48c41d
     pristine_git_object: 6937799095194b4fcab39215565cc6a37887fb8b
+  internal/sdk/models/shared/awscredentialsmode.go:
+    last_write_checksum: sha1:a43a49efc166ca0c6bb6e58f4a25442c89c04175
   internal/sdk/models/shared/azbatchforgeconfig.go:
     id: d13b3a409e31
     last_write_checksum: sha1:879f3fc35b68a87b74ba92f040f27b3a4b8be1d9
@@ -2262,19 +2284,17 @@ trackedFiles:
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
     id: 21b317c8a966
-    last_write_checksum: sha1:9d919797b79a75b6cf9963baa7447e0569ed8f97
+    last_write_checksum: sha1:3878d508a185c2c0a0c4b794be7b2a53f5518afd
     pristine_git_object: 42560fcd114408129519a9f9092b24fab369ef65
   internal/sdk/models/shared/computeenvcomputeconfiginput.go:
-    id: 6ad5da9244fb
-    last_write_checksum: sha1:e54c4e7a88e204a7c72b4cd001ad7f4a35f7f9ac
-    pristine_git_object: 2cbde3b1706b0e267125d82e8ddcbd3d7f5623c7
+    last_write_checksum: sha1:72516fd23f1954158adc09d5a5e39a3c60f6d8de
   internal/sdk/models/shared/computeenvqueryattribute.go:
     id: e1c918e85834
     last_write_checksum: sha1:2a23d6eeb2fe769fcc665b88dcf77feadbbb1fe8
     pristine_git_object: 2a0d9974806899fa4f9187c35f5e7544b1d4fc51
   internal/sdk/models/shared/computeenvresponsedto.go:
     id: 97cdb3d73a3c
-    last_write_checksum: sha1:9afd7557773c068c66d591c6c97765e14ef2e94b
+    last_write_checksum: sha1:5b8a0569e24a472326cfdd489e53b9f177e887db
     pristine_git_object: 9b2e69ca2199afa1f8ecd7170faea6404849eac7
   internal/sdk/models/shared/computeenvstatus.go:
     id: dabffc117c29
@@ -2470,7 +2490,7 @@ trackedFiles:
     pristine_git_object: 49c31291609e1d75de9a956f26272df3eaa72d03
   internal/sdk/models/shared/createmanagedidentityresponse.go:
     id: 8082a03fe206
-    last_write_checksum: sha1:3711bb419c4374f30fa7a228d79ce5459a222607
+    last_write_checksum: sha1:4c02914299a79a4b3c1d7ec68304dee6e373ee16
     pristine_git_object: 5eef4388a12030d941d8359f310db74b00c34429
   internal/sdk/models/shared/createorganizationrequest.go:
     id: 283ba99a3085
@@ -2482,12 +2502,16 @@ trackedFiles:
     pristine_git_object: a67f52bcaddcba5647b35283493bfd4e7c2641be
   internal/sdk/models/shared/createpipelinerequest.go:
     id: 6507ca147cfc
-    last_write_checksum: sha1:11ffe4e6feebf2c30d7d6255273cf83ecce247d0
+    last_write_checksum: sha1:b01158e47a5fdba75fed1d019fc67f4f208d984d
     pristine_git_object: 287369639c711d81175bda5b4111eddc3d9688ef
   internal/sdk/models/shared/createpipelineresponse.go:
     id: 06300849d84e
     last_write_checksum: sha1:3a4b314190dddb7e6b6bfc5f4e7611f8013db419
     pristine_git_object: 0171e760438f1f8ff56ac4b2a956bac9bc4da270
+  internal/sdk/models/shared/createpipelineschemarequest.go:
+    last_write_checksum: sha1:932138a1a74d59ad2e4299d147c8b712661e6388
+  internal/sdk/models/shared/createpipelineschemaresponse.go:
+    last_write_checksum: sha1:911f0abbc3dc58f3c5165d5e294e28abd22132ac
   internal/sdk/models/shared/createpipelinesecretrequest.go:
     id: 6278f21bd0ec
     last_write_checksum: sha1:cd3e862306ba52feafc4c5059279ec2579377859
@@ -2496,6 +2520,8 @@ trackedFiles:
     id: a679795c4feb
     last_write_checksum: sha1:f3c2c5f4662aa14d0c4619386e5097f02a413c08
     pristine_git_object: ddeb2fca966e5639ed4b3a10ad73adb162675505
+  internal/sdk/models/shared/createpipelineversionrequest.go:
+    last_write_checksum: sha1:f5585a1e04a309058445bdd3844c809fd21d34ed
   internal/sdk/models/shared/createsshcredentialsrequest.go:
     id: 102d56444714
     last_write_checksum: sha1:35876e12b78f5a7af28ba68c886ba9ddb0062e2b
@@ -2504,6 +2530,10 @@ trackedFiles:
     id: 8c43c40b534d
     last_write_checksum: sha1:58c25e2e51e4962f288a868a9918818650ac44dc
     pristine_git_object: 341bd3ba6c6ba5eb577e3fa9f3bb094bd7d9fb4a
+  internal/sdk/models/shared/createsshkeyrequest.go:
+    last_write_checksum: sha1:02d63e123da34c11b06dac76c3cb55cba8ec02e4
+  internal/sdk/models/shared/createsshkeyresponse.go:
+    last_write_checksum: sha1:2ce2fc413188e7ac13cd185f785a9e7193aa94fa
   internal/sdk/models/shared/createteammemberrequest.go:
     id: 21a1df21be9e
     last_write_checksum: sha1:e0eca95e36b71dbba8fa8c7124be98383c5e5f39
@@ -2638,7 +2668,7 @@ trackedFiles:
     pristine_git_object: c6e060a4e61e58bfb98c361d15a73f79ed1530b4
   internal/sdk/models/shared/datastudioconfiguration.go:
     id: 5841b2c71ba6
-    last_write_checksum: sha1:91b5f30a43c329ac1575318303f907159ae141ca
+    last_write_checksum: sha1:6a061dc606463f091dfa9016fa469d0f2d2ed2aa
     pristine_git_object: 227f1fede7b4f984a6dccff2b3f650fec8187799
   internal/sdk/models/shared/datastudiocreaterequest.go:
     id: f3e2d037c2c4
@@ -2650,7 +2680,7 @@ trackedFiles:
     pristine_git_object: 89ec20df5b4c222b73ea2376c4d354ac5dfa2479
   internal/sdk/models/shared/datastudiodto.go:
     id: e7da86830815
-    last_write_checksum: sha1:ee8053b7930e07dfe2a4956a818023ec07bdabae
+    last_write_checksum: sha1:cb5bfa7681bcc96a24d897ae876a6a9fc47b0e85
     pristine_git_object: 31d366345ef0f16a13e69c4a39d3516b82279009
   internal/sdk/models/shared/datastudiolistcheckpointsresponse.go:
     id: 5fb970629399
@@ -2670,7 +2700,7 @@ trackedFiles:
     pristine_git_object: 3104ed27b944f32f90731e9cd17879d45737ebdb
   internal/sdk/models/shared/datastudiostartrequest.go:
     id: b85784e03a6b
-    last_write_checksum: sha1:98ec95e1c64084cfcfef09dfe4474e08a5126627
+    last_write_checksum: sha1:8ef9c6b7af53940af0fa402f514ddf2abeab63b8
     pristine_git_object: e375bdb5fe5a91b9eb237dc7a7206d475005ec74
   internal/sdk/models/shared/datastudiostartresponse.go:
     id: 26501a0284dc
@@ -2704,10 +2734,14 @@ trackedFiles:
     id: 138d7204dd92
     last_write_checksum: sha1:80c44d07827e51f93b4525dd51b474083ff489a6
     pristine_git_object: dca98697457896ff486268fad3d1504f50ba18ff
+  internal/sdk/models/shared/datastudioworkspacesettingsrequest.go:
+    last_write_checksum: sha1:1f650987279ff7ddac7cfe4554ac9a8c281e8aba
   internal/sdk/models/shared/datastudioworkspacesettingsresponse.go:
     id: 62bb5fd9d1a5
-    last_write_checksum: sha1:cb54752de99b3c851518912d67ba4f1d3ba231ee
+    last_write_checksum: sha1:8580f82de16f14a6a54aa0779c95af7643038f64
     pristine_git_object: 5d9c663cf52d1d7394738deb0cd2d61721c74d49
+  internal/sdk/models/shared/defaultworkflowengineparameter.go:
+    last_write_checksum: sha1:8978b5d70bc03b2350f56cbb47be506b756847dc
   internal/sdk/models/shared/deletecredentialsconflictresponse.go:
     id: e8d764d9feab
     last_write_checksum: sha1:3b7ee29381e2f058bc066156918847bc16854ef5
@@ -2806,7 +2840,7 @@ trackedFiles:
     pristine_git_object: dc83ee3f5c97197e94b7673f34725386c8a12b23
   internal/sdk/models/shared/describelaunchresponse.go:
     id: 8bac3ea3f695
-    last_write_checksum: sha1:caf83d5c811a6a4a70cc647180e3c8707633135c
+    last_write_checksum: sha1:7d6eebdc0000a37e82cc7c3744a3f0feddd469b6
     pristine_git_object: cc828502467c3acfd6735be0f16693c9bc45d011
   internal/sdk/models/shared/describemanagedcomputeceresponse.go:
     id: f95224111ee9
@@ -2840,6 +2874,8 @@ trackedFiles:
     id: db6455452f9f
     last_write_checksum: sha1:36d831dccf816dc66af19f966649ec7114db20cd
     pristine_git_object: 70db4cabf5ff71f84ca0511cb0eb28fcac723c8c
+  internal/sdk/models/shared/describesshkeyresponse.go:
+    last_write_checksum: sha1:67dea40387699ef65998a16dc6c5aa0acca23c1d
   internal/sdk/models/shared/describetaskresponse.go:
     id: bde6c2c5a1bd
     last_write_checksum: sha1:b3af3e3f828f109a9aa295fee5c5f07df7121c05
@@ -2862,7 +2898,7 @@ trackedFiles:
     pristine_git_object: 4d50a2aa4f9d347610611cd2c7dbb0c13584944a
   internal/sdk/models/shared/describeworkflowresponse.go:
     id: cb46c0306832
-    last_write_checksum: sha1:4b63f07a452efa1b96a564c3993d0111e28f0332
+    last_write_checksum: sha1:ae57cc4d1fdf84711809696d898d3910e286bec7
     pristine_git_object: 43bc140ba6761af9a9802c976cd34258868edbe5
   internal/sdk/models/shared/describeworkspaceresponse.go:
     id: 5b7149929e4d
@@ -2896,6 +2932,8 @@ trackedFiles:
     id: f00388b21ac4
     last_write_checksum: sha1:634095e595eebfd09ddda55ce52aaac2905c4aca
     pristine_git_object: 94b0a48a8ab8d445271b58b00395202b0e8903d7
+  internal/sdk/models/shared/getcredentialskeysresponse.go:
+    last_write_checksum: sha1:ef9d236feb954cb6365cc4ae7cfc746a9009d90c
   internal/sdk/models/shared/getprogressresponse.go:
     id: e4eb67e532d0
     last_write_checksum: sha1:7229d6e7ebee0a7825aa442bd2c02c0721227b93
@@ -2980,10 +3018,6 @@ trackedFiles:
     id: 0050e50fd2c9
     last_write_checksum: sha1:2e5ce5a4745a90608fc7f886603ab8b26aa92f8b
     pristine_git_object: fe9c695f86891f4b3d35acf81d0fb455b2792eca
-  internal/sdk/models/shared/launch.go:
-    id: 063807f80b8a
-    last_write_checksum: sha1:09e58598394ed112e5467a5403869930ced8bf55
-    pristine_git_object: 26393f1208592cc8886a34832b3ce888ea75aa4f
   internal/sdk/models/shared/launchactionrequest.go:
     id: 7b611666d3be
     last_write_checksum: sha1:72bb5f7f5e1399c76fe4603a6428745539f8b488
@@ -2992,6 +3026,8 @@ trackedFiles:
     id: 48f1ddcebd6a
     last_write_checksum: sha1:df630144fbe276623a0d21b4fb5771e4c829b062
     pristine_git_object: 0ac170c9ca4204d1d3cd7e2cdd67041692cd6449
+  internal/sdk/models/shared/launchdbdto.go:
+    last_write_checksum: sha1:71d7fe9497c16c883a9228b5f6b2fc6308efe370
   internal/sdk/models/shared/listaccesstokensresponse.go:
     id: e9e6ce9fec76
     last_write_checksum: sha1:9b797009922784402c2ff28b68da883dbdab2472
@@ -3072,6 +3108,8 @@ trackedFiles:
     id: f1204f41287b
     last_write_checksum: sha1:ff936c65d1a50f71ce2662210433fb1e8c4cef0e
     pristine_git_object: 664bb7dc9f4b2196e81a338ff5829d4bdce44681
+  internal/sdk/models/shared/listpipelineversionsresponse.go:
+    last_write_checksum: sha1:9e4cdf3726763c243833e3a50fc3f1de72bd1b05
   internal/sdk/models/shared/listplatformsresponse.go:
     id: f4510616e78a
     last_write_checksum: sha1:307c37d2701d9797340b44f3bf8de093f65c6804
@@ -3080,6 +3118,8 @@ trackedFiles:
     id: a4cc95d239cd
     last_write_checksum: sha1:b5fff2a435a1ec38bbfd45f944515316eecd01c4
     pristine_git_object: 3e04d3445cf3a45189f719d6f25ffe02f0fc903a
+  internal/sdk/models/shared/listsshkeysresponse.go:
+    last_write_checksum: sha1:be019d1c96490c1528854ca2414607f53d089d9e
   internal/sdk/models/shared/listtasksresponse.go:
     id: d898eef18570
     last_write_checksum: sha1:3fdcec423d302fc9cdd3634a08722b7822f2da36
@@ -3094,7 +3134,7 @@ trackedFiles:
     pristine_git_object: c7b036b2a18eb73f01cd830209b518e2ec1007f0
   internal/sdk/models/shared/listworkflowsresponselistworkflowselement.go:
     id: 2be84e6e6f9a
-    last_write_checksum: sha1:829194d03ea02a8f245ccbc90a84190c6fe399d4
+    last_write_checksum: sha1:258030b09477f586966790e2a67b348c2a7ecd8b
     pristine_git_object: 442bd18c87c20f5d31110c1eda2100b50ac4f515
   internal/sdk/models/shared/listworkspacesandorgresponse.go:
     id: cf1ac68fda5d
@@ -3152,6 +3192,8 @@ trackedFiles:
     id: 35794a08491e
     last_write_checksum: sha1:de59bf9d9847e765389d49f4beb0579e5f3f3791
     pristine_git_object: bc829d8840721d025fe69676064eec6f900539ae
+  internal/sdk/models/shared/mountdata.go:
+    last_write_checksum: sha1:771948d660df5bd349762049544e4d708fedcfd0
   internal/sdk/models/shared/multirequestfileschema.go:
     id: bb5e470b2566
     last_write_checksum: sha1:e131dbbeb3fb6bfb08278ee10218dd2baa01e4d1
@@ -3198,7 +3240,7 @@ trackedFiles:
     pristine_git_object: 37ce998cf58b840e48da44d7bb0cb29e5143108f
   internal/sdk/models/shared/pipelinedbdto.go:
     id: ab8ad3b3fa8a
-    last_write_checksum: sha1:07e1fa7f226c7826ed630be8ea78318126324aab
+    last_write_checksum: sha1:518f45a19d946c8e2971e1f95d8aff7a77fff84f
     pristine_git_object: 4e92c835cc6c6b1bf6fff9027a42ca0ea78dabf7
   internal/sdk/models/shared/pipelineinfo.go:
     id: 4179c13facd2
@@ -3212,6 +3254,10 @@ trackedFiles:
     id: 837befa2c548
     last_write_checksum: sha1:5c74f5d1a349a6a3251f3661d7b7d91f5e58b99b
     pristine_git_object: 626e4afe7ec0bb32293d24647057fc61b6bb4a6b
+  internal/sdk/models/shared/pipelinemininforesponse.go:
+    last_write_checksum: sha1:0a6abf7452ea01ae0c2a1a2d76edb3b9f5dd6532
+  internal/sdk/models/shared/pipelinemininforesponsepipelineversionmininforesponse.go:
+    last_write_checksum: sha1:7cff0ff98a5a794ba7e486e7f3b0e7da16bdedd7
   internal/sdk/models/shared/pipelinequeryattribute.go:
     id: 5b59269d409b
     last_write_checksum: sha1:ff1b252c2da88d43cdd4bef5f31f141fe8b768b6
@@ -3220,6 +3266,8 @@ trackedFiles:
     id: e88d32017f8e
     last_write_checksum: sha1:56b3fee17dfc69b7f6a0076cb6311b617b408c86
     pristine_git_object: aa8e545c55aef8a9e9ccb5df7d7088c2c06ace42
+  internal/sdk/models/shared/pipelineschemadbdto.go:
+    last_write_checksum: sha1:f20885a9b2215682e578d10478ed8b86b76af83f
   internal/sdk/models/shared/pipelineschemaresponse.go:
     id: 068f82900c1e
     last_write_checksum: sha1:ccab43cb62896413d9720230c55f3efdd2062a62
@@ -3228,6 +3276,10 @@ trackedFiles:
     id: 7a4e83a4b916
     last_write_checksum: sha1:8a99526569bbfbbbe4b020a06a7b605568d78935
     pristine_git_object: d44a6507099d85a8c4d8d8c4911795888ae623cf
+  internal/sdk/models/shared/pipelineversionfullinfodto.go:
+    last_write_checksum: sha1:3163190a2a83fbdc591ea4f1b32fd3206a646b1d
+  internal/sdk/models/shared/pipelineversionmanagerequest.go:
+    last_write_checksum: sha1:92dbac73ea0bd20ed2aa807156a9c67a704591b4
   internal/sdk/models/shared/platformmetainfo.go:
     id: 9c55ebf6564b
     last_write_checksum: sha1:009bbb41e32ddb120a023602e3d6278bd2686994
@@ -3294,7 +3346,7 @@ trackedFiles:
     pristine_git_object: dbc4620b157442c58c43439125bc2c7392e8c935
   internal/sdk/models/shared/serviceinfo.go:
     id: 18e2052471c9
-    last_write_checksum: sha1:2b73f1230d3b2773c7624adaea6e6bd7ccf9a109
+    last_write_checksum: sha1:d47b0bbbe0fab2e429cc394dda65ae9419ffe850
     pristine_git_object: 0008df58bab87596da85d9faec7d40db61fdb705
   internal/sdk/models/shared/serviceinforesponse.go:
     id: c3defb5867b6
@@ -3326,7 +3378,7 @@ trackedFiles:
     pristine_git_object: bbac02ad6533237c15c11bcf58413b6b33584035
   internal/sdk/models/shared/task.go:
     id: ebbf5622a904
-    last_write_checksum: sha1:1897f37f2902e7ef5d06b1aa703e788323653760
+    last_write_checksum: sha1:76ba78c26fa640293127dc31d76dc9315e652063
     pristine_git_object: cc080e2454e015b6817959c0cbe8475372cbf7dd
   internal/sdk/models/shared/taskstatus.go:
     id: 2313fd64b531
@@ -3346,7 +3398,7 @@ trackedFiles:
     pristine_git_object: df7b2a4139a0d7d29eba4b5e4bfc4cf25af30f96
   internal/sdk/models/shared/tracebeginrequest.go:
     id: 14c21c68d13b
-    last_write_checksum: sha1:efa12567649135d48836906120ab99f15f7652c5
+    last_write_checksum: sha1:7a38e062dd52532baf01b444701e42c58a08672b
     pristine_git_object: ca89d9361eaaac4dd4ca92b5eab695b1cb9f6ed0
   internal/sdk/models/shared/tracebeginresponse.go:
     id: 61d6797554ac
@@ -3354,7 +3406,7 @@ trackedFiles:
     pristine_git_object: 07a7851e2ce7ec84db0a19a5abe940bed88f9474
   internal/sdk/models/shared/tracecompleterequest.go:
     id: ed2809b2abeb
-    last_write_checksum: sha1:aa521f4285f9f2426d889f2e21ded8814855f973
+    last_write_checksum: sha1:feebb4c1f91e7433a2a39da3641360844c54a230
     pristine_git_object: 2bad0176f68e8c1533a3ba7a445c730e8fb22203
   internal/sdk/models/shared/tracecompleteresponse.go:
     id: 21433f9f0d09
@@ -3366,7 +3418,7 @@ trackedFiles:
     pristine_git_object: 6cf8104575927b86080a3dfe6ef17fb4ed1a9d02
   internal/sdk/models/shared/tracecreateresponse.go:
     id: 344d3f130cca
-    last_write_checksum: sha1:25c7982eece5edfacf15c52ef4f08ba465c3c741
+    last_write_checksum: sha1:56c9771a703357fd0c04b14e4fac265c3b64f1fb
     pristine_git_object: cb84e7d6fabe7ed8b551c2c732f74045d97f06ac
   internal/sdk/models/shared/traceheartbeatrequest.go:
     id: 4af3b0160bc0
@@ -3528,6 +3580,8 @@ trackedFiles:
     id: 70f552c0c33f
     last_write_checksum: sha1:23c467934c364061245ba3fb30b4752541aa53df
     pristine_git_object: edb71a4804774e8b40bf1eaa8a8bbca50b1ba968
+  internal/sdk/models/shared/usersshpublickeydto.go:
+    last_write_checksum: sha1:5cf03770c8578feeb43d86ef784aa98c1e1dadd9
   internal/sdk/models/shared/visibility.go:
     id: 67300ab25b55
     last_write_checksum: sha1:6a4df30069507cf7fff071fcb545849ee8914afa
@@ -3540,6 +3594,10 @@ trackedFiles:
     id: f2e9bf1a6bcf
     last_write_checksum: sha1:c4fa6179adee798924ea195382747e928ca46dbb
     pristine_git_object: b562bffe27b0109067b6c14098c2104ba03b3bc5
+  internal/sdk/models/shared/wesserviceinfo.go:
+    last_write_checksum: sha1:5e45021cf06694403f0aac3bb51e01e44f5fe7bf
+  internal/sdk/models/shared/wffusionmeta.go:
+    last_write_checksum: sha1:2cd183abd4736386902dace16cc164e189beb45e
   internal/sdk/models/shared/wfmanifest.go:
     id: a59fc1c07d43
     last_write_checksum: sha1:11559b20a395c374d0b7ab28388b543e781adbe0
@@ -3552,25 +3610,23 @@ trackedFiles:
     id: 85e50271aee7
     last_write_checksum: sha1:e47788c434d4679edeaa2b8746aa8b63006d9b2c
     pristine_git_object: f43f1d0001435091a6c4b982fce923c16604d4f5
+  internal/sdk/models/shared/wfwavemeta.go:
+    last_write_checksum: sha1:f387b2895aed69dc047ac75996f00eb55604eaa1
   internal/sdk/models/shared/workflow.go:
     id: b060f88ddfde
-    last_write_checksum: sha1:a484f0e83204438db0ba7cf7e603dd42ee584962
+    last_write_checksum: sha1:8d14681cf86c5ff71570799d7950a59eddee44c4
     pristine_git_object: 1c166917d98a322d7c22deda4fc9fdb35be5881f
   internal/sdk/models/shared/workflowdbdto.go:
     id: e47bdf72a96a
-    last_write_checksum: sha1:1731100a59cd27e4bef84cb2827f7e43ad84c6a2
+    last_write_checksum: sha1:14435cd7945457961af0117766b6a12f306c9edd
     pristine_git_object: 3bc4009b3e5d627558d496fdfa955c0de921bde3
-  internal/sdk/models/shared/workflowinput.go:
-    id: c9f969d13e70
-    last_write_checksum: sha1:3e112570f42bf77c4101f1320bc7ee9bcd70646b
-    pristine_git_object: 8f47df425a5371633eff8259283058e5f9128836
   internal/sdk/models/shared/workflowlaunchrequest.go:
     id: 2b0df021cbad
-    last_write_checksum: sha1:a61641f30b4a9d403acf80699d05a203e7e306c3
+    last_write_checksum: sha1:c3adf4be1aff4291498a594f5abb580436ed8f48
     pristine_git_object: 610d44495458858e298def213b53372951961f8e
   internal/sdk/models/shared/workflowlaunchresponse.go:
     id: 58befbe96295
-    last_write_checksum: sha1:3d984437b344f3959916755743d008022cf0a8b9
+    last_write_checksum: sha1:04532a688108cae5a87a0ab31c038d01b2bc581c
     pristine_git_object: 13b67e02a553d72cb892d94b902fc42711fc730f
   internal/sdk/models/shared/workflowload.go:
     id: 07709e14f2ba
@@ -3580,18 +3636,22 @@ trackedFiles:
     id: a72344038467
     last_write_checksum: sha1:90a4051bc431a3973fdf8802dabf0e73fec28ae7
     pristine_git_object: 56d0ef18ecdaf77866c74900461affc550f200c4
+  internal/sdk/models/shared/workflowmaxdbdto.go:
+    last_write_checksum: sha1:36f3c571bbd0981ddcd6eba3da8df5f83a73921c
   internal/sdk/models/shared/workflowmetrics.go:
     id: 7011b720dc2e
     last_write_checksum: sha1:70f72ac01d9e84f265067ea58ddf8811dbfcf7b8
     pristine_git_object: 19626a7317800294d67ca09c4be933e52c7545ac
   internal/sdk/models/shared/workflowqueryattribute.go:
     id: 78928d95cca7
-    last_write_checksum: sha1:fc618a195163af428a8705b884fe7cf8e3ce9d37
+    last_write_checksum: sha1:33d3be05adb9edfff8fad8f49e42f2b2a48153e6
     pristine_git_object: 849bcaec15faf1cb62796c21634b4330571f5a2a
   internal/sdk/models/shared/workflowstatus.go:
     id: 357b47045cd2
     last_write_checksum: sha1:9d6763980116dc140cbf17fa4ebcaa5005db1f50
     pristine_git_object: 3c4a5fc9c65c36bfa47f6f0627643a8dc89d5ee5
+  internal/sdk/models/shared/workflowtypeversion.go:
+    last_write_checksum: sha1:d19bce102f9147906f8ece3c89db8f9b7e03786e
   internal/sdk/models/shared/workspace.go:
     id: e51ad67224b2
     last_write_checksum: sha1:e09cf30328d21eed3a25340c03d0afc598890ed0
@@ -3618,12 +3678,16 @@ trackedFiles:
     pristine_git_object: 05f3f4ec06f44d5212ea663d306bdf51c30024d9
   internal/sdk/pipelines.go:
     id: 64e6650df2cf
-    last_write_checksum: sha1:88826a472373c52d5662528e670f64f2f61b008d
+    last_write_checksum: sha1:a2f61e3dd26a8e8e87e9a3b8f5b5dc9075841a79
     pristine_git_object: 69fc62f69e5ed13ea997427572422dbdbfd632b1
+  internal/sdk/pipelineschemas.go:
+    last_write_checksum: sha1:d27c4a647110eb93f3f5f2ec6b4f3b89fca8af6d
   internal/sdk/pipelinesecrets.go:
     id: 0d183f1e5ea3
     last_write_checksum: sha1:0406a3fe74c8b1beb92577226590a288f462509e
     pristine_git_object: 2188dfe7a0cabe59810364096f7a645011f7d2b5
+  internal/sdk/pipelineversions.go:
+    last_write_checksum: sha1:c761f78b52cb16e072e9fadcc9a37d683bb5a8b8
   internal/sdk/platforms.go:
     id: 517ff966abb5
     last_write_checksum: sha1:566ce33bd113d996480bcdd4a76a56722903f1ac
@@ -3634,12 +3698,14 @@ trackedFiles:
     pristine_git_object: aa809fccb3445b1e2530a979dad620512f50e70f
   internal/sdk/seqera.go:
     id: b1c23bc5193c
-    last_write_checksum: sha1:100d38302dc40ed202ae053333fb0398ca433ecb
+    last_write_checksum: sha1:0a23d26dc8ae2ba956bf260052c0830390a9eb12
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
     last_write_checksum: sha1:5ab90872e6b5f402845495e3e471ca939460e1c5
     pristine_git_object: 4ecf30e85a2643beb02282ca8b755fb6227540be
+  internal/sdk/sshkeys.go:
+    last_write_checksum: sha1:f1e4edaf93f819bb6ee6104dfaa276db2dc8802b
   internal/sdk/studios.go:
     id: 73a47ef758cd
     last_write_checksum: sha1:cc8b4218847d6399f6619ac031bc08e6d8155efc
@@ -3686,7 +3752,7 @@ trackedFiles:
     pristine_git_object: 7a31812dea055180ae105fa0218d2244299469e0
   internal/sdk/workspaces.go:
     id: 436a1d832809
-    last_write_checksum: sha1:02d64ddf522467435830d2771c88114b68081ab3
+    last_write_checksum: sha1:749b00fdaf719dd0c70fb09813369c41df5b32e4
     pristine_git_object: c5824c63bd96905d849ebd2cc9c02a61c73f0e88
   internal/validators/DateValidator.go:
     id: 4fdfa187ab97
@@ -3774,7 +3840,7 @@ examples:
         query:
           workspaceId: 547784
       requestBody:
-        application/json: {"name": "<value>", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
+        application/json: {"name": "<value>", "launch": {"schemaName": "nextflow_schema.json", "computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -3808,7 +3874,7 @@ examples:
         path:
           actionId: "<id>"
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
+        application/json: {"launch": {"schemaName": "nextflow_schema.json", "computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "400":
           application/json: {"message": "<value>"}
@@ -5614,7 +5680,7 @@ examples:
   CreatePipeline:
     speakeasy-default-create-pipeline:
       requestBody:
-        application/json: {"name": "<value>", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
+        application/json: {"name": "<value>", "launch": {"schemaName": "nextflow_schema.json", "computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -5657,7 +5723,7 @@ examples:
         path:
           pipelineId: 936263
       requestBody:
-        application/json: {"name": "rna-seq-analysis", "launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
+        application/json: {"name": "rna-seq-analysis", "launch": {"schemaName": "nextflow_schema.json", "computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -5741,7 +5807,7 @@ examples:
         application/json: {"name": "my-jupyter-studio", "description": "Jupyter studio for data analysis and visualization", "dataStudioToolUrl": "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8", "computeEnvId": "compute-env-id", "configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
       responses:
         "200":
-          application/json: {"studio": {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}}
+          application/json: {"studio": {"sshDetails": {"host": "uneven-wallaby.com", "port": 691829, "user": "Hope86", "command": "ssh username@sessionId@host -p port"}, "configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}}
         "400":
           application/json: {"message": "<value>"}
   ListMountedDataLinkIds:
@@ -5764,7 +5830,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
+          application/json: {"sshDetails": {"host": "dapper-sushi.net", "port": 406928, "user": "Monty40", "command": "ssh username@sessionId@host -p port"}, "configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
         "404":
           application/json: {"message": "<value>"}
   DeleteDataStudio:
@@ -5816,7 +5882,7 @@ examples:
           sessionId: "<id>"
       responses:
         "200":
-          application/json: {"configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
+          application/json: {"sshDetails": {"host": "pleasing-detective.net", "port": 718113, "user": "Westley_Cruickshank", "command": "ssh username@sessionId@host -p port"}, "configuration": {"gpu": 0, "cpu": 2, "memory": 4096, "lifespanHours": 2}}
         "400":
           application/json: {"message": "<value>"}
   StartDataStudio:
@@ -5989,7 +6055,7 @@ examples:
         query:
           workspaceId: 714137
       requestBody:
-        application/json: {"launch": {"computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "schemaName": "nextflow_schema.json", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
+        application/json: {"launch": {"schemaName": "nextflow_schema.json", "computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
       responses:
         "200":
           application/json: {}
@@ -6153,5 +6219,112 @@ examples:
         "200":
           application/json: {}
         "404":
+          application/json: {"message": "<value>"}
+  GetEncryptedCredentials:
+    speakeasy-default-get-encrypted-credentials:
+      parameters:
+        path:
+          credentialsId: "<id>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteWorkspaceUser:
+    speakeasy-default-delete-workspace-user:
+      parameters:
+        path:
+          orgId: 991473
+          workspaceId: 329402
+          userId: 947306
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  CreatePipelineSchema:
+    speakeasy-default-create-pipeline-schema:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListPipelineVersions:
+    speakeasy-default-list-pipeline-versions:
+      parameters:
+        path:
+          pipelineId: 328044
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidatePipelineVersionName:
+    speakeasy-default-validate-pipeline-version-name:
+      parameters:
+        path:
+          pipelineId: 830951
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdatePipelineVersion:
+    speakeasy-default-update-pipeline-version:
+      parameters:
+        path:
+          pipelineId: 644348
+          versionId: "<id>"
+      requestBody:
+        application/json: {"name": "rna-seq-analysis", "launch": {"schemaName": "nextflow_schema.json", "computeEnvId": "4g09tT4pW4JFUvXTHdB6zP", "runName": "nextflow-hello", "pipeline": "https://github.com/nextflow-io/hello", "workDir": "s3://my-bucket/work", "revision": "main", "configProfiles": ["docker", "aws"], "userSecrets": ["MY_API_KEY", "DATABASE_PASSWORD"], "workspaceSecrets": ["WORKSPACE_TOKEN", "SHARED_CREDENTIALS"], "configText": "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n", "paramsText": "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n", "preRunScript": "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n", "postRunScript": "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n", "mainScript": "main.nf", "entryName": "main.nf", "resume": true, "pullLatest": true, "stubRun": false, "labelIds": [1001, 1002, 1003], "headJobCpus": 2, "headJobMemoryMb": 4096}}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ManagePipelineVersion:
+    speakeasy-default-manage-pipeline-version:
+      parameters:
+        path:
+          pipelineId: 796089
+          versionId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  ListSshKeys:
+    speakeasy-default-list-ssh-keys:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateSshKey:
+    speakeasy-default-create-ssh-key:
+      requestBody:
+        application/json: {"name": "<value>", "publicKey": "<value>"}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateSshKey: {}
+  ValidateSshKeyName: {}
+  DescribeSshKey:
+    speakeasy-default-describe-ssh-key:
+      parameters:
+        path:
+          keyId: 55113
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteSshKey:
+    speakeasy-default-delete-ssh-key:
+      parameters:
+        path:
+          keyId: 7941
+      responses:
+        "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2

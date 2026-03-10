@@ -3,6 +3,8 @@
 package shared
 
 type WorkflowLaunchRequest struct {
+	// Pipeline schema name
+	SchemaName   *string `json:"schemaName,omitempty"`
 	ComputeEnvID *string `json:"computeEnvId,omitempty"`
 	// Custom run name
 	RunName  *string `json:"runName,omitempty"`
@@ -27,17 +29,23 @@ type WorkflowLaunchRequest struct {
 	// Main script path
 	MainScript *string `json:"mainScript,omitempty"`
 	// Entry workflow name
-	EntryName *string `json:"entryName,omitempty"`
-	// Pipeline schema name
-	SchemaName *string `json:"schemaName,omitempty"`
-	Resume     *bool   `json:"resume,omitempty"`
-	PullLatest *bool   `json:"pullLatest,omitempty"`
-	StubRun    *bool   `json:"stubRun,omitempty"`
-	LabelIds   []int64 `json:"labelIds,omitempty"`
+	EntryName        *string `json:"entryName,omitempty"`
+	PipelineSchemaID *int64  `json:"pipelineSchemaId,omitempty"`
+	Resume           *bool   `json:"resume,omitempty"`
+	PullLatest       *bool   `json:"pullLatest,omitempty"`
+	StubRun          *bool   `json:"stubRun,omitempty"`
+	LabelIds         []int64 `json:"labelIds,omitempty"`
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
+}
+
+func (w *WorkflowLaunchRequest) GetSchemaName() *string {
+	if w == nil {
+		return nil
+	}
+	return w.SchemaName
 }
 
 func (w *WorkflowLaunchRequest) GetComputeEnvID() *string {
@@ -145,11 +153,11 @@ func (w *WorkflowLaunchRequest) GetEntryName() *string {
 	return w.EntryName
 }
 
-func (w *WorkflowLaunchRequest) GetSchemaName() *string {
+func (w *WorkflowLaunchRequest) GetPipelineSchemaID() *int64 {
 	if w == nil {
 		return nil
 	}
-	return w.SchemaName
+	return w.PipelineSchemaID
 }
 
 func (w *WorkflowLaunchRequest) GetResume() *bool {

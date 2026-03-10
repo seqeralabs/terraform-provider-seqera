@@ -19,18 +19,19 @@ resource "seqera_pipeline" "my_pipeline" {
       1002,
       1003,
     ]
-    main_script     = "main.nf"
-    params_text     = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
-    pipeline        = "https://github.com/nextflow-io/hello"
-    post_run_script = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
-    pre_run_script  = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-    pull_latest     = true
-    resume          = true
-    revision        = "main"
-    run_name        = "nextflow-hello"
-    schema_name     = "nextflow_schema.json"
-    stub_run        = false
-    tower_config    = "...my_tower_config..."
+    main_script        = "main.nf"
+    params_text        = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
+    pipeline           = "https://github.com/nextflow-io/hello"
+    pipeline_schema_id = 7
+    post_run_script    = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
+    pre_run_script     = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
+    pull_latest        = true
+    resume             = true
+    revision           = "main"
+    run_name           = "nextflow-hello"
+    schema_name        = "nextflow_schema.json"
+    stub_run           = false
+    tower_config       = "...my_tower_config..."
     user_secrets = [
       "MY_API_KEY",
       "DATABASE_PASSWORD",
@@ -41,6 +42,9 @@ resource "seqera_pipeline" "my_pipeline" {
       "SHARED_CREDENTIALS",
     ]
   }
-  name         = "rna-seq-analysis"
+  name = "rna-seq-analysis"
+  version = {
+    name = "...my_name..."
+  }
   workspace_id = 3
 }

@@ -20,6 +20,12 @@ func (r *AWSCredentialResourceModel) RefreshFromSharedAWSCredentialKeysOutput(ct
 	var diags diag.Diagnostics
 
 	r.AccessKey = types.StringPointerValue(resp.AccessKey)
+	r.ExternalID = types.StringPointerValue(resp.ExternalID)
+	if resp.Mode != nil {
+		r.Mode = types.StringValue(string(*resp.Mode))
+	} else {
+		r.Mode = types.StringNull()
+	}
 
 	return diags
 }
@@ -80,6 +86,12 @@ func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx
 	} else {
 		workspaceID = nil
 	}
+	useExternalID := new(bool)
+	if !r.UseExternalID.IsUnknown() && !r.UseExternalID.IsNull() {
+		*useExternalID = r.UseExternalID.ValueBool()
+	} else {
+		useExternalID = nil
+	}
 	createAWSCredentialsRequest, createAWSCredentialsRequestDiags := r.ToSharedCreateAWSCredentialsRequest(ctx, opts)
 	diags.Append(createAWSCredentialsRequestDiags...)
 
@@ -89,6 +101,7 @@ func (r *AWSCredentialResourceModel) ToOperationsCreateAWSCredentialsRequest(ctx
 
 	out := operations.CreateAWSCredentialsRequest{
 		WorkspaceID:                 workspaceID,
+		UseExternalID:               useExternalID,
 		CreateAWSCredentialsRequest: *createAWSCredentialsRequest,
 	}
 
@@ -147,6 +160,12 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 	} else {
 		workspaceID = nil
 	}
+	useExternalID := new(bool)
+	if !r.UseExternalID.IsUnknown() && !r.UseExternalID.IsNull() {
+		*useExternalID = r.UseExternalID.ValueBool()
+	} else {
+		useExternalID = nil
+	}
 	updateAWSCredentialsRequest, updateAWSCredentialsRequestDiags := r.ToSharedUpdateAWSCredentialsRequest(ctx, opts)
 	diags.Append(updateAWSCredentialsRequestDiags...)
 
@@ -157,6 +176,7 @@ func (r *AWSCredentialResourceModel) ToOperationsUpdateAWSCredentialsRequest(ctx
 	out := operations.UpdateAWSCredentialsRequest{
 		CredentialsID:               credentialsID,
 		WorkspaceID:                 workspaceID,
+		UseExternalID:               useExternalID,
 		UpdateAWSCredentialsRequest: *updateAWSCredentialsRequest,
 	}
 
@@ -219,10 +239,24 @@ func (r *AWSCredentialResourceModel) ToSharedAWSCredentialKeys(ctx context.Conte
 	} else {
 		assumeRoleArn = nil
 	}
+	mode := new(shared.AwsCredentialsMode)
+	if !r.Mode.IsUnknown() && !r.Mode.IsNull() {
+		*mode = shared.AwsCredentialsMode(r.Mode.ValueString())
+	} else {
+		mode = nil
+	}
+	externalID := new(string)
+	if !r.ExternalID.IsUnknown() && !r.ExternalID.IsNull() {
+		*externalID = r.ExternalID.ValueString()
+	} else {
+		externalID = nil
+	}
 	out := shared.AWSCredentialKeys{
 		AccessKey:     accessKey,
 		SecretKey:     secretKey,
 		AssumeRoleArn: assumeRoleArn,
+		Mode:          mode,
+		ExternalID:    externalID,
 	}
 
 	return &out, diags

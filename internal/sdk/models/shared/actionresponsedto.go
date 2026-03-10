@@ -7,8 +7,8 @@ package shared
 // for automated pipeline workflows.
 type ActionResponseDto struct {
 	// Unique identifier for the action
-	ID     *string `json:"id,omitempty"`
-	Launch *Launch `json:"launch,omitempty"`
+	ID     *string      `json:"id,omitempty"`
+	Launch *LaunchDbDto `json:"launch,omitempty"`
 	// Human-readable name for the action
 	Name *string `json:"name,omitempty"`
 	// Identifier for the webhook associated with this action
@@ -29,7 +29,7 @@ func (a *ActionResponseDto) GetID() *string {
 	return a.ID
 }
 
-func (a *ActionResponseDto) GetLaunch() *Launch {
+func (a *ActionResponseDto) GetLaunch() *LaunchDbDto {
 	if a == nil {
 		return nil
 	}

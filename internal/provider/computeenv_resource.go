@@ -81,6 +81,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 				},
 				Attributes: map[string]schema.Attribute{
+					"aws_account_id": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
 					"compute_env_id": schema.StringAttribute{
 						Computed: true,
 						PlanModifiers: []planmodifier.String{
@@ -94,7 +100,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 						},
 						Attributes: map[string]schema.Attribute{
-							"altair_platform": schema.SingleNestedAttribute{
+							"altair_pbs_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -270,26 +276,296 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"aws_batch": schema.SingleNestedAttribute{
+							"amazon_eks_cluster_configuration": schema.SingleNestedAttribute{
+								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									objectplanmodifier.RequiresReplaceIfConfigured(),
+								},
+								Attributes: map[string]schema.Attribute{
+									"cluster_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `The AWS EKS cluster name. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+									"compute_service_account": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
+											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+											`` + "\n" +
+											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
+											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.WaveEnabledValidator(),
+										},
+									},
+									"environment": schema.ListNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+												custom_objectvalidators.ConfigEnvVariableValidator(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												objectplanmodifier.RequiresReplaceIfConfigured(),
+											},
+											Attributes: map[string]schema.Attribute{
+												"compute": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"head": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+											},
+										},
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"head_job_cpus": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"head_job_memory_mb": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"head_pod_spec": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"head_service_account": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"namespace": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"pod_cleanup": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"on_success",
+												"always",
+												"never",
+											),
+										},
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+									},
+									"region": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `AWS region. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+									"server": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"service_pod_spec": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"ssl_cert": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"storage_claim_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"storage_mount_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+								},
+								Description: `Requires replacement if changed.`,
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
+									}...),
+								},
+							},
+							"aws_batch_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -900,27 +1176,26 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 									custom_objectvalidators.AwsForgeValidator(),
 								},
 							},
-							"aws_cloud": schema.SingleNestedAttribute{
+							"aws_cloud_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -1149,26 +1424,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"azure_batch": schema.SingleNestedAttribute{
+							"azure_batch_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -1417,26 +1691,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"azure_cloud": schema.SingleNestedAttribute{
+							"azure_cloud_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -1678,570 +1951,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"eks_platform": schema.SingleNestedAttribute{
-								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									objectplanmodifier.RequiresReplaceIfConfigured(),
-								},
-								Attributes: map[string]schema.Attribute{
-									"cluster_name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `The AWS EKS cluster name. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-									"compute_service_account": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"enable_fusion": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"enable_wave": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
-											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
-											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
-									},
-									"environment": schema.ListNestedAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											listplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
-											},
-											PlanModifiers: []planmodifier.Object{
-												objectplanmodifier.RequiresReplaceIfConfigured(),
-											},
-											Attributes: map[string]schema.Attribute{
-												"compute": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"head": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-												"value": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-											},
-										},
-										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"head_job_cpus": schema.Int32Attribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Int32{
-											int32planmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"head_job_memory_mb": schema.Int32Attribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Int32{
-											int32planmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"head_pod_spec": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"head_service_account": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"namespace": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"nextflow_config": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
-									},
-									"pod_cleanup": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"on_success",
-												"always",
-												"never",
-											),
-										},
-									},
-									"post_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
-									},
-									"pre_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
-									},
-									"region": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `AWS region. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-									"server": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"service_pod_spec": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"ssl_cert": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"storage_claim_name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"storage_mount_path": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"work_dir": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-								},
-								Description: `Requires replacement if changed.`,
-								Validators: []validator.Object{
-									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
-									}...),
-								},
-							},
-							"gke_platform": schema.SingleNestedAttribute{
-								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									objectplanmodifier.RequiresReplaceIfConfigured(),
-								},
-								Attributes: map[string]schema.Attribute{
-									"cluster_name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `The GKE cluster name. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-									"compute_service_account": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"enable_fusion": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"enable_wave": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
-											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
-											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
-									},
-									"environment": schema.ListNestedAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											listplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
-											},
-											PlanModifiers: []planmodifier.Object{
-												objectplanmodifier.RequiresReplaceIfConfigured(),
-											},
-											Attributes: map[string]schema.Attribute{
-												"compute": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"head": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-												"value": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-											},
-										},
-										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"head_job_cpus": schema.Int32Attribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Int32{
-											int32planmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"head_job_memory_mb": schema.Int32Attribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Int32{
-											int32planmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"head_pod_spec": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"head_service_account": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"namespace": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"nextflow_config": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
-									},
-									"pod_cleanup": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
-										Validators: []validator.String{
-											stringvalidator.OneOf(
-												"on_success",
-												"always",
-												"never",
-											),
-										},
-									},
-									"post_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
-									},
-									"pre_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
-									},
-									"region": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `The GKE cluster region - or - zone. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-									"server": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"service_pod_spec": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"ssl_cert": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"storage_claim_name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"storage_mount_path": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"work_dir": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-								},
-								Description: `Requires replacement if changed.`,
-								Validators: []validator.Object{
-									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
-									}...),
-								},
-							},
-							"google_batch": schema.SingleNestedAttribute{
+							"google_batch_service_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -2541,26 +2269,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"google_cloud": schema.SingleNestedAttribute{
+							"google_cloud_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -2763,26 +2490,296 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"google_lifesciences": schema.SingleNestedAttribute{
+							"google_gke_cluster_configuration": schema.SingleNestedAttribute{
+								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									objectplanmodifier.RequiresReplaceIfConfigured(),
+								},
+								Attributes: map[string]schema.Attribute{
+									"cluster_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `The GKE cluster name. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+									"compute_service_account": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_fusion": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"enable_wave": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
+											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+											`` + "\n" +
+											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
+											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.WaveEnabledValidator(),
+										},
+									},
+									"environment": schema.ListNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+												custom_objectvalidators.ConfigEnvVariableValidator(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												objectplanmodifier.RequiresReplaceIfConfigured(),
+											},
+											Attributes: map[string]schema.Attribute{
+												"compute": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"head": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+											},
+										},
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"head_job_cpus": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"head_job_memory_mb": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"head_pod_spec": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"head_service_account": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"namespace": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"pod_cleanup": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `must be one of ["on_success", "always", "never"]; Requires replacement if changed.`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"on_success",
+												"always",
+												"never",
+											),
+										},
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+									},
+									"region": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `The GKE cluster region - or - zone. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+									"server": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"service_pod_spec": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"ssl_cert": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"storage_claim_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"storage_mount_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+								},
+								Description: `Requires replacement if changed.`,
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
+									}...),
+								},
+							},
+							"google_life_sciences_configuration_retired": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -3016,26 +3013,243 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"k8s_platform": schema.SingleNestedAttribute{
+							"ibmlsf_configuration": schema.SingleNestedAttribute{
+								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									objectplanmodifier.RequiresReplaceIfConfigured(),
+								},
+								Attributes: map[string]schema.Attribute{
+									"compute_queue": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"environment": schema.ListNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											listplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+												custom_objectvalidators.ConfigEnvVariableValidator(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												objectplanmodifier.RequiresReplaceIfConfigured(),
+											},
+											Attributes: map[string]schema.Attribute{
+												"compute": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"head": schema.BoolAttribute{
+													Computed: true,
+													Optional: true,
+													Default:  booldefault.StaticBool(false),
+													PlanModifiers: []planmodifier.Bool{
+														boolplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
+														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
+														`Requires replacement if changed.` + "\n" +
+														`Default: false; Requires replacement if changed.`,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+												"value": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														stringplanmodifier.RequiresReplaceIfConfigured(),
+													},
+													Description: `Requires replacement if changed.`,
+												},
+											},
+										},
+										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
+									},
+									"head_job_options": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"head_queue": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"host_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"launch_dir": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"max_queue_size": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"nextflow_config": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
+									},
+									"per_job_mem_limit": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"per_task_reserve": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"port": schema.Int32Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int32{
+											int32planmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"post_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
+									},
+									"pre_run_script": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
+									},
+									"propagate_head_job_options": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											boolplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"unit_for_limits": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"user_name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Requires replacement if changed.`,
+									},
+									"work_dir": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											stringplanmodifier.RequiresReplaceIfConfigured(),
+										},
+										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+										},
+									},
+								},
+								Description: `Requires replacement if changed.`,
+								Validators: []validator.Object{
+									objectvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
+									}...),
+								},
+							},
+							"kubernetes_compute_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -3257,384 +3471,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"local_platform": schema.SingleNestedAttribute{
-								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									objectplanmodifier.RequiresReplaceIfConfigured(),
-								},
-								Attributes: map[string]schema.Attribute{
-									"environment": schema.ListNestedAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											listplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
-											},
-											PlanModifiers: []planmodifier.Object{
-												objectplanmodifier.RequiresReplaceIfConfigured(),
-											},
-											Attributes: map[string]schema.Attribute{
-												"compute": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"head": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-												"value": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-											},
-										},
-										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"fusion2_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"nextflow_config": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
-									},
-									"post_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
-									},
-									"pre_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
-									},
-									"wave_enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"work_dir": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-								},
-								Description: `Requires replacement if changed.`,
-								Validators: []validator.Object{
-									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
-									}...),
-								},
-							},
-							"lsf_platform": schema.SingleNestedAttribute{
-								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									objectplanmodifier.RequiresReplaceIfConfigured(),
-								},
-								Attributes: map[string]schema.Attribute{
-									"compute_queue": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"environment": schema.ListNestedAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											listplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										NestedObject: schema.NestedAttributeObject{
-											Validators: []validator.Object{
-												speakeasy_objectvalidators.NotNull(),
-												custom_objectvalidators.ConfigEnvVariableValidator(),
-											},
-											PlanModifiers: []planmodifier.Object{
-												objectplanmodifier.RequiresReplaceIfConfigured(),
-											},
-											Attributes: map[string]schema.Attribute{
-												"compute": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to compute/worker nodes.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"head": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(false),
-													PlanModifiers: []planmodifier.Bool{
-														boolplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													MarkdownDescription: `Whether this environment variable should be applied to the head/master node.` + "\n" +
-														`At least one of 'head' or 'compute' must be set to true. Both can be true to target both environments.` + "\n" +
-														`Requires replacement if changed.` + "\n" +
-														`Default: false; Requires replacement if changed.`,
-												},
-												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-												"value": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														stringplanmodifier.RequiresReplaceIfConfigured(),
-													},
-													Description: `Requires replacement if changed.`,
-												},
-											},
-										},
-										Description: `Array of environment variables for the compute environment. Requires replacement if changed.`,
-									},
-									"head_job_options": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"head_queue": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"host_name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"launch_dir": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"max_queue_size": schema.Int32Attribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Int32{
-											int32planmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"nextflow_config": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Nextflow configuration settings and parameters. Requires replacement if changed.`,
-									},
-									"per_job_mem_limit": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"per_task_reserve": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"port": schema.Int32Attribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Int32{
-											int32planmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"post_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute after workflow completes. Requires replacement if changed.`,
-									},
-									"pre_run_script": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Shell script to execute before workflow starts. Requires replacement if changed.`,
-									},
-									"propagate_head_job_options": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											boolplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"unit_for_limits": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"user_name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Requires replacement if changed.`,
-									},
-									"work_dir": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											stringplanmodifier.RequiresReplaceIfConfigured(),
-										},
-										Description: `Working directory path for workflow execution. Not Null; Requires replacement if changed.`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
-									},
-								},
-								Description: `Requires replacement if changed.`,
-								Validators: []validator.Object{
-									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
-									}...),
-								},
-							},
-							"moab_platform": schema.SingleNestedAttribute{
+							"moab_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -3810,26 +3665,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"seqeracompute_platform": schema.SingleNestedAttribute{
+							"seqera_compute_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -3967,26 +3821,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"slurm_platform": schema.SingleNestedAttribute{
+							"slurm_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -4162,26 +4015,25 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("uge_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("univa_grid_engine_configuration"),
 									}...),
 								},
 							},
-							"uge_platform": schema.SingleNestedAttribute{
+							"univa_grid_engine_configuration": schema.SingleNestedAttribute{
 								Optional: true,
 								PlanModifiers: []planmodifier.Object{
 									objectplanmodifier.RequiresReplaceIfConfigured(),
@@ -4357,22 +4209,21 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `Requires replacement if changed.`,
 								Validators: []validator.Object{
 									objectvalidator.ConflictsWith(path.Expressions{
-										path.MatchRelative().AtParent().AtName("aws_batch"),
-										path.MatchRelative().AtParent().AtName("aws_cloud"),
-										path.MatchRelative().AtParent().AtName("altair_platform"),
-										path.MatchRelative().AtParent().AtName("eks_platform"),
-										path.MatchRelative().AtParent().AtName("azure_cloud"),
-										path.MatchRelative().AtParent().AtName("azure_batch"),
-										path.MatchRelative().AtParent().AtName("google_batch"),
-										path.MatchRelative().AtParent().AtName("google_cloud"),
-										path.MatchRelative().AtParent().AtName("gke_platform"),
-										path.MatchRelative().AtParent().AtName("google_lifesciences"),
-										path.MatchRelative().AtParent().AtName("lsf_platform"),
-										path.MatchRelative().AtParent().AtName("k8s_platform"),
-										path.MatchRelative().AtParent().AtName("local_platform"),
-										path.MatchRelative().AtParent().AtName("moab_platform"),
-										path.MatchRelative().AtParent().AtName("seqeracompute_platform"),
-										path.MatchRelative().AtParent().AtName("slurm_platform"),
+										path.MatchRelative().AtParent().AtName("aws_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("aws_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("altair_pbs_configuration"),
+										path.MatchRelative().AtParent().AtName("amazon_eks_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_batch_configuration"),
+										path.MatchRelative().AtParent().AtName("azure_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_batch_service_configuration"),
+										path.MatchRelative().AtParent().AtName("google_cloud_configuration"),
+										path.MatchRelative().AtParent().AtName("google_gke_cluster_configuration"),
+										path.MatchRelative().AtParent().AtName("google_life_sciences_configuration_retired"),
+										path.MatchRelative().AtParent().AtName("ibmlsf_configuration"),
+										path.MatchRelative().AtParent().AtName("kubernetes_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("moab_configuration"),
+										path.MatchRelative().AtParent().AtName("seqera_compute_configuration"),
+										path.MatchRelative().AtParent().AtName("slurm_configuration"),
 									}...),
 								},
 							},
@@ -4524,14 +4375,16 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "azure-batch", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "local-platform", "seqeracompute-platform"]; Requires replacement if changed.`,
+						Description: `must be one of ["aws-batch", "aws-cloud", "google-lifesciences", "google-batch", "google-cloud", "azure-batch", "azure-cloud", "k8s-platform", "eks-platform", "gke-platform", "uge-platform", "slurm-platform", "lsf-platform", "altair-platform", "moab-platform", "seqeracompute-platform"]; Requires replacement if changed.`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"aws-batch",
 								"aws-cloud",
 								"google-lifesciences",
 								"google-batch",
+								"google-cloud",
 								"azure-batch",
+								"azure-cloud",
 								"k8s-platform",
 								"eks-platform",
 								"gke-platform",
@@ -4540,7 +4393,6 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"lsf-platform",
 								"altair-platform",
 								"moab-platform",
-								"local-platform",
 								"seqeracompute-platform",
 							),
 							custom_stringvalidators.ComputeConfigValidator(),

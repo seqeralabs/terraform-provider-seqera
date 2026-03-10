@@ -36,7 +36,7 @@ type ListLaunchDatasetVersionsResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	DescribeLaunchResponse *shared.DescribeLaunchResponse
+	ListDatasetVersionsResponse *shared.ListDatasetVersionsResponse
 }
 
 func (l *ListLaunchDatasetVersionsResponse) GetContentType() string {
@@ -60,9 +60,9 @@ func (l *ListLaunchDatasetVersionsResponse) GetRawResponse() *http.Response {
 	return l.RawResponse
 }
 
-func (l *ListLaunchDatasetVersionsResponse) GetDescribeLaunchResponse() *shared.DescribeLaunchResponse {
+func (l *ListLaunchDatasetVersionsResponse) GetListDatasetVersionsResponse() *shared.ListDatasetVersionsResponse {
 	if l == nil {
 		return nil
 	}
-	return l.DescribeLaunchResponse
+	return l.ListDatasetVersionsResponse
 }

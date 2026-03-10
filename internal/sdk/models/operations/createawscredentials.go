@@ -10,6 +10,8 @@ import (
 type CreateAWSCredentialsRequest struct {
 	// Workspace numeric identifier
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
+	// Generate External ID for AWS credentials (requires IAM Role ARN)
+	UseExternalID *bool `queryParam:"style=form,explode=true,name=useExternalId"`
 	// AWS credentials create request
 	CreateAWSCredentialsRequest shared.CreateAWSCredentialsRequest `request:"mediaType=application/json"`
 }
@@ -19,6 +21,13 @@ func (c *CreateAWSCredentialsRequest) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return c.WorkspaceID
+}
+
+func (c *CreateAWSCredentialsRequest) GetUseExternalID() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.UseExternalID
 }
 
 func (c *CreateAWSCredentialsRequest) GetCreateAWSCredentialsRequest() shared.CreateAWSCredentialsRequest {

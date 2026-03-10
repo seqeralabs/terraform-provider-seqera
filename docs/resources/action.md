@@ -157,6 +157,7 @@ Optional:
 - `main_script` (String) Main script path
 - `params_text` (String) Pipeline parameters text
 - `pipeline` (String)
+- `pipeline_schema_id` (Number)
 - `post_run_script` (String) Script to run after pipeline execution
 - `pre_run_script` (String) Script to run before pipeline execution
 - `pull_latest` (Boolean)

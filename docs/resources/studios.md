@@ -229,6 +229,7 @@ resource "seqera_studios" "studio_with_env_vars" {
 ### Read-Only
 
 - `session_id` (String) Studio session numeric identifier
+- `ssh_details` (Attributes) SSH connection details for a Studio session (see [below for nested schema](#nestedatt--ssh_details))
 
 <a id="nestedatt--configuration"></a>
 ### Nested Schema for `configuration`
@@ -241,7 +242,29 @@ Optional:
 - `gpu` (Number) Set to 0 to disable GPU or 1 to enable GPU. Default: 0; Requires replacement if changed.
 - `lifespan_hours` (Number) Maximum lifespan of the Studio session in hours. Requires replacement if changed.
 - `memory` (Number) Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults. Default: 8192; Requires replacement if changed.
-- `mount_data` (List of String) Requires replacement if changed.
+- `mount_data` (List of String, Deprecated) Requires replacement if changed.
+- `mount_data_v2` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--configuration--mount_data_v2))
+- `ssh_enabled` (Boolean) Requires replacement if changed.
+
+<a id="nestedatt--configuration--mount_data_v2"></a>
+### Nested Schema for `configuration.mount_data_v2`
+
+Optional:
+
+- `data_link_id` (String) Requires replacement if changed.
+- `path` (String) Requires replacement if changed.
+
+
+
+<a id="nestedatt--ssh_details"></a>
+### Nested Schema for `ssh_details`
+
+Read-Only:
+
+- `command` (String) The full SSH command to execute
+- `host` (String) The hostname to connect to
+- `port` (Number) The SSH port number
+- `user` (String) The user in the format 'username@sessionId'
 
 ## Import
 

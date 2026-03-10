@@ -225,7 +225,9 @@ actions:
       - aws-cloud
       - google-lifesciences
       - google-batch
+      - google-cloud
       - azure-batch
+      - azure-cloud
       - k8s-platform
       - eks-platform
       - gke-platform
@@ -234,7 +236,6 @@ actions:
       - lsf-platform
       - altair-platform
       - moab-platform
-      - local-platform
       - seqeracompute-platform
   - target: $["components"]["schemas"]["ComputeEnv_ComputeConfig_"]["properties"]["dateCreated"]
     update:

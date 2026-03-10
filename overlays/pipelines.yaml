@@ -277,5 +277,5 @@ actions:
   # TODO - Review once pipeline versioning goes live
   - target: $.components.schemas.PipelineDbDto.properties.commitId
     remove: true
-  - target: $.components.schemas.Launch.properties.commitId
+  - target: $.components.schemas.LaunchDbDto.properties.commitId
     remove: true

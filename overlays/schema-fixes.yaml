@@ -37,10 +37,10 @@ actions:
   # Remove deprecated schemas
   - target: $["components"]["schemas"]["SeqeraComputePlatformMetainfo"]
     remove: true
-  - target: $["components"]["schemas"]["WfFusionMeta"]
-    remove: true
-  - target: $["components"]["schemas"]["WfWaveMeta"]
-    remove: true
+  # - target: $["components"]["schemas"]["WfFusionMeta"]
+  #   remove: true
+  # - target: $["components"]["schemas"]["WfWaveMeta"]
+  #   remove: true
 
   # AWS Cloud Config terraform-ignore
   - target: $["components"]["schemas"]["AwsCloudConfig"]["properties"]["forgedResources"]
@@ -48,7 +48,7 @@ actions:
       x-speakeasy-terraform-ignore: true
 
   # Launch property configuration
-  - target: $["components"]["schemas"]["Launch"]["properties"]["id"]
+  - target: $["components"]["schemas"]["LaunchDbDto"]["properties"]["id"]
     update:
       x-speakeasy-param-readonly: true
 
@@ -62,11 +62,6 @@ actions:
   - target: $["components"]["schemas"]["Dataset"]["properties"]["name"]
     update:
       pattern: "^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?$"
-
-  # Launch schemaName: Replace Unicode character class with RE2-compatible pattern
-  - target: $["components"]["schemas"]["Launch"]["properties"]["schemaName"]
-    update:
-      pattern: "^[^/\\s][^/]*$"
 
   # Organization name: Replace lookahead pattern with simpler RE2-compatible pattern
   - target: $["components"]["schemas"]["Organization"]["properties"]["name"]

@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.102.0 and generator version 2.846.4
+// Generated from OpenAPI doc version 1.116.0 and generator version 2.856.1
 
 import (
 	"context"
@@ -74,15 +74,18 @@ type Seqera struct {
 	// Teams in an organization context
 	Teams *Teams
 	// Workspaces in an organization context
-	Workspaces *Workspaces
+	Workspaces      *Workspaces
+	PipelineSchemas *PipelineSchemas
 	// Pipeline secrets in a user or workspace context
 	PipelineSecrets *PipelineSecrets
 	// Pipelines
-	Pipelines *Pipelines
+	Pipelines        *Pipelines
+	PipelineVersions *PipelineVersions
 	// Computing platforms
 	Platforms *Platforms
 	// Seqera Platform API service information
 	ServiceInfo *ServiceInfo
+	SSHKeys     *SSHKeys
 	// Studios and Studio sessions
 	Studios *Studios
 	// API access tokens
@@ -171,7 +174,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.30.5",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.30.5 2.846.4 1.102.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.30.5 2.856.1 1.116.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -205,10 +208,13 @@ func New(opts ...SDKOption) *Seqera {
 	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PipelineSchemas = newPipelineSchemas(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PipelineSecrets = newPipelineSecrets(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Pipelines = newPipelines(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PipelineVersions = newPipelineVersions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Platforms = newPlatforms(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ServiceInfo = newServiceInfo(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.SSHKeys = newSSHKeys(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Studios = newStudios(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Tokens = newTokens(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Trace = newTrace(sdk, sdk.sdkConfiguration, sdk.hooks)

@@ -279,34 +279,34 @@ actions:
   # LAUNCH SCHEMA - Remove ephemeral and computed fields
   # ============================================================================
 
-  # Remove timestamp fields from Launch schema
-  - target: $.components.schemas.Launch.properties.dateCreated
+  # Remove timestamp fields from LaunchDbDto schema
+  - target: $.components.schemas.LaunchDbDto.properties.dateCreated
     remove: true
 
-  - target: $.components.schemas.Launch.properties.lastUpdated
+  - target: $.components.schemas.LaunchDbDto.properties.lastUpdated
     remove: true
 
   # Remove computeEnv (full compute environment object - response only)
-  - target: $.components.schemas.Launch.properties.computeEnv
+  - target: $.components.schemas.LaunchDbDto.properties.computeEnv
     remove: true
 
-  # Mark computed/response-only fields as read-only in Launch schema
-  - target: $.components.schemas.Launch.properties.resumeLaunchId
+  # Mark computed/response-only fields as read-only in LaunchDbDto schema
+  - target: $.components.schemas.LaunchDbDto.properties.resumeLaunchId
     update:
       x-speakeasy-param-readonly: true
 
-  - target: $.components.schemas.Launch.properties.sessionId
+  - target: $.components.schemas.LaunchDbDto.properties.sessionId
     update:
       x-speakeasy-param-readonly: true
 
-  - target: $.components.schemas.Launch.properties.optimizationId
+  - target: $.components.schemas.LaunchDbDto.properties.optimizationId
     update:
       x-speakeasy-param-readonly: true
 
-  - target: $.components.schemas.Launch.properties.optimizationTargets
+  - target: $.components.schemas.LaunchDbDto.properties.optimizationTargets
     update:
       x-speakeasy-param-readonly: true
 
-  - target: $.components.schemas.Launch.properties.launchContainer
+  - target: $.components.schemas.LaunchDbDto.properties.launchContainer
     update:
       x-speakeasy-param-readonly: true

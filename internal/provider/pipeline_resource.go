@@ -10,9 +10,16 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	speakeasy_boolplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/boolplanmodifier"
+	speakeasy_int64planmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/int64planmodifier"
+	speakeasy_objectplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/seqeralabs/terraform-provider-seqera/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	custom_stringvalidators "github.com/seqeralabs/terraform-provider-seqera/internal/validators/stringvalidators"
@@ -34,17 +41,18 @@ type PipelineResource struct {
 
 // PipelineResourceModel describes the resource data model.
 type PipelineResourceModel struct {
-	Description   types.String                    `tfsdk:"description"`
-	Icon          types.String                    `tfsdk:"icon"`
-	LabelIds      []types.Int64                   `tfsdk:"label_ids"`
-	Launch        *tfTypes.WorkflowLaunchRequest1 `tfsdk:"launch"`
-	Name          types.String                    `tfsdk:"name"`
-	PipelineID    types.Int64                     `tfsdk:"pipeline_id"`
-	Repository    types.String                    `tfsdk:"repository"`
-	UserFirstName types.String                    `tfsdk:"user_first_name"`
-	UserID        types.Int64                     `tfsdk:"user_id"`
-	UserName      types.String                    `tfsdk:"user_name"`
-	WorkspaceID   types.Int64                     `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	Description   types.String                          `tfsdk:"description"`
+	Icon          types.String                          `tfsdk:"icon"`
+	LabelIds      []types.Int64                         `tfsdk:"label_ids"`
+	Launch        *tfTypes.WorkflowLaunchRequest1       `tfsdk:"launch"`
+	Name          types.String                          `tfsdk:"name"`
+	PipelineID    types.Int64                           `tfsdk:"pipeline_id"`
+	Repository    types.String                          `tfsdk:"repository"`
+	UserFirstName types.String                          `tfsdk:"user_first_name"`
+	UserID        types.Int64                           `tfsdk:"user_id"`
+	UserName      types.String                          `tfsdk:"user_name"`
+	Version       *tfTypes.CreatePipelineVersionRequest `tfsdk:"version"`
+	WorkspaceID   types.Int64                           `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
 }
 
 func (r *PipelineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -108,6 +116,9 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 						Description: `Pipeline parameters text`,
 					},
 					"pipeline": schema.StringAttribute{
+						Optional: true,
+					},
+					"pipeline_schema_id": schema.Int64Attribute{
 						Optional: true,
 					},
 					"post_run_script": schema.StringAttribute{
@@ -181,6 +192,86 @@ func (r *PipelineResource) Schema(ctx context.Context, req resource.SchemaReques
 			},
 			"user_name": schema.StringAttribute{
 				Computed: true,
+			},
+			"version": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					objectplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"creator_avatar_url": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"creator_first_name": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"creator_last_name": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"creator_user_id": schema.Int64Attribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.Int64{
+							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+						},
+					},
+					"creator_user_name": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"date_created": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"hash": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"id": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"is_default": schema.BoolAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
+					},
+					"last_updated": schema.StringAttribute{
+						Computed: true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+					},
+					"name": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.String{
+							stringplanmodifier.RequiresReplaceIfConfigured(),
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
+						Description: `Requires replacement if changed.`,
+					},
+				},
+				Description: `Requires replacement if changed.`,
 			},
 			"workspace_id": schema.Int64Attribute{
 				Computed:    true,

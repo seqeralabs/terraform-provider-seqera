@@ -14,4 +14,6 @@ type DataStudioConfiguration struct {
 	LifespanHours    types.Int32             `tfsdk:"lifespan_hours"`
 	Memory           types.Int32             `tfsdk:"memory"`
 	MountData        []types.String          `tfsdk:"mount_data"`
+	MountDataV2      []MountData             `tfsdk:"mount_data_v2"`
+	SSHEnabled       types.Bool              `tfsdk:"ssh_enabled"`
 }

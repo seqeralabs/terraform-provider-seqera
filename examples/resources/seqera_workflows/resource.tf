@@ -17,6 +17,7 @@ resource "seqera_workflows" "my_workflows" {
   main_script         = "main.nf"
   params_text         = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
   pipeline            = "https://github.com/nextflow-io/hello"
+  pipeline_schema_id  = 10
   post_run_script     = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
   pre_run_script      = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
   pull_latest         = true

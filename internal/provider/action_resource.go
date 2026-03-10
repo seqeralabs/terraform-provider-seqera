@@ -18,7 +18,6 @@ import (
 	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk"
 	stateupgraders "github.com/seqeralabs/terraform-provider-seqera/internal/stateupgraders"
-	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -164,9 +163,10 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					"pipeline": schema.StringAttribute{
 						Computed: true,
 						Optional: true,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtMost(200),
-						},
+					},
+					"pipeline_schema_id": schema.Int64Attribute{
+						Computed: true,
+						Optional: true,
 					},
 					"post_run_script": schema.StringAttribute{
 						Computed:    true,
@@ -212,7 +212,6 @@ func (r *ActionResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						Description: `Pipeline schema name`,
 						Validators: []validator.String{
 							stringvalidator.UTF8LengthAtMost(100),
-							stringvalidator.RegexMatches(regexp.MustCompile(`^[^/\s][^/]*$`), "must match pattern "+regexp.MustCompile(`^[^/\s][^/]*$`).String()),
 						},
 					},
 					"session_id": schema.StringAttribute{

@@ -918,12 +918,12 @@ func (s *Ga4gh) Ga4ghServiceInfo(ctx context.Context, opts ...operations.Option)
 				return nil, err
 			}
 
-			var out shared.ServiceInfo
+			var out shared.WesServiceInfo
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.ServiceInfo = &out
+			res.WesServiceInfo = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

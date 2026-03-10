@@ -12,13 +12,16 @@ type Configuration struct {
 	// Number of CPU cores to allocate. Set to 0 to use the compute environment configured defaults.
 	CPU *int `default:"2" json:"cpu"`
 	// Memory allocation for the Studio session in megabytes (MB). Set to 0 to use the compute environment configured defaults.
-	Memory    *int     `default:"8192" json:"memory"`
-	MountData []string `json:"mountData,omitempty"`
+	Memory *int `default:"8192" json:"memory"`
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	MountData   []string    `json:"mountData,omitempty"`
+	MountDataV2 []MountData `json:"mountDataV2,omitempty"`
 	// Studio-specific environment variables as key-value pairs. Variable names must contain only alphanumeric and underscore characters, and cannot begin with a number.
 	Environment      map[string]string `json:"environment,omitempty"`
 	CondaEnvironment *string           `json:"condaEnvironment,omitempty"`
 	// Maximum lifespan of the Studio session in hours
-	LifespanHours *int `json:"lifespanHours,omitempty"`
+	LifespanHours *int  `json:"lifespanHours,omitempty"`
+	SSHEnabled    *bool `json:"sshEnabled,omitempty"`
 }
 
 func (c Configuration) MarshalJSON() ([]byte, error) {
@@ -60,6 +63,13 @@ func (c *Configuration) GetMountData() []string {
 	return c.MountData
 }
 
+func (c *Configuration) GetMountDataV2() []MountData {
+	if c == nil {
+		return nil
+	}
+	return c.MountDataV2
+}
+
 func (c *Configuration) GetEnvironment() map[string]string {
 	if c == nil {
 		return nil
@@ -79,6 +89,13 @@ func (c *Configuration) GetLifespanHours() *int {
 		return nil
 	}
 	return c.LifespanHours
+}
+
+func (c *Configuration) GetSSHEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.SSHEnabled
 }
 
 type DataStudioStartRequest struct {

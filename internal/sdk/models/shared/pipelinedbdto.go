@@ -19,8 +19,9 @@ type PipelineDbDto struct {
 	UserID     *int64  `json:"userId,omitempty"`
 	UserName   *string `json:"userName,omitempty"`
 	// User first name
-	UserFirstName *string `json:"userFirstName,omitempty"`
-	WorkspaceID   *int64  `json:"workspaceId,omitempty"`
+	UserFirstName *string                     `json:"userFirstName,omitempty"`
+	WorkspaceID   *int64                      `json:"workspaceId,omitempty"`
+	Version       *PipelineVersionFullInfoDto `json:"version,omitempty"`
 }
 
 func (p *PipelineDbDto) GetPipelineID() *int64 {
@@ -84,4 +85,11 @@ func (p *PipelineDbDto) GetWorkspaceID() *int64 {
 		return nil
 	}
 	return p.WorkspaceID
+}
+
+func (p *PipelineDbDto) GetVersion() *PipelineVersionFullInfoDto {
+	if p == nil {
+		return nil
+	}
+	return p.Version
 }

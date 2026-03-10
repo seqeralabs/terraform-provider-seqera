@@ -10,7 +10,6 @@ import (
 type Workflow struct {
 	RequiresAttention *bool           `json:"requiresAttention,omitempty"`
 	Status            *WorkflowStatus `json:"status,omitempty"`
-	OwnerID           *int64          `json:"ownerId,omitempty"`
 	Repository        *string         `json:"repository,omitempty"`
 	ID                *string         `json:"id,omitempty"`
 	Submit            time.Time       `json:"submit"`
@@ -18,8 +17,6 @@ type Workflow struct {
 	Start *time.Time `json:"start,omitempty"`
 	// Workflow completion time (null if not completed)
 	Complete    *time.Time     `json:"complete,omitempty"`
-	DateCreated *time.Time     `json:"dateCreated,omitempty"`
-	LastUpdated *time.Time     `json:"lastUpdated,omitempty"`
 	RunName     string         `json:"runName"`
 	SessionID   string         `json:"sessionId"`
 	Profile     *string        `json:"profile,omitempty"`
@@ -41,7 +38,6 @@ type Workflow struct {
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 	// Error report (null if no error)
 	ErrorReport     *string `json:"errorReport,omitempty"`
-	Deleted         *bool   `json:"deleted,omitempty"`
 	ProjectDir      *string `json:"projectDir,omitempty"`
 	HomeDir         *string `json:"homeDir,omitempty"`
 	Container       *string `json:"container,omitempty"`
@@ -82,13 +78,6 @@ func (w *Workflow) GetStatus() *WorkflowStatus {
 	return w.Status
 }
 
-func (w *Workflow) GetOwnerID() *int64 {
-	if w == nil {
-		return nil
-	}
-	return w.OwnerID
-}
-
 func (w *Workflow) GetRepository() *string {
 	if w == nil {
 		return nil
@@ -122,20 +111,6 @@ func (w *Workflow) GetComplete() *time.Time {
 		return nil
 	}
 	return w.Complete
-}
-
-func (w *Workflow) GetDateCreated() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.DateCreated
-}
-
-func (w *Workflow) GetLastUpdated() *time.Time {
-	if w == nil {
-		return nil
-	}
-	return w.LastUpdated
 }
 
 func (w *Workflow) GetRunName() string {
@@ -269,13 +244,6 @@ func (w *Workflow) GetErrorReport() *string {
 		return nil
 	}
 	return w.ErrorReport
-}
-
-func (w *Workflow) GetDeleted() *bool {
-	if w == nil {
-		return nil
-	}
-	return w.Deleted
 }
 
 func (w *Workflow) GetProjectDir() *string {

@@ -18,11 +18,30 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.PipelineInfo == nil {
+			r.PipelineInfo = nil
+		} else {
+			r.PipelineInfo = &tfTypes.PipelineMinInfoResponse{}
+			r.PipelineInfo.ID = types.Int64PointerValue(resp.PipelineInfo.ID)
+			if resp.PipelineInfo.Version == nil {
+				r.PipelineInfo.Version = nil
+			} else {
+				r.PipelineInfo.Version = &tfTypes.PipelineMinInfoResponsePipelineVersionMinInfoResponse{}
+				r.PipelineInfo.Version.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.PipelineInfo.Version.DateCreated))
+				r.PipelineInfo.Version.Hash = types.StringPointerValue(resp.PipelineInfo.Version.Hash)
+				r.PipelineInfo.Version.ID = types.StringPointerValue(resp.PipelineInfo.Version.ID)
+				r.PipelineInfo.Version.IsDefault = types.BoolPointerValue(resp.PipelineInfo.Version.IsDefault)
+				r.PipelineInfo.Version.IsDraftVersion = types.BoolPointerValue(resp.PipelineInfo.Version.IsDraftVersion)
+				r.PipelineInfo.Version.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.PipelineInfo.Version.LastUpdated))
+				r.PipelineInfo.Version.Name = types.StringPointerValue(resp.PipelineInfo.Version.Name)
+			}
+			r.PipelineInfo.WorkspaceID = types.Int64PointerValue(resp.PipelineInfo.WorkspaceID)
+		}
 		if resp.Workflow == nil {
 			r.Workflow = nil
 		} else {
-			r.Workflow = &tfTypes.Workflow{}
-			r.Workflow.CommandLine = types.StringValue(resp.Workflow.CommandLine)
+			r.Workflow = &tfTypes.WorkflowMaxDbDto{}
+			r.Workflow.CommandLine = types.StringPointerValue(resp.Workflow.CommandLine)
 			r.Workflow.Complete = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Complete))
 			if resp.Workflow.ConfigFiles != nil {
 				r.Workflow.ConfigFiles = make([]types.String, 0, len(resp.Workflow.ConfigFiles))
@@ -33,43 +52,19 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				r.Workflow.ConfigFiles = nil
 			}
 			r.Workflow.ConfigText = types.StringPointerValue(resp.Workflow.ConfigText)
-			r.Workflow.Container = types.StringPointerValue(resp.Workflow.Container)
-			r.Workflow.ContainerEngine = types.StringPointerValue(resp.Workflow.ContainerEngine)
 			r.Workflow.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.DateCreated))
 			r.Workflow.Deleted = types.BoolPointerValue(resp.Workflow.Deleted)
-			r.Workflow.Duration = types.Int64PointerValue(resp.Workflow.Duration)
-			r.Workflow.ErrorMessage = types.StringPointerValue(resp.Workflow.ErrorMessage)
-			r.Workflow.ErrorReport = types.StringPointerValue(resp.Workflow.ErrorReport)
-			r.Workflow.ExitStatus = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.ExitStatus))
-			r.Workflow.HomeDir = types.StringPointerValue(resp.Workflow.HomeDir)
+			if resp.Workflow.Fusion == nil {
+				r.Workflow.Fusion = nil
+			} else {
+				r.Workflow.Fusion = &tfTypes.WfFusionMeta{}
+				r.Workflow.Fusion.Enabled = types.BoolPointerValue(resp.Workflow.Fusion.Enabled)
+				r.Workflow.Fusion.Version = types.StringPointerValue(resp.Workflow.Fusion.Version)
+			}
 			r.Workflow.ID = types.StringPointerValue(resp.Workflow.ID)
 			r.Workflow.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.LastUpdated))
-			r.Workflow.LaunchDir = types.StringPointerValue(resp.Workflow.LaunchDir)
 			r.Workflow.LaunchID = types.StringPointerValue(resp.Workflow.LaunchID)
 			r.Workflow.LogFile = types.StringPointerValue(resp.Workflow.LogFile)
-			if resp.Workflow.Manifest == nil {
-				r.Workflow.Manifest = nil
-			} else {
-				r.Workflow.Manifest = &tfTypes.WfManifest{}
-				r.Workflow.Manifest.Author = types.StringPointerValue(resp.Workflow.Manifest.Author)
-				r.Workflow.Manifest.DefaultBranch = types.StringPointerValue(resp.Workflow.Manifest.DefaultBranch)
-				r.Workflow.Manifest.Description = types.StringPointerValue(resp.Workflow.Manifest.Description)
-				r.Workflow.Manifest.Gitmodules = types.StringPointerValue(resp.Workflow.Manifest.Gitmodules)
-				r.Workflow.Manifest.HomePage = types.StringPointerValue(resp.Workflow.Manifest.HomePage)
-				r.Workflow.Manifest.Icon = types.StringPointerValue(resp.Workflow.Manifest.Icon)
-				r.Workflow.Manifest.MainScript = types.StringPointerValue(resp.Workflow.Manifest.MainScript)
-				r.Workflow.Manifest.Name = types.StringPointerValue(resp.Workflow.Manifest.Name)
-				r.Workflow.Manifest.NextflowVersion = types.StringPointerValue(resp.Workflow.Manifest.NextflowVersion)
-				r.Workflow.Manifest.Version = types.StringPointerValue(resp.Workflow.Manifest.Version)
-			}
-			if resp.Workflow.Nextflow == nil {
-				r.Workflow.Nextflow = nil
-			} else {
-				r.Workflow.Nextflow = &tfTypes.WfNextflow{}
-				r.Workflow.Nextflow.Build = types.StringPointerValue(resp.Workflow.Nextflow.Build)
-				r.Workflow.Nextflow.Timestamp = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Nextflow.Timestamp))
-				r.Workflow.Nextflow.Version = types.StringPointerValue(resp.Workflow.Nextflow.Version)
-			}
 			r.Workflow.OperationID = types.StringPointerValue(resp.Workflow.OperationID)
 			r.Workflow.OutFile = types.StringPointerValue(resp.Workflow.OutFile)
 			r.Workflow.OwnerID = types.Int64PointerValue(resp.Workflow.OwnerID)
@@ -81,48 +76,28 @@ func (r *WorkflowsResourceModel) RefreshFromSharedDescribeWorkflowResponse(ctx c
 				}
 			}
 			r.Workflow.Profile = types.StringPointerValue(resp.Workflow.Profile)
-			r.Workflow.ProjectDir = types.StringPointerValue(resp.Workflow.ProjectDir)
-			r.Workflow.ProjectName = types.StringValue(resp.Workflow.ProjectName)
+			r.Workflow.ProjectName = types.StringPointerValue(resp.Workflow.ProjectName)
 			r.Workflow.Repository = types.StringPointerValue(resp.Workflow.Repository)
 			r.Workflow.RequiresAttention = types.BoolPointerValue(resp.Workflow.RequiresAttention)
 			r.Workflow.Resume = types.BoolPointerValue(resp.Workflow.Resume)
 			r.Workflow.Revision = types.StringPointerValue(resp.Workflow.Revision)
-			r.Workflow.RunName = types.StringValue(resp.Workflow.RunName)
-			r.Workflow.ScriptFile = types.StringPointerValue(resp.Workflow.ScriptFile)
-			r.Workflow.ScriptID = types.StringPointerValue(resp.Workflow.ScriptID)
+			r.Workflow.RunName = types.StringPointerValue(resp.Workflow.RunName)
 			r.Workflow.ScriptName = types.StringPointerValue(resp.Workflow.ScriptName)
-			r.Workflow.SessionID = types.StringValue(resp.Workflow.SessionID)
+			r.Workflow.SessionID = types.StringPointerValue(resp.Workflow.SessionID)
 			r.Workflow.Start = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Start))
-			if resp.Workflow.Stats == nil {
-				r.Workflow.Stats = nil
-			} else {
-				r.Workflow.Stats = &tfTypes.WfStats{}
-				r.Workflow.Stats.CachedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.CachedCount))
-				r.Workflow.Stats.CachedCountFmt = types.StringPointerValue(resp.Workflow.Stats.CachedCountFmt)
-				r.Workflow.Stats.CachedDuration = types.Int64PointerValue(resp.Workflow.Stats.CachedDuration)
-				r.Workflow.Stats.CachedPct = types.Float32PointerValue(resp.Workflow.Stats.CachedPct)
-				r.Workflow.Stats.ComputeTimeFmt = types.StringPointerValue(resp.Workflow.Stats.ComputeTimeFmt)
-				r.Workflow.Stats.FailedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.FailedCount))
-				r.Workflow.Stats.FailedCountFmt = types.StringPointerValue(resp.Workflow.Stats.FailedCountFmt)
-				r.Workflow.Stats.FailedDuration = types.Int64PointerValue(resp.Workflow.Stats.FailedDuration)
-				r.Workflow.Stats.FailedPct = types.Float32PointerValue(resp.Workflow.Stats.FailedPct)
-				r.Workflow.Stats.IgnoredCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.IgnoredCount))
-				r.Workflow.Stats.IgnoredCountFmt = types.StringPointerValue(resp.Workflow.Stats.IgnoredCountFmt)
-				r.Workflow.Stats.IgnoredPct = types.Float32PointerValue(resp.Workflow.Stats.IgnoredPct)
-				r.Workflow.Stats.SucceedCount = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Workflow.Stats.SucceedCount))
-				r.Workflow.Stats.SucceedCountFmt = types.StringPointerValue(resp.Workflow.Stats.SucceedCountFmt)
-				r.Workflow.Stats.SucceedDuration = types.Int64PointerValue(resp.Workflow.Stats.SucceedDuration)
-				r.Workflow.Stats.SucceedPct = types.Float32PointerValue(resp.Workflow.Stats.SucceedPct)
-			}
 			if resp.Workflow.Status != nil {
 				r.Workflow.Status = types.StringValue(string(*resp.Workflow.Status))
 			} else {
 				r.Workflow.Status = types.StringNull()
 			}
-			r.Workflow.Submit = types.StringValue(typeconvert.TimeToString(resp.Workflow.Submit))
-			r.Workflow.Success = types.BoolPointerValue(resp.Workflow.Success)
-			r.Workflow.UserName = types.StringValue(resp.Workflow.UserName)
-			r.Workflow.WorkDir = types.StringValue(resp.Workflow.WorkDir)
+			r.Workflow.Submit = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Workflow.Submit))
+			if resp.Workflow.Wave == nil {
+				r.Workflow.Wave = nil
+			} else {
+				r.Workflow.Wave = &tfTypes.WfWaveMeta{}
+				r.Workflow.Wave.Enabled = types.BoolPointerValue(resp.Workflow.Wave.Enabled)
+			}
+			r.Workflow.WorkDir = types.StringPointerValue(resp.Workflow.WorkDir)
 		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
@@ -235,6 +210,12 @@ func (r *WorkflowsResourceModel) ToSharedSubmitWorkflowLaunchRequest(ctx context
 func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Context) (*shared.WorkflowLaunchRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	schemaName := new(string)
+	if !r.SchemaName.IsUnknown() && !r.SchemaName.IsNull() {
+		*schemaName = r.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
 	computeEnvID := new(string)
 	if !r.ComputeEnvID.IsUnknown() && !r.ComputeEnvID.IsNull() {
 		*computeEnvID = r.ComputeEnvID.ValueString()
@@ -319,11 +300,11 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 	} else {
 		entryName = nil
 	}
-	schemaName := new(string)
-	if !r.SchemaName.IsUnknown() && !r.SchemaName.IsNull() {
-		*schemaName = r.SchemaName.ValueString()
+	pipelineSchemaID := new(int64)
+	if !r.PipelineSchemaID.IsUnknown() && !r.PipelineSchemaID.IsNull() {
+		*pipelineSchemaID = r.PipelineSchemaID.ValueInt64()
 	} else {
-		schemaName = nil
+		pipelineSchemaID = nil
 	}
 	resume := new(bool)
 	if !r.Resume.IsUnknown() && !r.Resume.IsNull() {
@@ -360,6 +341,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		headJobMemoryMb = nil
 	}
 	out := shared.WorkflowLaunchRequest{
+		SchemaName:       schemaName,
 		ComputeEnvID:     computeEnvID,
 		RunName:          runName,
 		Pipeline:         pipeline,
@@ -375,7 +357,7 @@ func (r *WorkflowsResourceModel) ToSharedWorkflowLaunchRequest(ctx context.Conte
 		PostRunScript:    postRunScript,
 		MainScript:       mainScript,
 		EntryName:        entryName,
-		SchemaName:       schemaName,
+		PipelineSchemaID: pipelineSchemaID,
 		Resume:           resume,
 		PullLatest:       pullLatest,
 		StubRun:          stubRun,

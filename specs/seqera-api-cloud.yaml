@@ -5,7 +5,7 @@ info:
   contact:
     url: https://seqera.io
     email: info@seqera.io
-  version: 1.102.0
+  version: 1.116.0
 tags:
 - name: actions
   description: Pipeline actions
@@ -967,8 +967,10 @@ paths:
       tags:
       - credentials
       summary: Create credentials
-      description: Creates new credentials in a user context. Append `?workspaceId`
-        to create the credentials in a workspace context.
+      description: "Creates new credentials in a user context. Append `?workspaceId`\
+        \ to create the credentials in a workspace context. For AWS credentials with\
+        \ IAM Role ARN, append `?useExternalId=true` to generate a Platform-managed\
+        \ External ID."
       operationId: CreateCredentials
       parameters:
       - name: workspaceId
@@ -977,6 +979,11 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: useExternalId
+        in: query
+        description: Generate External ID for AWS credentials (requires IAM Role ARN)
+        schema:
+          type: boolean
       requestBody:
         description: Credentials create request
         content:
@@ -1081,8 +1088,9 @@ paths:
       tags:
       - credentials
       summary: Update credentials
-      description: Updates the details of the credentials identified by the given
-        `credentialsId`.
+      description: "Updates the details of the credentials identified by the given\
+        \ `credentialsId`. For AWS credentials with IAM Role ARN, append `?useExternalId=true`\
+        \ to generate a Platform-managed External ID."
       operationId: UpdateCredentials
       parameters:
       - name: credentialsId
@@ -1097,6 +1105,11 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: useExternalId
+        in: query
+        description: Generate External ID for AWS credentials (requires IAM Role ARN)
+        schema:
+          type: boolean
       requestBody:
         description: Credentials update request
         content:
@@ -1159,6 +1172,49 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeleteCredentialsConflictResponse"
+      security:
+      - BearerAuth: []
+  /credentials/{credentialsId}/keys:
+    get:
+      tags:
+      - credentials
+      summary: Get encrypted credentials
+      description: Retrieves the encrypted keys for the credentials identified by
+        the given `credentialsId`.
+      operationId: GetEncryptedCredentials
+      parameters:
+      - name: credentialsId
+        in: path
+        description: Credentials string identifier
+        required: true
+        schema:
+          type: string
+      - name: workspaceId
+        in: query
+        description: Workspace numeric identifier
+        schema:
+          type: integer
+          format: int64
+      - name: pairingId
+        in: query
+        description: Encryption key string identifier
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCredentialsKeysResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
       security:
       - BearerAuth: []
   /data-links:
@@ -3007,7 +3063,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ServiceInfo"
+                $ref: "#/components/schemas/WesServiceInfo"
         "400":
           description: Bad request
           content:
@@ -3712,7 +3768,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DescribeLaunchResponse"
+                $ref: "#/components/schemas/ListDatasetVersionsResponse"
         "403":
           description: Operation not allowed
       security:
@@ -5219,7 +5275,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateWorkspaceRequest"
+              $ref: "#/components/schemas/DataStudioWorkspaceSettingsRequest"
         required: true
       responses:
         "204":
@@ -5238,6 +5294,88 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+      security:
+      - BearerAuth: []
+  /orgs/{orgId}/workspaces/{workspaceId}/users/{userId}:
+    delete:
+      tags:
+      - workspaces
+      summary: Delete workspace user
+      description: Deletes the given user (member or collaborator) from the given
+        workspace.
+      operationId: DeleteWorkspaceUser
+      parameters:
+      - name: orgId
+        in: path
+        description: Organization numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: workspaceId
+        in: path
+        description: Workspace numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: userId
+        in: path
+        description: User numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+      - BearerAuth: []
+  /pipeline-schemas:
+    post:
+      tags:
+      - pipeline-schemas
+      summary: Create pipeline schema
+      description: Creates a new pipeline schema in a user context. Append `?workspaceId`
+        to create the schema in a workspace context.
+      operationId: CreatePipelineSchema
+      parameters:
+      - name: workspaceId
+        in: query
+        description: Workspace numeric identifier
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Pipeline schema creation request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePipelineSchemaRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatePipelineSchemaResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
       security:
       - BearerAuth: []
   /pipeline-secrets:
@@ -5852,7 +5990,7 @@ paths:
     put:
       tags:
       - pipelines
-      summary: Update pipeline
+      summary: Update pipeline (default version)
       description: "Updates the details of the pipeline identified by the given `pipelineId`.\
         \ \n            **Note**: If `labelIds` is `null`, empty, or omitted, existing\
         \ pipeline labels are removed.\n            Include `labelIds: [<label-id-1>,<label-id-2>]`\
@@ -5966,6 +6104,12 @@ paths:
           type: integer
           format: int64
           nullable: true
+      - name: versionId
+        in: query
+        description: Pipeline version identifier
+        required: false
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -6026,6 +6170,12 @@ paths:
           type: array
           items:
             $ref: "#/components/schemas/PipelineSchemaAttributes"
+      - name: versionId
+        in: query
+        description: Pipeline version identifier
+        required: false
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -6043,6 +6193,230 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "403":
           description: Operation not allowed
+      security:
+      - BearerAuth: []
+  /pipelines/{pipelineId}/versions:
+    get:
+      tags:
+      - pipeline-versions
+      summary: List pipeline versions
+      description: Lists all available pipeline versions in a user context. Append
+        `workspaceId` to list pipeline versions in a workspace context.
+      operationId: ListPipelineVersions
+      parameters:
+      - name: pipelineId
+        in: path
+        description: Pipeline numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: workspaceId
+        in: query
+        description: Workspace numeric identifier
+        schema:
+          type: integer
+          format: int64
+      - name: max
+        in: query
+        description: Pagination max results
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: Pagination offset
+        schema:
+          type: integer
+          format: int32
+      - name: search
+        in: query
+        description: Filter search parameter
+        schema:
+          type: string
+      - name: isPublished
+        in: query
+        description: "Set to true to retrieve published versions, false to fetch draft\
+          \ versions"
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListPipelineVersionsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+      - BearerAuth: []
+  /pipelines/{pipelineId}/versions/validate:
+    get:
+      tags:
+      - pipeline-versions
+      summary: Validate pipeline version name
+      description: Confirms the validity of the given pipeline version `name` in a
+        user context.
+      operationId: ValidatePipelineVersionName
+      parameters:
+      - name: pipelineId
+        in: path
+        description: Pipeline numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: name
+        in: query
+        description: Pipeline name to validate
+        schema:
+          type: string
+      - name: workspaceId
+        in: query
+        description: Workspace Identifier
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+      - BearerAuth: []
+  /pipelines/{pipelineId}/versions/{versionId}:
+    post:
+      tags:
+      - pipeline-versions
+      summary: Update pipeline version
+      description: "Updates the details of the pipeline version identified by the\
+        \ given `pipelineId` and `versionId`. \n            **Note**: If `labelIds`\
+        \ is `null`, empty, or omitted, existing pipeline labels are removed.\n  \
+        \          Include `labelIds: [<label-id-1>,<label-id-2>]` to override existing\
+        \ labels. Labels to be preserved must be included.\n            To append\
+        \ a list of labels to multiple pipelines, use `/pipelines/labels/add`."
+      operationId: UpdatePipelineVersion
+      parameters:
+      - name: pipelineId
+        in: path
+        description: Pipeline numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: versionId
+        in: path
+        description: Pipeline version string identifier
+        required: true
+        schema:
+          type: string
+      - name: workspaceId
+        in: query
+        description: Workspace numeric identifier
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Pipeline version update request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePipelineRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdatePipelineResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicate element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+      - BearerAuth: []
+  /pipelines/{pipelineId}/versions/{versionId}/manage:
+    put:
+      tags:
+      - pipeline-versions
+      summary: Update pipeline version name and default flag
+      description: |-
+        Updates a pipeline version's name and/or marks it as the default version.
+                                     When setting a version as default, any previously default version is automatically unset.
+                                     Version names cannot be changed if the version is already referenced by workflow runs.
+      operationId: ManagePipelineVersion
+      parameters:
+      - name: pipelineId
+        in: path
+        description: Pipeline numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: versionId
+        in: path
+        description: Pipeline Version identifier (Launch ID)
+        required: true
+        schema:
+          type: string
+      - name: workspaceId
+        in: query
+        description: Workspace Identifier
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Pipeline Version Manage Request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PipelineVersionManageRequest"
+        required: true
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "404":
+          description: Version not found
+        "409":
+          description: Conflict - unsetting a default pipeline version
       security:
       - BearerAuth: []
   /platforms:
@@ -6190,6 +6564,179 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /ssh-keys:
+    get:
+      tags:
+      - ssh-keys
+      summary: List SSH keys
+      description: Retrieves the list of all SSH public keys for the authenticated
+        user.
+      operationId: ListSshKeys
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListSshKeysResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - ssh-keys
+      summary: Create SSH key
+      description: Creates a new SSH public key with the details in the given request
+        body.
+      operationId: CreateSshKey
+      requestBody:
+        description: SSH key create request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSshKeyRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateSshKeyResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "409":
+          description: Duplicated element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+      - BearerAuth: []
+  /ssh-keys/validate/key:
+    get:
+      tags:
+      - ssh-keys
+      summary: Validate SSH key
+      description: Confirms the availability of the given key for a SSH key in the
+        user context.
+      operationId: ValidateSshKey
+      parameters:
+      - name: key
+        in: query
+        description: SSH key to validate
+        schema:
+          type: string
+      responses:
+        "204":
+          description: "Ok - No content, if the key is valid."
+        "400":
+          description: "Bad request, if the key is not valid."
+        "409":
+          description: "Conflict, key duplicated in the given context."
+        "403":
+          description: Operation not allowed.
+      security:
+      - BearerAuth: []
+  /ssh-keys/validate/name:
+    get:
+      tags:
+      - ssh-keys
+      summary: Validate SSH key name
+      description: Confirms the availability of the given name for a SSH key in the
+        user context.
+      operationId: ValidateSshKeyName
+      parameters:
+      - name: name
+        in: query
+        description: SSH key name to validate
+        schema:
+          type: string
+      responses:
+        "204":
+          description: "Ok - No content, if the name is valid and available."
+        "400":
+          description: "Bad request, if the name is not valid."
+        "409":
+          description: "Conflict, name duplicated in the given context."
+        "403":
+          description: Operation not allowed.
+      security:
+      - BearerAuth: []
+  /ssh-keys/{keyId}:
+    get:
+      tags:
+      - ssh-keys
+      summary: Describe SSH key
+      description: Retrieves the details of an SSH public key by its ID.
+      operationId: DescribeSshKey
+      parameters:
+      - name: keyId
+        in: path
+        description: SSH key numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DescribeSshKeyResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+        "404":
+          description: SSH key not found
+      security:
+      - BearerAuth: []
+    delete:
+      tags:
+      - ssh-keys
+      summary: Delete SSH key
+      description: Deletes the given SSH public key by its ID.
+      operationId: DeleteSshKey
+      parameters:
+      - name: keyId
+        in: path
+        description: SSH key numeric identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: OK - No content
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Operation not allowed
+      security:
+      - BearerAuth: []
   /studios:
     get:
       tags:
@@ -8739,7 +9286,6 @@ components:
         id:
           type: integer
           format: int64
-          nullable: true
         name:
           maxLength: 50
           minLength: 1
@@ -8823,7 +9369,7 @@ components:
         id:
           type: string
         launch:
-          $ref: "#/components/schemas/Launch"
+          $ref: "#/components/schemas/LaunchDbDto"
         name:
           type: string
         hookId:
@@ -9256,12 +9802,23 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/InstanceType"
+    AwsCredentialsMode:
+      type: string
+      enum:
+      - keys
+      - role
+      x-enum-varnames:
+      - keys
+      - role
+      x-type: String
     AwsSecurityKeys:
       title: AWS credentials
       type: object
       properties:
         discriminator:
           type: string
+        mode:
+          $ref: "#/components/schemas/AwsCredentialsMode"
         accessKey:
           type: string
         secretKey:
@@ -9269,8 +9826,10 @@ components:
           writeOnly: true
         assumeRoleArn:
           type: string
+        externalId:
+          type: string
     AzBatchConfig:
-      title: Azure batch configuration
+      title: Azure Batch configuration
       type: object
       properties:
         workDir:
@@ -9592,13 +10151,12 @@ components:
           azure-batch: "#/components/schemas/AzBatchConfig"
           seqeracompute-platform: "#/components/schemas/SeqeraComputeConfig"
           eks-platform: "#/components/schemas/EksComputeConfig"
-          google-lifesciences: "#/components/schemas/GoogleLifeSciencesConfig"
           uge-platform: "#/components/schemas/UnivaComputeConfig"
+          google-lifesciences: "#/components/schemas/GoogleLifeSciencesConfig"
       oneOf:
       - $ref: "#/components/schemas/AwsBatchConfig"
       - $ref: "#/components/schemas/AwsCloudConfig"
       - $ref: "#/components/schemas/SeqeraComputeConfig"
-      - $ref: "#/components/schemas/GoogleLifeSciencesConfig"
       - $ref: "#/components/schemas/GoogleBatchConfig"
       - $ref: "#/components/schemas/GoogleCloudConfig"
       - $ref: "#/components/schemas/AzBatchConfig"
@@ -9611,7 +10169,7 @@ components:
       - $ref: "#/components/schemas/UnivaComputeConfig"
       - $ref: "#/components/schemas/AltairPbsComputeConfig"
       - $ref: "#/components/schemas/MoabComputeConfig"
-      - $ref: "#/components/schemas/LocalComputeConfig"
+      - $ref: "#/components/schemas/GoogleLifeSciencesConfig"
     ComputeEnv.Status:
       type: string
       enum:
@@ -9681,9 +10239,10 @@ components:
           - aws-batch
           - aws-cloud
           - seqeracompute-platform
-          - google-lifesciences
           - google-batch
+          - google-cloud
           - azure-batch
+          - azure-cloud
           - k8s-platform
           - eks-platform
           - gke-platform
@@ -9691,6 +10250,8 @@ components:
           - slurm-platform
           - lsf-platform
           - altair-platform
+          - moab-platform
+          - google-lifesciences
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -9728,6 +10289,9 @@ components:
           nullable: true
           allOf:
           - $ref: "#/components/schemas/ComputeEnvResources"
+        awsAccountId:
+          type: string
+          nullable: true
     ComputeEnv_ComputeConfig_:
       required:
       - config
@@ -9761,7 +10325,7 @@ components:
           enum:
           - aws-batch
           - aws-cloud
-          - google-lifesciences
+          - seqeracompute-platform
           - google-batch
           - google-cloud
           - azure-batch
@@ -9774,8 +10338,7 @@ components:
           - lsf-platform
           - altair-platform
           - moab-platform
-          - local-platform
-          - seqeracompute-platform
+          - google-lifesciences
         config:
           $ref: "#/components/schemas/ComputeConfig"
         dateCreated:
@@ -9794,7 +10357,6 @@ components:
           type: boolean
           readOnly: true
         status:
-          type: string
           readOnly: true
           allOf:
           - $ref: "#/components/schemas/ComputeEnv.Status"
@@ -10043,11 +10605,23 @@ components:
           items:
             type: integer
             format: int64
+        version:
+          $ref: "#/components/schemas/CreatePipelineVersionRequest"
     CreatePipelineResponse:
       type: object
       properties:
         pipeline:
           $ref: "#/components/schemas/PipelineDbDto"
+    CreatePipelineSchemaRequest:
+      type: object
+      properties:
+        content:
+          type: string
+    CreatePipelineSchemaResponse:
+      type: object
+      properties:
+        pipelineSchema:
+          $ref: "#/components/schemas/PipelineSchemaDbDto"
     CreatePipelineSecretRequest:
       type: object
       properties:
@@ -10061,6 +10635,26 @@ components:
         secretId:
           type: integer
           format: int64
+    CreatePipelineVersionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    CreateSshKeyRequest:
+      required:
+      - name
+      - publicKey
+      type: object
+      properties:
+        name:
+          type: string
+        publicKey:
+          type: string
+    CreateSshKeyResponse:
+      type: object
+      properties:
+        sshKey:
+          $ref: "#/components/schemas/UserSshPublicKeyDto"
     CreateTeamMemberRequest:
       type: object
       properties:
@@ -10262,7 +10856,6 @@ components:
         hidden:
           type: boolean
         status:
-          type: string
           readOnly: true
           allOf:
           - $ref: "#/components/schemas/DataLink.Status"
@@ -10437,8 +11030,15 @@ components:
           format: int32
         mountData:
           type: array
+          nullable: true
+          deprecated: true
           items:
             type: string
+        mountDataV2:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/MountData"
         environment:
           type: object
           additionalProperties:
@@ -10451,6 +11051,9 @@ components:
           minimum: 0
           type: integer
           format: int32
+        sshEnabled:
+          type: boolean
+          nullable: true
     DataStudioCreateRequest:
       required:
       - computeEnvId
@@ -10512,6 +11115,10 @@ components:
           type: string
         studioUrl:
           type: string
+        sshDetails:
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/StudioSshDetailsDto"
         computeEnv:
           $ref: "#/components/schemas/DataStudioComputeEnvDto"
         template:
@@ -10746,6 +11353,18 @@ components:
       - deprecated
       - experimental
       - unsupported
+    DataStudioWorkspaceSettingsRequest:
+      type: object
+      properties:
+        lifespanHours:
+          minimum: 0
+          type: integer
+          format: int32
+        containerRepository:
+          type: string
+          nullable: true
+        privateStudioByDefault:
+          type: boolean
     DataStudioWorkspaceSettingsResponse:
       type: object
       properties:
@@ -10761,6 +11380,8 @@ components:
         containerRepository:
           type: string
           nullable: true
+        privateStudioByDefault:
+          type: boolean
     DatasetDto:
       type: object
       properties:
@@ -10849,6 +11470,15 @@ components:
           type: string
         disabled:
           type: boolean
+    DefaultWorkflowEngineParameter:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        default_value:
+          type: string
     DeleteCredentialsConflictResponse:
       type: object
       properties:
@@ -10945,7 +11575,7 @@ components:
       type: object
       properties:
         launch:
-          $ref: "#/components/schemas/Launch"
+          $ref: "#/components/schemas/LaunchDbDto"
     DescribeOrganizationQuotasResponse:
       type: object
       properties:
@@ -10976,6 +11606,11 @@ components:
       properties:
         metainfo:
           $ref: "#/components/schemas/PlatformMetainfo"
+    DescribeSshKeyResponse:
+      type: object
+      properties:
+        sshKey:
+          $ref: "#/components/schemas/UserSshPublicKeyDto"
     DescribeTaskResponse:
       type: object
       properties:
@@ -11005,7 +11640,7 @@ components:
       type: object
       properties:
         workflow:
-          $ref: "#/components/schemas/Workflow"
+          $ref: "#/components/schemas/WorkflowMaxDbDto"
         progress:
           $ref: "#/components/schemas/ProgressData"
         platform:
@@ -11032,6 +11667,8 @@ components:
           type: array
           items:
             type: string
+        pipelineInfo:
+          $ref: "#/components/schemas/PipelineMinInfoResponse"
     DescribeWorkspaceResponse:
       type: object
       properties:
@@ -11230,6 +11867,11 @@ components:
         dns:
           type: string
         mount:
+          type: string
+    GetCredentialsKeysResponse:
+      type: object
+      properties:
+        keys:
           type: string
     GetProgressResponse:
       type: object
@@ -11577,7 +12219,7 @@ components:
         arch:
           type: string
     GoogleLifeSciencesConfig:
-      title: Google life sciences configuration
+      title: Google Life Sciences configuration (retired)
       type: object
       properties:
         workDir:
@@ -11861,32 +12503,34 @@ components:
       - simple
       - resource
       - all
-    Launch:
-      required:
-      - dateCreated
-      - pipeline
+    LaunchActionRequest:
+      type: object
+      properties:
+        params:
+          type: object
+          additionalProperties: true
+    LaunchActionResponse:
+      type: object
+      properties:
+        workflowId:
+          type: string
+    LaunchDbDto:
       type: object
       properties:
         id:
-          maxLength: 22
           type: string
         workspaceId:
           type: integer
           format: int64
         computeEnv:
-          nullable: true
-          allOf:
-          - $ref: "#/components/schemas/ComputeEnv_ComputeConfig_"
+          $ref: "#/components/schemas/ComputeEnv_ComputeConfig_"
         pipeline:
-          maxLength: 200
           type: string
         workDir:
           type: string
         revision:
-          maxLength: 100
           type: string
         commitId:
-          maxLength: 40
           type: string
         configText:
           type: string
@@ -11899,29 +12543,22 @@ components:
         postRunScript:
           type: string
         mainScript:
-          maxLength: 200
           type: string
         entryName:
-          maxLength: 80
           type: string
         schemaName:
-          maxLength: 100
-          pattern: "[\\p{Graph}&&[^/]]\\p{Graph}+"
           type: string
         resume:
           type: boolean
         resumeLaunchId:
-          maxLength: 22
           type: string
         pullLatest:
           type: boolean
         stubRun:
           type: boolean
         sessionId:
-          maxLength: 36
           type: string
         runName:
-          maxLength: 80
           type: string
         configProfiles:
           type: array
@@ -11936,7 +12573,6 @@ components:
           items:
             type: string
         optimizationId:
-          maxLength: 32
           type: string
         optimizationTargets:
           type: string
@@ -11954,17 +12590,9 @@ components:
         lastUpdated:
           type: string
           format: date-time
-    LaunchActionRequest:
-      type: object
-      properties:
-        params:
-          type: object
-          additionalProperties: true
-    LaunchActionResponse:
-      type: object
-      properties:
-        workflowId:
-          type: string
+        pipelineSchemaId:
+          type: integer
+          format: int64
     ListAccessTokensResponse:
       type: object
       properties:
@@ -12186,6 +12814,16 @@ components:
         totalSize:
           type: integer
           format: int64
+    ListPipelineVersionsResponse:
+      type: object
+      properties:
+        versions:
+          type: array
+          items:
+            $ref: "#/components/schemas/PipelineDbDto"
+        totalSize:
+          type: integer
+          format: int64
     ListPipelinesResponse:
       type: object
       properties:
@@ -12210,6 +12848,13 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ComputeRegion"
+    ListSshKeysResponse:
+      type: object
+      properties:
+        sshKeys:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserSshPublicKeyDto"
     ListTasksResponse:
       type: object
       properties:
@@ -12267,6 +12912,8 @@ components:
           type: boolean
         optimized:
           type: boolean
+        pipelineInfo:
+          $ref: "#/components/schemas/PipelineMinInfoResponse"
     ListWorkspacesAndOrgResponse:
       type: object
       properties:
@@ -12294,31 +12941,13 @@ components:
     LocalComputeConfig:
       title: Local execution configuration
       type: object
-      properties:
-        workDir:
-          type: string
-          description: Compute environment working directory
-        preRunScript:
-          type: string
-          description: "Add a script that executes in the nf-launch script prior to\
-            \ invoking Nextflow processes. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-        postRunScript:
-          type: string
-          description: "Add a script that executes after all Nextflow processes have\
-            \ completed. See [Pre and post-run scripts](https://docs.seqera.io/platform-cloud/launch/advanced#pre-and-post-run-scripts)."
-        environment:
-          type: array
-          items:
-            $ref: "#/components/schemas/ConfigEnvVariable"
-        nextflowConfig:
-          type: string
-        discriminator:
-          type: string
-          description: property to select the compute config platform
-        waveEnabled:
-          type: boolean
-        fusion2Enabled:
-          type: boolean
+      allOf:
+      - $ref: "#/components/schemas/ComputeConfig"
+      - properties:
+          waveEnabled:
+            type: boolean
+          fusion2Enabled:
+            type: boolean
     LocalPlatformMetainfo:
       title: Local platform metainfo
       type: object
@@ -12535,6 +13164,14 @@ components:
           type: string
         propagateHeadJobOptions:
           type: boolean
+    MountData:
+      type: object
+      properties:
+        dataLinkId:
+          type: string
+        path:
+          type: string
+          nullable: true
     MultiRequestFileSchema:
       type: object
       properties:
@@ -12804,6 +13441,8 @@ components:
             $ref: "#/components/schemas/LabelDbDto"
         computeEnv:
           $ref: "#/components/schemas/ComputeEnvDbDto"
+        version:
+          $ref: "#/components/schemas/PipelineVersionFullInfoDto"
     PipelineInfo:
       type: object
       properties:
@@ -12856,6 +13495,36 @@ components:
       enum:
       - ASCENDING
       - DESCENDING
+    PipelineMinInfoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        workspaceId:
+          type: integer
+          format: int64
+        version:
+          $ref: "#/components/schemas/PipelineMinInfoResponse.PipelineVersionMinInfoResponse"
+    PipelineMinInfoResponse.PipelineVersionMinInfoResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        lastUpdated:
+          type: string
+          format: date-time
+        hash:
+          type: string
+        isDefault:
+          type: boolean
+        isDraftVersion:
+          type: boolean
     PipelineOptimizationStatus:
       type: string
       enum:
@@ -12880,6 +13549,14 @@ components:
       x-enum-varnames:
       - schema
       - params
+    PipelineSchemaDbDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        content:
+          type: string
     PipelineSchemaResponse:
       required:
       - schema
@@ -12914,6 +13591,41 @@ components:
           type: string
           format: date-time
           readOnly: true
+    PipelineVersionFullInfoDto:
+      type: object
+      properties:
+        id:
+          type: string
+        creatorUserId:
+          type: integer
+          format: int64
+        creatorUserName:
+          type: string
+        creatorFirstName:
+          type: string
+        creatorLastName:
+          type: string
+        creatorAvatarUrl:
+          type: string
+        name:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        lastUpdated:
+          type: string
+          format: date-time
+        hash:
+          type: string
+        isDefault:
+          type: boolean
+    PipelineVersionManageRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isDefault:
+          type: boolean
     PlatformMetainfo:
       type: object
       properties:
@@ -13376,12 +14088,16 @@ components:
       properties:
         discriminator:
           type: string
+        mode:
+          $ref: "#/components/schemas/AwsCredentialsMode"
         accessKey:
           type: string
         secretKey:
           type: string
           writeOnly: true
         assumeRoleArn:
+          type: string
+        externalId:
           type: string
     ServiceInfo:
       type: object
@@ -13451,6 +14167,9 @@ components:
         seqeraAiBaseUrl:
           type: string
           nullable: true
+        launchParamsTextMaxSize:
+          type: integer
+          format: int32
     ServiceInfoResponse:
       type: object
       properties:
@@ -13538,6 +14257,29 @@ components:
         commitId:
           type: string
           nullable: true
+    StudioSshDetailsDto:
+      required:
+      - command
+      - host
+      - port
+      - user
+      type: object
+      properties:
+        host:
+          type: string
+          description: The hostname to connect to
+        port:
+          type: integer
+          description: The SSH port number
+          format: int32
+        user:
+          type: string
+          description: The user in the format 'username@sessionId'
+        command:
+          type: string
+          description: The full SSH command to execute
+          example: ssh username@sessionId@host -p port
+      description: SSH connection details for a Studio session
     SubmitWorkflowLaunchRequest:
       type: object
       properties:
@@ -13699,6 +14441,9 @@ components:
           type: string
           format: date-time
           nullable: true
+        errorMessage:
+          type: string
+          nullable: true
     TaskStatus:
       type: string
       enum:
@@ -13812,6 +14557,8 @@ components:
         message:
           type: string
         workflowId:
+          type: string
+        watchUrl:
           type: string
     TraceHeartbeatRequest:
       type: object
@@ -14239,6 +14986,22 @@ components:
           format: date-time
         deleted:
           type: boolean
+    UserSshPublicKeyDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        publicKey:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        lastUsed:
+          type: string
+          format: date-time
     Visibility:
       type: string
       enum:
@@ -14259,6 +15022,42 @@ components:
         status_code:
           type: integer
           format: int32
+    WesServiceInfo:
+      type: object
+      properties:
+        workflow_type_versions:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/WorkflowTypeVersion"
+        supported_wes_versions:
+          type: array
+          items:
+            type: string
+        supported_filesystem_protocols:
+          type: array
+          items:
+            type: string
+        workflow_engine_versions:
+          type: object
+          additionalProperties:
+            type: string
+        default_workflow_engine_parameters:
+          type: array
+          items:
+            $ref: "#/components/schemas/DefaultWorkflowEngineParameter"
+        system_state_counts:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+        auth_instructions_url:
+          type: string
+        contact_info_url:
+          type: string
+        tags:
+          type: object
+          additionalProperties:
+            type: string
     WfFusionMeta:
       type: object
       properties:
@@ -14502,10 +15301,6 @@ components:
     WorkflowDbDto:
       type: object
       properties:
-        messages:
-          type: array
-          items:
-            type: string
         id:
           type: string
         ownerId:
@@ -14602,6 +15397,8 @@ components:
     WorkflowLaunchRequest:
       type: object
       properties:
+        schemaName:
+          type: string
         id:
           type: string
         computeEnvId:
@@ -14644,8 +15441,9 @@ components:
           type: string
         entryName:
           type: string
-        schemaName:
-          type: string
+        pipelineSchemaId:
+          type: integer
+          format: int64
         resume:
           type: boolean
         pullLatest:
@@ -14720,6 +15518,9 @@ components:
           type: string
         schemaName:
           type: string
+        pipelineSchemaId:
+          type: integer
+          format: int64
         resume:
           type: boolean
         pullLatest:
@@ -14903,6 +15704,21 @@ components:
       properties:
         log:
           $ref: "#/components/schemas/LogPage"
+    WorkflowMaxDbDto:
+      type: object
+      allOf:
+      - $ref: "#/components/schemas/WorkflowDbDto"
+      - properties:
+          fusion:
+            $ref: "#/components/schemas/WfFusionMeta"
+          wave:
+            $ref: "#/components/schemas/WfWaveMeta"
+          logFile:
+            type: string
+          outFile:
+            type: string
+          operationId:
+            type: string
     WorkflowMetrics:
       required:
       - process
@@ -14940,13 +15756,13 @@ components:
       - labels
       - messages
       - minimal
-      - pipelineVersion
+      - pipelineInfo
       x-enum-varnames:
       - optimized
       - labels
       - messages
       - minimal
-      - pipelineVersion
+      - pipelineInfo
     WorkflowStatus:
       type: string
       enum:
@@ -14956,6 +15772,13 @@ components:
       - FAILED
       - CANCELLED
       - UNKNOWN
+    WorkflowTypeVersion:
+      type: object
+      properties:
+        workflow_type_version:
+          type: array
+          items:
+            type: string
     Workspace:
       required:
       - fullName

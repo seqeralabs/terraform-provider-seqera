@@ -30,6 +30,7 @@ type ServiceInfo struct {
 	AllowNextflowCliLogs         *bool   `json:"allowNextflowCliLogs,omitempty"`
 	LogoutURL                    *string `json:"logoutUrl,omitempty"`
 	SeqeraAiBaseURL              *string `json:"seqeraAiBaseUrl,omitempty"`
+	LaunchParamsTextMaxSize      *int    `json:"launchParamsTextMaxSize,omitempty"`
 }
 
 func (s *ServiceInfo) GetVersion() *string {
@@ -212,4 +213,11 @@ func (s *ServiceInfo) GetSeqeraAiBaseURL() *string {
 		return nil
 	}
 	return s.SeqeraAiBaseURL
+}
+
+func (s *ServiceInfo) GetLaunchParamsTextMaxSize() *int {
+	if s == nil {
+		return nil
+	}
+	return s.LaunchParamsTextMaxSize
 }

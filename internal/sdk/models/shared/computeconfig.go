@@ -3,15 +3,14 @@
 package shared
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/internal/utils"
 )
 
-type LocalExecutionConfiguration struct {
+type GoogleLifeSciencesConfigurationRetired struct {
 	// Working directory path for workflow execution
-	WorkDir string `json:"workDir"`
+	WorkDir *string `json:"workDir,omitempty"`
 	// Shell script to execute before workflow starts
 	PreRunScript *string `json:"preRunScript,omitempty"`
 	// Shell script to execute after workflow completes
@@ -21,76 +20,188 @@ type LocalExecutionConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator  *string `json:"discriminator,omitempty"`
-	WaveEnabled    *bool   `json:"waveEnabled,omitempty"`
-	Fusion2Enabled *bool   `json:"fusion2Enabled,omitempty"`
+	Discriminator     *string           `json:"discriminator,omitempty"`
+	Region            *string           `json:"region,omitempty"`
+	Zones             []string          `json:"zones,omitempty"`
+	Location          *string           `json:"location,omitempty"`
+	Preemptible       *bool             `json:"preemptible,omitempty"`
+	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
+	ProjectID         *string           `json:"projectId,omitempty"`
+	SSHDaemon         *bool             `json:"sshDaemon,omitempty"`
+	SSHImage          *string           `json:"sshImage,omitempty"`
+	DebugMode         *int              `json:"debugMode,omitempty"`
+	CopyImage         *string           `json:"copyImage,omitempty"`
+	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
+	Labels            map[string]string `json:"labels,omitempty"`
+	HeadJobCpus       *int              `json:"headJobCpus,omitempty"`
+	HeadJobMemoryMb   *int              `json:"headJobMemoryMb,omitempty"`
+	NfsTarget         *string           `json:"nfsTarget,omitempty"`
+	NfsMount          *string           `json:"nfsMount,omitempty"`
 }
 
-func (l LocalExecutionConfiguration) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(l, "", false)
+func (g GoogleLifeSciencesConfigurationRetired) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
 }
 
-func (l *LocalExecutionConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+func (g *GoogleLifeSciencesConfigurationRetired) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (l *LocalExecutionConfiguration) GetWorkDir() string {
-	if l == nil {
-		return ""
-	}
-	return l.WorkDir
-}
-
-func (l *LocalExecutionConfiguration) GetPreRunScript() *string {
-	if l == nil {
+func (g *GoogleLifeSciencesConfigurationRetired) GetWorkDir() *string {
+	if g == nil {
 		return nil
 	}
-	return l.PreRunScript
+	return g.WorkDir
 }
 
-func (l *LocalExecutionConfiguration) GetPostRunScript() *string {
-	if l == nil {
+func (g *GoogleLifeSciencesConfigurationRetired) GetPreRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return l.PostRunScript
+	return g.PreRunScript
 }
 
-func (l *LocalExecutionConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if l == nil {
+func (g *GoogleLifeSciencesConfigurationRetired) GetPostRunScript() *string {
+	if g == nil {
 		return nil
 	}
-	return l.Environment
+	return g.PostRunScript
 }
 
-func (l *LocalExecutionConfiguration) GetNextflowConfig() *string {
-	if l == nil {
+func (g *GoogleLifeSciencesConfigurationRetired) GetEnvironment() []ConfigEnvVariable {
+	if g == nil {
 		return nil
 	}
-	return l.NextflowConfig
+	return g.Environment
 }
 
-func (l *LocalExecutionConfiguration) GetDiscriminator() *string {
-	if l == nil {
+func (g *GoogleLifeSciencesConfigurationRetired) GetNextflowConfig() *string {
+	if g == nil {
 		return nil
 	}
-	return l.Discriminator
+	return g.NextflowConfig
 }
 
-func (l *LocalExecutionConfiguration) GetWaveEnabled() *bool {
-	if l == nil {
+func (g *GoogleLifeSciencesConfigurationRetired) GetDiscriminator() *string {
+	if g == nil {
 		return nil
 	}
-	return l.WaveEnabled
+	return g.Discriminator
 }
 
-func (l *LocalExecutionConfiguration) GetFusion2Enabled() *bool {
-	if l == nil {
+func (g *GoogleLifeSciencesConfigurationRetired) GetRegion() *string {
+	if g == nil {
 		return nil
 	}
-	return l.Fusion2Enabled
+	return g.Region
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetZones() []string {
+	if g == nil {
+		return nil
+	}
+	return g.Zones
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetLocation() *string {
+	if g == nil {
+		return nil
+	}
+	return g.Location
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetPreemptible() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.Preemptible
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetBootDiskSizeGb() *int {
+	if g == nil {
+		return nil
+	}
+	return g.BootDiskSizeGb
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetProjectID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ProjectID
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetSSHDaemon() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.SSHDaemon
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetSSHImage() *string {
+	if g == nil {
+		return nil
+	}
+	return g.SSHImage
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetDebugMode() *int {
+	if g == nil {
+		return nil
+	}
+	return g.DebugMode
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetCopyImage() *string {
+	if g == nil {
+		return nil
+	}
+	return g.CopyImage
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetUsePrivateAddress() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.UsePrivateAddress
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetLabels() map[string]string {
+	if g == nil {
+		return nil
+	}
+	return g.Labels
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetHeadJobCpus() *int {
+	if g == nil {
+		return nil
+	}
+	return g.HeadJobCpus
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetHeadJobMemoryMb() *int {
+	if g == nil {
+		return nil
+	}
+	return g.HeadJobMemoryMb
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetNfsTarget() *string {
+	if g == nil {
+		return nil
+	}
+	return g.NfsTarget
+}
+
+func (g *GoogleLifeSciencesConfigurationRetired) GetNfsMount() *string {
+	if g == nil {
+		return nil
+	}
+	return g.NfsMount
 }
 
 type MoabConfiguration struct {
@@ -2146,202 +2257,6 @@ func (g *GoogleBatchServiceConfiguration) GetComputeJobsInstanceTemplate() *stri
 	return g.ComputeJobsInstanceTemplate
 }
 
-type GoogleLifeSciencesConfiguration struct {
-	// Working directory path for workflow execution
-	WorkDir *string `json:"workDir,omitempty"`
-	// Shell script to execute before workflow starts
-	PreRunScript *string `json:"preRunScript,omitempty"`
-	// Shell script to execute after workflow completes
-	PostRunScript *string `json:"postRunScript,omitempty"`
-	// Array of environment variables for the compute environment
-	Environment []ConfigEnvVariable `json:"environment,omitempty"`
-	// Nextflow configuration settings and parameters
-	NextflowConfig *string `json:"nextflowConfig,omitempty"`
-	// Read-only property identifying the compute platform type
-	Discriminator     *string           `json:"discriminator,omitempty"`
-	Region            *string           `json:"region,omitempty"`
-	Zones             []string          `json:"zones,omitempty"`
-	Location          *string           `json:"location,omitempty"`
-	Preemptible       *bool             `json:"preemptible,omitempty"`
-	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
-	ProjectID         *string           `json:"projectId,omitempty"`
-	SSHDaemon         *bool             `json:"sshDaemon,omitempty"`
-	SSHImage          *string           `json:"sshImage,omitempty"`
-	DebugMode         *int              `json:"debugMode,omitempty"`
-	CopyImage         *string           `json:"copyImage,omitempty"`
-	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
-	Labels            map[string]string `json:"labels,omitempty"`
-	HeadJobCpus       *int              `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb   *int              `json:"headJobMemoryMb,omitempty"`
-	NfsTarget         *string           `json:"nfsTarget,omitempty"`
-	NfsMount          *string           `json:"nfsMount,omitempty"`
-}
-
-func (g GoogleLifeSciencesConfiguration) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(g, "", false)
-}
-
-func (g *GoogleLifeSciencesConfiguration) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetWorkDir() *string {
-	if g == nil {
-		return nil
-	}
-	return g.WorkDir
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetPreRunScript() *string {
-	if g == nil {
-		return nil
-	}
-	return g.PreRunScript
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetPostRunScript() *string {
-	if g == nil {
-		return nil
-	}
-	return g.PostRunScript
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetEnvironment() []ConfigEnvVariable {
-	if g == nil {
-		return nil
-	}
-	return g.Environment
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetNextflowConfig() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NextflowConfig
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetDiscriminator() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Discriminator
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetRegion() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Region
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetZones() []string {
-	if g == nil {
-		return nil
-	}
-	return g.Zones
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetLocation() *string {
-	if g == nil {
-		return nil
-	}
-	return g.Location
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetPreemptible() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.Preemptible
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetBootDiskSizeGb() *int {
-	if g == nil {
-		return nil
-	}
-	return g.BootDiskSizeGb
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetProjectID() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ProjectID
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetSSHDaemon() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.SSHDaemon
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetSSHImage() *string {
-	if g == nil {
-		return nil
-	}
-	return g.SSHImage
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetDebugMode() *int {
-	if g == nil {
-		return nil
-	}
-	return g.DebugMode
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetCopyImage() *string {
-	if g == nil {
-		return nil
-	}
-	return g.CopyImage
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetUsePrivateAddress() *bool {
-	if g == nil {
-		return nil
-	}
-	return g.UsePrivateAddress
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetLabels() map[string]string {
-	if g == nil {
-		return nil
-	}
-	return g.Labels
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetHeadJobCpus() *int {
-	if g == nil {
-		return nil
-	}
-	return g.HeadJobCpus
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetHeadJobMemoryMb() *int {
-	if g == nil {
-		return nil
-	}
-	return g.HeadJobMemoryMb
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetNfsTarget() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NfsTarget
-}
-
-func (g *GoogleLifeSciencesConfiguration) GetNfsMount() *string {
-	if g == nil {
-		return nil
-	}
-	return g.NfsMount
-}
-
 type SeqeraComputeConfiguration struct {
 	// Working directory path for workflow execution
 	WorkDir *string `json:"workDir,omitempty"`
@@ -2899,417 +2814,384 @@ func (a *AWSBatchConfiguration) GetForgedResources() []map[string]any {
 type ComputeConfigType string
 
 const (
-	ComputeConfigTypeMoabPlatform          ComputeConfigType = "moab-platform"
-	ComputeConfigTypeAwsBatch              ComputeConfigType = "aws-batch"
-	ComputeConfigTypeGoogleCloud           ComputeConfigType = "google-cloud"
-	ComputeConfigTypeLocalPlatform         ComputeConfigType = "local-platform"
-	ComputeConfigTypeAzureCloud            ComputeConfigType = "azure-cloud"
-	ComputeConfigTypeGkePlatform           ComputeConfigType = "gke-platform"
-	ComputeConfigTypeGoogleBatch           ComputeConfigType = "google-batch"
-	ComputeConfigTypeAwsCloud              ComputeConfigType = "aws-cloud"
-	ComputeConfigTypeSlurmPlatform         ComputeConfigType = "slurm-platform"
-	ComputeConfigTypeK8sPlatform           ComputeConfigType = "k8s-platform"
-	ComputeConfigTypeAltairPlatform        ComputeConfigType = "altair-platform"
-	ComputeConfigTypeLsfPlatform           ComputeConfigType = "lsf-platform"
-	ComputeConfigTypeAzureBatch            ComputeConfigType = "azure-batch"
-	ComputeConfigTypeSeqeracomputePlatform ComputeConfigType = "seqeracompute-platform"
-	ComputeConfigTypeEksPlatform           ComputeConfigType = "eks-platform"
-	ComputeConfigTypeGoogleLifesciences    ComputeConfigType = "google-lifesciences"
-	ComputeConfigTypeUgePlatform           ComputeConfigType = "uge-platform"
+	ComputeConfigTypeAWSBatchConfiguration                  ComputeConfigType = "AWS Batch configuration"
+	ComputeConfigTypeAWSCloudConfiguration                  ComputeConfigType = "AWS Cloud configuration"
+	ComputeConfigTypeSeqeraComputeConfiguration             ComputeConfigType = "Seqera Compute configuration"
+	ComputeConfigTypeGoogleBatchServiceConfiguration        ComputeConfigType = "Google Batch service configuration"
+	ComputeConfigTypeGoogleCloudConfiguration               ComputeConfigType = "Google Cloud configuration"
+	ComputeConfigTypeAzureBatchConfiguration                ComputeConfigType = "Azure Batch configuration"
+	ComputeConfigTypeAzureCloudConfiguration                ComputeConfigType = "Azure Cloud configuration"
+	ComputeConfigTypeIBMLSFConfiguration                    ComputeConfigType = "IBM LSF configuration"
+	ComputeConfigTypeSlurmConfiguration                     ComputeConfigType = "Slurm configuration"
+	ComputeConfigTypeKubernetesComputeConfiguration         ComputeConfigType = "Kubernetes compute configuration"
+	ComputeConfigTypeAmazonEKSClusterConfiguration          ComputeConfigType = "Amazon EKS cluster configuration"
+	ComputeConfigTypeGoogleGKEClusterConfiguration          ComputeConfigType = "Google GKE cluster configuration"
+	ComputeConfigTypeUnivaGridEngineConfiguration           ComputeConfigType = "Univa Grid Engine configuration"
+	ComputeConfigTypeAltairPBSConfiguration                 ComputeConfigType = "Altair PBS configuration"
+	ComputeConfigTypeMoabConfiguration                      ComputeConfigType = "Moab configuration"
+	ComputeConfigTypeGoogleLifeSciencesConfigurationRetired ComputeConfigType = "Google Life Sciences configuration (retired)"
 )
 
 // ComputeConfig - Configuration settings for compute environments including work directories,
 // pre/post run scripts, and environment-specific parameters.
 type ComputeConfig struct {
-	AWSBatchConfiguration           *AWSBatchConfiguration           `queryParam:"inline" union:"member"`
-	AWSCloudConfiguration           *AWSCloudConfiguration           `queryParam:"inline" union:"member"`
-	SeqeraComputeConfiguration      *SeqeraComputeConfiguration      `queryParam:"inline" union:"member"`
-	GoogleLifeSciencesConfiguration *GoogleLifeSciencesConfiguration `queryParam:"inline" union:"member"`
-	GoogleBatchServiceConfiguration *GoogleBatchServiceConfiguration `queryParam:"inline" union:"member"`
-	GoogleCloudConfiguration        *GoogleCloudConfiguration        `queryParam:"inline" union:"member"`
-	AzureBatchConfiguration         *AzureBatchConfiguration         `queryParam:"inline" union:"member"`
-	AzureCloudConfiguration         *AzureCloudConfiguration         `queryParam:"inline" union:"member"`
-	IBMLSFConfiguration             *IBMLSFConfiguration             `queryParam:"inline" union:"member"`
-	SlurmConfiguration              *SlurmConfiguration              `queryParam:"inline" union:"member"`
-	KubernetesComputeConfiguration  *KubernetesComputeConfiguration  `queryParam:"inline" union:"member"`
-	AmazonEKSClusterConfiguration   *AmazonEKSClusterConfiguration   `queryParam:"inline" union:"member"`
-	GoogleGKEClusterConfiguration   *GoogleGKEClusterConfiguration   `queryParam:"inline" union:"member"`
-	UnivaGridEngineConfiguration    *UnivaGridEngineConfiguration    `queryParam:"inline" union:"member"`
-	AltairPBSConfiguration          *AltairPBSConfiguration          `queryParam:"inline" union:"member"`
-	MoabConfiguration               *MoabConfiguration               `queryParam:"inline" union:"member"`
-	LocalExecutionConfiguration     *LocalExecutionConfiguration     `queryParam:"inline" union:"member"`
+	AWSBatchConfiguration                  *AWSBatchConfiguration                  `queryParam:"inline" union:"member"`
+	AWSCloudConfiguration                  *AWSCloudConfiguration                  `queryParam:"inline" union:"member"`
+	SeqeraComputeConfiguration             *SeqeraComputeConfiguration             `queryParam:"inline" union:"member"`
+	GoogleBatchServiceConfiguration        *GoogleBatchServiceConfiguration        `queryParam:"inline" union:"member"`
+	GoogleCloudConfiguration               *GoogleCloudConfiguration               `queryParam:"inline" union:"member"`
+	AzureBatchConfiguration                *AzureBatchConfiguration                `queryParam:"inline" union:"member"`
+	AzureCloudConfiguration                *AzureCloudConfiguration                `queryParam:"inline" union:"member"`
+	IBMLSFConfiguration                    *IBMLSFConfiguration                    `queryParam:"inline" union:"member"`
+	SlurmConfiguration                     *SlurmConfiguration                     `queryParam:"inline" union:"member"`
+	KubernetesComputeConfiguration         *KubernetesComputeConfiguration         `queryParam:"inline" union:"member"`
+	AmazonEKSClusterConfiguration          *AmazonEKSClusterConfiguration          `queryParam:"inline" union:"member"`
+	GoogleGKEClusterConfiguration          *GoogleGKEClusterConfiguration          `queryParam:"inline" union:"member"`
+	UnivaGridEngineConfiguration           *UnivaGridEngineConfiguration           `queryParam:"inline" union:"member"`
+	AltairPBSConfiguration                 *AltairPBSConfiguration                 `queryParam:"inline" union:"member"`
+	MoabConfiguration                      *MoabConfiguration                      `queryParam:"inline" union:"member"`
+	GoogleLifeSciencesConfigurationRetired *GoogleLifeSciencesConfigurationRetired `queryParam:"inline" union:"member"`
 
 	Type ComputeConfigType
 }
 
-func CreateComputeConfigMoabPlatform(moabPlatform MoabConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeMoabPlatform
-
-	typStr := string(typ)
-	moabPlatform.Discriminator = &typStr
+func CreateComputeConfigAWSBatchConfiguration(awsBatchConfiguration AWSBatchConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAWSBatchConfiguration
 
 	return ComputeConfig{
-		MoabConfiguration: &moabPlatform,
-		Type:              typ,
-	}
-}
-
-func CreateComputeConfigAwsBatch(awsBatch AWSBatchConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAwsBatch
-
-	typStr := string(typ)
-	awsBatch.Discriminator = &typStr
-
-	return ComputeConfig{
-		AWSBatchConfiguration: &awsBatch,
+		AWSBatchConfiguration: &awsBatchConfiguration,
 		Type:                  typ,
 	}
 }
 
-func CreateComputeConfigGoogleCloud(googleCloud GoogleCloudConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeGoogleCloud
-
-	typStr := string(typ)
-	googleCloud.Discriminator = &typStr
+func CreateComputeConfigAWSCloudConfiguration(awsCloudConfiguration AWSCloudConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAWSCloudConfiguration
 
 	return ComputeConfig{
-		GoogleCloudConfiguration: &googleCloud,
-		Type:                     typ,
-	}
-}
-
-func CreateComputeConfigLocalPlatform(localPlatform LocalExecutionConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeLocalPlatform
-
-	typStr := string(typ)
-	localPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		LocalExecutionConfiguration: &localPlatform,
-		Type:                        typ,
-	}
-}
-
-func CreateComputeConfigAzureCloud(azureCloud AzureCloudConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAzureCloud
-
-	typStr := string(typ)
-	azureCloud.Discriminator = &typStr
-
-	return ComputeConfig{
-		AzureCloudConfiguration: &azureCloud,
-		Type:                    typ,
-	}
-}
-
-func CreateComputeConfigGkePlatform(gkePlatform GoogleGKEClusterConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeGkePlatform
-
-	typStr := string(typ)
-	gkePlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		GoogleGKEClusterConfiguration: &gkePlatform,
-		Type:                          typ,
-	}
-}
-
-func CreateComputeConfigGoogleBatch(googleBatch GoogleBatchServiceConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeGoogleBatch
-
-	typStr := string(typ)
-	googleBatch.Discriminator = &typStr
-
-	return ComputeConfig{
-		GoogleBatchServiceConfiguration: &googleBatch,
-		Type:                            typ,
-	}
-}
-
-func CreateComputeConfigAwsCloud(awsCloud AWSCloudConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAwsCloud
-
-	typStr := string(typ)
-	awsCloud.Discriminator = &typStr
-
-	return ComputeConfig{
-		AWSCloudConfiguration: &awsCloud,
+		AWSCloudConfiguration: &awsCloudConfiguration,
 		Type:                  typ,
 	}
 }
 
-func CreateComputeConfigSlurmPlatform(slurmPlatform SlurmConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeSlurmPlatform
-
-	typStr := string(typ)
-	slurmPlatform.Discriminator = &typStr
+func CreateComputeConfigSeqeraComputeConfiguration(seqeraComputeConfiguration SeqeraComputeConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeSeqeraComputeConfiguration
 
 	return ComputeConfig{
-		SlurmConfiguration: &slurmPlatform,
-		Type:               typ,
-	}
-}
-
-func CreateComputeConfigK8sPlatform(k8sPlatform KubernetesComputeConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeK8sPlatform
-
-	typStr := string(typ)
-	k8sPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		KubernetesComputeConfiguration: &k8sPlatform,
-		Type:                           typ,
-	}
-}
-
-func CreateComputeConfigAltairPlatform(altairPlatform AltairPBSConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAltairPlatform
-
-	typStr := string(typ)
-	altairPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		AltairPBSConfiguration: &altairPlatform,
-		Type:                   typ,
-	}
-}
-
-func CreateComputeConfigLsfPlatform(lsfPlatform IBMLSFConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeLsfPlatform
-
-	typStr := string(typ)
-	lsfPlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		IBMLSFConfiguration: &lsfPlatform,
-		Type:                typ,
-	}
-}
-
-func CreateComputeConfigAzureBatch(azureBatch AzureBatchConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeAzureBatch
-
-	typStr := string(typ)
-	azureBatch.Discriminator = &typStr
-
-	return ComputeConfig{
-		AzureBatchConfiguration: &azureBatch,
-		Type:                    typ,
-	}
-}
-
-func CreateComputeConfigSeqeracomputePlatform(seqeracomputePlatform SeqeraComputeConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeSeqeracomputePlatform
-
-	typStr := string(typ)
-	seqeracomputePlatform.Discriminator = &typStr
-
-	return ComputeConfig{
-		SeqeraComputeConfiguration: &seqeracomputePlatform,
+		SeqeraComputeConfiguration: &seqeraComputeConfiguration,
 		Type:                       typ,
 	}
 }
 
-func CreateComputeConfigEksPlatform(eksPlatform AmazonEKSClusterConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeEksPlatform
-
-	typStr := string(typ)
-	eksPlatform.Discriminator = &typStr
+func CreateComputeConfigGoogleBatchServiceConfiguration(googleBatchServiceConfiguration GoogleBatchServiceConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeGoogleBatchServiceConfiguration
 
 	return ComputeConfig{
-		AmazonEKSClusterConfiguration: &eksPlatform,
-		Type:                          typ,
-	}
-}
-
-func CreateComputeConfigGoogleLifesciences(googleLifesciences GoogleLifeSciencesConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeGoogleLifesciences
-
-	typStr := string(typ)
-	googleLifesciences.Discriminator = &typStr
-
-	return ComputeConfig{
-		GoogleLifeSciencesConfiguration: &googleLifesciences,
+		GoogleBatchServiceConfiguration: &googleBatchServiceConfiguration,
 		Type:                            typ,
 	}
 }
 
-func CreateComputeConfigUgePlatform(ugePlatform UnivaGridEngineConfiguration) ComputeConfig {
-	typ := ComputeConfigTypeUgePlatform
-
-	typStr := string(typ)
-	ugePlatform.Discriminator = &typStr
+func CreateComputeConfigGoogleCloudConfiguration(googleCloudConfiguration GoogleCloudConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeGoogleCloudConfiguration
 
 	return ComputeConfig{
-		UnivaGridEngineConfiguration: &ugePlatform,
+		GoogleCloudConfiguration: &googleCloudConfiguration,
+		Type:                     typ,
+	}
+}
+
+func CreateComputeConfigAzureBatchConfiguration(azureBatchConfiguration AzureBatchConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAzureBatchConfiguration
+
+	return ComputeConfig{
+		AzureBatchConfiguration: &azureBatchConfiguration,
+		Type:                    typ,
+	}
+}
+
+func CreateComputeConfigAzureCloudConfiguration(azureCloudConfiguration AzureCloudConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAzureCloudConfiguration
+
+	return ComputeConfig{
+		AzureCloudConfiguration: &azureCloudConfiguration,
+		Type:                    typ,
+	}
+}
+
+func CreateComputeConfigIBMLSFConfiguration(ibmLSFConfiguration IBMLSFConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeIBMLSFConfiguration
+
+	return ComputeConfig{
+		IBMLSFConfiguration: &ibmLSFConfiguration,
+		Type:                typ,
+	}
+}
+
+func CreateComputeConfigSlurmConfiguration(slurmConfiguration SlurmConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeSlurmConfiguration
+
+	return ComputeConfig{
+		SlurmConfiguration: &slurmConfiguration,
+		Type:               typ,
+	}
+}
+
+func CreateComputeConfigKubernetesComputeConfiguration(kubernetesComputeConfiguration KubernetesComputeConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeKubernetesComputeConfiguration
+
+	return ComputeConfig{
+		KubernetesComputeConfiguration: &kubernetesComputeConfiguration,
+		Type:                           typ,
+	}
+}
+
+func CreateComputeConfigAmazonEKSClusterConfiguration(amazonEKSClusterConfiguration AmazonEKSClusterConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAmazonEKSClusterConfiguration
+
+	return ComputeConfig{
+		AmazonEKSClusterConfiguration: &amazonEKSClusterConfiguration,
+		Type:                          typ,
+	}
+}
+
+func CreateComputeConfigGoogleGKEClusterConfiguration(googleGKEClusterConfiguration GoogleGKEClusterConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeGoogleGKEClusterConfiguration
+
+	return ComputeConfig{
+		GoogleGKEClusterConfiguration: &googleGKEClusterConfiguration,
+		Type:                          typ,
+	}
+}
+
+func CreateComputeConfigUnivaGridEngineConfiguration(univaGridEngineConfiguration UnivaGridEngineConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeUnivaGridEngineConfiguration
+
+	return ComputeConfig{
+		UnivaGridEngineConfiguration: &univaGridEngineConfiguration,
 		Type:                         typ,
+	}
+}
+
+func CreateComputeConfigAltairPBSConfiguration(altairPBSConfiguration AltairPBSConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeAltairPBSConfiguration
+
+	return ComputeConfig{
+		AltairPBSConfiguration: &altairPBSConfiguration,
+		Type:                   typ,
+	}
+}
+
+func CreateComputeConfigMoabConfiguration(moabConfiguration MoabConfiguration) ComputeConfig {
+	typ := ComputeConfigTypeMoabConfiguration
+
+	return ComputeConfig{
+		MoabConfiguration: &moabConfiguration,
+		Type:              typ,
+	}
+}
+
+func CreateComputeConfigGoogleLifeSciencesConfigurationRetired(googleLifeSciencesConfigurationRetired GoogleLifeSciencesConfigurationRetired) ComputeConfig {
+	typ := ComputeConfigTypeGoogleLifeSciencesConfigurationRetired
+
+	return ComputeConfig{
+		GoogleLifeSciencesConfigurationRetired: &googleLifeSciencesConfigurationRetired,
+		Type:                                   typ,
 	}
 }
 
 func (u *ComputeConfig) UnmarshalJSON(data []byte) error {
 
-	type discriminator struct {
-		Discriminator string `json:"discriminator"`
+	var candidates []utils.UnionCandidate
+
+	// Collect all valid candidates
+	var awsBatchConfiguration AWSBatchConfiguration = AWSBatchConfiguration{}
+	if err := utils.UnmarshalJSON(data, &awsBatchConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeAWSBatchConfiguration,
+			Value: &awsBatchConfiguration,
+		})
 	}
 
-	dis := new(discriminator)
-	if err := json.Unmarshal(data, &dis); err != nil {
-		return fmt.Errorf("could not unmarshal discriminator: %w", err)
+	var awsCloudConfiguration AWSCloudConfiguration = AWSCloudConfiguration{}
+	if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeAWSCloudConfiguration,
+			Value: &awsCloudConfiguration,
+		})
 	}
 
-	switch dis.Discriminator {
-	case "moab-platform":
-		moabConfiguration := new(MoabConfiguration)
-		if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == moab-platform) type MoabConfiguration within ComputeConfig: %w", string(data), err)
-		}
+	var seqeraComputeConfiguration SeqeraComputeConfiguration = SeqeraComputeConfiguration{}
+	if err := utils.UnmarshalJSON(data, &seqeraComputeConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeSeqeraComputeConfiguration,
+			Value: &seqeraComputeConfiguration,
+		})
+	}
 
-		u.MoabConfiguration = moabConfiguration
-		u.Type = ComputeConfigTypeMoabPlatform
+	var googleBatchServiceConfiguration GoogleBatchServiceConfiguration = GoogleBatchServiceConfiguration{}
+	if err := utils.UnmarshalJSON(data, &googleBatchServiceConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeGoogleBatchServiceConfiguration,
+			Value: &googleBatchServiceConfiguration,
+		})
+	}
+
+	var googleCloudConfiguration GoogleCloudConfiguration = GoogleCloudConfiguration{}
+	if err := utils.UnmarshalJSON(data, &googleCloudConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeGoogleCloudConfiguration,
+			Value: &googleCloudConfiguration,
+		})
+	}
+
+	var azureBatchConfiguration AzureBatchConfiguration = AzureBatchConfiguration{}
+	if err := utils.UnmarshalJSON(data, &azureBatchConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeAzureBatchConfiguration,
+			Value: &azureBatchConfiguration,
+		})
+	}
+
+	var azureCloudConfiguration AzureCloudConfiguration = AzureCloudConfiguration{}
+	if err := utils.UnmarshalJSON(data, &azureCloudConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeAzureCloudConfiguration,
+			Value: &azureCloudConfiguration,
+		})
+	}
+
+	var ibmLSFConfiguration IBMLSFConfiguration = IBMLSFConfiguration{}
+	if err := utils.UnmarshalJSON(data, &ibmLSFConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeIBMLSFConfiguration,
+			Value: &ibmLSFConfiguration,
+		})
+	}
+
+	var slurmConfiguration SlurmConfiguration = SlurmConfiguration{}
+	if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeSlurmConfiguration,
+			Value: &slurmConfiguration,
+		})
+	}
+
+	var kubernetesComputeConfiguration KubernetesComputeConfiguration = KubernetesComputeConfiguration{}
+	if err := utils.UnmarshalJSON(data, &kubernetesComputeConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeKubernetesComputeConfiguration,
+			Value: &kubernetesComputeConfiguration,
+		})
+	}
+
+	var amazonEKSClusterConfiguration AmazonEKSClusterConfiguration = AmazonEKSClusterConfiguration{}
+	if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeAmazonEKSClusterConfiguration,
+			Value: &amazonEKSClusterConfiguration,
+		})
+	}
+
+	var googleGKEClusterConfiguration GoogleGKEClusterConfiguration = GoogleGKEClusterConfiguration{}
+	if err := utils.UnmarshalJSON(data, &googleGKEClusterConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeGoogleGKEClusterConfiguration,
+			Value: &googleGKEClusterConfiguration,
+		})
+	}
+
+	var univaGridEngineConfiguration UnivaGridEngineConfiguration = UnivaGridEngineConfiguration{}
+	if err := utils.UnmarshalJSON(data, &univaGridEngineConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeUnivaGridEngineConfiguration,
+			Value: &univaGridEngineConfiguration,
+		})
+	}
+
+	var altairPBSConfiguration AltairPBSConfiguration = AltairPBSConfiguration{}
+	if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeAltairPBSConfiguration,
+			Value: &altairPBSConfiguration,
+		})
+	}
+
+	var moabConfiguration MoabConfiguration = MoabConfiguration{}
+	if err := utils.UnmarshalJSON(data, &moabConfiguration, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeMoabConfiguration,
+			Value: &moabConfiguration,
+		})
+	}
+
+	var googleLifeSciencesConfigurationRetired GoogleLifeSciencesConfigurationRetired = GoogleLifeSciencesConfigurationRetired{}
+	if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfigurationRetired, "", true, nil); err == nil {
+		candidates = append(candidates, utils.UnionCandidate{
+			Type:  ComputeConfigTypeGoogleLifeSciencesConfigurationRetired,
+			Value: &googleLifeSciencesConfigurationRetired,
+		})
+	}
+
+	if len(candidates) == 0 {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ComputeConfig", string(data))
+	}
+
+	// Pick the best candidate using multi-stage filtering
+	best := utils.PickBestUnionCandidate(candidates, data)
+	if best == nil {
+		return fmt.Errorf("could not unmarshal `%s` into any supported union types for ComputeConfig", string(data))
+	}
+
+	// Set the union type and value based on the best candidate
+	u.Type = best.Type.(ComputeConfigType)
+	switch best.Type {
+	case ComputeConfigTypeAWSBatchConfiguration:
+		u.AWSBatchConfiguration = best.Value.(*AWSBatchConfiguration)
 		return nil
-	case "aws-batch":
-		awsBatchConfiguration := new(AWSBatchConfiguration)
-		if err := utils.UnmarshalJSON(data, &awsBatchConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-batch) type AWSBatchConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.AWSBatchConfiguration = awsBatchConfiguration
-		u.Type = ComputeConfigTypeAwsBatch
+	case ComputeConfigTypeAWSCloudConfiguration:
+		u.AWSCloudConfiguration = best.Value.(*AWSCloudConfiguration)
 		return nil
-	case "google-cloud":
-		googleCloudConfiguration := new(GoogleCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-cloud) type GoogleCloudConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.GoogleCloudConfiguration = googleCloudConfiguration
-		u.Type = ComputeConfigTypeGoogleCloud
+	case ComputeConfigTypeSeqeraComputeConfiguration:
+		u.SeqeraComputeConfiguration = best.Value.(*SeqeraComputeConfiguration)
 		return nil
-	case "local-platform":
-		localExecutionConfiguration := new(LocalExecutionConfiguration)
-		if err := utils.UnmarshalJSON(data, &localExecutionConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == local-platform) type LocalExecutionConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.LocalExecutionConfiguration = localExecutionConfiguration
-		u.Type = ComputeConfigTypeLocalPlatform
+	case ComputeConfigTypeGoogleBatchServiceConfiguration:
+		u.GoogleBatchServiceConfiguration = best.Value.(*GoogleBatchServiceConfiguration)
 		return nil
-	case "azure-cloud":
-		azureCloudConfiguration := new(AzureCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &azureCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-cloud) type AzureCloudConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.AzureCloudConfiguration = azureCloudConfiguration
-		u.Type = ComputeConfigTypeAzureCloud
+	case ComputeConfigTypeGoogleCloudConfiguration:
+		u.GoogleCloudConfiguration = best.Value.(*GoogleCloudConfiguration)
 		return nil
-	case "gke-platform":
-		googleGKEClusterConfiguration := new(GoogleGKEClusterConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleGKEClusterConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == gke-platform) type GoogleGKEClusterConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.GoogleGKEClusterConfiguration = googleGKEClusterConfiguration
-		u.Type = ComputeConfigTypeGkePlatform
+	case ComputeConfigTypeAzureBatchConfiguration:
+		u.AzureBatchConfiguration = best.Value.(*AzureBatchConfiguration)
 		return nil
-	case "google-batch":
-		googleBatchServiceConfiguration := new(GoogleBatchServiceConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleBatchServiceConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-batch) type GoogleBatchServiceConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.GoogleBatchServiceConfiguration = googleBatchServiceConfiguration
-		u.Type = ComputeConfigTypeGoogleBatch
+	case ComputeConfigTypeAzureCloudConfiguration:
+		u.AzureCloudConfiguration = best.Value.(*AzureCloudConfiguration)
 		return nil
-	case "aws-cloud":
-		awsCloudConfiguration := new(AWSCloudConfiguration)
-		if err := utils.UnmarshalJSON(data, &awsCloudConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == aws-cloud) type AWSCloudConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.AWSCloudConfiguration = awsCloudConfiguration
-		u.Type = ComputeConfigTypeAwsCloud
+	case ComputeConfigTypeIBMLSFConfiguration:
+		u.IBMLSFConfiguration = best.Value.(*IBMLSFConfiguration)
 		return nil
-	case "slurm-platform":
-		slurmConfiguration := new(SlurmConfiguration)
-		if err := utils.UnmarshalJSON(data, &slurmConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == slurm-platform) type SlurmConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.SlurmConfiguration = slurmConfiguration
-		u.Type = ComputeConfigTypeSlurmPlatform
+	case ComputeConfigTypeSlurmConfiguration:
+		u.SlurmConfiguration = best.Value.(*SlurmConfiguration)
 		return nil
-	case "k8s-platform":
-		kubernetesComputeConfiguration := new(KubernetesComputeConfiguration)
-		if err := utils.UnmarshalJSON(data, &kubernetesComputeConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == k8s-platform) type KubernetesComputeConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.KubernetesComputeConfiguration = kubernetesComputeConfiguration
-		u.Type = ComputeConfigTypeK8sPlatform
+	case ComputeConfigTypeKubernetesComputeConfiguration:
+		u.KubernetesComputeConfiguration = best.Value.(*KubernetesComputeConfiguration)
 		return nil
-	case "altair-platform":
-		altairPBSConfiguration := new(AltairPBSConfiguration)
-		if err := utils.UnmarshalJSON(data, &altairPBSConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == altair-platform) type AltairPBSConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.AltairPBSConfiguration = altairPBSConfiguration
-		u.Type = ComputeConfigTypeAltairPlatform
+	case ComputeConfigTypeAmazonEKSClusterConfiguration:
+		u.AmazonEKSClusterConfiguration = best.Value.(*AmazonEKSClusterConfiguration)
 		return nil
-	case "lsf-platform":
-		ibmLSFConfiguration := new(IBMLSFConfiguration)
-		if err := utils.UnmarshalJSON(data, &ibmLSFConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == lsf-platform) type IBMLSFConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.IBMLSFConfiguration = ibmLSFConfiguration
-		u.Type = ComputeConfigTypeLsfPlatform
+	case ComputeConfigTypeGoogleGKEClusterConfiguration:
+		u.GoogleGKEClusterConfiguration = best.Value.(*GoogleGKEClusterConfiguration)
 		return nil
-	case "azure-batch":
-		azureBatchConfiguration := new(AzureBatchConfiguration)
-		if err := utils.UnmarshalJSON(data, &azureBatchConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == azure-batch) type AzureBatchConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.AzureBatchConfiguration = azureBatchConfiguration
-		u.Type = ComputeConfigTypeAzureBatch
+	case ComputeConfigTypeUnivaGridEngineConfiguration:
+		u.UnivaGridEngineConfiguration = best.Value.(*UnivaGridEngineConfiguration)
 		return nil
-	case "seqeracompute-platform":
-		seqeraComputeConfiguration := new(SeqeraComputeConfiguration)
-		if err := utils.UnmarshalJSON(data, &seqeraComputeConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == seqeracompute-platform) type SeqeraComputeConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.SeqeraComputeConfiguration = seqeraComputeConfiguration
-		u.Type = ComputeConfigTypeSeqeracomputePlatform
+	case ComputeConfigTypeAltairPBSConfiguration:
+		u.AltairPBSConfiguration = best.Value.(*AltairPBSConfiguration)
 		return nil
-	case "eks-platform":
-		amazonEKSClusterConfiguration := new(AmazonEKSClusterConfiguration)
-		if err := utils.UnmarshalJSON(data, &amazonEKSClusterConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == eks-platform) type AmazonEKSClusterConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.AmazonEKSClusterConfiguration = amazonEKSClusterConfiguration
-		u.Type = ComputeConfigTypeEksPlatform
+	case ComputeConfigTypeMoabConfiguration:
+		u.MoabConfiguration = best.Value.(*MoabConfiguration)
 		return nil
-	case "google-lifesciences":
-		googleLifeSciencesConfiguration := new(GoogleLifeSciencesConfiguration)
-		if err := utils.UnmarshalJSON(data, &googleLifeSciencesConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == google-lifesciences) type GoogleLifeSciencesConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.GoogleLifeSciencesConfiguration = googleLifeSciencesConfiguration
-		u.Type = ComputeConfigTypeGoogleLifesciences
-		return nil
-	case "uge-platform":
-		univaGridEngineConfiguration := new(UnivaGridEngineConfiguration)
-		if err := utils.UnmarshalJSON(data, &univaGridEngineConfiguration, "", true, nil); err != nil {
-			return fmt.Errorf("could not unmarshal `%s` into expected (Discriminator == uge-platform) type UnivaGridEngineConfiguration within ComputeConfig: %w", string(data), err)
-		}
-
-		u.UnivaGridEngineConfiguration = univaGridEngineConfiguration
-		u.Type = ComputeConfigTypeUgePlatform
+	case ComputeConfigTypeGoogleLifeSciencesConfigurationRetired:
+		u.GoogleLifeSciencesConfigurationRetired = best.Value.(*GoogleLifeSciencesConfigurationRetired)
 		return nil
 	}
 
@@ -3327,10 +3209,6 @@ func (u ComputeConfig) MarshalJSON() ([]byte, error) {
 
 	if u.SeqeraComputeConfiguration != nil {
 		return utils.MarshalJSON(u.SeqeraComputeConfiguration, "", true)
-	}
-
-	if u.GoogleLifeSciencesConfiguration != nil {
-		return utils.MarshalJSON(u.GoogleLifeSciencesConfiguration, "", true)
 	}
 
 	if u.GoogleBatchServiceConfiguration != nil {
@@ -3381,8 +3259,8 @@ func (u ComputeConfig) MarshalJSON() ([]byte, error) {
 		return utils.MarshalJSON(u.MoabConfiguration, "", true)
 	}
 
-	if u.LocalExecutionConfiguration != nil {
-		return utils.MarshalJSON(u.LocalExecutionConfiguration, "", true)
+	if u.GoogleLifeSciencesConfigurationRetired != nil {
+		return utils.MarshalJSON(u.GoogleLifeSciencesConfigurationRetired, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type ComputeConfig: all fields are null")

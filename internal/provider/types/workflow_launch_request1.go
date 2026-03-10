@@ -17,6 +17,7 @@ type WorkflowLaunchRequest1 struct {
 	MainScript       types.String   `tfsdk:"main_script"`
 	ParamsText       types.String   `tfsdk:"params_text"`
 	Pipeline         types.String   `tfsdk:"pipeline"`
+	PipelineSchemaID types.Int64    `tfsdk:"pipeline_schema_id"`
 	PostRunScript    types.String   `tfsdk:"post_run_script"`
 	PreRunScript     types.String   `tfsdk:"pre_run_script"`
 	PullLatest       types.Bool     `tfsdk:"pull_latest"`

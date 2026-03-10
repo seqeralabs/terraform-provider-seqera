@@ -429,13 +429,6 @@ actions:
       nullable: true
       description: Config files (can be null)
 
-  - target: $.components.schemas.WorkflowDbDto.properties.messages
-    update:
-      type: array
-      items:
-        type: string
-      nullable: true
-      description: Messages (can be null)
 
   - target: $.components.schemas.WorkflowDbDto.properties.params
     update:
@@ -610,118 +603,118 @@ actions:
   # Launch/WorkflowLaunchRequest optional fields
   # =============================================================================
 
-  - target: $.components.schemas.Launch.properties.workDir
+  - target: $.components.schemas.LaunchDbDto.properties.workDir
     update:
       type: string
       nullable: true
       description: Working directory
 
-  - target: $.components.schemas.Launch.properties.revision
+  - target: $.components.schemas.LaunchDbDto.properties.revision
     update:
       type: string
       maxLength: 100
       nullable: true
       description: Pipeline revision
 
-  - target: $.components.schemas.Launch.properties.commitId
+  - target: $.components.schemas.LaunchDbDto.properties.commitId
     update:
       type: string
       maxLength: 40
       nullable: true
       description: Git commit ID
 
-  - target: $.components.schemas.Launch.properties.configText
+  - target: $.components.schemas.LaunchDbDto.properties.configText
     update:
       type: string
       nullable: true
       description: Nextflow configuration text
 
-  - target: $.components.schemas.Launch.properties.towerConfig
+  - target: $.components.schemas.LaunchDbDto.properties.towerConfig
     update:
       type: string
       nullable: true
       description: Tower-specific configuration
 
-  - target: $.components.schemas.Launch.properties.paramsText
+  - target: $.components.schemas.LaunchDbDto.properties.paramsText
     update:
       type: string
       nullable: true
       description: Pipeline parameters text
 
-  - target: $.components.schemas.Launch.properties.preRunScript
+  - target: $.components.schemas.LaunchDbDto.properties.preRunScript
     update:
       type: string
       nullable: true
       description: Script to run before pipeline execution
 
-  - target: $.components.schemas.Launch.properties.postRunScript
+  - target: $.components.schemas.LaunchDbDto.properties.postRunScript
     update:
       type: string
       nullable: true
       description: Script to run after pipeline execution
 
-  - target: $.components.schemas.Launch.properties.mainScript
+  - target: $.components.schemas.LaunchDbDto.properties.mainScript
     update:
       type: string
       maxLength: 200
       nullable: true
       description: Main script path
 
-  - target: $.components.schemas.Launch.properties.entryName
+  - target: $.components.schemas.LaunchDbDto.properties.entryName
     update:
       type: string
       maxLength: 80
       nullable: true
       description: Entry workflow name
 
-  - target: $.components.schemas.Launch.properties.schemaName
+  - target: $.components.schemas.LaunchDbDto.properties.schemaName
     update:
       type: string
       maxLength: 100
       nullable: true
       description: Pipeline schema name
 
-  - target: $.components.schemas.Launch.properties.runName
+  - target: $.components.schemas.LaunchDbDto.properties.runName
     update:
       type: string
       maxLength: 80
       nullable: true
       description: Custom run name
 
-  - target: $.components.schemas.Launch.properties.sessionId
+  - target: $.components.schemas.LaunchDbDto.properties.sessionId
     update:
       type: string
       maxLength: 36
       nullable: true
       description: Session ID for resuming
 
-  - target: $.components.schemas.Launch.properties.resumeLaunchId
+  - target: $.components.schemas.LaunchDbDto.properties.resumeLaunchId
     update:
       type: string
       maxLength: 22
       nullable: true
       description: Launch ID to resume from
 
-  - target: $.components.schemas.Launch.properties.optimizationId
+  - target: $.components.schemas.LaunchDbDto.properties.optimizationId
     update:
       type: string
       nullable: true
       description: Optimization profile ID
 
-  - target: $.components.schemas.Launch.properties.optimizationTargets
+  - target: $.components.schemas.LaunchDbDto.properties.optimizationTargets
     update:
       type: string
       nullable: true
       description: Optimization targets
 
-  - target: $.components.schemas.Launch.properties.headJobCpus
+  - target: $.components.schemas.LaunchDbDto.properties.headJobCpus
     update:
       type: integer
       format: int32
       nullable: true
       description: Head job CPU allocation
 
-  - target: $.components.schemas.Launch.properties.headJobMemoryMb
+  - target: $.components.schemas.LaunchDbDto.properties.headJobMemoryMb
     update:
       type: integer
       format: int32

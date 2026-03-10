@@ -6,8 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type WfNextflow struct {
-	Version   types.String `tfsdk:"version"`
-	Build     types.String `tfsdk:"build"`
-	Timestamp types.String `tfsdk:"timestamp"`
+type WfFusionMeta struct {
+	Enabled types.Bool   `tfsdk:"enabled"`
+	Version types.String `tfsdk:"version"`
 }

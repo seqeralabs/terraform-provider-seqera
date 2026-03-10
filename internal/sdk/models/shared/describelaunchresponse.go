@@ -3,10 +3,10 @@
 package shared
 
 type DescribeLaunchResponse struct {
-	Launch *Launch `json:"launch,omitempty"`
+	Launch *LaunchDbDto `json:"launch,omitempty"`
 }
 
-func (d *DescribeLaunchResponse) GetLaunch() *Launch {
+func (d *DescribeLaunchResponse) GetLaunch() *LaunchDbDto {
 	if d == nil {
 		return nil
 	}

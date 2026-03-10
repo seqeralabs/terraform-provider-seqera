@@ -14,6 +14,8 @@ type DescribePipelineLaunchRequest struct {
 	WorkspaceID *int64 `queryParam:"style=form,explode=true,name=workspaceId"`
 	// Source workspace numeric identifier
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
+	// Pipeline version identifier
+	VersionID *string `queryParam:"style=form,explode=true,name=versionId"`
 }
 
 func (d *DescribePipelineLaunchRequest) GetPipelineID() int64 {
@@ -35,6 +37,13 @@ func (d *DescribePipelineLaunchRequest) GetSourceWorkspaceID() *int64 {
 		return nil
 	}
 	return d.SourceWorkspaceID
+}
+
+func (d *DescribePipelineLaunchRequest) GetVersionID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.VersionID
 }
 
 type DescribePipelineLaunchResponse struct {

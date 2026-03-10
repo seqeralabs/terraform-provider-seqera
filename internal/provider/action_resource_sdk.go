@@ -47,7 +47,8 @@ func (r *ActionResourceModel) RefreshFromSharedActionResponseDto(ctx context.Con
 			r.Launch.OptimizationID = types.StringPointerValue(resp.Launch.OptimizationID)
 			r.Launch.OptimizationTargets = types.StringPointerValue(resp.Launch.OptimizationTargets)
 			r.Launch.ParamsText = types.StringPointerValue(resp.Launch.ParamsText)
-			r.Launch.Pipeline = types.StringValue(resp.Launch.Pipeline)
+			r.Launch.Pipeline = types.StringPointerValue(resp.Launch.Pipeline)
+			r.Launch.PipelineSchemaID = types.Int64PointerValue(resp.Launch.PipelineSchemaID)
 			r.Launch.PostRunScript = types.StringPointerValue(resp.Launch.PostRunScript)
 			r.Launch.PreRunScript = types.StringPointerValue(resp.Launch.PreRunScript)
 			r.Launch.PullLatest = types.BoolPointerValue(resp.Launch.PullLatest)
@@ -217,6 +218,12 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		source = nil
 	}
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -301,11 +308,11 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 	} else {
 		entryName = nil
 	}
-	schemaName := new(string)
-	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-		*schemaName = r.Launch.SchemaName.ValueString()
+	pipelineSchemaID := new(int64)
+	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
+		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
 	} else {
-		schemaName = nil
+		pipelineSchemaID = nil
 	}
 	resume := new(bool)
 	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
@@ -342,6 +349,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		headJobMemoryMb = nil
 	}
 	launch := shared.WorkflowLaunchRequest{
+		SchemaName:       schemaName,
 		ComputeEnvID:     computeEnvID,
 		RunName:          runName,
 		Pipeline:         pipeline,
@@ -357,7 +365,7 @@ func (r *ActionResourceModel) ToSharedCreateActionRequest(ctx context.Context) (
 		PostRunScript:    postRunScript,
 		MainScript:       mainScript,
 		EntryName:        entryName,
-		SchemaName:       schemaName,
+		PipelineSchemaID: pipelineSchemaID,
 		Resume:           resume,
 		PullLatest:       pullLatest,
 		StubRun:          stubRun,
@@ -384,6 +392,12 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		name = nil
 	}
 	var launch *shared.WorkflowLaunchRequest
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -468,11 +482,11 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 	} else {
 		entryName = nil
 	}
-	schemaName := new(string)
-	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-		*schemaName = r.Launch.SchemaName.ValueString()
+	pipelineSchemaID := new(int64)
+	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
+		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
 	} else {
-		schemaName = nil
+		pipelineSchemaID = nil
 	}
 	resume := new(bool)
 	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
@@ -509,6 +523,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		headJobMemoryMb = nil
 	}
 	launch = &shared.WorkflowLaunchRequest{
+		SchemaName:       schemaName,
 		ComputeEnvID:     computeEnvID,
 		RunName:          runName,
 		Pipeline:         pipeline,
@@ -524,7 +539,7 @@ func (r *ActionResourceModel) ToSharedUpdateActionRequest(ctx context.Context) (
 		PostRunScript:    postRunScript,
 		MainScript:       mainScript,
 		EntryName:        entryName,
-		SchemaName:       schemaName,
+		PipelineSchemaID: pipelineSchemaID,
 		Resume:           resume,
 		PullLatest:       pullLatest,
 		StubRun:          stubRun,

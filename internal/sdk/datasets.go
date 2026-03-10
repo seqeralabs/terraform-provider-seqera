@@ -2137,12 +2137,12 @@ func (s *Datasets) ListLaunchDatasetVersions(ctx context.Context, request operat
 				return nil, err
 			}
 
-			var out shared.DescribeLaunchResponse
+			var out shared.ListDatasetVersionsResponse
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DescribeLaunchResponse = &out
+			res.ListDatasetVersionsResponse = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

@@ -41,18 +41,19 @@ resource "seqera_pipeline" "my_pipeline" {
       1002,
       1003,
     ]
-    main_script     = "main.nf"
-    params_text     = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
-    pipeline        = "https://github.com/nextflow-io/hello"
-    post_run_script = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
-    pre_run_script  = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-    pull_latest     = true
-    resume          = true
-    revision        = "main"
-    run_name        = "nextflow-hello"
-    schema_name     = "nextflow_schema.json"
-    stub_run        = false
-    tower_config    = "...my_tower_config..."
+    main_script        = "main.nf"
+    params_text        = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
+    pipeline           = "https://github.com/nextflow-io/hello"
+    pipeline_schema_id = 7
+    post_run_script    = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
+    pre_run_script     = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
+    pull_latest        = true
+    resume             = true
+    revision           = "main"
+    run_name           = "nextflow-hello"
+    schema_name        = "nextflow_schema.json"
+    stub_run           = false
+    tower_config       = "...my_tower_config..."
     user_secrets = [
       "MY_API_KEY",
       "DATABASE_PASSWORD",
@@ -63,7 +64,10 @@ resource "seqera_pipeline" "my_pipeline" {
       "SHARED_CREDENTIALS",
     ]
   }
-  name         = "rna-seq-analysis"
+  name = "rna-seq-analysis"
+  version = {
+    name = "...my_name..."
+  }
   workspace_id = 3
 }
 ```
@@ -81,6 +85,7 @@ resource "seqera_pipeline" "my_pipeline" {
 - `description` (String) Detailed description of the pipeline's purpose and functionality
 - `icon` (String) Icon identifier or URL for visual representation
 - `label_ids` (List of Number)
+- `version` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--version))
 - `workspace_id` (Number) Workspace numeric identifier
 
 ### Read-Only
@@ -106,6 +111,7 @@ Optional:
 - `main_script` (String) Main script path
 - `params_text` (String) Pipeline parameters text
 - `pipeline` (String)
+- `pipeline_schema_id` (Number)
 - `post_run_script` (String) Script to run after pipeline execution
 - `pre_run_script` (String) Script to run before pipeline execution
 - `pull_latest` (Boolean)
@@ -118,6 +124,27 @@ Optional:
 - `user_secrets` (List of String)
 - `work_dir` (String) Working directory
 - `workspace_secrets` (List of String)
+
+
+<a id="nestedatt--version"></a>
+### Nested Schema for `version`
+
+Optional:
+
+- `name` (String) Requires replacement if changed.
+
+Read-Only:
+
+- `creator_avatar_url` (String)
+- `creator_first_name` (String)
+- `creator_last_name` (String)
+- `creator_user_id` (Number)
+- `creator_user_name` (String)
+- `date_created` (String)
+- `hash` (String)
+- `id` (String)
+- `is_default` (Boolean)
+- `last_updated` (String)
 
 ## Import
 

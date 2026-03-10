@@ -6,6 +6,8 @@ import (
 	"context"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/seqeralabs/terraform-provider-seqera/internal/provider/typeconvert"
+	tfTypes "github.com/seqeralabs/terraform-provider-seqera/internal/provider/types"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/operations"
 	"github.com/seqeralabs/terraform-provider-seqera/internal/sdk/models/shared"
 )
@@ -52,6 +54,22 @@ func (r *PipelineResourceModel) RefreshFromSharedPipelineDbDto(ctx context.Conte
 		r.UserFirstName = types.StringPointerValue(resp.UserFirstName)
 		r.UserID = types.Int64PointerValue(resp.UserID)
 		r.UserName = types.StringPointerValue(resp.UserName)
+		if resp.Version == nil {
+			r.Version = nil
+		} else {
+			r.Version = &tfTypes.CreatePipelineVersionRequest{}
+			r.Version.CreatorAvatarURL = types.StringPointerValue(resp.Version.CreatorAvatarURL)
+			r.Version.CreatorFirstName = types.StringPointerValue(resp.Version.CreatorFirstName)
+			r.Version.CreatorLastName = types.StringPointerValue(resp.Version.CreatorLastName)
+			r.Version.CreatorUserID = types.Int64PointerValue(resp.Version.CreatorUserID)
+			r.Version.CreatorUserName = types.StringPointerValue(resp.Version.CreatorUserName)
+			r.Version.DateCreated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Version.DateCreated))
+			r.Version.Hash = types.StringPointerValue(resp.Version.Hash)
+			r.Version.ID = types.StringPointerValue(resp.Version.ID)
+			r.Version.IsDefault = types.BoolPointerValue(resp.Version.IsDefault)
+			r.Version.LastUpdated = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.Version.LastUpdated))
+			r.Version.Name = types.StringPointerValue(resp.Version.Name)
+		}
 		r.WorkspaceID = types.Int64PointerValue(resp.WorkspaceID)
 	}
 
@@ -180,6 +198,12 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		icon = nil
 	}
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -264,11 +288,11 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	} else {
 		entryName = nil
 	}
-	schemaName := new(string)
-	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-		*schemaName = r.Launch.SchemaName.ValueString()
+	pipelineSchemaID := new(int64)
+	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
+		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
 	} else {
-		schemaName = nil
+		pipelineSchemaID = nil
 	}
 	resume := new(bool)
 	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
@@ -305,6 +329,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		headJobMemoryMb = nil
 	}
 	launch := shared.WorkflowLaunchRequest{
+		SchemaName:       schemaName,
 		ComputeEnvID:     computeEnvID,
 		RunName:          runName,
 		Pipeline:         pipeline,
@@ -320,7 +345,7 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 		PostRunScript:    postRunScript,
 		MainScript:       mainScript,
 		EntryName:        entryName,
-		SchemaName:       schemaName,
+		PipelineSchemaID: pipelineSchemaID,
 		Resume:           resume,
 		PullLatest:       pullLatest,
 		StubRun:          stubRun,
@@ -332,12 +357,25 @@ func (r *PipelineResourceModel) ToSharedCreatePipelineRequest(ctx context.Contex
 	for labelIdsIndex1 := range r.LabelIds {
 		labelIds1 = append(labelIds1, r.LabelIds[labelIdsIndex1].ValueInt64())
 	}
+	var version *shared.CreatePipelineVersionRequest
+	if r.Version != nil {
+		name1 := new(string)
+		if !r.Version.Name.IsUnknown() && !r.Version.Name.IsNull() {
+			*name1 = r.Version.Name.ValueString()
+		} else {
+			name1 = nil
+		}
+		version = &shared.CreatePipelineVersionRequest{
+			Name: name1,
+		}
+	}
 	out := shared.CreatePipelineRequest{
 		Name:        name,
 		Description: description,
 		Icon:        icon,
 		Launch:      launch,
 		LabelIds:    labelIds1,
+		Version:     version,
 	}
 
 	return &out, diags
@@ -365,6 +403,12 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		icon = nil
 	}
 	var launch *shared.WorkflowLaunchRequest
+	schemaName := new(string)
+	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
+		*schemaName = r.Launch.SchemaName.ValueString()
+	} else {
+		schemaName = nil
+	}
 	computeEnvID := new(string)
 	if !r.Launch.ComputeEnvID.IsUnknown() && !r.Launch.ComputeEnvID.IsNull() {
 		*computeEnvID = r.Launch.ComputeEnvID.ValueString()
@@ -449,11 +493,11 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 	} else {
 		entryName = nil
 	}
-	schemaName := new(string)
-	if !r.Launch.SchemaName.IsUnknown() && !r.Launch.SchemaName.IsNull() {
-		*schemaName = r.Launch.SchemaName.ValueString()
+	pipelineSchemaID := new(int64)
+	if !r.Launch.PipelineSchemaID.IsUnknown() && !r.Launch.PipelineSchemaID.IsNull() {
+		*pipelineSchemaID = r.Launch.PipelineSchemaID.ValueInt64()
 	} else {
-		schemaName = nil
+		pipelineSchemaID = nil
 	}
 	resume := new(bool)
 	if !r.Launch.Resume.IsUnknown() && !r.Launch.Resume.IsNull() {
@@ -490,6 +534,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		headJobMemoryMb = nil
 	}
 	launch = &shared.WorkflowLaunchRequest{
+		SchemaName:       schemaName,
 		ComputeEnvID:     computeEnvID,
 		RunName:          runName,
 		Pipeline:         pipeline,
@@ -505,7 +550,7 @@ func (r *PipelineResourceModel) ToSharedUpdatePipelineRequest(ctx context.Contex
 		PostRunScript:    postRunScript,
 		MainScript:       mainScript,
 		EntryName:        entryName,
-		SchemaName:       schemaName,
+		PipelineSchemaID: pipelineSchemaID,
 		Resume:           resume,
 		PullLatest:       pullLatest,
 		StubRun:          stubRun,

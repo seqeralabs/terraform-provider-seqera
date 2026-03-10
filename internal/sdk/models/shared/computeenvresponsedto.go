@@ -15,9 +15,10 @@ const (
 	ComputeEnvResponseDtoPlatformAwsBatch              ComputeEnvResponseDtoPlatform = "aws-batch"
 	ComputeEnvResponseDtoPlatformAwsCloud              ComputeEnvResponseDtoPlatform = "aws-cloud"
 	ComputeEnvResponseDtoPlatformSeqeracomputePlatform ComputeEnvResponseDtoPlatform = "seqeracompute-platform"
-	ComputeEnvResponseDtoPlatformGoogleLifesciences    ComputeEnvResponseDtoPlatform = "google-lifesciences"
 	ComputeEnvResponseDtoPlatformGoogleBatch           ComputeEnvResponseDtoPlatform = "google-batch"
+	ComputeEnvResponseDtoPlatformGoogleCloud           ComputeEnvResponseDtoPlatform = "google-cloud"
 	ComputeEnvResponseDtoPlatformAzureBatch            ComputeEnvResponseDtoPlatform = "azure-batch"
+	ComputeEnvResponseDtoPlatformAzureCloud            ComputeEnvResponseDtoPlatform = "azure-cloud"
 	ComputeEnvResponseDtoPlatformK8sPlatform           ComputeEnvResponseDtoPlatform = "k8s-platform"
 	ComputeEnvResponseDtoPlatformEksPlatform           ComputeEnvResponseDtoPlatform = "eks-platform"
 	ComputeEnvResponseDtoPlatformGkePlatform           ComputeEnvResponseDtoPlatform = "gke-platform"
@@ -25,6 +26,8 @@ const (
 	ComputeEnvResponseDtoPlatformSlurmPlatform         ComputeEnvResponseDtoPlatform = "slurm-platform"
 	ComputeEnvResponseDtoPlatformLsfPlatform           ComputeEnvResponseDtoPlatform = "lsf-platform"
 	ComputeEnvResponseDtoPlatformAltairPlatform        ComputeEnvResponseDtoPlatform = "altair-platform"
+	ComputeEnvResponseDtoPlatformMoabPlatform          ComputeEnvResponseDtoPlatform = "moab-platform"
+	ComputeEnvResponseDtoPlatformGoogleLifesciences    ComputeEnvResponseDtoPlatform = "google-lifesciences"
 )
 
 func (e ComputeEnvResponseDtoPlatform) ToPointer() *ComputeEnvResponseDtoPlatform {
@@ -42,11 +45,13 @@ func (e *ComputeEnvResponseDtoPlatform) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "seqeracompute-platform":
 		fallthrough
-	case "google-lifesciences":
-		fallthrough
 	case "google-batch":
 		fallthrough
+	case "google-cloud":
+		fallthrough
 	case "azure-batch":
+		fallthrough
+	case "azure-cloud":
 		fallthrough
 	case "k8s-platform":
 		fallthrough
@@ -61,6 +66,10 @@ func (e *ComputeEnvResponseDtoPlatform) UnmarshalJSON(data []byte) error {
 	case "lsf-platform":
 		fallthrough
 	case "altair-platform":
+		fallthrough
+	case "moab-platform":
+		fallthrough
+	case "google-lifesciences":
 		*e = ComputeEnvResponseDtoPlatform(v)
 		return nil
 	default:
@@ -148,6 +157,7 @@ type ComputeEnvResponseDto struct {
 	WorkspaceID       *int64                          `json:"workspaceId,omitempty"`
 	Labels            []LabelDbDto                    `json:"labels,omitempty"`
 	Resources         *ComputeEnvResponseDtoResources `json:"resources,omitempty"`
+	AwsAccountID      *string                         `json:"awsAccountId,omitempty"`
 }
 
 func (c ComputeEnvResponseDto) MarshalJSON() ([]byte, error) {
@@ -194,125 +204,6 @@ func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfig {
 		return nil
 	}
 	return c.Config
-}
-
-func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.MoabConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigAwsBatch() *AWSBatchConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.AWSBatchConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigGoogleCloud() *GoogleCloudConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.GoogleCloudConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigLocalPlatform() *LocalExecutionConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.LocalExecutionConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigAzureCloud() *AzureCloudConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.AzureCloudConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.GoogleGKEClusterConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.GoogleBatchServiceConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigAwsCloud() *AWSCloudConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.AWSCloudConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.SlurmConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.KubernetesComputeConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.AltairPBSConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.IBMLSFConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigAzureBatch() *AzureBatchConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.AzureBatchConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.SeqeraComputeConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.AmazonEKSClusterConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.GoogleLifeSciencesConfiguration
-	}
-	return nil
-}
-
-func (c *ComputeEnvResponseDto) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	if v := c.GetConfig(); v != nil {
-		return v.UnivaGridEngineConfiguration
-	}
-	return nil
 }
 
 func (c *ComputeEnvResponseDto) GetDateCreated() *time.Time {
@@ -404,4 +295,11 @@ func (c *ComputeEnvResponseDto) GetResources() *ComputeEnvResponseDtoResources {
 		return nil
 	}
 	return c.Resources
+}
+
+func (c *ComputeEnvResponseDto) GetAwsAccountID() *string {
+	if c == nil {
+		return nil
+	}
+	return c.AwsAccountID
 }

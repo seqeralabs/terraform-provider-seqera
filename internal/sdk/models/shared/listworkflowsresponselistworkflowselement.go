@@ -21,7 +21,8 @@ type ListWorkflowsResponseListWorkflowsElement struct {
 	// Whether workflow is starred
 	Starred *bool `json:"starred,omitempty"`
 	// Whether workflow is optimized
-	Optimized *bool `json:"optimized,omitempty"`
+	Optimized    *bool                    `json:"optimized,omitempty"`
+	PipelineInfo *PipelineMinInfoResponse `json:"pipelineInfo,omitempty"`
 }
 
 func (l *ListWorkflowsResponseListWorkflowsElement) GetWorkflow() *WorkflowDbDto {
@@ -85,4 +86,11 @@ func (l *ListWorkflowsResponseListWorkflowsElement) GetOptimized() *bool {
 		return nil
 	}
 	return l.Optimized
+}
+
+func (l *ListWorkflowsResponseListWorkflowsElement) GetPipelineInfo() *PipelineMinInfoResponse {
+	if l == nil {
+		return nil
+	}
+	return l.PipelineInfo
 }

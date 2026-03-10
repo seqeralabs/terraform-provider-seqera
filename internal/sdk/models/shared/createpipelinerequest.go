@@ -6,9 +6,10 @@ type CreatePipelineRequest struct {
 	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// Icon identifier or URL for visual representation
-	Icon     *string               `json:"icon,omitempty"`
-	Launch   WorkflowLaunchRequest `json:"launch"`
-	LabelIds []int64               `json:"labelIds,omitempty"`
+	Icon     *string                       `json:"icon,omitempty"`
+	Launch   WorkflowLaunchRequest         `json:"launch"`
+	LabelIds []int64                       `json:"labelIds,omitempty"`
+	Version  *CreatePipelineVersionRequest `json:"version,omitempty"`
 }
 
 func (c *CreatePipelineRequest) GetName() string {
@@ -44,4 +45,11 @@ func (c *CreatePipelineRequest) GetLabelIds() []int64 {
 		return nil
 	}
 	return c.LabelIds
+}
+
+func (c *CreatePipelineRequest) GetVersion() *CreatePipelineVersionRequest {
+	if c == nil {
+		return nil
+	}
+	return c.Version
 }

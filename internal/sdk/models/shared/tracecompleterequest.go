@@ -3,12 +3,12 @@
 package shared
 
 type TraceCompleteRequest struct {
-	Workflow *WorkflowInput     `json:"workflow,omitempty"`
+	Workflow *Workflow          `json:"workflow,omitempty"`
 	Metrics  []WorkflowMetrics  `json:"metrics,omitempty"`
 	Progress *TraceProgressData `json:"progress,omitempty"`
 }
 
-func (t *TraceCompleteRequest) GetWorkflow() *WorkflowInput {
+func (t *TraceCompleteRequest) GetWorkflow() *Workflow {
 	if t == nil {
 		return nil
 	}

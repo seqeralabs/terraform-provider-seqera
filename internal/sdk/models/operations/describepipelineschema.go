@@ -16,6 +16,8 @@ type DescribePipelineSchemaRequest struct {
 	SourceWorkspaceID *int64 `queryParam:"style=form,explode=true,name=sourceWorkspaceId"`
 	// Additional attribute values to include in the response: `schema` returns the pipeline schema, `params` returns the pipeline config. Returns all if `attributes` is omitted.
 	Attributes []shared.PipelineSchemaAttributes `queryParam:"style=form,explode=false,name=attributes"`
+	// Pipeline version identifier
+	VersionID *string `queryParam:"style=form,explode=true,name=versionId"`
 }
 
 func (d *DescribePipelineSchemaRequest) GetPipelineID() int64 {
@@ -44,6 +46,13 @@ func (d *DescribePipelineSchemaRequest) GetAttributes() []shared.PipelineSchemaA
 		return nil
 	}
 	return d.Attributes
+}
+
+func (d *DescribePipelineSchemaRequest) GetVersionID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.VersionID
 }
 
 type DescribePipelineSchemaResponse struct {

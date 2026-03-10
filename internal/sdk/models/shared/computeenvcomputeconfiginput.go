@@ -16,7 +16,9 @@ const (
 	ComputeEnvComputeConfigPlatformAwsCloud              ComputeEnvComputeConfigPlatform = "aws-cloud"
 	ComputeEnvComputeConfigPlatformGoogleLifesciences    ComputeEnvComputeConfigPlatform = "google-lifesciences"
 	ComputeEnvComputeConfigPlatformGoogleBatch           ComputeEnvComputeConfigPlatform = "google-batch"
+	ComputeEnvComputeConfigPlatformGoogleCloud           ComputeEnvComputeConfigPlatform = "google-cloud"
 	ComputeEnvComputeConfigPlatformAzureBatch            ComputeEnvComputeConfigPlatform = "azure-batch"
+	ComputeEnvComputeConfigPlatformAzureCloud            ComputeEnvComputeConfigPlatform = "azure-cloud"
 	ComputeEnvComputeConfigPlatformK8sPlatform           ComputeEnvComputeConfigPlatform = "k8s-platform"
 	ComputeEnvComputeConfigPlatformEksPlatform           ComputeEnvComputeConfigPlatform = "eks-platform"
 	ComputeEnvComputeConfigPlatformGkePlatform           ComputeEnvComputeConfigPlatform = "gke-platform"
@@ -25,7 +27,6 @@ const (
 	ComputeEnvComputeConfigPlatformLsfPlatform           ComputeEnvComputeConfigPlatform = "lsf-platform"
 	ComputeEnvComputeConfigPlatformAltairPlatform        ComputeEnvComputeConfigPlatform = "altair-platform"
 	ComputeEnvComputeConfigPlatformMoabPlatform          ComputeEnvComputeConfigPlatform = "moab-platform"
-	ComputeEnvComputeConfigPlatformLocalPlatform         ComputeEnvComputeConfigPlatform = "local-platform"
 	ComputeEnvComputeConfigPlatformSeqeracomputePlatform ComputeEnvComputeConfigPlatform = "seqeracompute-platform"
 )
 
@@ -46,7 +47,11 @@ func (e *ComputeEnvComputeConfigPlatform) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "google-batch":
 		fallthrough
+	case "google-cloud":
+		fallthrough
 	case "azure-batch":
+		fallthrough
+	case "azure-cloud":
 		fallthrough
 	case "k8s-platform":
 		fallthrough
@@ -63,8 +68,6 @@ func (e *ComputeEnvComputeConfigPlatform) UnmarshalJSON(data []byte) error {
 	case "altair-platform":
 		fallthrough
 	case "moab-platform":
-		fallthrough
-	case "local-platform":
 		fallthrough
 	case "seqeracompute-platform":
 		*e = ComputeEnvComputeConfigPlatform(v)
@@ -119,74 +122,6 @@ func (c *ComputeEnvComputeConfigInput) GetConfig() ComputeConfig {
 		return ComputeConfig{}
 	}
 	return c.Config
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigMoabPlatform() *MoabConfiguration {
-	return c.GetConfig().MoabConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return c.GetConfig().AWSBatchConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleCloud() *GoogleCloudConfiguration {
-	return c.GetConfig().GoogleCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigLocalPlatform() *LocalExecutionConfiguration {
-	return c.GetConfig().LocalExecutionConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAzureCloud() *AzureCloudConfiguration {
-	return c.GetConfig().AzureCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return c.GetConfig().GoogleGKEClusterConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return c.GetConfig().GoogleBatchServiceConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return c.GetConfig().AWSCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return c.GetConfig().SlurmConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return c.GetConfig().KubernetesComputeConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return c.GetConfig().AltairPBSConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return c.GetConfig().IBMLSFConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return c.GetConfig().AzureBatchConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return c.GetConfig().SeqeraComputeConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return c.GetConfig().AmazonEKSClusterConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	return c.GetConfig().GoogleLifeSciencesConfiguration
-}
-
-func (c *ComputeEnvComputeConfigInput) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return c.GetConfig().UnivaGridEngineConfiguration
 }
 
 func (c *ComputeEnvComputeConfigInput) GetMessage() *string {
@@ -320,74 +255,6 @@ func (c *ComputeEnvComputeConfig) GetConfig() ComputeConfig {
 		return ComputeConfig{}
 	}
 	return c.Config
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigMoabPlatform() *MoabConfiguration {
-	return c.GetConfig().MoabConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigAwsBatch() *AWSBatchConfiguration {
-	return c.GetConfig().AWSBatchConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigGoogleCloud() *GoogleCloudConfiguration {
-	return c.GetConfig().GoogleCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigLocalPlatform() *LocalExecutionConfiguration {
-	return c.GetConfig().LocalExecutionConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigAzureCloud() *AzureCloudConfiguration {
-	return c.GetConfig().AzureCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
-	return c.GetConfig().GoogleGKEClusterConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
-	return c.GetConfig().GoogleBatchServiceConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigAwsCloud() *AWSCloudConfiguration {
-	return c.GetConfig().AWSCloudConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigSlurmPlatform() *SlurmConfiguration {
-	return c.GetConfig().SlurmConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
-	return c.GetConfig().KubernetesComputeConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigAltairPlatform() *AltairPBSConfiguration {
-	return c.GetConfig().AltairPBSConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigLsfPlatform() *IBMLSFConfiguration {
-	return c.GetConfig().IBMLSFConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigAzureBatch() *AzureBatchConfiguration {
-	return c.GetConfig().AzureBatchConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
-	return c.GetConfig().SeqeraComputeConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
-	return c.GetConfig().AmazonEKSClusterConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfiguration {
-	return c.GetConfig().GoogleLifeSciencesConfiguration
-}
-
-func (c *ComputeEnvComputeConfig) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
-	return c.GetConfig().UnivaGridEngineConfiguration
 }
 
 func (c *ComputeEnvComputeConfig) GetDateCreated() *time.Time {

@@ -11,8 +11,6 @@ import (
 // Contains execution status, metadata, and results from pipeline
 // runs including logs and performance metrics.
 type WorkflowDbDto struct {
-	// Array of status messages and logs from workflow execution
-	Messages []string `json:"messages,omitempty"`
 	// Unique identifier for the workflow execution
 	ID *string `json:"id,omitempty"`
 	// Numeric identifier of the user who owns this workflow
@@ -69,13 +67,6 @@ func (w *WorkflowDbDto) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (w *WorkflowDbDto) GetMessages() []string {
-	if w == nil {
-		return nil
-	}
-	return w.Messages
 }
 
 func (w *WorkflowDbDto) GetID() *string {

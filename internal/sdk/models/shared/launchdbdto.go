@@ -2,10 +2,10 @@
 
 package shared
 
-type Launch struct {
+type LaunchDbDto struct {
 	ID          *string `json:"id,omitempty"`
 	WorkspaceID *int64  `json:"workspaceId,omitempty"`
-	Pipeline    string  `json:"pipeline"`
+	Pipeline    *string `json:"pipeline,omitempty"`
 	// Working directory
 	WorkDir *string `json:"workDir,omitempty"`
 	// Pipeline revision
@@ -45,195 +45,203 @@ type Launch struct {
 	// Head job CPU allocation
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Head job memory allocation in MB
-	HeadJobMemoryMb *int    `json:"headJobMemoryMb,omitempty"`
-	LaunchContainer *string `json:"launchContainer,omitempty"`
+	HeadJobMemoryMb  *int    `json:"headJobMemoryMb,omitempty"`
+	LaunchContainer  *string `json:"launchContainer,omitempty"`
+	PipelineSchemaID *int64  `json:"pipelineSchemaId,omitempty"`
 }
 
-func (l *Launch) GetID() *string {
+func (l *LaunchDbDto) GetID() *string {
 	if l == nil {
 		return nil
 	}
 	return l.ID
 }
 
-func (l *Launch) GetWorkspaceID() *int64 {
+func (l *LaunchDbDto) GetWorkspaceID() *int64 {
 	if l == nil {
 		return nil
 	}
 	return l.WorkspaceID
 }
 
-func (l *Launch) GetPipeline() string {
+func (l *LaunchDbDto) GetPipeline() *string {
 	if l == nil {
-		return ""
+		return nil
 	}
 	return l.Pipeline
 }
 
-func (l *Launch) GetWorkDir() *string {
+func (l *LaunchDbDto) GetWorkDir() *string {
 	if l == nil {
 		return nil
 	}
 	return l.WorkDir
 }
 
-func (l *Launch) GetRevision() *string {
+func (l *LaunchDbDto) GetRevision() *string {
 	if l == nil {
 		return nil
 	}
 	return l.Revision
 }
 
-func (l *Launch) GetConfigText() *string {
+func (l *LaunchDbDto) GetConfigText() *string {
 	if l == nil {
 		return nil
 	}
 	return l.ConfigText
 }
 
-func (l *Launch) GetTowerConfig() *string {
+func (l *LaunchDbDto) GetTowerConfig() *string {
 	if l == nil {
 		return nil
 	}
 	return l.TowerConfig
 }
 
-func (l *Launch) GetParamsText() *string {
+func (l *LaunchDbDto) GetParamsText() *string {
 	if l == nil {
 		return nil
 	}
 	return l.ParamsText
 }
 
-func (l *Launch) GetPreRunScript() *string {
+func (l *LaunchDbDto) GetPreRunScript() *string {
 	if l == nil {
 		return nil
 	}
 	return l.PreRunScript
 }
 
-func (l *Launch) GetPostRunScript() *string {
+func (l *LaunchDbDto) GetPostRunScript() *string {
 	if l == nil {
 		return nil
 	}
 	return l.PostRunScript
 }
 
-func (l *Launch) GetMainScript() *string {
+func (l *LaunchDbDto) GetMainScript() *string {
 	if l == nil {
 		return nil
 	}
 	return l.MainScript
 }
 
-func (l *Launch) GetEntryName() *string {
+func (l *LaunchDbDto) GetEntryName() *string {
 	if l == nil {
 		return nil
 	}
 	return l.EntryName
 }
 
-func (l *Launch) GetSchemaName() *string {
+func (l *LaunchDbDto) GetSchemaName() *string {
 	if l == nil {
 		return nil
 	}
 	return l.SchemaName
 }
 
-func (l *Launch) GetResume() *bool {
+func (l *LaunchDbDto) GetResume() *bool {
 	if l == nil {
 		return nil
 	}
 	return l.Resume
 }
 
-func (l *Launch) GetResumeLaunchID() *string {
+func (l *LaunchDbDto) GetResumeLaunchID() *string {
 	if l == nil {
 		return nil
 	}
 	return l.ResumeLaunchID
 }
 
-func (l *Launch) GetPullLatest() *bool {
+func (l *LaunchDbDto) GetPullLatest() *bool {
 	if l == nil {
 		return nil
 	}
 	return l.PullLatest
 }
 
-func (l *Launch) GetStubRun() *bool {
+func (l *LaunchDbDto) GetStubRun() *bool {
 	if l == nil {
 		return nil
 	}
 	return l.StubRun
 }
 
-func (l *Launch) GetSessionID() *string {
+func (l *LaunchDbDto) GetSessionID() *string {
 	if l == nil {
 		return nil
 	}
 	return l.SessionID
 }
 
-func (l *Launch) GetRunName() *string {
+func (l *LaunchDbDto) GetRunName() *string {
 	if l == nil {
 		return nil
 	}
 	return l.RunName
 }
 
-func (l *Launch) GetConfigProfiles() []string {
+func (l *LaunchDbDto) GetConfigProfiles() []string {
 	if l == nil {
 		return nil
 	}
 	return l.ConfigProfiles
 }
 
-func (l *Launch) GetUserSecrets() []string {
+func (l *LaunchDbDto) GetUserSecrets() []string {
 	if l == nil {
 		return nil
 	}
 	return l.UserSecrets
 }
 
-func (l *Launch) GetWorkspaceSecrets() []string {
+func (l *LaunchDbDto) GetWorkspaceSecrets() []string {
 	if l == nil {
 		return nil
 	}
 	return l.WorkspaceSecrets
 }
 
-func (l *Launch) GetOptimizationID() *string {
+func (l *LaunchDbDto) GetOptimizationID() *string {
 	if l == nil {
 		return nil
 	}
 	return l.OptimizationID
 }
 
-func (l *Launch) GetOptimizationTargets() *string {
+func (l *LaunchDbDto) GetOptimizationTargets() *string {
 	if l == nil {
 		return nil
 	}
 	return l.OptimizationTargets
 }
 
-func (l *Launch) GetHeadJobCpus() *int {
+func (l *LaunchDbDto) GetHeadJobCpus() *int {
 	if l == nil {
 		return nil
 	}
 	return l.HeadJobCpus
 }
 
-func (l *Launch) GetHeadJobMemoryMb() *int {
+func (l *LaunchDbDto) GetHeadJobMemoryMb() *int {
 	if l == nil {
 		return nil
 	}
 	return l.HeadJobMemoryMb
 }
 
-func (l *Launch) GetLaunchContainer() *string {
+func (l *LaunchDbDto) GetLaunchContainer() *string {
 	if l == nil {
 		return nil
 	}
 	return l.LaunchContainer
+}
+
+func (l *LaunchDbDto) GetPipelineSchemaID() *int64 {
+	if l == nil {
+		return nil
+	}
+	return l.PipelineSchemaID
 }

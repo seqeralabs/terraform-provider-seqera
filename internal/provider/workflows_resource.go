@@ -38,33 +38,35 @@ type WorkflowsResource struct {
 
 // WorkflowsResourceModel describes the resource data model.
 type WorkflowsResourceModel struct {
-	ComputeEnvID      types.String      `tfsdk:"compute_env_id"`
-	ConfigProfiles    []types.String    `tfsdk:"config_profiles"`
-	ConfigText        types.String      `tfsdk:"config_text"`
-	EntryName         types.String      `tfsdk:"entry_name"`
-	Force             types.Bool        `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
-	HeadJobCpus       types.Int32       `tfsdk:"head_job_cpus"`
-	HeadJobMemoryMb   types.Int32       `tfsdk:"head_job_memory_mb"`
-	LabelIds          []types.Int64     `tfsdk:"label_ids"`
-	MainScript        types.String      `tfsdk:"main_script"`
-	ParamsText        types.String      `tfsdk:"params_text"`
-	Pipeline          types.String      `tfsdk:"pipeline"`
-	PostRunScript     types.String      `tfsdk:"post_run_script"`
-	PreRunScript      types.String      `tfsdk:"pre_run_script"`
-	PullLatest        types.Bool        `tfsdk:"pull_latest"`
-	Resume            types.Bool        `tfsdk:"resume"`
-	Revision          types.String      `tfsdk:"revision"`
-	RunName           types.String      `tfsdk:"run_name"`
-	SchemaName        types.String      `tfsdk:"schema_name"`
-	SourceWorkspaceID types.Int64       `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
-	StubRun           types.Bool        `tfsdk:"stub_run"`
-	TowerConfig       types.String      `tfsdk:"tower_config"`
-	UserSecrets       []types.String    `tfsdk:"user_secrets"`
-	WorkDir           types.String      `tfsdk:"work_dir"`
-	Workflow          *tfTypes.Workflow `tfsdk:"workflow"`
-	WorkflowID        types.String      `tfsdk:"workflow_id"`
-	WorkspaceID       types.Int64       `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
-	WorkspaceSecrets  []types.String    `tfsdk:"workspace_secrets"`
+	ComputeEnvID      types.String                     `tfsdk:"compute_env_id"`
+	ConfigProfiles    []types.String                   `tfsdk:"config_profiles"`
+	ConfigText        types.String                     `tfsdk:"config_text"`
+	EntryName         types.String                     `tfsdk:"entry_name"`
+	Force             types.Bool                       `queryParam:"style=form,explode=true,name=force" tfsdk:"force"`
+	HeadJobCpus       types.Int32                      `tfsdk:"head_job_cpus"`
+	HeadJobMemoryMb   types.Int32                      `tfsdk:"head_job_memory_mb"`
+	LabelIds          []types.Int64                    `tfsdk:"label_ids"`
+	MainScript        types.String                     `tfsdk:"main_script"`
+	ParamsText        types.String                     `tfsdk:"params_text"`
+	Pipeline          types.String                     `tfsdk:"pipeline"`
+	PipelineInfo      *tfTypes.PipelineMinInfoResponse `tfsdk:"pipeline_info"`
+	PipelineSchemaID  types.Int64                      `tfsdk:"pipeline_schema_id"`
+	PostRunScript     types.String                     `tfsdk:"post_run_script"`
+	PreRunScript      types.String                     `tfsdk:"pre_run_script"`
+	PullLatest        types.Bool                       `tfsdk:"pull_latest"`
+	Resume            types.Bool                       `tfsdk:"resume"`
+	Revision          types.String                     `tfsdk:"revision"`
+	RunName           types.String                     `tfsdk:"run_name"`
+	SchemaName        types.String                     `tfsdk:"schema_name"`
+	SourceWorkspaceID types.Int64                      `queryParam:"style=form,explode=true,name=sourceWorkspaceId" tfsdk:"source_workspace_id"`
+	StubRun           types.Bool                       `tfsdk:"stub_run"`
+	TowerConfig       types.String                     `tfsdk:"tower_config"`
+	UserSecrets       []types.String                   `tfsdk:"user_secrets"`
+	WorkDir           types.String                     `tfsdk:"work_dir"`
+	Workflow          *tfTypes.WorkflowMaxDbDto        `tfsdk:"workflow"`
+	WorkflowID        types.String                     `tfsdk:"workflow_id"`
+	WorkspaceID       types.Int64                      `queryParam:"style=form,explode=true,name=workspaceId" tfsdk:"workspace_id"`
+	WorkspaceSecrets  []types.String                   `tfsdk:"workspace_secrets"`
 }
 
 func (r *WorkflowsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -148,6 +150,50 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Requires replacement if changed.`,
+			},
+			"pipeline_info": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"id": schema.Int64Attribute{
+						Computed: true,
+					},
+					"version": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"date_created": schema.StringAttribute{
+								Computed: true,
+							},
+							"hash": schema.StringAttribute{
+								Computed: true,
+							},
+							"id": schema.StringAttribute{
+								Computed: true,
+							},
+							"is_default": schema.BoolAttribute{
+								Computed: true,
+							},
+							"is_draft_version": schema.BoolAttribute{
+								Computed: true,
+							},
+							"last_updated": schema.StringAttribute{
+								Computed: true,
+							},
+							"name": schema.StringAttribute{
+								Computed: true,
+							},
+						},
+					},
+					"workspace_id": schema.Int64Attribute{
+						Computed: true,
+					},
+				},
+			},
+			"pipeline_schema_id": schema.Int64Attribute{
+				Optional: true,
+				PlanModifiers: []planmodifier.Int64{
+					int64planmodifier.RequiresReplaceIfConfigured(),
 				},
 				Description: `Requires replacement if changed.`,
 			},
@@ -240,111 +286,53 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"command_line": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Command line`,
 					},
 					"complete": schema.StringAttribute{
 						Computed:    true,
-						Description: `Workflow completion time (null if not completed)`,
+						Description: `Timestamp when the workflow execution completed`,
 					},
 					"config_files": schema.ListAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
+						Description: `Config files (can be null)`,
 					},
 					"config_text": schema.StringAttribute{
-						Computed: true,
-					},
-					"container": schema.StringAttribute{
-						Computed: true,
-					},
-					"container_engine": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Config text`,
 					},
 					"date_created": schema.StringAttribute{
 						Computed: true,
 					},
 					"deleted": schema.BoolAttribute{
-						Computed: true,
-					},
-					"duration": schema.Int64Attribute{
-						Computed: true,
-					},
-					"error_message": schema.StringAttribute{
 						Computed:    true,
-						Description: `Error message (null if no error)`,
+						Description: `Whether the workflow is deleted`,
 					},
-					"error_report": schema.StringAttribute{
-						Computed:    true,
-						Description: `Error report (null if no error)`,
-					},
-					"exit_status": schema.Int32Attribute{
+					"fusion": schema.SingleNestedAttribute{
 						Computed: true,
-					},
-					"home_dir": schema.StringAttribute{
-						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Computed: true,
+							},
+							"version": schema.StringAttribute{
+								Computed: true,
+							},
+						},
 					},
 					"id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Unique identifier for the workflow execution`,
 					},
 					"last_updated": schema.StringAttribute{
 						Computed: true,
 					},
-					"launch_dir": schema.StringAttribute{
-						Computed: true,
-					},
 					"launch_id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Launch ID`,
 					},
 					"log_file": schema.StringAttribute{
 						Computed: true,
-					},
-					"manifest": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"author": schema.StringAttribute{
-								Computed: true,
-							},
-							"default_branch": schema.StringAttribute{
-								Computed: true,
-							},
-							"description": schema.StringAttribute{
-								Computed: true,
-							},
-							"gitmodules": schema.StringAttribute{
-								Computed: true,
-							},
-							"home_page": schema.StringAttribute{
-								Computed: true,
-							},
-							"icon": schema.StringAttribute{
-								Computed: true,
-							},
-							"main_script": schema.StringAttribute{
-								Computed: true,
-							},
-							"name": schema.StringAttribute{
-								Computed: true,
-							},
-							"nextflow_version": schema.StringAttribute{
-								Computed: true,
-							},
-							"version": schema.StringAttribute{
-								Computed: true,
-							},
-						},
-					},
-					"nextflow": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"build": schema.StringAttribute{
-								Computed: true,
-							},
-							"timestamp": schema.StringAttribute{
-								Computed: true,
-							},
-							"version": schema.StringAttribute{
-								Computed: true,
-							},
-						},
 					},
 					"operation_id": schema.StringAttribute{
 						Computed: true,
@@ -353,121 +341,77 @@ func (r *WorkflowsResource) Schema(ctx context.Context, req resource.SchemaReque
 						Computed: true,
 					},
 					"owner_id": schema.Int64Attribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Numeric identifier of the user who owns this workflow`,
 					},
 					"params": schema.MapAttribute{
 						Computed:    true,
 						ElementType: jsontypes.NormalizedType{},
+						Description: `Workflow parameters (can be null)`,
 					},
 					"profile": schema.StringAttribute{
-						Computed: true,
-					},
-					"project_dir": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Profile`,
 					},
 					"project_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Project name`,
 					},
 					"repository": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Repository`,
 					},
 					"requires_attention": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Requires attention flag`,
 					},
 					"resume": schema.BoolAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Resume flag`,
 					},
 					"revision": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Revision`,
 					},
 					"run_name": schema.StringAttribute{
-						Computed: true,
-					},
-					"script_file": schema.StringAttribute{
-						Computed: true,
-					},
-					"script_id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Run name`,
 					},
 					"script_name": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Script name`,
 					},
 					"session_id": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Session ID`,
 					},
 					"start": schema.StringAttribute{
 						Computed:    true,
-						Description: `Workflow start time (null if not started)`,
-					},
-					"stats": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"cached_count": schema.Int32Attribute{
-								Computed: true,
-							},
-							"cached_count_fmt": schema.StringAttribute{
-								Computed: true,
-							},
-							"cached_duration": schema.Int64Attribute{
-								Computed: true,
-							},
-							"cached_pct": schema.Float32Attribute{
-								Computed: true,
-							},
-							"compute_time_fmt": schema.StringAttribute{
-								Computed: true,
-							},
-							"failed_count": schema.Int32Attribute{
-								Computed: true,
-							},
-							"failed_count_fmt": schema.StringAttribute{
-								Computed: true,
-							},
-							"failed_duration": schema.Int64Attribute{
-								Computed: true,
-							},
-							"failed_pct": schema.Float32Attribute{
-								Computed: true,
-							},
-							"ignored_count": schema.Int32Attribute{
-								Computed: true,
-							},
-							"ignored_count_fmt": schema.StringAttribute{
-								Computed: true,
-							},
-							"ignored_pct": schema.Float32Attribute{
-								Computed: true,
-							},
-							"succeed_count": schema.Int32Attribute{
-								Computed: true,
-							},
-							"succeed_count_fmt": schema.StringAttribute{
-								Computed: true,
-							},
-							"succeed_duration": schema.Int64Attribute{
-								Computed: true,
-							},
-							"succeed_pct": schema.Float32Attribute{
-								Computed: true,
-							},
-						},
+						Description: `Timestamp when the workflow execution actually started`,
 					},
 					"status": schema.StringAttribute{
 						Computed: true,
 					},
 					"submit": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Timestamp when the workflow was submitted for execution`,
 					},
-					"success": schema.BoolAttribute{
+					"wave": schema.SingleNestedAttribute{
 						Computed: true,
-					},
-					"user_name": schema.StringAttribute{
-						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Computed: true,
+							},
+						},
 					},
 					"work_dir": schema.StringAttribute{
-						Computed: true,
+						Computed:    true,
+						Description: `Work directory`,
 					},
 				},
+				MarkdownDescription: `Represents a workflow execution record.` + "\n" +
+					`Contains execution status, metadata, and results from pipeline` + "\n" +
+					`runs including logs and performance metrics.`,
 			},
 			"workflow_id": schema.StringAttribute{
 				Computed:    true,

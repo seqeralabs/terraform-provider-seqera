@@ -3,10 +3,11 @@
 package shared
 
 type DataStudioWorkspaceSettingsResponse struct {
-	OrgID               *int64  `json:"orgId,omitempty"`
-	WspID               *int64  `json:"wspId,omitempty"`
-	LifespanHours       *int    `json:"lifespanHours,omitempty"`
-	ContainerRepository *string `json:"containerRepository,omitempty"`
+	OrgID                  *int64  `json:"orgId,omitempty"`
+	WspID                  *int64  `json:"wspId,omitempty"`
+	LifespanHours          *int    `json:"lifespanHours,omitempty"`
+	ContainerRepository    *string `json:"containerRepository,omitempty"`
+	PrivateStudioByDefault *bool   `json:"privateStudioByDefault,omitempty"`
 }
 
 func (d *DataStudioWorkspaceSettingsResponse) GetOrgID() *int64 {
@@ -35,4 +36,11 @@ func (d *DataStudioWorkspaceSettingsResponse) GetContainerRepository() *string {
 		return nil
 	}
 	return d.ContainerRepository
+}
+
+func (d *DataStudioWorkspaceSettingsResponse) GetPrivateStudioByDefault() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.PrivateStudioByDefault
 }

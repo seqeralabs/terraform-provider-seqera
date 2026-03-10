@@ -15,7 +15,7 @@ type Ga4ghServiceInfoResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// OK
-	ServiceInfo *shared.ServiceInfo
+	WesServiceInfo *shared.WesServiceInfo
 	// Bad request
 	WesErrorResponse *shared.WesErrorResponse
 }
@@ -41,11 +41,11 @@ func (g *Ga4ghServiceInfoResponse) GetRawResponse() *http.Response {
 	return g.RawResponse
 }
 
-func (g *Ga4ghServiceInfoResponse) GetServiceInfo() *shared.ServiceInfo {
+func (g *Ga4ghServiceInfoResponse) GetWesServiceInfo() *shared.WesServiceInfo {
 	if g == nil {
 		return nil
 	}
-	return g.ServiceInfo
+	return g.WesServiceInfo
 }
 
 func (g *Ga4ghServiceInfoResponse) GetWesErrorResponse() *shared.WesErrorResponse {
