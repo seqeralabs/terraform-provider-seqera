@@ -235,8 +235,12 @@ Must have permissions for S3, CloudWatch, etc.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `compute_queue` (String) Name of the AWS Batch compute queue. Requires replacement if changed.
-- `dragen_instance_type` (String) Requires replacement if changed.
-- `dragen_queue` (String) Requires replacement if changed.
+- `dragen_instance_type` (String) EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
+Only applicable when DRAGEN is enabled.
+Requires replacement if changed.
+- `dragen_queue` (String) Name of the AWS Batch queue for DRAGEN jobs.
+Only applicable when DRAGEN is enabled.
+Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
 and augmentation capabilities for Nextflow workflows.
@@ -250,14 +254,18 @@ Must have permissions for ECR and CloudWatch Logs.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch_configuration--forge))
-- `fusion_snapshots` (Boolean) Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots (beta). Allows automatic job restoration after
+AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `head_queue` (String) Name of the head job queue. Requires replacement if changed.
-- `log_group` (String) Requires replacement if changed.
+- `log_group` (String) CloudWatch Log group name for pipeline execution logs.
+If specified, logs are sent to this existing log group instead of the default.
+Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
@@ -269,7 +277,9 @@ Requires replacement if changed.
 Examples: us-east-1, eu-west-1, ap-southeast-2
 Not Null; Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
-- `volumes` (List of String) Requires replacement if changed.
+- `volumes` (List of String) List of volume mount specifications for compute instances.
+Format follows Docker volume mount syntax.
+Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_batch_configuration--environment"></a>
@@ -301,8 +311,12 @@ Optional:
 - SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
 Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
 must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.
-- `allow_buckets` (List of String) Requires replacement if changed.
-- `arm64_enabled` (Boolean) Requires replacement if changed.
+- `allow_buckets` (List of String) List of additional S3 bucket ARNs or names that compute jobs are allowed to access.
+The work directory bucket is automatically included.
+Requires replacement if changed.
+- `arm64_enabled` (Boolean) Enable ARM64 (Graviton) CPU architecture for compute instances.
+When enabled, Graviton-based EC2 instances will be selected for cost savings.
+Requires replacement if changed.
 - `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
 for that instance type before instances are launched. For example, if your maximum percentage is 20%,
 then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
@@ -331,18 +345,34 @@ Important: Deleting a workspace with active compute environments will bypass thi
 and require manual removal of AWS resources. We recommend deleting compute environments
 before deleting workspaces.
 Requires replacement if changed.
-- `dragen_ami_id` (String) Requires replacement if changed.
-- `dragen_enabled` (Boolean) Requires replacement if changed.
-- `dragen_instance_type` (String) Requires replacement if changed.
-- `ebs_auto_scale` (Boolean) Enable automatic EBS volume expansion.
-When enabled, EBS volumes automatically expand as needed.
+- `dragen_ami_id` (String) Custom AMI ID for DRAGEN-enabled instances.
+Only applicable when dragen_enabled is true.
 Requires replacement if changed.
-- `ebs_block_size` (Number) Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.
-- `ebs_boot_size` (Number) Requires replacement if changed.
+- `dragen_enabled` (Boolean) Enable Illumina DRAGEN support for the compute environment.
+When enabled, DRAGEN-specific instance types and AMIs will be used.
+Requires replacement if changed.
+- `dragen_instance_type` (String) EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
+Only applicable when dragen_enabled is true.
+Requires replacement if changed.
+- `ebs_auto_scale` (Boolean, Deprecated) Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
+are dynamically attached and mounted (typically at /scratch) as disk space runs low.
+This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size
+to configure a larger root volume instead.
+Requires replacement if changed.
+- `ebs_block_size` (Number, Deprecated) Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins
+to run out of free space. Only applies when ebs_auto_scale is enabled.
+This is NOT the root/boot volume size — use ebs_boot_size for that.
+This feature is deprecated and is not compatible with Fusion v2.
+Requires replacement if changed.
+- `ebs_boot_size` (Number) Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
+Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
 Requires replacement if changed.
-- `ecs_config` (String) Requires replacement if changed.
+- `ecs_config` (String) Custom ECS agent configuration parameters appended to the ECS config file
+on compute instances. Use for advanced ECS tuning.
+Requires replacement if changed.
 - `efs_create` (Boolean) Automatically create an EFS file system. Requires replacement if changed.
 - `efs_id` (String) EFS file system ID to mount.
 Format: fs- followed by hexadecimal characters.
@@ -359,7 +389,9 @@ Requires replacement if changed.
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable instance types will be selected.
 Requires replacement if changed.
-- `image_id` (String) Requires replacement if changed.
+- `image_id` (String) Custom Amazon Machine Image (AMI) ID for compute instances.
+If not specified, AWS Batch selects the default ECS-optimized AMI.
+Requires replacement if changed.
 - `instance_types` (List of String) List of EC2 instance types to use.
 Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
 Default: ["optimal"] - AWS Batch selects appropriate instances
@@ -393,10 +425,18 @@ Requires replacement if changed.
 
 Optional:
 
-- `allow_buckets` (List of String) Requires replacement if changed.
-- `arm64_enabled` (Boolean) Requires replacement if changed.
-- `ebs_boot_size` (Number) Requires replacement if changed.
-- `ec2_key_pair` (String) Requires replacement if changed.
+- `allow_buckets` (List of String) List of additional S3 bucket names that compute jobs are allowed to access.
+The work directory bucket is automatically included.
+Requires replacement if changed.
+- `arm64_enabled` (Boolean) Enable ARM64 (Graviton) CPU architecture for compute instances.
+When enabled, Graviton-based EC2 instances will be selected for cost savings.
+Requires replacement if changed.
+- `ebs_boot_size` (Number) Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
+Requires replacement if changed.
+- `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
+Key pair must exist in the specified region.
+Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
 and augmentation capabilities for Nextflow workflows.
@@ -405,17 +445,31 @@ When enable_wave is true, enable_fusion must be explicitly set to either true or
 Note: If Fusion2 is enabled, Wave must also be enabled.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud_configuration--environment))
-- `gpu_enabled` (Boolean) Requires replacement if changed.
-- `image_id` (String) Requires replacement if changed.
-- `instance_profile_arn` (String) Requires replacement if changed.
-- `instance_type` (String) Requires replacement if changed.
-- `log_group` (String) Requires replacement if changed.
+- `gpu_enabled` (Boolean) Enable GPU support for compute instances.
+When enabled, GPU-capable instance types will be selected.
+Requires replacement if changed.
+- `image_id` (String) Custom Amazon Machine Image (AMI) ID for compute instances.
+If not specified, the default ECS-optimized AMI is used.
+Requires replacement if changed.
+- `instance_profile_arn` (String) IAM instance profile ARN for compute instances.
+Format: arn:aws:iam::account-id:instance-profile/profile-name
+Requires replacement if changed.
+- `instance_type` (String) EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge). Requires replacement if changed.
+- `log_group` (String) CloudWatch Log group name for pipeline execution logs.
+If specified, logs are sent to this existing log group instead of the default.
+Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `region` (String) Not Null; Requires replacement if changed.
-- `security_groups` (List of String) Requires replacement if changed.
-- `subnet_id` (String) Requires replacement if changed.
+- `region` (String) AWS region where the compute environment will be created.
+Examples: us-east-1, eu-west-1, ap-southeast-2
+Not Null; Requires replacement if changed.
+- `security_groups` (List of String) List of security group IDs to attach to compute instances.
+Security groups must allow necessary network access.
+Requires replacement if changed.
+- `subnet_id` (String) Subnet ID where compute instances will be launched.
+Must be in the same VPC and region as the compute environment.
+Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--aws_cloud_configuration--environment"></a>
@@ -549,11 +603,17 @@ Optional:
 
 Optional:
 
-- `boot_disk_size_gb` (Number) Requires replacement if changed.
-- `compute_jobs_instance_template` (String) Requires replacement if changed.
-- `copy_image` (String) Requires replacement if changed.
-- `cpu_platform` (String) Requires replacement if changed.
-- `debug_mode` (Number) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Size of the boot (persistent) disk in GB allocated per task and head job VM. Requires replacement if changed.
+- `compute_jobs_instance_template` (String) Google Cloud instance template name or self-link for compute job VMs.
+Overrides other VM configuration settings for compute jobs.
+Requires replacement if changed.
+- `copy_image` (String) Container image used for file staging (copying data to/from Cloud Storage). Requires replacement if changed.
+- `cpu_platform` (String) Minimum CPU platform for compute instances (e.g., "Intel Cascade Lake").
+See Google Cloud documentation for available CPU platforms per region.
+Requires replacement if changed.
+- `debug_mode` (Number) Debug mode level for the compute environment.
+Set to a non-zero value to enable additional debug logging.
+Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
 and augmentation capabilities for Nextflow workflows.
@@ -562,25 +622,43 @@ When enable_wave is true, enable_fusion must be explicitly set to either true or
 Note: If Fusion2 is enabled, Wave must also be enabled.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch_service_configuration--environment))
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_instance_template` (String) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
-- `labels` (Map of String) Requires replacement if changed.
-- `location` (String) Not Null; Requires replacement if changed.
-- `machine_type` (String) Requires replacement if changed.
-- `network` (String) Requires replacement if changed.
+- `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
+- `head_job_instance_template` (String) Google Cloud instance template name or self-link for the Nextflow head job VM.
+Overrides other VM configuration settings for the head job.
+Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB. Requires replacement if changed.
+- `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
+for cost tracking and organization.
+Requires replacement if changed.
+- `location` (String) Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1). Not Null; Requires replacement if changed.
+- `machine_type` (String) Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
+Supports patterns like "c2-*" to allow any machine in a family.
+Requires replacement if changed.
+- `network` (String) Google Cloud VPC network name or self-link for compute instances. Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nfs_mount` (String) Requires replacement if changed.
-- `nfs_target` (String) Requires replacement if changed.
+- `nfs_mount` (String) Local mount path for the NFS file system on compute instances. Requires replacement if changed.
+- `nfs_target` (String) NFS server hostname or IP address for shared file system access.
+Format: hostname:/export/path
+Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `project_id` (String) Requires replacement if changed.
-- `service_account` (String) Requires replacement if changed.
-- `spot` (Boolean) Requires replacement if changed.
-- `ssh_daemon` (Boolean) Requires replacement if changed.
-- `ssh_image` (String) Requires replacement if changed.
-- `subnetwork` (String) Requires replacement if changed.
-- `use_private_address` (Boolean) Requires replacement if changed.
+- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
+- `service_account` (String) Google Cloud service account email for compute instances.
+If not specified, the default compute service account is used.
+Requires replacement if changed.
+- `spot` (Boolean) Use Spot (preemptible) VMs for reduced cost. Spot VMs may be reclaimed by
+Google Cloud at any time, so pipelines must be able to handle interruptions.
+Requires replacement if changed.
+- `ssh_daemon` (Boolean) Enable SSH daemon on compute instances for debugging access. Requires replacement if changed.
+- `ssh_image` (String) Custom container image for the SSH daemon sidecar.
+Only applicable when ssh_daemon is enabled.
+Requires replacement if changed.
+- `subnetwork` (String) Google Cloud VPC subnetwork name or self-link for compute instances.
+Must be in the same region as the compute environment location.
+Requires replacement if changed.
+- `use_private_address` (Boolean) Restrict compute instances to private IP addresses only (no public internet access).
+Instances must have access to Google APIs via Private Google Access or a NAT gateway.
+Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_batch_service_configuration--environment"></a>
@@ -648,7 +726,7 @@ Default: false; Requires replacement if changed.
 Optional:
 
 - `cluster_name` (String) The GKE cluster name. Not Null; Requires replacement if changed.
-- `compute_service_account` (String) Requires replacement if changed.
+- `compute_service_account` (String) Kubernetes service account for compute/task pods (default: default account in the namespace). Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
 and augmentation capabilities for Nextflow workflows.
@@ -657,21 +735,27 @@ When enable_wave is true, enable_fusion must be explicitly set to either true or
 Note: If Fusion2 is enabled, Wave must also be enabled.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_gke_cluster_configuration--environment))
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
-- `head_pod_spec` (String) Requires replacement if changed.
-- `head_service_account` (String) Requires replacement if changed.
-- `namespace` (String) Requires replacement if changed.
+- `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head/launcher pod. Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory allocation for the Nextflow head/launcher pod in MB. Requires replacement if changed.
+- `head_pod_spec` (String) Custom pod specification (YAML) for the Nextflow head/launcher pod.
+Use for nodeSelector, affinity, tolerations, etc.
+Requires replacement if changed.
+- `head_service_account` (String) Kubernetes service account for the Nextflow head/launcher pod (default: tower-launcher-sa).
+Must have access to the storage bucket when using Fusion v2.
+Requires replacement if changed.
+- `namespace` (String) Kubernetes namespace for running Nextflow workloads (default: tower-nf). Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
 - `pod_cleanup` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
 - `region` (String) The GKE cluster region - or - zone. Not Null; Requires replacement if changed.
-- `server` (String) Requires replacement if changed.
-- `service_pod_spec` (String) Requires replacement if changed.
-- `ssl_cert` (String) Requires replacement if changed.
-- `storage_claim_name` (String) Requires replacement if changed.
-- `storage_mount_path` (String) Requires replacement if changed.
+- `server` (String) GKE cluster API server endpoint URL. Requires replacement if changed.
+- `service_pod_spec` (String) Custom pod specification (YAML) for the compute environment service pod. Requires replacement if changed.
+- `ssl_cert` (String) SSL certificate for authenticating with the GKE cluster API server. Requires replacement if changed.
+- `storage_claim_name` (String) Persistent Volume Claim name for the pipeline scratch filesystem (default: tower-scratch).
+Not required when using Fusion v2.
+Requires replacement if changed.
+- `storage_mount_path` (String) Mount path for the persistent volume claim on the pod filesystem (default: /scratch). Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_gke_cluster_configuration--environment"></a>
@@ -697,27 +781,39 @@ Default: false; Requires replacement if changed.
 
 Optional:
 
-- `boot_disk_size_gb` (Number) Requires replacement if changed.
-- `copy_image` (String) Requires replacement if changed.
-- `debug_mode` (Number) Requires replacement if changed.
+- `boot_disk_size_gb` (Number) Size of the boot disk in GB for compute VMs. Requires replacement if changed.
+- `copy_image` (String) Container image used for file staging (copying data to/from Cloud Storage). Requires replacement if changed.
+- `debug_mode` (Number) Debug mode level. Set to a non-zero value to enable additional debug logging. Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_life_sciences_configuration_retired--environment))
-- `head_job_cpus` (Number) Requires replacement if changed.
-- `head_job_memory_mb` (Number) Requires replacement if changed.
-- `labels` (Map of String) Requires replacement if changed.
-- `location` (String) Requires replacement if changed.
+- `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
+- `head_job_memory_mb` (Number) Memory allocation for the Nextflow head job in MB. Requires replacement if changed.
+- `labels` (Map of String) Key-value map of Google Cloud resource labels applied to compute resources
+for cost tracking and organization.
+Requires replacement if changed.
+- `location` (String) Google Cloud location for the Life Sciences API endpoint. Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nfs_mount` (String) Requires replacement if changed.
-- `nfs_target` (String) Requires replacement if changed.
+- `nfs_mount` (String) Local mount path for the NFS file system on compute instances. Requires replacement if changed.
+- `nfs_target` (String) NFS server hostname or IP address for shared file system access.
+Format: hostname:/export/path
+Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
-- `preemptible` (Boolean) Requires replacement if changed.
-- `project_id` (String) Requires replacement if changed.
-- `region` (String) Requires replacement if changed.
-- `ssh_daemon` (Boolean) Requires replacement if changed.
-- `ssh_image` (String) Requires replacement if changed.
-- `use_private_address` (Boolean) Requires replacement if changed.
+- `preemptible` (Boolean) Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed
+at any time and last at most 24 hours.
+Requires replacement if changed.
+- `project_id` (String) Google Cloud project ID where compute resources will be created. Requires replacement if changed.
+- `region` (String) Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1). Requires replacement if changed.
+- `ssh_daemon` (Boolean) Enable SSH daemon on compute instances for debugging access. Requires replacement if changed.
+- `ssh_image` (String) Custom container image for the SSH daemon sidecar.
+Only applicable when ssh_daemon is enabled.
+Requires replacement if changed.
+- `use_private_address` (Boolean) Restrict compute instances to private IP addresses only (no public internet access).
+Instances must have access to Google APIs via Private Google Access or a NAT gateway.
+Requires replacement if changed.
 - `work_dir` (String) Working directory path for workflow execution. Not Null; Requires replacement if changed.
-- `zones` (List of String) Requires replacement if changed.
+- `zones` (List of String) List of Google Cloud zones where compute instances can be created.
+Zones must be within the specified region.
+Requires replacement if changed.
 
 <a id="nestedatt--compute_env--config--google_life_sciences_configuration_retired--environment"></a>
 ### Nested Schema for `compute_env.config.google_life_sciences_configuration_retired.environment`

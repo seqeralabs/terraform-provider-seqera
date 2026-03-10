@@ -14,23 +14,38 @@ type AwsBatchConfig struct {
 	// Bash script to run after workflow execution completes.
 	// Use for cleanup, archiving results, sending notifications, etc.
 	//
-	PostRunScript  *string             `json:"postRunScript,omitempty"`
-	Environment    []ConfigEnvVariable `json:"environment,omitempty"`
-	NextflowConfig *string             `json:"nextflowConfig,omitempty"`
+	PostRunScript *string `json:"postRunScript,omitempty"`
+	// Array of environment variables for the compute environment.
+	// Each variable can target the head node, compute nodes, or both.
+	//
+	Environment []ConfigEnvVariable `json:"environment,omitempty"`
+	// Nextflow configuration settings that override repository defaults.
+	// Applied globally to all pipelines launched in this compute environment.
+	//
+	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// property to select the compute config platform
 	Discriminator *string `json:"discriminator,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LustreID *string  `json:"lustreId,omitempty"`
-	Volumes  []string `json:"volumes,omitempty"`
+	LustreID *string `json:"lustreId,omitempty"`
+	// List of volume mount specifications for compute instances.
+	// Format follows Docker volume mount syntax.
+	//
+	Volumes []string `json:"volumes,omitempty"`
 	// AWS region where the Batch compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
 	Region string `json:"region"`
 	// Name of the AWS Batch compute queue
-	ComputeQueue       *string `json:"computeQueue,omitempty"`
-	DragenQueue        *string `json:"dragenQueue,omitempty"`
+	ComputeQueue *string `json:"computeQueue,omitempty"`
+	// Name of the AWS Batch queue for DRAGEN jobs.
+	// Only applicable when DRAGEN is enabled.
+	//
+	DragenQueue *string `json:"dragenQueue,omitempty"`
+	// EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
+	// Only applicable when DRAGEN is enabled.
+	//
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
 	// IAM role ARN for compute jobs. Jobs assume this role during execution.
 	// Must have permissions for S3, CloudWatch, etc.
@@ -66,11 +81,17 @@ type AwsBatchConfig struct {
 	// Enable NVMe instance storage for high-performance I/O.
 	// When enabled, NVMe storage volumes are automatically mounted and configured.
 	//
-	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup           *string          `json:"logGroup,omitempty"`
-	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
-	Forge              *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
+	NvmeStorageEnabled *bool `json:"nvnmeStorageEnabled,omitempty"`
+	// CloudWatch Log group name for pipeline execution logs.
+	// If specified, logs are sent to this existing log group instead of the default.
+	//
+	LogGroup *string `json:"logGroup,omitempty"`
+	// Enable Fusion snapshots (beta). Allows automatic job restoration after
+	// AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+	//
+	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
+	Forge           *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (a *AwsBatchConfig) GetWorkDir() *string {

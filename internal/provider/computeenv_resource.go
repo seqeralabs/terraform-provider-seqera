@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/boolvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -604,7 +605,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).` + "\n" +
+											`Only applicable when DRAGEN is enabled.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"dragen_queue": schema.StringAttribute{
 										Computed: true,
@@ -612,7 +615,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Name of the AWS Batch queue for DRAGEN jobs.` + "\n" +
+											`Only applicable when DRAGEN is enabled.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"enable_fusion": schema.BoolAttribute{
 										Computed: true,
@@ -744,7 +749,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													listplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												ElementType: types.StringType,
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `List of additional S3 bucket ARNs or names that compute jobs are allowed to access.` + "\n" +
+													`The work directory bucket is automatically included.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"arm64_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -752,7 +759,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Enable ARM64 (Graviton) CPU architecture for compute instances.` + "\n" +
+													`When enabled, Graviton-based EC2 instances will be selected for cost savings.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"bid_percentage": schema.Int32Attribute{
 												Computed: true,
@@ -805,7 +814,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Custom AMI ID for DRAGEN-enabled instances.` + "\n" +
+													`Only applicable when dragen_enabled is true.` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.AlsoRequires(path.Expressions{
+														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+													}...),
+												},
 											},
 											"dragen_enabled": schema.BoolAttribute{
 												Computed: true,
@@ -813,7 +830,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Enable Illumina DRAGEN support for the compute environment.` + "\n" +
+													`When enabled, DRAGEN-specific instance types and AMIs will be used.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"dragen_instance_type": schema.StringAttribute{
 												Computed: true,
@@ -821,7 +840,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).` + "\n" +
+													`Only applicable when dragen_enabled is true.` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.String{
+													stringvalidator.AlsoRequires(path.Expressions{
+														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+														path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+													}...),
+												},
 											},
 											"ebs_auto_scale": schema.BoolAttribute{
 												Computed: true,
@@ -829,8 +856,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
-													`When enabled, EBS volumes automatically expand as needed.` + "\n" +
+												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+												MarkdownDescription: `Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes` + "\n" +
+													`are dynamically attached and mounted (typically at /scratch) as disk space runs low.` + "\n" +
+													`This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size` + "\n" +
+													`to configure a larger root volume instead.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"ebs_block_size": schema.Int32Attribute{
@@ -839,7 +869,18 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.`,
+												DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+												MarkdownDescription: `Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins` + "\n" +
+													`to run out of free space. Only applies when ebs_auto_scale is enabled.` + "\n" +
+													`This is NOT the root/boot volume size — use ebs_boot_size for that.` + "\n" +
+													`This feature is deprecated and is not compatible with Fusion v2.` + "\n" +
+													`Requires replacement if changed.`,
+												Validators: []validator.Int32{
+													int32validator.AlsoRequires(path.Expressions{
+														path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
+														path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
+													}...),
+												},
 											},
 											"ebs_boot_size": schema.Int32Attribute{
 												Computed: true,
@@ -847,7 +888,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.Int32{
 													int32planmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.` + "\n" +
+													`When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"ec2_key_pair": schema.StringAttribute{
 												Computed: true,
@@ -865,7 +908,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Custom ECS agent configuration parameters appended to the ECS config file` + "\n" +
+													`on compute instances. Use for advanced ECS tuning.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"efs_create": schema.BoolAttribute{
 												Computed: true,
@@ -874,6 +919,12 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
 												Description: `Automatically create an EFS file system. Requires replacement if changed.`,
+												Validators: []validator.Bool{
+													boolvalidator.ConflictsWith(path.Expressions{
+														path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
+														path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
+													}...),
+												},
 											},
 											"efs_id": schema.StringAttribute{
 												Computed: true,
@@ -945,7 +996,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.String{
 													stringplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												Description: `Requires replacement if changed.`,
+												MarkdownDescription: `Custom Amazon Machine Image (AMI) ID for compute instances.` + "\n" +
+													`If not specified, AWS Batch selects the default ECS-optimized AMI.` + "\n" +
+													`Requires replacement if changed.`,
 											},
 											"instance_types": schema.ListAttribute{
 												Computed: true,
@@ -1043,7 +1096,15 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable Fusion snapshots (beta). Allows automatic job restoration after` + "\n" +
+											`AWS Spot instance reclamation. Requires Fusion v2 to be enabled.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											boolvalidator.AlsoRequires(path.Expressions{
+												path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
+												path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
+											}...),
+										},
 									},
 									"head_job_cpus": schema.Int32Attribute{
 										Computed: true,
@@ -1085,7 +1146,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `CloudWatch Log group name for pipeline execution logs.` + "\n" +
+											`If specified, logs are sent to this existing log group instead of the default.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"lustre_id": schema.StringAttribute{
 										Computed: true,
@@ -1159,7 +1222,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `List of volume mount specifications for compute instances.` + "\n" +
+											`Format follows Docker volume mount syntax.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -1208,7 +1273,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `List of additional S3 bucket names that compute jobs are allowed to access.` + "\n" +
+											`The work directory bucket is automatically included.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"arm64_enabled": schema.BoolAttribute{
 										Computed: true,
@@ -1216,7 +1283,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable ARM64 (Graviton) CPU architecture for compute instances.` + "\n" +
+											`When enabled, Graviton-based EC2 instances will be selected for cost savings.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"ebs_boot_size": schema.Int32Attribute{
 										Computed: true,
@@ -1224,7 +1293,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.` + "\n" +
+											`When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"ec2_key_pair": schema.StringAttribute{
 										Computed: true,
@@ -1232,7 +1303,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `EC2 key pair name for SSH access to compute instances.` + "\n" +
+											`Key pair must exist in the specified region.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"enable_fusion": schema.BoolAttribute{
 										Computed: true,
@@ -1323,7 +1396,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Enable GPU support for compute instances.` + "\n" +
+											`When enabled, GPU-capable instance types will be selected.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"image_id": schema.StringAttribute{
 										Computed: true,
@@ -1331,7 +1406,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Custom Amazon Machine Image (AMI) ID for compute instances.` + "\n" +
+											`If not specified, the default ECS-optimized AMI is used.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"instance_profile_arn": schema.StringAttribute{
 										Computed: true,
@@ -1339,7 +1416,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `IAM instance profile ARN for compute instances.` + "\n" +
+											`Format: arn:aws:iam::account-id:instance-profile/profile-name` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"instance_type": schema.StringAttribute{
 										Computed: true,
@@ -1347,7 +1426,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge). Requires replacement if changed.`,
 									},
 									"log_group": schema.StringAttribute{
 										Computed: true,
@@ -1355,7 +1434,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `CloudWatch Log group name for pipeline execution logs.` + "\n" +
+											`If specified, logs are sent to this existing log group instead of the default.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -1387,7 +1468,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										MarkdownDescription: `AWS region where the compute environment will be created.` + "\n" +
+											`Examples: us-east-1, eu-west-1, ap-southeast-2` + "\n" +
+											`Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -1399,7 +1482,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `List of security group IDs to attach to compute instances.` + "\n" +
+											`Security groups must allow necessary network access.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"subnet_id": schema.StringAttribute{
 										Computed: true,
@@ -1407,7 +1492,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Subnet ID where compute instances will be launched.` + "\n" +
+											`Must be in the same VPC and region as the compute environment.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -1981,7 +2068,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Size of the boot (persistent) disk in GB allocated per task and head job VM. Requires replacement if changed.`,
 									},
 									"compute_jobs_instance_template": schema.StringAttribute{
 										Computed: true,
@@ -1989,7 +2076,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud instance template name or self-link for compute job VMs.` + "\n" +
+											`Overrides other VM configuration settings for compute jobs.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"copy_image": schema.StringAttribute{
 										Computed: true,
@@ -1997,7 +2086,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Container image used for file staging (copying data to/from Cloud Storage). Requires replacement if changed.`,
 									},
 									"cpu_platform": schema.StringAttribute{
 										Computed: true,
@@ -2005,7 +2094,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Minimum CPU platform for compute instances (e.g., "Intel Cascade Lake").` + "\n" +
+											`See Google Cloud documentation for available CPU platforms per region.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"debug_mode": schema.Int32Attribute{
 										Computed: true,
@@ -2013,7 +2104,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Debug mode level for the compute environment.` + "\n" +
+											`Set to a non-zero value to enable additional debug logging.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"enable_fusion": schema.BoolAttribute{
 										Computed: true,
@@ -2104,7 +2197,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.`,
 									},
 									"head_job_instance_template": schema.StringAttribute{
 										Computed: true,
@@ -2112,7 +2205,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud instance template name or self-link for the Nextflow head job VM.` + "\n" +
+											`Overrides other VM configuration settings for the head job.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"head_job_memory_mb": schema.Int32Attribute{
 										Computed: true,
@@ -2120,7 +2215,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Memory allocation for the Nextflow head job in MB. Requires replacement if changed.`,
 									},
 									"labels": schema.MapAttribute{
 										Computed: true,
@@ -2129,7 +2224,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
+											`for cost tracking and organization.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"location": schema.StringAttribute{
 										Computed: true,
@@ -2137,7 +2234,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Not Null; Requires replacement if changed.`,
+										Description: `Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1). Not Null; Requires replacement if changed.`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
@@ -2148,7 +2245,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).` + "\n" +
+											`Supports patterns like "c2-*" to allow any machine in a family.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"network": schema.StringAttribute{
 										Computed: true,
@@ -2156,7 +2255,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Google Cloud VPC network name or self-link for compute instances. Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -2172,7 +2271,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Local mount path for the NFS file system on compute instances. Requires replacement if changed.`,
 									},
 									"nfs_target": schema.StringAttribute{
 										Computed: true,
@@ -2180,7 +2279,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `NFS server hostname or IP address for shared file system access.` + "\n" +
+											`Format: hostname:/export/path` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2204,7 +2305,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
 									},
 									"service_account": schema.StringAttribute{
 										Computed: true,
@@ -2212,7 +2313,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud service account email for compute instances.` + "\n" +
+											`If not specified, the default compute service account is used.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"spot": schema.BoolAttribute{
 										Computed: true,
@@ -2220,7 +2323,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Use Spot (preemptible) VMs for reduced cost. Spot VMs may be reclaimed by` + "\n" +
+											`Google Cloud at any time, so pipelines must be able to handle interruptions.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"ssh_daemon": schema.BoolAttribute{
 										Computed: true,
@@ -2228,7 +2333,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Enable SSH daemon on compute instances for debugging access. Requires replacement if changed.`,
 									},
 									"ssh_image": schema.StringAttribute{
 										Computed: true,
@@ -2236,7 +2341,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Custom container image for the SSH daemon sidecar.` + "\n" +
+											`Only applicable when ssh_daemon is enabled.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"subnetwork": schema.StringAttribute{
 										Computed: true,
@@ -2244,7 +2351,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Google Cloud VPC subnetwork name or self-link for compute instances.` + "\n" +
+											`Must be in the same region as the compute environment location.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"use_private_address": schema.BoolAttribute{
 										Computed: true,
@@ -2252,7 +2361,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Restrict compute instances to private IP addresses only (no public internet access).` + "\n" +
+											`Instances must have access to Google APIs via Private Google Access or a NAT gateway.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -2531,7 +2642,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Kubernetes service account for compute/task pods (default: default account in the namespace). Requires replacement if changed.`,
 									},
 									"enable_fusion": schema.BoolAttribute{
 										Computed: true,
@@ -2622,7 +2733,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Number of CPUs allocated for the Nextflow head/launcher pod. Requires replacement if changed.`,
 									},
 									"head_job_memory_mb": schema.Int32Attribute{
 										Computed: true,
@@ -2630,7 +2741,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Memory allocation for the Nextflow head/launcher pod in MB. Requires replacement if changed.`,
 									},
 									"head_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -2638,7 +2749,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Custom pod specification (YAML) for the Nextflow head/launcher pod.` + "\n" +
+											`Use for nodeSelector, affinity, tolerations, etc.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"head_service_account": schema.StringAttribute{
 										Computed: true,
@@ -2646,7 +2759,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Kubernetes service account for the Nextflow head/launcher pod (default: tower-launcher-sa).` + "\n" +
+											`Must have access to the storage bucket when using Fusion v2.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"namespace": schema.StringAttribute{
 										Computed: true,
@@ -2654,7 +2769,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Kubernetes namespace for running Nextflow workloads (default: tower-nf). Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -2712,7 +2827,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `GKE cluster API server endpoint URL. Requires replacement if changed.`,
 									},
 									"service_pod_spec": schema.StringAttribute{
 										Computed: true,
@@ -2720,7 +2835,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Custom pod specification (YAML) for the compute environment service pod. Requires replacement if changed.`,
 									},
 									"ssl_cert": schema.StringAttribute{
 										Computed: true,
@@ -2728,7 +2843,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `SSL certificate for authenticating with the GKE cluster API server. Requires replacement if changed.`,
 									},
 									"storage_claim_name": schema.StringAttribute{
 										Computed: true,
@@ -2736,7 +2851,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Persistent Volume Claim name for the pipeline scratch filesystem (default: tower-scratch).` + "\n" +
+											`Not required when using Fusion v2.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"storage_mount_path": schema.StringAttribute{
 										Computed: true,
@@ -2744,7 +2861,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Mount path for the persistent volume claim on the pod filesystem (default: /scratch). Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -2791,7 +2908,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Size of the boot disk in GB for compute VMs. Requires replacement if changed.`,
 									},
 									"copy_image": schema.StringAttribute{
 										Computed: true,
@@ -2799,7 +2916,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Container image used for file staging (copying data to/from Cloud Storage). Requires replacement if changed.`,
 									},
 									"debug_mode": schema.Int32Attribute{
 										Computed: true,
@@ -2807,7 +2924,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Debug mode level. Set to a non-zero value to enable additional debug logging. Requires replacement if changed.`,
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2874,7 +2991,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.`,
 									},
 									"head_job_memory_mb": schema.Int32Attribute{
 										Computed: true,
@@ -2882,7 +2999,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Int32{
 											int32planmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Memory allocation for the Nextflow head job in MB. Requires replacement if changed.`,
 									},
 									"labels": schema.MapAttribute{
 										Computed: true,
@@ -2891,7 +3008,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											mapplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Key-value map of Google Cloud resource labels applied to compute resources` + "\n" +
+											`for cost tracking and organization.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"location": schema.StringAttribute{
 										Computed: true,
@@ -2899,7 +3018,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Google Cloud location for the Life Sciences API endpoint. Requires replacement if changed.`,
 									},
 									"nextflow_config": schema.StringAttribute{
 										Computed: true,
@@ -2915,7 +3034,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Local mount path for the NFS file system on compute instances. Requires replacement if changed.`,
 									},
 									"nfs_target": schema.StringAttribute{
 										Computed: true,
@@ -2923,7 +3042,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `NFS server hostname or IP address for shared file system access.` + "\n" +
+											`Format: hostname:/export/path` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -2947,7 +3068,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed` + "\n" +
+											`at any time and last at most 24 hours.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"project_id": schema.StringAttribute{
 										Computed: true,
@@ -2955,7 +3078,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Google Cloud project ID where compute resources will be created. Requires replacement if changed.`,
 									},
 									"region": schema.StringAttribute{
 										Computed: true,
@@ -2963,7 +3086,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1). Requires replacement if changed.`,
 									},
 									"ssh_daemon": schema.BoolAttribute{
 										Computed: true,
@@ -2971,7 +3094,7 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										Description: `Enable SSH daemon on compute instances for debugging access. Requires replacement if changed.`,
 									},
 									"ssh_image": schema.StringAttribute{
 										Computed: true,
@@ -2979,7 +3102,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.String{
 											stringplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Custom container image for the SSH daemon sidecar.` + "\n" +
+											`Only applicable when ssh_daemon is enabled.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"use_private_address": schema.BoolAttribute{
 										Computed: true,
@@ -2987,7 +3112,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Restrict compute instances to private IP addresses only (no public internet access).` + "\n" +
+											`Instances must have access to Google APIs via Private Google Access or a NAT gateway.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 									"work_dir": schema.StringAttribute{
 										Computed: true,
@@ -3007,7 +3134,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											listplanmodifier.RequiresReplaceIfConfigured(),
 										},
 										ElementType: types.StringType,
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `List of Google Cloud zones where compute instances can be created.` + "\n" +
+											`Zones must be within the specified region.` + "\n" +
+											`Requires replacement if changed.`,
 									},
 								},
 								Description: `Requires replacement if changed.`,

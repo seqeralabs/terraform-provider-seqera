@@ -19,17 +19,20 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     forge = {
       alloc_strategy = "SPOT_CAPACITY_OPTIMIZED"
       allow_buckets = [
-        "..."
+        "s3://my-input-bucket",
+        "s3://my-output-bucket",
+        "s3://my-input-bucket",
+        "s3://my-output-bucket",
       ]
-      arm64_enabled        = true
+      arm64_enabled        = false
       bid_percentage       = 20
       dispose_on_deletion  = true
       dragen_ami_id        = "...my_dragen_ami_id..."
-      dragen_enabled       = true
+      dragen_enabled       = false
       dragen_instance_type = "...my_dragen_instance_type..."
-      ebs_auto_scale       = true
+      ebs_auto_scale       = false
       ebs_block_size       = 100
-      ebs_boot_size        = 3
+      ebs_boot_size        = 100
       ec2_key_pair         = "my-keypair"
       ecs_config           = "...my_ecs_config..."
       efs_create           = false
@@ -40,7 +43,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
       fsx_name             = "my-fsx-filesystem"
       fsx_size             = 1200
       gpu_enabled          = false
-      image_id             = "...my_image_id..."
+      image_id             = "ami-0123456789abcdef0"
       instance_types = [
         "m5.xlarge",
         "m5.2xlarge",
@@ -67,7 +70,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     head_job_memory_mb   = 8192
     head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
     head_queue           = "...my_head_queue..."
-    log_group            = "...my_log_group..."
+    log_group            = "/aws/batch/seqera"
     lustre_id            = "...my_lustre_id..."
     nextflow_config      = "...my_nextflow_config..."
     nvme_storage_enabled = true

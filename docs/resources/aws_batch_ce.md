@@ -39,17 +39,20 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
     forge = {
       alloc_strategy = "SPOT_CAPACITY_OPTIMIZED"
       allow_buckets = [
-        "..."
+        "s3://my-input-bucket",
+        "s3://my-output-bucket",
+        "s3://my-input-bucket",
+        "s3://my-output-bucket",
       ]
-      arm64_enabled        = true
+      arm64_enabled        = false
       bid_percentage       = 20
       dispose_on_deletion  = true
       dragen_ami_id        = "...my_dragen_ami_id..."
-      dragen_enabled       = true
+      dragen_enabled       = false
       dragen_instance_type = "...my_dragen_instance_type..."
-      ebs_auto_scale       = true
+      ebs_auto_scale       = false
       ebs_block_size       = 100
-      ebs_boot_size        = 8
+      ebs_boot_size        = 100
       ec2_key_pair         = "my-keypair"
       ecs_config           = "...my_ecs_config..."
       efs_create           = false
@@ -60,7 +63,7 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
       fsx_name             = "my-fsx-filesystem"
       fsx_size             = 1200
       gpu_enabled          = false
-      image_id             = "...my_image_id..."
+      image_id             = "ami-0123456789abcdef0"
       instance_types = [
         "m5.xlarge",
         "m5.2xlarge",
@@ -87,7 +90,7 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
     head_job_memory_mb   = 8192
     head_job_role        = "arn:aws:iam::123456789012:role/BatchHeadJobRole"
     head_queue           = "...my_head_queue..."
-    log_group            = "...my_log_group..."
+    log_group            = "/aws/batch/seqera"
     lustre_id            = "...my_lustre_id..."
     nextflow_config      = "...my_nextflow_config..."
     nvme_storage_enabled = true
@@ -158,8 +161,12 @@ Must have permissions for S3, CloudWatch, etc.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `compute_queue` (String) Name of the AWS Batch compute queue. Requires replacement if changed.
-- `dragen_instance_type` (String) Requires replacement if changed.
-- `dragen_queue` (String) Requires replacement if changed.
+- `dragen_instance_type` (String) EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
+Only applicable when DRAGEN is enabled.
+Requires replacement if changed.
+- `dragen_queue` (String) Name of the AWS Batch queue for DRAGEN jobs.
+Only applicable when DRAGEN is enabled.
+Requires replacement if changed.
 - `enable_fusion` (Boolean) Requires replacement if changed.
 - `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
 and augmentation capabilities for Nextflow workflows.
@@ -167,22 +174,30 @@ and augmentation capabilities for Nextflow workflows.
 When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 Note: If Fusion2 is enabled, Wave must also be enabled.
 Requires replacement if changed.
-- `environment` (Attributes List) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
+- `environment` (Attributes List) Array of environment variables for the compute environment.
+Each variable can target the head node, compute nodes, or both.
+Requires replacement if changed. (see [below for nested schema](#nestedatt--config--environment))
 - `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
 Must have permissions for ECR and CloudWatch Logs.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--config--forge))
-- `fusion_snapshots` (Boolean) Requires replacement if changed.
+- `fusion_snapshots` (Boolean) Enable Fusion snapshots (beta). Allows automatic job restoration after
+AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
 - `head_job_role` (String) IAM role ARN for the head job.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `head_queue` (String) Name of the head job queue. Requires replacement if changed.
-- `log_group` (String) Requires replacement if changed.
+- `log_group` (String) CloudWatch Log group name for pipeline execution logs.
+If specified, logs are sent to this existing log group instead of the default.
+Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
-- `nextflow_config` (String) Requires replacement if changed.
+- `nextflow_config` (String) Nextflow configuration settings that override repository defaults.
+Applied globally to all pipelines launched in this compute environment.
+Requires replacement if changed.
 - `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
 When enabled, NVMe storage volumes are automatically mounted and configured.
 Requires replacement if changed.
@@ -193,7 +208,9 @@ Requires replacement if changed.
 Use for environment setup, loading modules, downloading reference data, etc.
 Requires replacement if changed.
 - `storage_type` (String, Deprecated) Requires replacement if changed.
-- `volumes` (List of String) Requires replacement if changed.
+- `volumes` (List of String) List of volume mount specifications for compute instances.
+Format follows Docker volume mount syntax.
+Requires replacement if changed.
 
 <a id="nestedatt--config--environment"></a>
 ### Nested Schema for `config.environment`
@@ -224,8 +241,12 @@ Optional:
 - SPOT_PRICE_CAPACITY_OPTIMIZED: Optimizes for both price and capacity
 Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
 must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "SPOT_PRICE_CAPACITY_OPTIMIZED"]; Requires replacement if changed.
-- `allow_buckets` (List of String) Requires replacement if changed.
-- `arm64_enabled` (Boolean) Requires replacement if changed.
+- `allow_buckets` (List of String) List of additional S3 bucket ARNs or names that compute jobs are allowed to access.
+The work directory bucket is automatically included.
+Requires replacement if changed.
+- `arm64_enabled` (Boolean) Enable ARM64 (Graviton) CPU architecture for compute instances.
+When enabled, Graviton-based EC2 instances will be selected for cost savings.
+Requires replacement if changed.
 - `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
 for that instance type before instances are launched. For example, if your maximum percentage is 20%,
 then the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance.
@@ -254,18 +275,34 @@ Important: Deleting a workspace with active compute environments will bypass thi
 and require manual removal of AWS resources. We recommend deleting compute environments
 before deleting workspaces.
 Requires replacement if changed.
-- `dragen_ami_id` (String) Requires replacement if changed.
-- `dragen_enabled` (Boolean) Requires replacement if changed.
-- `dragen_instance_type` (String) Requires replacement if changed.
-- `ebs_auto_scale` (Boolean) Enable automatic EBS volume expansion.
-When enabled, EBS volumes automatically expand as needed.
+- `dragen_ami_id` (String) Custom AMI ID for DRAGEN-enabled instances.
+Only applicable when dragen_enabled is true.
 Requires replacement if changed.
-- `ebs_block_size` (Number) Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.
-- `ebs_boot_size` (Number) Requires replacement if changed.
+- `dragen_enabled` (Boolean) Enable Illumina DRAGEN support for the compute environment.
+When enabled, DRAGEN-specific instance types and AMIs will be used.
+Requires replacement if changed.
+- `dragen_instance_type` (String) EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
+Only applicable when dragen_enabled is true.
+Requires replacement if changed.
+- `ebs_auto_scale` (Boolean, Deprecated) Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
+are dynamically attached and mounted (typically at /scratch) as disk space runs low.
+This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size
+to configure a larger root volume instead.
+Requires replacement if changed.
+- `ebs_block_size` (Number, Deprecated) Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins
+to run out of free space. Only applies when ebs_auto_scale is enabled.
+This is NOT the root/boot volume size — use ebs_boot_size for that.
+This feature is deprecated and is not compatible with Fusion v2.
+Requires replacement if changed.
+- `ebs_boot_size` (Number) Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
+Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
 Requires replacement if changed.
-- `ecs_config` (String) Requires replacement if changed.
+- `ecs_config` (String) Custom ECS agent configuration parameters appended to the ECS config file
+on compute instances. Use for advanced ECS tuning.
+Requires replacement if changed.
 - `efs_create` (Boolean) Automatically create an EFS file system. Requires replacement if changed.
 - `efs_id` (String) EFS file system ID to mount.
 Format: fs- followed by hexadecimal characters.
@@ -282,7 +319,9 @@ Requires replacement if changed.
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
 When enabled, GPU-capable instance types will be selected.
 Requires replacement if changed.
-- `image_id` (String) Requires replacement if changed.
+- `image_id` (String) Custom Amazon Machine Image (AMI) ID for compute instances.
+If not specified, AWS Batch selects the default ECS-optimized AMI.
+Requires replacement if changed.
 - `instance_types` (List of String) List of EC2 instance types to use.
 Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
 Default: ["optimal"] - AWS Batch selects appropriate instances

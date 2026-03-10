@@ -20,23 +20,61 @@ type GoogleLifeSciencesConfigurationRetired struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator     *string           `json:"discriminator,omitempty"`
-	Region            *string           `json:"region,omitempty"`
-	Zones             []string          `json:"zones,omitempty"`
-	Location          *string           `json:"location,omitempty"`
-	Preemptible       *bool             `json:"preemptible,omitempty"`
-	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
-	ProjectID         *string           `json:"projectId,omitempty"`
-	SSHDaemon         *bool             `json:"sshDaemon,omitempty"`
-	SSHImage          *string           `json:"sshImage,omitempty"`
-	DebugMode         *int              `json:"debugMode,omitempty"`
-	CopyImage         *string           `json:"copyImage,omitempty"`
-	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
-	Labels            map[string]string `json:"labels,omitempty"`
-	HeadJobCpus       *int              `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb   *int              `json:"headJobMemoryMb,omitempty"`
-	NfsTarget         *string           `json:"nfsTarget,omitempty"`
-	NfsMount          *string           `json:"nfsMount,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1).
+	//
+	Region *string `json:"region,omitempty"`
+	// List of Google Cloud zones where compute instances can be created.
+	// Zones must be within the specified region.
+	//
+	Zones []string `json:"zones,omitempty"`
+	// Google Cloud location for the Life Sciences API endpoint.
+	//
+	Location *string `json:"location,omitempty"`
+	// Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed
+	// at any time and last at most 24 hours.
+	//
+	Preemptible *bool `json:"preemptible,omitempty"`
+	// Size of the boot disk in GB for compute VMs.
+	//
+	BootDiskSizeGb *int `json:"bootDiskSizeGb,omitempty"`
+	// Google Cloud project ID where compute resources will be created.
+	//
+	ProjectID *string `json:"projectId,omitempty"`
+	// Enable SSH daemon on compute instances for debugging access.
+	//
+	SSHDaemon *bool `json:"sshDaemon,omitempty"`
+	// Custom container image for the SSH daemon sidecar.
+	// Only applicable when ssh_daemon is enabled.
+	//
+	SSHImage *string `json:"sshImage,omitempty"`
+	// Debug mode level. Set to a non-zero value to enable additional debug logging.
+	//
+	DebugMode *int `json:"debugMode,omitempty"`
+	// Container image used for file staging (copying data to/from Cloud Storage).
+	//
+	CopyImage *string `json:"copyImage,omitempty"`
+	// Restrict compute instances to private IP addresses only (no public internet access).
+	// Instances must have access to Google APIs via Private Google Access or a NAT gateway.
+	//
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
+	// Key-value map of Google Cloud resource labels applied to compute resources
+	// for cost tracking and organization.
+	//
+	Labels map[string]string `json:"labels,omitempty"`
+	// Number of CPUs allocated for the Nextflow head job.
+	//
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the Nextflow head job in MB.
+	//
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
+	// NFS server hostname or IP address for shared file system access.
+	// Format: hostname:/export/path
+	//
+	NfsTarget *string `json:"nfsTarget,omitempty"`
+	// Local mount path for the NFS file system on compute instances.
+	//
+	NfsMount *string `json:"nfsMount,omitempty"`
 }
 
 func (g GoogleLifeSciencesConfigurationRetired) MarshalJSON() ([]byte, error) {
@@ -636,19 +674,44 @@ type GoogleGKEClusterConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator         *string           `json:"discriminator,omitempty"`
-	Server                *string           `json:"server,omitempty"`
-	SslCert               *string           `json:"sslCert,omitempty"`
-	Namespace             *string           `json:"namespace,omitempty"`
-	ComputeServiceAccount *string           `json:"computeServiceAccount,omitempty"`
-	HeadServiceAccount    *string           `json:"headServiceAccount,omitempty"`
-	StorageClaimName      *string           `json:"storageClaimName,omitempty"`
-	StorageMountPath      *string           `json:"storageMountPath,omitempty"`
-	PodCleanup            *PodCleanupPolicy `json:"podCleanup,omitempty"`
-	HeadPodSpec           *string           `json:"headPodSpec,omitempty"`
-	ServicePodSpec        *string           `json:"servicePodSpec,omitempty"`
-	HeadJobCpus           *int              `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb       *int              `json:"headJobMemoryMb,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// GKE cluster API server endpoint URL.
+	//
+	Server *string `json:"server,omitempty"`
+	// SSL certificate for authenticating with the GKE cluster API server.
+	//
+	SslCert *string `json:"sslCert,omitempty"`
+	// Kubernetes namespace for running Nextflow workloads (default: tower-nf).
+	//
+	Namespace *string `json:"namespace,omitempty"`
+	// Kubernetes service account for compute/task pods (default: default account in the namespace).
+	//
+	ComputeServiceAccount *string `json:"computeServiceAccount,omitempty"`
+	// Kubernetes service account for the Nextflow head/launcher pod (default: tower-launcher-sa).
+	// Must have access to the storage bucket when using Fusion v2.
+	//
+	HeadServiceAccount *string `json:"headServiceAccount,omitempty"`
+	// Persistent Volume Claim name for the pipeline scratch filesystem (default: tower-scratch).
+	// Not required when using Fusion v2.
+	//
+	StorageClaimName *string `json:"storageClaimName,omitempty"`
+	// Mount path for the persistent volume claim on the pod filesystem (default: /scratch).
+	//
+	StorageMountPath *string           `json:"storageMountPath,omitempty"`
+	PodCleanup       *PodCleanupPolicy `json:"podCleanup,omitempty"`
+	// Custom pod specification (YAML) for the Nextflow head/launcher pod.
+	// Use for nodeSelector, affinity, tolerations, etc.
+	//
+	HeadPodSpec *string `json:"headPodSpec,omitempty"`
+	// Custom pod specification (YAML) for the compute environment service pod.
+	//
+	ServicePodSpec *string `json:"servicePodSpec,omitempty"`
+	// Number of CPUs allocated for the Nextflow head/launcher pod.
+	//
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the Nextflow head/launcher pod in MB.
+	//
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
 	// The GKE cluster region - or - zone
 	Region string `json:"region"`
 	// The GKE cluster name
@@ -2011,35 +2074,89 @@ type GoogleBatchServiceConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator     *string           `json:"discriminator,omitempty"`
-	Location          string            `json:"location"`
-	Spot              *bool             `json:"spot,omitempty"`
-	BootDiskSizeGb    *int              `json:"bootDiskSizeGb,omitempty"`
-	CPUPlatform       *string           `json:"cpuPlatform,omitempty"`
-	MachineType       *string           `json:"machineType,omitempty"`
-	ProjectID         *string           `json:"projectId,omitempty"`
-	SSHDaemon         *bool             `json:"sshDaemon,omitempty"`
-	SSHImage          *string           `json:"sshImage,omitempty"`
-	DebugMode         *int              `json:"debugMode,omitempty"`
-	CopyImage         *string           `json:"copyImage,omitempty"`
-	UsePrivateAddress *bool             `json:"usePrivateAddress,omitempty"`
-	Labels            map[string]string `json:"labels,omitempty"`
-	HeadJobCpus       *int              `json:"headJobCpus,omitempty"`
-	HeadJobMemoryMb   *int              `json:"headJobMemoryMb,omitempty"`
-	NfsTarget         *string           `json:"nfsTarget,omitempty"`
-	NfsMount          *string           `json:"nfsMount,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1).
+	//
+	Location string `json:"location"`
+	// Use Spot (preemptible) VMs for reduced cost. Spot VMs may be reclaimed by
+	// Google Cloud at any time, so pipelines must be able to handle interruptions.
+	//
+	Spot *bool `json:"spot,omitempty"`
+	// Size of the boot (persistent) disk in GB allocated per task and head job VM.
+	//
+	BootDiskSizeGb *int `json:"bootDiskSizeGb,omitempty"`
+	// Minimum CPU platform for compute instances (e.g., "Intel Cascade Lake").
+	// See Google Cloud documentation for available CPU platforms per region.
+	//
+	CPUPlatform *string `json:"cpuPlatform,omitempty"`
+	// Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
+	// Supports patterns like "c2-*" to allow any machine in a family.
+	//
+	MachineType *string `json:"machineType,omitempty"`
+	// Google Cloud project ID where compute resources will be created.
+	//
+	ProjectID *string `json:"projectId,omitempty"`
+	// Enable SSH daemon on compute instances for debugging access.
+	//
+	SSHDaemon *bool `json:"sshDaemon,omitempty"`
+	// Custom container image for the SSH daemon sidecar.
+	// Only applicable when ssh_daemon is enabled.
+	//
+	SSHImage *string `json:"sshImage,omitempty"`
+	// Debug mode level for the compute environment.
+	// Set to a non-zero value to enable additional debug logging.
+	//
+	DebugMode *int `json:"debugMode,omitempty"`
+	// Container image used for file staging (copying data to/from Cloud Storage).
+	//
+	CopyImage *string `json:"copyImage,omitempty"`
+	// Restrict compute instances to private IP addresses only (no public internet access).
+	// Instances must have access to Google APIs via Private Google Access or a NAT gateway.
+	//
+	UsePrivateAddress *bool `json:"usePrivateAddress,omitempty"`
+	// Key-value map of Google Cloud resource labels applied to compute resources
+	// for cost tracking and organization.
+	//
+	Labels map[string]string `json:"labels,omitempty"`
+	// Number of CPUs allocated for the Nextflow head job.
+	//
+	HeadJobCpus *int `json:"headJobCpus,omitempty"`
+	// Memory allocation for the Nextflow head job in MB.
+	//
+	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
+	// NFS server hostname or IP address for shared file system access.
+	// Format: hostname:/export/path
+	//
+	NfsTarget *string `json:"nfsTarget,omitempty"`
+	// Local mount path for the NFS file system on compute instances.
+	//
+	NfsMount *string `json:"nfsMount,omitempty"`
 	// Enable Wave containers for this compute environment. Wave provides container provisioning
 	// and augmentation capabilities for Nextflow workflows.
 	//
 	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 	// Note: If Fusion2 is enabled, Wave must also be enabled.
 	//
-	EnableWave                  *bool   `json:"waveEnabled,omitempty"`
-	EnableFusion                *bool   `json:"fusion2Enabled,omitempty"`
-	ServiceAccount              *string `json:"serviceAccount,omitempty"`
-	Network                     *string `json:"network,omitempty"`
-	Subnetwork                  *string `json:"subnetwork,omitempty"`
-	HeadJobInstanceTemplate     *string `json:"headJobInstanceTemplate,omitempty"`
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Google Cloud service account email for compute instances.
+	// If not specified, the default compute service account is used.
+	//
+	ServiceAccount *string `json:"serviceAccount,omitempty"`
+	// Google Cloud VPC network name or self-link for compute instances.
+	//
+	Network *string `json:"network,omitempty"`
+	// Google Cloud VPC subnetwork name or self-link for compute instances.
+	// Must be in the same region as the compute environment location.
+	//
+	Subnetwork *string `json:"subnetwork,omitempty"`
+	// Google Cloud instance template name or self-link for the Nextflow head job VM.
+	// Overrides other VM configuration settings for the head job.
+	//
+	HeadJobInstanceTemplate *string `json:"headJobInstanceTemplate,omitempty"`
+	// Google Cloud instance template name or self-link for compute job VMs.
+	// Overrides other VM configuration settings for compute jobs.
+	//
 	ComputeJobsInstanceTemplate *string `json:"computeJobsInstanceTemplate,omitempty"`
 }
 
@@ -2362,28 +2479,63 @@ type AWSCloudConfiguration struct {
 	// Nextflow configuration settings and parameters
 	NextflowConfig *string `json:"nextflowConfig,omitempty"`
 	// Read-only property identifying the compute platform type
-	Discriminator *string  `json:"discriminator,omitempty"`
-	AllowBuckets  []string `json:"allowBuckets,omitempty"`
-	Region        string   `json:"region"`
-	InstanceType  *string  `json:"instanceType,omitempty"`
-	ImageID       *string  `json:"imageId,omitempty"`
+	Discriminator *string `json:"discriminator,omitempty"`
+	// List of additional S3 bucket names that compute jobs are allowed to access.
+	// The work directory bucket is automatically included.
+	//
+	AllowBuckets []string `json:"allowBuckets,omitempty"`
+	// AWS region where the compute environment will be created.
+	// Examples: us-east-1, eu-west-1, ap-southeast-2
+	//
+	Region string `json:"region"`
+	// EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge).
+	//
+	InstanceType *string `json:"instanceType,omitempty"`
+	// Custom Amazon Machine Image (AMI) ID for compute instances.
+	// If not specified, the default ECS-optimized AMI is used.
+	//
+	ImageID *string `json:"imageId,omitempty"`
 	// Enable Wave containers for this compute environment. Wave provides container provisioning
 	// and augmentation capabilities for Nextflow workflows.
 	//
 	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
 	// Note: If Fusion2 is enabled, Wave must also be enabled.
 	//
-	EnableWave         *bool            `json:"waveEnabled,omitempty"`
-	EnableFusion       *bool            `json:"fusion2Enabled,omitempty"`
-	LogGroup           *string          `json:"logGroup,omitempty"`
-	Arm64Enabled       *bool            `json:"arm64Enabled,omitempty"`
-	GpuEnabled         *bool            `json:"gpuEnabled,omitempty"`
-	Ec2KeyPair         *string          `json:"ec2KeyPair,omitempty"`
-	EbsBootSize        *int             `json:"ebsBootSize,omitempty"`
-	InstanceProfileArn *string          `json:"instanceProfileArn,omitempty"`
-	SubnetID           *string          `json:"subnetId,omitempty"`
-	SecurityGroups     []string         `json:"securityGroups,omitempty"`
-	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
+	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// CloudWatch Log group name for pipeline execution logs.
+	// If specified, logs are sent to this existing log group instead of the default.
+	//
+	LogGroup *string `json:"logGroup,omitempty"`
+	// Enable ARM64 (Graviton) CPU architecture for compute instances.
+	// When enabled, Graviton-based EC2 instances will be selected for cost savings.
+	//
+	Arm64Enabled *bool `json:"arm64Enabled,omitempty"`
+	// Enable GPU support for compute instances.
+	// When enabled, GPU-capable instance types will be selected.
+	//
+	GpuEnabled *bool `json:"gpuEnabled,omitempty"`
+	// EC2 key pair name for SSH access to compute instances.
+	// Key pair must exist in the specified region.
+	//
+	Ec2KeyPair *string `json:"ec2KeyPair,omitempty"`
+	// Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+	// When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
+	//
+	EbsBootSize *int `json:"ebsBootSize,omitempty"`
+	// IAM instance profile ARN for compute instances.
+	// Format: arn:aws:iam::account-id:instance-profile/profile-name
+	//
+	InstanceProfileArn *string `json:"instanceProfileArn,omitempty"`
+	// Subnet ID where compute instances will be launched.
+	// Must be in the same VPC and region as the compute environment.
+	//
+	SubnetID *string `json:"subnetId,omitempty"`
+	// List of security group IDs to attach to compute instances.
+	// Security groups must allow necessary network access.
+	//
+	SecurityGroups  []string         `json:"securityGroups,omitempty"`
+	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (a AWSCloudConfiguration) MarshalJSON() ([]byte, error) {
@@ -2560,15 +2712,24 @@ type AWSBatchConfiguration struct {
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	StorageType *string `json:"storageType,omitempty"`
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	LustreID *string  `json:"lustreId,omitempty"`
-	Volumes  []string `json:"volumes,omitempty"`
+	LustreID *string `json:"lustreId,omitempty"`
+	// List of volume mount specifications for compute instances.
+	// Format follows Docker volume mount syntax.
+	//
+	Volumes []string `json:"volumes,omitempty"`
 	// AWS region where the Batch compute environment will be created.
 	// Examples: us-east-1, eu-west-1, ap-southeast-2
 	//
 	Region string `json:"region"`
 	// Name of the AWS Batch compute queue
-	ComputeQueue       *string `json:"computeQueue,omitempty"`
-	DragenQueue        *string `json:"dragenQueue,omitempty"`
+	ComputeQueue *string `json:"computeQueue,omitempty"`
+	// Name of the AWS Batch queue for DRAGEN jobs.
+	// Only applicable when DRAGEN is enabled.
+	//
+	DragenQueue *string `json:"dragenQueue,omitempty"`
+	// EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
+	// Only applicable when DRAGEN is enabled.
+	//
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
 	// IAM role ARN for compute jobs. Jobs assume this role during execution.
 	// Must have permissions for S3, CloudWatch, etc.
@@ -2604,11 +2765,17 @@ type AWSBatchConfiguration struct {
 	// Enable NVMe instance storage for high-performance I/O.
 	// When enabled, NVMe storage volumes are automatically mounted and configured.
 	//
-	NvmeStorageEnabled *bool            `json:"nvnmeStorageEnabled,omitempty"`
-	LogGroup           *string          `json:"logGroup,omitempty"`
-	FusionSnapshots    *bool            `json:"fusionSnapshots,omitempty"`
-	Forge              *ForgeConfig     `json:"forge,omitempty"`
-	ForgedResources    []map[string]any `json:"forgedResources,omitempty"`
+	NvmeStorageEnabled *bool `json:"nvnmeStorageEnabled,omitempty"`
+	// CloudWatch Log group name for pipeline execution logs.
+	// If specified, logs are sent to this existing log group instead of the default.
+	//
+	LogGroup *string `json:"logGroup,omitempty"`
+	// Enable Fusion snapshots (beta). Allows automatic job restoration after
+	// AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+	//
+	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
+	Forge           *ForgeConfig     `json:"forge,omitempty"`
+	ForgedResources []map[string]any `json:"forgedResources,omitempty"`
 }
 
 func (a AWSBatchConfiguration) MarshalJSON() ([]byte, error) {

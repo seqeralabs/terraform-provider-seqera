@@ -457,6 +457,466 @@ actions:
     update:
       x-speakeasy-name-override: enable_fusion
 
+  # ============================================================================
+  # AWS CLOUD CONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.AwsCloudConfig.properties.ebsBootSize
+    update:
+      description: |
+        Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+        When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
+      example: 100
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.region
+    update:
+      description: |
+        AWS region where the compute environment will be created.
+        Examples: us-east-1, eu-west-1, ap-southeast-2
+      example: "us-east-1"
+      x-speakeasy-param-force-new: true
+      x-speakeasy-param-optional: false
+
+  - target: $.components.schemas.AwsCloudConfig.properties.allowBuckets
+    update:
+      description: |
+        List of additional S3 bucket names that compute jobs are allowed to access.
+        The work directory bucket is automatically included.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.instanceType
+    update:
+      description: |
+        EC2 instance type for the compute environment (e.g., m5.xlarge, c5.2xlarge).
+      example: "m5.xlarge"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.imageId
+    update:
+      description: |
+        Custom Amazon Machine Image (AMI) ID for compute instances.
+        If not specified, the default ECS-optimized AMI is used.
+      example: "ami-0123456789abcdef0"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.logGroup
+    update:
+      description: |
+        CloudWatch Log group name for pipeline execution logs.
+        If specified, logs are sent to this existing log group instead of the default.
+      example: "/aws/batch/seqera"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.arm64Enabled
+    update:
+      description: |
+        Enable ARM64 (Graviton) CPU architecture for compute instances.
+        When enabled, Graviton-based EC2 instances will be selected for cost savings.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.gpuEnabled
+    update:
+      description: |
+        Enable GPU support for compute instances.
+        When enabled, GPU-capable instance types will be selected.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.ec2KeyPair
+    update:
+      description: |
+        EC2 key pair name for SSH access to compute instances.
+        Key pair must exist in the specified region.
+      example: "my-keypair"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.instanceProfileArn
+    update:
+      description: |
+        IAM instance profile ARN for compute instances.
+        Format: arn:aws:iam::account-id:instance-profile/profile-name
+      example: "arn:aws:iam::123456789012:instance-profile/BatchInstanceProfile"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.subnetId
+    update:
+      description: |
+        Subnet ID where compute instances will be launched.
+        Must be in the same VPC and region as the compute environment.
+      example: "subnet-12345678"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsCloudConfig.properties.securityGroups
+    update:
+      description: |
+        List of security group IDs to attach to compute instances.
+        Security groups must allow necessary network access.
+      example: ["sg-12345678"]
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # GOOGLE BATCH CONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.location
+    update:
+      description: |
+        Google Cloud region where pipelines will execute (e.g., us-central1, europe-west1).
+      example: "us-central1"
+      x-speakeasy-param-force-new: true
+      x-speakeasy-param-optional: false
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.spot
+    update:
+      description: |
+        Use Spot (preemptible) VMs for reduced cost. Spot VMs may be reclaimed by
+        Google Cloud at any time, so pipelines must be able to handle interruptions.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.bootDiskSizeGb
+    update:
+      description: |
+        Size of the boot (persistent) disk in GB allocated per task and head job VM.
+      example: 50
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.cpuPlatform
+    update:
+      description: |
+        Minimum CPU platform for compute instances (e.g., "Intel Cascade Lake").
+        See Google Cloud documentation for available CPU platforms per region.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.machineType
+    update:
+      description: |
+        Google Cloud machine type for compute instances (e.g., n1-standard-4, c2-standard-8).
+        Supports patterns like "c2-*" to allow any machine in a family.
+      example: "n1-standard-4"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.projectId
+    update:
+      description: |
+        Google Cloud project ID where compute resources will be created.
+      example: "my-gcp-project"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.sshDaemon
+    update:
+      description: |
+        Enable SSH daemon on compute instances for debugging access.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.sshImage
+    update:
+      description: |
+        Custom container image for the SSH daemon sidecar.
+        Only applicable when ssh_daemon is enabled.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.debugMode
+    update:
+      description: |
+        Debug mode level for the compute environment.
+        Set to a non-zero value to enable additional debug logging.
+      example: 0
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.copyImage
+    update:
+      description: |
+        Container image used for file staging (copying data to/from Cloud Storage).
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.usePrivateAddress
+    update:
+      description: |
+        Restrict compute instances to private IP addresses only (no public internet access).
+        Instances must have access to Google APIs via Private Google Access or a NAT gateway.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.labels
+    update:
+      description: |
+        Key-value map of Google Cloud resource labels applied to compute resources
+        for cost tracking and organization.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.headJobCpus
+    update:
+      description: |
+        Number of CPUs allocated for the Nextflow head job.
+      example: 4
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.headJobMemoryMb
+    update:
+      description: |
+        Memory allocation for the Nextflow head job in MB.
+      example: 8192
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.nfsTarget
+    update:
+      description: |
+        NFS server hostname or IP address for shared file system access.
+        Format: hostname:/export/path
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.nfsMount
+    update:
+      description: |
+        Local mount path for the NFS file system on compute instances.
+      example: "/mnt/nfs"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.serviceAccount
+    update:
+      description: |
+        Google Cloud service account email for compute instances.
+        If not specified, the default compute service account is used.
+      example: "my-sa@my-project.iam.gserviceaccount.com"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.network
+    update:
+      description: |
+        Google Cloud VPC network name or self-link for compute instances.
+      example: "default"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.subnetwork
+    update:
+      description: |
+        Google Cloud VPC subnetwork name or self-link for compute instances.
+        Must be in the same region as the compute environment location.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.headJobInstanceTemplate
+    update:
+      description: |
+        Google Cloud instance template name or self-link for the Nextflow head job VM.
+        Overrides other VM configuration settings for the head job.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleBatchConfig.properties.computeJobsInstanceTemplate
+    update:
+      description: |
+        Google Cloud instance template name or self-link for compute job VMs.
+        Overrides other VM configuration settings for compute jobs.
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # GOOGLE LIFE SCIENCES CONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.region
+    update:
+      description: |
+        Google Cloud region for the Life Sciences API (e.g., us-central1, europe-west1).
+      example: "us-central1"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.zones
+    update:
+      description: |
+        List of Google Cloud zones where compute instances can be created.
+        Zones must be within the specified region.
+      example: ["us-central1-a", "us-central1-b"]
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.location
+    update:
+      description: |
+        Google Cloud location for the Life Sciences API endpoint.
+      example: "us-central1"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.preemptible
+    update:
+      description: |
+        Use preemptible VMs for reduced cost. Preemptible VMs may be reclaimed
+        at any time and last at most 24 hours.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.bootDiskSizeGb
+    update:
+      description: |
+        Size of the boot disk in GB for compute VMs.
+      example: 50
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.projectId
+    update:
+      description: |
+        Google Cloud project ID where compute resources will be created.
+      example: "my-gcp-project"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.sshDaemon
+    update:
+      description: |
+        Enable SSH daemon on compute instances for debugging access.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.sshImage
+    update:
+      description: |
+        Custom container image for the SSH daemon sidecar.
+        Only applicable when ssh_daemon is enabled.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.debugMode
+    update:
+      description: |
+        Debug mode level. Set to a non-zero value to enable additional debug logging.
+      example: 0
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.copyImage
+    update:
+      description: |
+        Container image used for file staging (copying data to/from Cloud Storage).
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.usePrivateAddress
+    update:
+      description: |
+        Restrict compute instances to private IP addresses only (no public internet access).
+        Instances must have access to Google APIs via Private Google Access or a NAT gateway.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.labels
+    update:
+      description: |
+        Key-value map of Google Cloud resource labels applied to compute resources
+        for cost tracking and organization.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.headJobCpus
+    update:
+      description: |
+        Number of CPUs allocated for the Nextflow head job.
+      example: 4
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.headJobMemoryMb
+    update:
+      description: |
+        Memory allocation for the Nextflow head job in MB.
+      example: 8192
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.nfsTarget
+    update:
+      description: |
+        NFS server hostname or IP address for shared file system access.
+        Format: hostname:/export/path
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GoogleLifeSciencesConfig.properties.nfsMount
+    update:
+      description: |
+        Local mount path for the NFS file system on compute instances.
+      example: "/mnt/nfs"
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # GKE COMPUTE CONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.GkeComputeConfig.properties.server
+    update:
+      description: |
+        GKE cluster API server endpoint URL.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.sslCert
+    update:
+      description: |
+        SSL certificate for authenticating with the GKE cluster API server.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.namespace
+    update:
+      description: |
+        Kubernetes namespace for running Nextflow workloads (default: tower-nf).
+      example: "tower-nf"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.computeServiceAccount
+    update:
+      description: |
+        Kubernetes service account for compute/task pods (default: default account in the namespace).
+      example: "default"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.headServiceAccount
+    update:
+      description: |
+        Kubernetes service account for the Nextflow head/launcher pod (default: tower-launcher-sa).
+        Must have access to the storage bucket when using Fusion v2.
+      example: "tower-launcher-sa"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.storageClaimName
+    update:
+      description: |
+        Persistent Volume Claim name for the pipeline scratch filesystem (default: tower-scratch).
+        Not required when using Fusion v2.
+      example: "tower-scratch"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.storageMountPath
+    update:
+      description: |
+        Mount path for the persistent volume claim on the pod filesystem (default: /scratch).
+      example: "/scratch"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.podCleanup
+    update:
+      description: |
+        Policy for cleaning up terminated pods. Controls when Kubernetes pods are
+        deleted after completion.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.headPodSpec
+    update:
+      description: |
+        Custom pod specification (YAML) for the Nextflow head/launcher pod.
+        Use for nodeSelector, affinity, tolerations, etc.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.servicePodSpec
+    update:
+      description: |
+        Custom pod specification (YAML) for the compute environment service pod.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.headJobCpus
+    update:
+      description: |
+        Number of CPUs allocated for the Nextflow head/launcher pod.
+      example: 4
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.GkeComputeConfig.properties.headJobMemoryMb
+    update:
+      description: |
+        Memory allocation for the Nextflow head/launcher pod in MB.
+      example: 8192
+      x-speakeasy-param-force-new: true
+
   # Schema description
   - target: $.components.schemas.ComputeConfig
     update:

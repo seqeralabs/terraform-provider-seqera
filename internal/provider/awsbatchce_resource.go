@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-framework-validators/boolvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -130,7 +131,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).` + "\n" +
+							`Only applicable when DRAGEN is enabled.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"dragen_queue": schema.StringAttribute{
 						Computed: true,
@@ -139,7 +142,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `Name of the AWS Batch queue for DRAGEN jobs.` + "\n" +
+							`Only applicable when DRAGEN is enabled.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"enable_fusion": schema.BoolAttribute{
 						Computed: true,
@@ -230,7 +235,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 						},
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `Array of environment variables for the compute environment.` + "\n" +
+							`Each variable can target the head node, compute nodes, or both.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"execution_role": schema.StringAttribute{
 						Computed: true,
@@ -283,7 +290,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 								},
 								ElementType: types.StringType,
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `List of additional S3 bucket ARNs or names that compute jobs are allowed to access.` + "\n" +
+									`The work directory bucket is automatically included.` + "\n" +
+									`Requires replacement if changed.`,
 							},
 							"arm64_enabled": schema.BoolAttribute{
 								Computed: true,
@@ -292,7 +301,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									boolplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Enable ARM64 (Graviton) CPU architecture for compute instances.` + "\n" +
+									`When enabled, Graviton-based EC2 instances will be selected for cost savings.` + "\n" +
+									`Requires replacement if changed.`,
 							},
 							"bid_percentage": schema.Int32Attribute{
 								Computed: true,
@@ -348,7 +359,15 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									stringplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Custom AMI ID for DRAGEN-enabled instances.` + "\n" +
+									`Only applicable when dragen_enabled is true.` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.String{
+									stringvalidator.AlsoRequires(path.Expressions{
+										path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+										path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+									}...),
+								},
 							},
 							"dragen_enabled": schema.BoolAttribute{
 								Computed: true,
@@ -357,7 +376,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									boolplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Enable Illumina DRAGEN support for the compute environment.` + "\n" +
+									`When enabled, DRAGEN-specific instance types and AMIs will be used.` + "\n" +
+									`Requires replacement if changed.`,
 							},
 							"dragen_instance_type": schema.StringAttribute{
 								Computed: true,
@@ -366,7 +387,15 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									stringplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).` + "\n" +
+									`Only applicable when dragen_enabled is true.` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.String{
+									stringvalidator.AlsoRequires(path.Expressions{
+										path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+										path.MatchRelative().AtParent().AtParent().AtName("dragen_enabled"),
+									}...),
+								},
 							},
 							"ebs_auto_scale": schema.BoolAttribute{
 								Computed: true,
@@ -375,8 +404,11 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									boolplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
-								MarkdownDescription: `Enable automatic EBS volume expansion.` + "\n" +
-									`When enabled, EBS volumes automatically expand as needed.` + "\n" +
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								MarkdownDescription: `Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes` + "\n" +
+									`are dynamically attached and mounted (typically at /scratch) as disk space runs low.` + "\n" +
+									`This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size` + "\n" +
+									`to configure a larger root volume instead.` + "\n" +
 									`Requires replacement if changed.`,
 							},
 							"ebs_block_size": schema.Int32Attribute{
@@ -386,7 +418,18 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									int32planmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 								},
-								Description: `Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB). Requires replacement if changed.`,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								MarkdownDescription: `Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins` + "\n" +
+									`to run out of free space. Only applies when ebs_auto_scale is enabled.` + "\n" +
+									`This is NOT the root/boot volume size — use ebs_boot_size for that.` + "\n" +
+									`This feature is deprecated and is not compatible with Fusion v2.` + "\n" +
+									`Requires replacement if changed.`,
+								Validators: []validator.Int32{
+									int32validator.AlsoRequires(path.Expressions{
+										path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
+										path.MatchRelative().AtParent().AtParent().AtName("ebs_auto_scale"),
+									}...),
+								},
 							},
 							"ebs_boot_size": schema.Int32Attribute{
 								Computed: true,
@@ -395,7 +438,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									int32planmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.` + "\n" +
+									`When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.` + "\n" +
+									`Requires replacement if changed.`,
 							},
 							"ec2_key_pair": schema.StringAttribute{
 								Computed: true,
@@ -415,7 +460,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									stringplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Custom ECS agent configuration parameters appended to the ECS config file` + "\n" +
+									`on compute instances. Use for advanced ECS tuning.` + "\n" +
+									`Requires replacement if changed.`,
 							},
 							"efs_create": schema.BoolAttribute{
 								Computed: true,
@@ -425,6 +472,12 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 								},
 								Description: `Automatically create an EFS file system. Requires replacement if changed.`,
+								Validators: []validator.Bool{
+									boolvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
+										path.MatchRelative().AtParent().AtParent().AtName("efs_id"),
+									}...),
+								},
 							},
 							"efs_id": schema.StringAttribute{
 								Computed: true,
@@ -504,7 +557,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 									stringplanmodifier.RequiresReplaceIfConfigured(),
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
-								Description: `Requires replacement if changed.`,
+								MarkdownDescription: `Custom Amazon Machine Image (AMI) ID for compute instances.` + "\n" +
+									`If not specified, AWS Batch selects the default ECS-optimized AMI.` + "\n" +
+									`Requires replacement if changed.`,
 							},
 							"instance_types": schema.ListAttribute{
 								Computed: true,
@@ -610,7 +665,15 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							boolplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `Enable Fusion snapshots (beta). Allows automatic job restoration after` + "\n" +
+							`AWS Spot instance reclamation. Requires Fusion v2 to be enabled.` + "\n" +
+							`Requires replacement if changed.`,
+						Validators: []validator.Bool{
+							boolvalidator.AlsoRequires(path.Expressions{
+								path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
+								path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
+							}...),
+						},
 					},
 					"head_job_cpus": schema.Int32Attribute{
 						Computed: true,
@@ -657,7 +720,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `CloudWatch Log group name for pipeline execution logs.` + "\n" +
+							`If specified, logs are sent to this existing log group instead of the default.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"lustre_id": schema.StringAttribute{
 						Computed: true,
@@ -676,7 +741,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							stringplanmodifier.RequiresReplaceIfConfigured(),
 							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `Nextflow configuration settings that override repository defaults.` + "\n" +
+							`Applied globally to all pipelines launched in this compute environment.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"nvme_storage_enabled": schema.BoolAttribute{
 						Computed: true,
@@ -739,7 +806,9 @@ func (r *AWSBatchCEResource) Schema(ctx context.Context, req resource.SchemaRequ
 							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 						},
 						ElementType: types.StringType,
-						Description: `Requires replacement if changed.`,
+						MarkdownDescription: `List of volume mount specifications for compute instances.` + "\n" +
+							`Format follows Docker volume mount syntax.` + "\n" +
+							`Requires replacement if changed.`,
 					},
 					"work_dir": schema.StringAttribute{
 						Required: true,

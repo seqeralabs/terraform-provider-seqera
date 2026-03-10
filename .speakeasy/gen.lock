@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 0432053270fe022267e4fe422f9fe093
+  docChecksum: 702dcadda12abeeb71760846122af4b7
   docVersion: 1.116.0
   speakeasyVersion: 1.750.0
   generationVersion: 2.856.1
@@ -58,7 +58,7 @@ trackedFiles:
     pristine_git_object: d6079949f8cb6ae9974f13f89e3bf256b956b2e8
   examples/resources/seqera_aws_batch_ce/resource.tf:
     id: 5bc3e344486a
-    last_write_checksum: sha1:fd0afbaed877c61f0b8b19a1adc4bba451dbe6f8
+    last_write_checksum: sha1:4e095c61a063bf2ad3941db4adeff5fdce6c8ed8
     pristine_git_object: f9071e1a40fb13bae2e71fb7698a35f2a59f79b9
   examples/resources/seqera_aws_compute_env/import-by-string-id.tf:
     id: b90750c578e2
@@ -70,7 +70,7 @@ trackedFiles:
     pristine_git_object: 83601f7153a116de5979ef74e2e4128dd16c3e8a
   examples/resources/seqera_aws_compute_env/resource.tf:
     id: b3072b89fa01
-    last_write_checksum: sha1:25a4be1d5d39e5642f468e4cbfc790976feaa673
+    last_write_checksum: sha1:16cfc28778dad3a36a00d9789176e32b4dda2bcf
     pristine_git_object: f6cd02d2c1b98058a0e1babcbad048a6bc0d27ba
   examples/resources/seqera_aws_credential/import-by-string-id.tf:
     id: ad3bcd233d82
@@ -414,7 +414,7 @@ trackedFiles:
     pristine_git_object: b987eb32b2d86ebe52fb9875e9e4b6eb9f30af6e
   internal/provider/awsbatchce_resource.go:
     id: aeeab49ad69b
-    last_write_checksum: sha1:4b2732ed31fdc2b66b3ba772a0cca5dc2a9f440a
+    last_write_checksum: sha1:0ff1b566f3e7dac9cc9f9bdc5bb0972ed2b5c2df
     pristine_git_object: 136a1cfb3f23c1c396175224b78c790e8d4b9808
   internal/provider/awsbatchce_resource_sdk.go:
     id: acddb134f02d
@@ -422,7 +422,7 @@ trackedFiles:
     pristine_git_object: 91db6c7b9d563b0b0fa5e57c712ed1952c1d54d2
   internal/provider/awscomputeenv_resource.go:
     id: 788844f2d22e
-    last_write_checksum: sha1:ce5f70f31ff1fe85436cbf9b16fa3c7df2542dc4
+    last_write_checksum: sha1:416189500666211471e73555f95df67e1c6322d2
     pristine_git_object: 251b9b34df068086a2b6c118fd0cdc7384d6fb53
   internal/provider/awscomputeenv_resource_sdk.go:
     id: 9a23d2e0f03e
@@ -462,7 +462,7 @@ trackedFiles:
     pristine_git_object: 0c1b43d5db49b023cf3c7408c198a4d66c795d8a
   internal/provider/computeenv_resource.go:
     id: f4162f219efd
-    last_write_checksum: sha1:1de2ba28adebddd83fd241e483e4dad543ef8100
+    last_write_checksum: sha1:47d840d240264f3c0d7f7c9e0f2896cd9be38148
     pristine_git_object: d5550a0a3bc980d281c55531d71458e7e4968b48
   internal/provider/computeenv_resource_sdk.go:
     id: 1e29eea44332
@@ -2230,7 +2230,7 @@ trackedFiles:
     pristine_git_object: 18e30f40d1932fcb8ee01325e79f17ee3d77c716
   internal/sdk/models/shared/awsbatchconfig.go:
     id: aa4705d45858
-    last_write_checksum: sha1:90ac6d4439ef64e89fd5cc356ee407e0d2f97ff1
+    last_write_checksum: sha1:784c92afe412bba5ba91a1ce0cf14f4f488e26fb
     pristine_git_object: a9a08e5a58a2f9a9df44522dc4695f3fac3230cc
   internal/sdk/models/shared/awsbatchplatformmetainfo.go:
     id: 86cf3ff126ca
@@ -2284,7 +2284,7 @@ trackedFiles:
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
     id: 21b317c8a966
-    last_write_checksum: sha1:3878d508a185c2c0a0c4b794be7b2a53f5518afd
+    last_write_checksum: sha1:52638bfb6fe9c2600d4c38667629c379402f8470
     pristine_git_object: 42560fcd114408129519a9f9092b24fab369ef65
   internal/sdk/models/shared/computeenvcomputeconfiginput.go:
     last_write_checksum: sha1:72516fd23f1954158adc09d5a5e39a3c60f6d8de
@@ -2926,7 +2926,7 @@ trackedFiles:
     pristine_git_object: fe9ce6f2d92dc2374fd266280d28c7068cddcf24
   internal/sdk/models/shared/forgeconfig.go:
     id: f0d74f37365a
-    last_write_checksum: sha1:8f21ac1cb470f0aa8d04f2db9cda25082327a920
+    last_write_checksum: sha1:55d30f5b5f23a54b4445eff5c9293b5a6f07ca3c
     pristine_git_object: 8640f7531d89ba50ae044b7c3ee95155583a20bd
   internal/sdk/models/shared/fsxfilesystem.go:
     id: f00388b21ac4
@@ -4093,7 +4093,7 @@ examples:
         query:
           workspaceId: 814681
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "logGroup": "/aws/batch/seqera", "fusionSnapshots": false, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "imageId": "ami-0123456789abcdef0", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "dragenEnabled": false, "ebsBootSize": 100, "fargateHeadEnabled": false, "arm64Enabled": false}}}}
       responses:
         "200":
           application/json: {}
@@ -4108,7 +4108,7 @@ examples:
           workspaceId: 757884
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "logGroup": "/aws/batch/seqera", "fusionSnapshots": false, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "imageId": "ami-0123456789abcdef0", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "dragenEnabled": false, "ebsBootSize": 100, "fargateHeadEnabled": false, "arm64Enabled": false}}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAWSComputeEnv:
@@ -4125,7 +4125,7 @@ examples:
         query:
           workspaceId: 890311
       requestBody:
-        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+        application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "logGroup": "/aws/batch/seqera", "fusionSnapshots": false, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "imageId": "ami-0123456789abcdef0", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "dragenEnabled": false, "ebsBootSize": 100, "fargateHeadEnabled": false, "arm64Enabled": false}}}}
       responses:
         "200":
           application/json: {}
@@ -4140,7 +4140,7 @@ examples:
           workspaceId: 651683
       responses:
         "200":
-          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "ebsAutoScale": true, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "ebsBlockSize": 100, "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "fargateHeadEnabled": false}}}}
+          application/json: {"computeEnv": {"credentialsId": "<id>", "name": "<value>", "platform": "aws-batch", "config": {"workDir": "s3://my-nextflow-bucket/work", "region": "us-east-1", "computeJobRole": "arn:aws:iam::123456789012:role/BatchJobRole", "executionRole": "arn:aws:iam::123456789012:role/BatchExecutionRole", "headJobRole": "arn:aws:iam::123456789012:role/BatchHeadJobRole", "cliPath": "/home/ec2-user/miniconda/bin/aws", "headJobCpus": 4, "headJobMemoryMb": 8192, "nvnmeStorageEnabled": true, "logGroup": "/aws/batch/seqera", "fusionSnapshots": false, "forge": {"type": "SPOT", "minCpus": 0, "maxCpus": 256, "gpuEnabled": false, "instanceTypes": ["m5.xlarge", "m5.2xlarge", "m5.xlarge", "m5.2xlarge"], "allocStrategy": "SPOT_CAPACITY_OPTIMIZED", "imageId": "ami-0123456789abcdef0", "vpcId": "vpc-1234567890abcdef0", "subnets": ["subnet-12345", "subnet-67890", "subnet-12345", "subnet-67890"], "securityGroups": ["sg-12345678", "sg-12345678"], "fsxMount": "/fsx", "fsxName": "my-fsx-filesystem", "fsxSize": 1200, "disposeOnDeletion": true, "ec2KeyPair": "my-keypair", "allowBuckets": ["s3://my-input-bucket", "s3://my-output-bucket", "s3://my-input-bucket", "s3://my-output-bucket"], "bidPercentage": 20, "efsCreate": false, "efsId": "fs-1234567890abcdef0", "efsMount": "/mnt/efs", "dragenEnabled": false, "ebsBootSize": 100, "fargateHeadEnabled": false, "arm64Enabled": false}}}}
         "400":
           application/json: {"message": "<value>"}
   DeleteAWSBatchCE:

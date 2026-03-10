@@ -95,9 +95,13 @@ type ForgeConfig struct {
 	// When enabled, GPU-capable instance types will be selected.
 	//
 	GpuEnabled *bool `json:"gpuEnabled,omitempty"`
-	// Enable automatic EBS volume expansion.
-	// When enabled, EBS volumes automatically expand as needed.
+	// Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
+	// are dynamically attached and mounted (typically at /scratch) as disk space runs low.
+	// This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size
+	// to configure a larger root volume instead.
 	//
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	EbsAutoScale *bool `json:"ebsAutoScale,omitempty"`
 	// List of EC2 instance types to use.
 	// Examples: ["m5.xlarge", "m5.2xlarge"], ["c5.2xlarge"], ["p3.2xlarge"]
@@ -112,7 +116,10 @@ type ForgeConfig struct {
 	// Note: SPOT_CAPACITY_OPTIMIZED only valid when type is SPOT
 	//
 	AllocStrategy *AllocStrategy `json:"allocStrategy,omitempty"`
-	ImageID       *string        `json:"imageId,omitempty"`
+	// Custom Amazon Machine Image (AMI) ID for compute instances.
+	// If not specified, AWS Batch selects the default ECS-optimized AMI.
+	//
+	ImageID *string `json:"imageId,omitempty"`
 	// VPC ID where compute environment will be deployed.
 	// Format: vpc- followed by hexadecimal characters
 	//
@@ -158,10 +165,18 @@ type ForgeConfig struct {
 	// EC2 key pair name for SSH access to compute instances.
 	// Key pair must exist in the specified region.
 	//
-	Ec2KeyPair   *string  `json:"ec2KeyPair,omitempty"`
-	AllowBuckets []string `json:"allowBuckets,omitempty"`
-	// Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
+	Ec2KeyPair *string `json:"ec2KeyPair,omitempty"`
+	// List of additional S3 bucket ARNs or names that compute jobs are allowed to access.
+	// The work directory bucket is automatically included.
 	//
+	AllowBuckets []string `json:"allowBuckets,omitempty"`
+	// Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins
+	// to run out of free space. Only applies when ebs_auto_scale is enabled.
+	// This is NOT the root/boot volume size — use ebs_boot_size for that.
+	// This feature is deprecated and is not compatible with Fusion v2.
+	//
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	EbsBlockSize *int `json:"ebsBlockSize,omitempty"`
 	// The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
 	// for that instance type before instances are launched. For example, if your maximum percentage is 20%,
@@ -182,17 +197,35 @@ type ForgeConfig struct {
 	EfsID *string `json:"efsId,omitempty"`
 	// Path where EFS will be mounted in the container.
 	//
-	EfsMount      *string `json:"efsMount,omitempty"`
-	DragenEnabled *bool   `json:"dragenEnabled,omitempty"`
-	DragenAmiID   *string `json:"dragenAmiId,omitempty"`
-	EbsBootSize   *int    `json:"ebsBootSize,omitempty"`
-	EcsConfig     *string `json:"ecsConfig,omitempty"`
+	EfsMount *string `json:"efsMount,omitempty"`
+	// Enable Illumina DRAGEN support for the compute environment.
+	// When enabled, DRAGEN-specific instance types and AMIs will be used.
+	//
+	DragenEnabled *bool `json:"dragenEnabled,omitempty"`
+	// Custom AMI ID for DRAGEN-enabled instances.
+	// Only applicable when dragen_enabled is true.
+	//
+	DragenAmiID *string `json:"dragenAmiId,omitempty"`
+	// Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+	// When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
+	//
+	EbsBootSize *int `json:"ebsBootSize,omitempty"`
+	// Custom ECS agent configuration parameters appended to the ECS config file
+	// on compute instances. Use for advanced ECS tuning.
+	//
+	EcsConfig *string `json:"ecsConfig,omitempty"`
 	// Use Fargate for head job instead of EC2.
 	// Reduces costs by running head job on serverless compute.
 	// Only applicable when using EC2 for worker jobs.
 	//
-	FargateHeadEnabled *bool   `json:"fargateHeadEnabled,omitempty"`
-	Arm64Enabled       *bool   `json:"arm64Enabled,omitempty"`
+	FargateHeadEnabled *bool `json:"fargateHeadEnabled,omitempty"`
+	// Enable ARM64 (Graviton) CPU architecture for compute instances.
+	// When enabled, Graviton-based EC2 instances will be selected for cost savings.
+	//
+	Arm64Enabled *bool `json:"arm64Enabled,omitempty"`
+	// EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
+	// Only applicable when dragen_enabled is true.
+	//
 	DragenInstanceType *string `json:"dragenInstanceType,omitempty"`
 }
 

@@ -503,15 +503,32 @@ actions:
   - target: $.components.schemas.ForgeConfig.properties.ebsAutoScale
     update:
       description: |
-        Enable automatic EBS volume expansion.
-        When enabled, EBS volumes automatically expand as needed.
-      example: true
+        Deprecated. Enable automatic EBS volume expansion. When enabled, additional EBS volumes
+        are dynamically attached and mounted (typically at /scratch) as disk space runs low.
+        This feature is deprecated and is not compatible with Fusion v2. Use ebs_boot_size
+        to configure a larger root volume instead.
+      deprecated: true
+      example: false
       x-speakeasy-param-force-new: true
 
   - target: $.components.schemas.ForgeConfig.properties.ebsBlockSize
     update:
       description: |
-        Size of EBS root volume in GB (minimum 8 GB, maximum 16 TB).
+        Deprecated. Size in GB of each EBS auto-expandable block added when the volume begins
+        to run out of free space. Only applies when ebs_auto_scale is enabled.
+        This is NOT the root/boot volume size — use ebs_boot_size for that.
+        This feature is deprecated and is not compatible with Fusion v2.
+      deprecated: true
+      example: 100
+      x-speakeasy-param-force-new: true
+      x-speakeasy-required-with:
+        - ../ebsAutoScale
+
+  - target: $.components.schemas.ForgeConfig.properties.ebsBootSize
+    update:
+      description: |
+        Size of the boot disk (root volume) in GB for EC2 instances in this compute environment.
+        When using Fusion v2 without fast instance storage, this defaults to 100 GB with GP3 volume type.
       example: 100
       x-speakeasy-param-force-new: true
 
@@ -586,6 +603,8 @@ actions:
       description: Automatically create an EFS file system
       example: false
       x-speakeasy-param-force-new: true
+      x-speakeasy-conflicts-with:
+        - ../efsId
 
   - target: $.components.schemas.ForgeConfig.properties.efsId
     update:
@@ -622,6 +641,123 @@ actions:
       description: |
         Size of FSx file system in GB.
       example: 1200
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # ADDITIONAL FORGECONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.ForgeConfig.properties.imageId
+    update:
+      description: |
+        Custom Amazon Machine Image (AMI) ID for compute instances.
+        If not specified, AWS Batch selects the default ECS-optimized AMI.
+      example: "ami-0123456789abcdef0"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.ForgeConfig.properties.allowBuckets
+    update:
+      description: |
+        List of additional S3 bucket ARNs or names that compute jobs are allowed to access.
+        The work directory bucket is automatically included.
+      example: ["s3://my-input-bucket", "s3://my-output-bucket"]
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.ForgeConfig.properties.dragenEnabled
+    update:
+      description: |
+        Enable Illumina DRAGEN support for the compute environment.
+        When enabled, DRAGEN-specific instance types and AMIs will be used.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.ForgeConfig.properties.dragenAmiId
+    update:
+      description: |
+        Custom AMI ID for DRAGEN-enabled instances.
+        Only applicable when dragen_enabled is true.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-required-with:
+        - ../dragenEnabled
+
+  - target: $.components.schemas.ForgeConfig.properties.dragenInstanceType
+    update:
+      description: |
+        EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).
+        Only applicable when dragen_enabled is true.
+      x-speakeasy-param-force-new: true
+      x-speakeasy-required-with:
+        - ../dragenEnabled
+
+  - target: $.components.schemas.ForgeConfig.properties.ecsConfig
+    update:
+      description: |
+        Custom ECS agent configuration parameters appended to the ECS config file
+        on compute instances. Use for advanced ECS tuning.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.ForgeConfig.properties.arm64Enabled
+    update:
+      description: |
+        Enable ARM64 (Graviton) CPU architecture for compute instances.
+        When enabled, Graviton-based EC2 instances will be selected for cost savings.
+      example: false
+      x-speakeasy-param-force-new: true
+
+  # ============================================================================
+  # ADDITIONAL AWSBATCHCONFIG FIELD DESCRIPTIONS
+  # ============================================================================
+
+  - target: $.components.schemas.AwsBatchConfig.properties.environment
+    update:
+      description: |
+        Array of environment variables for the compute environment.
+        Each variable can target the head node, compute nodes, or both.
+
+  - target: $.components.schemas.AwsBatchConfig.properties.nextflowConfig
+    update:
+      description: |
+        Nextflow configuration settings that override repository defaults.
+        Applied globally to all pipelines launched in this compute environment.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsBatchConfig.properties.volumes
+    update:
+      description: |
+        List of volume mount specifications for compute instances.
+        Format follows Docker volume mount syntax.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsBatchConfig.properties.logGroup
+    update:
+      description: |
+        CloudWatch Log group name for pipeline execution logs.
+        If specified, logs are sent to this existing log group instead of the default.
+      example: "/aws/batch/seqera"
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsBatchConfig.properties.fusionSnapshots
+    update:
+      description: |
+        Enable Fusion snapshots (beta). Allows automatic job restoration after
+        AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+      example: false
+      x-speakeasy-param-force-new: true
+      x-speakeasy-required-with:
+        - ../fusion2Enabled
+
+  - target: $.components.schemas.AwsBatchConfig.properties.dragenQueue
+    update:
+      description: |
+        Name of the AWS Batch queue for DRAGEN jobs.
+        Only applicable when DRAGEN is enabled.
+      x-speakeasy-param-force-new: true
+
+  - target: $.components.schemas.AwsBatchConfig.properties.dragenInstanceType
+    update:
+      description: |
+        EC2 instance type for DRAGEN jobs (e.g., f1.2xlarge).
+        Only applicable when DRAGEN is enabled.
       x-speakeasy-param-force-new: true
 
   # Fix typo: nvnmeStorageEnabled -> nvme_storage_enabled in Terraform
