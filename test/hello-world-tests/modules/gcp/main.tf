@@ -19,7 +19,7 @@ resource "seqera_compute_env" "gcp_batch_compute_env" {
     credentials_id = resource.seqera_google_credential.gcp_credential.credentials_id
 
     config = {
-      google_batch = {
+      google_batch_service_configuration = {
         region   = "us-central1"
         work_dir = var.work_dir
         # machine_type     = "e2-standard-4"

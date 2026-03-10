@@ -20,7 +20,7 @@ resource "seqera_compute_env" "azure_batch_compute_env" {
     credentials_id = resource.seqera_azure_credential.azure_credential.credentials_id
 
     config = {
-      azure_batch = {
+      azure_batch_configuration = {
         region   = "eastus"
         work_dir = var.work_dir
         #head_pool = "tower-pool-11OOCPR4OtcuwzdFSixWSu "

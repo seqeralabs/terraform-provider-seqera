@@ -74,7 +74,7 @@ resource "seqera_compute_env" "aws_batch_compute_env" {
     credentials_id = resource.seqera_aws_credential.aws_credential.credentials_id
 
     config = {
-      aws_batch = {
+      aws_batch_configuration = {
         discriminator = "aws-batch"
         region        = "us-east-1"
         work_dir      = var.work_dir
