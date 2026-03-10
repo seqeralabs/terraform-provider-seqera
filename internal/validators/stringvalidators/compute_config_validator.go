@@ -53,19 +53,22 @@ func (v StringComputeConfigValidatorValidator) ValidateString(ctx context.Contex
 	// Define the platform to config schema mapping
 	// TODO: We can probably import this from the OpenAPI spec instead of hardcoding it
 	platformConfigMap := map[string][]string{
-		"aws-batch":              {"aws_batch"},
-		"aws-cloud":              {"aws_cloud"},
-		"azure-batch":            {"azure_batch"},
-		"google-lifesciences":    {"google_lifesciences"},
-		"google-batch":           {"google_batch"},
-		"seqeracompute-platform": {"seqeracompute_platform"},
-		"k8s-platform":           {"k8s_platform"},
-		"eks-platform":           {"eks_platform"},
-		"gke-platform":           {"gke_platform"},
-		"slurm-platform":         {"slurm_platform"},
-		"lsf-platform":           {"lsf_platform"},
-		"altair-platform":        {"altair_platform"},
-		"uge-platform":           {"uge_platform"},
+		"aws-batch":              {"aws_batch_configuration"},
+		"aws-cloud":              {"aws_cloud_configuration"},
+		"azure-batch":            {"azure_batch_configuration"},
+		"azure-cloud":            {"azure_cloud_configuration"},
+		"google-lifesciences":    {"google_life_sciences_configuration_retired"},
+		"google-batch":           {"google_batch_service_configuration"},
+		"google-cloud":           {"google_cloud_configuration"},
+		"seqeracompute-platform": {"seqera_compute_configuration"},
+		"k8s-platform":           {"kubernetes_compute_configuration"},
+		"eks-platform":           {"amazon_eks_cluster_configuration"},
+		"gke-platform":           {"google_gke_cluster_configuration"},
+		"slurm-platform":         {"slurm_configuration"},
+		"lsf-platform":           {"ibmlsf_configuration"},
+		"altair-platform":        {"altair_pbs_configuration"},
+		"moab-platform":          {"moab_configuration"},
+		"uge-platform":           {"univa_grid_engine_configuration"},
 	}
 
 	// Get the expected config field names for this platform
