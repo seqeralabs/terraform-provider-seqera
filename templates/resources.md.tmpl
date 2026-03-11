@@ -1,0 +1,70 @@
+---
+page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
+{{- if or (eq .Name "seqera_aws_credential") (eq .Name "seqera_azure_credential") (eq .Name "seqera_bitbucket_credential") (eq .Name "seqera_codecommit_credential") (eq .Name "seqera_container_registry_credential") (eq .Name "seqera_credential") (eq .Name "seqera_gitea_credential") (eq .Name "seqera_github_credential") (eq .Name "seqera_gitlab_credential") (eq .Name "seqera_google_credential") (eq .Name "seqera_kubernetes_credential") (eq .Name "seqera_ssh_credential") (eq .Name "seqera_tower_agent_credential") }}
+subcategory: "Credentials"
+{{- else if or (eq .Name "seqera_aws_batch_ce") (eq .Name "seqera_aws_compute_env") (eq .Name "seqera_compute_env") (eq .Name "seqera_managed_compute_ce") (eq .Name "seqera_primary_compute_env") }}
+subcategory: "Compute Environments"
+{{- else if or (eq .Name "seqera_action") (eq .Name "seqera_pipeline") (eq .Name "seqera_pipeline_secret") (eq .Name "seqera_workflows") }}
+subcategory: "Pipelines"
+{{- else if or (eq .Name "seqera_data_link") (eq .Name "seqera_datasets") (eq .Name "seqera_dataset_version") }}
+subcategory: "Data"
+{{- else if or (eq .Name "seqera_orgs") (eq .Name "seqera_organization_member") (eq .Name "seqera_teams") (eq .Name "seqera_team_member") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
+subcategory: "Organization"
+{{- else if eq .Name "seqera_studios" }}
+subcategory: "Studios"
+{{- else if or (eq .Name "seqera_tokens") (eq .Name "seqera_labels") }}
+subcategory: "Tokens & Labels"
+{{- else }}
+subcategory: ""
+{{- end }}
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Name}} ({{.Type}})
+
+{{ .Description | trimspace }}
+
+{{ if .HasExamples -}}
+## Example Usage
+{{- range .ExampleFiles }}
+{{- if gt (len (split . "/resource.tf")) 1 }}
+{{- else }}
+{{- $suffixExt := index (split . "/resource_") 1 -}}
+{{- $suffix := index (split $suffixExt ".") 0 }}
+
+### {{ range $i, $word := split $suffix "_" }}{{ if gt $i 0 }} {{ end }}{{ title $word }}{{ end }}
+{{- end }}
+
+{{ tffile . }}
+{{- end }}
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}
+
+{{- if or .HasImport .HasImportIDConfig .HasImportIdentityConfig }}
+
+## Import
+
+Import is supported using the following syntax:
+{{- end }}
+{{- if .HasImportIdentityConfig }}
+
+In Terraform v1.12.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `identity` attribute, for example:
+
+{{tffile .ImportIdentityConfigFile }}
+
+{{ .IdentitySchemaMarkdown | trimspace }}
+{{- end }}
+{{- if .HasImportIDConfig }}
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+{{tffile .ImportIDConfigFile }}
+{{- end }}
+{{- if .HasImport }}
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+{{codefile "shell" .ImportFile }}
+{{- end }}

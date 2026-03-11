@@ -15,12 +15,3 @@ resource "seqera_container_registry_credential" "dockerhub" {
   username = var.registry_username
   password = var.registry_password
 }
-
-resource "seqera_container_registry_credential" "private" {
-  name         = "private-registry"
-  workspace_id = seqera_workspace.main.id
-
-  registry = "registry.mycompany.com"
-  username = var.registry_username
-  password = var.registry_password
-}

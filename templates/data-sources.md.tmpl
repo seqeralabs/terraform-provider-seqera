@@ -1,0 +1,37 @@
+---
+page_title: "{{.Name}} {{.Type}} - {{.ProviderName}}"
+{{- if eq .Name "seqera_credentials" }}
+subcategory: "Credentials"
+{{- else if or (eq .Name "seqera_organization") (eq .Name "seqera_organization_member") (eq .Name "seqera_workspace") (eq .Name "seqera_workspace_participant") }}
+subcategory: "Organization"
+{{- else if or (eq .Name "seqera_pipeline") (eq .Name "seqera_pipeline_secret") }}
+subcategory: "Pipelines"
+{{- else if eq .Name "seqera_data_links" }}
+subcategory: "Data"
+{{- else }}
+subcategory: ""
+{{- end }}
+description: |-
+{{ .Description | plainmarkdown | trimspace | prefixlines "  " }}
+---
+
+# {{.Name}} ({{.Type}})
+
+{{ .Description | trimspace }}
+
+{{ if .HasExamples -}}
+## Example Usage
+{{- range .ExampleFiles }}
+{{- if gt (len (split . "/data-source.tf")) 1 }}
+{{- else }}
+{{- $suffixExt := index (split . "/data-source_") 1 -}}
+{{- $suffix := index (split $suffixExt ".") 0 }}
+
+### {{ range $i, $word := split $suffix "_" }}{{ if gt $i 0 }} {{ end }}{{ title $word }}{{ end }}
+{{- end }}
+
+{{ tffile . }}
+{{- end }}
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}
