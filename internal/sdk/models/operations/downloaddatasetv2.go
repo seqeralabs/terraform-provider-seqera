@@ -46,6 +46,9 @@ func (d *DownloadDatasetV2Request) GetFileName() string {
 	return d.FileName
 }
 
+// #region class-body-downloaddatasetv2request
+// #endregion class-body-downloaddatasetv2request
+
 type DownloadDatasetV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -93,3 +96,6 @@ func (d *DownloadDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
 	}
 	return d.ErrorResponse
 }
+
+// #region class-body-downloaddatasetv2response
+// #endregion class-body-downloaddatasetv2response

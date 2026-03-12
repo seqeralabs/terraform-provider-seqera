@@ -16,6 +16,12 @@ internal/validators/objectvalidators/config_env_variable_validator.go
 internal/validators/stringvalidators/aws_credential_keys_validator.go
 internal/validators/stringvalidators/instance_type_size_validator.go
 internal/validators/stringvalidators/seqera_compute_region_validator.go
+internal/validators/boolvalidators/requires_sibling_true.go
+internal/validators/boolvalidators/nvme_storage_validator.go
+internal/validators/boolvalidators/fusion_enabled_validator.go
+internal/validators/boolvalidators/fusion_snapshots_validator.go
+internal/validators/objectvalidators/fargate_head_validator.go
+internal/validators/boolvalidators/graviton_validator.go
 
 # Custom state upgraders for field renames and migrations
 internal/stateupgraders/awsbatchce_v0.go

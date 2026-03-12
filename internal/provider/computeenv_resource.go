@@ -326,7 +326,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
 									},
 									"enable_wave": schema.BoolAttribute{
 										Computed: true,
@@ -334,15 +341,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
 											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -625,7 +628,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
 									},
 									"enable_wave": schema.BoolAttribute{
 										Computed: true,
@@ -633,15 +643,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
 											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -759,9 +765,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `Enable ARM64 (Graviton) CPU architecture for compute instances.` + "\n" +
-													`When enabled, Graviton-based EC2 instances will be selected for cost savings.` + "\n" +
+												MarkdownDescription: `Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline` + "\n" +
+													`compute jobs.` + "\n" +
+													`` + "\n" +
+													`Requires ` + "`" + `fargate_head_enabled = true` + "`" + `, ` + "`" + `enable_wave = true` + "`" + `, and ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 													`Requires replacement if changed.`,
+												Validators: []validator.Bool{
+													custom_boolvalidators.GravitonValidator(),
+												},
 											},
 											"bid_percentage": schema.Int32Attribute{
 												Computed: true,
@@ -951,9 +962,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 												PlanModifiers: []planmodifier.Bool{
 													boolplanmodifier.RequiresReplaceIfConfigured(),
 												},
-												MarkdownDescription: `Use Fargate for head job instead of EC2.` + "\n" +
-													`Reduces costs by running head job on serverless compute.` + "\n" +
-													`Only applicable when using EC2 for worker jobs.` + "\n" +
+												MarkdownDescription: `Run the Nextflow head job using the Fargate container service. This speeds up the launch` + "\n" +
+													`of your pipeline execution.` + "\n" +
+													`` + "\n" +
+													`Requires ` + "`" + `enable_fusion = true` + "`" + ` and forge ` + "`" + `type = "SPOT"` + "`" + `.` + "\n" +
+													`Not compatible with EFS (` + "`" + `efs_create` + "`" + `, ` + "`" + `efs_id` + "`" + `) or FSx (` + "`" + `fsx_name` + "`" + `) file systems.` + "\n" +
 													`Requires replacement if changed.`,
 											},
 											"fsx_mount": schema.StringAttribute{
@@ -1089,6 +1102,9 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 											},
 										},
 										Description: `Requires replacement if changed.`,
+										Validators: []validator.Object{
+											custom_objectvalidators.FargateHeadValidator(),
+										},
 									},
 									"fusion_snapshots": schema.BoolAttribute{
 										Computed: true,
@@ -1096,14 +1112,16 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable Fusion snapshots (beta). Allows automatic job restoration after` + "\n" +
-											`AWS Spot instance reclamation. Requires Fusion v2 to be enabled.` + "\n" +
+										MarkdownDescription: `Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job` + "\n" +
+											`when it is interrupted by a spot reclamation.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
 										Validators: []validator.Bool{
 											boolvalidator.AlsoRequires(path.Expressions{
 												path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
-												path.MatchRelative().AtParent().AtParent().AtName("fusion2_enabled"),
 											}...),
+											custom_boolvalidators.FusionSnapshotsValidator(),
 										},
 									},
 									"head_job_cpus": schema.Int32Attribute{
@@ -1173,9 +1191,13 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable NVMe instance storage for high-performance I/O.` + "\n" +
-											`When enabled, NVMe storage volumes are automatically mounted and configured.` + "\n" +
+										MarkdownDescription: `Allow the use of NVMe instance storage to speed up I/O and disk access operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_fusion = true` + "`" + `.` + "\n" +
 											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.NvmeStorageValidator(),
+										},
 									},
 									"post_run_script": schema.StringAttribute{
 										Computed: true,
@@ -1313,7 +1335,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
 									},
 									"enable_wave": schema.BoolAttribute{
 										Computed: true,
@@ -1321,15 +1350,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
 											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -1573,7 +1598,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
 									},
 									"enable_wave": schema.BoolAttribute{
 										Computed: true,
@@ -1581,15 +1613,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
 											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2114,7 +2142,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
 									},
 									"enable_wave": schema.BoolAttribute{
 										Computed: true,
@@ -2122,15 +2157,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
 											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,
@@ -2650,7 +2681,14 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										Description: `Requires replacement if changed.`,
+										MarkdownDescription: `Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,` + "\n" +
+											`speeding up most operations.` + "\n" +
+											`` + "\n" +
+											`Requires ` + "`" + `enable_wave = true` + "`" + `.` + "\n" +
+											`Requires replacement if changed.`,
+										Validators: []validator.Bool{
+											custom_boolvalidators.FusionEnabledValidator(),
+										},
 									},
 									"enable_wave": schema.BoolAttribute{
 										Computed: true,
@@ -2658,15 +2696,11 @@ func (r *ComputeEnvResource) Schema(ctx context.Context, req resource.SchemaRequ
 										PlanModifiers: []planmodifier.Bool{
 											boolplanmodifier.RequiresReplaceIfConfigured(),
 										},
-										MarkdownDescription: `Enable Wave containers for this compute environment. Wave provides container provisioning` + "\n" +
-											`and augmentation capabilities for Nextflow workflows.` + "\n" +
+										MarkdownDescription: `Allow access to private container repositories and the provisioning of containers in your` + "\n" +
+											`Nextflow pipelines via the Wave containers service.` + "\n" +
 											`` + "\n" +
-											`When enable_wave is true, enable_fusion must be explicitly set to either true or false.` + "\n" +
-											`Note: If Fusion2 is enabled, Wave must also be enabled.` + "\n" +
+											`Required when ` + "`" + `enable_fusion` + "`" + ` is true.` + "\n" +
 											`Requires replacement if changed.`,
-										Validators: []validator.Bool{
-											custom_boolvalidators.WaveEnabledValidator(),
-										},
 									},
 									"environment": schema.ListNestedAttribute{
 										Computed: true,

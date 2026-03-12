@@ -55,6 +55,9 @@ func (l *ListLatestDatasetVersionsV2Request) GetSearch() *string {
 	return l.Search
 }
 
+// #region class-body-listlatestdatasetversionsv2request
+// #endregion class-body-listlatestdatasetversionsv2request
+
 type ListLatestDatasetVersionsV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -102,3 +105,6 @@ func (l *ListLatestDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorRe
 	}
 	return l.ErrorResponse
 }
+
+// #region class-body-listlatestdatasetversionsv2response
+// #endregion class-body-listlatestdatasetversionsv2response

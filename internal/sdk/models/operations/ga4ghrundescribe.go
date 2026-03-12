@@ -19,6 +19,9 @@ func (g *Ga4ghRunDescribeRequest) GetRunID() string {
 	return g.RunID
 }
 
+// #region class-body-ga4ghrundescriberequest
+// #endregion class-body-ga4ghrundescriberequest
+
 type Ga4ghRunDescribeResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -66,3 +69,6 @@ func (g *Ga4ghRunDescribeResponse) GetWesErrorResponse() *shared.WesErrorRespons
 	}
 	return g.WesErrorResponse
 }
+
+// #region class-body-ga4ghrundescriberesponse
+// #endregion class-body-ga4ghrundescriberesponse

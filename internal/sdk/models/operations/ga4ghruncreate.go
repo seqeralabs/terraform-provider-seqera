@@ -54,3 +54,6 @@ func (g *Ga4ghRunCreateResponse) GetWesErrorResponse() *shared.WesErrorResponse 
 	}
 	return g.WesErrorResponse
 }
+
+// #region class-body-ga4ghruncreateresponse
+// #endregion class-body-ga4ghruncreateresponse

@@ -28,6 +28,9 @@ func (c *CreateDatasetV2Request) GetCreateDatasetRequest() shared.CreateDatasetR
 	return c.CreateDatasetRequest
 }
 
+// #region class-body-createdatasetv2request
+// #endregion class-body-createdatasetv2request
+
 type CreateDatasetV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -75,3 +78,6 @@ func (c *CreateDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
 	}
 	return c.ErrorResponse
 }
+
+// #region class-body-createdatasetv2response
+// #endregion class-body-createdatasetv2response

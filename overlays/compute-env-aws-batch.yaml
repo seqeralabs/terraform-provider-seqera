@@ -443,7 +443,11 @@ actions:
       example: 8192
       x-speakeasy-param-force-new: true
 
-  # Forge configuration descriptions - add force-new to all properties
+  # Forge configuration - add validator and force-new to all properties
+  - target: $.components.schemas.ForgeConfig
+    update:
+      x-speakeasy-plan-validators: FargateHeadValidator
+
   - target: $.components.schemas.ForgeConfig.properties.type
     update:
       description: |
@@ -592,9 +596,11 @@ actions:
   - target: $.components.schemas.ForgeConfig.properties.fargateHeadEnabled
     update:
       description: |
-        Use Fargate for head job instead of EC2.
-        Reduces costs by running head job on serverless compute.
-        Only applicable when using EC2 for worker jobs.
+        Run the Nextflow head job using the Fargate container service. This speeds up the launch
+        of your pipeline execution.
+
+        Requires `enable_fusion = true` and forge `type = "SPOT"`.
+        Not compatible with EFS (`efs_create`, `efs_id`) or FSx (`fsx_name`) file systems.
       example: false
       x-speakeasy-param-force-new: true
 
@@ -698,9 +704,12 @@ actions:
 
   - target: $.components.schemas.ForgeConfig.properties.arm64Enabled
     update:
+      x-speakeasy-plan-validators: GravitonValidator
       description: |
-        Enable ARM64 (Graviton) CPU architecture for compute instances.
-        When enabled, Graviton-based EC2 instances will be selected for cost savings.
+        Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
+        compute jobs.
+
+        Requires `fargate_head_enabled = true`, `enable_wave = true`, and `enable_fusion = true`.
       example: false
       x-speakeasy-param-force-new: true
 
@@ -739,12 +748,13 @@ actions:
   - target: $.components.schemas.AwsBatchConfig.properties.fusionSnapshots
     update:
       description: |
-        Enable Fusion snapshots (beta). Allows automatic job restoration after
-        AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+        Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job
+        when it is interrupted by a spot reclamation.
+
+        Requires `enable_fusion = true`.
       example: false
       x-speakeasy-param-force-new: true
-      x-speakeasy-required-with:
-        - ../fusion2Enabled
+      x-speakeasy-plan-validators: FusionSnapshotsValidator
 
   - target: $.components.schemas.AwsBatchConfig.properties.dragenQueue
     update:
@@ -764,8 +774,10 @@ actions:
   - target: $.components.schemas.AwsBatchConfig.properties.nvnmeStorageEnabled
     update:
       x-speakeasy-name-override: nvme_storage_enabled
+      x-speakeasy-plan-validators: NvmeStorageValidator
       description: |
-        Enable NVMe instance storage for high-performance I/O.
-        When enabled, NVMe storage volumes are automatically mounted and configured.
+        Allow the use of NVMe instance storage to speed up I/O and disk access operations.
+
+        Requires `enable_fusion = true`.
       example: true
       x-speakeasy-param-force-new: true

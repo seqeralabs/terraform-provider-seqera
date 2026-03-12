@@ -349,67 +349,55 @@ actions:
       minimum: 0
       maximum: 100
 
-  # Add wave_enabled validator to ensure fusion2_enabled is explicitly set
+  # Wave descriptions (no validator needed - Wave can be used standalone without Fusion)
   - target: $.components.schemas.AwsBatchConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
-        Enable Wave containers for this compute environment. Wave provides container provisioning
-        and augmentation capabilities for Nextflow workflows.
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
 
-        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-        Note: If Fusion2 is enabled, Wave must also be enabled.
-      x-speakeasy-plan-validators: WaveEnabledValidator
+        Required when `enable_fusion` is true.
   - target: $.components.schemas.AwsCloudConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
-        Enable Wave containers for this compute environment. Wave provides container provisioning
-        and augmentation capabilities for Nextflow workflows.
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
 
-        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-        Note: If Fusion2 is enabled, Wave must also be enabled.
-      x-speakeasy-plan-validators: WaveEnabledValidator
+        Required when `enable_fusion` is true.
   - target: $.components.schemas.AzBatchConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
-        Enable Wave containers for this compute environment. Wave provides container provisioning
-        and augmentation capabilities for Nextflow workflows.
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
 
-        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-        Note: If Fusion2 is enabled, Wave must also be enabled.
-      x-speakeasy-plan-validators: WaveEnabledValidator
+        Required when `enable_fusion` is true.
   - target: $.components.schemas.EksComputeConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
-        Enable Wave containers for this compute environment. Wave provides container provisioning
-        and augmentation capabilities for Nextflow workflows.
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
 
-        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-        Note: If Fusion2 is enabled, Wave must also be enabled.
-      x-speakeasy-plan-validators: WaveEnabledValidator
+        Required when `enable_fusion` is true.
   - target: $.components.schemas.GkeComputeConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
-        Enable Wave containers for this compute environment. Wave provides container provisioning
-        and augmentation capabilities for Nextflow workflows.
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
 
-        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-        Note: If Fusion2 is enabled, Wave must also be enabled.
-      x-speakeasy-plan-validators: WaveEnabledValidator
+        Required when `enable_fusion` is true.
   - target: $.components.schemas.GoogleBatchConfig.properties.waveEnabled
     update:
       title: "Wave Enabled"
       description: |
-        Enable Wave containers for this compute environment. Wave provides container provisioning
-        and augmentation capabilities for Nextflow workflows.
+        Allow access to private container repositories and the provisioning of containers in your
+        Nextflow pipelines via the Wave containers service.
 
-        When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-        Note: If Fusion2 is enabled, Wave must also be enabled.
-      x-speakeasy-plan-validators: WaveEnabledValidator
+        Required when `enable_fusion` is true.
   # NOTE: SeqeraComputeConfig.waveEnabled moved to compute-env-seqeracompute.yaml
 
   # ============================================================================
@@ -438,24 +426,61 @@ actions:
   # NOTE: SeqeraComputeConfig.waveEnabled name override moved to compute-env-seqeracompute.yaml
 
   # Rename fusion2Enabled -> enable_fusion across all compute configs
+  # Add FusionEnabledValidator to ensure enable_wave is true when fusion is enabled
   - target: $.components.schemas.AwsBatchConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
   - target: $.components.schemas.AwsCloudConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
   - target: $.components.schemas.AzBatchConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
   - target: $.components.schemas.EksComputeConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
   - target: $.components.schemas.GkeComputeConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
   - target: $.components.schemas.GoogleBatchConfig.properties.fusion2Enabled
     update:
       x-speakeasy-name-override: enable_fusion
+      x-speakeasy-plan-validators: FusionEnabledValidator
+      description: |
+        Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+        speeding up most operations.
+
+        Requires `enable_wave = true`.
 
   # ============================================================================
   # AWS CLOUD CONFIG FIELD DESCRIPTIONS

@@ -38,12 +38,13 @@ ENHANCEMENTS:
 
 - **Credentials** - AWS credential resource (`seqera_aws_credential`) now supports `mode` (`keys` or `role`), `external_id`, and `use_external_id` fields for IAM role-based authentication with cross-account external ID support.
 
-- **Validation** - Added Speakeasy declarative validation dependencies for AWS compute environment fields:
+- **Validation** - Compute environment configuration now validates feature dependencies at plan time, matching the Seqera Platform UI. You'll get clear errors during `terraform plan` instead of unexpected failures at apply time.
 
-  - `ebs_block_size` now requires `ebs_auto_scale` to be set (`AlsoRequires` validator).
-  - `efs_create` conflicts with `efs_id` — use an existing EFS or create a new one, not both (`ConflictsWith` validator).
-  - `dragen_ami_id` and `dragen_instance_type` require `dragen_enabled` to be set (`AlsoRequires` validator).
-  - `fusion_snapshots` requires `enable_fusion` (Fusion v2) to be set (`AlsoRequires` validator).
+  - Fusion v2 requires Wave containers
+  - Fast instance storage and Fusion Snapshots require Fusion v2
+  - Fargate for head jobs requires Fusion v2 and Spot provisioning, and is not compatible with EFS or FSx
+  - Graviton (ARM64) requires Fargate, Wave, and Fusion v2
+  - Additional field-level validations for EBS, EFS, and DRAGEN dependencies
 
 DEPRECATIONS:
 

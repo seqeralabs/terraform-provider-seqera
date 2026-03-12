@@ -37,6 +37,9 @@ func (u *UpdateDatasetV2Request) GetUpdateDatasetRequest() shared.UpdateDatasetR
 	return u.UpdateDatasetRequest
 }
 
+// #region class-body-updatedatasetv2request
+// #endregion class-body-updatedatasetv2request
+
 type UpdateDatasetV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -75,3 +78,6 @@ func (u *UpdateDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
 	}
 	return u.ErrorResponse
 }
+
+// #region class-body-updatedatasetv2response
+// #endregion class-body-updatedatasetv2response

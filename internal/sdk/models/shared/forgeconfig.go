@@ -214,13 +214,17 @@ type ForgeConfig struct {
 	// on compute instances. Use for advanced ECS tuning.
 	//
 	EcsConfig *string `json:"ecsConfig,omitempty"`
-	// Use Fargate for head job instead of EC2.
-	// Reduces costs by running head job on serverless compute.
-	// Only applicable when using EC2 for worker jobs.
+	// Run the Nextflow head job using the Fargate container service. This speeds up the launch
+	// of your pipeline execution.
+	//
+	// Requires `enable_fusion = true` and forge `type = "SPOT"`.
+	// Not compatible with EFS (`efs_create`, `efs_id`) or FSx (`fsx_name`) file systems.
 	//
 	FargateHeadEnabled *bool `json:"fargateHeadEnabled,omitempty"`
-	// Enable ARM64 (Graviton) CPU architecture for compute instances.
-	// When enabled, Graviton-based EC2 instances will be selected for cost savings.
+	// Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
+	// compute jobs.
+	//
+	// Requires `fargate_head_enabled = true`, `enable_wave = true`, and `enable_fusion = true`.
 	//
 	Arm64Enabled *bool `json:"arm64Enabled,omitempty"`
 	// EC2 instance type to use for DRAGEN jobs (e.g., f1.2xlarge, f1.16xlarge).

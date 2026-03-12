@@ -715,13 +715,17 @@ type GoogleGKEClusterConfiguration struct {
 	// The GKE cluster region - or - zone
 	Region string `json:"region"`
 	// The GKE cluster name
-	ClusterName  string `json:"clusterName"`
-	EnableFusion *bool  `json:"fusion2Enabled,omitempty"`
-	// Enable Wave containers for this compute environment. Wave provides container provisioning
-	// and augmentation capabilities for Nextflow workflows.
+	ClusterName string `json:"clusterName"`
+	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
 	//
-	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	// Requires `enable_wave = true`.
+	//
+	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
+	//
+	// Required when `enable_fusion` is true.
 	//
 	EnableWave *bool `json:"waveEnabled,omitempty"`
 }
@@ -920,13 +924,17 @@ type AmazonEKSClusterConfiguration struct {
 	Region string `json:"region"`
 	// The AWS EKS cluster name
 	ClusterName string `json:"clusterName"`
-	// Enable Wave containers for this compute environment. Wave provides container provisioning
-	// and augmentation capabilities for Nextflow workflows.
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
 	//
-	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	// Required when `enable_fusion` is true.
 	//
-	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableWave *bool `json:"waveEnabled,omitempty"`
+	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
 }
 
@@ -1764,13 +1772,17 @@ type AzureBatchConfiguration struct {
 	TokenDuration           *string             `json:"tokenDuration,omitempty"`
 	DeleteJobsOnCompletion  *JobCleanupPolicy   `json:"deleteJobsOnCompletion,omitempty"`
 	DeletePoolsOnCompletion *bool               `json:"deletePoolsOnCompletion,omitempty"`
-	// Enable Wave containers for this compute environment. Wave provides container provisioning
-	// and augmentation capabilities for Nextflow workflows.
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
 	//
-	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	// Required when `enable_fusion` is true.
 	//
-	EnableWave              *bool   `json:"waveEnabled,omitempty"`
+	EnableWave *bool `json:"waveEnabled,omitempty"`
+	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
 	EnableFusion            *bool   `json:"fusion2Enabled,omitempty"`
 	ManagedIdentityClientID *string `json:"managedIdentityClientId,omitempty"`
 }
@@ -2131,13 +2143,17 @@ type GoogleBatchServiceConfiguration struct {
 	// Local mount path for the NFS file system on compute instances.
 	//
 	NfsMount *string `json:"nfsMount,omitempty"`
-	// Enable Wave containers for this compute environment. Wave provides container provisioning
-	// and augmentation capabilities for Nextflow workflows.
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
 	//
-	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	// Required when `enable_fusion` is true.
 	//
-	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableWave *bool `json:"waveEnabled,omitempty"`
+	// Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
 	// Google Cloud service account email for compute instances.
 	// If not specified, the default compute service account is used.
@@ -2495,13 +2511,17 @@ type AWSCloudConfiguration struct {
 	// If not specified, the default ECS-optimized AMI is used.
 	//
 	ImageID *string `json:"imageId,omitempty"`
-	// Enable Wave containers for this compute environment. Wave provides container provisioning
-	// and augmentation capabilities for Nextflow workflows.
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
 	//
-	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	// Required when `enable_fusion` is true.
 	//
-	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableWave *bool `json:"waveEnabled,omitempty"`
+	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
 	// CloudWatch Log group name for pipeline execution logs.
 	// If specified, logs are sent to this existing log group instead of the default.
@@ -2754,24 +2774,31 @@ type AWSBatchConfiguration struct {
 	HeadJobCpus *int `json:"headJobCpus,omitempty"`
 	// Memory allocation for the head job in MB (default: 1024)
 	HeadJobMemoryMb *int `json:"headJobMemoryMb,omitempty"`
-	// Enable Wave containers for this compute environment. Wave provides container provisioning
-	// and augmentation capabilities for Nextflow workflows.
+	// Allow access to private container repositories and the provisioning of containers in your
+	// Nextflow pipelines via the Wave containers service.
 	//
-	// When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-	// Note: If Fusion2 is enabled, Wave must also be enabled.
+	// Required when `enable_fusion` is true.
 	//
-	EnableWave   *bool `json:"waveEnabled,omitempty"`
+	EnableWave *bool `json:"waveEnabled,omitempty"`
+	// Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+	// speeding up most operations.
+	//
+	// Requires `enable_wave = true`.
+	//
 	EnableFusion *bool `json:"fusion2Enabled,omitempty"`
-	// Enable NVMe instance storage for high-performance I/O.
-	// When enabled, NVMe storage volumes are automatically mounted and configured.
+	// Allow the use of NVMe instance storage to speed up I/O and disk access operations.
+	//
+	// Requires `enable_fusion = true`.
 	//
 	NvmeStorageEnabled *bool `json:"nvnmeStorageEnabled,omitempty"`
 	// CloudWatch Log group name for pipeline execution logs.
 	// If specified, logs are sent to this existing log group instead of the default.
 	//
 	LogGroup *string `json:"logGroup,omitempty"`
-	// Enable Fusion snapshots (beta). Allows automatic job restoration after
-	// AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+	// Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job
+	// when it is interrupted by a spot reclamation.
+	//
+	// Requires `enable_fusion = true`.
 	//
 	FusionSnapshots *bool            `json:"fusionSnapshots,omitempty"`
 	Forge           *ForgeConfig     `json:"forge,omitempty"`

@@ -37,6 +37,9 @@ func (l *ListDatasetVersionsV2Request) GetMimeType() *string {
 	return l.MimeType
 }
 
+// #region class-body-listdatasetversionsv2request
+// #endregion class-body-listdatasetversionsv2request
+
 type ListDatasetVersionsV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -84,3 +87,6 @@ func (l *ListDatasetVersionsV2Response) GetErrorResponse() *shared.ErrorResponse
 	}
 	return l.ErrorResponse
 }
+
+// #region class-body-listdatasetversionsv2response
+// #endregion class-body-listdatasetversionsv2response

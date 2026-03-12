@@ -37,6 +37,9 @@ func (d *DescribeDatasetV2Request) GetAttributes() []shared.DatasetQueryAttribut
 	return d.Attributes
 }
 
+// #region class-body-describedatasetv2request
+// #endregion class-body-describedatasetv2request
+
 type DescribeDatasetV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -84,3 +87,6 @@ func (d *DescribeDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
 	}
 	return d.ErrorResponse
 }
+
+// #region class-body-describedatasetv2response
+// #endregion class-body-describedatasetv2response

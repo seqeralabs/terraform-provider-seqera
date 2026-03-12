@@ -85,6 +85,9 @@ func (s *S3CompatibleCredentials) GetPathStyleAccessEnabled() *bool {
 	return s.PathStyleAccessEnabled
 }
 
+// #region class-body-s3compatiblecredentials
+// #endregion class-body-s3compatiblecredentials
+
 type SeqeraComputeCredentials struct {
 	Discriminator *string `json:"discriminator,omitempty"`
 	AccessKey     *string `json:"accessKey,omitempty"`
@@ -1453,6 +1456,9 @@ func (s *S3CompatibleCredentialsOutput) GetPathStyleAccessEnabled() *bool {
 	}
 	return s.PathStyleAccessEnabled
 }
+
+// #region class-body-s3compatiblecredentialsoutput
+// #endregion class-body-s3compatiblecredentialsoutput
 
 type SeqeraComputeCredentialsOutput struct {
 	Discriminator *string `json:"discriminator,omitempty"`

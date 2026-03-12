@@ -46,6 +46,9 @@ func (u *UploadDatasetV2Request) GetMultiRequestFileSchema() shared.MultiRequest
 	return u.MultiRequestFileSchema
 }
 
+// #region class-body-uploaddatasetv2request
+// #endregion class-body-uploaddatasetv2request
+
 type UploadDatasetV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -93,3 +96,6 @@ func (u *UploadDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
 	}
 	return u.ErrorResponse
 }
+
+// #region class-body-uploaddatasetv2response
+// #endregion class-body-uploaddatasetv2response

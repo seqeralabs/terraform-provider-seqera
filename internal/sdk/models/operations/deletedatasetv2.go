@@ -28,6 +28,9 @@ func (d *DeleteDatasetV2Request) GetDatasetID() string {
 	return d.DatasetID
 }
 
+// #region class-body-deletedatasetv2request
+// #endregion class-body-deletedatasetv2request
+
 type DeleteDatasetV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -66,3 +69,6 @@ func (d *DeleteDatasetV2Response) GetErrorResponse() *shared.ErrorResponse {
 	}
 	return d.ErrorResponse
 }
+
+// #region class-body-deletedatasetv2response
+// #endregion class-body-deletedatasetv2response

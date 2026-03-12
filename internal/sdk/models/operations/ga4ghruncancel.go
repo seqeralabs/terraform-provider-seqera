@@ -27,6 +27,9 @@ func (g *Ga4ghRunCancelRequest) GetEmptyBodyRequest() *shared.EmptyBodyRequest {
 	return g.EmptyBodyRequest
 }
 
+// #region class-body-ga4ghruncancelrequest
+// #endregion class-body-ga4ghruncancelrequest
+
 type Ga4ghRunCancelResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -74,3 +77,6 @@ func (g *Ga4ghRunCancelResponse) GetWesErrorResponse() *shared.WesErrorResponse 
 	}
 	return g.WesErrorResponse
 }
+
+// #region class-body-ga4ghruncancelresponse
+// #endregion class-body-ga4ghruncancelresponse

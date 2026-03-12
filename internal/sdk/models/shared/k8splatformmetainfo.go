@@ -28,3 +28,6 @@ func (k *K8sPlatformMetaInfo) GetDiscriminator() *string {
 	}
 	return k.Discriminator
 }
+
+// #region class-body-k8splatformmetainfo
+// #endregion class-body-k8splatformmetainfo

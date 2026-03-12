@@ -28,6 +28,9 @@ func (g *Ga4ghRunListRequest) GetPageToken() *string {
 	return g.PageToken
 }
 
+// #region class-body-ga4ghrunlistrequest
+// #endregion class-body-ga4ghrunlistrequest
+
 type Ga4ghRunListResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -75,3 +78,6 @@ func (g *Ga4ghRunListResponse) GetWesErrorResponse() *shared.WesErrorResponse {
 	}
 	return g.WesErrorResponse
 }
+
+// #region class-body-ga4ghrunlistresponse
+// #endregion class-body-ga4ghrunlistresponse

@@ -12345,22 +12345,28 @@ components:
           type: boolean
           title: "Wave Enabled"
           description: |
-            Enable Wave containers for this compute environment. Wave provides container provisioning
-            and augmentation capabilities for Nextflow workflows.
+            Allow access to private container repositories and the provisioning of containers in your
+            Nextflow pipelines via the Wave containers service.
 
-            When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-            Note: If Fusion2 is enabled, Wave must also be enabled.
-          x-speakeasy-plan-validators: WaveEnabledValidator
+            Required when `enable_fusion` is true.
           x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
+          x-speakeasy-plan-validators: FusionEnabledValidator
+          description: |
+            Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+            speeding up most operations.
+
+            Requires `enable_wave = true`.
         nvnmeStorageEnabled:
           type: boolean
           x-speakeasy-name-override: nvme_storage_enabled
+          x-speakeasy-plan-validators: NvmeStorageValidator
           description: |
-            Enable NVMe instance storage for high-performance I/O.
-            When enabled, NVMe storage volumes are automatically mounted and configured.
+            Allow the use of NVMe instance storage to speed up I/O and disk access operations.
+
+            Requires `enable_fusion = true`.
           example: true
           x-speakeasy-param-force-new: true
         logGroup:
@@ -12373,13 +12379,15 @@ components:
         fusionSnapshots:
           type: boolean
           description: |
-            Enable Fusion snapshots (beta). Allows automatic job restoration after
-            AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+            Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job
+            when it is interrupted by a spot reclamation.
+
+            Requires `enable_fusion = true`.
           example: false
           x-speakeasy-param-force-new: true
           x-speakeasy-required-with:
             - ../fusion2Enabled
-            - ../fusion2Enabled
+          x-speakeasy-plan-validators: FusionSnapshotsValidator
         forge:
           $ref: "#/components/schemas/ForgeConfig"
         forgedResources:
@@ -12501,16 +12509,20 @@ components:
           type: boolean
           title: "Wave Enabled"
           description: |
-            Enable Wave containers for this compute environment. Wave provides container provisioning
-            and augmentation capabilities for Nextflow workflows.
+            Allow access to private container repositories and the provisioning of containers in your
+            Nextflow pipelines via the Wave containers service.
 
-            When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-            Note: If Fusion2 is enabled, Wave must also be enabled.
-          x-speakeasy-plan-validators: WaveEnabledValidator
+            Required when `enable_fusion` is true.
           x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
+          x-speakeasy-plan-validators: FusionEnabledValidator
+          description: |
+            Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+            speeding up most operations.
+
+            Requires `enable_wave = true`.
         logGroup:
           type: string
           description: |
@@ -12690,16 +12702,20 @@ components:
           type: boolean
           title: "Wave Enabled"
           description: |
-            Enable Wave containers for this compute environment. Wave provides container provisioning
-            and augmentation capabilities for Nextflow workflows.
+            Allow access to private container repositories and the provisioning of containers in your
+            Nextflow pipelines via the Wave containers service.
 
-            When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-            Note: If Fusion2 is enabled, Wave must also be enabled.
-          x-speakeasy-plan-validators: WaveEnabledValidator
+            Required when `enable_fusion` is true.
           x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
+          x-speakeasy-plan-validators: FusionEnabledValidator
+          description: |
+            Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+            speeding up most operations.
+
+            Requires `enable_wave = true`.
         managedIdentityClientId:
           type: string
           nullable: true
@@ -14843,16 +14859,20 @@ components:
           type: boolean
           title: "Wave Enabled"
           description: |
-            Enable Wave containers for this compute environment. Wave provides container provisioning
-            and augmentation capabilities for Nextflow workflows.
+            Allow access to private container repositories and the provisioning of containers in your
+            Nextflow pipelines via the Wave containers service.
 
-            When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-            Note: If Fusion2 is enabled, Wave must also be enabled.
-          x-speakeasy-plan-validators: WaveEnabledValidator
+            Required when `enable_fusion` is true.
           x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
+          x-speakeasy-plan-validators: FusionEnabledValidator
+          description: |
+            Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+            speeding up most operations.
+
+            Requires `enable_wave = true`.
       required:
         - region
         - clusterName
@@ -15143,18 +15163,23 @@ components:
         fargateHeadEnabled:
           type: boolean
           description: |
-            Use Fargate for head job instead of EC2.
-            Reduces costs by running head job on serverless compute.
-            Only applicable when using EC2 for worker jobs.
+            Run the Nextflow head job using the Fargate container service. This speeds up the launch
+            of your pipeline execution.
+
+            Requires `enable_fusion = true` and forge `type = "SPOT"`.
+            Not compatible with EFS (`efs_create`, `efs_id`) or FSx (`fsx_name`) file systems.
           example: false
           x-speakeasy-param-force-new: true
         arm64Enabled:
           type: boolean
           description: |
-            Enable ARM64 (Graviton) CPU architecture for compute instances.
-            When enabled, Graviton-based EC2 instances will be selected for cost savings.
+            Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
+            compute jobs.
+
+            Requires `fargate_head_enabled = true`, `enable_wave = true`, and `enable_fusion = true`.
           example: false
           x-speakeasy-param-force-new: true
+          x-speakeasy-plan-validators: GravitonValidator
         dragenInstanceType:
           type: string
           description: |
@@ -15164,6 +15189,7 @@ components:
           x-speakeasy-required-with:
             - ../dragenEnabled
             - ../dragenEnabled
+      x-speakeasy-plan-validators: FargateHeadValidator
       required:
         - type
         - minCpus
@@ -15390,16 +15416,20 @@ components:
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
+          x-speakeasy-plan-validators: FusionEnabledValidator
+          description: |
+            Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+            speeding up most operations.
+
+            Requires `enable_wave = true`.
         waveEnabled:
           type: boolean
           title: "Wave Enabled"
           description: |
-            Enable Wave containers for this compute environment. Wave provides container provisioning
-            and augmentation capabilities for Nextflow workflows.
+            Allow access to private container repositories and the provisioning of containers in your
+            Nextflow pipelines via the Wave containers service.
 
-            When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-            Note: If Fusion2 is enabled, Wave must also be enabled.
-          x-speakeasy-plan-validators: WaveEnabledValidator
+            Required when `enable_fusion` is true.
           x-speakeasy-name-override: enable_wave
       required:
         - region
@@ -15552,16 +15582,20 @@ components:
           type: boolean
           title: "Wave Enabled"
           description: |
-            Enable Wave containers for this compute environment. Wave provides container provisioning
-            and augmentation capabilities for Nextflow workflows.
+            Allow access to private container repositories and the provisioning of containers in your
+            Nextflow pipelines via the Wave containers service.
 
-            When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-            Note: If Fusion2 is enabled, Wave must also be enabled.
-          x-speakeasy-plan-validators: WaveEnabledValidator
+            Required when `enable_fusion` is true.
           x-speakeasy-name-override: enable_wave
         fusion2Enabled:
           type: boolean
           x-speakeasy-name-override: enable_fusion
+          x-speakeasy-plan-validators: FusionEnabledValidator
+          description: |
+            Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+            speeding up most operations.
+
+            Requires `enable_wave = true`.
         serviceAccount:
           type: string
           description: |

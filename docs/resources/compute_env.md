@@ -181,12 +181,15 @@ Optional:
 
 - `cluster_name` (String) The AWS EKS cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Requires replacement if changed.
-- `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
-and augmentation capabilities for Nextflow workflows.
+- `enable_fusion` (Boolean) Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
 
-When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--amazon_eks_cluster_configuration--environment))
 - `head_job_cpus` (Number) Requires replacement if changed.
@@ -241,12 +244,15 @@ Requires replacement if changed.
 - `dragen_queue` (String) Name of the AWS Batch queue for DRAGEN jobs.
 Only applicable when DRAGEN is enabled.
 Requires replacement if changed.
-- `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
-and augmentation capabilities for Nextflow workflows.
+- `enable_fusion` (Boolean) Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
 
-When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch_configuration--environment))
 - `execution_role` (String) IAM role ARN for Batch execution (pulling container images, writing logs).
@@ -254,8 +260,10 @@ Must have permissions for ECR and CloudWatch Logs.
 Format: arn:aws:iam::account-id:role/role-name
 Requires replacement if changed.
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_batch_configuration--forge))
-- `fusion_snapshots` (Boolean) Enable Fusion snapshots (beta). Allows automatic job restoration after
-AWS Spot instance reclamation. Requires Fusion v2 to be enabled.
+- `fusion_snapshots` (Boolean) Enable Fusion Snapshots (beta). This feature allows Fusion to automatically restore a job
+when it is interrupted by a spot reclamation.
+
+Requires `enable_fusion = true`.
 Requires replacement if changed.
 - `head_job_cpus` (Number) Number of CPUs allocated for the head job (default: 1). Requires replacement if changed.
 - `head_job_memory_mb` (Number) Memory allocation for the head job in MB (default: 1024). Requires replacement if changed.
@@ -268,8 +276,9 @@ If specified, logs are sent to this existing log group instead of the default.
 Requires replacement if changed.
 - `lustre_id` (String, Deprecated) Requires replacement if changed.
 - `nextflow_config` (String) Nextflow configuration settings and parameters. Requires replacement if changed.
-- `nvme_storage_enabled` (Boolean) Enable NVMe instance storage for high-performance I/O.
-When enabled, NVMe storage volumes are automatically mounted and configured.
+- `nvme_storage_enabled` (Boolean) Allow the use of NVMe instance storage to speed up I/O and disk access operations.
+
+Requires `enable_fusion = true`.
 Requires replacement if changed.
 - `post_run_script` (String) Shell script to execute after workflow completes. Requires replacement if changed.
 - `pre_run_script` (String) Shell script to execute before workflow starts. Requires replacement if changed.
@@ -314,8 +323,10 @@ must be one of ["BEST_FIT", "BEST_FIT_PROGRESSIVE", "SPOT_CAPACITY_OPTIMIZED", "
 - `allow_buckets` (List of String) List of additional S3 bucket ARNs or names that compute jobs are allowed to access.
 The work directory bucket is automatically included.
 Requires replacement if changed.
-- `arm64_enabled` (Boolean) Enable ARM64 (Graviton) CPU architecture for compute instances.
-When enabled, Graviton-based EC2 instances will be selected for cost savings.
+- `arm64_enabled` (Boolean) Enable this option to deploy Graviton-based (ARM64) EC2 instances to run your pipeline
+compute jobs.
+
+Requires `fargate_head_enabled = true`, `enable_wave = true`, and `enable_fusion = true`.
 Requires replacement if changed.
 - `bid_percentage` (Number) The maximum percentage that a Spot Instance price can be when compared with the On-Demand price
 for that instance type before instances are launched. For example, if your maximum percentage is 20%,
@@ -379,9 +390,11 @@ Format: fs- followed by hexadecimal characters.
 EFS must be in the same VPC and region.
 Requires replacement if changed.
 - `efs_mount` (String) Path where EFS will be mounted in the container. Requires replacement if changed.
-- `fargate_head_enabled` (Boolean) Use Fargate for head job instead of EC2.
-Reduces costs by running head job on serverless compute.
-Only applicable when using EC2 for worker jobs.
+- `fargate_head_enabled` (Boolean) Run the Nextflow head job using the Fargate container service. This speeds up the launch
+of your pipeline execution.
+
+Requires `enable_fusion = true` and forge `type = "SPOT"`.
+Not compatible with EFS (`efs_create`, `efs_id`) or FSx (`fsx_name`) file systems.
 Requires replacement if changed.
 - `fsx_mount` (String) Path where FSx will be mounted in the container. Requires replacement if changed.
 - `fsx_name` (String) FSx for Lustre file system name. Requires replacement if changed.
@@ -437,12 +450,15 @@ Requires replacement if changed.
 - `ec2_key_pair` (String) EC2 key pair name for SSH access to compute instances.
 Key pair must exist in the specified region.
 Requires replacement if changed.
-- `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
-and augmentation capabilities for Nextflow workflows.
+- `enable_fusion` (Boolean) Allow access to your AWS S3-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
 
-When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--aws_cloud_configuration--environment))
 - `gpu_enabled` (Boolean) Enable GPU support for compute instances.
@@ -498,12 +514,15 @@ Optional:
 - `auto_pool_mode` (Boolean, Deprecated) Requires replacement if changed.
 - `delete_jobs_on_completion` (String) must be one of ["on_success", "always", "never"]; Requires replacement if changed.
 - `delete_pools_on_completion` (Boolean) Requires replacement if changed.
-- `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
-and augmentation capabilities for Nextflow workflows.
+- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
 
-When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch_configuration--environment))
 - `forge` (Attributes) Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--azure_batch_configuration--forge))
@@ -614,12 +633,15 @@ Requires replacement if changed.
 - `debug_mode` (Number) Debug mode level for the compute environment.
 Set to a non-zero value to enable additional debug logging.
 Requires replacement if changed.
-- `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
-and augmentation capabilities for Nextflow workflows.
+- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
 
-When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_batch_service_configuration--environment))
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head job. Requires replacement if changed.
@@ -727,12 +749,15 @@ Optional:
 
 - `cluster_name` (String) The GKE cluster name. Not Null; Requires replacement if changed.
 - `compute_service_account` (String) Kubernetes service account for compute/task pods (default: default account in the namespace). Requires replacement if changed.
-- `enable_fusion` (Boolean) Requires replacement if changed.
-- `enable_wave` (Boolean) Enable Wave containers for this compute environment. Wave provides container provisioning
-and augmentation capabilities for Nextflow workflows.
+- `enable_fusion` (Boolean) Allow access to your cloud-hosted data via the Fusion v2 virtual distributed file system,
+speeding up most operations.
 
-When enable_wave is true, enable_fusion must be explicitly set to either true or false.
-Note: If Fusion2 is enabled, Wave must also be enabled.
+Requires `enable_wave = true`.
+Requires replacement if changed.
+- `enable_wave` (Boolean) Allow access to private container repositories and the provisioning of containers in your
+Nextflow pipelines via the Wave containers service.
+
+Required when `enable_fusion` is true.
 Requires replacement if changed.
 - `environment` (Attributes List) Array of environment variables for the compute environment. Requires replacement if changed. (see [below for nested schema](#nestedatt--compute_env--config--google_gke_cluster_configuration--environment))
 - `head_job_cpus` (Number) Number of CPUs allocated for the Nextflow head/launcher pod. Requires replacement if changed.

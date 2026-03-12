@@ -54,3 +54,6 @@ func (g *Ga4ghServiceInfoResponse) GetWesErrorResponse() *shared.WesErrorRespons
 	}
 	return g.WesErrorResponse
 }
+
+// #region class-body-ga4ghserviceinforesponse
+// #endregion class-body-ga4ghserviceinforesponse

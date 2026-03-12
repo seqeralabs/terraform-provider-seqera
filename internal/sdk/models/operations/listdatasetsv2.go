@@ -82,6 +82,9 @@ func (l *ListDatasetsV2Request) GetAttributes() []shared.DatasetQueryAttribute {
 	return l.Attributes
 }
 
+// #region class-body-listdatasetsv2request
+// #endregion class-body-listdatasetsv2request
+
 type ListDatasetsV2Response struct {
 	// HTTP response content type for this operation
 	ContentType string
@@ -129,3 +132,6 @@ func (l *ListDatasetsV2Response) GetErrorResponse() *shared.ErrorResponse {
 	}
 	return l.ErrorResponse
 }
+
+// #region class-body-listdatasetsv2response
+// #endregion class-body-listdatasetsv2response
