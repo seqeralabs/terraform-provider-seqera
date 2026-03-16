@@ -39,3 +39,122 @@ func (c *CreateManagedIdentityResponse) GetConfig() *ComputeConfig {
 	}
 	return c.Config
 }
+
+func (c *CreateManagedIdentityResponse) GetConfigMoabPlatform() *MoabConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.MoabConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigAwsBatch() *AWSBatchConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AWSBatchConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleCloudConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.LocalExecutionConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigAzureCloud() *AzureCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleGKEClusterConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleBatchServiceConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigAwsCloud() *AWSCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AWSCloudConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigSlurmPlatform() *SlurmConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.SlurmConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.KubernetesComputeConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AltairPBSConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.IBMLSFConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigAzureBatch() *AzureBatchConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AzureBatchConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.SeqeraComputeConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.UnivaGridEngineConfiguration
+	}
+	return nil
+}
+
+func (c *CreateManagedIdentityResponse) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleLifeSciencesConfigurationRetired
+	}
+	return nil
+}

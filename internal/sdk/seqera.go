@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.116.0 and generator version 2.859.2
+// Generated from OpenAPI doc version 1.119.0 and generator version 2.865.2
 
 import (
 	"context"
@@ -50,53 +50,53 @@ func Pointer[T any](v T) *T { return &v }
 // Seqera API: The Seqera Platform Terraform Provider enables infrastructure-as-code management of Seqera Platform resources. This provider allows you to programmatically create, configure, and manage organizations, workspaces, compute environments, pipelines, credentials, and other Seqera Platform components using Terraform.
 type Seqera struct {
 	SDKVersion string
-	// Pipeline actions
-	Actions *Actions
-	// Labels and resource labels
-	Labels *Labels
-	// Avatars
-	Avatars *Avatars
-	// Compute environments
-	ComputeEnvs *ComputeEnvs
-	// Credentials
-	Credentials *Credentials
-	// Cloud storage directory paths in Data Explorer
-	DataLinks *DataLinks
-	// Pipeline input datasets (samplesheets) in CSV or TSV format
-	Datasets *Datasets
-	// GA4GH workflow execution service runs
-	Ga4gh      *Ga4gh
-	Identities *Identities
-	// Workflow launch events
-	Launch *Launch
-	// Organizations
-	Orgs *Orgs
-	// Teams in an organization context
-	Teams *Teams
-	// Workspaces in an organization context
-	Workspaces      *Workspaces
-	PipelineSchemas *PipelineSchemas
-	// Pipeline secrets in a user or workspace context
-	PipelineSecrets *PipelineSecrets
-	// Pipelines
-	Pipelines        *Pipelines
-	PipelineVersions *PipelineVersions
 	// Computing platforms
 	Platforms *Platforms
+	// GA4GH workflow execution service runs
+	Ga4gh *Ga4gh
 	// Seqera Platform API service information
 	ServiceInfo *ServiceInfo
-	SSHKeys     *SSHKeys
-	// Studios and Studio sessions
-	Studios *Studios
+	// Labels and resource labels
+	Labels *Labels
+	// Workspaces in an organization context
+	Workspaces *Workspaces
+	// Users
+	Users *Users
 	// API access tokens
 	Tokens *Tokens
 	// Workflow execution traces
-	Trace *Trace
-	// Users
-	Users *Users
-	// Workflow executions
-	Workflows    *Workflows
+	Trace        *Trace
 	WorkflowStar *WorkflowStar
+	// Teams in an organization context
+	Teams *Teams
+	// Compute environments
+	ComputeEnvs *ComputeEnvs
+	// Organizations
+	Orgs *Orgs
+	// Workflow launch events
+	Launch *Launch
+	// Credentials
+	Credentials *Credentials
+	SSHKeys     *SSHKeys
+	// Pipeline secrets in a user or workspace context
+	PipelineSecrets *PipelineSecrets
+	// Avatars
+	Avatars    *Avatars
+	Identities *Identities
+	// Pipeline actions
+	Actions *Actions
+	// Cloud storage directory paths in Data Explorer
+	DataLinks *DataLinks
+	// Pipeline input datasets (samplesheets) in CSV or TSV format
+	Datasets        *Datasets
+	PipelineSchemas *PipelineSchemas
+	// Pipelines
+	Pipelines        *Pipelines
+	PipelineVersions *PipelineVersions
+	// Studios and Studio sessions
+	Studios *Studios
+	// Workflow executions
+	Workflows *Workflows
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -174,7 +174,7 @@ func New(opts ...SDKOption) *Seqera {
 	sdk := &Seqera{
 		SDKVersion: "0.30.5",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.30.5 2.859.2 1.116.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.30.5 2.865.2 1.119.0 github.com/seqeralabs/terraform-provider-seqera/internal/sdk",
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -195,32 +195,32 @@ func New(opts ...SDKOption) *Seqera {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
-	sdk.Actions = newActions(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Labels = newLabels(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Avatars = newAvatars(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.ComputeEnvs = newComputeEnvs(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.DataLinks = newDataLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Datasets = newDatasets(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Ga4gh = newGa4gh(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Identities = newIdentities(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Launch = newLaunch(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.PipelineSchemas = newPipelineSchemas(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.PipelineSecrets = newPipelineSecrets(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Pipelines = newPipelines(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.PipelineVersions = newPipelineVersions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Platforms = newPlatforms(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Ga4gh = newGa4gh(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.ServiceInfo = newServiceInfo(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.SSHKeys = newSSHKeys(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Studios = newStudios(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Labels = newLabels(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Workspaces = newWorkspaces(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Tokens = newTokens(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Trace = newTrace(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Users = newUsers(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Workflows = newWorkflows(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.WorkflowStar = newWorkflowStar(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Teams = newTeams(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.ComputeEnvs = newComputeEnvs(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Orgs = newOrgs(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Launch = newLaunch(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Credentials = newCredentials(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.SSHKeys = newSSHKeys(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PipelineSecrets = newPipelineSecrets(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Avatars = newAvatars(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Identities = newIdentities(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Actions = newActions(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.DataLinks = newDataLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Datasets = newDatasets(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PipelineSchemas = newPipelineSchemas(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Pipelines = newPipelines(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PipelineVersions = newPipelineVersions(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Studios = newStudios(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Workflows = newWorkflows(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

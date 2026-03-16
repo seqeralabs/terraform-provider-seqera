@@ -3,20 +3,21 @@
 package types
 
 type ComputeConfig struct {
-	AWSBatchConfiguration                  *AWSBatchConfiguration                  `queryParam:"inline" tfsdk:"aws_batch_configuration"`
-	AWSCloudConfiguration                  *AWSCloudConfiguration                  `queryParam:"inline" tfsdk:"aws_cloud_configuration"`
-	AltairPBSConfiguration                 *AltairPBSConfiguration                 `queryParam:"inline" tfsdk:"altair_pbs_configuration"`
-	AmazonEKSClusterConfiguration          *AmazonEKSClusterConfiguration          `queryParam:"inline" tfsdk:"amazon_eks_cluster_configuration"`
-	AzureBatchConfiguration                *AzureBatchConfiguration                `queryParam:"inline" tfsdk:"azure_batch_configuration"`
-	AzureCloudConfiguration                *AzureCloudConfiguration                `queryParam:"inline" tfsdk:"azure_cloud_configuration"`
-	GoogleBatchServiceConfiguration        *GoogleBatchServiceConfiguration        `queryParam:"inline" tfsdk:"google_batch_service_configuration"`
-	GoogleCloudConfiguration               *GoogleCloudConfiguration               `queryParam:"inline" tfsdk:"google_cloud_configuration"`
-	GoogleGKEClusterConfiguration          *GoogleGKEClusterConfiguration          `queryParam:"inline" tfsdk:"google_gke_cluster_configuration"`
-	GoogleLifeSciencesConfigurationRetired *GoogleLifeSciencesConfigurationRetired `queryParam:"inline" tfsdk:"google_life_sciences_configuration_retired"`
-	IBMLSFConfiguration                    *IBMLSFConfiguration                    `queryParam:"inline" tfsdk:"ibmlsf_configuration"`
-	KubernetesComputeConfiguration         *KubernetesComputeConfiguration         `queryParam:"inline" tfsdk:"kubernetes_compute_configuration"`
-	MoabConfiguration                      *MoabConfiguration                      `queryParam:"inline" tfsdk:"moab_configuration"`
-	SeqeraComputeConfiguration             *SeqeraComputeConfiguration             `queryParam:"inline" tfsdk:"seqera_compute_configuration"`
-	SlurmConfiguration                     *SlurmConfiguration                     `queryParam:"inline" tfsdk:"slurm_configuration"`
-	UnivaGridEngineConfiguration           *UnivaGridEngineConfiguration           `queryParam:"inline" tfsdk:"univa_grid_engine_configuration"`
+	AwsBatch              *AWSBatchConfiguration                  `queryParam:"inline" tfsdk:"aws_batch"`
+	AwsCloud              *AWSCloudConfiguration                  `queryParam:"inline" tfsdk:"aws_cloud"`
+	AltairPlatform        *AltairPBSConfiguration                 `queryParam:"inline" tfsdk:"altair_platform"`
+	EksPlatform           *AmazonEKSClusterConfiguration          `queryParam:"inline" tfsdk:"eks_platform"`
+	AzureBatch            *AzureBatchConfiguration                `queryParam:"inline" tfsdk:"azure_batch"`
+	AzureCloud            *AzureCloudConfiguration                `queryParam:"inline" tfsdk:"azure_cloud"`
+	GoogleBatch           *GoogleBatchServiceConfiguration        `queryParam:"inline" tfsdk:"google_batch"`
+	GoogleCloud           *GoogleCloudConfiguration               `queryParam:"inline" tfsdk:"google_cloud"`
+	GkePlatform           *GoogleGKEClusterConfiguration          `queryParam:"inline" tfsdk:"gke_platform"`
+	GoogleLifesciences    *GoogleLifeSciencesConfigurationRetired `queryParam:"inline" tfsdk:"google_lifesciences"`
+	LsfPlatform           *IBMLSFConfiguration                    `queryParam:"inline" tfsdk:"lsf_platform"`
+	K8sPlatform           *KubernetesComputeConfiguration         `queryParam:"inline" tfsdk:"k8s_platform"`
+	LocalPlatform         *LocalExecutionConfiguration            `queryParam:"inline" tfsdk:"local_platform"`
+	MoabPlatform          *MoabConfiguration                      `queryParam:"inline" tfsdk:"moab_platform"`
+	SeqeracomputePlatform *SeqeraComputeConfiguration             `queryParam:"inline" tfsdk:"seqeracompute_platform"`
+	SlurmPlatform         *SlurmConfiguration                     `queryParam:"inline" tfsdk:"slurm_platform"`
+	UgePlatform           *UnivaGridEngineConfiguration           `queryParam:"inline" tfsdk:"uge_platform"`
 }

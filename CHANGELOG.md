@@ -1,34 +1,9 @@
 # v0.31.0
 
-BREAKING CHANGES:
-
-- **Compute Environments** - Configuration block names in `seqera_compute_env` have been renamed. Existing Terraform configurations must be updated:
-
-  | Old Name                 | New Name                                     |
-  | ------------------------ | -------------------------------------------- |
-  | `aws_batch`              | `aws_batch_configuration`                    |
-  | `aws_cloud`              | `aws_cloud_configuration`                    |
-  | `azure_batch`            | `azure_batch_configuration`                  |
-  | `google_batch`           | `google_batch_service_configuration`         |
-  | `google_lifesciences`    | `google_life_sciences_configuration_retired` |
-  | `altair_platform`        | `altair_pbs_configuration`                   |
-  | `eks_platform`           | `amazon_eks_cluster_configuration`           |
-  | `gke_platform`           | `google_gke_cluster_configuration`           |
-  | `k8s_platform`           | `kubernetes_compute_configuration`           |
-  | `lsf_platform`           | `ibmlsf_configuration`                       |
-  | `moab_platform`          | `moab_configuration`                         |
-  | `seqeracompute_platform` | `seqera_compute_configuration`               |
-  | `slurm_platform`         | `slurm_configuration`                        |
-  | `uge_platform`           | `univa_grid_engine_configuration`            |
-  | `local_platform`         | **Removed**                                  |
-
-- **Compute Environments** - New configuration blocks added: `azure_cloud_configuration`, `google_cloud_configuration`.
-
-- **Compute Environments** - Platform enum updated: removed `local-platform`, added `google-cloud` and `azure-cloud`.
-
-- **Workflows** - The read-only `workflow` block now includes `fusion` and `wave` attributes. The `messages` field has been removed. A new read-only `pipeline_info` block has been added with pipeline version metadata.
 
 ENHANCEMENTS:
+
+- **Compute Environments** - New configuration blocks added: `azure_cloud`, `google_cloud`.
 
 - **Pipelines** - Added `version` block for pipeline versioning support and `pipeline_schema_id` field in the launch configuration.
 

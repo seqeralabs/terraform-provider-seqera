@@ -14,6 +14,8 @@ type GooglePlatformMetainfo struct {
 	Zones         []string                          `json:"zones,omitempty"`
 	Buckets       []GooglePlatformMetainfoBucket    `json:"buckets,omitempty"`
 	Filestores    []GooglePlatformMetainfoFilestore `json:"filestores,omitempty"`
+	InstanceTypes []GoogleInstanceType              `json:"instanceTypes,omitempty"`
+	Images        []GoogleImage                     `json:"images,omitempty"`
 }
 
 func (g GooglePlatformMetainfo) MarshalJSON() ([]byte, error) {
@@ -67,4 +69,18 @@ func (g *GooglePlatformMetainfo) GetFilestores() []GooglePlatformMetainfoFilesto
 		return nil
 	}
 	return g.Filestores
+}
+
+func (g *GooglePlatformMetainfo) GetInstanceTypes() []GoogleInstanceType {
+	if g == nil {
+		return nil
+	}
+	return g.InstanceTypes
+}
+
+func (g *GooglePlatformMetainfo) GetImages() []GoogleImage {
+	if g == nil {
+		return nil
+	}
+	return g.Images
 }

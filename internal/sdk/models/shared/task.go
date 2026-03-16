@@ -89,8 +89,9 @@ type Task struct {
 	// Voluntary context switches
 	VolCtxt *int64 `json:"volCtxt,omitempty"`
 	// Involuntary context switches
-	InvCtxt              *int64 `json:"invCtxt,omitempty"`
-	NumSpotInterruptions *int   `json:"numSpotInterruptions,omitempty"`
+	InvCtxt              *int64  `json:"invCtxt,omitempty"`
+	LogStreamID          *string `json:"logStreamId,omitempty"`
+	NumSpotInterruptions *int    `json:"numSpotInterruptions,omitempty"`
 	// Task exit value (can be string)
 	Exit         *string    `json:"exit,omitempty"`
 	ID           *int64     `json:"id,omitempty"`
@@ -411,6 +412,13 @@ func (t *Task) GetInvCtxt() *int64 {
 		return nil
 	}
 	return t.InvCtxt
+}
+
+func (t *Task) GetLogStreamID() *string {
+	if t == nil {
+		return nil
+	}
+	return t.LogStreamID
 }
 
 func (t *Task) GetNumSpotInterruptions() *int {

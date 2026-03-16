@@ -27,6 +27,7 @@ const (
 	ComputeEnvResponseDtoPlatformLsfPlatform           ComputeEnvResponseDtoPlatform = "lsf-platform"
 	ComputeEnvResponseDtoPlatformAltairPlatform        ComputeEnvResponseDtoPlatform = "altair-platform"
 	ComputeEnvResponseDtoPlatformMoabPlatform          ComputeEnvResponseDtoPlatform = "moab-platform"
+	ComputeEnvResponseDtoPlatformLocalPlatform         ComputeEnvResponseDtoPlatform = "local-platform"
 	ComputeEnvResponseDtoPlatformGoogleLifesciences    ComputeEnvResponseDtoPlatform = "google-lifesciences"
 )
 
@@ -68,6 +69,8 @@ func (e *ComputeEnvResponseDtoPlatform) UnmarshalJSON(data []byte) error {
 	case "altair-platform":
 		fallthrough
 	case "moab-platform":
+		fallthrough
+	case "local-platform":
 		fallthrough
 	case "google-lifesciences":
 		*e = ComputeEnvResponseDtoPlatform(v)
@@ -204,6 +207,125 @@ func (c *ComputeEnvResponseDto) GetConfig() *ComputeConfig {
 		return nil
 	}
 	return c.Config
+}
+
+func (c *ComputeEnvResponseDto) GetConfigMoabPlatform() *MoabConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.MoabConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigAwsBatch() *AWSBatchConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AWSBatchConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigGoogleCloud() *GoogleCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleCloudConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigLocalPlatform() *LocalExecutionConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.LocalExecutionConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigAzureCloud() *AzureCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AzureCloudConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigGkePlatform() *GoogleGKEClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleGKEClusterConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigGoogleBatch() *GoogleBatchServiceConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleBatchServiceConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigAwsCloud() *AWSCloudConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AWSCloudConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigSlurmPlatform() *SlurmConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.SlurmConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigK8sPlatform() *KubernetesComputeConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.KubernetesComputeConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigAltairPlatform() *AltairPBSConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AltairPBSConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigLsfPlatform() *IBMLSFConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.IBMLSFConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigAzureBatch() *AzureBatchConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AzureBatchConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigSeqeracomputePlatform() *SeqeraComputeConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.SeqeraComputeConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigEksPlatform() *AmazonEKSClusterConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.AmazonEKSClusterConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigUgePlatform() *UnivaGridEngineConfiguration {
+	if v := c.GetConfig(); v != nil {
+		return v.UnivaGridEngineConfiguration
+	}
+	return nil
+}
+
+func (c *ComputeEnvResponseDto) GetConfigGoogleLifesciences() *GoogleLifeSciencesConfigurationRetired {
+	if v := c.GetConfig(); v != nil {
+		return v.GoogleLifeSciencesConfigurationRetired
+	}
+	return nil
 }
 
 func (c *ComputeEnvResponseDto) GetDateCreated() *time.Time {

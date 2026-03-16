@@ -23,6 +23,7 @@ type AWSCloudConfiguration struct {
 	PostRunScript      types.String        `tfsdk:"post_run_script"`
 	PreRunScript       types.String        `tfsdk:"pre_run_script"`
 	Region             types.String        `tfsdk:"region"`
+	SchedEnabled       types.Bool          `tfsdk:"sched_enabled"`
 	SecurityGroups     []types.String      `tfsdk:"security_groups"`
 	SubnetID           types.String        `tfsdk:"subnet_id"`
 	WorkDir            types.String        `tfsdk:"work_dir"`

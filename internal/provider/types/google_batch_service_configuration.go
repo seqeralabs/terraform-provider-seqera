@@ -7,8 +7,10 @@ import (
 )
 
 type GoogleBatchServiceConfiguration struct {
+	BootDiskImage               types.String            `tfsdk:"boot_disk_image"`
 	BootDiskSizeGb              types.Int32             `tfsdk:"boot_disk_size_gb"`
 	ComputeJobsInstanceTemplate types.String            `tfsdk:"compute_jobs_instance_template"`
+	ComputeJobsMachineType      types.String            `tfsdk:"compute_jobs_machine_type"`
 	CopyImage                   types.String            `tfsdk:"copy_image"`
 	CPUPlatform                 types.String            `tfsdk:"cpu_platform"`
 	DebugMode                   types.Int32             `tfsdk:"debug_mode"`
@@ -22,6 +24,7 @@ type GoogleBatchServiceConfiguration struct {
 	Location                    types.String            `tfsdk:"location"`
 	MachineType                 types.String            `tfsdk:"machine_type"`
 	Network                     types.String            `tfsdk:"network"`
+	NetworkTags                 []types.String          `tfsdk:"network_tags"`
 	NextflowConfig              types.String            `tfsdk:"nextflow_config"`
 	NfsMount                    types.String            `tfsdk:"nfs_mount"`
 	NfsTarget                   types.String            `tfsdk:"nfs_target"`
