@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: 5aa1f75a9657efdade8e7ea0ba3ef5cb
+  docChecksum: be5709adfd2573b121281e4144202f61
   docVersion: 1.119.0
   speakeasyVersion: 1.755.1
   generationVersion: 2.865.2
@@ -212,10 +212,6 @@ trackedFiles:
     id: e57779bdc35f
     last_write_checksum: sha1:5700e85c31cc3c2181f8223c6d5671bd97991beb
     pristine_git_object: 12a7eb4925e4b351967b0515d9f2b509e905ec4d
-  examples/resources/seqera_pipeline/resource.tf:
-    id: b26016c20b8c
-    last_write_checksum: sha1:0a443c5f8df953ce1cf4617b4c144d000f750a16
-    pristine_git_object: 967785067a13174bb250560be1262a241549c047
   examples/resources/seqera_pipeline_secret/import-by-string-id.tf:
     id: 706fedb7e486
     last_write_checksum: sha1:88a58f3ebaf0d095232cf39cefc8aa98bcadba1b
@@ -406,7 +402,7 @@ trackedFiles:
     pristine_git_object: 0ea64fbeb1fd7709d7241a8e06d34bfe9d0323d3
   internal/provider/action_resource.go:
     id: f7c19bf35b58
-    last_write_checksum: sha1:d33f26dccce031ce422a62bfae0659a2359ba519
+    last_write_checksum: sha1:a15ea418c130cfefba72b9f55b9ad3d33a15853f
     pristine_git_object: fc35041e2f1cf6db01d04e9e9e861df96d042782
   internal/provider/action_resource_sdk.go:
     id: 28576317893d
@@ -582,7 +578,7 @@ trackedFiles:
     pristine_git_object: fe81d09c0d5656f2f24a007997800ddfa455d8b7
   internal/provider/pipeline_resource.go:
     id: 4ed6bd4f0039
-    last_write_checksum: sha1:cd81fbb6a7a4a7930fc1295e7370119e4c2a21eb
+    last_write_checksum: sha1:4eb745f69b73170abb7bc8080cf9ebdfa007a51d
     pristine_git_object: 775b794c8dc2b188c818f0bfc8e90364ef46737b
   internal/provider/pipeline_resource_sdk.go:
     id: c3bca9acd758
@@ -950,7 +946,7 @@ trackedFiles:
     pristine_git_object: 9cc78dd1f7684941df14144df744dad2b23885f9
   internal/provider/workflows_resource.go:
     id: efcad015245a
-    last_write_checksum: sha1:f3463a2553fd4b01aad8b3809c9910256bffe2a1
+    last_write_checksum: sha1:4a8d583c4e2aeacf976e1f5abf1a5da728ae67a5
     pristine_git_object: 2ec8cdfba570a37c74c14055a3d9ffa12fe8881c
   internal/provider/workflows_resource_sdk.go:
     id: ee2d992725aa
@@ -3628,7 +3624,7 @@ trackedFiles:
     pristine_git_object: 3bc4009b3e5d627558d496fdfa955c0de921bde3
   internal/sdk/models/shared/workflowlaunchrequest.go:
     id: 2b0df021cbad
-    last_write_checksum: sha1:c3adf4be1aff4291498a594f5abb580436ed8f48
+    last_write_checksum: sha1:003111ee0288e6b027e4e342693f7e8d2150745f
     pristine_git_object: 610d44495458858e298def213b53372951961f8e
   internal/sdk/models/shared/workflowlaunchresponse.go:
     id: 58befbe96295

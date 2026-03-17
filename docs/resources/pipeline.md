@@ -20,55 +20,60 @@ for scalable bioinformatics and data processing workflows.
 ## Example Usage
 
 ```terraform
-resource "seqera_pipeline" "my_pipeline" {
-  description = "...my_description..."
-  icon        = "...my_icon..."
-  label_ids = [
-    7
-  ]
+# Pipeline Examples
+#
+# Manage Nextflow pipeline definitions in Seqera Platform.
+
+# Example 1: Pipeline with explicit work_dir
+resource "seqera_pipeline" "basic" {
+  workspace_id = seqera_workspace.main.id
+  name         = "rna-seq-analysis"
+  description  = "RNA sequencing analysis pipeline"
+
   launch = {
-    compute_env_id = "4g09tT4pW4JFUvXTHdB6zP"
-    config_profiles = [
-      "docker",
-      "aws",
-    ]
-    config_text        = "process {\n  executor = 'awsbatch'\n  queue = 'my-queue'\n}\n"
-    entry_name         = "main.nf"
-    head_job_cpus      = 2
-    head_job_memory_mb = 4096
-    label_ids = [
-      1001,
-      1002,
-      1003,
-    ]
-    main_script        = "main.nf"
-    params_text        = "{\n  \"input\": \"s3://my-bucket/input.csv\",\n  \"output_dir\": \"s3://my-bucket/results\"\n}\n"
-    pipeline           = "https://github.com/nextflow-io/hello"
-    pipeline_schema_id = 7
-    post_run_script    = "#!/bin/bash\necho \"Workflow completed\"\naws s3 sync ./results s3://my-bucket/results\n"
-    pre_run_script     = "#!/bin/bash\necho \"Starting workflow execution\"\naws s3 sync s3://my-bucket/data ./data\n"
-    pull_latest        = true
-    resume             = true
-    revision           = "main"
-    run_name           = "nextflow-hello"
-    schema_name        = "nextflow_schema.json"
-    stub_run           = false
-    tower_config       = "...my_tower_config..."
-    user_secrets = [
-      "MY_API_KEY",
-      "DATABASE_PASSWORD",
-    ]
-    work_dir = "s3://my-bucket/work"
-    workspace_secrets = [
-      "WORKSPACE_TOKEN",
-      "SHARED_CREDENTIALS",
-    ]
+    pipeline       = "https://github.com/nf-core/rnaseq"
+    compute_env_id = seqera_compute_env.aws.compute_env.id
+    work_dir       = "s3://my-bucket/work"
+    revision       = "main"
   }
-  name = "rna-seq-analysis"
-  version = {
-    name = "...my_name..."
+}
+
+# Example 2: Pipeline referencing work_dir from a generic compute environment
+# Avoids duplicating the work_dir value across resources
+resource "seqera_pipeline" "from_generic_ce" {
+  workspace_id = seqera_workspace.main.id
+  name         = "genomics-pipeline"
+
+  launch = {
+    pipeline       = "https://github.com/nf-core/sarek"
+    compute_env_id = seqera_compute_env.aws.compute_env.id
+    work_dir       = seqera_compute_env.aws.compute_env.config.aws_batch.work_dir
+    revision       = "main"
   }
-  workspace_id = 3
+}
+
+# Example 3: Pipeline referencing work_dir from a platform-specific compute environment
+resource "seqera_pipeline" "from_platform_ce" {
+  workspace_id = seqera_workspace.main.id
+  name         = "variant-calling"
+
+  launch = {
+    pipeline       = "https://github.com/nf-core/sarek"
+    compute_env_id = seqera_aws_batch_compute_env.production.compute_env_id
+    work_dir       = seqera_aws_batch_compute_env.production.config.work_dir
+    revision       = "3.4.0"
+  }
+}
+
+# Example 4: Pipeline in a shared workspace (work_dir and compute_env_id are optional)
+resource "seqera_pipeline" "shared" {
+  workspace_id = seqera_workspace.shared.id
+  name         = "hello-world"
+
+  launch = {
+    pipeline = "https://github.com/nextflow-io/hello"
+    revision = "main"
+  }
 }
 ```
 
@@ -122,7 +127,7 @@ Optional:
 - `stub_run` (Boolean)
 - `tower_config` (String) Tower-specific configuration
 - `user_secrets` (List of String)
-- `work_dir` (String) Working directory
+- `work_dir` (String) Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir.
 - `workspace_secrets` (List of String)
 
 
