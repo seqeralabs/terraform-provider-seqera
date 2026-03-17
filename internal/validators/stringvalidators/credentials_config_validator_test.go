@@ -235,6 +235,15 @@ func TestCredentialsConfigValidator_UnknownProviderType(t *testing.T) {
 	assert.False(t, diags.HasError(), "unknown provider_type should skip validation")
 }
 
+func TestCredentialsConfigValidator_AzureBothAzureAndCloudKeysRejected(t *testing.T) {
+	t.Parallel()
+	// Setting both keys.azure and keys.azure_cloud simultaneously should fail.
+	req := makeRequest("azure", buildKeysValue("azure", "azure_cloud"))
+	diags := runValidator(req)
+	assert.True(t, diags.HasError(), "provider_type=azure with both keys.azure and keys.azure_cloud should fail")
+	assert.Contains(t, diags.Errors()[0].Summary(), "Multiple Provider Keys")
+}
+
 func TestCredentialsConfigValidator_AzureRejectsEntraKeys(t *testing.T) {
 	t.Parallel()
 	req := makeRequest("azure", buildKeysValue("azure_entra"))
