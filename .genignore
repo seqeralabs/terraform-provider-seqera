@@ -22,6 +22,7 @@ internal/validators/boolvalidators/fusion_enabled_validator.go
 internal/validators/boolvalidators/fusion_snapshots_validator.go
 internal/validators/objectvalidators/fargate_head_validator.go
 internal/validators/boolvalidators/graviton_validator.go
+internal/validators/stringvalidators/work_dir_format_validator.go
 
 # Custom state upgraders for field renames and migrations
 internal/stateupgraders/awsbatchce_v0.go
@@ -30,6 +31,7 @@ internal/stateupgraders/computeenv_v0.go
 internal/stateupgraders/action_v0.go
 
 # Custom examples that should be manually maintained
+examples/resources/seqera_pipeline/resource.tf
 examples/resources/seqera_action/resource.tf
 examples/resources/seqera_labels/resource.tf
 examples/resources/seqera_orgs/resource.tf

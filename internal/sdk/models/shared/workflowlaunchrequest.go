@@ -9,7 +9,7 @@ type WorkflowLaunchRequest struct {
 	// Custom run name
 	RunName  *string `json:"runName,omitempty"`
 	Pipeline *string `json:"pipeline,omitempty"`
-	// Working directory
+	// Working directory for pipeline execution. Must start with a valid cloud storage prefix (s3://, gs://, az://) or be an absolute local path (/). Do not include a trailing slash — the API strips trailing slashes at launch time, which causes plan diffs. Required for pipelines in private workspaces and personal context; optional for shared workspaces. You can reference the work_dir from your compute environment instead of duplicating the value, e.g. seqera_compute_env.my_ce.compute_env.config.aws_batch.work_dir or seqera_aws_batch_compute_env.my_ce.config.work_dir.
 	WorkDir *string `json:"workDir"`
 	// Pipeline revision
 	Revision         *string  `json:"revision,omitempty"`
