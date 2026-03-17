@@ -259,7 +259,7 @@ func TestSchemaNameToKeysFieldName(t *testing.T) {
 	t.Parallel()
 
 	cases := map[string]string{
-		"AgentSecurityKeys":          "tw_agent",
+		"AgentSecurityKeys":         "tw_agent",
 		"AwsSecurityKeys":           "aws",
 		"AzureCloudSecurityKeys":    "azure_cloud",
 		"AzureEntraKeys":            "azure_entra",

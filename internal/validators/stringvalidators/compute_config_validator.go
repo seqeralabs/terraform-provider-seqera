@@ -129,7 +129,6 @@ func (v StringComputeConfigValidatorValidator) ValidateString(ctx context.Contex
 	}
 }
 
-
 func ComputeConfigValidator() validator.String {
 	return StringComputeConfigValidatorValidator{}
 }
