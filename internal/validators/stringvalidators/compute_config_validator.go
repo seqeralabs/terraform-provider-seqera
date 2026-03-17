@@ -77,7 +77,7 @@ func (v StringComputeConfigValidatorValidator) ValidateString(ctx context.Contex
 		resp.Diagnostics.AddAttributeError(
 			req.Path,
 			"Invalid Platform",
-			fmt.Sprintf("Platform '%s' is not supported. Valid platforms are: %v", platform, getValidPlatforms(platformConfigMap)),
+			fmt.Sprintf("Platform '%s' is not supported. Valid platforms are: %v", platform, mapKeys(platformConfigMap)),
 		)
 		return
 	}
@@ -129,14 +129,6 @@ func (v StringComputeConfigValidatorValidator) ValidateString(ctx context.Contex
 	}
 }
 
-// Helper function to get valid platforms
-func getValidPlatforms(platformMap map[string][]string) []string {
-	platforms := make([]string, 0, len(platformMap))
-	for platform := range platformMap {
-		platforms = append(platforms, platform)
-	}
-	return platforms
-}
 
 func ComputeConfigValidator() validator.String {
 	return StringComputeConfigValidatorValidator{}

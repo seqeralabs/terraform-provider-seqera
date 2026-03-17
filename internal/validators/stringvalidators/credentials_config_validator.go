@@ -56,38 +56,46 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 	}
 
 	// Get the expected keys field name by converting schema name to field name
-	// Provider to schema mapping from the discriminator in the OpenAPI spec:
-	providerKeysMap := map[string]string{
-		"aws":           "AwsSecurityKeys",
-		"azure":         "AzureSecurityKeys",
-		"google":        "GoogleSecurityKeys",
-		"github":        "GitHubSecurityKeys",
-		"gitlab":        "GitLabSecurityKeys",
-		"bitbucket":     "BitBucketSecurityKeys",
-		"ssh":           "SSHSecurityKeys",
-		"k8s":           "K8sSecurityKeys",
-		"container-reg": "ContainerRegistryKeys",
-		"tw-agent":      "AgentSecurityKeys",
-		"codecommit":    "CodeCommitSecurityKeys",
-		"gitea":         "GiteaSecurityKeys",
-		"azurerepos":    "AzureReposSecurityKeys",
-		"seqeracompute": "SeqeraComputeSecurityKeys",
-		"azure_entra":   "AzureEntraKeys",
+	// Provider to schema mapping from the discriminator in the OpenAPI spec.
+	// Some provider types accept multiple keys blocks (e.g., "azure" accepts
+	// both "azure" shared-key and "azure_cloud" service-principal keys).
+	providerKeysMap := map[string][]string{
+		"aws":           {"AwsSecurityKeys"},
+		"azure":         {"AzureSecurityKeys", "AzureCloudSecurityKeys"},
+		"google":        {"GoogleSecurityKeys"},
+		"github":        {"GitHubSecurityKeys"},
+		"gitlab":        {"GitLabSecurityKeys"},
+		"bitbucket":     {"BitBucketSecurityKeys"},
+		"ssh":           {"SSHSecurityKeys"},
+		"k8s":           {"K8sSecurityKeys"},
+		"container-reg": {"ContainerRegistryKeys"},
+		"tw-agent":      {"AgentSecurityKeys"},
+		"codecommit":    {"CodeCommitSecurityKeys"},
+		"gitea":         {"GiteaSecurityKeys"},
+		"azurerepos":    {"AzureReposSecurityKeys"},
+		"seqeracompute": {"SeqeraComputeSecurityKeys"},
+		"azure_entra":   {"AzureEntraKeys"},
 	}
 
-	// Get the expected keys schema name for this provider
-	expectedSchemaName, exists := providerKeysMap[providerType]
+	// Get the expected keys schema names for this provider
+	expectedSchemaNames, exists := providerKeysMap[providerType]
 	if !exists {
 		resp.Diagnostics.AddAttributeError(
 			req.Path,
 			"Invalid Provider Type",
-			fmt.Sprintf("Provider type '%s' is not supported. Valid provider types are: %v", providerType, getValidProviders(providerKeysMap)),
+			fmt.Sprintf("Provider type '%s' is not supported. Valid provider types are: %v", providerType, mapKeys(providerKeysMap)),
 		)
 		return
 	}
 
-	// Convert schema name to field name (e.g., "AwsSecurityKeys" -> "aws")
-	expectedFieldName := schemaNameToKeysFieldName(expectedSchemaName)
+	// Build the set of accepted field names for this provider type
+	expectedFieldNames := make(map[string]bool)
+	var expectedFieldNamesList []string
+	for _, schemaName := range expectedSchemaNames {
+		fieldName := schemaNameToKeysFieldName(schemaName)
+		expectedFieldNames[fieldName] = true
+		expectedFieldNamesList = append(expectedFieldNamesList, fieldName)
+	}
 
 	// Check if the keys object has exactly one keys field set and it matches the provider
 	keysAttrs := keysObj.Attributes()
@@ -97,7 +105,7 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 	for keysName, attr := range keysAttrs {
 		if !attr.IsNull() && !attr.IsUnknown() {
 			setKeysNames = append(setKeysNames, keysName)
-			if keysName == expectedFieldName {
+			if expectedFieldNames[keysName] {
 				matchCount++
 			}
 		}
@@ -108,7 +116,7 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 		resp.Diagnostics.AddAttributeError(
 			req.Path,
 			"Provider Keys Mismatch",
-			fmt.Sprintf("Provider type '%s' cannot be used with keys type '%s'. Expected keys type: '%s'", providerType, setKeysNames[0], expectedFieldName),
+			fmt.Sprintf("Provider type '%s' cannot be used with keys type '%s'. Expected one of: %v", providerType, setKeysNames[0], expectedFieldNamesList),
 		)
 		return
 	}
@@ -128,7 +136,7 @@ func (v StringCredentialsConfigValidatorValidator) ValidateString(ctx context.Co
 		resp.Diagnostics.AddAttributeError(
 			req.Path,
 			"Missing Provider Keys",
-			fmt.Sprintf("Provider type '%s' requires keys type '%s' to be set", providerType, expectedFieldName),
+			fmt.Sprintf("Provider type '%s' requires one of these keys types to be set: %v", providerType, expectedFieldNamesList),
 		)
 	}
 }
@@ -142,6 +150,8 @@ func schemaNameToKeysFieldName(schemaName string) string {
 		return "tw_agent"
 	case "AwsSecurityKeys":
 		return "aws"
+	case "AzureCloudSecurityKeys":
+		return "azure_cloud"
 	case "AzureEntraKeys":
 		return "azure_entra"
 	case "AzureReposSecurityKeys":
@@ -174,13 +184,13 @@ func schemaNameToKeysFieldName(schemaName string) string {
 	}
 }
 
-// Helper function to get valid providers
-func getValidProviders(providerMap map[string]string) []string {
-	providers := make([]string, 0, len(providerMap))
-	for provider := range providerMap {
-		providers = append(providers, provider)
+// mapKeys returns the keys of a map[string][]string as a string slice.
+func mapKeys(m map[string][]string) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
 	}
-	return providers
+	return keys
 }
 
 func CredentialsConfigValidator() validator.String {
