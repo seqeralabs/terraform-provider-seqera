@@ -184,7 +184,6 @@ func schemaNameToKeysFieldName(schemaName string) string {
 	}
 }
 
-
 func CredentialsConfigValidator() validator.String {
 	return StringCredentialsConfigValidatorValidator{}
 }
