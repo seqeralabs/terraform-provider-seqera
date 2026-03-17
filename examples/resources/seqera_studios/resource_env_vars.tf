@@ -1,6 +1,6 @@
 resource "seqera_studios" "studio_with_env_vars" {
   auto_start     = false
-  compute_env_id = "htaAEef9YYm5DqQrAyeDy"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     cpu            = 2
     memory         = 8192
@@ -17,5 +17,5 @@ resource "seqera_studios" "studio_with_env_vars" {
   description          = "Studio with custom environment variables"
   is_private           = true
   name                 = "studio-with-env"
-  workspace_id         = seqera_workspace.my_workspace.id
+  workspace_id         = seqera_workspace.main.id
 }

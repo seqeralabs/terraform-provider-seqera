@@ -1,6 +1,6 @@
 resource "seqera_studios" "jupyter_with_conda_heredoc" {
   auto_start     = false
-  compute_env_id = "compute-env-id"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     # Use heredoc for simple YAML - just copy/paste your conda environment
     conda_environment = <<-EOT
@@ -25,5 +25,5 @@ resource "seqera_studios" "jupyter_with_conda_heredoc" {
   is_private           = true
   name                 = "jupyter-with-conda-heredoc"
   spot                 = true
-  workspace_id         = seqera_workspace.my_workspace.id
+  workspace_id         = seqera_workspace.main.id
 }

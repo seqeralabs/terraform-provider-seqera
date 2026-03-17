@@ -1,20 +1,6 @@
-resource "seqera_labels" "environment_prod" {
-  workspace_id = seqera_workspace.my_workspace.id
-  name         = "environment"
-  value        = "production"
-  resource     = true
-}
-
-resource "seqera_labels" "team_datascience" {
-  workspace_id = seqera_workspace.my_workspace.id
-  name         = "team"
-  value        = "data-science"
-  resource     = true
-}
-
 resource "seqera_studios" "jupyter_with_conda_labels" {
   auto_start     = false
-  compute_env_id = "compute-env-id"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     # Use yamlencode() for dynamic generation or when using Terraform variables
     conda_environment = yamlencode({
@@ -49,5 +35,5 @@ resource "seqera_studios" "jupyter_with_conda_labels" {
   ]
   name         = "jupyter-with-conda-labels"
   spot         = true
-  workspace_id = seqera_workspace.my_workspace.id
+  workspace_id = seqera_workspace.main.id
 }

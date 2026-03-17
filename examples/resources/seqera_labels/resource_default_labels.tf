@@ -9,7 +9,7 @@ locals {
 resource "seqera_labels" "defaults" {
   for_each = local.default_labels
 
-  workspace_id = 123456
+  workspace_id = seqera_workspace.main.id
   name         = each.key
   value        = each.value
   resource     = true
