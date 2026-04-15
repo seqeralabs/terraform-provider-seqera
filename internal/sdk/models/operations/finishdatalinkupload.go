@@ -56,10 +56,10 @@ type FinishDataLinkUploadResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// BadRequest
-	ErrorResponse *shared.ErrorResponse
 	// FinishDataLinkUpload 200 response
 	Object *FinishDataLinkUploadResponseBody
+	// BadRequest
+	ErrorResponse *shared.ErrorResponse
 }
 
 func (f *FinishDataLinkUploadResponse) GetContentType() string {
@@ -83,16 +83,16 @@ func (f *FinishDataLinkUploadResponse) GetRawResponse() *http.Response {
 	return f.RawResponse
 }
 
-func (f *FinishDataLinkUploadResponse) GetErrorResponse() *shared.ErrorResponse {
-	if f == nil {
-		return nil
-	}
-	return f.ErrorResponse
-}
-
 func (f *FinishDataLinkUploadResponse) GetObject() *FinishDataLinkUploadResponseBody {
 	if f == nil {
 		return nil
 	}
 	return f.Object
+}
+
+func (f *FinishDataLinkUploadResponse) GetErrorResponse() *shared.ErrorResponse {
+	if f == nil {
+		return nil
+	}
+	return f.ErrorResponse
 }

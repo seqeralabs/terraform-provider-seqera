@@ -86,6 +86,7 @@ terraform:
     - env: TOWER_ACCESS_TOKEN
       providerAttribute: bearer_auth
   excludeEmptyObjectSchemas: false
+  forwardCompatibleEnumsByDefault: false
   generateValidationHelpers: true
   includeEmptyObjects: false
   inferUnionDiscriminators: false

@@ -20,7 +20,7 @@ and management across the platform.
 
 ```terraform
 resource "seqera_labels" "environment" {
-  workspace_id = 123456
+  workspace_id = seqera_workspace.main.id
   name         = "environment"
   value        = "production"
   resource     = true
@@ -42,7 +42,7 @@ locals {
 resource "seqera_labels" "defaults" {
   for_each = local.default_labels
 
-  workspace_id = 123456
+  workspace_id = seqera_workspace.main.id
   name         = each.key
   value        = each.value
   resource     = true
@@ -54,36 +54,9 @@ resource "seqera_labels" "defaults" {
 
 ```terraform
 resource "seqera_labels" "critical" {
-  workspace_id = 123456
+  workspace_id = seqera_workspace.main.id
   name         = "critical"
   resource     = false
-  is_default   = false
-}
-
-resource "seqera_labels" "experimental" {
-  workspace_id = 123456
-  name         = "experimental"
-  resource     = false
-  is_default   = false
-}
-```
-
-### With Workspace Ref
-
-```terraform
-resource "seqera_workspace" "my_workspace" {
-  name        = "my-workspace"
-  org_id      = 123456
-  full_name   = "my-org/my-workspace"
-  visibility  = "PRIVATE"
-  description = "Example workspace"
-}
-
-resource "seqera_labels" "workspace_label" {
-  workspace_id = seqera_workspace.my_workspace.id
-  name         = "owner"
-  value        = "john-doe"
-  resource     = true
   is_default   = false
 }
 ```

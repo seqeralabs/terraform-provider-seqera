@@ -29,9 +29,9 @@ To run simultaneous sessions, contact Seqera for a Seqera Cloud Pro license.
 ```terraform
 resource "seqera_studios" "basic_jupyter" {
   name                 = "my-jupyter-studio"
-  compute_env_id       = "compute-env-id"
+  compute_env_id       = seqera_compute_env.main.id
   data_studio_tool_url = "public.cr.seqera.io/platform/data-studio-jupyter:4.2.5-0.8"
-  workspace_id         = seqera_workspace.my_workspace.id
+  workspace_id         = seqera_workspace.main.id
   # Configuration is required - gpu defaults to 0
   configuration = {}
 }
@@ -42,7 +42,7 @@ resource "seqera_studios" "basic_jupyter" {
 ```terraform
 resource "seqera_studios" "jupyter_with_conda_heredoc" {
   auto_start     = false
-  compute_env_id = "compute-env-id"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     # Use heredoc for simple YAML - just copy/paste your conda environment
     conda_environment = <<-EOT
@@ -67,30 +67,16 @@ resource "seqera_studios" "jupyter_with_conda_heredoc" {
   is_private           = true
   name                 = "jupyter-with-conda-heredoc"
   spot                 = true
-  workspace_id         = seqera_workspace.my_workspace.id
+  workspace_id         = seqera_workspace.main.id
 }
 ```
 
 ### Conda Yamlencode Labels
 
 ```terraform
-resource "seqera_labels" "environment_prod" {
-  workspace_id = seqera_workspace.my_workspace.id
-  name         = "environment"
-  value        = "production"
-  resource     = true
-}
-
-resource "seqera_labels" "team_datascience" {
-  workspace_id = seqera_workspace.my_workspace.id
-  name         = "team"
-  value        = "data-science"
-  resource     = true
-}
-
 resource "seqera_studios" "jupyter_with_conda_labels" {
   auto_start     = false
-  compute_env_id = "compute-env-id"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     # Use yamlencode() for dynamic generation or when using Terraform variables
     conda_environment = yamlencode({
@@ -125,7 +111,7 @@ resource "seqera_studios" "jupyter_with_conda_labels" {
   ]
   name         = "jupyter-with-conda-labels"
   spot         = true
-  workspace_id = seqera_workspace.my_workspace.id
+  workspace_id = seqera_workspace.main.id
 }
 ```
 
@@ -134,7 +120,7 @@ resource "seqera_studios" "jupyter_with_conda_labels" {
 ```terraform
 resource "seqera_studios" "studio_with_env_vars" {
   auto_start     = false
-  compute_env_id = "htaAEef9YYm5DqQrAyeDy"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     cpu            = 2
     memory         = 8192
@@ -151,7 +137,7 @@ resource "seqera_studios" "studio_with_env_vars" {
   description          = "Studio with custom environment variables"
   is_private           = true
   name                 = "studio-with-env"
-  workspace_id         = seqera_workspace.my_workspace.id
+  workspace_id         = seqera_workspace.main.id
 }
 ```
 
@@ -160,7 +146,7 @@ resource "seqera_studios" "studio_with_env_vars" {
 ```terraform
 # Fetch all data links in the workspace
 data "seqera_data_links" "workspace_data" {
-  workspace_id = seqera_workspace.my_workspace.id
+  workspace_id = seqera_workspace.main.id
 }
 
 # Create a lookup map indexed by data link name
@@ -172,7 +158,7 @@ locals {
 
 resource "seqera_studios" "rstudio_with_data" {
   auto_start     = false
-  compute_env_id = "htaAEef9YYm5DqQrAyeDy"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     cpu            = 2
     memory         = 8192
@@ -189,13 +175,22 @@ resource "seqera_studios" "rstudio_with_data" {
   description          = "RStudio with mounted S3 data"
   is_private           = true
   name                 = "rstudio-with-data"
-  workspace_id         = seqera_workspace.my_workspace.id
+  workspace_id         = seqera_workspace.main.id
+}
+```
+
+### Rstudio Regional Data
+
+```terraform
+# Fetch all data links in the workspace
+data "seqera_data_links" "workspace_data" {
+  workspace_id = seqera_workspace.main.id
 }
 
-# Alternative: Mount only AWS data links in us-east-1
+# Mount only AWS data links in a specific region
 resource "seqera_studios" "rstudio_regional_data" {
   auto_start     = false
-  compute_env_id = "htaAEef9YYm5DqQrAyeDy"
+  compute_env_id = seqera_compute_env.main.id
   configuration = {
     cpu            = 2
     memory         = 8192
@@ -211,7 +206,7 @@ resource "seqera_studios" "rstudio_regional_data" {
   description          = "RStudio with AWS us-east-1 data only"
   is_private           = true
   name                 = "rstudio-regional-data"
-  workspace_id         = seqera_workspace.my_workspace.id
+  workspace_id         = seqera_workspace.main.id
 }
 ```
 

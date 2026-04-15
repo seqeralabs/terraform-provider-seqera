@@ -31,8 +31,8 @@ resource "seqera_compute_env" "my_computeenv" {
         compute_queue = "...my_compute_queue..."
         environment = [
           {
-            compute = true
-            head    = true
+            compute = false
+            head    = false
             name    = "...my_name..."
             value   = "...my_value..."
           }
@@ -1159,7 +1159,7 @@ import {
   to = seqera_compute_env.my_seqera_compute_env
   id = jsonencode({
     compute_env_id = "..."
-    workspace_id = 0
+    workspace_id   = 0
   })
 }
 ```

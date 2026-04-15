@@ -64,7 +64,7 @@ type ListWorkspacesByTeamResponse struct {
 	RawResponse *http.Response
 	// OK
 	ListWorkspacesByTeamResponse *shared.ListWorkspacesByTeamResponse
-	// Not Found
+	// Bad Request
 	ErrorResponse *shared.ErrorResponse
 }
 

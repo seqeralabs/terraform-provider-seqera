@@ -29,7 +29,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     environment = [
       {
         compute = false
-        head    = true
+        head    = false
         name    = "...my_name..."
         value   = "...my_value..."
       }
@@ -368,7 +368,7 @@ import {
   to = seqera_aws_compute_env.my_seqera_aws_compute_env
   id = jsonencode({
     compute_env_id = "..."
-    workspace_id = 0
+    workspace_id   = 0
   })
 }
 ```

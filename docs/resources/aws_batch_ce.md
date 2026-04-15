@@ -28,7 +28,7 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
     enable_wave          = true
     environment = [
       {
-        compute = true
+        compute = false
         head    = false
         name    = "...my_name..."
         value   = "...my_value..."
@@ -368,7 +368,7 @@ import {
   to = seqera_aws_batch_ce.my_seqera_aws_batch_ce
   id = jsonencode({
     compute_env_id = "..."
-    workspace_id = 0
+    workspace_id   = 0
   })
 }
 ```

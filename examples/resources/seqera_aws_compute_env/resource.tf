@@ -10,7 +10,7 @@ resource "seqera_aws_compute_env" "my_awscomputeenv" {
     environment = [
       {
         compute = false
-        head    = true
+        head    = false
         name    = "...my_name..."
         value   = "...my_value..."
       }

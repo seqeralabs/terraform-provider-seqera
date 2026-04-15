@@ -65,10 +65,10 @@ type FinishDataLinkUploadWithPathResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// BadRequest
-	ErrorResponse *shared.ErrorResponse
 	// FinishDataLinkUploadWithPath 200 response
 	Object *FinishDataLinkUploadWithPathResponseBody
+	// BadRequest
+	ErrorResponse *shared.ErrorResponse
 }
 
 func (f *FinishDataLinkUploadWithPathResponse) GetContentType() string {
@@ -92,16 +92,16 @@ func (f *FinishDataLinkUploadWithPathResponse) GetRawResponse() *http.Response {
 	return f.RawResponse
 }
 
-func (f *FinishDataLinkUploadWithPathResponse) GetErrorResponse() *shared.ErrorResponse {
-	if f == nil {
-		return nil
-	}
-	return f.ErrorResponse
-}
-
 func (f *FinishDataLinkUploadWithPathResponse) GetObject() *FinishDataLinkUploadWithPathResponseBody {
 	if f == nil {
 		return nil
 	}
 	return f.Object
+}
+
+func (f *FinishDataLinkUploadWithPathResponse) GetErrorResponse() *shared.ErrorResponse {
+	if f == nil {
+		return nil
+	}
+	return f.ErrorResponse
 }

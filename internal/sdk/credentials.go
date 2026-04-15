@@ -34,6 +34,8 @@ func newCredentials(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *h
 // ListCredentials - List credentials
 // Lists all credentials accessible to the authenticated user.
 // Use `workspace_id` to filter credentials in a specific workspace context.
+//
+// This operation requires either [Security.BearerAuth] or [Security.BearerAuth] to be set via [WithSecurity].
 func (s *Credentials) ListCredentials(ctx context.Context, request operations.ListCredentialsDataSourceRequest, opts ...operations.Option) (*operations.ListCredentialsDataSourceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -89,7 +91,7 @@ func (s *Credentials) ListCredentials(ctx context.Context, request operations.Li
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security, "BearerAuth", "BearerAuth"); err != nil {
 		return nil, err
 	}
 

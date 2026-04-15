@@ -1,0 +1,9 @@
+root:
+  - openapi
+  - info
+  - tags
+  - servers
+  - paths
+  - components
+  - security
+  - externalDocs

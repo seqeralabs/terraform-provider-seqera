@@ -77,7 +77,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = seqera_workspace.my_seqera_workspace
   id = jsonencode({
-    id = 0
+    id     = 0
     org_id = 0
   })
 }

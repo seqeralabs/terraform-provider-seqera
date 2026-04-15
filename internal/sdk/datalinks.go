@@ -34,6 +34,8 @@ func newDataLinks(rootSDK *Seqera, sdkConfig config.SDKConfiguration, hooks *hoo
 // ListDataLinks - List data links
 // Lists all data links accessible to the authenticated user.
 // Use `workspace_id` to filter data links in a specific workspace context.
+//
+// This operation requires either [Security.BearerAuth] or [Security.BearerAuth] to be set via [WithSecurity].
 func (s *DataLinks) ListDataLinks(ctx context.Context, request operations.ListDataLinksDataSourceRequest, opts ...operations.Option) (*operations.ListDataLinksDataSourceResponse, error) {
 	o := operations.Options{}
 	supportedOptions := []string{
@@ -89,7 +91,7 @@ func (s *DataLinks) ListDataLinks(ctx context.Context, request operations.ListDa
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
-	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security); err != nil {
+	if err := utils.PopulateSecurity(ctx, req, s.sdkConfiguration.Security, "BearerAuth", "BearerAuth"); err != nil {
 		return nil, err
 	}
 

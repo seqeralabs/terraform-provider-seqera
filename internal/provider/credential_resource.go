@@ -785,7 +785,7 @@ func (r *CredentialResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"provider_type": schema.StringAttribute{
 				Required:    true,
-				Description: `Cloud or service provider type (e.g., aws, azure, gcp). must be one of ["aws", "azure", "azure_entra", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]. Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.`,
+				Description: `Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud. must be one of ["aws", "azure", "azure_entra", "google", "github", "gitlab", "bitbucket", "ssh", "k8s", "container-reg", "tw-agent", "codecommit", "gitea", "azurerepos", "seqeracompute"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"aws",

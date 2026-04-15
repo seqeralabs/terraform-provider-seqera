@@ -39,7 +39,7 @@ resource "seqera_managed_compute_ce" "my_managedcomputece" {
   data_retention_policy = true
   environment = [
     {
-      compute = true
+      compute = false
       head    = false
       name    = "...my_name..."
       value   = "...my_value..."
@@ -132,7 +132,7 @@ import {
   to = seqera_managed_compute_ce.my_seqera_managed_compute_ce
   id = jsonencode({
     compute_env_id = "..."
-    workspace_id = 0
+    workspace_id   = 0
   })
 }
 ```

@@ -44,9 +44,9 @@ type CreateDataStudioResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Created
+	// CreateDataStudio 200 response
 	DataStudioCreateResponse *shared.DataStudioCreateResponse
-	// NotFound, when the workspace or compute environment is not found or when the API is disabled.
+	// BadRequest
 	ErrorResponse *shared.ErrorResponse
 }
 

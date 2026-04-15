@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// CredentialsProviderType - Cloud or service provider type (e.g., aws, azure, gcp)
+// CredentialsProviderType - Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
 type CredentialsProviderType string
 
 const (
@@ -85,7 +85,7 @@ type CredentialsInput struct {
 	Name string `json:"name"`
 	// Optional description explaining the purpose of the credential
 	Description *string `json:"description,omitempty"`
-	// Cloud or service provider type (e.g., aws, azure, gcp)
+	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
 	ProviderType CredentialsProviderType `json:"provider"`
 	// Base URL for the credential provider
 	BaseURL *string `json:"baseUrl,omitempty"`
@@ -225,7 +225,7 @@ type CredentialsOutput struct {
 	Name string `json:"name"`
 	// Optional description explaining the purpose of the credential
 	Description *string `json:"description,omitempty"`
-	// Cloud or service provider type (e.g., aws, azure, gcp)
+	// Cloud or service provider type (e.g., aws, azure, gcp). Note: for Azure Cloud credentials (service principal), use provider_type "azure" with keys.azure_cloud.
 	ProviderType CredentialsProviderType `json:"provider"`
 	// Base URL for the credential provider
 	BaseURL *string `json:"baseUrl,omitempty"`

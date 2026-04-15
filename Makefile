@@ -17,6 +17,9 @@ test: ## Run tests
 lint: ## Run linters (if golangci-lint is available)
 	@which golangci-lint > /dev/null && golangci-lint run || echo "golangci-lint not found, skipping..."
 
+format-spec: ## Sort OpenAPI spec for clean diffs
+	npx openapi-format specs/seqera-api-cloud.yaml -o specs/seqera-api-cloud.yaml --sortComponentsProps -s specs/.openapi-format-sort.yaml
+
 clean: ## Clean build artifacts
 	rm -f terraform-provider-seqera
 

@@ -56,7 +56,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = seqera_teams.my_seqera_teams
   id = jsonencode({
-    org_id = 0
+    org_id  = 0
     team_id = 0
   })
 }

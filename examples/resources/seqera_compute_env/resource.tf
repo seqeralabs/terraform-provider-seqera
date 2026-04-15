@@ -5,8 +5,8 @@ resource "seqera_compute_env" "my_computeenv" {
         compute_queue = "...my_compute_queue..."
         environment = [
           {
-            compute = true
-            head    = true
+            compute = false
+            head    = false
             name    = "...my_name..."
             value   = "...my_value..."
           }

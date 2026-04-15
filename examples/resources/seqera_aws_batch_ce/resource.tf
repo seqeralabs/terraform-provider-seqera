@@ -9,7 +9,7 @@ resource "seqera_aws_batch_ce" "my_awsbatchce" {
     enable_wave          = true
     environment = [
       {
-        compute = true
+        compute = false
         head    = false
         name    = "...my_name..."
         value   = "...my_value..."
