@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 9eba9f63-fbb7-47c2-b957-92fb58cab346
 management:
-  docChecksum: d56767d8b327513e4ab7c3a81e9d10ca
+  docChecksum: 9c5eb88b90e6e142c714e719e11e919f
   docVersion: 1.119.0
   speakeasyVersion: 1.761.8
   generationVersion: 2.881.2
@@ -778,9 +778,7 @@ trackedFiles:
     last_write_checksum: sha1:582213fbed55b531b09844459506cd54d946e651
     pristine_git_object: c54b0bbc1db7eb7c002b3971a12a3065b0225719
   internal/provider/types/compute_config.go:
-    id: 4d8a6c389309
     last_write_checksum: sha1:0b3635eda86d3d0c0356c383f8bc38d5bef63d41
-    pristine_git_object: e30a3a295eb11a2e06224274ca50c6d570e935f3
   internal/provider/types/compute_env_compute_config.go:
     id: 6553ec9a03cb
     last_write_checksum: sha1:41a68fe013706fe7f453a8b55d9fb22b31eaf47d
@@ -979,7 +977,7 @@ trackedFiles:
     pristine_git_object: 47bd93d33a5187778e37e15f28a86920d700bb6d
   internal/sdk/datalinks.go:
     id: ef6966e16293
-    last_write_checksum: sha1:e928e2b7e07e14fafadecd7c1c1ff6c26c43bc10
+    last_write_checksum: sha1:26af63bc693e435d578d07b92c33e876f7704f9f
     pristine_git_object: b1e44827a51863975f9f474fb86fdd9633d9f363
   internal/sdk/datasets.go:
     id: c03fc9a88bfc
@@ -995,7 +993,7 @@ trackedFiles:
     pristine_git_object: e8ffa8ceba5dcac2a4d3d4527451748343a17f85
   internal/sdk/identities.go:
     id: a724fedb400f
-    last_write_checksum: sha1:97340d299d09bc622b8432755282f71018652407
+    last_write_checksum: sha1:071bd70e0473f26ff1502484dbecc48a8f745323
     pristine_git_object: bcd9d3ceb520f4ab43ea996f714ecf630474fbd1
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
@@ -1059,7 +1057,7 @@ trackedFiles:
     pristine_git_object: 0415b536598baa76c5d1a8fc32816ed1b83f9137
   internal/sdk/labels.go:
     id: a35e05b0247d
-    last_write_checksum: sha1:d243a8b7a748f24bb0b6d821944ab31d39c33dff
+    last_write_checksum: sha1:5d776876094edf17719b8a2514bdd443200f56ed
     pristine_git_object: b7356bf00c840d897e8af0f600a0050b3b0e4749
   internal/sdk/launch.go:
     id: 8999bce1dfb3
@@ -1612,9 +1610,7 @@ trackedFiles:
     last_write_checksum: sha1:470facd6c1c14b3c0e830802300cce2d15d19e63
     pristine_git_object: 4cebbd6224ea39ad53f4525d09ff89be7d0205ed
   internal/sdk/models/operations/downloaddataset.go:
-    id: 45dde0014367
     last_write_checksum: sha1:cddf5e53789d4b9bafb1a193e58e5b3e2ef5c5ce
-    pristine_git_object: 609f56f41db088eb823bc7b82aee8c1ec4375640
   internal/sdk/models/operations/downloaddatasetv2.go:
     id: 7fd9d48350fe
     last_write_checksum: sha1:b209a66a90b424cceb0ce9493e82a2bf29b150ff
@@ -2278,9 +2274,7 @@ trackedFiles:
     last_write_checksum: sha1:3441fcab6ab8f43df13f9d3cd4fdfc3f037c126f
     pristine_git_object: 168da50a9909ad4639d68c4ef0cb63bf647d949b
   internal/sdk/models/shared/computeconfig.go:
-    id: 21b317c8a966
     last_write_checksum: sha1:24ca9c9436a2143801a0a9c936e2d3913af334db
-    pristine_git_object: 42560fcd114408129519a9f9092b24fab369ef65
   internal/sdk/models/shared/computeenvcomputeconfiginput.go:
     last_write_checksum: sha1:8df397b232d272feff59ec1718f3b04b99d2706d
   internal/sdk/models/shared/computeenvqueryattribute.go:
@@ -2994,9 +2988,7 @@ trackedFiles:
     last_write_checksum: sha1:43ac355b7b9f75d963d039fc4bd1e8b1550309f5
     pristine_git_object: f3fe93890eb2f0b566cc6ea4e5802af50124bb25
   internal/sdk/models/shared/jobcleanuppolicy.go:
-    id: 6fbf2675cd68
     last_write_checksum: sha1:3695a4bd12b6be2ba027e3006abe539929d9ae1b
-    pristine_git_object: c07cebd15f9a40c71cc58fb5e63a8b6bd58524dd
   internal/sdk/models/shared/jobqueue.go:
     id: ca3b1b08cf50
     last_write_checksum: sha1:de56dda98bc675d041f43428c1df09cf337687e2
@@ -3697,7 +3689,7 @@ trackedFiles:
     pristine_git_object: aa809fccb3445b1e2530a979dad620512f50e70f
   internal/sdk/seqera.go:
     id: b1c23bc5193c
-    last_write_checksum: sha1:284a1e04689849e9ba2bdd3731d3c8e3fa295c49
+    last_write_checksum: sha1:8b60e78cd9ba66d081faec1a13cbf6b14e6d9558
     pristine_git_object: 89364ed6208c4c999b317d23d7d954d63ac46bc5
   internal/sdk/serviceinfo.go:
     id: 085db9a15b34
@@ -6324,6 +6316,129 @@ examples:
         path:
           keyId: 7941
       responses:
+        "400":
+          application/json: {"message": "<value>"}
+  PreviewDatasetUrl:
+    speakeasy-default-preview-dataset-url:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateDatasetUrl:
+    speakeasy-default-validate-dataset-url:
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  LinkDatasetVersion:
+    speakeasy-default-link-dataset-version:
+      parameters:
+        path:
+          datasetId: "<id>"
+      requestBody:
+        application/json: {}
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  PreviewDatasetVersion:
+    speakeasy-default-preview-dataset-version:
+      parameters:
+        path:
+          datasetId: "<id>"
+          version: 15336
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListUserRolesInOrganization:
+    speakeasy-default-list-user-roles-in-organization:
+      parameters:
+        path:
+          orgId: 73180
+          userId: 117134
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListRoles:
+    speakeasy-default-list-roles:
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  CreateRole:
+    speakeasy-default-create-role:
+      requestBody:
+        application/json: {"description": "till sweetly scratch dredger up gruesome amid devise address worth"}
+      responses:
+        "201":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ListRolePermissions:
+    speakeasy-default-list-role-permissions:
+      parameters:
+        query:
+          orgId: 9259
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  ValidateRoleName:
+    speakeasy-default-validate-role-name:
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DeleteRole:
+    speakeasy-default-delete-role:
+      parameters:
+        path:
+          roleName: "<value>"
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  DescribeRole:
+    speakeasy-default-describe-role:
+      parameters:
+        path:
+          roleName: "<value>"
+      responses:
+        "200":
+          application/json: {}
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateRole:
+    speakeasy-default-update-role:
+      parameters:
+        path:
+          roleName: "<value>"
+      requestBody:
+        application/json: {"description": "spiteful yowza foot solidly jury"}
+      responses:
+        "400":
+          application/json: {"message": "<value>"}
+  UpdateDataStudio:
+    speakeasy-default-update-data-studio:
+      parameters:
+        path:
+          sessionId: "<id>"
+      requestBody:
+        application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}}
+      responses:
+        "200":
+          application/json: {"configuration": {"cpu": 2, "gpu": 0, "lifespanHours": 2, "memory": 4096}, "sshDetails": {"command": "ssh username@sessionId@host -p port", "host": "impolite-markup.name", "port": 602573, "user": "Jacklyn.Bogisich78"}}
         "400":
           application/json: {"message": "<value>"}
 examplesVersion: 1.0.2
